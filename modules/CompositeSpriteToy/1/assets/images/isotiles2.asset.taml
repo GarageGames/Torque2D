@@ -1,0 +1,8 @@
+<ImageAsset
+    AssetName="isotiles"
+    ImageFile="isotiles.png"
+    CellStrideY="22"
+    CellCountX="1"
+    CellCountY="5"
+    CellWidth="18"
+    CellHeight="19" />

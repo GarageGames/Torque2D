@@ -1,0 +1,4 @@
+<AudioAsset
+    AssetName="TowerUpgradeSound"
+    AssetAutoUnload="0"
+    AudioFile="TD_TowerUpgrade.wav" />

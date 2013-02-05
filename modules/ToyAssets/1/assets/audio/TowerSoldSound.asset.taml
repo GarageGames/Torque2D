@@ -1,0 +1,4 @@
+<AudioAsset
+    AssetName="TowerSoldSound"
+    AssetAutoUnload="0"
+    AudioFile="TD_TowerSold.wav" />

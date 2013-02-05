@@ -1,0 +1,4 @@
+<AudioAsset
+    AssetName="TowerMisplacementSound"
+    AssetAutoUnload="0"
+    AudioFile="TD_TowerMisplacement.wav" />

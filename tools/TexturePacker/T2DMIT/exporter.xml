@@ -1,0 +1,51 @@
+<exporter version="1.0">
+    <!-- identifier of the exporter -->
+    <name>T2D MIT</name>
+	
+    <!-- display name of the exporter for the combo box -->
+    <displayName>Torque 2D MIT</displayName>
+	
+    <!-- description of the exporter -->
+    <description>Torque 2D MIT Exporter</description>
+
+    <!-- exporter version -->
+    <version>1.0</version>
+	
+    <!-- currently only one file allowed - more to come with update -->
+    <files>
+        <file>
+            <!-- name of this file variable -->
+            <name>TAML</name>
+
+            <!-- human readable name (for GUI) -->
+            <displayName>TAML File</displayName>
+
+            <!-- file extension for the file -->
+            <fileExtension>asset.taml</fileExtension>
+
+            <!-- name of the template file -->
+            <template>template.asset.taml</template>
+        </file>
+    </files>
+
+    <!-- target framework supports trimming -->
+    <supportsTrimming>true</supportsTrimming>
+
+    <!-- target framework supports rotated sprites -->
+    <supportsRotation>false</supportsRotation>
+
+    <!-- rotated sprites direction (cw/ccw) -->
+    <rotationDirection>cw</rotationDirection>
+
+    <!-- supports npot sizes -->
+    <supportsNPOT>false</supportsNPOT>
+
+    <!-- supports file name stripping (remove .png etc) -->
+    <supportsTrimSpriteNames>yes</supportsTrimSpriteNames>
+
+    <!-- supports texure subpath -->
+    <supportsTextureSubPath>false</supportsTextureSubPath>
+
+</exporter>
+
+

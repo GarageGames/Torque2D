@@ -1,0 +1,15 @@
+<ModuleDefinition
+    ModuleId="DeathBallToy"
+    VersionId="1"
+    Enabled="1"
+    Description="A ball game demonstration."    
+    Type="toy"
+    ToyCategoryIndex="5"
+    ScriptFile="main.cs"
+    CreateFunction="create"
+    DestroyFunction="destroy">
+        <DeclaredAssets
+            Path="assets"
+            Extension="asset.taml"
+            Recurse="true"/>		
+</ModuleDefinition>

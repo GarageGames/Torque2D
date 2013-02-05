@@ -1,0 +1,5 @@
+<AnimationAsset
+    AssetName="1234Animation"
+    Image="@asset=ToyAssets:1234"
+    AnimationFrames="0 1 2 3"
+    AnimationTime="2" />

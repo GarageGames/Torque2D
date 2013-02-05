@@ -1,0 +1,7 @@
+<ImageAsset
+    AssetName="eel"
+    ImageFile="eel.png"
+    CellCountX="1"
+    CellCountY="4"
+    CellWidth="256"
+    CellHeight="64" />

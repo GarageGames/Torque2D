@@ -1,0 +1,8 @@
+<ImageAsset
+    AssetName="Tiles"
+    ImageFile="tiles.png"
+	FilterMode="NEAREST"
+    CellCountX="4"
+    CellCountY="4"
+    CellWidth="128"
+    CellHeight="128" />

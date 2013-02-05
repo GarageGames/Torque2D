@@ -1,0 +1,57 @@
+//-----------------------------------------------------------------------------
+// Copyright (c) 2013 GarageGames, LLC
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+/// Puts the current thread in a modal state & shows the alert.
+/// This should only be called from the main thread. 
+/// If you call it from any other thread, bad things will happen. So don't.
+/// The 'main thread' here means the program's thread zero. The first thread.
+/// In multithreaded Torque, this is NOT the game loop thread.
+/// On the Mac, events and alerts have to happen in thread zero.
+//-----------------------------------------------------------------------------
+//void iOSRunAlertMain();
+#import "UIKit/UIViewController.h"
+#import "UIKit/UIAlertView.h"
+
+
+
+@interface iOSAlertDelegate : UIViewController <UIAlertViewDelegate>
+{
+@public
+	NSInteger buttonNumber;
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
+
+//Luma: Added delegate for dismissed call by system
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;
+
+- (void)didPresentAlertView:(UIAlertView *)alertView;
+
+@end
+
+
+
+
+
+
+

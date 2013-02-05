@@ -1,0 +1,7 @@
+<AnimationAsset
+    AssetName="TD_DwarfWalkSouth"
+    Image="@asset=ToyAssets:TD_DwarfImage"
+    animationFrames="0 1 2 3 8 9 10 11 16 17 18 19 25 25 26 27"
+    animationTime="1"
+    animationCycle="1"
+     />

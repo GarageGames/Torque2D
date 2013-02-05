@@ -1,0 +1,10 @@
+<ModuleDefinition
+	ModuleId="MoveToToy"
+	VersionId="1"
+	Description="Demonstrates the ability to move to a specific position over time."
+	Dependencies="ToyAssets=1"
+	Type="toy"
+	ToyCategoryIndex="3"
+	ScriptFile="main.cs"
+	CreateFunction="create"
+	DestroyFunction="destroy"/>

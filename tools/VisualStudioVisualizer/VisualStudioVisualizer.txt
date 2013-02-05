@@ -1,0 +1,71 @@
+Visual Studio Debug Visualizer
+
+There are certain Torque types that don't naturally exposed themselves well to the Visual Studio debugger but you can use the following C++ visualizer script to configure how they are exposed.
+
+To get this to work, you need to locate your "autoexp.dat".  Typically this is in:
+
+C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\Packages\Debugger\autoexp.dat
+
+The first thing to do is to ensure that you make a copy of this file in-case something goes wrong then open up hte original file using any text editor.  Find the section starting with the entry "[Visualizer]".  Somewhere in some blank space after that (in mine I do it after the three "ATL" lines) paste the following:
+
+;-----------------------------------------------------------------------------
+; Vector<T>
+;-----------------------------------------------------------------------------
+Vector<*> {
+	preview (
+		#(
+			"[Count=", $c.mElementCount, "], ",
+			"[Capacity=", $c.mArraySize, "]"
+		)
+	)
+	
+	children (
+		#(
+			#array(
+				expr: $c.mArray[$i],
+				size: $c.mElementCount
+			) : &$e
+		)
+	)
+}
+
+;-----------------------------------------------------------------------------
+; Vector2
+;-----------------------------------------------------------------------------
+Vector2 {
+	preview (
+		#(
+			"x=", $c.x, ", ",
+			"y=", $c.y, " ",
+		)
+	)
+}
+
+;-----------------------------------------------------------------------------
+; Assets
+;-----------------------------------------------------------------------------
+AssetPtr<*> {
+	preview (
+		#(
+			"[AssetId=", [(($T1*)($c.mpAsset.mObj))->mpAssetDefinition->mAssetId, s], "], ",
+			"[Type=", [(($T1*)($c.mpAsset.mObj))->mpAssetDefinition->mAssetType, s], "], ",
+			"[ReferenceCount=", [(($T1*)($c.mpAsset.mObj))->mAcquireReferenceCount, u], "], ",
+			"[Path=", [(($T1*)($c.mpAsset.mObj))->mpAssetDefinition->mAssetBaseFilePath, s], "], "
+		)
+	)
+}
+
+
+When you've pasted this, you do not need to restart VS but you will need to restart any debugger session.  VS reparses this prior to any debugger sessions starting which is really nice if you're developing one.
+
+Although old, the visualizer scipts haven't changed much since VS2005 which is why this still applies to VS2010 now.
+
+The following links provide a fair bit of detail on how to customize this yourself:
+
+http://mariusbancila.ro/blog/2007/04/06/tweaking-autoexpdat-for-custom-types-in-vs2005/
+http://www.virtualdub.org/blog/pivot/entry.php?id=120
+
+There's also some great information here:
+http://www.highprogrammer.com/alan/windev/visualstudio.html
+
+

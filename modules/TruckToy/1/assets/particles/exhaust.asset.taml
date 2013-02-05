@@ -1,0 +1,34 @@
+<ParticleAsset
+    AssetName="Exhaust">
+    <ParticleAssetEmitter
+        EmitterName="smoke"
+        FixedForceAngle="90"
+        OldestInFront="1"
+        Image="@asset=ToyAssets:Particles4"
+        Frame="0">
+        <ParticleAssetEmitter.Fields>
+            <Quantity
+                Keys="0 10" />
+			<EmissionArc
+				Keys="0 15" />
+			<EmissionAngle
+				Keys="0 180" />				
+            <LifetimeVariation
+                Keys="0 1" />
+            <Speed
+                Keys="0 1.5" />
+            <SizeXVariation
+                Keys="0 2" />
+            <FixedForce
+                Keys="0 4" />
+            <SizeXLife
+                Keys="0 0 0.2 1 0.5 2 0.9 1 1 0" />
+            <FixedForceVariation
+                Keys="0 1" />
+            <SpeedVariation
+                Keys="0 1" />
+            <AlphaChannel
+                Keys="0 0 0.1 0.15 0.8 0.15 1 0" />
+        </ParticleAssetEmitter.Fields>
+    </ParticleAssetEmitter>
+</ParticleAsset>

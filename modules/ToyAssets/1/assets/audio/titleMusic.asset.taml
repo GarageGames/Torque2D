@@ -1,0 +1,4 @@
+<AudioAsset
+    AssetName="titleMusic"
+    AssetAutoUnload="0"
+    AudioFile="TD_Medieval_TitleAudio.wav" />

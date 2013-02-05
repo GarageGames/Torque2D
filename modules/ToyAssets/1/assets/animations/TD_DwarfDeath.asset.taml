@@ -1,0 +1,7 @@
+<AnimationAsset
+    AssetName="TD_DwarfDeath"
+    Image="@asset=ToyAssets:TD_DwarfImage"
+    animationFrames="36 37 38 39 44 45 46 47 52 53 54 55 60 61 62 63"
+    animationTime="1"
+    animationCycle="0"
+     />

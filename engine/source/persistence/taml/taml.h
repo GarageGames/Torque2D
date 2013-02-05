@@ -1,0 +1,198 @@
+//-----------------------------------------------------------------------------
+// Copyright (c) 2013 GarageGames, LLC
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
+//-----------------------------------------------------------------------------
+
+#ifndef _TAML_H_
+#define _TAML_H_
+
+#ifndef _TAML_CALLBACKS_H_
+#include "persistence/taml/tamlCallbacks.h"
+#endif
+
+#ifndef _TAML_CUSTOM_H_
+#include "persistence/taml/tamlCustom.h"
+#endif
+
+#ifndef _TAML_CHILDREN_H_
+#include "persistence/taml/tamlChildren.h"
+#endif
+
+#ifndef _TAML_WRITE_NODE_H_
+#include "persistence/taml/TamlWriteNode.h"
+#endif
+
+#ifndef _SIMBASE_H_
+#include "sim/simBase.h"
+#endif
+
+#ifndef _HASHTABLE_H
+#include "collection/hashTable.h"
+#endif
+
+#ifndef _FILESTREAM_H_
+#include "io/fileStream.h"
+#endif
+
+//-----------------------------------------------------------------------------
+
+#define TAML_SIGNATURE                  "Taml"
+#define TAML_ID_ATTRIBUTE_NAME          "TamlId"
+#define TAML_REFID_ATTRIBUTE_NAME       "TamlRefId"
+#define TAML_REF_FIELD_NAME             "TamlRefField"
+#define TAML_OBJECTNAME_ATTRIBUTE_NAME  "Name"
+
+//-----------------------------------------------------------------------------
+
+class TamlXmlWriter;
+class TamlXmlReader;
+class TamlBinaryWriter;
+class TamlBinaryReader;
+
+//-----------------------------------------------------------------------------
+
+class Taml : public SimObject
+{
+    friend class TamlXmlWriter;
+    friend class TamlXmlReader;
+    friend class TamlBinaryWriter;
+    friend class TamlBinaryReader;
+
+public:
+    enum TamlFormatMode
+    {
+        InvalidFormat = 0,
+        XmlFormat,
+        BinaryFormat
+    };
+
+private:
+    typedef SimObject Parent;
+    typedef Vector<TamlWriteNode*>                  typeNodeVector;
+    typedef HashMap<SimObjectId, TamlWriteNode*>    typeCompiledHash;
+
+    typeNodeVector      mCompiledNodes;
+    typeCompiledHash    mCompiledObjects;
+    U32                 mMasterNodeId;
+    TamlFormatMode      mFormatMode;
+    bool                mBinaryCompression;
+    bool                mAutoFormat;
+    StringTableEntry    mAutoFormatXmlExtension;
+    StringTableEntry    mAutoFormatBinaryExtension;
+    bool                mWriteDefaults;
+    char                mFilePathBuffer[1024];
+    bool                mProgenitorUpdate;
+
+private:
+    void resetCompilation( void );
+
+    TamlWriteNode* compileObject( SimObject* pSimObject );
+    void compileStaticFields( TamlWriteNode* pTamlWriteNode );
+    void compileDynamicFields( TamlWriteNode* pTamlWriteNode );
+    void compileChildren( TamlWriteNode* pTamlWriteNode );
+    void compileCustomProperties( TamlWriteNode* pTamlWriteNode );
+
+    bool write( FileStream& stream, SimObject* pSimObject, const TamlFormatMode formatMode );
+    SimObject* read( FileStream& stream, const TamlFormatMode formatMode );
+    template<typename T> inline T* read( FileStream& stream, const TamlFormatMode formatMode )
+    {
+        SimObject* pSimObject = read( stream, formatMode );
+        if ( pSimObject == NULL )
+            return NULL;
+        T* pObj = dynamic_cast<T*>( pSimObject );
+        if ( pObj != NULL )
+            return pObj;
+        pSimObject->deleteObject();
+        return NULL;
+    }
+
+    static SimObject* createType( StringTableEntry typeName, const Taml* pTaml, const char* pProgenitorSuffix = NULL );
+
+    /// Taml callbacks.
+    inline void tamlPreWrite( TamlCallbacks* pCallbacks )                                           { pCallbacks->onTamlPreWrite(); }
+    inline void tamlPostWrite( TamlCallbacks* pCallbacks )                                          { pCallbacks->onTamlPostWrite(); }
+    inline void tamlPreRead( TamlCallbacks* pCallbacks )                                            { pCallbacks->onTamlPreRead(); }
+    inline void tamlPostRead( TamlCallbacks* pCallbacks, const TamlCustomProperties& customProperties )   { pCallbacks->onTamlPostRead( customProperties ); }
+    inline void tamlAddParent( TamlCallbacks* pCallbacks, SimObject* pParentObject )                { pCallbacks->onTamlAddParent( pParentObject ); }
+    inline void tamlCustomWrite( TamlCallbacks* pCallbacks, TamlCustomProperties& customProperties )      { pCallbacks->onTamlCustomWrite( customProperties ); }
+    inline void tamlCustomRead( TamlCallbacks* pCallbacks, const TamlCustomProperties& customProperties ) { pCallbacks->onTamlCustomRead( customProperties ); }
+
+public:
+    Taml();
+    virtual ~Taml() {}
+
+    virtual bool onAdd() { if ( !Parent::onAdd() ) return false; resetCompilation(); return true; }
+    virtual void onRemove() { resetCompilation(); Parent::onRemove(); }
+    static void initPersistFields();
+
+    /// Format mode.
+    inline void setFormatMode( const TamlFormatMode formatMode ) { mFormatMode = formatMode != Taml::InvalidFormat ? formatMode : Taml::XmlFormat; }
+    inline TamlFormatMode getFormatMode( void ) const { return mFormatMode; }
+
+    /// Auto-Format mode.
+    inline void setAutoFormat( const bool autoFormat ) { mAutoFormat = autoFormat; }
+    inline bool getAutoFormat( void ) const { return mAutoFormat; }
+
+    /// Write defaults.
+    inline void setWriteDefaults( const bool writeDefaults ) { mWriteDefaults = writeDefaults; }
+    inline bool getWriteDefaults( void ) const { return mWriteDefaults; }
+
+    inline void setProgenitorUpdate( const bool progenitorUpdate ) { mProgenitorUpdate = progenitorUpdate; }
+    inline bool getProgenitorUpdate( void ) const { return mProgenitorUpdate; }
+
+    // Auto-format extensions.
+    inline void setAutoFormatXmlExtension( const char* pExtension ) { mAutoFormatXmlExtension = StringTable->insert( pExtension ); }
+    inline StringTableEntry getAutoFormatXmlExtension( void ) const { return mAutoFormatXmlExtension; }
+    inline void setAutoFormatBinaryExtension( const char* pExtension ) { mAutoFormatBinaryExtension = StringTable->insert( pExtension ); }
+    inline StringTableEntry getAutoFormatBinaryExtension( void ) const { return mAutoFormatBinaryExtension; }
+
+    /// Compression.
+    inline void setBinaryCompression( const bool compressed ) { mBinaryCompression = compressed; }
+    inline bool getBinaryCompression( void ) const { return mBinaryCompression; }
+
+    TamlFormatMode getFileAutoFormatMode( const char* pFilename );
+
+    const char* getFilePathBuffer( void ) const { return mFilePathBuffer; }
+
+    /// Write.
+    bool write( SimObject* pSimObject, const char* pFilename );
+
+    /// Read.
+    template<typename T> inline T* read( const char* pFilename )
+    {
+        SimObject* pSimObject = read( pFilename );
+        if ( pSimObject == NULL )
+            return NULL;
+        T* pObj = dynamic_cast<T*>( pSimObject );
+        if ( pObj != NULL )
+            return pObj;
+        pSimObject->deleteObject();
+        return NULL;
+    }
+    SimObject* read( const char* pFilename );
+
+    static TamlFormatMode getFormatModeEnum( const char* label );
+    static const char* getFormatModeDescription( const TamlFormatMode formatMode );
+
+    /// Declare Console Object.
+    DECLARE_CONOBJECT( Taml );
+};
+
+#endif // _TAML_H_

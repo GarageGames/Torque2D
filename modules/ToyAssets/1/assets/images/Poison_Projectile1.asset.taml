@@ -1,0 +1,8 @@
+<ImageAsset
+    AssetName="Poison_Projectile1Sprite"
+    imageFile="Poison_Projectile1.png"
+    cellCountX="4"
+    cellCountY="4"
+    cellWidth="64"
+    cellHeight="64"
+     />

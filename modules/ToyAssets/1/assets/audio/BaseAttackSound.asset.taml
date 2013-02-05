@@ -1,0 +1,4 @@
+<AudioAsset
+    AssetName="BaseAttackedSound"
+    AssetAutoUnload="0"
+    AudioFile="TD_LoseLife.wav" />
