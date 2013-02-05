@@ -30,11 +30,10 @@
 		8609FE38165572EC004662ED /* osxFont.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8609FE37165572EC004662ED /* osxFont.mm */; };
 		861CD8D01678F6C200DAE1A0 /* fileDialog.cc in Sources */ = {isa = PBXBuildFile; fileRef = 861CD8CF1678F6C200DAE1A0 /* fileDialog.cc */; };
 		8652C279165586520052D0CB /* osxAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8652C278165586520052D0CB /* osxAudio.mm */; };
+		8652F2A016C146CF00639EFE /* torque2d.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8652F29F16C146CF00639EFE /* torque2d.icns */; };
 		8658B174165A7BFB0087ABC1 /* osxCPU.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8658B171165A7BFB0087ABC1 /* osxCPU.mm */; };
 		8658B175165A7BFB0087ABC1 /* osxNetwork.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8658B172165A7BFB0087ABC1 /* osxNetwork.mm */; };
 		8658B176165A7BFB0087ABC1 /* osxString.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8658B173165A7BFB0087ABC1 /* osxString.mm */; };
-		865A20B11651530B00527C44 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 865A20B01651530B00527C44 /* Config.xcconfig */; };
-		865A20BF165158CA00527C44 /* torque2d.icns in Resources */ = {isa = PBXBuildFile; fileRef = 865A20BE165158CA00527C44 /* torque2d.icns */; };
 		865A20CA16515B1E00527C44 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 869FF8BF1651518C002FE082 /* AppKit.framework */; };
 		865A20CB16515B1E00527C44 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 865A20C116515ACE00527C44 /* AVFoundation.framework */; };
 		865A20CC16515B1E00527C44 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 869FF8BC1651518C002FE082 /* Cocoa.framework */; };
@@ -492,6 +491,7 @@
 		864ECFEE165279E100012416 /* networkProcessList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = networkProcessList.h; sourceTree = "<group>"; };
 		864ECFF016527A8500012416 /* gameInterface_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gameInterface_ScriptBinding.h; sourceTree = "<group>"; };
 		8652C278165586520052D0CB /* osxAudio.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = osxAudio.mm; sourceTree = "<group>"; };
+		8652F29F16C146CF00639EFE /* torque2d.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = torque2d.icns; sourceTree = "<group>"; };
 		8658B171165A7BFB0087ABC1 /* osxCPU.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = osxCPU.mm; sourceTree = "<group>"; };
 		8658B172165A7BFB0087ABC1 /* osxNetwork.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = osxNetwork.mm; sourceTree = "<group>"; };
 		8658B173165A7BFB0087ABC1 /* osxString.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = osxString.mm; sourceTree = "<group>"; };
@@ -1659,6 +1659,7 @@
 		869FF8AD1651518C002FE082 = {
 			isa = PBXGroup;
 			children = (
+				8652F29F16C146CF00639EFE /* torque2d.icns */,
 				869FF8C21651518C002FE082 /* Torque2D */,
 				865A2351165188AF00527C44 /* platformOSX */,
 				865A21E71651875E00527C44 /* Support_Libraries */,
@@ -2738,7 +2739,7 @@
 		869FF8AF1651518C002FE082 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Michael Perry";
 			};
 			buildConfigurationList = 869FF8B21651518C002FE082 /* Build configuration list for PBXProject "Torque2D" */;
@@ -2763,9 +2764,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				865A20B11651530B00527C44 /* Config.xcconfig in Resources */,
-				865A20BF165158CA00527C44 /* torque2d.icns in Resources */,
 				86C281CD16A4307E00F030F4 /* MainMenu.xib in Resources */,
+				8652F2A016C146CF00639EFE /* torque2d.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3237,7 +3237,7 @@
 				HEADER_SEARCH_PATHS = "";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 			};
 			name = Shipping;
 		};
@@ -3303,7 +3303,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = NO;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -3333,7 +3333,7 @@
 				HEADER_SEARCH_PATHS = "";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};

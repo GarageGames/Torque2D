@@ -190,9 +190,6 @@ public:
     inline void setPaused( const bool paused ) { mPaused = paused; }
     inline bool getPaused( void ) const { return mPaused; }
 
-    bool moveEffectTo( const F32 moveTime, const F32 timeStep, U32& peakCount, F32& peakTime );
-    bool findParticlePeak( const F32 searchTime, const F32 timeStep, const U32 peakLimit, U32& peakCount, F32& peakTime );
-
     /// Declare Console Object.
     DECLARE_CONOBJECT(ParticlePlayer);
 

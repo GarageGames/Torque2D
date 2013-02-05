@@ -92,7 +92,7 @@ public:
     void freeParticle( ParticleNode* pParticleNode );
 
     inline U32 getActiveParticleCount( void ) const { return mActiveParticleCount; };
-    inline U32 getAllocatedParticleCount( void ) const { return mParticlePool.size() * mParticlePoolBlockSize; }
+    inline U32 getAllocatedParticleCount( void ) const { return (U32)mParticlePool.size() * mParticlePoolBlockSize; }
 };
 
 #endif // _PARTICLE_SYSTEM_H_

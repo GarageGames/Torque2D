@@ -207,7 +207,7 @@ void ParticlePlayer::preIntegrate( const F32 totalTime, const F32 elapsedTime, D
     Parent::preIntegrate( totalTime, elapsedTime, pDebugStats );
 
     // Finish if the camera idle distance is zero.
-    if ( mIsZero(mCameraIdleDistance) )
+    if ( mIsZero(mCameraIdleDistance) || !validRender() )
         return;
 
     // Fetch current position.
@@ -256,13 +256,9 @@ void ParticlePlayer::integrateObject( const F32 totalTime, const F32 elapsedTime
 
     // Finish if no need to integrate.
     if (    !mPlaying ||
-            mCameraIdle ||
             mPaused ||
             mEmitters.size() == 0 )
         return;
-
-    // Yes, so update the particle player age.
-    mAge += elapsedTime;
 
     // Fetch particle asset.
     ParticleAsset* pParticleAsset = mParticleAsset;
@@ -271,106 +267,119 @@ void ParticlePlayer::integrateObject( const F32 totalTime, const F32 elapsedTime
     if ( pParticleAsset == NULL )
         return;
 
-    // Iterate the emitters.
-    for( typeEmitterVector::iterator emitterItr = mEmitters.begin(); emitterItr != mEmitters.end(); ++emitterItr )
+    // Reset active particle count.
+    U32 activeParticleCount = 0;
+
+    // Is the camera idle?
+    if ( !mCameraIdle )
     {
-        // Fetch the emitter node.
-        EmitterNode* pEmitterNode = *emitterItr;
+        // No, so update the particle player age.
+        mAge += elapsedTime;
 
-        // Fetch the asset emitter.
-        ParticleAssetEmitter* pParticleAssetEmitter = pEmitterNode->getAssetEmitter();
-
-        // Fetch the first particle node.
-        ParticleSystem::ParticleNode* pParticleNode = pEmitterNode->getFirstParticle();
-
-        // Fetch the particle node head.
-        ParticleSystem::ParticleNode* pParticleNodeHead = pEmitterNode->getParticleNodeHead();
-
-        // Process All particle nodes.
-        while ( pParticleNode != pParticleNodeHead )
+        // Iterate the emitters.
+        for( typeEmitterVector::iterator emitterItr = mEmitters.begin(); emitterItr != mEmitters.end(); ++emitterItr )
         {
-            // Update the particle age.
-            pParticleNode->mParticleAge += elapsedTime;
+            // Fetch the emitter node.
+            EmitterNode* pEmitterNode = *emitterItr;
 
-            // Has the particle expired?
-            // NOTE:-   If we're in single-particle mode then the particle lives as long as the particle player does.
-            if (    ( !pParticleAssetEmitter->getSingleParticle() && pParticleNode->mParticleAge > pParticleNode->mParticleLifetime ) ||
-                    ( mIsZero(pParticleNode->mParticleLifetime) ) )
+            // Fetch the asset emitter.
+            ParticleAssetEmitter* pParticleAssetEmitter = pEmitterNode->getAssetEmitter();
+
+            // Fetch the first particle node.
+            ParticleSystem::ParticleNode* pParticleNode = pEmitterNode->getFirstParticle();
+
+            // Fetch the particle node head.
+            ParticleSystem::ParticleNode* pParticleNodeHead = pEmitterNode->getParticleNodeHead();
+
+            // Process All particle nodes.
+            while ( pParticleNode != pParticleNodeHead )
             {
-                // Yes, so fetch next particle before we kill it.
-                pParticleNode = pParticleNode->mNextNode;
+                // Update the particle age.
+                pParticleNode->mParticleAge += elapsedTime;
 
-                // Kill the particle.
-                // NOTE:-   Because we move to the next particle the particle to kill is now the previous!
-                pEmitterNode->freeParticle( pParticleNode->mPreviousNode );
+                // Has the particle expired?
+                // NOTE:-   If we're in single-particle mode then the particle lives as long as the particle player does.
+                if (    ( !pParticleAssetEmitter->getSingleParticle() && pParticleNode->mParticleAge > pParticleNode->mParticleLifetime ) ||
+                        ( mIsZero(pParticleNode->mParticleLifetime) ) )
+                {
+                    // Yes, so fetch next particle before we kill it.
+                    pParticleNode = pParticleNode->mNextNode;
+
+                    // Kill the particle.
+                    // NOTE:-   Because we move to the next particle the particle to kill is now the previous!
+                    pEmitterNode->freeParticle( pParticleNode->mPreviousNode );
+                }
+                else
+                {
+                    // No, so integrate the particle.
+                    integrateParticle( pEmitterNode, pParticleNode, pParticleNode->mParticleAge / pParticleNode->mParticleLifetime, elapsedTime );
+
+                    // Move to the next particle node.
+                    pParticleNode = pParticleNode->mNextNode;
+
+                    // Only count particles when not in single-particle mode.
+                    activeParticleCount++;
+                }
+            };
+
+            // Skip generating new particles if the emitter is paused.
+            if ( pEmitterNode->getPaused() )
+                continue;
+
+            // Are we in single-particle mode?
+            if ( pParticleAssetEmitter->getSingleParticle() )
+            {
+                // Yes, so do we have a single particle yet?
+                if ( pParticleNodeHead->mNextNode == pParticleNodeHead )
+                {
+                    // No, so generate a single particle.
+                    pEmitterNode->createParticle();
+                }
             }
             else
             {
-                // No, so integrate the particle.
-                integrateParticle( pEmitterNode, pParticleNode, pParticleNode->mParticleAge / pParticleNode->mParticleLifetime, elapsedTime );
+                // Accumulate the last generation time as we need to handle very small time-integrations correctly.
+                //
+                // NOTE:    We need to do this if there's an emission target but the time-integration is so small
+                //          that rounding results in no emission.  Downside to good FPS!
+                pEmitterNode->setTimeSinceLastGeneration( pEmitterNode->getTimeSinceLastGeneration() + elapsedTime );
 
-                // Move to the next particle node.
-                pParticleNode = pParticleNode->mNextNode;
-            }
-        };
+                // Fetch the particle player age.
+                const F32 particlePlayerAge = mAge;
 
-        // Skip generating new particles if the emitter is paused.
-        if ( pEmitterNode->getPaused() )
-            continue;
+                // Fetch the quantity base and variation fields.
+                const ParticleAssetField& quantityBaseField = pParticleAssetEmitter->getQuantityBaseField();
+                const ParticleAssetField& quantityVaritationField = pParticleAssetEmitter->getQuantityBaseField();
 
-        // Are we in single-particle mode?
-        if ( pParticleAssetEmitter->getSingleParticle() )
-        {
-            // Yes, so do we have a single particle yet?
-            if ( pParticleNodeHead->mNextNode == pParticleNodeHead )
-            {
-                // No, so generate a single particle.
-                pEmitterNode->createParticle();
-            }
-        }
-        else
-        {
-            // Accumulate the last generation time as we need to handle very small time-integrations correctly.
-            //
-            // NOTE:    We need to do this if there's an emission target but the time-integration is so small
-            //          that rounding results in no emission.  Downside to good FPS!
-            pEmitterNode->setTimeSinceLastGeneration( pEmitterNode->getTimeSinceLastGeneration() + elapsedTime );
+                // Fetch the emissions.
+                const F32 baseEmission = quantityBaseField.getFieldValue( particlePlayerAge );
+                const F32 varEmission = quantityVaritationField.getFieldValue( particlePlayerAge ) * 0.5f;
 
-            // Fetch the particle player age.
-            const F32 particlePlayerAge = mAge;
+                // Fetch the emission scale.
+                const F32 effectEmission = pParticleAsset->getQuantityScaleField().getFieldValue( particlePlayerAge ) * getEmissionRateScale();
 
-            // Fetch the quantity base and variation fields.
-            const ParticleAssetField& quantityBaseField = pParticleAssetEmitter->getQuantityBaseField();
-            const ParticleAssetField& quantityVaritationField = pParticleAssetEmitter->getQuantityBaseField();
+                // Calculate the local emission.
+                const F32 localEmission = mClampF(  (baseEmission + CoreMath::mGetRandomF(-varEmission, varEmission)) * effectEmission,
+                                                    quantityBaseField.getMinValue(),
+                                                    quantityBaseField.getMaxValue() );
 
-            // Fetch the emissions.
-            const F32 baseEmission = quantityBaseField.getFieldValue( particlePlayerAge );
-            const F32 varEmission = quantityVaritationField.getFieldValue( particlePlayerAge ) * 0.5f;
+                // Calculate the final time-independent emission count.
+                const U32 emissionCount = U32(mFloor( localEmission * pEmitterNode->getTimeSinceLastGeneration() ));
 
-            // Fetch the emission scale.
-            const F32 effectEmission = pParticleAsset->getQuantityScaleField().getFieldValue( particlePlayerAge ) * getEmissionRateScale();
+                // Do we have an emission?
+                if ( emissionCount > 0 )
+                {
+                    // Yes, so remove this emission from accumulated time.
+                    pEmitterNode->setTimeSinceLastGeneration( getMax(0.0f, pEmitterNode->getTimeSinceLastGeneration() - (emissionCount / localEmission) ) );
 
-            // Calculate the local emission.
-            const F32 localEmission = mClampF(  (baseEmission + CoreMath::mGetRandomF(-varEmission, varEmission)) * effectEmission,
-                                                quantityBaseField.getMinValue(),
-                                                quantityBaseField.getMaxValue() );
+                    // Suppress Precision Errors.
+                    if ( mIsZero( pEmitterNode->getTimeSinceLastGeneration() ) )
+                        pEmitterNode->setTimeSinceLastGeneration( 0.0f );
 
-            // Calculate the final time-independent emission count.
-            const U32 emissionCount = U32(mFloor( localEmission * pEmitterNode->getTimeSinceLastGeneration() ));
-
-            // Do we have an emission?
-            if ( emissionCount > 0 )
-            {
-                // Yes, so remove this emission from accumulated time.
-                pEmitterNode->setTimeSinceLastGeneration( getMax(0.0f, pEmitterNode->getTimeSinceLastGeneration() - (emissionCount / localEmission) ) );
-
-                // Suppress Precision Errors.
-                if ( mIsZero( pEmitterNode->getTimeSinceLastGeneration() ) )
-                    pEmitterNode->setTimeSinceLastGeneration( 0.0f );
-
-                // Generate the required emission.
-                for ( U32 n = 0; n < emissionCount; n++ )
-                    pEmitterNode->createParticle();
+                    // Generate the required emission.
+                    for ( U32 n = 0; n < emissionCount; n++ )
+                        pEmitterNode->createParticle();
+                }
             }
         }
     }
@@ -378,9 +387,22 @@ void ParticlePlayer::integrateObject( const F32 totalTime, const F32 elapsedTime
     // Fetch the particle life-mode.
     const ParticleAsset::LifeMode lifeMode = pParticleAsset->getLifeMode();
 
-    // Finish if we're waiting for particles already.
-    if ( mWaitingForParticles || lifeMode == ParticleAsset::INFINITE )
+    // Finish if the particle player is in "infinite" mode.
+    if ( lifeMode == ParticleAsset::INFINITE )
         return;
+
+    // Are we waiting for particles and there are non left?
+    if ( mWaitingForParticles )
+    {
+        // Yes, so are there any particles left?
+        if ( activeParticleCount == 0 )
+        {
+            // No, so stop the player immediately.
+            stop( false, mWaitingForDelete );
+        }
+
+        return;
+    }
 
     // Fetch the particle lifetime.
     const F32 lifetime = pParticleAsset->getLifetime();
@@ -395,7 +417,7 @@ void ParticlePlayer::integrateObject( const F32 totalTime, const F32 elapsedTime
             play( false );
         }
         return;
-    };
+    }
 
     // Stop life-mode?
     if ( lifeMode == ParticleAsset::STOP )
@@ -407,7 +429,7 @@ void ParticlePlayer::integrateObject( const F32 totalTime, const F32 elapsedTime
             stop( true, false );
         }
         return;
-    };
+    }
 
     // kill life-mode?
     if ( lifeMode == ParticleAsset::KILL )
@@ -419,7 +441,7 @@ void ParticlePlayer::integrateObject( const F32 totalTime, const F32 elapsedTime
             stop( true, true );
         }
         return;
-    };
+    }
 }
 
 //------------------------------------------------------------------------------

@@ -130,7 +130,7 @@ void Input::reactivate()
 
 //------------------------------------------------------------------------------
 // Print the entire input state to the console
-#pragma message ("Input::echoInputState not yet implemented")
+// Not yet implemented or unnecessary. Will resolve in the next platform update
 void Input::echoInputState()
 {
 }
@@ -279,33 +279,33 @@ InputManager *Input::getManager()
 }
 
 //------------------------------------------------------------------------------
-#pragma message ("Input::getKeyCode not yet implemented")
+// Not yet implemented. Will resolve in the next platform update
 U16 Input::getKeyCode(U16 asciiCode)
 {
     return 0;
 }
 
 //------------------------------------------------------------------------------
-#pragma message ("Input::getAscii not yet implemented")
+// Not yet implemented. Will resolve in the next platform update
 U16 Input::getAscii(U16 keyCode, KEY_STATE keyState)
 {
     return 0;
 }
 
 //------------------------------------------------------------------------------
-#pragma message ("Input::pushCursor not yet implemented")
+// Not yet implemented. Will resolve in the next platform update
 void Input::pushCursor(S32 cursorID)
 {
 }
 
 //------------------------------------------------------------------------------
-#pragma message ("Input::popCursor not yet implemented")
+// Not yet implemented. Will resolve in the next platform update
 void Input::popCursor()
 {
 }
 
 //-----------------------------------------------------------------------------
-#pragma message ("Input::refreshCursor not yet implemented")
+// Not yet implemented. Will resolve in the next platform update
 void Input::refreshCursor()
 {
 }
@@ -333,20 +333,20 @@ S32 Input::getDoubleClickHeight()
 }
 
 //------------------------------------------------------------------------------
-#pragma message ("Input::setCursorPos not yet implemented")
+// Not yet implemented. Will resolve in the next platform update
 void Input::setCursorPos(S32 x, S32 y)
 {
 }
 
 //-----------------------------------------------------------------------------
-#pragma message ("Input::setCursorState not yet implemented")
+// Not yet implemented. Will resolve in the next platform update
 void Input::setCursorState(bool on)
 {
 
 }
 
 //-----------------------------------------------------------------------------
-#pragma message ("Input::setCursorShape not yet implemented")
+// Not yet implemented. Will resolve in the next platform update
 void Input::setCursorShape(U32 cursorID)
 {
 
@@ -355,28 +355,28 @@ void Input::setCursorShape(U32 cursorID)
 #pragma mark ---- Platform Namespace Functions ----
 
 //------------------------------------------------------------------------------
-#pragma message ("Input::getClipBoard not yet implemented")
+// Not yet implemented. Will resolve in the next platform update
 const char *Platform::getClipboard()
 {
     return NULL;
 }
 
 //-----------------------------------------------------------------------------
-#pragma message ("Input::setClipBoard not yet implemented")
+// Not yet implemented. Will resolve in the next platform update
 bool Platform::setClipboard(const char *text)
 {
     return false;
 }
 
 //-----------------------------------------------------------------------------
-#pragma message ("Input::enableKeyboardTranslation not yet implemented")
+// Not yet implemented. Will resolve in the next platform update
 void Platform::enableKeyboardTranslation(void)
 {
 
 }
 
 //-----------------------------------------------------------------------------
-#pragma message ("Input::disableKeyboardTranslation not yet implemented")
+// Not yet implemented. Will resolve in the next platform update
 void Platform::disableKeyboardTranslation(void)
 {
 

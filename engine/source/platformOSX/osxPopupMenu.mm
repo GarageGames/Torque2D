@@ -170,7 +170,7 @@ bool PopupMenu::handleSelect(U32 command, const char *text /* = NULL */)
 }
 
 //-----------------------------------------------------------------------------
-#pragma message ("PopupMenu::showPopup not yet implemented")
+// Not yet implemented or no longer necessary. Will resolve in the next platform update
 void PopupMenu::showPopup(S32 x /* = -1 */, S32 y /* = -1 */)
 {
     // Get the position of the cursor

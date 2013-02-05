@@ -88,7 +88,6 @@ void Platform::initWindow(const Point2I &initialSize, const char *name)
     // Create the NSWindow
     osxPlatState * platState = [osxPlatState sharedPlatState];
     
-    [platState setWindowSize:initialSize.x height:initialSize.y];
     
     NSRect frame = NSMakeRect(0, 0, [platState windowWidth], [platState windowHeight]);
     
@@ -105,6 +104,8 @@ void Platform::initWindow(const Point2I &initialSize, const char *name)
     [tempWindow setFrame:frame display:YES];
 
     [platState setWindow:tempWindow];
+    
+    [platState setWindowSize:initialSize.x height:initialSize.y];
     
     [platState updateWindowTitle:name];
     

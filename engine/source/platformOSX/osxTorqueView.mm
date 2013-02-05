@@ -100,6 +100,17 @@
     NSSize size = [[self window] frame].size;
 
     [[osxPlatState sharedPlatState] setWindowSize:(S32)size.width height:(S32)size.height];
+    
+    NSRect frame = NSMakeRect(0, 0, size.width, size.height);
+    
+    S32 barHeight = frame.size.height;
+    frame = [NSWindow frameRectForContentRect:frame styleMask:NSTitledWindowMask];
+    barHeight -= frame.size.height;
+    
+    NSRect viewFrame = NSMakeRect(0, barHeight, frame.size.width, frame.size.height);
+    
+    [self setFrame:viewFrame];
+    [self updateContext];
 }
 
 #pragma mark ---- OSXTorqueView OpenGL Handling ----

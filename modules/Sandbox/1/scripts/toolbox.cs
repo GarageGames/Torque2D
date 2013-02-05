@@ -46,9 +46,12 @@ function ToyCategorySelectList::onSelect(%this)
     }
     else
     {
-        %firstToyButton = ToyListArray.getObject(0);
-        if (isObject(%firstToyButton))
-            %firstToyButton.performSelect();
+        if ( ToyListArray.getCount() > 0 )
+        {
+            %firstToyButton = ToyListArray.getObject(0);
+            if (isObject(%firstToyButton))
+                %firstToyButton.performSelect();
+        }
     }
 }
 

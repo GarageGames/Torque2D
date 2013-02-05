@@ -87,7 +87,9 @@ void _iOSGameInnerLoop()
 
 void _iOSGameResignActive()
 {
-	Con::executef( 1, "oniOSResignActive" );
+    if ( Con::isFunction("oniOSResignActive") )
+        Con::executef( 1, "oniOSResignActive" );
+    
     appIsRunning = false;
 }
 
@@ -95,14 +97,16 @@ void _iOSGameBecomeActive()
 {
 	clearPendingMultitouchEvents( );
     
-	Con::executef( 1, "oniOSBecomeActive" );
+    if ( Con::isFunction("oniOSBecomeActive") )
+        Con::executef( 1, "oniOSBecomeActive" );
     
     appIsRunning = true;
 }
 
 void _iOSGameWillTerminate()
 {
-	Con::executef( 1, "oniOSWillTerminate" );
+    if ( Con::isFunction("oniOSWillTerminate") )
+        Con::executef( 1, "oniOSWillTerminate" );
     
 	Con::executef( 1, "onExit" );
     

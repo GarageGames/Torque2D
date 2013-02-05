@@ -130,7 +130,7 @@ public:
 
     /// @name Keyboard Input
     /// @{
-    GuiControl *mFirstResponder;
+    SimObjectPtr<GuiControl> mFirstResponder;
     static GuiControl *smPrevResponder;
     static GuiControl *smCurResponder;
     /// @}

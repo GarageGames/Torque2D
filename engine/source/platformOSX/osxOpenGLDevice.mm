@@ -88,7 +88,25 @@ bool osxOpenGLDevice::enumDisplayModes( CGDirectDisplayID display )
             // Skip the mode.
             continue;
         }
-        
+
+        // Prepare the resolution.
+        Resolution foundResolution( width, height, bitDepth );
+
+        // Ensure this isn't already in the list.
+        bool alreadyPresent = false;
+        for( Vector<Resolution>::iterator itr = mResolutionList.begin(); itr != mResolutionList.end(); ++itr )
+        {
+            if ( *itr == foundResolution )
+            {
+                alreadyPresent = true;
+                break;
+            }
+        }
+
+        // Skip if already present.
+        if ( alreadyPresent )
+            continue;
+
         // Store the resolution.
         mResolutionList.push_back( Resolution( width, height, bitDepth ) );
     }
@@ -360,14 +378,14 @@ const char* osxOpenGLDevice::getDriverInfo()
 }
 
 //-----------------------------------------------------------------------------
-#pragma message ("osxOpenGLDevice::getGammaCorrection not yet implemented")
+// Not yet implemented. Will resolve in the next video update
 bool osxOpenGLDevice::getGammaCorrection(F32 &g)
 {
     return false;
 }
 
 //-----------------------------------------------------------------------------
-#pragma message ("osxOpenGLDevice::setGammaCorrection not yet implemented")
+// Not yet implemented. Will resolve in the next video update
 bool osxOpenGLDevice::setGammaCorrection(F32 g)
 {
     return false;
