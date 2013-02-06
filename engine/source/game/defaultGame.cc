@@ -111,7 +111,6 @@ static U32 frameTotalCount = 0;
 bool initializeLibraries()
 {
     PlatformAssert::create();
-    _StringTable::create();
     Con::init();
     Sim::init();
 
