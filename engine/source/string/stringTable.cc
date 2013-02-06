@@ -23,7 +23,7 @@
 #include "platform/platform.h"
 #include "stringTable.h"
 
-_StringTable *StringTable = NULL;
+_StringTable *_gStringTable = NULL;
 const U32 _StringTable::csm_stInitSize = 29;
 StringTableEntry _StringTable::EmptyString;
 
@@ -102,8 +102,10 @@ _StringTable::~_StringTable()
 //--------------------------------------
 void _StringTable::create()
 {
-   AssertFatal(StringTable == NULL, "StringTable::create: StringTable already exists.");
-   StringTable = new _StringTable;
+    if(!_gStringTable)
+    {
+        _gStringTable = new _StringTable;
+    }
 }
 
 
@@ -112,7 +114,7 @@ void _StringTable::destroy()
 {
    AssertFatal(StringTable != NULL, "StringTable::destroy: StringTable does not exist.");
    delete StringTable;
-   StringTable = NULL;
+   _gStringTable = NULL;
 }
 
 //--------------------------------------
