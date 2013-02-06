@@ -72,19 +72,33 @@ namespace Compiler
 
    //------------------------------------------------------------
 
-   U32 evalSTEtoU32(StringTableEntry ste, U32)
+   StringTableEntry CodeToSTE(U32 *code, U32 ip)
    {
-      return *((U32 *) &ste);
+#ifdef TORQUE_64
+      return (StringTableEntry)(*((U64*)(code+ip)));
+#else
+      return (StringTableEntry)(*(code+ip));
+#endif
    }
-
-   U32 compileSTEtoU32(StringTableEntry ste, U32 ip)
+   
+   void evalSTEtoCode(StringTableEntry ste, U32 ip, U32 *codeStream)
+   {
+#ifdef TORQUE_64
+      *((U64*)(codeStream+ip)) = (U64)ste;
+#else
+      codeStream[ip] = (U32)ste;
+#endif
+   }
+   
+   void compileSTEtoCode(StringTableEntry ste, U32 ip, U32 *codeStream)
    {
       if(ste)
          getIdentTable().add(ste, ip);
-      return 0;
+      codeStream[ip] = 0;
+      codeStream[ip+1] = 0;
    }
 
-   U32 (*STEtoU32)(StringTableEntry ste, U32 ip) = evalSTEtoU32;
+   void (*STEtoCode)(StringTableEntry ste, U32 ip, U32 *codeStream) = evalSTEtoCode;
 
    //------------------------------------------------------------
 

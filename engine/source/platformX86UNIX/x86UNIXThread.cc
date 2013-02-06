@@ -129,9 +129,9 @@ bool Thread::isAlive()
   return false;
 }
 
-U32 Thread::getCurrentThreadId()
+ThreadIdent Thread::getCurrentThreadId()
 {
-   return (U32)SDL_ThreadID();
+   return SDL_ThreadID();
 }
 
 class PlatformThreadStorage

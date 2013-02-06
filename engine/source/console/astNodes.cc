@@ -798,9 +798,9 @@ U32 VarNode::precompile(TypeReq type)
 
    precompileIdent(varName);
    if(arrayIndex)
-      return arrayIndex->precompile(TypeReqString) + 6;
+      return arrayIndex->precompile(TypeReqString) + 7;
    else
-      return 3;
+      return 4;
 }
 
 U32 VarNode::compile(U32 *codeStream, U32 ip, TypeReq type)
@@ -809,8 +809,8 @@ U32 VarNode::compile(U32 *codeStream, U32 ip, TypeReq type)
       return ip;
 
    codeStream[ip++] = arrayIndex ? OP_LOADIMMED_IDENT : OP_SETCURVAR;
-   codeStream[ip] = STEtoU32(varName, ip);
-   ip++;
+   STEtoCode(varName, ip, codeStream);
+   ip += 2;
    if(arrayIndex)
    {
       codeStream[ip++] = OP_ADVANCE_STR;
@@ -990,7 +990,7 @@ U32 ConstantNode::precompile(TypeReq type)
    if(type == TypeReqString)
    {
       precompileIdent(value);
-      return 2;
+      return 3;
    }
    else if(type == TypeReqNone)
       return 0;
@@ -1007,8 +1007,8 @@ U32 ConstantNode::compile(U32 *codeStream, U32 ip, TypeReq type)
    {
    case TypeReqString:
       codeStream[ip++] = OP_LOADIMMED_IDENT;
-      codeStream[ip] = STEtoU32(value, ip);
-      ip++;
+      STEtoCode(value, ip, codeStream);
+      ip += 2;
       break;
    case TypeReqUInt:
       codeStream[ip++] = OP_LOADIMMED_UINT;
@@ -1064,12 +1064,12 @@ U32 AssignExprNode::precompile(TypeReq type)
    if(arrayIndex)
    {
       if(subType == TypeReqString)
-         return arrayIndex->precompile(TypeReqString) + retSize + addSize + 8;
+         return arrayIndex->precompile(TypeReqString) + retSize + addSize + 9;
       else
-         return arrayIndex->precompile(TypeReqString) + retSize + addSize + 6;
+         return arrayIndex->precompile(TypeReqString) + retSize + addSize + 7;
    }
    else
-      return retSize + addSize + 3;
+      return retSize + addSize + 4;
 }
 
 U32 AssignExprNode::compile(U32 *codeStream, U32 ip, TypeReq type)
@@ -1081,8 +1081,8 @@ U32 AssignExprNode::compile(U32 *codeStream, U32 ip, TypeReq type)
          codeStream[ip++] = OP_ADVANCE_STR;
 
       codeStream[ip++] = OP_LOADIMMED_IDENT;
-      codeStream[ip] = STEtoU32(varName, ip);
-      ip++;
+      STEtoCode(varName, ip, codeStream);
+      ip += 2;
       codeStream[ip++] = OP_ADVANCE_STR;
       ip = arrayIndex->compile(codeStream, ip, TypeReqString);
       codeStream[ip++] = OP_REWIND_STR;
@@ -1093,8 +1093,8 @@ U32 AssignExprNode::compile(U32 *codeStream, U32 ip, TypeReq type)
    else
    {
       codeStream[ip++] = OP_SETCURVAR_CREATE;
-      codeStream[ip] = STEtoU32(varName, ip);
-      ip++;
+      STEtoCode(varName, ip, codeStream);
+      ip += 2;
    }
    switch(subType)
    {
@@ -1197,11 +1197,11 @@ U32 AssignOpExprNode::precompile(TypeReq type)
    if(type != subType)
       size++;
    if(!arrayIndex)
-      return size + 5;
+      return size + 6;
    else
    {
       size += arrayIndex->precompile(TypeReqString);
-      return size + 8;
+      return size + 9;
    }
 }
 
@@ -1211,14 +1211,14 @@ U32 AssignOpExprNode::compile(U32 *codeStream, U32 ip, TypeReq type)
    if(!arrayIndex)
    {
       codeStream[ip++] = OP_SETCURVAR_CREATE;
-      codeStream[ip] = STEtoU32(varName, ip);
-      ip++;
+      STEtoCode(varName, ip, codeStream);
+      ip += 2;
    }
    else
    {
       codeStream[ip++] = OP_LOADIMMED_IDENT;
-      codeStream[ip] = STEtoU32(varName, ip);
-      ip++;
+      STEtoCode(varName, ip, codeStream);
+      ip += 2;
       codeStream[ip++] = OP_ADVANCE_STR;
       ip = arrayIndex->compile(codeStream, ip, TypeReqString);
       codeStream[ip++] = OP_REWIND_STR;
@@ -1304,7 +1304,7 @@ U32 FuncCallExprNode::precompile(TypeReq type)
    precompileIdent(nameSpace);
    for(ExprNode *walk = args; walk; walk = (ExprNode *) walk->getNext())
       size += walk->precompile(TypeReqString) + 1;
-   return size + 5;
+   return size + 7;
 }
 
 U32 FuncCallExprNode::compile(U32 *codeStream, U32 ip, TypeReq type)
@@ -1320,10 +1320,10 @@ U32 FuncCallExprNode::compile(U32 *codeStream, U32 ip, TypeReq type)
    else
       codeStream[ip++] = OP_CALLFUNC_RESOLVE;
 
-   codeStream[ip] = STEtoU32(funcName, ip);
-   ip++;
-   codeStream[ip] = STEtoU32(nameSpace, ip);
-   ip++;
+   STEtoCode(funcName, ip, codeStream);
+   ip += 2;
+   STEtoCode(nameSpace, ip, codeStream);
+   ip += 2;
    codeStream[ip++] = callType;
    if(type != TypeReqString)
       codeStream[ip++] = conversionOp(TypeReqString, type);
@@ -1354,7 +1354,7 @@ U32 SlotAccessNode::precompile(TypeReq type)
       size += 3 + arrayExpr->precompile(TypeReqString);
    }
    // eval object expression sub + 3 (op_setCurField + OP_SETCUROBJECT)
-   size += objectExpr->precompile(TypeReqString) + 3;
+   size += objectExpr->precompile(TypeReqString) + 4;
 
    // get field in desired type:
    return size + 1;
@@ -1375,8 +1375,8 @@ U32 SlotAccessNode::compile(U32 *codeStream, U32 ip, TypeReq type)
    
    codeStream[ip++] = OP_SETCURFIELD;
    
-   codeStream[ip] = STEtoU32(slotName, ip);
-   ip++;
+   STEtoCode(slotName, ip, codeStream);
+   ip += 2;
 
    if(arrayExpr)
    {
@@ -1490,9 +1490,9 @@ U32 SlotAssignNode::precompile(TypeReq type)
    size += valueExpr->precompile(TypeReqString);
 
    if(objectExpr)
-      size += objectExpr->precompile(TypeReqString) + 5;
+      size += objectExpr->precompile(TypeReqString) + 6;
    else
-      size += 5;
+      size += 6;
 
    if(arrayExpr)
       size += arrayExpr->precompile(TypeReqString) + 3;
@@ -1516,8 +1516,8 @@ U32 SlotAssignNode::compile(U32 *codeStream, U32 ip, TypeReq type)
    else
       codeStream[ip++] = OP_SETCUROBJECT_NEW;
    codeStream[ip++] = OP_SETCURFIELD;
-   codeStream[ip] = STEtoU32(slotName, ip);
-   ip++;
+   STEtoCode(slotName, ip, codeStream);
+   ip += 2;
    if(arrayExpr)
    {
       codeStream[ip++] = OP_TERMINATE_REWIND_STR;
@@ -1568,9 +1568,9 @@ U32 SlotAssignOpNode::precompile(TypeReq type)
    if(type != subType)
       size++;
    if(arrayExpr)
-      return size + 9 + arrayExpr->precompile(TypeReqString) + objectExpr->precompile(TypeReqString);
+      return size + 10 + arrayExpr->precompile(TypeReqString) + objectExpr->precompile(TypeReqString);
    else
-      return size + 6 + objectExpr->precompile(TypeReqString);
+      return size + 7 + objectExpr->precompile(TypeReqString);
 }
 
 U32 SlotAssignOpNode::compile(U32 *codeStream, U32 ip, TypeReq type)
@@ -1584,8 +1584,8 @@ U32 SlotAssignOpNode::compile(U32 *codeStream, U32 ip, TypeReq type)
    ip = objectExpr->compile(codeStream, ip, TypeReqString);
    codeStream[ip++] = OP_SETCUROBJECT;
    codeStream[ip++] = OP_SETCURFIELD;
-   codeStream[ip] = STEtoU32(slotName, ip);
-   ip++;
+   STEtoCode(slotName, ip, codeStream);
+   ip += 2;
    if(arrayExpr)
    {
       codeStream[ip++] = OP_TERMINATE_REWIND_STR;
@@ -1634,7 +1634,7 @@ U32 ObjectDeclNode::precompileSubObject(bool)
       argSize += exprWalk->precompile(TypeReqString) + 1;
    argSize += classNameExpr->precompile(TypeReqString) + 1;
 
-   U32 nameSize = objectNameExpr->precompile(TypeReqString) + 2;
+   U32 nameSize = objectNameExpr->precompile(TypeReqString) + 3; // 2
 
    U32 slotSize = 0;
    for(SlotAssignNode *slotWalk = slotDecls; slotWalk; slotWalk = (SlotAssignNode *) slotWalk->getNext())
@@ -1679,8 +1679,8 @@ U32 ObjectDeclNode::compileSubObject(U32 *codeStream, U32 ip, bool root)
       codeStream[ip++] = OP_PUSH;
    }
    codeStream[ip++] = OP_CREATE_OBJECT;
-   codeStream[ip] = STEtoU32(parentObject, ip);
-   ip++;
+   STEtoCode(parentObject, ip, codeStream);
+   ip += 2;
    codeStream[ip++] = structDecl;
    codeStream[ip++] = isClassNameInternal;
    codeStream[ip++] = isMessage;
@@ -1747,7 +1747,7 @@ U32 FunctionDeclStmtNode::precompileStmt(U32)
    setCurrentStringTable(&getGlobalStringTable());
    setCurrentFloatTable(&getGlobalFloatTable());
 
-   endOffset = argc + subSize + 8;
+   endOffset = (argc*2) + subSize + 11;
    return endOffset;
 }
 
@@ -1755,19 +1755,19 @@ U32 FunctionDeclStmtNode::compileStmt(U32 *codeStream, U32 ip, U32, U32)
 {
    U32 start = ip;
    codeStream[ip++] = OP_FUNC_DECL;
-   codeStream[ip] = STEtoU32(fnName, ip);
-   ip++;
-   codeStream[ip] = STEtoU32(nameSpace, ip);
-   ip++;
-   codeStream[ip] = STEtoU32(package, ip);
-   ip++;
+   STEtoCode(fnName, ip, codeStream);
+   ip += 2;
+   STEtoCode(nameSpace, ip, codeStream);
+   ip += 2;
+   STEtoCode(package, ip, codeStream);
+   ip += 2;
    codeStream[ip++] = bool(stmts != NULL);
    codeStream[ip++] = start + endOffset;
    codeStream[ip++] = argc;
    for(VarNode *walk = args; walk; walk = (VarNode *)((StmtNode*)walk)->getNext())
    {
-      codeStream[ip] = STEtoU32(walk->varName, ip);
-      ip++;
+      STEtoCode(walk->varName, ip, codeStream);
+      ip += 2;
    }
    CodeBlock::smInFunction = true;
    ip = compileBlock(stmts, codeStream, ip, 0, 0);
