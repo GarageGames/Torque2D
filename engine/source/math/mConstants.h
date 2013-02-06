@@ -42,4 +42,6 @@
 #define M_2PI_F        (3.1415926535897932384626433f * 2.0f)
 #define M_SQRTHALF_F   0.7071067811865475244008443f
 
+#define POINT_EPSILON (1e-4) ///< Epsilon for point types.
+
 #endif

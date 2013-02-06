@@ -26,6 +26,10 @@
 #include <cstddef>
 #include <limits>
 
+#ifdef TORQUE_OS_IOS
+#import <GLKit/GLKMath.h>
+#endif
+
 /// This function is used to ensure that a floating point number is
 /// not a NaN or infinity.
 inline bool b2IsValid(float32 x)
@@ -63,20 +67,43 @@ inline float32 b2InvSqrt(float32 x)
 /// A 2D column vector.
 struct b2Vec2
 {
-	/// Default constructor does nothing (for performance).
+    union
+    {
+        /// Seperate Elements.
+        struct { float32 x, y; };
+        /// Arrayed Elements.
+#ifdef __GLK_MATH_TYPES_H
+        GLKVector2 mGV;
+#endif
+        float32 v[2];
+    };
+	
+    /// Default constructor does nothing (for performance).
 	b2Vec2() {}
 
 	/// Construct using coordinates.
 	b2Vec2(float32 x, float32 y) : x(x), y(y) {}
+
+#ifdef __GLK_VECTOR_2_H
+	b2Vec2(GLKVector2 gv) : mGV(gv) {}
+#endif
 
 	/// Set this vector to all zeros.
 	void SetZero() { x = 0.0f; y = 0.0f; }
 
 	/// Set this vector to some specified coordinates.
 	void Set(float32 x_, float32 y_) { x = x_; y = y_; }
+    
+#ifdef __GLK_MATH_TYPES_H
+    void Set(GLKVector2 mGV_) { mGV = mGV_;};
+#endif
 
 	/// Negate this vector.
+#ifdef __GLK_VECTOR_2_H
+	b2Vec2 operator -() const { b2Vec2 v; v.Set(GLKVector2Negate(mGV)); return v; }
+#else
 	b2Vec2 operator -() const { b2Vec2 v; v.Set(-x, -y); return v; }
+#endif
 	
 	/// Read from and indexed element.
 	float32 operator () (int32 i) const
@@ -111,7 +138,11 @@ struct b2Vec2
 	/// Get the length of this vector (the norm).
 	float32 Length() const
 	{
+#ifdef __GLK_VECTOR_2_H
+        return GLKVector2Length(mGV);
+#else
 		return b2Sqrt(x * x + y * y);
+#endif
 	}
 
 	/// Get the length squared. For performance, use this instead of
@@ -129,9 +160,14 @@ struct b2Vec2
 		{
 			return 0.0f;
 		}
+
+#ifdef __GLK_VECTOR_2_H
+        mGV = GLKVector2Normalize( mGV);
+#else
 		float32 invLength = 1.0f / length;
 		x *= invLength;
 		y *= invLength;
+#endif
 
 		return length;
 	}
@@ -148,12 +184,22 @@ struct b2Vec2
 		return b2Vec2(-y, x);
 	}
 
-	float32 x, y;
 };
 
 /// A 2D column vector with 3 elements.
 struct b2Vec3
 {
+    union
+    {
+        /// Seperate Elements.
+        struct { float32 x, y, z; };
+        /// Arrayed Elements.
+#ifdef __GLK_MATH_TYPES_H
+        GLKVector3 mGV;
+#endif
+        float32 v[3];
+    };
+
 	/// Default constructor does nothing (for performance).
 	b2Vec3() {}
 
@@ -187,7 +233,6 @@ struct b2Vec3
 		x *= s; y *= s; z *= s;
 	}
 
-	float32 x, y, z;
 };
 
 /// A 2-by-2 matrix. Stored in column-major order.
@@ -267,6 +312,8 @@ struct b2Mat22
 /// A 3-by-3 matrix. Stored in column-major order.
 struct b2Mat33
 {
+	b2Vec3 ex, ey, ez;
+
 	/// The default constructor does nothing (for performance).
 	b2Mat33() {}
 
@@ -302,8 +349,6 @@ struct b2Mat33
 	/// Get the symmetric inverse of this matrix as a 3-by-3.
 	/// Returns the zero matrix if singular.
 	void GetSymInverse33(b2Mat33* M) const;
-
-	b2Vec3 ex, ey, ez;
 };
 
 /// Rotation
@@ -472,13 +517,21 @@ inline b2Vec2 operator * (float32 s, const b2Vec2& a)
 
 inline bool operator == (const b2Vec2& a, const b2Vec2& b)
 {
+#ifdef __GLK_VECTOR_2_H
+    return GLKVector2AllEqualToVector2(a.mGV, b.mGV);
+#else
 	return a.x == b.x && a.y == b.y;
+#endif
 }
 
 inline float32 b2Distance(const b2Vec2& a, const b2Vec2& b)
 {
+#ifdef __GLK_VECTOR_2_H
+    return GLKVector2Distance(a.mGV, b.mGV);
+#else
 	b2Vec2 c = a - b;
 	return c.Length();
+#endif
 }
 
 inline float32 b2DistanceSquared(const b2Vec2& a, const b2Vec2& b)

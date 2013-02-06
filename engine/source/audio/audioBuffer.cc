@@ -207,7 +207,7 @@ ALuint AudioBuffer::getALBuffer()
 #ifdef LOG_SOUND_LOADS
            Con::printf("Reading Caf: %s\n", mFilename);
 #endif
-           SoundEngine::UInt32 bufferID;
+           UInt32 bufferID;
            readSuccess = SoundEngine::LoadSoundFile(mFilename, &bufferID);
            //-Mat need to save the buffer
            malBuffer = bufferID;

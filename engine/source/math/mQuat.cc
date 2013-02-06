@@ -56,12 +56,17 @@ QuatF& QuatF::set( const EulerF & e )
 
 AngAxisF & AngAxisF::set( const QuatF & q )
 {
+#ifdef __GLK_QUATERNION_H
+    axis.mGV = GLKQuaternionAxis(q.mGQ);
+    angle = GLKQuaternionAngle(q.mGQ);
+#else
    angle = mAcos( q.w ) * 2;
    F32 sinHalfAngle = mSqrt(1 - q.w * q.w);
    if (sinHalfAngle != 0)
    	axis.set( q.x / sinHalfAngle, q.y / sinHalfAngle, q.z / sinHalfAngle );
    else
       axis.set(1,0,0);
+#endif
    return *this;
 }
 
@@ -97,19 +102,27 @@ QuatF& QuatF::operator /=( const QuatF & c )
 
 QuatF& QuatF::operator +=( const QuatF & c )
 {
+#ifdef __GLK_QUATERNION_H
+    mGQ = GLKQuaternionAdd(mGQ, c.mGQ);
+#else
    x += c.x;
    y += c.y;
    z += c.z;
    w += c.w;
+#endif
    return *this;
 }
 
 QuatF& QuatF::operator -=( const QuatF & c )
 {
+#ifdef __GLK_QUATERNION_H
+    mGQ = GLKQuaternionSubtract(mGQ, c.mGQ);
+#else
    x -= c.x;
    y -= c.y;
    z -= c.z;
    w -= c.w;
+#endif
    return *this;
 }
 
@@ -143,6 +156,9 @@ QuatF& QuatF::square()
 
 QuatF& QuatF::inverse()
 {
+#ifdef __GLK_QUATERNION_H
+    mGQ = GLKQuaternionInvert(mGQ);
+#else
    F32 magnitude = w*w + x*x + y*y + z*z;
    F32 invMagnitude;
    if( magnitude == 1.0f )    // special case unit quaternion
@@ -162,22 +178,30 @@ QuatF& QuatF::inverse()
       y *= -invMagnitude;
       z *= -invMagnitude;
    }
+#endif
 	return *this;
 }
 
 QuatF& QuatF::set( const AngAxisF & a )
 {
+#ifdef __GLK_QUATERNION_H
+    mGQ = GLKQuaternionMakeWithAngleAndVector3Axis(a.angle, a.axis.mGV);
+#else
    F32 sinHalfAngle, cosHalfAngle;
    mSinCos( a.angle * F32(0.5), sinHalfAngle, cosHalfAngle );
    x = a.axis.x * sinHalfAngle;
    y = a.axis.y * sinHalfAngle;
    z = a.axis.z * sinHalfAngle;
    w = cosHalfAngle;
+#endif
    return *this;
 }
 
 QuatF & QuatF::normalize()
 {
+#ifdef __GLK_QUATERNION_H
+    mGQ = GLKQuaternionNormalize(mGQ);
+#else
    F32 l = mSqrt( x*x + y*y + z*z + w*w );
    if( l == F32(0.0) )
       identity();
@@ -188,6 +212,7 @@ QuatF & QuatF::normalize()
       z /= l;
       w /= l;
    }
+#endif
    return *this;
 }
 
@@ -195,6 +220,9 @@ QuatF & QuatF::normalize()
 
 QuatF& QuatF::set( const MatrixF & mat )
 {
+#ifdef __GLK_QUATERNION_H
+    mGQ = GLKQuaternionMakeWithMatrix4(mat.mGM);
+#else
    F32 const *m = mat;
 
    F32 trace = m[idx(0, 0)] + m[idx(1, 1)] + m[idx(2, 2)];
@@ -220,7 +248,7 @@ QuatF& QuatF::set( const MatrixF & mat )
       q[k] = (m[idx(i,k)] + m[idx(k, i)]) * s;
       w = (m[idx(j,k)] - m[idx(k, j)]) * s;
    }
-
+#endif
    return *this;
 }
 
@@ -275,7 +303,10 @@ QuatF & QuatF::extrapolate( const QuatF & q1, const QuatF & q2, F32 t )
 
 QuatF & QuatF::interpolate( const QuatF & q1, const QuatF & q2, F32 t )
 {
-   //-----------------------------------
+#ifdef __GLK_QUATERNION_H
+    mGQ = GLKQuaternionSlerp ( q1.mGQ, q2.mGQ , t);
+#else
+    //-----------------------------------
    // Calculate the cosine of the angle:
 
    double cosOmega = q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w;
@@ -319,6 +350,7 @@ QuatF & QuatF::interpolate( const QuatF & q1, const QuatF & q2, F32 t )
    y = F32(scale1 * q1.y + scale2 * q2.y);
    z = F32(scale1 * q1.z + scale2 * q2.z);
    w = F32(scale1 * q1.w + scale2 * q2.w);
+#endif
    return *this;
 }
 
