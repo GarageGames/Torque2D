@@ -24,7 +24,7 @@
 #include "math/mMatrix.h"
 #include "console/console.h"
 #include "memory/frameAllocator.h"
-
+const MatrixF MatrixF::Identity( true );
 // idx(i,j) is index to element in column i, row j
 
 void MatrixF::transposeTo(F32 *matrix) const
@@ -163,13 +163,13 @@ EulerF MatrixF::toEuler() const
 
    if(mCos(r.x) != 0.f)
    {
-      r.y = mAtan(-mat[MatrixF::idx(2,0)], mat[MatrixF::idx(2,2)]);
-      r.z = mAtan(-mat[MatrixF::idx(0,1)], mat[MatrixF::idx(1,1)]);
+      r.y = mAtan2(-mat[MatrixF::idx(2,0)], mat[MatrixF::idx(2,2)]);
+      r.z = mAtan2(-mat[MatrixF::idx(0,1)], mat[MatrixF::idx(1,1)]);
    }
    else
    {
       r.y = 0.f;
-      r.z = mAtan(mat[MatrixF::idx(1,0)], mat[MatrixF::idx(0,0)]);
+      r.z = mAtan2(mat[MatrixF::idx(1,0)], mat[MatrixF::idx(0,0)]);
    }
 
    return r;
