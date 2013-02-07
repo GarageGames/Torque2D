@@ -212,7 +212,15 @@ namespace Compiler
 
    //------------------------------------------------------------
    
-   extern StringTableEntry CodeToSTE(U32 *code, U32 ip);
+   inline StringTableEntry CodeToSTE(U32 *code, U32 ip)
+   {
+#ifdef TORQUE_64
+      return (StringTableEntry)(*((U64*)(code+ip)));
+#else
+      return (StringTableEntry)(*(code+ip));
+#endif
+   }
+   
    extern void (*STEtoCode)(StringTableEntry ste, U32 ip, U32 *codeStream);
 
    void evalSTEtoCode(StringTableEntry ste, U32 ip, U32 *codeStream);

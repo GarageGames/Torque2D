@@ -71,15 +71,6 @@ namespace Compiler
    void setBreakCodeBlock(CodeBlock *cb)  { gCurBreakBlock = cb;   }
 
    //------------------------------------------------------------
-
-   StringTableEntry CodeToSTE(U32 *code, U32 ip)
-   {
-#ifdef TORQUE_64
-      return (StringTableEntry)(*((U64*)(code+ip)));
-#else
-      return (StringTableEntry)(*(code+ip));
-#endif
-   }
    
    void evalSTEtoCode(StringTableEntry ste, U32 ip, U32 *codeStream)
    {
