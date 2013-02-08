@@ -25,6 +25,10 @@
 
 #ifndef TORQUE_SHIPPING
 
+#if _MSC_VER >= 1700
+#define _VARIADIC_MAX 10
+#endif
+
 #include "gtest/gtest.h"
 
 #endif // TORQUE_SHIPPING
