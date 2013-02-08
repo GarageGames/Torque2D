@@ -1,14 +1,12 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Torque 2D", "Torque 2D.vcxproj", "{1564A07D-230E-4C90-AEE6-52AC9A58D6C9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Torque2D", "Torque 2D.vcxproj", "{1564A07D-230E-4C90-AEE6-52AC9A58D6C9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ljpeg", "ljpeg.vcxproj", "{0B07BA94-AA53-4FD4-ADB4-79EC2DA53B36}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lpng", "lpng.vcxproj", "{AF1179E3-A838-46A3-A427-1E62AA4C52F4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "zlib.vcxproj", "{86CB2525-0CF3-40D3-BF42-A0A95035EE8C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{963EAD38-C2E9-442D-89B2-299D450E3F43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,10 +42,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{0B07BA94-AA53-4FD4-ADB4-79EC2DA53B36} = {963EAD38-C2E9-442D-89B2-299D450E3F43}
-		{AF1179E3-A838-46A3-A427-1E62AA4C52F4} = {963EAD38-C2E9-442D-89B2-299D450E3F43}
-		{86CB2525-0CF3-40D3-BF42-A0A95035EE8C} = {963EAD38-C2E9-442D-89B2-299D450E3F43}
 	EndGlobalSection
 EndGlobal
