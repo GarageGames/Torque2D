@@ -60,8 +60,3 @@ bool iOSStreamSource::stop() {
 	SoundEngine::SoundEngine_UnloadBackgroundMusicTrack();
 	return true;
 }
-    
-bool iOSStreamSource::setVolume( F32 volume) {
-    SoundEngine::SoundEngine_SetBackgroundMusicVolume(volume);
-    return true;
-}
