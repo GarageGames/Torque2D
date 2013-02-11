@@ -90,6 +90,9 @@ function Sandbox::destroy( %this )
     
     // Destroy the sandbox window.
     destroySandboxWindow();
+    
+    // Destroy the sandbox scene.
+    destroySandboxScene();
 }
 
 //-----------------------------------------------------------------------------

@@ -118,6 +118,9 @@ ParticleSystem::ParticleNode* ParticleSystem::createParticle( void )
 
 void ParticleSystem::freeParticle( ParticleNode* pParticleNode )
 {
+    // Reset the particle.
+    pParticleNode->resetState();
+
     // Remove the previous node reference.
     pParticleNode->mPreviousNode = NULL;
     
