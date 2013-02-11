@@ -561,6 +561,24 @@ bool AssetManager::isAssetInternal( const char* pAssetId )
 
 //-----------------------------------------------------------------------------
 
+bool AssetManager::isAssetPrivate( const char* pAssetId )
+{
+    // Find asset definition.
+    AssetDefinition* pAssetDefinition = findAsset( pAssetId );
+
+    // Did we find the asset?
+    if ( pAssetDefinition == NULL )
+    {
+        // No, so warn.
+        Con::warnf( "Asset Manager: Cannot find asset Id '%s'.", pAssetId );
+        return false;
+    }
+
+    return pAssetDefinition->mAssetPrivate;
+}
+
+//-----------------------------------------------------------------------------
+
 bool AssetManager::isAssetAutoUnload( const char* pAssetId )
 {
     // Find asset definition.
