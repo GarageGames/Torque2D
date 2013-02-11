@@ -69,6 +69,9 @@ function loadToy( %moduleDefinition )
         
     // Create a sandbox scene.
     createSandboxScene();
+    
+    // Now is a good time to purge any idle assets.
+    AssetDatabase.purgeAssets();    
         
     // Set active toy.
     // This must be done here in-case a toy depends on it during its initialization.
@@ -105,5 +108,5 @@ function unloadToy()
     }
     
     // Reset active toy.
-    Sandbox.ActiveToy = "";     
+    Sandbox.ActiveToy = "";  
 }
