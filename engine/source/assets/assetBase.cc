@@ -250,17 +250,29 @@ void AssetBase::refreshAsset( void )
 
 //-----------------------------------------------------------------------------
 
+void AssetBase::acquireAssetReference( void )
+{
+    // Acquired the acquired reference count.
+    if ( mpOwningAssetManager != NULL )
+        mpOwningAssetManager->acquireAcquiredReferenceCount();
+    
+    mAcquireReferenceCount++;
+}
+
+//-----------------------------------------------------------------------------
+
 bool AssetBase::releaseAssetReference( void )
 {
     // Are there any acquisition references?
     if ( mAcquireReferenceCount == 0 )
     {
-        // No, so warn.
-        Con::warnf( "AssetBase: Cannot release asset reference as there are no current acquisitions." );
-
         // Return "unload" unless auto unload is off.
         return mpAssetDefinition->mAssetAutoUnload;
     }
+
+    // Release the acquired reference count.
+    if ( mpOwningAssetManager != NULL )
+        mpOwningAssetManager->releaseAcquiredReferenceCount(); 
 
     // Release reference.
     mAcquireReferenceCount--;
