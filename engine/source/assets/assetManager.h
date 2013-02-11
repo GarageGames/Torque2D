@@ -139,6 +139,7 @@ public:
     StringTableEntry getAssetPath( const char* pAssetId );
     ModuleDefinition* getAssetModuleDefinition( const char* pAssetId );
     bool isAssetInternal( const char* pAssetId );
+    bool isAssetPrivate( const char* pAssetId );
     bool isAssetAutoUnload( const char* pAssetId );
     bool isAssetLoaded( const char* pAssetId );
     bool isDeclaredAsset( const char* pAssetId );

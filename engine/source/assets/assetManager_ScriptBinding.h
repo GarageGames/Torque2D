@@ -213,6 +213,15 @@ ConsoleMethod( AssetManager, isAssetInternal, bool, 3, 3,       "(assetId) - Che
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod( AssetManager, isAssetPrivate, bool, 3, 3,       "(assetId) - Check whether the specified asset Id is private or not.\n"
+                                                                "@param assetId The selected asset Id.\n"
+                                                                "@return Whether the specified asset Id is private or not.")
+{
+    return object->isAssetPrivate( argv[2] );
+}
+
+//-----------------------------------------------------------------------------
+
 ConsoleMethod( AssetManager, isAssetAutoUnload, bool, 3, 3,    "(assetId) - Check whether the specified asset Id is auto-unload or not.\n"
                                                                 "@param assetId The selected asset Id.\n"
                                                                 "@return Whether the specified asset Id is auto-unload or not.")
