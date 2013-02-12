@@ -100,6 +100,18 @@ function buildAquarium()
     %nearRocks.setSceneLayer(3);
     SandboxScene.add( %nearRocks );
     
+    %beam = new Sprite();
+    %beam.setBodyType( "static" );
+    %beam.setPosition( 0, 0 );
+    %beam.setAngle(45);
+    %beam.setImage( "AquariumToy:beam" );
+    %beam.setSize( 30, 800 );
+    %beam.setCollisionSuppress();
+    %beam.setAwake( false );
+    %beam.setActive( false );
+    %beam.setSceneLayer(5);
+    SandboxScene.add( %beam );
+    
     // Left trigger
     %leftTrigger = new SceneObject() { class = "AquariumBoundary"; };
     
