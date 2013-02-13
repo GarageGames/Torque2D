@@ -127,7 +127,7 @@ protected:
     static const char*      getAssetPrivate(void* obj, const char* data)        { return Con::getBoolArg(static_cast<AssetBase*>(obj)->getAssetPrivate()); }
 
 private:
-    inline void             acquireAssetReference( void )                       { mAcquireReferenceCount++; }
+    void                    acquireAssetReference( void );
     bool                    releaseAssetReference( void );
 
     /// Set asset manager ownership.
