@@ -43,7 +43,7 @@
 @property (readwrite, assign) bool accelerometerEnabled;
 @property (readwrite, assign) bool gyroscopeEnabled;
 
-@property (retain) CMAttitude* referenceAttitude;
+@property (strong) CMAttitude* referenceAttitude;
 
 // Accelerometer related functions
 - (void) enableAccelerometer;
