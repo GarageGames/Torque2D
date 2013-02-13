@@ -270,6 +270,7 @@ void GuiGridControl::AdjustGridItems(S32 size, Vector<StringTableEntry>& strItem
 
 	//step two: iterate the grid columns again, and fill in any percentage based sizing, and setup the correct grid array.
 	int remainingSize = size - totalSize;
+	int sizeForPerc = remainingSize;
 	for(int i = 0; i < GridItems.size(); ++i)
 	{
 		GridItem gi = GridItems[i];
@@ -281,7 +282,7 @@ void GuiGridControl::AdjustGridItems(S32 size, Vector<StringTableEntry>& strItem
 		else if (gi.IsPercentage)
 		{
 			F32 perc = gi.Size / 100.0f;
-			S32 realSize = remainingSize * perc;
+			S32 realSize = sizeForPerc * perc;
 			remainingSize -= realSize;
 			items.push_back(realSize);
 		}
