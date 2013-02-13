@@ -52,40 +52,39 @@
 
 
 
-bool iOSButtonBox(const char *windowTitle, const char *message, int numButtons = 0, NSString *buttons[] = nil, iOSAlertDelegate *delegate = nil) 
+bool iOSButtonBox(const char *windowTitle, const char *message, int numButtons = 0, NSArray *buttons = nil, iOSAlertDelegate *delegate = nil)
 {
-
-	UIAlertView *Alert =  [[UIAlertView alloc] initWithTitle: [NSString stringWithUTF8String: windowTitle]
-													 message: [NSString stringWithUTF8String: message] 
-													delegate: delegate 
+    
+	UIAlertView *Alert =  [[UIAlertView alloc] initWithTitle: @(windowTitle)
+													 message: @(message)
+													delegate: delegate
 										   cancelButtonTitle: nil
 										   otherButtonTitles: nil ];
 	
 	if(numButtons > 0)
 	{
 		NSString *current = nil;
-		for( int i = 1;  i < numButtons ; i++ ) 
+		for( int i = 1;  i < numButtons ; i++ )
 		{
 			current = buttons[i];
 			[Alert addButtonWithTitle: current ];
 		}
 	}
-	else 
+	else
 	{
 		[Alert addButtonWithTitle: @"OK" ];
 	}
-
+    
 	
 	[Alert show];
 	
 	// PUAP -Mat NOTE: NSRunLoop is not Thread-Safe, see documentation
-
-	while (Alert.visible) 
+    
+	while (Alert.visible)
 	{
 		[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.100]];
 	}
 	
-	[Alert release];
 	
 	return true;
 }
@@ -99,22 +98,20 @@ void Platform::AlertOK(const char *windowTitle, const char *message)
 	
 	iOSButtonBox( windowTitle, message, 0, nil, delegate );
 	
-	[delegate release];
 }
 //-----------------------------------------------------------------------------
 bool Platform::AlertOKCancel(const char *windowTitle, const char *message)
-{	
+{
 	iOSAlertDelegate *delegate = [[iOSAlertDelegate alloc] init];
 	
-
-	NSString *buttons[] = { @"OK", @"Cancel" };
+    
+	NSArray *buttons = @[ @"OK", @"Cancel" ];
 	
 	//Luma:	Need to pass the delegate in as well
-	iOSButtonBox( windowTitle, message, 2, buttons, delegate );	
+	iOSButtonBox( windowTitle, message, 2, buttons, delegate );
 	
 	//Luma: Zero is NOT the cancel button index... it is based on the order of the buttons in the above array
 	bool returnValue = (delegate->buttonNumber != 1 );
-	[delegate release];
 	return returnValue;
 }
 
@@ -124,29 +121,25 @@ bool Platform::AlertRetry(const char *windowTitle, const char *message)
 	iOSAlertDelegate *delegate = [[iOSAlertDelegate alloc] init];
 	
 	//Luma:	Should be Retry / Cancel, not Cancel / Retry
-	NSString *buttons[] = { @"Retry",
-							@"Cancel",
-						  };
-
+    NSArray  *buttons = @[@"Retry", @"Cancel"];
+    
 	//Luma:	Need to pass the delegate in as well
-	iOSButtonBox( windowTitle, message, 2, buttons, delegate );	
+	iOSButtonBox( windowTitle, message, 2, buttons, delegate );
 	
 	//Luma: Zero is NOT the cancel button index... it is based on the order of the buttons in the above array
 	bool returnValue = (delegate->buttonNumber != 1 );
-	[delegate release];
 	return returnValue;
 }
 
 
 bool Platform::AlertYesNo(const char *windowTitle, const char *message)
-{	
+{
 	iOSAlertDelegate *delegate = [[iOSAlertDelegate alloc] init];
 	
-	NSString *buttons[] = { @"Yes", @"No" };
+    NSArray  *buttons = @[@"Yes", @"No"];
 	
-	iOSButtonBox( windowTitle, message, 2, buttons, delegate );	
+	iOSButtonBox( windowTitle, message, 2, buttons, delegate );
 	bool returnValue = (delegate->buttonNumber != 1 );
-	[delegate release];
 	
 	return returnValue;
 }
