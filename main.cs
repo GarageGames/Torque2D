@@ -63,4 +63,6 @@ ModuleDatabase.LoadExplicit( "Sandbox" );
 
 function onExit()
 {
+    // Unload the sandbox module.
+    ModuleDatabase.unloadExplicit( "Sandbox" );
 }
