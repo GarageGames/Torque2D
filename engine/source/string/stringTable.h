@@ -162,9 +162,16 @@ private:
    static StringTableEntry EmptyString;
 };
 
+extern _StringTable *_gStringTable;
 
-extern _StringTable *StringTable;
+inline _StringTable* _getStringTable()
+{
+    if(_gStringTable == NULL)
+        _StringTable::create();
+    return _gStringTable;
+}
 
+#define StringTable _getStringTable()
 
 #endif //_STRINGTABLE_H_
 
