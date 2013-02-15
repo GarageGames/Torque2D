@@ -26,7 +26,7 @@ if not exist "input/docDump.txt" (
 
 REM --- Build the doxygen docs ---
  cd doxygen
- doxygen.exe scriptReference.cfg
+ doxygen.exe scriptReference.Windows.cfg
 
 REM --- Build the CHM ---
  hhc.exe output\html\index.hhp
