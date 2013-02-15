@@ -1,0 +1,1 @@
+This directory contains the sources from Doxygen 1.6.3 that have been modified for our needs.
