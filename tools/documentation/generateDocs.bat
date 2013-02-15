@@ -2,7 +2,7 @@
 setlocal
 
 REM --- Dump the engine docs ---
-if not exist "../Torque2D.exe" (
+if not exist "../../Torque2D.exe" (
 	echo.
 	echo The Torque 2D executable was not found.
 	echo.
@@ -12,7 +12,7 @@ if not exist "../Torque2D.exe" (
 )
 
 if exist "input/docDump.txt" del /Q "input/docDump.txt"
-"../Torque2D.exe" generateDocs.cs
+"../../Torque2D.exe" generateDocs.cs
 if not exist "input/docDump.txt" (
     echo.
     echo The Torque 2D documentation was not dumped.
