@@ -695,6 +695,7 @@ function TruckProjectile::handleCollision(%this, %object, %collisionDetails)
 {   
     // Create an impact explosion at the projectiles position.
     %particlePlayer = new ParticlePlayer();
+    %particlePlayer.BodyType = Static;
     %particlePlayer.Position = %this.Position;    
     %particlePlayer.Size = 10;
     %particlePlayer.SceneLayer = TruckToy.BackgroundDomain-1;

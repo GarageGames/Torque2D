@@ -246,6 +246,21 @@ function ResolutionSelectList::onSelect(%this)
 
 //-----------------------------------------------------------------------------
 
+function PauseSceneModeButton::onClick(%this)
+{
+    // Sanity!
+    if ( !isObject(SandboxScene) )
+    {
+        error( "Cannot pause/unpause the Sandbox scene as it does not exist." );
+        return;
+    }
+    
+    // Toggle the scene pause.
+    SandboxScene.setScenePause( !SandboxScene.getScenePause() );   
+}
+
+//-----------------------------------------------------------------------------
+
 function ReloadToyOverlayButton::onClick(%this)
 {
     // Finish if no toy is loaded.
