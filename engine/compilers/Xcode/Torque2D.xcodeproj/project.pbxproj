@@ -459,6 +459,7 @@
 		2AC4404416B0142B00FC4091 /* ImageFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFont.h; sourceTree = "<group>"; };
 		2AC5C7E71667C85700A0D046 /* platformStringTests.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = platformStringTests.cc; path = ../../../source/testing/tests/platformStringTests.cc; sourceTree = "<group>"; };
 		2ACFC0A7166CE1AB00FE7370 /* platformMemoryTests.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = platformMemoryTests.cc; path = ../../../source/testing/tests/platformMemoryTests.cc; sourceTree = "<group>"; };
+		2AD07B2616D15F5A0070DC79 /* simObjectTimerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simObjectTimerEvent.h; sourceTree = "<group>"; };
 		2AD35A541663608E00C75F30 /* platformFileIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platformFileIO.h; sourceTree = "<group>"; };
 		2ADCAC0E16A41E4400E07619 /* tamlChildren.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlChildren.h; sourceTree = "<group>"; };
 		2ADCAC1016A41E5500E07619 /* ParticleAsset_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleAsset_ScriptBinding.h; sourceTree = "<group>"; };
@@ -746,7 +747,6 @@
 		86BC7EC516518D4600D96ADF /* SceneObject_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObject_ScriptBinding.h; sourceTree = "<group>"; };
 		86BC7EC816518D4600D96ADF /* SceneObjectMoveToEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObjectMoveToEvent.h; sourceTree = "<group>"; };
 		86BC7EC916518D4600D96ADF /* SceneObjectRotateToEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObjectRotateToEvent.h; sourceTree = "<group>"; };
-		86BC7ECD16518D4600D96ADF /* SceneObjectTimerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObjectTimerEvent.h; sourceTree = "<group>"; };
 		86BC7ECE16518D4600D96ADF /* Scroller.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scroller.cc; sourceTree = "<group>"; };
 		86BC7ECF16518D4600D96ADF /* Scroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scroller.h; sourceTree = "<group>"; };
 		86BC7ED016518D4600D96ADF /* Scroller_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scroller_ScriptBinding.h; sourceTree = "<group>"; };
@@ -1868,7 +1868,6 @@
 				86BC7EC516518D4600D96ADF /* SceneObject_ScriptBinding.h */,
 				86BC7EC816518D4600D96ADF /* SceneObjectMoveToEvent.h */,
 				86BC7EC916518D4600D96ADF /* SceneObjectRotateToEvent.h */,
-				86BC7ECD16518D4600D96ADF /* SceneObjectTimerEvent.h */,
 				86BC7ECE16518D4600D96ADF /* Scroller.cc */,
 				86BC7ECF16518D4600D96ADF /* Scroller.h */,
 				86BC7ED016518D4600D96ADF /* Scroller_ScriptBinding.h */,
@@ -2580,6 +2579,7 @@
 		86BC812C16518D4600D96ADF /* sim */ = {
 			isa = PBXGroup;
 			children = (
+				2AD07B2616D15F5A0070DC79 /* simObjectTimerEvent.h */,
 				86BC812D16518D4600D96ADF /* scriptGroup.cc */,
 				86BC812E16518D4600D96ADF /* scriptGroup.h */,
 				86BC812F16518D4600D96ADF /* scriptObject.cc */,

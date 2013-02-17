@@ -52,10 +52,6 @@
 #include "component/behaviors/behaviorTemplate.h"
 #endif
 
-#ifndef _SCENE_OBJECT_TIMER_EVENT_H_
-#include "2d/sceneobject/SceneObjectTimerEvent.h"
-#endif
-
 #ifndef _SCENE_OBJECT_MOVE_TO_EVENT_H_
 #include "2d/sceneobject/SceneObjectMoveToEvent.h"
 #endif
@@ -204,7 +200,6 @@ SceneObject::SceneObject() :
     mEditorTickAllowed(true),
     mPickingAllowed(true),
     mAlwaysInScope(false),
-    mPeriodicTimerID(0),
     mMoveToEventId(0),
     mRotateToEventId(0),
     mSerialId(0),

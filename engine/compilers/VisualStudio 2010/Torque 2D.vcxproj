@@ -1003,6 +1003,7 @@
     <ClInclude Include="..\..\source\sim\simObject.h" />
     <ClInclude Include="..\..\source\sim\SimObjectList.h" />
     <ClInclude Include="..\..\source\sim\simObjectPtr.h" />
+    <ClInclude Include="..\..\source\sim\simObjectTimerEvent.h" />
     <ClInclude Include="..\..\source\sim\simSet.h" />
     <ClInclude Include="..\..\source\string\findMatch.h" />
     <ClInclude Include="..\..\source\string\stringBuffer.h" />

@@ -220,7 +220,6 @@ protected:
     bool                    mEditorTickAllowed;
     bool                    mPickingAllowed;
     bool                    mAlwaysInScope;
-    S32                     mPeriodicTimerID;
     U32                     mMoveToEventId;
     U32                     mRotateToEventId;
     U32                     mSerialId;
@@ -564,8 +563,6 @@ public:
     inline const char*      scriptThis(void) const                      { return Con::getIntArg(getId()); }
     inline bool             getIsPickingAllowed(void) const             { return mPickingAllowed; }
     inline bool             getIsAlwaysInScope(void) const              { return mAlwaysInScope; }
-    inline void             setPeriodicTimerID( S32 timerID )           { mPeriodicTimerID = timerID; }
-    inline S32              getPeriodicTimerID( void ) const            { return mPeriodicTimerID; }
     inline void             setWorldQueryKey( const U32 key )           { mWorldQueryKey = key; }
     inline U32              getWorldQueryKey( void ) const              { return mWorldQueryKey; }
     BehaviorInstance*       behavior(const char *name);

@@ -3730,50 +3730,6 @@ ConsoleMethod(SceneObject, safeDelete, void, 2, 2, "() - Safely deletes object.\
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setTimerOn, void, 3, 3, "(float timePeriod) - Starts a periodic timer for this object.\n"
-                                                      "Sets a timer on the object that, when it expires, will cause the object to execute the onTimer() callback.\n"
-                                                      "The timer event will continue to occur at regular intervals until setTimerOff() is called.\n"
-                                                      "@param timePeriod The period of time, in milliseconds, between each callback.\n"
-                                                    "@return No return Value.")
-{
-    // Is the periodic timer running?
-    if ( object->getPeriodicTimerID() != 0 )
-    {
-        // Yes, so cancel it.
-        Sim::cancelEvent( object->getPeriodicTimerID() );
-
-        // Reset Timer ID.
-        object->setPeriodicTimerID( 0 );
-    }
-
-    // Fetch Time-Delta.
-    U32 timeDelta = U32(dAtof(argv[2]));
-
-    // Create Timer Event.
-    SceneObjectTimerEvent* pEvent = new SceneObjectTimerEvent( timeDelta );
-
-    // Post Event.
-    object->setPeriodicTimerID( Sim::postEvent( object, pEvent, Sim::getCurrentTime() + timeDelta ) );
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(SceneObject, setTimerOff, void, 2, 2, "() - Stops the periodic timer for this object.\n"
-                                                                 "@return No return Value.")
-{
-    // Finish if the periodic timer isn't running.
-    if ( object->getPeriodicTimerID() == 0 )
-        return;
-
-    // Cancel It.
-    Sim::cancelEvent( object->getPeriodicTimerID() );
-
-    // Reset Timer ID.
-    object->setPeriodicTimerID( 0 );
-}
-
-//-----------------------------------------------------------------------------
-
 ConsoleMethod(SceneObject, behavior, S32, 3, 3, "(string behaviorName) - Gets the behavior instance ID off of the object based on the behavior name passed.\n"
                                                    "@param behaviorName The name of the behavior you want to get the instance ID of.\n"
                                                    "@return (integer behaviorID) The id of the behavior instance.")
