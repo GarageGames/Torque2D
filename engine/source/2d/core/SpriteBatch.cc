@@ -931,7 +931,7 @@ SpriteBatchItem* SpriteBatch::createSprite( void )
     PROFILE_SCOPE(SpriteBatch_CreateSprite);
 
     // Allocate batch Id.
-    const U32 batchId = mMasterBatchId++;
+    const U32 batchId = ++mMasterBatchId;
 
     // Create sprite batch item,
     SpriteBatchItem* pSpriteBatchItem = SpriteBatchItemFactory.createObject();
