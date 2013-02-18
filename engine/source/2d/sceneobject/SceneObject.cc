@@ -52,10 +52,6 @@
 #include "component/behaviors/behaviorTemplate.h"
 #endif
 
-#ifndef _SCENE_OBJECT_TIMER_EVENT_H_
-#include "2d/sceneobject/SceneObjectTimerEvent.h"
-#endif
-
 #ifndef _SCENE_OBJECT_MOVE_TO_EVENT_H_
 #include "2d/sceneobject/SceneObjectMoveToEvent.h"
 #endif
@@ -204,7 +200,6 @@ SceneObject::SceneObject() :
     mEditorTickAllowed(true),
     mPickingAllowed(true),
     mAlwaysInScope(false),
-    mPeriodicTimerID(0),
     mMoveToEventId(0),
     mRotateToEventId(0),
     mSerialId(0),
@@ -1639,19 +1634,26 @@ void SceneObject::onEndCollision( const TickContact& tickContact )
 
 //-----------------------------------------------------------------------------
 
-bool SceneObject::moveTo( const Vector2& targetWorldPoint, const U32 time, const bool autoStop, const bool warpToTarget )
+bool SceneObject::moveTo( const Vector2& targetWorldPoint, const F32 speed, const bool autoStop, const bool warpToTarget )
 {
     // Check in a scene.
     if ( !getScene() )
     {
-        Con::warnf("Cannot move object (%d) to a point as it is not in a scene.", getId() );
+        Con::warnf("SceneObject::moveTo() - Cannot move object (%d) to a point as it is not in a scene.", getId() );
         return false;
     }
 
     // Check not a static body.
     if ( getBodyType() == b2_staticBody )
     {
-        Con::warnf("Cannot move object (%d) to a point as it is a static body.", getId() );
+        Con::warnf("SceneObject::moveTo() - Cannot move object (%d) to a point as it is a static body.", getId() );
+        return false;
+    }
+
+    // Check speed.
+    if ( speed <= 0.0f )
+    {
+        Con::warnf("SceneObject::moveTo() - Speed '%f' is invalid.", speed );
         return false;
     }
 
@@ -1662,11 +1664,12 @@ bool SceneObject::moveTo( const Vector2& targetWorldPoint, const U32 time, const
         mMoveToEventId = 0;
     }
 
-    // Calculate relative position.
-    const Vector2 relativePosition = targetWorldPoint - getPosition();
+    // Calculate the linear velocity for the specified speed.
+    Vector2 linearVelocity = targetWorldPoint - getPosition();
+    const F32 distance = linearVelocity.Normalize( speed );
 
-    // Calculate linear velocity to use over time.
-    const Vector2 linearVelocity = relativePosition / (time * 0.001f);
+    // Calculate the time it will take to reach the target.
+    const U32 time = (U32)((distance / speed) * 1000.0f);
 
     // Set the linear velocity.
     setLinearVelocity( linearVelocity );
@@ -1680,19 +1683,26 @@ bool SceneObject::moveTo( const Vector2& targetWorldPoint, const U32 time, const
 
 //-----------------------------------------------------------------------------
 
-bool SceneObject::rotateTo( const F32 targetAngle, const U32 time, const bool autoStop, const bool warpToTarget )
+bool SceneObject::rotateTo( const F32 targetAngle, const F32 speed, const bool autoStop, const bool warpToTarget )
 {
     // Check in a scene.
     if ( !getScene() )
     {
-        Con::warnf("Cannot rotate object (%d) to an angle as it is not in a scene.", getId() );
+        Con::warnf("SceneObject::rotateTo() - Cannot rotate object (%d) to an angle as it is not in a scene.", getId() );
         return false;
     }
 
     // Check not a static body.
     if ( getBodyType() == b2_staticBody )
     {
-        Con::warnf("Cannot move object (%d) to an angle as it is a static body.", getId() );
+        Con::warnf("SceneObject::rotateTo() - Cannot move object (%d) to an angle as it is a static body.", getId() );
+        return false;
+    }
+
+    // Check speed.
+    if ( speed <= 0.0f )
+    {
+        Con::warnf("SceneObject::rotateTo() - Speed '%f' is invalid.", speed );
         return false;
     }
 
@@ -1709,11 +1719,11 @@ bool SceneObject::rotateTo( const F32 targetAngle, const U32 time, const bool au
     // Calculate delta angle.
     const F32 deltaAngle = mAtan( mSin( relativeAngle ), mCos( relativeAngle ) );
 
-    // Calculate angular velocity over time.
-    const F32 angularVelocity = deltaAngle / (time * 0.001f);
-
     // Set angular velocity.
-    setAngularVelocity( angularVelocity );
+    setAngularVelocity( deltaAngle > 0.0f ? speed : -speed );
+
+    // Calculate the time it will take to reach the angle.
+    const U32 time = (U32)(mFabs(deltaAngle / speed) * 1000.0f);
 
     // Create and post event.
     SceneObjectRotateToEvent* pEvent = new SceneObjectRotateToEvent( targetAngle, autoStop, warpToTarget );

@@ -2586,6 +2586,9 @@
     <ClInclude Include="..\..\source\persistence\taml\tamlCustom.h">
       <Filter>persistence\taml</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\sim\simObjectTimerEvent.h">
+      <Filter>sim</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\math\mMath_ASM.asm">

@@ -2348,9 +2348,6 @@
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectRotateToEvent.h">
       <Filter>2d\sceneobject</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectTimerEvent.h">
-      <Filter>2d\sceneobject</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\2d\sceneobject\Scroller.h">
       <Filter>2d\sceneobject</Filter>
     </ClInclude>
@@ -2585,6 +2582,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\persistence\taml\tamlCustom.h">
       <Filter>persistence\taml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\sim\simObjectTimerEvent.h">
+      <Filter>sim</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

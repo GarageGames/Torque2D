@@ -284,6 +284,9 @@ private:
 
     StringTableEntry    mProgenitorFile;
 
+    S32 mPeriodicTimerID;
+
+
     /// @name Notification
     /// @{
     Notify*     mNotifyList;
@@ -620,6 +623,10 @@ public:
 
     inline void setProgenitorFile( const char* pFile ) { mProgenitorFile = StringTable->insert( pFile ); }
     inline StringTableEntry getProgenitorFile( void ) const { return mProgenitorFile; }
+
+    inline void setPeriodicTimerID( const S32 timerID )     { mPeriodicTimerID = timerID; }
+    inline S32 getPeriodicTimerID( void ) const             { return mPeriodicTimerID; }
+    inline bool isPeriodicTimerActive( void ) const         { return mPeriodicTimerID != 0; }
 
     /// @}
 
