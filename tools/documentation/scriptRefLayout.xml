@@ -1,9 +1,13 @@
 <doxygenlayout version="1.0">
   <!-- Navigation index tabs for HTML output -->
   <navindex>
-      <tab type="classindex" visible="$ALPHABETICAL_INDEX" title="Type Index"/>
-      <tab type="hierarchy" visible="$CLASS_HIERARCHY_INDEX" title="Type Hierarchy"/>
-      <tab type="classmembers" visible="$CLASS_MEMBER_INDEX" title="Type Members"/>
+    <tab type="namespaces" visible="yes" title="Global Script">
+      <tab type="namespaces" visible="yes" title="Functions"/>
+    </tab>  
+	<tab type="classes" visible="yes" title="Types">
+      <tab type="classindex" visible="$ALPHABETICAL_INDEX" title="A-Z"/>
+      <tab type="hierarchy" visible="$CLASS_HIERARCHY_INDEX" title="Hierarchy"/>
+	</tab>
   </navindex>  
 
   <!-- Layout definition for a class page -->
