@@ -32,6 +32,7 @@
 #endif
 
 #include <math.h>
+#include <limits>
 
 // Remove a couple of annoying macros, if they are present (In VC 6, they are.)
 #ifdef min

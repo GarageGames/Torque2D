@@ -849,6 +849,9 @@
     <ClInclude Include="..\..\source\io\zip\zipStatFilter.h" />
     <ClInclude Include="..\..\source\io\zip\zipSubStream.h" />
     <ClInclude Include="..\..\source\io\zip\zipTempStream.h" />
+    <ClInclude Include="..\..\source\math\mPoint2.h" />
+    <ClInclude Include="..\..\source\math\mPoint3.h" />
+    <ClInclude Include="..\..\source\math\mPoint4.h" />
     <ClInclude Include="..\..\source\math\rectClipper.h" />
     <ClInclude Include="..\..\source\memory\dataChunker.h" />
     <ClInclude Include="..\..\source\memory\factoryCache.h" />
