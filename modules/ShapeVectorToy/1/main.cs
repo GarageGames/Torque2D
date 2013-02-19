@@ -34,7 +34,7 @@ function ShapeVectorToy::create( %this )
     // "Square": Simple box
     // "Triangle": Equilateral triangle
     // "Circle": Simple circle
-    // "Complexe":
+    // "Complex": Shape with enough vertices to make an uncommon shape
     ShapeVectorToy.shape = "Square";
 
     // Toggles filling the shape with color or leaving as an outline
