@@ -1017,10 +1017,10 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
     AssertFatal( shapeIndexCollider >= 0, "SceneObject::getContact() - Cannot find shape index reported on physics proxy of a fixture." );
 
     // Fetch normal and contact points.
+    const U32& pointCount = tickContact.mPointCount;
     const b2Vec2& normal = tickContact.mWorldManifold.normal;
     const b2Vec2& point1 = tickContact.mWorldManifold.points[0];
     const b2Vec2& point2 = tickContact.mWorldManifold.points[1];
-    const U32& pointCount = tickContact.mPointCount;
 
     // Fetch collision impulse information
     const F32 normalImpulse1 = tickContact.mNormalImpulses[0];
@@ -1044,7 +1044,7 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
             normalImpulse2,
             tangentImpulse2 );
     }
-    else
+    else if ( pointCount == 1 )
     {
         dSprintf(pReturnBuffer, 128,
             "%d %d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
@@ -1055,6 +1055,13 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
             normalImpulse1,
             tangentImpulse1 );
     }
+	else
+	{
+        dSprintf(pReturnBuffer, 64,
+            "%d %d %d",
+            pSceneObjectCollider,
+            shapeIndexThis, shapeIndexCollider );
+	}
 
     return pReturnBuffer;
 }
@@ -1610,13 +1617,13 @@ ConsoleMethod(SceneObject, getAngularDamping, F32, 2, 2, "() - Gets the angular 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, moveTo, bool, 3, 7,  "(worldPoint X/Y, [time = 1000], [autoStop = true], [warpToTarget = true]) - Moves the object to the specified world point.\n"
+ConsoleMethod(SceneObject, moveTo, bool, 4, 7,  "(worldPoint X/Y, time, [autoStop = true], [warpToTarget = true]) - Moves the object to the specified world point.\n"
                                                 "The point is moved by calculating the initial linear velocity required and applies it.\n"
                                                 "The object may never reach the point if it has linear damping applied or collides with another object.\n"
-                                                "@param worldPoint/Y - The world point to move the object to.\n"
-                                                "@param time - The time (milliseconds) taken to move the object to the specified point."
-                                                "@param autoStop? - Whether to automatically set the linear velocity to zero when time has elapsed or not\n"
-                                                "@param warpToTarget? - Whether to move instantly to the target point after the specified time or not in-case the target was not quite reached.\n"
+                                                "@param worldPoint/Y The world point to move the object to.\n"
+                                                "@param speed The speed (in m/s) to use to move to the specified point."
+                                                "@param autoStop? Whether to automatically set the linear velocity to zero when time has elapsed or not\n"
+                                                "@param warpToTarget? Whether to move instantly to the target point after the specified time or not in-case the target was not quite reached.\n"
                                                 "@return Whether the move could be started or not.")
 {
     // World point.
@@ -1641,17 +1648,12 @@ ConsoleMethod(SceneObject, moveTo, bool, 3, 7,  "(worldPoint X/Y, [time = 1000],
         return false;
     }
 
-    if ( argc <= nextArg )
-    {
-        return object->moveTo( worldPoint );
-    }
-
-    // Time.
-    const U32 time = dAtoi(argv[nextArg++]);
+    // Speed.
+    const F32 speed = dAtof(argv[nextArg++]);
 
     if ( argc <= nextArg )
     {
-        return object->moveTo( worldPoint, time );
+        return object->moveTo( worldPoint, speed );
     }
 
     // Auto stop?
@@ -1659,40 +1661,35 @@ ConsoleMethod(SceneObject, moveTo, bool, 3, 7,  "(worldPoint X/Y, [time = 1000],
 
     if ( argc <= nextArg )
     {
-        return object->moveTo( worldPoint, time, autoStop );
+        return object->moveTo( worldPoint, speed, autoStop );
     }
 
     // Warp to target?
     const bool warpToTarget = dAtob(argv[nextArg++]);
 
-    return object->moveTo( worldPoint, time, autoStop, warpToTarget );
+    return object->moveTo( worldPoint, speed, autoStop, warpToTarget );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, rotateTo, bool, 3, 6,    "(angle, [time = 1000], [autoStop = true], [warpToTarget = true]) - Rotates the object to the specified angle.\n"
+ConsoleMethod(SceneObject, rotateTo, bool, 4, 6,    "(angle, speed, [autoStop = true], [warpToTarget = true]) - Rotates the object to the specified angle.\n"
                                                     "The angle is rotated to by calculating the initial angular velocity required and applies it.\n"
                                                     "The object may never reach the point if it has angular damping applied or collides with another object.\n"
-                                                    "@param angle- The angle to rotate the object to.\n"
-                                                    "@param time - The time (milliseconds) taken to rotate the object to the specified angle."
-                                                    "@param autoStop? - Whether to automatically set the angular velocity to zero when time has elapsed or not\n"
-                                                    "@param warpToTarget? - Whether to rotate instantly to the target angle after the specified time or not in-case the target was not quite reached.\n"
+                                                    "@param angle The angle to rotate the object to.\n"
+                                                    "@param speed The speed (in degree/s) to use to rotate to the specified angle."
+                                                    "@param autoStop? Whether to automatically set the angular velocity to zero when time has elapsed or not\n"
+                                                    "@param warpToTarget? Whether to rotate instantly to the target angle after the specified time or not in-case the target was not quite reached.\n"
                                                     "@return Whether the rotation could be started or not.")
 {
     // Fetch angle.
     const F32 angle = mDegToRad(dAtof(argv[2]));
 
-    if ( argc == 3 )
-    {
-        return object->rotateTo( angle );
-    }
-
-    // Time.
-    const U32 time = dAtoi(argv[3]);
+    // Speed.
+    const F32 speed = mDegToRad(dAtof(argv[3]));
 
     if ( argc == 4 )
     {
-        return object->rotateTo( angle, time );
+        return object->rotateTo( angle, speed );
     }
 
     // Auto stop?
@@ -1700,13 +1697,13 @@ ConsoleMethod(SceneObject, rotateTo, bool, 3, 6,    "(angle, [time = 1000], [aut
 
     if ( argc == 5 )
     {
-        return object->rotateTo( angle, time, autoStop );
+        return object->rotateTo( angle, speed, autoStop );
     }
 
     // Warp to target.
     const bool warpToTarget = dAtob(argv[5]);
 
-    return object->rotateTo( angle, time, autoStop, warpToTarget );
+    return object->rotateTo( angle, speed, autoStop, warpToTarget );
 
 }
 
@@ -3726,50 +3723,6 @@ ConsoleMethod(SceneObject, safeDelete, void, 2, 2, "() - Safely deletes object.\
 {
     // Script Delete.
     object->safeDelete();
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(SceneObject, setTimerOn, void, 3, 3, "(float timePeriod) - Starts a periodic timer for this object.\n"
-                                                      "Sets a timer on the object that, when it expires, will cause the object to execute the onTimer() callback.\n"
-                                                      "The timer event will continue to occur at regular intervals until setTimerOff() is called.\n"
-                                                      "@param timePeriod The period of time, in milliseconds, between each callback.\n"
-                                                    "@return No return Value.")
-{
-    // Is the periodic timer running?
-    if ( object->getPeriodicTimerID() != 0 )
-    {
-        // Yes, so cancel it.
-        Sim::cancelEvent( object->getPeriodicTimerID() );
-
-        // Reset Timer ID.
-        object->setPeriodicTimerID( 0 );
-    }
-
-    // Fetch Time-Delta.
-    U32 timeDelta = U32(dAtof(argv[2]));
-
-    // Create Timer Event.
-    SceneObjectTimerEvent* pEvent = new SceneObjectTimerEvent( timeDelta );
-
-    // Post Event.
-    object->setPeriodicTimerID( Sim::postEvent( object, pEvent, Sim::getCurrentTime() + timeDelta ) );
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(SceneObject, setTimerOff, void, 2, 2, "() - Stops the periodic timer for this object.\n"
-                                                                 "@return No return Value.")
-{
-    // Finish if the periodic timer isn't running.
-    if ( object->getPeriodicTimerID() == 0 )
-        return;
-
-    // Cancel It.
-    Sim::cancelEvent( object->getPeriodicTimerID() );
-
-    // Reset Timer ID.
-    object->setPeriodicTimerID( 0 );
 }
 
 //-----------------------------------------------------------------------------

@@ -562,10 +562,10 @@ void Scene::dispatchBeginContactCallbacks( void )
             continue;
 
         // Fetch normal and contact points.
+        const U32& pointCount = tickContact.mPointCount;
         const b2Vec2& normal = tickContact.mWorldManifold.normal;
         const b2Vec2& point1 = tickContact.mWorldManifold.points[0];
         const b2Vec2& point2 = tickContact.mWorldManifold.points[1];
-        const U32& pointCount = tickContact.mPointCount;
         const S32 shapeIndexA = pSceneObjectA->getCollisionShapeIndex( tickContact.mpFixtureA );
         const S32 shapeIndexB = pSceneObjectB->getCollisionShapeIndex( tickContact.mpFixtureB );
 
@@ -600,7 +600,7 @@ void Scene::dispatchBeginContactCallbacks( void )
                 normalImpulse2,
                 tangentImpulse2 );
         }
-        else
+        else if ( pointCount == 1 )
         {
             dSprintf(pMiscInfoBuffer, 128,
                 "%d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
@@ -610,6 +610,12 @@ void Scene::dispatchBeginContactCallbacks( void )
                 normalImpulse1,
                 tangentImpulse1 );
         }
+		else
+		{
+            dSprintf(pMiscInfoBuffer, 64,
+                "%d %d",
+                shapeIndexA, shapeIndexB );
+		}
 
         // Script callback.
         Con::executef( this, 4, "onCollision",

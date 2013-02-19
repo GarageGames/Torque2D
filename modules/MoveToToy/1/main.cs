@@ -26,10 +26,12 @@ function MoveToToy::create( %this )
     activatePackage( MoveToToyPackage );    
 
     // Initialize the toys settings.
-    MoveToToy.moveTime = 1000;
+    MoveToToy.moveSpeed = 50;
+    MoveToToy.trackMouse = true;
 
     // Add the custom controls.
-    addNumericOption("Move time", 1000, 10000, 100, "setMoveTime", MoveToToy.moveTime, true, "Sets the time it takes to move to the target position.");
+    addNumericOption("Move Speed", 1, 150, 1, "setMoveSpeed", MoveToToy.moveSpeed, true, "Sets the linear speed to use when moving to the target position.");
+    addFlagOption("Track Mouse", "setTrackMouse", MoveToToy.trackMouse, false, "Whether to track the position of the mouse or not." );
 
     // Reset the toy initially.
     MoveToToy.reset();        
@@ -148,9 +150,16 @@ function MoveToToy::createTarget( %this )
 
 //-----------------------------------------------------------------------------
 
-function MoveToToy::setMoveTime( %this, %value )
+function MoveToToy::setMoveSpeed( %this, %value )
 {
-    %this.moveTime = %value;
+    %this.moveSpeed = %value;
+}
+
+//-----------------------------------------------------------------------------
+
+function MoveToToy::setTrackMouse( %this, %value )
+{
+    %this.trackMouse = %value;
 }
 
 //-----------------------------------------------------------------------------
@@ -164,7 +173,22 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
     MoveToToy.TargetObject.Position = %worldPosition;
     
     // Move the sight to the touched position.
-    MoveToToy.SightObject.MoveTo( %worldPosition, MoveToToy.moveTime );
+    MoveToToy.SightObject.MoveTo( %worldPosition, MoveToToy.moveSpeed );
+}
+
+//-----------------------------------------------------------------------------
+
+function SandboxWindow::onTouchMoved(%this, %touchID, %worldPosition)
+{
+    // Finish if not tracking the mouse.
+    if ( !MoveToToy.trackMouse )
+        return;
+        
+    // Set the target to the touched position.
+    MoveToToy.TargetObject.Position = %worldPosition;
+    
+    // Move the sight to the touched position.
+    MoveToToy.SightObject.MoveTo( %worldPosition, MoveToToy.moveSpeed );     
 }
     
 };

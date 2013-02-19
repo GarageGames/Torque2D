@@ -74,6 +74,7 @@ AssetManager::AssetManager() :
     mMaxLoadedInternalAssetsCount( 0 ),
     mMaxLoadedExternalAssetsCount( 0 ),
     mMaxLoadedPrivateAssetsCount( 0 ),
+    mAcquiredReferenceCount( 0 ),
     mEchoInfo( false ),
     mIgnoreAutoUnload( false )
 {
@@ -560,6 +561,24 @@ bool AssetManager::isAssetInternal( const char* pAssetId )
 
 //-----------------------------------------------------------------------------
 
+bool AssetManager::isAssetPrivate( const char* pAssetId )
+{
+    // Find asset definition.
+    AssetDefinition* pAssetDefinition = findAsset( pAssetId );
+
+    // Did we find the asset?
+    if ( pAssetDefinition == NULL )
+    {
+        // No, so warn.
+        Con::warnf( "Asset Manager: Cannot find asset Id '%s'.", pAssetId );
+        return false;
+    }
+
+    return pAssetDefinition->mAssetPrivate;
+}
+
+//-----------------------------------------------------------------------------
+
 bool AssetManager::isAssetAutoUnload( const char* pAssetId )
 {
     // Find asset definition.
@@ -898,29 +917,6 @@ bool AssetManager::releaseAsset( const char* pAssetId )
     {
         Con::printSeparator();
         Con::printf( "Asset Manager: Started releasing Asset Id '%s'...", pAssetId );
-
-        // Fetch asset Id.
-        StringTableEntry assetId = StringTable->insert( pAssetId );
-
-        // Yes, so find any asset dependencies.
-        typeAssetDependsOnHash::iterator assetDependenciesItr = mAssetDependsOn.find( assetId );
-
-        // Do we have any asset dependencies?
-        if ( assetDependenciesItr != mAssetDependsOn.end() )
-        {
-            // Yes, so show all dependency assets.
-            Con::printf( "Asset Manager: Found dependencies for Asset Id '%s' of:", pAssetId );
-
-            // Iterate all dependencies.
-            while( assetDependenciesItr != mAssetDependsOn.end() && assetDependenciesItr->key == assetId )
-            {
-                // Info.
-                Con::printf( "Asset Manager: > Asset Id '%s'", assetDependenciesItr->value );
-
-                // Next dependency.
-                assetDependenciesItr++;
-            }
-        }
     }
 
     // Release asset reference.
@@ -932,9 +928,7 @@ bool AssetManager::releaseAsset( const char* pAssetId )
             // Yes, so info.
             if ( mEchoInfo )
             {
-                Con::printf( "Asset Manager: Asset Id '%s' now has a reference count of '0' but ignoring auto-unloading of assets.",
-                    pAssetId,
-                    pAssetDefinition->mpAssetBase->getAcquiredReferenceCount() );
+                Con::printf( "Asset Manager: > Releasing to idle state." );
             }
         }
         else
@@ -942,7 +936,7 @@ bool AssetManager::releaseAsset( const char* pAssetId )
             // No, so info.
             if ( mEchoInfo )
             {
-                Con::printf( "Asset Manager: Asset Id '%s' is being unloaded.", pAssetId );
+                Con::printf( "Asset Manager: > Unload the asset from memory." );
             }
 
             // Unload the asset.
@@ -952,24 +946,14 @@ bool AssetManager::releaseAsset( const char* pAssetId )
     // Info.
     else if ( mEchoInfo )
     {
-        if ( pAssetDefinition->mpAssetBase->getAcquiredReferenceCount() > 0 )
-        {
-            Con::printf( "Asset Manager: Asset Id '%s' now has a reference count of '%d'.",
-                pAssetId,
-                pAssetDefinition->mpAssetBase->getAcquiredReferenceCount() );
-        }
-        else
-        {
-            Con::printf( "Asset Manager: Asset Id '%s' now has a reference count of '0' but set to not auto-unload.",
-                pAssetId,
-                pAssetDefinition->mpAssetBase->getAcquiredReferenceCount() );
-        }
+        Con::printf( "Asset Manager: > Reference count now '%d'.", pAssetDefinition->mpAssetBase->getAcquiredReferenceCount() );
     }
 
     // Info.
     if ( mEchoInfo )
     {
-        Con::printf( "Asset Manager: ... Finished releasing Asset Id '%s'.", pAssetId );
+        Con::printf( "Asset Manager: > Finished releasing Asset Id '%s'.", pAssetId );
+        Con::printSeparator();
     }
 
     return true;
@@ -1690,8 +1674,9 @@ void AssetManager::dumpDeclaredAssets( void ) const
         const AssetDefinition* pAssetDefinition = *assetItr;
 
         // Info.
-        Con::printf( "AssetId:'%s', LoadCount:%d, UnloadCount:%d, AutoUnload:%d, Loaded:%d, Internal:%d, Private: %d, Type:'%s', Module/Version:'%s'/'%d', File:'%s'",
+        Con::printf( "AssetId:'%s', RefCount:%d, LoadCount:%d, UnloadCount:%d, AutoUnload:%d, Loaded:%d, Internal:%d, Private: %d, Type:'%s', Module/Version:'%s'/'%d', File:'%s'",
             pAssetDefinition->mAssetId,
+            pAssetDefinition->mpAssetBase == NULL ? 0 : pAssetDefinition->mpAssetBase->getAcquiredReferenceCount(),
             pAssetDefinition->mAssetLoadedCount,
             pAssetDefinition->mAssetUnloadedCount,
             pAssetDefinition->mAssetAutoUnload,

@@ -35,9 +35,13 @@
 #include "assets/assetPtr.h"
 #endif
 
+#ifndef _FACTORY_CACHE_H_
+#include "memory/factoryCache.h"
+#endif
+
 ///-----------------------------------------------------------------------------
 
-class AnimationController : private AssetPtrCallback
+class AnimationController : public IFactoryObjectReset, private AssetPtrCallback
 {
 private:
     AssetPtr<AnimationAsset>                mAnimationAsset;
@@ -82,6 +86,8 @@ public:
     bool updateAnimation( const F32 elapsedTime );
     void stopAnimation( void );
     void resetTime( void );
+
+    virtual void resetState( void );
 };
 
 

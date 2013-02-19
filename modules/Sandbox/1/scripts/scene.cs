@@ -94,7 +94,7 @@ function destroySandboxScene()
         return;
 
     // Delete the scene.
-    SandboxScene.delete();         
+    SandboxScene.delete();
 }
 
 //-----------------------------------------------------------------------------

@@ -46,17 +46,12 @@ function SphereStackToy::create( %this )
 
 function SphereStackToy::destroy( %this )
 {   
-    // Cancel any pending events.
-    SphereStackToy::cancelPendingEvents();
 }
 
 //-----------------------------------------------------------------------------
 
 function SphereStackToy::reset(%this)
 {
-    // Cancel any pending events.
-    SphereStackToy::cancelPendingEvents();
-    
     // Clear the scene.
     SandboxScene.clear();
     
@@ -78,21 +73,8 @@ function SphereStackToy::reset(%this)
     // Create the ground.
     %this.createGround();
         
-    // Schedule to create a ball.
-    %this.createBallScheduleId = %this.schedule( 100, "createBall" );
-}
-
-//-----------------------------------------------------------------------------
-
-function SphereStackToy::cancelPendingEvents(%this)
-{
-    // Finish if there are not pending events.
-    if ( !isEventPending(%this.createBallScheduleId) )
-        return;
-        
-    // Cancel it.
-    cancel(%this.createBallScheduleId);
-    %this.createBallScheduleId = "";
+    // Start the timer.
+    SphereStackToy.startTimer( "createball", 100 );
 }
 
 //-----------------------------------------------------------------------------
@@ -150,12 +132,14 @@ function SphereStackToy::createGround( %this )
 
 function SphereStackToy::createBall(%this)
 {
-    // Reset the event schedule.
-    %this.createBallScheduleId = "";
-
     // Finish if exceeded the required number of balls.
     if ( %this.currentBalls >= %this.maxBalls)
+    {
+        // Stop the timer.
+        SphereStackToy.stopTimer();
+        
         return;
+    }
 
     // Set the ball size.
     %ballSize = 2;
@@ -188,10 +172,10 @@ function SphereStackToy::createBall(%this)
     
     // Finish if exceeded the required number of balls.
     if ( %this.currentBalls == %this.maxBalls)
-        return;
-
-    // Schedule to create a ball.
-    %this.createBallScheduleId = %this.schedule( 150, "createBall" );
+    {
+        // Stop the timer.
+        SphereStackToy.stopTimer();
+    }
 }
 
 //-----------------------------------------------------------------------------
