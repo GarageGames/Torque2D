@@ -79,7 +79,10 @@ class Vector
    U32         mLineAssociation;
 #endif
 
-   bool  resize(U32);
+   bool  resize(U32); // resizes, but does no construction/destruction
+   void  destroy(U32 start, U32 end);   ///< Destructs elements from <i>start</i> to <i>end-1</i>
+   void  construct(U32 start, U32 end); ///< Constructs elements from <i>start</i> to <i>end-1</i>
+   void  construct(U32 start, U32 end, const T* array);
   public:
    Vector(const U32 initialSize = 0);
    Vector(const U32 initialSize, const char* fileName, const U32 lineNum);
@@ -103,6 +106,8 @@ class Vector
    typedef S32    difference_type;
    typedef U32    size_type;
 
+   typedef difference_type (QSORT_CALLBACK *compare_func)(const T *a, const T *b);
+
    Vector<T>& operator=(const Vector<T>& p);
 
    iterator       begin();
@@ -112,6 +117,7 @@ class Vector
 
    S32 size() const;
    bool empty() const;
+   bool contains(const T&) const;
 
    void insert(iterator, const T&);
    void erase(iterator);
@@ -123,6 +129,9 @@ class Vector
 
    void push_front(const T&);
    void push_back(const T&);
+   U32 push_front_unique(const T&);
+   U32 push_back_unique(const T&);
+   S32 find_next( const T&, U32 start = 0 ) const;
    void pop_front();
    void pop_back();
 
@@ -146,7 +155,8 @@ class Vector
    U32  memSize() const;
    T*   address() const;
    U32  setSize(U32);
-   void increment(U32 = 1);
+   void increment( U32 = 1);
+   void increment(const T* array, U32 = 1);
    void decrement(U32 = 1);
    void insert(U32);
    void erase(U32);
@@ -154,7 +164,7 @@ class Vector
    void erase_fast(iterator);
    void clear();
    void compact();
-
+   void sort(compare_func f);
    T& first();
    T& last();
    const T& first() const;
@@ -246,6 +256,33 @@ template<class T> inline void Vector<T>::setFileAssociation(const char* file,
 }
 #endif
 
+template<class T> inline void  Vector<T>::destroy(U32 start, U32 end) // destroys from start to end-1
+{
+   // This check is a little generous as we can legitimately get (0,0) as
+   // our parameters... so it won't detect every invalid case but it does
+   // remain simple.
+   AssertFatal(start <= mElementCount && end <= mElementCount, "Vector<T>::destroy - out of bounds start/end.");
+
+   // destroys from start to end-1
+   while(start < end)
+      destructInPlace(&mArray[start++]);
+}
+
+template<class T> inline void  Vector<T>::construct(U32 start, U32 end) // destroys from start to end-1
+{
+   AssertFatal(start <= mElementCount && end <= mElementCount, "Vector<T>::construct - out of bounds start/end.");
+   while(start < end)
+      constructInPlace(&mArray[start++]);
+}
+
+template<class T> inline void  Vector<T>::construct(U32 start, U32 end, const T* array) // destroys from start to end-1
+{
+   AssertFatal(start <= mElementCount && end <= mElementCount, "Vector<T>::construct - out of bounds start/end.");
+    for (int i = 0; start + i < end; i++) {
+      constructInPlace(&mArray[start+i], &array[i]);
+    }
+}
+
 template<class T> inline U32 Vector<T>::memSize() const
 {
    return capacity() * sizeof(T);
@@ -265,18 +302,40 @@ template<class T> inline U32 Vector<T>::setSize(U32 size)
    return mElementCount;
 }
 
-template<class T> inline void Vector<T>::increment(U32 delta)
+template<class T> inline void Vector<T>::increment( U32 delta)
 {
+    U32 count = mElementCount;
+    if ((mElementCount += delta) > mArraySize)
+        resize(mElementCount);
+    construct(count, mElementCount);
+}
+
+template<class T> inline void Vector<T>::increment(const T* array, U32 delta)
+{
+   U32 count = mElementCount;
    if ((mElementCount += delta) > mArraySize)
       resize(mElementCount);
+    construct(count, mElementCount, array);
 }
 
 template<class T> inline void Vector<T>::decrement(U32 delta)
 {
+   AssertFatal(mElementCount != 0, "Vector<T>::decrement - cannot decrement zero-length vector.");
+
+   const U32 count = mElementCount;
+
+   // Determine new count after decrement...
+   U32 newCount = mElementCount;
    if (mElementCount > delta)
-      mElementCount -= delta;
+      newCount -= delta;
    else
-      mElementCount = 0;
+      newCount = 0;
+
+   // Destruct removed items...
+   destroy(newCount, count);
+
+   // Note new element count.
+   mElementCount = newCount;
 }
 
 template<class T> inline void Vector<T>::insert(U32 index)
@@ -349,6 +408,12 @@ template<class T> inline void Vector<T>::compact()
    resize(mElementCount);
 }
 
+typedef int (QSORT_CALLBACK *qsort_compare_func)(const void *, const void *);
+
+template<class T> inline void Vector<T>::sort(compare_func f)
+{
+   qsort(address(), size(), sizeof(T), (qsort_compare_func) f);
+}
 
 //-----------------------------------------------------------------------------
 
@@ -438,8 +503,55 @@ template<class T> inline void Vector<T>::push_front(const T& x)
 
 template<class T> inline void Vector<T>::push_back(const T& x)
 {
-   increment();
-   mArray[mElementCount - 1] = x;
+   increment(&x);
+//   mArray[mElementCount - 1] = x;
+}
+
+template<class T> inline U32 Vector<T>::push_front_unique(const T& x)
+{
+   S32 index = find_next(x);
+
+   if (index == -1)
+   {
+      index = 0;
+
+      insert(index);
+      mArray[index] = x;
+   }
+
+   return index;
+}
+
+template<class T> inline U32 Vector<T>::push_back_unique(const T& x)
+{
+   S32 index = find_next(x);
+
+   if (index == -1)
+   {
+      increment(&x);
+      index = mElementCount - 1;
+   }
+
+   return index;
+}
+
+template<class T> inline S32 Vector<T>::find_next( const T& x, U32 start ) const
+{
+   S32 index = -1;
+
+   if (start < mElementCount)
+   {
+      for (U32 i = start; i < mElementCount; i++)
+      {
+         if (mArray[i] == x)
+         {
+            index = i;
+            break;
+         }
+      }
+   }
+
+   return index;
 }
 
 template<class T> inline void Vector<T>::pop_front()
