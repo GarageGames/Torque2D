@@ -138,7 +138,7 @@ void BMFontAsset::onAssetRefresh( void )
 
 bool BMFontAsset::isAssetValid( void ) const
 {
-//    return mImageAsset.notNull() && mImageAsset->isAssetValid() && mValidatedFrames.size() > 0;
+    return (!mFont.isNull());
 }
 
 //------------------------------------------------------------------------------
