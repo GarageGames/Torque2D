@@ -58,6 +58,7 @@
 #include "platform/nativeDialogs/msgBox.h"
 #include "platform/nativeDialogs/fileDialog.h"
 #include "memory/safeDelete.h"
+#include "graphics/bmFont.h"
 
 #include <stdio.h>
 
@@ -145,6 +146,7 @@ bool initializeLibraries()
     ResourceManager->registerExtension(".jpeg", constructBitmapJPEG);
     ResourceManager->registerExtension(".png", constructBitmapPNG);
     ResourceManager->registerExtension(".uft", constructNewFont);
+    ResourceManager->registerExtension(".fnt", constructBMFont);
 
 #ifdef TORQUE_OS_IOS
     ResourceManager->registerExtension(".pvr", constructBitmapPVR);
