@@ -612,7 +612,7 @@ void Scene::dispatchBeginContactCallbacks( void )
         }
 		else
 		{
-            dSprintf(pMiscInfoBuffer, 128,
+            dSprintf(pMiscInfoBuffer, 64,
                 "%d %d",
                 shapeIndexA, shapeIndexB );
 		}

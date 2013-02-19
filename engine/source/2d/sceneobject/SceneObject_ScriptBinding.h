@@ -1017,10 +1017,10 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
     AssertFatal( shapeIndexCollider >= 0, "SceneObject::getContact() - Cannot find shape index reported on physics proxy of a fixture." );
 
     // Fetch normal and contact points.
+    const U32& pointCount = tickContact.mPointCount;
     const b2Vec2& normal = tickContact.mWorldManifold.normal;
     const b2Vec2& point1 = tickContact.mWorldManifold.points[0];
     const b2Vec2& point2 = tickContact.mWorldManifold.points[1];
-    const U32& pointCount = tickContact.mPointCount;
 
     // Fetch collision impulse information
     const F32 normalImpulse1 = tickContact.mNormalImpulses[0];
@@ -1044,7 +1044,7 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
             normalImpulse2,
             tangentImpulse2 );
     }
-    else
+    else if ( pointCount == 1 )
     {
         dSprintf(pReturnBuffer, 128,
             "%d %d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
@@ -1055,6 +1055,13 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
             normalImpulse1,
             tangentImpulse1 );
     }
+	else
+	{
+        dSprintf(pReturnBuffer, 64,
+            "%d %d %d",
+            pSceneObjectCollider,
+            shapeIndexThis, shapeIndexCollider );
+	}
 
     return pReturnBuffer;
 }
