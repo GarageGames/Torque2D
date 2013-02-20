@@ -105,7 +105,7 @@ function TumblerToy::createTumbler(%this)
     SandboxScene.add( %tumbler );
 
     // Create the motor joint.    
-    TumblerToy.MotorJoint = SandboxScene.createRevoluteJoint( %tumbler, 0, "0 0" );
+    TumblerToy.MotorJoint = SandboxScene.createRevoluteJoint( %tumbler, "", "0 0" );
     SandboxScene.setRevoluteJointMotor( TumblerToy.MotorJoint, true, TumblerToy.MotorSpeed, 1000000 );    
 }
 

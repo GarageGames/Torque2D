@@ -467,8 +467,8 @@ ConsoleMethod(Scene, deleteJoint, bool, 3, 3,           "(int jointId) Deletes t
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(Scene, createDistanceJoint, S32, 4, 12,   "(sceneObjectA, sceneObjectB, [localAnchorA X/Y], [localAnchorB X/Y], [distance], [frequency], [dampingRatio], [collideConnected]) Creates a distance joint.\n"
-                                                                "@param sceneObjectA The first scene object to connect to the joint.\n"
-                                                                "@param sceneObjectB The second scene object to connect to the joint.\n"
+                                                                "@param sceneObjectA The first scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
+                                                                "@param sceneObjectB The second scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
                                                                 "@param localAnchorA The local point of the first scene object where the joint connects.\n"
                                                                 "@param localAnchorB The local point of the second scene object where the joint connects.\n"
                                                                 "@param distance The distance the joint should maintain between scene objects.  The default is the distance currently between the scene objects.\n"
@@ -477,26 +477,26 @@ ConsoleMethod(Scene, createDistanceJoint, S32, 4, 12,   "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-    // Fetch scene objects.
-    const SimObjectId sceneObjectA = dAtoi(argv[2]);
-    const SimObjectId sceneObjectB = dAtoi(argv[3]);
+	// Fetch scene object references.
+	const char* sceneObjectA = argv[2];
+	const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
 
     // Fetch scene object.
-    if ( sceneObjectA != 0 )
+    if ( *sceneObjectA != 0 )
     {
-        pSceneObjectA = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectA) );
+        pSceneObjectA = Sim::findObject<SceneObject>(sceneObjectA);
 
         if ( !pSceneObjectA )
             Con::warnf("Scene::createDistanceJoint() - Could not find scene object %d.", sceneObjectA);
     }
 
     // Fetch scene object.
-    if ( sceneObjectB != 0 )
+    if (*sceneObjectB != 0 )
     {
-        pSceneObjectB = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectB) );
+        pSceneObjectB = Sim::findObject<SceneObject>(sceneObjectB);
 
         if ( !pSceneObjectB )
             Con::warnf("Scene::createDistanceJoint() - Could not find scene object %d.", sceneObjectB);
@@ -683,34 +683,34 @@ ConsoleMethod(Scene, getDistanceJointDampingRatio, F32, 3, 3,   "(jointId) Gets 
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(Scene, createRopeJoint, S32, 4, 10,       "(sceneObjectA, sceneObjectB, [localAnchorA X/Y], [localAnchorB X/Y], [maxLength], [collideConnected]) Creates a rope joint.\n"
-                                                                "@param sceneObjectA The first scene object to connect to the joint.\n"
-                                                                "@param sceneObjectB The second scene object to connect to the joint.\n"
+                                                                "@param sceneObjectA The first scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
+                                                                "@param sceneObjectB The second scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
                                                                 "@param localAnchorA The local point of the first scene object where the joint connects.\n"
                                                                 "@param localAnchorB The local point of the second scene object where the joint connects.\n"
                                                                 "@param maxLength The maximum rigid length of the rope.\n"
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-    // Fetch scene objects.
-    const SimObjectId sceneObjectA = dAtoi(argv[2]);
-    const SimObjectId sceneObjectB = dAtoi(argv[3]);
+	// Fetch scene object references.
+	const char* sceneObjectA = argv[2];
+	const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
 
     // Fetch scene object.
-    if ( sceneObjectA != 0 )
+    if ( *sceneObjectA != 0 )
     {
-        pSceneObjectA = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectA) );
+        pSceneObjectA = Sim::findObject<SceneObject>(sceneObjectA);
 
         if ( !pSceneObjectA )
             Con::warnf("Scene::createRopeJoint() - Could not find scene object %d.", sceneObjectA);
     }
 
     // Fetch scene object.
-    if ( sceneObjectB != 0 )
+    if (*sceneObjectB != 0 )
     {
-        pSceneObjectB = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectB) );
+        pSceneObjectB = Sim::findObject<SceneObject>(sceneObjectB);
 
         if ( !pSceneObjectB )
             Con::warnf("Scene::createRopeJoint() - Could not find scene object %d.", sceneObjectB);
@@ -821,33 +821,33 @@ ConsoleMethod(Scene, getRopeJointMaxLength, F32, 3, 3,     "(jointId) Gets the m
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(Scene, createRevoluteJoint, S32, 4, 9,    "(sceneObjectA, sceneObjectB, [localAnchorA X/Y], [localAnchorB X/Y], [collideConnected]) Creates a revolute joint.\n"
-                                                                "@param sceneObjectA The first scene object to connect to the joint.\n"
-                                                                "@param sceneObjectB The second scene object to connect to the joint.\n"
+                                                                "@param sceneObjectA The first scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
+                                                                "@param sceneObjectB The second scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
                                                                 "@param localAnchorA The local point of the first scene object where the joint connects.\n"
                                                                 "@param localAnchorB The local point of the second scene object where the joint connects.\n"
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-    // Fetch scene objects.
-    const SimObjectId sceneObjectA = dAtoi(argv[2]);
-    const SimObjectId sceneObjectB = dAtoi(argv[3]);
+	// Fetch scene object references.
+	const char* sceneObjectA = argv[2];
+	const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
 
     // Fetch scene object.
-    if ( sceneObjectA != 0 )
+    if ( *sceneObjectA != 0 )
     {
-        pSceneObjectA = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectA) );
+        pSceneObjectA = Sim::findObject<SceneObject>(sceneObjectA);
 
         if ( !pSceneObjectA )
             Con::warnf("Scene::createRevoluteJoint() - Could not find scene object %d.", sceneObjectA);
     }
 
     // Fetch scene object.
-    if ( sceneObjectB != 0 )
+    if ( *sceneObjectB != 0 )
     {
-        pSceneObjectB = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectB) );
+        pSceneObjectB = Sim::findObject<SceneObject>(sceneObjectB);
 
         if ( !pSceneObjectB )
             Con::warnf("Scene::createRevoluteJoint() - Could not find scene object %d.", sceneObjectB);
@@ -1014,8 +1014,8 @@ ConsoleMethod(Scene, getRevoluteJointMotor, const char*, 3, 3,  "(jointId) Gets 
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(Scene, createWeldJoint, S32, 4, 11,       "(sceneObjectA, sceneObjectB, [localAnchorA X/Y], [localAnchorB X/Y], [frequency], [dampingRatio], [collideConnected]) Creates a weld joint.\n"
-                                                                "@param sceneObjectA The first scene object to connect to the joint.\n"
-                                                                "@param sceneObjectB The second scene object to connect to the joint.\n"
+                                                                "@param sceneObjectA The first scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
+                                                                "@param sceneObjectB The second scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
                                                                 "@param localAnchorA The local point of the first scene object where the joint connects.\n"
                                                                 "@param localAnchorB The local point of the second scene object where the joint connects.\n"
                                                                 "@param frequency The mass-spring-damper frequency in Hertz. A value of 0 disables softness (default).\n"
@@ -1023,26 +1023,26 @@ ConsoleMethod(Scene, createWeldJoint, S32, 4, 11,       "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-    // Fetch scene objects.
-    const SimObjectId sceneObjectA = dAtoi(argv[2]);
-    const SimObjectId sceneObjectB = dAtoi(argv[3]);
+	// Fetch scene object references.
+	const char* sceneObjectA = argv[2];
+	const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
 
     // Fetch scene object.
-    if ( sceneObjectA != 0 )
+    if ( *sceneObjectA != 0 )
     {
-        pSceneObjectA = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectA) );
+        pSceneObjectA = Sim::findObject<SceneObject>(sceneObjectA);
 
         if ( !pSceneObjectA )
             Con::warnf("Scene::createWeldJoint() - Could not find scene object %d.", sceneObjectA);
     }
 
     // Fetch scene object.
-    if ( sceneObjectB != 0 )
+    if ( *sceneObjectB != 0 )
     {
-        pSceneObjectB = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectB) );
+        pSceneObjectB = Sim::findObject<SceneObject>(sceneObjectB);
 
         if ( !pSceneObjectB )
             Con::warnf("Scene::createWeldJoint() - Could not find scene object %d.", sceneObjectB);
@@ -1191,34 +1191,34 @@ ConsoleMethod(Scene, getWeldJointDampingRatio, F32, 3, 3,       "(jointId) Gets 
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(Scene, createWheelJoint, S32, 7, 11,      "(sceneObjectA, sceneObjectB, localAnchorA X/Y, localAnchorB X/Y, worldAxis X/Y, [collideConnected]) Creates a wheel joint.\n"
-                                                                "@param sceneObjectA The first scene object to connect to the joint.\n"
-                                                                "@param sceneObjectB The second scene object to connect to the joint.\n"
+                                                                "@param sceneObjectA The first scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
+                                                                "@param sceneObjectB The second scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
                                                                 "@param localAnchorA The local point of the first scene object where the joint connects.\n"
                                                                 "@param localAnchorB The local point of the second scene object where the joint connects.\n"
                                                                 "@param worldAxis The world axis of the wheel suspension spring.\n"
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-    // Fetch scene objects.
-    const SimObjectId sceneObjectA = dAtoi(argv[2]);
-    const SimObjectId sceneObjectB = dAtoi(argv[3]);
+	// Fetch scene object references.
+	const char* sceneObjectA = argv[2];
+	const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
 
     // Fetch scene object.
-    if ( sceneObjectA != 0 )
+    if ( *sceneObjectA != 0 )
     {
-        pSceneObjectA = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectA) );
+        pSceneObjectA = Sim::findObject<SceneObject>(sceneObjectA);
 
         if ( !pSceneObjectA )
             Con::warnf("Scene::createWheelJoint() - Could not find scene object %d.", sceneObjectA);
     }
 
     // Fetch scene object.
-    if ( sceneObjectB != 0 )
+    if ( *sceneObjectB != 0 )
     {
-        pSceneObjectB = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectB) );
+        pSceneObjectB = Sim::findObject<SceneObject>(sceneObjectB);
 
         if ( !pSceneObjectB )
             Con::warnf("Scene::createWheelJoint() - Could not find scene object %d.", sceneObjectB);
@@ -1409,8 +1409,8 @@ ConsoleMethod(Scene, getWheelJointDampingRatio, F32, 3, 3,      "(jointId) Gets 
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(Scene, createFrictionJoint, S32, 4, 11,   "(sceneObjectA, sceneObjectB, [localAnchorA X/Y], [localAnchorB X/Y], [maxForce], [maxTorque], [collideConnected]) Creates a friction joint.\n"
-                                                                "@param sceneObjectA The first scene object to connect to the joint.\n"
-                                                                "@param sceneObjectB The second scene object to connect to the joint.\n"
+                                                                "@param sceneObjectA The first scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
+                                                                "@param sceneObjectB The second scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
                                                                 "@param localAnchorA The local point of the first scene object where the joint connects.\n"
                                                                 "@param localAnchorB The local point of the second scene object where the joint connects.\n"
                                                                 "@param maxForce The maximum friction force (N).\n"
@@ -1418,26 +1418,26 @@ ConsoleMethod(Scene, createFrictionJoint, S32, 4, 11,   "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-    // Fetch scene objects.
-    const SimObjectId sceneObjectA = dAtoi(argv[2]);
-    const SimObjectId sceneObjectB = dAtoi(argv[3]);
+	// Fetch scene object references.
+	const char* sceneObjectA = argv[2];
+	const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
 
     // Fetch scene object.
-    if ( sceneObjectA != 0 )
+    if ( *sceneObjectA != 0 )
     {
-        pSceneObjectA = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectA) );
+        pSceneObjectA = Sim::findObject<SceneObject>(sceneObjectA);
 
         if ( !pSceneObjectA )
             Con::warnf("Scene::createFrictionJoint() - Could not find scene object %d.", sceneObjectA);
     }
 
     // Fetch scene object.
-    if ( sceneObjectB != 0 )
+    if ( *sceneObjectB != 0 )
     {
-        pSceneObjectB = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectB) );
+        pSceneObjectB = Sim::findObject<SceneObject>(sceneObjectB);
 
         if ( !pSceneObjectB )
             Con::warnf("Scene::createFrictionJoint() - Could not find scene object %d.", sceneObjectB);
@@ -1581,34 +1581,34 @@ ConsoleMethod(Scene, getFrictionJointMaxTorque, F32, 3, 3,  "(jointId) Gets the 
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(Scene, createPrismaticJoint, S32, 7, 11,  "(sceneObjectA, sceneObjectB, localAnchorA X/Y, localAnchorB X/Y, worldAxis X/Y, [collideConnected]) Creates a prismatic joint.\n"
-                                                                "@param sceneObjectA The first scene object to connect to the joint.\n"
-                                                                "@param sceneObjectB The second scene object to connect to the joint.\n"
+                                                                "@param sceneObjectA The first scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
+                                                                "@param sceneObjectB The second scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
                                                                 "@param localAnchorA The local point of the first scene object where the joint connects.\n"
                                                                 "@param localAnchorB The local point of the second scene object where the joint connects.\n"
                                                                 "@param worldAxis The world axis defining the translational degree of freedom.\n"
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-    // Fetch scene objects.
-    const SimObjectId sceneObjectA = dAtoi(argv[2]);
-    const SimObjectId sceneObjectB = dAtoi(argv[3]);
+	// Fetch scene object references.
+	const char* sceneObjectA = argv[2];
+	const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
 
     // Fetch scene object.
-    if ( sceneObjectA != 0 )
+    if ( *sceneObjectA != 0 )
     {
-        pSceneObjectA = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectA) );
+        pSceneObjectA = Sim::findObject<SceneObject>(sceneObjectA);
 
         if ( !pSceneObjectA )
             Con::warnf("Scene::createPrismaticJoint() - Could not find scene object %d.", sceneObjectA);
     }
 
     // Fetch scene object.
-    if ( sceneObjectB != 0 )
+    if ( *sceneObjectB != 0 )
     {
-        pSceneObjectB = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectB) );
+        pSceneObjectB = Sim::findObject<SceneObject>(sceneObjectB);
 
         if ( !pSceneObjectB )
             Con::warnf("Scene::createPrismaticJoint() - Could not find scene object %d.", sceneObjectB);
@@ -1784,8 +1784,8 @@ ConsoleMethod(Scene, getPrismaticJointMotor, const char*, 3, 3,    "(jointId) Ge
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(Scene, createPulleyJoint, S32, 9, 16,     "(sceneObjectA, sceneObjectB, localAnchorA X/Y, localAnchorB X/Y, worldGroundAnchorA X/Y, worldGroundAnchorB X/Y, ratio, [lengthA], [lengthB], [collideConnected]) Creates a prismatic joint.\n"
-                                                                "@param sceneObjectA The first scene object to connect to the joint.\n"
-                                                                "@param sceneObjectB The second scene object to connect to the joint.\n"
+                                                                "@param sceneObjectA The first scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
+                                                                "@param sceneObjectB The second scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
                                                                 "@param localAnchorA The local point of the first scene object where the joint connects.\n"
                                                                 "@param localAnchorB The local point of the second scene object where the joint connects.\n"
                                                                 "@param worldGroundAnchorA The world point of the first ground anchor.  This point never moves.\n"
@@ -1796,26 +1796,26 @@ ConsoleMethod(Scene, createPulleyJoint, S32, 9, 16,     "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-    // Fetch scene objects.
-    const SimObjectId sceneObjectA = dAtoi(argv[2]);
-    const SimObjectId sceneObjectB = dAtoi(argv[3]);
+	// Fetch scene object references.
+	const char* sceneObjectA = argv[2];
+	const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
 
     // Fetch scene object.
-    if ( sceneObjectA != 0 )
+    if ( *sceneObjectA != 0 )
     {
-        pSceneObjectA = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectA) );
+        pSceneObjectA = Sim::findObject<SceneObject>(sceneObjectA);
 
         if ( !pSceneObjectA )
             Con::warnf("Scene::createPulleyJoint() - Could not find scene object %d.", sceneObjectA);
     }
 
     // Fetch scene object.
-    if ( sceneObjectB != 0 )
+    if ( *sceneObjectB != 0 )
     {
-        pSceneObjectB = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectB) );
+        pSceneObjectB = Sim::findObject<SceneObject>(sceneObjectB);
 
         if ( !pSceneObjectB )
             Con::warnf("Scene::createPulleyJoint() - Could not find scene object %d.", sceneObjectB);
@@ -1932,15 +1932,13 @@ ConsoleMethod(Scene, createTargetJoint, S32, 5, 10,     "(sceneObject, worldTarg
                                                         "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                         "@return The joint Id (-1 if error).")
 {
-    // Fetch scene object.
-    const SimObjectId sceneObject = dAtoi(argv[2]);
-
-    SceneObject* pSceneObject = dynamic_cast<SceneObject*>( Sim::findObject(sceneObject) );
+	// Fetch scene object.
+    SceneObject* pSceneObject = Sim::findObject<SceneObject>(argv[2]);
 
     // Check scene object.
     if ( !pSceneObject )
     {
-        Con::warnf("Scene::createTargetJoint() - Could not find scene object %d.", sceneObject);
+        Con::warnf("Scene::createTargetJoint() - Could not find scene object %d.", argv[2]);
         return -1;
     }
 
@@ -2115,8 +2113,8 @@ ConsoleMethod(Scene, getTargetJointDampingRatio, F32, 3, 3,    "(jointId) Sets t
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(Scene, createMotorJoint, S32, 4, 11,      "(sceneObjectA, sceneObjectB, [linearOffset X/Y], [angularOffset], [maxForce], [maxTorque], [correctionFactor], [collideConnected]) Creates a motor joint.\n"
-                                                                "@param sceneObjectA The first scene object to connect to the joint.\n"
-                                                                "@param sceneObjectB The second scene object to connect to the joint.\n"
+                                                                "@param sceneObjectA The first scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
+                                                                "@param sceneObjectB The second scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
                                                                 "@param linearOffsetX/Y The linear offset in sceneObjectA space.\n"
                                                                 "@param angularOffset The angularOffset between the bodies.\n"
                                                                 "@param maxForce The maximum friction force (N).\n"
@@ -2125,26 +2123,26 @@ ConsoleMethod(Scene, createMotorJoint, S32, 4, 11,      "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-    // Fetch scene objects.
-    const SimObjectId sceneObjectA = dAtoi(argv[2]);
-    const SimObjectId sceneObjectB = dAtoi(argv[3]);
+	// Fetch scene object references.
+	const char* sceneObjectA = argv[2];
+	const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
 
     // Fetch scene object.
-    if ( sceneObjectA != 0 )
+    if ( *sceneObjectA != 0 )
     {
-        pSceneObjectA = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectA) );
+        pSceneObjectA = Sim::findObject<SceneObject>(sceneObjectA);
 
         if ( !pSceneObjectA )
             Con::warnf("Scene::createMotorJoint() - Could not find scene object %d.", sceneObjectA);
     }
 
     // Fetch scene object.
-    if ( sceneObjectB != 0 )
+    if ( *sceneObjectB != 0 )
     {
-        pSceneObjectB = dynamic_cast<SceneObject*>( Sim::findObject(sceneObjectB) );
+        pSceneObjectB = Sim::findObject<SceneObject>(sceneObjectB);
 
         if ( !pSceneObjectB )
             Con::warnf("Scene::createMotorJoint() - Could not find scene object %d.", sceneObjectB);

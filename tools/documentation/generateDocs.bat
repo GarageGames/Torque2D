@@ -23,8 +23,13 @@ if not exist "input\docDump.txt" (
 
 REM --- Build the doxygen docs ---
 del /Q "output\html"
-rd "output\html"
+svn checkout "https://github.com/GarageGames/Torque2D.git/branches/gh-pages" "output\html"
 doxygen.exe scriptReference.Windows.cfg
+
+REM --- Add the newly generated docs to the gh-pages branch
+cd "output\html"
+svn add *.*
+svn commit -m "- Updated reference"
 
 REM --- Build the CHM ---
 REM hhc.exe "output\html\index.hhp"

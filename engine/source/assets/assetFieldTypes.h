@@ -34,8 +34,11 @@ DefineConsoleType( TypeAssetLooseFilePath )
 
 //-----------------------------------------------------------------------------
 
-#define ASSET_ASSIGNMENT_SEPARATOR      "="
-#define ASSET_SCOPE_SEPARATOR           ":"
+/// Asset scope.
+#define ASSET_SCOPE_TOKEN				":"
+
+/// Asset assignment.
+#define ASSET_ASSIGNMENT_TOKEN			"="
 
 /// Asset Id.
 #define ASSET_ID_SIGNATURE              "@asset"
