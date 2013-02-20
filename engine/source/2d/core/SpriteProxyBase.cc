@@ -209,8 +209,9 @@ void SpriteProxyBase::renderGui( GuiControl& owner, Point2I offset, const RectI 
             RectI destinationRegion(offset, owner.mBounds.extent);
 
             // Render image.
-            dglClearBitmapModulation();
+			dglSetBitmapModulation( owner.mProfile->mFillColor );
             dglDrawBitmapStretchSR( mImageAsset->getImageTexture(), destinationRegion, sourceRegion );
+            dglClearBitmapModulation();
         }
         else
         {
@@ -231,8 +232,9 @@ void SpriteProxyBase::renderGui( GuiControl& owner, Point2I offset, const RectI 
             RectI destinationRegion(offset, owner.mBounds.extent);
 
             // Render animation image.
-            dglClearBitmapModulation();
+			dglSetBitmapModulation( owner.mProfile->mFillColor );
             dglDrawBitmapStretchSR( mpAnimationController->getImageTexture(), destinationRegion, sourceRegion );
+            dglClearBitmapModulation();
 
             // Update control.
             owner.setUpdate();
