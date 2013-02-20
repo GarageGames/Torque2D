@@ -1,6 +1,3 @@
-Torque2D
-========
+MIT Licensed Open Source version of Torque 2D from [GarageGames LLC](http://www.garagegames.com).
 
-MIT Licensed Open Source version of Torque 2D from GarageGames.
-
-You can find the main Wiki page [here](https://github.com/GarageGames/Torque2D/wiki)
+You can find the main Wiki page [here](https://github.com/GarageGames/Torque2D/wiki).
