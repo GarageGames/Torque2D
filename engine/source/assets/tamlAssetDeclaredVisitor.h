@@ -137,20 +137,20 @@ protected:
         const char* pAssetReference = pAttribute->Value();
 
         // Fetch field word count.
-        const U32 fieldWordCount = StringUnit::getUnitCount( pAssetReference, ASSET_ASSIGNMENT_SEPARATOR );
+        const U32 fieldWordCount = StringUnit::getUnitCount( pAssetReference, ASSET_ASSIGNMENT_TOKEN );
 
         // Finish if there are not two words.
         if ( fieldWordCount != 2 )
             return true;
 
         // Fetch the asset signature.
-        StringTableEntry assetSignature = StringTable->insert( StringUnit::getUnit( pAssetReference, 0, ASSET_ASSIGNMENT_SEPARATOR ) );
+        StringTableEntry assetSignature = StringTable->insert( StringUnit::getUnit( pAssetReference, 0, ASSET_ASSIGNMENT_TOKEN ) );
 
         // Is this an asset Id signature?
         if ( assetSignature == StringTable->insert(ASSET_ID_SIGNATURE) )
         {
             // Yes, so get asset Id.
-            typeAssetId assetId = StringTable->insert( StringUnit::getUnit( pAssetReference, 1, ASSET_ASSIGNMENT_SEPARATOR ) );
+            typeAssetId assetId = StringTable->insert( StringUnit::getUnit( pAssetReference, 1, ASSET_ASSIGNMENT_TOKEN ) );
 
             // Finish if the dependency is itself!
             if ( mAssetDefinition.mAssetId == assetId )
@@ -171,7 +171,7 @@ protected:
         else if ( assetSignature == StringTable->insert(ASSET_LOOSEFILE_SIGNATURE) )
         {
             // Yes, so get loose-file reference.
-            const char* pAssetLooseFile = StringUnit::getUnit( pAssetReference, 1, ASSET_ASSIGNMENT_SEPARATOR );
+            const char* pAssetLooseFile = StringUnit::getUnit( pAssetReference, 1, ASSET_ASSIGNMENT_TOKEN );
 
             char assetFilePathBuffer[1024];
 
