@@ -74,9 +74,6 @@ function TruckToy::destroy( %this )
 
 function TruckToy::reset( %this )
 {   
-    // Cancel any pending events.
-    %this.cancelPendingEvents();
-    
     // Clear the scene.
     SandboxScene.clear();    
     
