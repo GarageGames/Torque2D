@@ -87,20 +87,22 @@ public:
 
     void renderGui( GuiControl& owner, Point2I offset, const RectI &updateRect ) const;
 
+	void renderNoImage( GuiControl& owner, Point2I &offset, const RectI& updateRect ) const;
+
     virtual void copyTo(SpriteProxyBase* pSpriteProxyBase) const;
 
     void clearAsset( void );
 
     // Image.
     inline bool setImage( const char* pImageAssetId ) { return setImage( pImageAssetId, mImageFrame ); }
-    bool setImage( const char* pImageAssetId, const U32 frame );
+    virtual bool setImage( const char* pImageAssetId, const U32 frame );
     inline StringTableEntry getImage( void ) const { return mImageAsset.getAssetId(); }
-    bool setImageFrame( const U32 frame );
+    virtual bool setImageFrame( const U32 frame );
     inline U32 getImageFrame( void ) const { return mImageFrame; }
     inline StringTableEntry getAnimation( void ) const { return mAnimationAsset.getAssetId(); }
 
     /// Animation.
-    bool setAnimation( const char* pAnimationAssetId, const bool autoRestore = false );
+    virtual bool setAnimation( const char* pAnimationAssetId, const bool autoRestore = false );
     inline AnimationController* getAnimationController( void ) const { return mpAnimationController; }
     inline bool isStaticMode( void ) const { return mStaticMode; }
     inline void pauseAnimation( const bool animationPaused ) { mAnimationPaused = animationPaused; }
