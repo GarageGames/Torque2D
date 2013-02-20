@@ -109,6 +109,7 @@ private:
     U32                                 mLoadedInternalAssetsCount;
     U32                                 mLoadedExternalAssetsCount;
     U32                                 mLoadedPrivateAssetsCount;
+    U32                                 mAcquiredReferenceCount;
     U32                                 mMaxLoadedInternalAssetsCount;
     U32                                 mMaxLoadedExternalAssetsCount;
     U32                                 mMaxLoadedPrivateAssetsCount;
@@ -138,6 +139,7 @@ public:
     StringTableEntry getAssetPath( const char* pAssetId );
     ModuleDefinition* getAssetModuleDefinition( const char* pAssetId );
     bool isAssetInternal( const char* pAssetId );
+    bool isAssetPrivate( const char* pAssetId );
     bool isAssetAutoUnload( const char* pAssetId );
     bool isAssetLoaded( const char* pAssetId );
     bool isDeclaredAsset( const char* pAssetId );
@@ -191,12 +193,12 @@ public:
         // Is the asset already loaded?
         if ( pAssetDefinition->mpAssetBase == NULL )
         {
-            // No, so fetch asset Id.
-            StringTableEntry assetId = StringTable->insert( pAssetId );
-
-            // Info.
+            // No, so info
             if ( mEchoInfo )
             {
+                // Fetch asset Id.
+                StringTableEntry assetId = StringTable->insert( pAssetId );
+
                 // Find any asset dependencies.
                 typeAssetDependsOnHash::iterator assetDependenciesItr = mAssetDependsOn.find( assetId );
 
@@ -204,7 +206,7 @@ public:
                 if ( assetDependenciesItr != mAssetDependsOn.end() )
                 {
                     // Yes, so show all dependency assets.
-                    Con::printf( "Asset Manager: Found dependencies for Asset Id '%s' of:", pAssetId );
+                    Con::printf( "Asset Manager: > Found dependencies:" );
 
                     // Iterate all dependencies.
                     while( assetDependenciesItr != mAssetDependsOn.end() && assetDependenciesItr->key == assetId )
@@ -231,7 +233,8 @@ public:
             if ( pAssetDefinition->mpAssetBase == NULL )
             {
                 // No, so warn.
-                Con::warnf( "Asset Manager: Failed to acquire asset Id '%s' as loading the asset file failed to return the asset or the correct asset type: '%s'.", pAssetId, pAssetDefinition->mAssetBaseFilePath );
+                Con::warnf( "Asset Manager: > Failed to acquire asset Id '%s' as loading the asset file failed to return the asset or the correct asset type: '%s'.",
+                    pAssetId, pAssetDefinition->mAssetBaseFilePath );
                 return NULL;
             }
 
@@ -241,8 +244,8 @@ public:
             // Info.
             if ( mEchoInfo )
             {
-                Con::printf( "Asset Manager: Acquiring Asset Id '%s' resulted in asset object Id '%d' being loaded from file '%s'.",
-                    pAssetId, pAssetDefinition->mpAssetBase->getId(), pAssetDefinition->mAssetBaseFilePath );
+                Con::printf( "Asset Manager: > Loading asset into memory as object Id '%d' from file '%s'.",
+                    pAssetDefinition->mpAssetBase->getId(), pAssetDefinition->mAssetBaseFilePath );
             }
 
             // Set ownership by asset manager.
@@ -262,6 +265,14 @@ public:
                     mMaxLoadedExternalAssetsCount = mLoadedExternalAssetsCount;
             }
         }
+        else if ( pAssetDefinition->mpAssetBase->getAcquiredReferenceCount() == 0 )
+        {
+            // Info.
+            if ( mEchoInfo )
+            {
+                Con::printf( "Asset Manager: > Acquiring from idle state." );
+            }
+        }
 
         // Set acquired asset.
         T* pAcquiredAsset = dynamic_cast<T*>( (AssetBase*)pAssetDefinition->mpAssetBase );
@@ -270,7 +281,7 @@ public:
         if ( pAcquiredAsset == NULL )
         {
             // No, so warn.
-            Con::warnf( "Asset Manager: Failed to acquire asset Id '%s' as it was not of the specified asset type: '%s'.", pAssetId, pAssetDefinition->mAssetBaseFilePath );
+            Con::warnf( "Asset Manager: > Failed to acquire asset Id '%s' as it was not the required asset type: '%s'.", pAssetId, pAssetDefinition->mAssetBaseFilePath );
             return NULL;
         }
 
@@ -280,7 +291,7 @@ public:
         // Info.
         if ( mEchoInfo )
         {
-            Con::printf( "Asset Manager: ... Finished acquiring Asset Id '%s' (Ref Count '%d').", pAssetId, pAcquiredAsset->getAcquiredReferenceCount() );
+            Con::printf( "Asset Manager: > Finished acquiring asset.  Reference count now '%d'.", pAssetDefinition->mpAssetBase->getAcquiredReferenceCount() );
             Con::printSeparator();
         }
 
@@ -319,7 +330,12 @@ public:
     inline U32 getMaxLoadedExternalAssetCount( void ) const { return mMaxLoadedExternalAssetsCount; }
     inline U32 getMaxLoadedPrivateAssetCount( void ) const { return mMaxLoadedPrivateAssetsCount; }
     void dumpDeclaredAssets( void ) const;
-    
+
+    /// Total acquired asset references.
+    inline void acquireAcquiredReferenceCount( void ) { mAcquiredReferenceCount++; }
+    inline void releaseAcquiredReferenceCount( void ) { AssertFatal( mAcquiredReferenceCount != 0, "AssetManager: Invalid acquired reference count." ); mAcquiredReferenceCount--; }
+    inline U32 getAcquiredReferenceCount( void ) const { return mAcquiredReferenceCount; }
+
     /// Asset queries.
     S32 findAllAssets( AssetQuery* pAssetQuery, const bool ignoreInternal = true, const bool ignorePrivate = true );
     S32 findAssetName( AssetQuery* pAssetQuery, const char* pAssetName, const bool partialName = false );

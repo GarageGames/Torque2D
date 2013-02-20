@@ -49,6 +49,10 @@ ModuleDatabase.EchoInfo = false;
 // Set asset database information echo.
 AssetDatabase.EchoInfo = false;
 
+// Set the asset manager to ignore any auto-unload assets.
+// This cases assets to stay in memory unless assets are purged.
+AssetDatabase.IgnoreAutoUnload = true;
+
 // Scan modules.
 ModuleDatabase.scanModules( "modules" );
 
@@ -59,4 +63,6 @@ ModuleDatabase.LoadExplicit( "Sandbox" );
 
 function onExit()
 {
+    // Unload the sandbox module.
+    ModuleDatabase.unloadExplicit( "Sandbox" );
 }

@@ -478,6 +478,7 @@
 		2AC4404B16B0144500FC4091 /* ImageFont_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFont_ScriptBinding.h; sourceTree = "<group>"; };
 		2AC4404C16B0144500FC4091 /* ImageFont.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageFont.cc; sourceTree = "<group>"; };
 		2AC4404D16B0144500FC4091 /* ImageFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFont.h; sourceTree = "<group>"; };
+		2AD07B2716D15F8E0070DC79 /* simObjectTimerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simObjectTimerEvent.h; sourceTree = "<group>"; };
 		2AED7D9216B70102003482CF /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		2AF1C54716B439D900C1CF3A /* declaredAssets.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = declaredAssets.cc; sourceTree = "<group>"; };
 		2AF1C54816B439D900C1CF3A /* declaredAssets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = declaredAssets.h; sourceTree = "<group>"; };
@@ -634,7 +635,6 @@
 		867BAD5416AEC9050033868F /* SceneObject_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObject_ScriptBinding.h; sourceTree = "<group>"; };
 		867BAD5716AEC9050033868F /* SceneObjectMoveToEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObjectMoveToEvent.h; sourceTree = "<group>"; };
 		867BAD5816AEC9050033868F /* SceneObjectRotateToEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObjectRotateToEvent.h; sourceTree = "<group>"; };
-		867BAD5C16AEC9050033868F /* SceneObjectTimerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObjectTimerEvent.h; sourceTree = "<group>"; };
 		867BAD5D16AEC9050033868F /* Scroller.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scroller.cc; sourceTree = "<group>"; };
 		867BAD5E16AEC9050033868F /* Scroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scroller.h; sourceTree = "<group>"; };
 		867BAD5F16AEC9050033868F /* Scroller_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scroller_ScriptBinding.h; sourceTree = "<group>"; };
@@ -1620,7 +1620,6 @@
 				867BAD5416AEC9050033868F /* SceneObject_ScriptBinding.h */,
 				867BAD5716AEC9050033868F /* SceneObjectMoveToEvent.h */,
 				867BAD5816AEC9050033868F /* SceneObjectRotateToEvent.h */,
-				867BAD5C16AEC9050033868F /* SceneObjectTimerEvent.h */,
 				867BAD5D16AEC9050033868F /* Scroller.cc */,
 				867BAD5E16AEC9050033868F /* Scroller.h */,
 				867BAD5F16AEC9050033868F /* Scroller_ScriptBinding.h */,
@@ -2425,6 +2424,7 @@
 		867BAFB516AEC9050033868F /* sim */ = {
 			isa = PBXGroup;
 			children = (
+				2AD07B2716D15F8E0070DC79 /* simObjectTimerEvent.h */,
 				867BAFB616AEC9050033868F /* scriptGroup.cc */,
 				867BAFB716AEC9050033868F /* scriptGroup.h */,
 				867BAFB816AEC9050033868F /* scriptObject.cc */,

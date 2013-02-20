@@ -647,7 +647,6 @@
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObject.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectMoveToEvent.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectRotateToEvent.h" />
-    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectTimerEvent.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Scroller.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Scroller_ScriptBinding.h" />
@@ -1009,6 +1008,7 @@
     <ClInclude Include="..\..\source\sim\simObject.h" />
     <ClInclude Include="..\..\source\sim\SimObjectList.h" />
     <ClInclude Include="..\..\source\sim\simObjectPtr.h" />
+    <ClInclude Include="..\..\source\sim\simObjectTimerEvent.h" />
     <ClInclude Include="..\..\source\sim\simSet.h" />
     <ClInclude Include="..\..\source\string\findMatch.h" />
     <ClInclude Include="..\..\source\string\stringBuffer.h" />

@@ -106,6 +106,8 @@ ParticlePlayer::ParticlePlayer() :
 
 ParticlePlayer::~ParticlePlayer()
 {
+    // Destroy the particle asset.
+    destroyParticleAsset();
 }
 
 //------------------------------------------------------------------------------
@@ -192,6 +194,9 @@ void ParticlePlayer::OnRegisterScene( Scene* pScene )
 
 void ParticlePlayer::OnUnregisterScene( Scene* pScene )
 {
+    // Stop the player.
+    stop( false, false );
+
     // Remove always in scope.
     pScene->getWorldQuery()->removeAlwaysInScope( this );
 
@@ -1290,7 +1295,7 @@ void ParticlePlayer::configureParticle( EmitterNode* pEmitterNode, ParticleSyste
         if ( animationAsset.notNull() )
         {
             // Yes, so play it.
-            pParticleNode->mAnimationController.playAnimation( animationAsset.getAssetId(), false );
+            pParticleNode->mAnimationController.playAnimation( animationAsset, false );
         }
     }
 

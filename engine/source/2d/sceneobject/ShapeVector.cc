@@ -307,16 +307,14 @@ void ShapeVector::renderPolygonShape(U32 vertexCount)
 
 void ShapeVector::setSize( const Vector2& size )
 {
-    Vector2 difference = size - mSize;
-
+    F32 xDifference = mSize.x / size.x;
+    
     // Call Parent.
     Parent::setSize( size );
-
+    
     if (mIsCircle)
     {
-        F32 total = difference.x + difference.y;
-
-        mCircleRadius += total;
+        mCircleRadius /= xDifference;
     }
     else
     {

@@ -31,7 +31,7 @@
 //------------------------------------------------------------------------------
 
 SpriteBatch::SpriteBatch() :
-    mMasterBatchId( 1 ),
+    mMasterBatchId( 0 ),
     mSelectedSprite( NULL ),
     mBatchSortMode( SceneRenderQueue::RENDER_SORT_OFF ),
     mDefaultSpriteStride( 1.0f, 1.0f),
@@ -931,7 +931,7 @@ SpriteBatchItem* SpriteBatch::createSprite( void )
     PROFILE_SCOPE(SpriteBatch_CreateSprite);
 
     // Allocate batch Id.
-    const U32 batchId = mMasterBatchId++;
+    const U32 batchId = ++mMasterBatchId;
 
     // Create sprite batch item,
     SpriteBatchItem* pSpriteBatchItem = SpriteBatchItemFactory.createObject();
