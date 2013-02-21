@@ -107,7 +107,6 @@ ConsoleMethod(AnimationAsset, getAnimationTime, F32, 2, 2,       "() Gets the to
     return object->getAnimationTime();
 }
 
-
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(AnimationAsset, setAnimationCycle, void, 3, 3,     "(bool animationCycle) Sets whether the animation cycles or not.\n"
@@ -123,4 +122,21 @@ ConsoleMethod(AnimationAsset, getAnimationCycle, bool, 2, 2,     "() Gets whethe
                                                                         "@return Whether the animation cycles or not.")
 {
     return object->getAnimationCycle();
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(AnimationAsset, setRandomStart, void, 3, 3,     "(bool randomStart) Sets whether the animation starts at a random frame or not.\n"
+                                                                        "@param randomStart Whether the animation starts at a random frame or not..\n"
+                                                                        "@return No return value.")
+{
+    object->setRandomStart( dAtob(argv[2] ) );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(AnimationAsset, getRandomStart, bool, 2, 2,     "() Gets whether the animation starts at a random frame or not.\n"
+                                                                        "@return Whether the animation starts at a random frame or not.")
+{
+    return object->getRandomStart();
 }
