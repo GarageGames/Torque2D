@@ -58,18 +58,18 @@ protected:
         const char* pAttributeValue = pAttribute->Value();
 
         // Fetch attribute value word count.
-        const U32 valueWordCount = StringUnit::getUnitCount( pAttributeValue, ASSET_ASSIGNMENT_SEPARATOR );
+        const U32 valueWordCount = StringUnit::getUnitCount( pAttributeValue, ASSET_ASSIGNMENT_TOKEN );
 
         // Finish if not two words.
         if ( valueWordCount != 2 )
             return true;
 
         // Skip if this is not an asset signature.
-        if ( dStricmp( StringUnit::getUnit( pAttributeValue, 0, ASSET_ASSIGNMENT_SEPARATOR), ASSET_ID_SIGNATURE ) != 0 )
+        if ( dStricmp( StringUnit::getUnit( pAttributeValue, 0, ASSET_ASSIGNMENT_TOKEN), ASSET_ID_SIGNATURE ) != 0 )
             return true;
 
         // Get the asset value.
-        const char* pAssetValue = StringUnit::getUnit( pAttributeValue, 1, ASSET_ASSIGNMENT_SEPARATOR );
+        const char* pAssetValue = StringUnit::getUnit( pAttributeValue, 1, ASSET_ASSIGNMENT_TOKEN );
 
         // Finish if not the asset Id we're looking for.
         if ( dStricmp( pAssetValue, mAssetIdFrom ) != 0 )
@@ -85,7 +85,7 @@ protected:
 
         // Format asset.
         char assetBuffer[1024];
-        dSprintf( assetBuffer, sizeof(assetBuffer), "%s%s%s", ASSET_ID_SIGNATURE, ASSET_ASSIGNMENT_SEPARATOR, mAssetIdTo );
+        dSprintf( assetBuffer, sizeof(assetBuffer), "%s%s%s", ASSET_ID_SIGNATURE, ASSET_ASSIGNMENT_TOKEN, mAssetIdTo );
 
         // Assign new value.
         pAttribute->SetValue( assetBuffer );

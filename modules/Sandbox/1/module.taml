@@ -1,6 +1,7 @@
 <ModuleDefinition
 	ModuleId="Sandbox"
 	VersionId="1"
+	Dependencies="ToyAssets=1"
 	Description="A sandbox for testing and prototyping."
 	ScriptFile="main.cs"
 	CreateFunction="create"

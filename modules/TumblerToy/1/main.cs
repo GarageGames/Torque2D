@@ -30,7 +30,6 @@ function TumblerToy::create( %this )
     Sandbox.useManipulation( pull );
     
     // Initialize the toys settings.
-    TumblerToy.createBallScheduleId = "";
     TumblerToy.maxBalls = 100;
     TumblerToy.currentBalls = 0;
     TumblerToy.MotorSpeed = 10;
@@ -48,30 +47,12 @@ function TumblerToy::create( %this )
 
 function TumblerToy::destroy( %this )
 {
-    // Cancel any pending events.
-    TumblerToy.cancelPendingEvents();
-}
-
-//-----------------------------------------------------------------------------
-
-function TumblerToy::cancelPendingEvents(%this)
-{
-    // Finish if there are not pending events.
-    if ( !isEventPending(%this.createBallScheduleId) )
-        return;
-        
-    // Cancel it.
-    cancel(%this.createBallScheduleId);
-    %this.createBallScheduleId = "";
 }
 
 //-----------------------------------------------------------------------------
 
 function TumblerToy::reset(%this)
-{
-    // Cancel any pending events.
-    TumblerToy::cancelPendingEvents();
-    
+{   
     // Clear the scene.
     SandboxScene.clear();
     
@@ -87,8 +68,8 @@ function TumblerToy::reset(%this)
     // Reset the ball count.    
     %this.currentBalls = 0;
             
-    // Schedule to create a ball.
-    %this.createBallScheduleId = %this.schedule( 100, "createBall" );
+    // Start the timer.
+    TumblerToy.startTimer( "createBall", 100 );
 }
 
 //-----------------------------------------------------------------------------
@@ -124,7 +105,7 @@ function TumblerToy::createTumbler(%this)
     SandboxScene.add( %tumbler );
 
     // Create the motor joint.    
-    TumblerToy.MotorJoint = SandboxScene.createRevoluteJoint( %tumbler, 0, "0 0" );
+    TumblerToy.MotorJoint = SandboxScene.createRevoluteJoint( %tumbler, "", "0 0" );
     SandboxScene.setRevoluteJointMotor( TumblerToy.MotorJoint, true, TumblerToy.MotorSpeed, 1000000 );    
 }
 
@@ -132,9 +113,6 @@ function TumblerToy::createTumbler(%this)
 
 function TumblerToy::createBall(%this)
 {
-    // Reset the event schedule.
-    %this.createBallScheduleId = "";
-
     // Fetch the stock color count.
     %stockColorCount = getStockColorCount();
     
@@ -153,13 +131,15 @@ function TumblerToy::createBall(%this)
         // Increase ball count.
         %this.currentBalls++;
         
-        // Finish if exceeded the required number of balls.
+        // Stop the timer if exceeded the required number of balls.
         if ( %this.currentBalls >= %this.maxBalls)
-            return;
-    }
+        {
+            // Cancel the timer.
+            TumblerToy.stopTimer();
 
-    // Schedule to create a ball.
-    %this.createBallScheduleId = %this.schedule( 100, "createBall" );
+            return;
+        }
+    }
 }
 
 

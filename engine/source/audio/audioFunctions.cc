@@ -726,6 +726,19 @@ ConsoleFunction(stopiOSAudioStream, void, 2, 2, "( streamId ) - Stops playing th
     }
 }
 
+ConsoleFunction(setiOSAudioStreamVolume, void, 3, 3, "setiPhoneAudioVolume( Stream ID, float volume )" )
+{
+    SimObjectId streamId = dAtoi( argv[1] );
+    iOSStreamSource* pStream = Sim::findObject<iOSStreamSource>( streamId );
+    
+    F32 volume = dAtof( argv[2] );
+    
+    if( pStream ) {
+        if( pStream->isPlaying() ) {
+            pStream->setVolume(volume);
+        }
+    }
+}
 #endif
 
 

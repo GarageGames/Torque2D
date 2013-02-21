@@ -35,6 +35,9 @@
 #include "platformiOS/T2DView.h"
 #include "platformiOS/T2DViewController.h"
 
+// Mich Note: Do not try to spend too much time analyzing this class.
+// It is planned to refactor the iOS platform layer and replace this
+// with a platform state similar to what OS X uses.
 class iOSPlatState
 {
 public:

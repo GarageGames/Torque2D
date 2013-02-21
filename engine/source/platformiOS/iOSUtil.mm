@@ -214,7 +214,7 @@ CFSocketRef CreateCFSocketToURLAndPort(const char *ipAddress, U16 port)
     inet_aton(ipAddress, &addr4.sin_addr);
 
     NSData *address = [NSData dataWithBytes:&addr4 length:sizeof(addr4)];
-    CFSocketConnectToAddress(socket, (CFDataRef)address, -1);
+    CFSocketConnectToAddress(socket, (__bridge CFDataRef)address, -1);
 
     CFRunLoopSourceRef source;
     source = CFSocketCreateRunLoopSource(NULL, socket, 1);

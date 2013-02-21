@@ -109,48 +109,48 @@ S32 Platform::messageBox(const UTF8 *title, const UTF8 *message, MBButtons butto
 bool Platform::pathCopy(const char* source, const char* dest, bool nooverwrite)
 {
    NSFileManager *manager = [NSFileManager defaultManager];
-   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+   @autoreleasepool {
    
-   NSString *nsource = [[NSString stringWithUTF8String:source] stringByStandardizingPath];
-   NSString *ndest   = [[NSString stringWithUTF8String:dest] stringByStandardizingPath];
-   NSString *ndestFolder = [ndest stringByDeletingLastPathComponent];
-   
-   if(! [manager fileExistsAtPath:nsource])
-   {
-      Con::errorf("Platform::pathCopy: no file exists at %s",source);
-      return false;
-   }
-    
-    //Catcher for the errors.
-    NSError** returnValue = nil;
-   
-   if( [manager fileExistsAtPath:ndest] )
-   {
-      if(nooverwrite)
+      NSString *nsource = [@(source) stringByStandardizingPath];
+      NSString *ndest   = [@(dest) stringByStandardizingPath];
+      NSString *ndestFolder = [ndest stringByDeletingLastPathComponent];
+      
+      if(! [manager fileExistsAtPath:nsource])
       {
-         Con::errorf("Platform::pathCopy file already exists at %s",dest);
+         Con::errorf("Platform::pathCopy: no file exists at %s",source);
          return false;
       }
        
-      Con::warnf("Deleting files at path: %s", dest);
-      bool deleted = [manager removeItemAtPath:ndest error:returnValue];
-      if(!deleted)
+       //Catcher for the errors.
+       NSError* returnValue = nil;
+      
+      if( [manager fileExistsAtPath:ndest] )
       {
-         Con::errorf("Copy failed! Could not delete files at path: %s", dest);
-         return false;
+         if(nooverwrite)
+         {
+            Con::errorf("Platform::pathCopy file already exists at %s",dest);
+            return false;
+         }
+          
+         Con::warnf("Deleting files at path: %s", dest);
+         bool deleted = [manager removeItemAtPath:ndest error:&returnValue];
+         if(!deleted)
+         {
+            Con::errorf("Copy failed! Could not delete files at path: %s", dest);
+            return false;
+         }
       }
+      
+      if([manager fileExistsAtPath:ndestFolder] == NO)
+      {
+         ndestFolder = [ndestFolder stringByAppendingString:@"/"]; // createpath requires a trailing slash
+         Platform::createPath([ndestFolder UTF8String]);
+      }
+      
+      bool ret = [manager copyItemAtPath:nsource toPath:ndest error:&returnValue];
+      
+      return ret;
    }
-   
-   if([manager fileExistsAtPath:ndestFolder] == NO)
-   {
-      ndestFolder = [ndestFolder stringByAppendingString:@"/"]; // createpath requires a trailing slash
-      Platform::createPath([ndestFolder UTF8String]);
-   }
-   
-   bool ret = [manager copyItemAtPath:nsource toPath:ndest error:returnValue];
-   
-   [pool release];
-   return ret;
    
 }
 
@@ -176,9 +176,9 @@ bool Platform::fileRename(const char *source, const char *dest)
       Con::warnf("Platform::fileRename: Deleting files at path: %s", dest);
    }
     
-    NSError** returnValue = NULL;
+    NSError* returnValue = NULL;
    
-   bool ret = [manager moveItemAtPath:nsource toPath:ndest error:returnValue];
+   bool ret = [manager moveItemAtPath:nsource toPath:ndest error:&returnValue];
   
    return ret;
 }

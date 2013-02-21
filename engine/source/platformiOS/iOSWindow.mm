@@ -319,8 +319,6 @@ bool Platform::openWebBrowser(const char *webAddress)
     NSString *string = [[NSString alloc] initWithUTF8String:webAddress];
     NSURL *url = [[NSURL alloc] initWithString:string];
     bool ret = [platState.application openURL:url];
-    [string release];
-    [url release];
 
     return ret;// this bails on the application, switching to Safari
 }
