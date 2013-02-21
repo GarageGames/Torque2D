@@ -502,10 +502,10 @@ inline Point4I::operator Point4F() const
 {
    const F32 inv255 = 1.0f / 255.0f;
 
-   return Point4I(F32(red)   * inv255,
-                 F32(green) * inv255,
-                 F32(blue)  * inv255,
-                 F32(alpha) * inv255);
+   return Point4I(U8(F32(red)   * inv255),
+                 U8(F32(green) * inv255),
+                 U8(F32(blue)  * inv255),
+                 U8(F32(alpha) * inv255));
 }
 
 
