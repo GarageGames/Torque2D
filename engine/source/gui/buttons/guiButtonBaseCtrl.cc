@@ -202,6 +202,15 @@ void GuiButtonBaseCtrl::onMouseDown(const GuiEvent &event)
    mouseLock();
    mDepressed = true;
 
+   if (mUseMouseEvents)
+   {
+       char buf[3][32];
+       dSprintf(buf[0], 32, "%d", event.modifier);
+       dSprintf(buf[1], 32, "%d %d", event.mousePoint.x, event.mousePoint.y);
+       dSprintf(buf[2], 32, "%d", event.mouseClickCount);
+       Con::executef(this, 4, "onMouseDown", buf[0], buf[1], buf[2]);
+   }
+
    //update
    setUpdate();
 }
