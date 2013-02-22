@@ -64,7 +64,7 @@ public:
     virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats ) {}
 
     // Scene render.
-    virtual void sceneRender( const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer ) {}
+    virtual void renderOverlay( Scene* pScene, const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer ) {}
 
     /// Declare Console Object.
     DECLARE_CONOBJECT( SceneController );

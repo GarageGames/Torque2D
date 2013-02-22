@@ -1245,8 +1245,8 @@ void Scene::sceneRender( const SceneRenderState* pSceneRenderState )
 			    if ( pController == NULL )
 				    continue;
 
-			    // Integrate.
-                pController->sceneRender( pSceneRenderState, &mBatchRenderer );
+			    // Render the overlay.
+                pController->renderOverlay( this, pSceneRenderState, &mBatchRenderer );
 		    }
 
             // Flush isolated batch.

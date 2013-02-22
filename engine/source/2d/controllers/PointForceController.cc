@@ -124,3 +124,14 @@ void PointForceController::integrate( Scene* pScene, const F32 totalTime, const 
         pSceneObject->applyForce( forceDirection, true );
     }
 }
+
+//------------------------------------------------------------------------------
+
+void PointForceController::renderOverlay( Scene* pScene, const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer )
+{
+    // Call parent.
+    Parent::renderOverlay( pScene, pSceneRenderState, pBatchRenderer );
+
+    // Draw camera pause distance.
+    pScene->mDebugDraw.DrawCircle( mPosition, mRadius, b2Color(1.0f, 1.0f, 0.0f ) );
+}

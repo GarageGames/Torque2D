@@ -52,6 +52,9 @@ public:
     /// Integration.
     virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
 
+    // Scene render.
+    virtual void renderOverlay( Scene* pScene, const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer );
+
     inline void setForce( const F32& force ) { mForce = force; }
     inline const F32 getForce( void ) const { return mForce; }
 
