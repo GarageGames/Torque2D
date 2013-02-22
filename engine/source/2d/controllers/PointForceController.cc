@@ -104,7 +104,7 @@ void PointForceController::integrate( Scene* pScene, const F32 totalTime, const 
     // Fetch results.
     typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
 
-    // Add picked objects.
+    // Iterate the results.
     for ( U32 n = 0; n < (U32)queryResults.size(); n++ )
     {
         // Fetch the scene object.
