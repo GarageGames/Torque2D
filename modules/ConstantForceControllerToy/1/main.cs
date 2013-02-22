@@ -139,8 +139,8 @@ function ConstantForceControllerToy::createConstantForceController( %this )
     // Set scene controller.
     ConstantForceControllerToy.SceneController = %controller;
 
-    // Update the constant force.
-    %this.updateConstantForce();
+    // Update the constant force controller.
+    %this.updateConstantForceController();
     
     // Add the controller.
     SandboxScene.Controllers.add( %controller );
@@ -177,7 +177,7 @@ function ConstantForceControllerToy::createConstantForceController( %this )
 
 //-----------------------------------------------------------------------------
 
-function ConstantForceControllerToy::updateConstantForce( %this )
+function ConstantForceControllerToy::updateConstantForceController( %this )
 {
     // Calculate the force.
     ConstantForceControllerToy.SceneController.Force = Vector2Direction( %this.ForceAngle, %this.ForceMagnitude );
@@ -190,7 +190,7 @@ function ConstantForceControllerToy::setForceAngle(%this, %value)
     %this.ForceAngle = %value;
     
     // Update the constant force.
-    %this.updateConstantForce();   
+    %this.updateConstantForceController();   
 }
 
 //-----------------------------------------------------------------------------
@@ -200,7 +200,7 @@ function ConstantForceControllerToy::setForceMagnitude(%this, %value)
     %this.ForceMagnitude = %value;
     
     // Update the constant force.
-    %this.updateConstantForce();    
+    %this.updateConstantForceController();    
 }
 
 //-----------------------------------------------------------------------------

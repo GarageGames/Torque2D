@@ -410,8 +410,4 @@ function BuoyancyControllerToy::updateBuoyancyController( %this )
     %controller.AngularDrag = BuoyancyControllerToy.AngularDrag;
     %controller.FluidGravity = BuoyancyControllerToy.FluidGravity;
     %controller.UseShapeDensity = BuoyancyControllerToy.UseShapeDensity;
-    
-    // Calculate the force.
-    
-
 }
