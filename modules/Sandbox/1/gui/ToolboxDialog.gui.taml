@@ -458,7 +458,7 @@
             Visible="1"
             Active="1"
             tooltipprofile="GuiToolTipProfile"
-            ToolTip="Whether to show the cdontrollers overlay or not."
+            ToolTip="Whether to show the controllers overlay or not."
             hovertime="100"
             text="Controllers"
             groupNum="-1"
