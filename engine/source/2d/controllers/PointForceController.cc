@@ -96,7 +96,7 @@ void PointForceController::integrate( Scene* pScene, const F32 totalTime, const 
     // Calculate the AABB of the attractor.
     b2AABB aabb;
     aabb.lowerBound.Set( mPosition.x - mRadius, mPosition.y - mRadius );
-    aabb.lowerBound.Set( mPosition.x + mRadius, mPosition.y + mRadius );
+    aabb.upperBound.Set( mPosition.x + mRadius, mPosition.y + mRadius );
 
     // Query for candidate objects.
     pWorldQuery->anyQueryArea( aabb ); 
@@ -116,6 +116,10 @@ void PointForceController::integrate( Scene* pScene, const F32 totalTime, const 
 
         // Calculate the force direction to the controllers position.
         Vector2 forceDirection = mPosition - pSceneObject->getPosition();
+
+        // Skip if the position is outside the radius.
+        if ( forceDirection.Length() > mRadius )
+            continue;
 
         // Normalize to the specified force.
         forceDirection.Normalize( mForce );
