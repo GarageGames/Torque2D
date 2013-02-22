@@ -32,11 +32,11 @@ function PointForceControllerToy::create( %this )
     // Configure settings.
     PointForceControllerToy.ForceRadius = 20;
     PointForceControllerToy.ForceMagnitude = 50;
-    PointForceControllerToy.DebrisCount = 10;
+    PointForceControllerToy.DebrisCount = 100;
 
     // Add options.    
     addNumericOption("Force Radius", 1, 200, 1, "setForceRadius", PointForceControllerToy.ForceRadius, false, "The radius of the point force.");   
-    addNumericOption("Force Magnitude", 1, 1000, 10, "setForceMagnitude", PointForceControllerToy.ForceMagnitude, false, "The magnitude of the point force.");   
+    addNumericOption("Force Magnitude", -1000, 1000, 10, "setForceMagnitude", PointForceControllerToy.ForceMagnitude, false, "The magnitude of the point force.");   
     addNumericOption("Debris Count", 10, 1000, 10, "setDebrisCount", PointForceControllerToy.DebrisCount, true, "The amount of debris to use.");
     
     // Reset the toy.
