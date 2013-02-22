@@ -33,7 +33,7 @@ class ParticleSystem
 {
 public:
     /// Particle node.
-    struct ParticleNode
+    struct ParticleNode : public IFactoryObjectReset
     {
         /// Particle Node Linkages.
         ParticleNode*           mPreviousNode;
@@ -72,6 +72,11 @@ public:
         Vector2                 mPreTickPosition;
         Vector2                 mPostTickPosition;
         Vector2                 mRenderTickPosition;
+
+        virtual void resetState( void )
+        {
+            mAnimationController.resetState();
+        }
     };
 
 private:

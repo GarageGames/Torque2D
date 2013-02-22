@@ -246,6 +246,9 @@ ConsoleFunction(TamlWrite, bool, 3, 5,  "(object, filename, [format], [compresse
                 Con::warnf( "TamlWrite() - Setting binary compression is only valid for XML formatting." );
             }
         }
+
+		// Turn-off auto-formatting.
+		taml.setAutoFormat( false );
     }
 
     // Write.
@@ -264,7 +267,16 @@ ConsoleFunction(TamlRead, const char*, 2, 4,    "(filename, [format]) - Read an 
 
     // Set the format mode.
     Taml taml;
-    taml.setFormatMode( argc > 2 ? Taml::getFormatModeEnum( argv[2] ) : Taml::XmlFormat );  
+
+	// Was a format mode specified?
+	if ( argc > 2 )
+	{
+		// Yes, so set it.
+		taml.setFormatMode( Taml::getFormatModeEnum( argv[2] ) );  
+
+		// Turn-off auto-formatting.
+		taml.setAutoFormat( false );
+	}
 
     // Read object.
     SimObject* pSimObject = taml.read( pFilename );

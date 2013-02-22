@@ -203,7 +203,7 @@ ConsoleFunction( Vector2Distance, F32, 3, 3, "(Vector2 p1, Vector2 p2) - Returns
 //-----------------------------------------------------------------------------
 // Angle between two 2D Vectors.
 //-----------------------------------------------------------------------------
-ConsoleFunction( t2dAngleBetween, F32, 3, 3, "(Vector2 v1, Vector2 v2) - Returns the angle between v1 and v2.")
+ConsoleFunction( Vector2AngleBetween, F32, 3, 3, "(Vector2 v1, Vector2 v2) - Returns the angle between v1 and v2.")
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 ||Utility::mGetStringElementCount(argv[2]) < 2 )
@@ -224,7 +224,7 @@ ConsoleFunction( t2dAngleBetween, F32, 3, 3, "(Vector2 v1, Vector2 v2) - Returns
 //-----------------------------------------------------------------------------
 // Angle from one point to another.
 //-----------------------------------------------------------------------------
-ConsoleFunction( t2dAngleToPoint, F32, 3, 3, "(Vector2 p1, Vector2 p1) - Returns the angle from p1 to p2.")
+ConsoleFunction( Vector2AngleToPoint, F32, 3, 3, "(Vector2 p1, Vector2 p1) - Returns the angle from p1 to p2.")
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 ||Utility::mGetStringElementCount(argv[2]) < 2 )
@@ -238,6 +238,26 @@ ConsoleFunction( t2dAngleToPoint, F32, 3, 3, "(Vector2 p1, Vector2 p1) - Returns
 
     // Do Operation.
     return mRadToDeg( mAtan((p2.x - p1.x), (p1.y - p2.y)) );
+}
+
+//-----------------------------------------------------------------------------
+// Vector from angle and magnitude.
+//-----------------------------------------------------------------------------
+ConsoleFunction( Vector2Direction, const char*, 3, 3,   "(F32 angle, F32 magnitude) - Calculates a direction from an angle and magnitude.\n"
+                                                        "@param angle The angle of the direction.\n"
+                                                        "@param magnitude The magnitude of the direction.\n"
+                                                        "@return No return value.")
+{
+    // Fetch angle.
+    const F32 angle = mDegToRad(dAtof(argv[1]));
+
+    // Fetch magnitude.
+    const F32 magnitude = dAtof(argv[2]);
+
+    // Do Operation.
+    Vector2 direction;
+    direction.setPolar( angle, magnitude );
+    return direction.scriptThis();
 }
 
 //-----------------------------------------------------------------------------
@@ -313,7 +333,7 @@ ConsoleFunction( Vector2InverseY, const char*, 2, 2, "(Vector2 v1) - Returns the
 //-----------------------------------------------------------------------------
 // Normalize Rectangle (two 2D Vectors) with relation to each other.
 //-----------------------------------------------------------------------------
-ConsoleFunction( t2dRectNormalize, const char*, 3, 3, "(Vector2 v1, Vector2 v2) - Returns Normalize rectangle of v1 and v2.")
+ConsoleFunction( Vector2AreaNormalize, const char*, 3, 3, "(Vector2 v1, Vector2 v2) - Returns Normalize rectangle of v1 and v2.")
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 ||Utility::mGetStringElementCount(argv[2]) < 2 )

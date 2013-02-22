@@ -105,7 +105,7 @@ struct Vector2 : b2Vec2
 
     /// Utility.
     inline void setAngle(const F32 radians)                             { x = mSin(radians); y = mCos(radians); }
-    inline void setPolar(const F32 radians,F32 length)                  { x = mSin(radians)*length; y = mCos(radians*length); }
+    inline void setPolar(const F32 radians,F32 length)                  { x = mSin(radians)*length; y = mCos(radians)*length; }
     inline const Vector2& setZero()                                     { (*this) = getZero(); return *this; }
     inline const Vector2& setOne()                                      { (*this) = getOne(); return *this; }
     inline static const Vector2& getZero()                              { static const Vector2 v(0.0f, 0.0f); return v; }

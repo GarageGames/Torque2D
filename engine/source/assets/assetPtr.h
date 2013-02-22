@@ -45,7 +45,7 @@ public:
     AssetPtrBase() {};
     virtual ~AssetPtrBase()
     {
-        // Unregister any notifications.
+        // Un-register any notifications.
         unregisterRefreshNotify();
     };
 
@@ -72,7 +72,7 @@ public:
 
     void unregisterRefreshNotify( void )
     {
-        // Unregister the refresh notify if the asset system is available.
+        // Un-register the refresh notify if the asset system is available.
         if ( AssetDatabase.isProperlyAdded() )
             AssetDatabase.unregisterAssetPtrRefreshNotify( this );
     }

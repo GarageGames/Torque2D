@@ -50,18 +50,18 @@ protected:
         const char* pAssetReference = pAttribute->Value();
 
         // Fetch field word count.
-        const U32 fieldWordCount = StringUnit::getUnitCount( pAssetReference, ASSET_ASSIGNMENT_SEPARATOR );
+        const U32 fieldWordCount = StringUnit::getUnitCount( pAssetReference, ASSET_ASSIGNMENT_TOKEN );
 
         // Finish if there are not two words.
         if ( fieldWordCount != 2 )
             return true;
 
         // Finish if the first word is not an asset signature.
-        if ( StringTable->insert( StringUnit::getUnit( pAssetReference, 0, ASSET_ASSIGNMENT_SEPARATOR ) ) != StringTable->insert(ASSET_ID_SIGNATURE) )
+        if ( StringTable->insert( StringUnit::getUnit( pAssetReference, 0, ASSET_ASSIGNMENT_TOKEN ) ) != StringTable->insert(ASSET_ID_SIGNATURE) )
             return true;
 
         // Get asset Id.
-        typeAssetId assetId = StringTable->insert( StringUnit::getUnit( pAssetReference, 1, ASSET_ASSIGNMENT_SEPARATOR ) );
+        typeAssetId assetId = StringTable->insert( StringUnit::getUnit( pAssetReference, 1, ASSET_ASSIGNMENT_TOKEN ) );
 
         // Finish if we already have this asset Id.
         if ( mAssetReferenced.contains( assetId ) )

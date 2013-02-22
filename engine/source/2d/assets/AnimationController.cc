@@ -32,26 +32,38 @@
 
 //-----------------------------------------------------------------------------
 
-AnimationController::AnimationController() :
-    mCurrentFrameIndex(0),
-    mLastFrameIndex(0),
-    mMaxFrameIndex(0),
-    mCurrentTime(0.0f),
-    mPausedTime(0.0f),
-    mAnimationTimeScale(1.0f),
-    mTotalIntegrationTime(0.0f),
-    mFrameIntegrationTime(0.0f),
-    mAutoRestoreAnimation(false),
-    mAnimationFinished(true)
+AnimationController::AnimationController()
 {
     // Register for animation asset refresh notifications.
     mAnimationAsset.registerRefreshNotify( this );
+
+    // Reset the state.
+    resetState();
 }
 
 //-----------------------------------------------------------------------------
 
 AnimationController::~AnimationController()
 {
+}
+
+//-----------------------------------------------------------------------------
+
+void AnimationController::resetState( void )
+{
+    mCurrentFrameIndex = 0;
+    mLastFrameIndex = 0;
+    mMaxFrameIndex = 0;
+    mCurrentTime = 0.0f;
+    mPausedTime = 0.0f;
+    mAnimationTimeScale = 1.0f;
+    mTotalIntegrationTime = 0.0f;
+    mFrameIntegrationTime = 0.0f;
+    mAutoRestoreAnimation = false;
+    mAnimationFinished = true;
+
+    mAnimationAsset.clear();
+    mLastAnimationAsset.clear();
 }
 
 //-----------------------------------------------------------------------------

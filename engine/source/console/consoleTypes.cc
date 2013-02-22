@@ -537,14 +537,15 @@ ConsoleGetType( TypeSimObjectPtr )
 {
    SimObject **obj = (SimObject**)dptr;
    char* returnBuffer = Con::getReturnBuffer(256);
-   dSprintf(returnBuffer, 256, "%s", *obj ? (*obj)->getName() ? (*obj)->getName() : (*obj)->getIdString() : "");
+   const char* Id =  *obj ? (*obj)->getName() ? (*obj)->getName() : (*obj)->getIdString() : StringTable->EmptyString;
+   dSprintf(returnBuffer, 256, "%s", Id);
    return returnBuffer;
 }
 
 //////////////////////////////////////////////////////////////////////////
 // TypeSimObjectName
 //////////////////////////////////////////////////////////////////////////
-ConsoleType( SimObjectPtr, TypeSimObjectName, sizeof(SimObject*), "" )
+ConsoleType( SimObjectName, TypeSimObjectName, sizeof(SimObject*), "" )
 
 ConsoleSetType( TypeSimObjectName )
 {
@@ -564,3 +565,30 @@ ConsoleGetType( TypeSimObjectName )
    dSprintf(returnBuffer, 128, "%s", *obj && (*obj)->getName() ? (*obj)->getName() : "");
    return returnBuffer;
 }
+
+
+//////////////////////////////////////////////////////////////////////////
+// TypeSimObjectId
+//////////////////////////////////////////////////////////////////////////
+ConsoleType( SimObjectId, TypeSimObjectId, sizeof(SimObject*), "" )
+
+ConsoleSetType( TypeSimObjectId )
+{
+   if(argc == 1)
+   {
+      SimObject **obj = (SimObject **)dptr;
+      *obj = Sim::findObject(argv[0]);
+   }
+   else
+      Con::printf("(TypeSimObjectId) Cannot set multiple args to a single S32.");
+}
+
+ConsoleGetType( TypeSimObjectId )
+{
+   SimObject **obj = (SimObject**)dptr;
+   char* returnBuffer = Con::getReturnBuffer(128);
+   dSprintf(returnBuffer, 128, "%s", *obj ? (*obj)->getIdString() : StringTable->EmptyString );
+   return returnBuffer;
+}
+
+

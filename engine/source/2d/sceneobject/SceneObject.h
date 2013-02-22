@@ -165,7 +165,7 @@ protected:
     bool                    mCollisionSuppress;
     b2FixtureDef            mDefaultFixture;
     bool                    mGatherContacts;
-    typeContactVector*      mpCurrentContacts;
+    Scene::typeContactVector* mpCurrentContacts;
 
     /// General collision shape access.
     typeCollisionFixtureDefVector mCollisionFixtureDefs;
@@ -220,7 +220,6 @@ protected:
     bool                    mEditorTickAllowed;
     bool                    mPickingAllowed;
     bool                    mAlwaysInScope;
-    S32                     mPeriodicTimerID;
     U32                     mMoveToEventId;
     U32                     mRotateToEventId;
     U32                     mSerialId;
@@ -375,7 +374,7 @@ public:
     inline F32              getDefaultRestitution( void ) const         { return mDefaultFixture.restitution; }
     inline void             setCollisionSuppress( const bool status )   { mCollisionSuppress = status; }
     inline bool             getCollisionSuppress(void) const            { return mCollisionSuppress; }
-    inline const typeContactVector* getCurrentContacts( void ) const    { return mpCurrentContacts; }
+    inline const Scene::typeContactVector* getCurrentContacts( void ) const    { return mpCurrentContacts; }
     inline U32              getCurrentContactCount( void ) const        { if ( mpCurrentContacts != NULL ) return mpCurrentContacts->size(); else return 0; }
     virtual void            setGatherContacts( const bool gatherContacts ) { mGatherContacts = gatherContacts; initializeContactGathering(); }
     inline bool             getGatherContacts( void ) const             { return mGatherContacts; }
@@ -395,8 +394,8 @@ public:
     inline F32              getAngularDamping(void) const               { if ( mpScene ) return mpBody->GetAngularDamping(); else return mBodyDefinition.angularDamping; }
 
     /// Move/Rotate to.
-    bool                    moveTo( const Vector2& targetWorldPoint, const U32 time = 1000, const bool autoStop = true, const bool warpToTarget = true );
-    bool                    rotateTo( const F32 targetAngle, const U32 time = 1000, const bool autoStop = true, const bool warpToTarget = true );
+    bool                    moveTo( const Vector2& targetWorldPoint, const F32 speed, const bool autoStop = true, const bool warpToTarget = true );
+    bool                    rotateTo( const F32 targetAngle, const F32 speed, const bool autoStop = true, const bool warpToTarget = true );
     void                    cancelMoveTo( const bool autoStop = true );
     void                    cancelRotateTo( const bool autoStop = true );
     inline bool             isMoveToComplete( void ) const              { return mMoveToEventId == 0; }
@@ -564,8 +563,6 @@ public:
     inline const char*      scriptThis(void) const                      { return Con::getIntArg(getId()); }
     inline bool             getIsPickingAllowed(void) const             { return mPickingAllowed; }
     inline bool             getIsAlwaysInScope(void) const              { return mAlwaysInScope; }
-    inline void             setPeriodicTimerID( S32 timerID )           { mPeriodicTimerID = timerID; }
-    inline S32              getPeriodicTimerID( void ) const            { return mPeriodicTimerID; }
     inline void             setWorldQueryKey( const U32 key )           { mWorldQueryKey = key; }
     inline U32              getWorldQueryKey( void ) const              { return mWorldQueryKey; }
     BehaviorInstance*       behavior(const char *name);
