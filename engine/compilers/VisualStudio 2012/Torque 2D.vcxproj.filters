@@ -1287,7 +1287,7 @@
     <ClCompile Include="..\..\source\2d\controllers\BuoyancyController.cc">
       <Filter>2d\controllers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\2d\controllers\AttractorController.cc">
+    <ClCompile Include="..\..\source\2d\controllers\PointForceController.cc">
       <Filter>2d\controllers</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2634,10 +2634,10 @@
     <ClInclude Include="..\..\source\2d\controllers\BuoyancyController_ScriptBinding.h">
       <Filter>2d\controllers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\2d\controllers\AttractorController.h">
+    <ClInclude Include="..\..\source\2d\controllers\PointForceController.h">
       <Filter>2d\controllers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\2d\controllers\AttractorController_ScriptBinding.h">
+    <ClInclude Include="..\..\source\2d\controllers\PointForceController_ScriptBinding.h">
       <Filter>2d\controllers</Filter>
     </ClInclude>
   </ItemGroup>

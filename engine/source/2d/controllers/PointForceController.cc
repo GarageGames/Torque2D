@@ -21,19 +21,19 @@
 //-----------------------------------------------------------------------------
 
 #ifndef _ATTRACTOR_CONTROLLER_H_
-#include "2d/controllers/AttractorController.h"
+#include "2d/controllers/PointForceController.h"
 #endif
 
 // Script bindings.
-#include "AttractorController_ScriptBinding.h"
+#include "PointForceController_ScriptBinding.h"
 
 //------------------------------------------------------------------------------
 
-IMPLEMENT_CONOBJECT(AttractorController);
+IMPLEMENT_CONOBJECT(PointForceController);
 
 //------------------------------------------------------------------------------
 
-AttractorController::AttractorController()        
+PointForceController::PointForceController()        
 {
     // Reset he controller.
     mPosition.SetZero();
@@ -43,36 +43,36 @@ AttractorController::AttractorController()
 
 //------------------------------------------------------------------------------
 
-AttractorController::~AttractorController()
+PointForceController::~PointForceController()
 {
 }
 
 
 //------------------------------------------------------------------------------
 
-void AttractorController::initPersistFields()
+void PointForceController::initPersistFields()
 {
     // Call parent.
     Parent::initPersistFields();
 
     // Force.
-    addProtectedField("Position", TypeVector2, Offset( mPosition, AttractorController), &defaultProtectedSetFn, &defaultProtectedGetFn, "The position of the attractor controller.");
-    addProtectedField("Radius", TypeVector2, Offset( mRadius, AttractorController), &defaultProtectedSetFn, &defaultProtectedGetFn, "The radius of the attractor circle centered on the attractors position.");
-    addProtectedField("Force", TypeF32, Offset( mForce, AttractorController), &defaultProtectedSetFn, &defaultProtectedGetFn, "The force to apply to attact to the controller position.");
+    addProtectedField("Position", TypeVector2, Offset( mPosition, PointForceController), &defaultProtectedSetFn, &defaultProtectedGetFn, "The position of the attractor controller.");
+    addProtectedField("Radius", TypeVector2, Offset( mRadius, PointForceController), &defaultProtectedSetFn, &defaultProtectedGetFn, "The radius of the attractor circle centered on the attractors position.");
+    addProtectedField("Force", TypeF32, Offset( mForce, PointForceController), &defaultProtectedSetFn, &defaultProtectedGetFn, "The force to apply to attact to the controller position.");
 }
 
 //------------------------------------------------------------------------------
 
-void AttractorController::copyTo(SimObject* object)
+void PointForceController::copyTo(SimObject* object)
 {
     // Call to parent.
     Parent::copyTo(object);
 
     // Cast to controller.
-    AttractorController* pController = static_cast<AttractorController*>(object);
+    PointForceController* pController = static_cast<PointForceController*>(object);
 
     // Sanity!
-    AssertFatal(pController != NULL, "AttractorController::copyTo() - Object is not the correct type.");
+    AssertFatal(pController != NULL, "PointForceController::copyTo() - Object is not the correct type.");
 
     // Copy state.
     pController->setForce( getForce() );
@@ -80,7 +80,7 @@ void AttractorController::copyTo(SimObject* object)
 
 //------------------------------------------------------------------------------
 
-void AttractorController::integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats )
+void PointForceController::integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats )
 {
     // Finish if the attractor would have no effect.
     if ( mIsZero( mForce ) || mIsZero( mRadius ) )

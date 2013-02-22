@@ -33,7 +33,7 @@
 
 //------------------------------------------------------------------------------
 
-class AttractorController : public SceneController
+class PointForceController : public SceneController
 {
 private:
     typedef SceneController Parent;
@@ -43,8 +43,8 @@ private:
     F32 mForce;
 
 public:
-    AttractorController();
-    virtual ~AttractorController();
+    PointForceController();
+    virtual ~PointForceController();
 
     static void initPersistFields();
     virtual void copyTo(SimObject* object);
@@ -56,7 +56,7 @@ public:
     inline const F32 getForce( void ) const { return mForce; }
 
     /// Declare Console Object.
-    DECLARE_CONOBJECT( AttractorController );
+    DECLARE_CONOBJECT( PointForceController );
 };
 
 #endif // _ATTRACTOR_CONTROLLER_H_
