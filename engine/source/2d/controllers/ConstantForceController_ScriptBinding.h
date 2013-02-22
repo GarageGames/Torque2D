@@ -20,4 +20,40 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(ConstantForceController, setForce, void, 3, 4,    "(float x, float y) - Sets the constant (world) force to use.\n"
+                                                                "@param x The component of the constant force along the horizontal (world) axis.\n"
+                                                                "@param y The component of the constant force along the vertical (world) axis.\n"
+                                                                "@return No return value.")
+{
+    // The new force.
+    b2Vec2 force;
+
+    // Elements in the first argument.
+    const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+
+    // ("x y")
+    if ((elementCount == 2) && (argc == 3))
+        force = Utility::mGetStringElementVector(argv[2]);
+
+    // (x, y)
+    else if ((elementCount == 1) && (argc == 4))
+        force.Set(dAtof(argv[2]), dAtof(argv[3]));
+
+    // Invalid
+    else
+    {
+        Con::warnf("ConstantForceController::setForce() - Invalid number of parameters!");
+        return;
+    }
+
+    object->setForce( force );
+} 
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(ConstantForceController, getForce, const char*, 2, 2, "() Gets the constant (world) force being used.\n"
+                                                                    "@return The constant (world) force being used.")
+{
+    return object->getForce().scriptThis();
+}
 
