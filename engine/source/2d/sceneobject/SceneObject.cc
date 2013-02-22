@@ -1588,7 +1588,7 @@ void SceneObject::initializeContactGathering( void )
     }
 
     // Generate current contacts.
-    mpCurrentContacts = new typeContactVector();
+    mpCurrentContacts = new Scene::typeContactVector();
 }
 
 //-----------------------------------------------------------------------------
@@ -1620,7 +1620,7 @@ void SceneObject::onEndCollision( const TickContact& tickContact )
     AssertFatal( tickContact.mpSceneObjectA == this || tickContact.mpSceneObjectB == this, "SceneObject::onEndCollision() - Contact does not involve this scene object." );
 
     // Remove contact.
-    for( typeContactVector::iterator contactItr = mpCurrentContacts->begin(); contactItr != mpCurrentContacts->end(); ++contactItr )
+    for( Scene::typeContactVector::iterator contactItr = mpCurrentContacts->begin(); contactItr != mpCurrentContacts->end(); ++contactItr )
     {
         // Is this is the correct contact?
         if ( contactItr->mpContact == tickContact.mpContact )

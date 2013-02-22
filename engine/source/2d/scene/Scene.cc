@@ -48,6 +48,10 @@
 #include "2d/SceneRenderObject.h"
 #endif
 
+#ifndef _SCENE_CONTROLLER_H_
+#include "2d/controllers/SceneController.h"
+#endif
+
 #ifndef _PARTICLE_SYSTEM_H_
 #include "2d/core/particleSystem.h"
 #endif
@@ -256,6 +260,10 @@ Scene::Scene() :
     // Set debug stats for batch renderer.
     mBatchRenderer.setDebugStats( &mDebugStats );
 
+	// Register the scene controllers set.
+    mControllers = new SimSet();
+    mControllers->registerObject();
+
     // Assign scene index.    
     mSceneIndex = ++sSceneMasterIndex;
     sSceneCount++;
@@ -267,6 +275,9 @@ Scene::Scene() :
 
 Scene::~Scene()
 {
+	// Unregister the scene controllers set.
+    mControllers->deleteObject();
+
     // Decrease scene count.
     --sSceneCount;
 }
@@ -394,6 +405,8 @@ void Scene::initPersistFields()
        addField( buffer, TypeEnum, OffsetNonConst(mLayerSortModes[n], Scene), &writeLayerSortMode, 1, &SceneRenderQueue::renderSortTable, "");
     }
 
+    addField("Controllers", TypeSimObjectPtr, Offset(mControllers, Scene), &defaultProtectedNotWriteFn, "The scene controllers to use.");
+    
     // Callbacks.
     addField("UpdateCallback", TypeBool, Offset(mUpdateCallback, Scene), &writeUpdateCallback, "");
     addField("RenderCallback", TypeBool, Offset(mRenderCallback, Scene), &writeRenderCallback, "");
@@ -772,18 +785,52 @@ void Scene::processTick( void )
         // Debug Status Reference.
         DebugStats* pDebugStats = &mDebugStats;
 
-        // ****************************************************
+		// Fetch ticked scene object count.
+		const S32 tickedSceneObjectCount = mTickedSceneObjects.size();
+
+		// ****************************************************
         // Pre-integrate objects.
         // ****************************************************
 
         // Iterate ticked scene objects.
-        for ( S32 n = 0; n < mTickedSceneObjects.size(); ++n )
+        for ( S32 i = 0; i < tickedSceneObjectCount; ++i )
         {
             // Debug Profiling.
             PROFILE_SCOPE(Scene_PreIntegrate);
 
             // Pre-integrate.
-            mTickedSceneObjects[n]->preIntegrate( mSceneTime, Tickable::smTickSec, pDebugStats );
+            mTickedSceneObjects[i]->preIntegrate( mSceneTime, Tickable::smTickSec, pDebugStats );
+        }
+
+        // ****************************************************
+		// Integrate controllers.
+        // ****************************************************
+
+        // Fetch the controller set.
+        SimSet* pControllerSet = getControllers();
+
+        // Do we have any scene controllers?
+        if ( pControllerSet != NULL )
+        {
+            // Debug Profiling.
+            PROFILE_SCOPE(Scene_IntegrateSceneControllers);
+
+		    // Yes, so fetch scene controller count.
+		    const S32 sceneControllerCount = (S32)pControllerSet->size();
+
+		    // Iterate scene controllers.
+		    for( S32 i = 0; i < sceneControllerCount; i++ )
+		    {
+			    // Fetch the scene controller.
+			    SceneController* pController = dynamic_cast<SceneController*>((*pControllerSet)[i]);
+
+			    // Skip if not a controller.
+			    if ( pController == NULL )
+				    continue;
+
+			    // Integrate.
+			    pController->integrate( this, mSceneTime, Tickable::smTickSec, pDebugStats );
+		    }
         }
 
         // Debug Profiling.
@@ -806,19 +853,18 @@ void Scene::processTick( void )
         // Forward the contacts.
         forwardContacts();
 
-
         // ****************************************************
         // Integrate objects.
         // ****************************************************
 
         // Iterate ticked scene objects.
-        for ( S32 n = 0; n < mTickedSceneObjects.size(); ++n )
+        for ( S32 i = 0; i < tickedSceneObjectCount; ++i )
         {
             // Debug Profiling.
             PROFILE_SCOPE(Scene_IntegrateObject);
 
             // Integrate.
-            mTickedSceneObjects[n]->integrateObject( mSceneTime, Tickable::smTickSec, pDebugStats );
+            mTickedSceneObjects[i]->integrateObject( mSceneTime, Tickable::smTickSec, pDebugStats );
         }
 
         // ****************************************************
@@ -826,13 +872,13 @@ void Scene::processTick( void )
         // ****************************************************
 
         // Iterate ticked scene objects.
-        for ( S32 n = 0; n < mTickedSceneObjects.size(); ++n )
+        for ( S32 i = 0; i < tickedSceneObjectCount; ++i )
         {
             // Debug Profiling.
             PROFILE_SCOPE(Scene_PostIntegrate);
 
             // Post-integrate.
-            mTickedSceneObjects[n]->postIntegrate( mSceneTime, Tickable::smTickSec, pDebugStats );
+            mTickedSceneObjects[i]->postIntegrate( mSceneTime, Tickable::smTickSec, pDebugStats );
         }
 
         // Scene update callback.
@@ -870,8 +916,15 @@ void Scene::interpolateTick( F32 timeDelta )
     // Debug Profiling.
     PROFILE_SCOPE(Scene_InterpolateTick);
 
+    // ****************************************************
+	// Interpolate scene objects.
+    // ****************************************************
+
+	// Fetch the scene object count.
+	const S32 sceneObjectCount = mSceneObjects.size();
+
     // Iterate scene objects.
-    for( S32 n = 0; n < mSceneObjects.size(); ++n )
+    for( S32 n = 0; n < sceneObjectCount; ++n )
     {
         // Fetch scene object.
         SceneObject* pSceneObject = mSceneObjects[n];
@@ -1167,6 +1220,40 @@ void Scene::sceneRender( const SceneRenderState* pSceneRenderState )
         SceneRenderQueueFactory.cacheObject( pSceneRenderQueue );
     }
 
+    // Draw controllers.
+    if ( getDebugMask() & Scene::SCENE_DEBUG_CONTROLLERS )
+    {
+        // Fetch the controller set.
+        SimSet* pControllerSet = getControllers();
+
+        // Do we have any scene controllers?
+        if ( pControllerSet != NULL )
+        {
+            // Debug Profiling.
+            PROFILE_SCOPE(Scene_RenderControllers);
+
+		    // Yes, so fetch scene controller count.
+		    const S32 sceneControllerCount = (S32)pControllerSet->size();
+
+		    // Iterate scene controllers.
+		    for( S32 i = 0; i < sceneControllerCount; i++ )
+		    {
+			    // Fetch the scene controller.
+			    SceneController* pController = dynamic_cast<SceneController*>((*pControllerSet)[i]);
+
+			    // Skip if not a controller.
+			    if ( pController == NULL )
+				    continue;
+
+			    // Integrate.
+                pController->sceneRender( pSceneRenderState, &mBatchRenderer );
+		    }
+
+            // Flush isolated batch.
+            mBatchRenderer.flush( pDebugStats->batchIsolatedFlush );
+        }
+    }
+
     // Draw Joints.
     if ( getDebugMask() & Scene::SCENE_DEBUG_JOINTS )
     {
@@ -1205,6 +1292,38 @@ void Scene::clearScene( bool deleteObjects )
         // Queue Object for deletion.
         if ( deleteObjects )
             pSceneObject->safeDelete();
+    }
+
+    // Fetch the controller set.
+    SimSet* pControllerSet = getControllers();
+
+    // Do we have any scene controllers?
+    if ( pControllerSet == NULL )
+        return;
+
+	// Fetch scene controller count.
+	const S32 sceneControllerCount = (S32)pControllerSet->size();
+
+	// Iterate scene controllers.
+	for( S32 i = 0; i < sceneControllerCount; i++ )
+	{
+		// Fetch the scene controller.
+		SceneController* pController = dynamic_cast<SceneController*>((*pControllerSet)[i]);
+
+        // Clear objects from the controller.
+        pController->clear();
+	}
+
+    // Are we deleting objects?
+    if ( deleteObjects )
+    {
+        // Yes, so delete the controllers.
+        pControllerSet->deleteObjects();
+    }
+    else
+    {
+        // No, so just clear the controllers.
+        pControllerSet->clear();
     }
 }
 
@@ -4675,6 +4794,7 @@ static EnumTable::Enums DebugOptionsLookup[] =
                 {
                 { Scene::SCENE_DEBUG_METRICS,           "metrics" },
                 { Scene::SCENE_DEBUG_FPS_METRICS,       "fps" },
+                { Scene::SCENE_DEBUG_CONTROLLERS,       "controllers" },
                 { Scene::SCENE_DEBUG_JOINTS,            "joints" },
                 { Scene::SCENE_DEBUG_WIREFRAME_RENDER,  "wireframe" },
                 ///

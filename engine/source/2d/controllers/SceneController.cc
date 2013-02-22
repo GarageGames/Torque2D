@@ -20,30 +20,58 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _TAML_CHILDREN_H_
-#define _TAML_CHILDREN_H_
-
-#ifndef _TORQUE_TYPES_H_
-#include "platform/types.h"
+#ifndef _SCENE_CONTROLLER_H_
+#include "2d/controllers/SceneController.h"
 #endif
 
-//-----------------------------------------------------------------------------
+#ifndef _SCENE_OBJECT_SET_H_
+#include "2d/sceneObject/sceneObjectSet.h"
+#endif
 
-class SimObject;
+#ifndef _SCENE_H_
+#include "2d/scene/scene.h"
+#endif
 
-//-----------------------------------------------------------------------------
+// Script bindings.
+#include "SceneController_ScriptBinding.h"
 
-class TamlChildren
+//------------------------------------------------------------------------------
+
+IMPLEMENT_CONOBJECT(SceneController);
+
+//------------------------------------------------------------------------------
+
+SceneController::SceneController()
 {
-public:
-    /// Called when Taml attempts to compile a list of children.
-    virtual U32 getTamlChildCount( void ) const = 0;
+}
 
-    /// Called when Taml attempts to compile a list of children.
-    virtual SimObject* getTamlChild( const U32 childIndex ) const = 0;
+//------------------------------------------------------------------------------
 
-    /// Called when Taml attempts to populate an objects children during a read.
-    virtual void addTamlChild( SimObject* pSimObject ) = 0;
-};
+SceneController::~SceneController()
+{
+}
 
-#endif // _TAML_CHILDREN_H_
+
+//------------------------------------------------------------------------------
+
+void SceneController::initPersistFields()
+{
+    // Call parent.
+    Parent::initPersistFields();
+
+}
+
+//------------------------------------------------------------------------------
+
+void SceneController::copyTo(SimObject* object)
+{
+    // Call to parent.
+    Parent::copyTo(object);
+
+    // Cast to controller.
+    SceneController* pController = static_cast<SceneController*>(object);
+
+    // Sanity!
+    AssertFatal(pController != NULL, "SceneController::copyTo() - Object is not the correct type.");
+}
+

@@ -20,30 +20,43 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _TAML_CHILDREN_H_
-#define _TAML_CHILDREN_H_
+#ifndef _SCENE_OBJECT_LIST_H_
+#define _SCENE_OBJECT_LIST_H_
 
-#ifndef _TORQUE_TYPES_H_
-#include "platform/types.h"
+#ifndef _VECTOR_H_
+#include "collection/vector.h"
 #endif
 
 //-----------------------------------------------------------------------------
 
-class SimObject;
+class SceneObject;
 
 //-----------------------------------------------------------------------------
 
-class TamlChildren
+class SceneObjectList : public VectorPtr<SceneObject*>
 {
+	static S32 QSORT_CALLBACK compareId(const void* a,const void* b);
+
 public:
-    /// Called when Taml attempts to compile a list of children.
-    virtual U32 getTamlChildCount( void ) const = 0;
+	///< Add the SceneObject* to the end of the list, unless it's already in the list.
+	void pushBack(SceneObject*); 
 
-    /// Called when Taml attempts to compile a list of children.
-    virtual SimObject* getTamlChild( const U32 childIndex ) const = 0;
+	///< Add the SceneObject* to the end of the list, moving it there if it's already present in the list.
+	void pushBackForce(SceneObject*);
 
-    /// Called when Taml attempts to populate an objects children during a read.
-    virtual void addTamlChild( SimObject* pSimObject ) = 0;
+	///< Add the SceneObject* to the start of the list.
+	void pushFront(SceneObject*);
+
+	///< Remove the SceneObject* from the list; may disrupt order of the list.
+	void remove(SceneObject*);         
+
+	/// Remove the SimObject* from the list; guaranteed to preserve list order.
+	void removeStable(SceneObject* pObject);
+
+	inline SceneObject* at(S32 index) const {  if(index >= 0 && index < size()) return (*this)[index]; return NULL; }
+
+	///< Sort the list by object ID.
+	void sortId();
 };
 
-#endif // _TAML_CHILDREN_H_
+#endif // _SCENE_OBJECT_LIST_H_

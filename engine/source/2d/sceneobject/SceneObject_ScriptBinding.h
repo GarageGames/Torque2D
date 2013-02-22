@@ -982,7 +982,7 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
     }
 
     // Fetch contacts.
-    const typeContactVector* pCurrentContacts = object->getCurrentContacts();
+    const Scene::typeContactVector* pCurrentContacts = object->getCurrentContacts();
 
     // Sanity!
     AssertFatal( pCurrentContacts != NULL, "SceneObject::getContact() - Contacts not initialized correctly." );

@@ -20,30 +20,54 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _TAML_CHILDREN_H_
-#define _TAML_CHILDREN_H_
+#ifndef _SCENE_CONTROLLER_H_
+#define _SCENE_CONTROLLER_H_
 
-#ifndef _TORQUE_TYPES_H_
-#include "platform/types.h"
+#ifndef _SCENE_OBJECT_SET_H_
+#include "2d/sceneObject/sceneObjectSet.h"
 #endif
 
-//-----------------------------------------------------------------------------
+#ifndef _SCENE_RENDER_STATE_H_
+#include "2d/scene/sceneRenderState.h"
+#endif
 
-class SimObject;
+#ifndef _BATCH_RENDER_H_
+#include "2d/core/batchRender.h"
+#endif
 
-//-----------------------------------------------------------------------------
+#ifndef _SCENE_OBJECT_H_
+#include "2d/sceneObject/sceneObject.h"
+#endif
 
-class TamlChildren
+#ifndef _DEBUG_STATS_H_
+#include "2d/scene/DebugStats.h"
+#endif
+
+//------------------------------------------------------------------------------
+
+class Scene;
+
+//------------------------------------------------------------------------------
+
+class SceneController : public SceneObjectSet
 {
+    typedef SceneObjectSet Parent;
+
 public:
-    /// Called when Taml attempts to compile a list of children.
-    virtual U32 getTamlChildCount( void ) const = 0;
+    SceneController();
+    virtual ~SceneController();
 
-    /// Called when Taml attempts to compile a list of children.
-    virtual SimObject* getTamlChild( const U32 childIndex ) const = 0;
+    static void initPersistFields();
+    virtual void copyTo(SimObject* object);
 
-    /// Called when Taml attempts to populate an objects children during a read.
-    virtual void addTamlChild( SimObject* pSimObject ) = 0;
+    /// Integration.
+    virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats ) {}
+
+    // Scene render.
+    virtual void sceneRender( const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer ) {}
+
+    /// Declare Console Object.
+    DECLARE_CONOBJECT( SceneController );
 };
 
-#endif // _TAML_CHILDREN_H_
+#endif // _SCENE_CONTROLLER_H_

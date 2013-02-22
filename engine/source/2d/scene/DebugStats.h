@@ -23,8 +23,20 @@
 #ifndef _DEBUG_STATS_H_
 #define _DEBUG_STATS_H_
 
+#ifndef _PROFILER_H_
+#include "debug/profiler.h"
+#endif
+
 #ifndef _TORQUE_TYPES_H_
 #include "platform\types.h"
+#endif
+
+#ifndef _PLATFORM_MEMORY_H_
+#include "platform/platformMemory.h"
+#endif
+
+#ifndef BOX2D_H
+#include "box2d/Box2D.h"
 #endif
 
 //-----------------------------------------------------------------------------

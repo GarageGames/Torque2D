@@ -51,6 +51,7 @@ DefineConsoleType( TypeEnum )
 DefineConsoleType( TypeFlag )
 DefineConsoleType( TypeSimObjectPtr )
 DefineConsoleType( TypeSimObjectName )
+DefineConsoleType( TypeSimObjectId )
 DefineConsoleType( TypeT2DVector )
 
 #endif

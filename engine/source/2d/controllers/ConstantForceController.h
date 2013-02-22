@@ -20,30 +20,41 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _TAML_CHILDREN_H_
-#define _TAML_CHILDREN_H_
+#ifndef _CONSTANT_FORCE_CONTROLLER_H_
+#define _CONSTANT_FORCE_CONTROLLER_H_
 
-#ifndef _TORQUE_TYPES_H_
-#include "platform/types.h"
+#ifndef _SCENE_CONTROLLER_H_
+#include "2d/controllers/sceneController.h"
 #endif
 
-//-----------------------------------------------------------------------------
+#ifndef _VECTOR2_H_
+#include "2d/core/vector2.h"
+#endif
 
-class SimObject;
+//------------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-
-class TamlChildren
+class ConstantForceController : public SceneController
 {
+private:
+    typedef SceneController Parent;
+
+    Vector2 mForce;
+
 public:
-    /// Called when Taml attempts to compile a list of children.
-    virtual U32 getTamlChildCount( void ) const = 0;
+    ConstantForceController();
+    virtual ~ConstantForceController();
 
-    /// Called when Taml attempts to compile a list of children.
-    virtual SimObject* getTamlChild( const U32 childIndex ) const = 0;
+    static void initPersistFields();
+    virtual void copyTo(SimObject* object);
 
-    /// Called when Taml attempts to populate an objects children during a read.
-    virtual void addTamlChild( SimObject* pSimObject ) = 0;
+    /// Integration.
+    virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
+
+    inline void setForce( const Vector2& force ) { mForce = force; }
+    inline const Vector2& getForce( void ) const { return mForce; }
+
+    /// Declare Console Object.
+    DECLARE_CONOBJECT( ConstantForceController );
 };
 
-#endif // _TAML_CHILDREN_H_
+#endif // _CONSTANT_FORCE_CONTROLLER_H_
