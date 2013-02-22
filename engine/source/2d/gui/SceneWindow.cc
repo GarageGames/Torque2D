@@ -1728,13 +1728,14 @@ void SceneWindow::renderMetricsOverlay( Point2I offset, const RectI& updateRect 
 
         // Scene.
         dglDrawText( font, bannerOffset + Point2I(0,(S32)linePositionY), "Scene", NULL );
-        dSprintf( mDebugText, sizeof( mDebugText ), "- Count=%d, Index=%d, Time=%0.1fs, Objects=%d<%d>(Global=%d), Enabled=%d<%d>, Visible=%d<%d>, Awake=%d<%d>",
+        dSprintf( mDebugText, sizeof( mDebugText ), "- Count=%d, Index=%d, Time=%0.1fs, Objects=%d<%d>(Global=%d), Enabled=%d<%d>, Visible=%d<%d>, Awake=%d<%d>, Controllers=%d",
             Scene::getGlobalSceneCount(), pScene->getSceneIndex(),
             pScene->getSceneTime(),
             debugStats.objectsCount, debugStats.maxObjectsCount, SceneObject::getGlobalSceneObjectCount(),
             debugStats.objectsEnabled, debugStats.maxObjectsEnabled,
             debugStats.objectsVisible, debugStats.maxObjectsVisible,
-            debugStats.objectsAwake, debugStats.maxObjectsAwake );        
+            debugStats.objectsAwake, debugStats.maxObjectsAwake,
+            pScene->getControllers() == NULL ? 0 : pScene->getControllers()->size() );        
         dglDrawText( font, bannerOffset + Point2I(metricsOffset,(S32)linePositionY), mDebugText, NULL );
         linePositionY += linePositionOffsetY;
 

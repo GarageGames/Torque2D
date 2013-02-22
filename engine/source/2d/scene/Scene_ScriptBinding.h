@@ -387,6 +387,17 @@ ConsoleMethod(Scene, mergeScene, void, 3, 3,    "(scene) Merges the specified sc
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(Scene, getControllers, const char*, 2, 2,	"() Gets the Scene Controllers.\n"
+														"@return Gets the scene controllers.")
+{
+    // Fetch the scene controllers.
+    SimSet* pControllerSet = object->getControllers();
+
+    return ( pControllerSet == NULL ) ? StringTable->EmptyString : pControllerSet->getIdString();
+}
+
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(Scene, getSceneTime, F32, 2, 2,   "() Gets the Scene Time.\n"
                                                         "@return Returns the time as a floating point number\n")
 {

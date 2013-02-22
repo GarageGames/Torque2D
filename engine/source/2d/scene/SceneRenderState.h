@@ -23,6 +23,10 @@
 #ifndef _SCENE_RENDER_STATE_H_
 #define _SCENE_RENDER_STATE_H_
 
+#ifndef _VECTOR2_H_
+#include "2d/core/vector2.h"
+#endif
+
 //-----------------------------------------------------------------------------
 
 class RectF;

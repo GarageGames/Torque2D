@@ -310,7 +310,13 @@ function updateToolboxOptions()
         SandboxScene.setDebugOn( "fps" );
     else
         SandboxScene.setDebugOff( "fps" );
-       
+
+    // Set option.
+    if ( $pref::Sandbox::controllersOption )
+        SandboxScene.setDebugOn( "controllers" );
+    else
+        SandboxScene.setDebugOff( "controllers" );
+                    
     // Set option.
     if ( $pref::Sandbox::jointsOption )
         SandboxScene.setDebugOn( "joints" );
@@ -362,6 +368,7 @@ function updateToolboxOptions()
     // Set the options check-boxe.
     MetricsOptionCheckBox.setStateOn( $pref::Sandbox::metricsOption );
     FpsMetricsOptionCheckBox.setStateOn( $pref::Sandbox::fpsmetricsOption );
+    ControllersOptionCheckBox.setStateOn( $pref::Sandbox::controllersOption );
     JointsOptionCheckBox.setStateOn( $pref::Sandbox::jointsOption );
     WireframeOptionCheckBox.setStateOn( $pref::Sandbox::wireframeOption );
     AABBOptionCheckBox.setStateOn( $pref::Sandbox::aabbOption );
@@ -414,6 +421,14 @@ function setFPSMetricsOption( %flag )
 function setMetricsOption( %flag )
 {
     $pref::Sandbox::metricsOption = %flag;
+    updateToolboxOptions();
+}
+
+//-----------------------------------------------------------------------------
+
+function setControllersOption( %flag )
+{
+    $pref::Sandbox::controllersOption = %flag;
     updateToolboxOptions();
 }
 

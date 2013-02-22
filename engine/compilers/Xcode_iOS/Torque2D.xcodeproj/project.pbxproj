@@ -7,8 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2AA6866416D6995A003CEF0A /* SceneController.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AA6866216D6995A003CEF0A /* SceneController.cc */; };
+		2AA6866A16D69968003CEF0A /* SceneObjectList.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AA6866516D69968003CEF0A /* SceneObjectList.cc */; };
+		2AA6866B16D69968003CEF0A /* SceneObjectSet.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AA6866816D69968003CEF0A /* SceneObjectSet.cc */; };
+		2AB14A0916D7CDCE00EABBF2 /* PointForceController.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AB14A0716D7CDCE00EABBF2 /* PointForceController.cc */; };
 		2AB97A2116B66BE50080F940 /* tamlCustom.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AB97A1F16B66BE50080F940 /* tamlCustom.cc */; };
 		2AC4404E16B0144500FC4091 /* ImageFont.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AC4404C16B0144500FC4091 /* ImageFont.cc */; };
+		2AE2F55516D6AB3C00B6A058 /* ConstantForceController.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AE2F55316D6AB3C00B6A058 /* ConstantForceController.cc */; };
+		2AE2F55916D6B07200B6A058 /* BuoyancyController.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AE2F55716D6B07200B6A058 /* BuoyancyController.cc */; };
 		2AED7D9316B70102003482CF /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AED7D9216B70102003482CF /* CoreText.framework */; };
 		2AF1C54B16B439D900C1CF3A /* declaredAssets.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AF1C54716B439D900C1CF3A /* declaredAssets.cc */; };
 		2AF1C54C16B439D900C1CF3A /* referencedAssets.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AF1C54916B439D900C1CF3A /* referencedAssets.cc */; };
@@ -473,12 +479,29 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2AA6866116D6995A003CEF0A /* SceneController_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneController_ScriptBinding.h; path = controllers/SceneController_ScriptBinding.h; sourceTree = "<group>"; };
+		2AA6866216D6995A003CEF0A /* SceneController.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneController.cc; path = controllers/SceneController.cc; sourceTree = "<group>"; };
+		2AA6866316D6995A003CEF0A /* SceneController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneController.h; path = controllers/SceneController.h; sourceTree = "<group>"; };
+		2AA6866516D69968003CEF0A /* SceneObjectList.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneObjectList.cc; sourceTree = "<group>"; };
+		2AA6866616D69968003CEF0A /* SceneObjectList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObjectList.h; sourceTree = "<group>"; };
+		2AA6866716D69968003CEF0A /* SceneObjectSet_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObjectSet_ScriptBinding.h; sourceTree = "<group>"; };
+		2AA6866816D69968003CEF0A /* SceneObjectSet.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneObjectSet.cc; sourceTree = "<group>"; };
+		2AA6866916D69968003CEF0A /* SceneObjectSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObjectSet.h; sourceTree = "<group>"; };
+		2AB14A0616D7CDCE00EABBF2 /* PointForceController_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PointForceController_ScriptBinding.h; path = controllers/PointForceController_ScriptBinding.h; sourceTree = "<group>"; };
+		2AB14A0716D7CDCE00EABBF2 /* PointForceController.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PointForceController.cc; path = controllers/PointForceController.cc; sourceTree = "<group>"; };
+		2AB14A0816D7CDCE00EABBF2 /* PointForceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PointForceController.h; path = controllers/PointForceController.h; sourceTree = "<group>"; };
 		2AB97A1F16B66BE50080F940 /* tamlCustom.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tamlCustom.cc; sourceTree = "<group>"; };
 		2AB97A2016B66BE50080F940 /* tamlCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlCustom.h; sourceTree = "<group>"; };
 		2AC4404B16B0144500FC4091 /* ImageFont_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFont_ScriptBinding.h; sourceTree = "<group>"; };
 		2AC4404C16B0144500FC4091 /* ImageFont.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageFont.cc; sourceTree = "<group>"; };
 		2AC4404D16B0144500FC4091 /* ImageFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFont.h; sourceTree = "<group>"; };
 		2AD07B2716D15F8E0070DC79 /* simObjectTimerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simObjectTimerEvent.h; sourceTree = "<group>"; };
+		2AE2F55216D6AB3C00B6A058 /* ConstantForceController_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConstantForceController_ScriptBinding.h; path = controllers/ConstantForceController_ScriptBinding.h; sourceTree = "<group>"; };
+		2AE2F55316D6AB3C00B6A058 /* ConstantForceController.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ConstantForceController.cc; path = controllers/ConstantForceController.cc; sourceTree = "<group>"; };
+		2AE2F55416D6AB3C00B6A058 /* ConstantForceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConstantForceController.h; path = controllers/ConstantForceController.h; sourceTree = "<group>"; };
+		2AE2F55616D6B07200B6A058 /* BuoyancyController_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BuoyancyController_ScriptBinding.h; path = controllers/BuoyancyController_ScriptBinding.h; sourceTree = "<group>"; };
+		2AE2F55716D6B07200B6A058 /* BuoyancyController.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BuoyancyController.cc; path = controllers/BuoyancyController.cc; sourceTree = "<group>"; };
+		2AE2F55816D6B07200B6A058 /* BuoyancyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BuoyancyController.h; path = controllers/BuoyancyController.h; sourceTree = "<group>"; };
 		2AED7D9216B70102003482CF /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		2AF1C54716B439D900C1CF3A /* declaredAssets.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = declaredAssets.cc; sourceTree = "<group>"; };
 		2AF1C54816B439D900C1CF3A /* declaredAssets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = declaredAssets.h; sourceTree = "<group>"; };
@@ -1414,6 +1437,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2AB4F1D416D55B9F00C9A27B /* controllers */ = {
+			isa = PBXGroup;
+			children = (
+				2AB14A0616D7CDCE00EABBF2 /* PointForceController_ScriptBinding.h */,
+				2AB14A0716D7CDCE00EABBF2 /* PointForceController.cc */,
+				2AB14A0816D7CDCE00EABBF2 /* PointForceController.h */,
+				2AE2F55616D6B07200B6A058 /* BuoyancyController_ScriptBinding.h */,
+				2AE2F55716D6B07200B6A058 /* BuoyancyController.cc */,
+				2AE2F55816D6B07200B6A058 /* BuoyancyController.h */,
+				2AE2F55216D6AB3C00B6A058 /* ConstantForceController_ScriptBinding.h */,
+				2AE2F55316D6AB3C00B6A058 /* ConstantForceController.cc */,
+				2AE2F55416D6AB3C00B6A058 /* ConstantForceController.h */,
+				2AA6866116D6995A003CEF0A /* SceneController_ScriptBinding.h */,
+				2AA6866216D6995A003CEF0A /* SceneController.cc */,
+				2AA6866316D6995A003CEF0A /* SceneController.h */,
+			);
+			name = controllers;
+			sourceTree = "<group>";
+		};
 		867BAC9116AEC8BB0033868F /* platformiOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -1493,6 +1535,7 @@
 		867BACF816AEC9050033868F /* 2d */ = {
 			isa = PBXGroup;
 			children = (
+				2AB4F1D416D55B9F00C9A27B /* controllers */,
 				867BACF916AEC9050033868F /* assets */,
 				867BAD0C16AEC9050033868F /* core */,
 				867BAD2416AEC9050033868F /* gui */,
@@ -1606,6 +1649,11 @@
 		867BAD4516AEC9050033868F /* sceneobject */ = {
 			isa = PBXGroup;
 			children = (
+				2AA6866516D69968003CEF0A /* SceneObjectList.cc */,
+				2AA6866616D69968003CEF0A /* SceneObjectList.h */,
+				2AA6866716D69968003CEF0A /* SceneObjectSet_ScriptBinding.h */,
+				2AA6866816D69968003CEF0A /* SceneObjectSet.cc */,
+				2AA6866916D69968003CEF0A /* SceneObjectSet.h */,
 				2AC4404B16B0144500FC4091 /* ImageFont_ScriptBinding.h */,
 				2AC4404C16B0144500FC4091 /* ImageFont.cc */,
 				2AC4404D16B0144500FC4091 /* ImageFont.h */,
@@ -3334,6 +3382,12 @@
 				2AF1C54C16B439D900C1CF3A /* referencedAssets.cc in Sources */,
 				2AB97A2116B66BE50080F940 /* tamlCustom.cc in Sources */,
 				33230F1656FA2C7C493DA2D2 /* guiSliderCtrl.cc in Sources */,
+				2AA6866416D6995A003CEF0A /* SceneController.cc in Sources */,
+				2AA6866A16D69968003CEF0A /* SceneObjectList.cc in Sources */,
+				2AA6866B16D69968003CEF0A /* SceneObjectSet.cc in Sources */,
+				2AE2F55516D6AB3C00B6A058 /* ConstantForceController.cc in Sources */,
+				2AE2F55916D6B07200B6A058 /* BuoyancyController.cc in Sources */,
+				2AB14A0916D7CDCE00EABBF2 /* PointForceController.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
