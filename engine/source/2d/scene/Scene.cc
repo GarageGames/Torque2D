@@ -405,7 +405,7 @@ void Scene::initPersistFields()
        addField( buffer, TypeEnum, OffsetNonConst(mLayerSortModes[n], Scene), &writeLayerSortMode, 1, &SceneRenderQueue::renderSortTable, "");
     }
 
-    addField("Controllers", TypeSimObjectPtr, Offset(mControllers, Scene), &defaultProtectedNotWriteFn, "The scene controllers to use.");
+    addProtectedField("Controllers", TypeSimObjectPtr, Offset(mControllers, Scene), &defaultProtectedNotSetFn, &defaultProtectedGetFn, &defaultProtectedNotWriteFn, "The scene controllers to use.");
     
     // Callbacks.
     addField("UpdateCallback", TypeBool, Offset(mUpdateCallback, Scene), &writeUpdateCallback, "");
