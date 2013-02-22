@@ -57,7 +57,7 @@ void PointForceController::initPersistFields()
 
     // Force.
     addProtectedField("Position", TypeVector2, Offset( mPosition, PointForceController), &defaultProtectedSetFn, &defaultProtectedGetFn, "The position of the attractor controller.");
-    addProtectedField("Radius", TypeVector2, Offset( mRadius, PointForceController), &defaultProtectedSetFn, &defaultProtectedGetFn, "The radius of the attractor circle centered on the attractors position.");
+    addProtectedField("Radius", TypeF32, Offset( mRadius, PointForceController), &defaultProtectedSetFn, &defaultProtectedGetFn, "The radius of the attractor circle centered on the attractors position.");
     addProtectedField("Force", TypeF32, Offset( mForce, PointForceController), &defaultProtectedSetFn, &defaultProtectedGetFn, "The force to apply to attact to the controller position.");
 }
 
