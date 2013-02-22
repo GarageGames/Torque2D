@@ -21,6 +21,7 @@
 		2ACFC0A8166CE1AB00FE7370 /* platformMemoryTests.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ACFC0A7166CE1AB00FE7370 /* platformMemoryTests.cc */; };
 		2ADCAC1516A41E5500E07619 /* ParticleAsset.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ADCAC1116A41E5500E07619 /* ParticleAsset.cc */; };
 		2ADCAC1716A41E5500E07619 /* ParticleAssetField.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ADCAC1316A41E5500E07619 /* ParticleAssetField.cc */; };
+		2AE0D4F716D7B7F40014420B /* AttractorController.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AE0D4F516D7B7F40014420B /* AttractorController.cc */; };
 		2AE2F55116D6AB3100B6A058 /* ConstantForceController.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AE2F54F16D6AB3100B6A058 /* ConstantForceController.cc */; };
 		2AE2F55D16D6B08800B6A058 /* BuoyancyController.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AE2F55B16D6B08800B6A058 /* BuoyancyController.cc */; };
 		2AE5B54216A6D860006908D5 /* ParticleAssetFieldCollection.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AE5B54016A6D860006908D5 /* ParticleAssetFieldCollection.cc */; };
@@ -480,6 +481,9 @@
 		2ADCAC1216A41E5500E07619 /* ParticleAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleAsset.h; sourceTree = "<group>"; };
 		2ADCAC1316A41E5500E07619 /* ParticleAssetField.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleAssetField.cc; sourceTree = "<group>"; };
 		2ADCAC1416A41E5500E07619 /* ParticleAssetField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleAssetField.h; sourceTree = "<group>"; };
+		2AE0D4F416D7B7F40014420B /* AttractorController_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AttractorController_ScriptBinding.h; path = controllers/AttractorController_ScriptBinding.h; sourceTree = "<group>"; };
+		2AE0D4F516D7B7F40014420B /* AttractorController.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AttractorController.cc; path = controllers/AttractorController.cc; sourceTree = "<group>"; };
+		2AE0D4F616D7B7F40014420B /* AttractorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AttractorController.h; path = controllers/AttractorController.h; sourceTree = "<group>"; };
 		2AE2F54E16D6AB3100B6A058 /* ConstantForceController_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConstantForceController_ScriptBinding.h; path = controllers/ConstantForceController_ScriptBinding.h; sourceTree = "<group>"; };
 		2AE2F54F16D6AB3100B6A058 /* ConstantForceController.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ConstantForceController.cc; path = controllers/ConstantForceController.cc; sourceTree = "<group>"; };
 		2AE2F55016D6AB3100B6A058 /* ConstantForceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConstantForceController.h; path = controllers/ConstantForceController.h; sourceTree = "<group>"; };
@@ -1366,6 +1370,9 @@
 		2AB4F1CF16D55B7300C9A27B /* controllers */ = {
 			isa = PBXGroup;
 			children = (
+				2AE0D4F416D7B7F40014420B /* AttractorController_ScriptBinding.h */,
+				2AE0D4F516D7B7F40014420B /* AttractorController.cc */,
+				2AE0D4F616D7B7F40014420B /* AttractorController.h */,
 				2AE2F55A16D6B08800B6A058 /* BuoyancyController_ScriptBinding.h */,
 				2AE2F55B16D6B08800B6A058 /* BuoyancyController.cc */,
 				2AE2F55C16D6B08800B6A058 /* BuoyancyController.h */,
@@ -3244,6 +3251,7 @@
 				2AA6866016D69943003CEF0A /* SceneObjectSet.cc in Sources */,
 				2AE2F55116D6AB3100B6A058 /* ConstantForceController.cc in Sources */,
 				2AE2F55D16D6B08800B6A058 /* BuoyancyController.cc in Sources */,
+				2AE0D4F716D7B7F40014420B /* AttractorController.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
