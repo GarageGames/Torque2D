@@ -156,7 +156,6 @@ bool OpenGLDevice::cleanupContextAndWindow()
 void OpenGLDevice::shutdown()
 {
     Con::printf("Shutting down the OpenGL display device...");
-    [platState.ctx release];
 }
 
 

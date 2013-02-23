@@ -210,7 +210,7 @@ function DeathBallToy::spawnDeathball(%this, %position)
     
     //%db.pauseAnimation(1);
 
-    //Deathball.rollSchedule = Deathball.schedule(100, "updateRollAnimation");
+    Deathball.rollSchedule = Deathball.schedule(100, "updateRollAnimation");
 
     SandboxScene.add(%db);
 
@@ -224,13 +224,10 @@ function Deathball::updateRollAnimation(%this)
     %this.rollSchedule = "";
 
     %velocity = %this.getLinearVelocity();
-
-    %currentAnimTime = %this.getAnimationTime();
     %scaledVelocity = (mAbs(getWord(%velocity, 0))) + mAbs(getWord(%velocity, 1)) / 50;
     %flooredVelocity = mFloatLength(%scaledVelocity, 1);
-    %scaledAnimTime = %currentAnimTime * %flooredVelocity;
 
-    %this.setAnimationTimeScale(%scaledAnimTime);
+    %this.setAnimationTimeScale(%flooredVelocity / 15);
 
     %this.rollSchedule = %this.schedule(100, updateRollAnimation);
 }
