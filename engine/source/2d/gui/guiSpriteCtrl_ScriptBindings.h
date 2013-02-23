@@ -49,7 +49,7 @@ ConsoleMethod( GuiSpriteCtrl, getImage, const char*, 2, 2,  "() - Gets current i
     }
 
     // Get image.
-    return object->getImage();
+    return DYNAMIC_VOID_CAST_TO(GuiSpriteCtrl, SpriteProxyBase, object)->getImage();
 }
 
 //-----------------------------------------------------------------------------
@@ -102,54 +102,5 @@ ConsoleMethod( GuiSpriteCtrl, getAnimation, const char*, 2, 2,  "() - Gets the c
     }
 
     // Get animation.
-    return object->getAnimation();
-}
-
-//------------------------------------------------------------------------------
-
-ConsoleMethod( GuiSpriteCtrl, play, void, 2, 2,  "() - plays the control's current animation.  Resumes playback if paused.\n")
-{
-    // Are we in static mode?
-    if ( object->isStaticMode() )
-    {
-        // Yes, so warn.
-        Con::warnf( "GuiSpriteCtrl::play() - Method invalid, in static mode." );
-        return;
-    }
-
-    // play animation.
-    object->play();
-}
-
-//------------------------------------------------------------------------------
-
-ConsoleMethod( GuiSpriteCtrl, pause, void, 3, 3,  "(bool flag) - pauses/unpauses the control's current animation.\n"
-                                                    "@param flag true to pause, false to resume.")
-{
-    // Are we in static mode?
-    if ( object->isStaticMode() )
-    {
-        // Yes, so warn.
-        Con::warnf( "GuiSpriteCtrl::pause() - Method invalid, in static mode." );
-        return;
-    }
-
-    // pause animation.
-    object->pause( dAtob(argv[2]) );
-}
-
-//------------------------------------------------------------------------------
-
-ConsoleMethod( GuiSpriteCtrl, stop, void, 2, 2,  "() - stops the control's current animation.\n")
-{
-    // Are we in static mode?
-    if ( object->isStaticMode() )
-    {
-        // Yes, so warn.
-        Con::warnf( "GuiSpriteCtrl::stop() - Method invalid, in static mode." );
-        return;
-    }
-
-    // stop animation.
-    object->stop();
+    return DYNAMIC_VOID_CAST_TO(GuiSpriteCtrl, SpriteProxyBase, object)->getAnimation();
 }

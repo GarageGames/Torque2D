@@ -60,17 +60,12 @@ function SpriteStressToy::create( %this )
 
 function SpriteStressToy::destroy( %this )
 {
-    // Cancel any pending events.
-    SpriteStressToy::cancelPendingEvents();    
 }
 
 //-----------------------------------------------------------------------------
 
 function SpriteStressToy::reset( %this )
 {
-    // Cancel any pending events.
-    SpriteStressToy::cancelPendingEvents();
-    
     // Reset sprite count.
     SpriteStressToy.SpriteCount = 0;
 
@@ -97,7 +92,7 @@ function SpriteStressToy::reset( %this )
     if ( SpriteStressToy.RenderMode $= "Static" )
     {
         // Create the static sprites.
-        %this.createStaticSprites();
+        SpriteStressToy.startTimer( "createStaticSprites", SpriteStressToy.SpriteCreatePeriod );
         
         return;
     }
@@ -106,7 +101,7 @@ function SpriteStressToy::reset( %this )
     if ( SpriteStressToy.RenderMode $= "Static (Composite)" )
     {
         // Create the static composite sprites.
-        %this.createStaticCompositeSprites();    
+        SpriteStressToy.startTimer( "createStaticCompositeSprites", SpriteStressToy.SpriteCreatePeriod );
     
         return;
     }
@@ -115,7 +110,7 @@ function SpriteStressToy::reset( %this )
     if ( SpriteStressToy.RenderMode $= "Animated" )
     {
         // Create the animated sprites.
-        %this.createAnimatedSprites();    
+        SpriteStressToy.startTimer( "createAnimatedSprites", SpriteStressToy.SpriteCreatePeriod );
     
         return;
     }    
@@ -124,27 +119,13 @@ function SpriteStressToy::reset( %this )
     if ( SpriteStressToy.RenderMode $= "Animated (Composite)" )
     {
         // Create the animated composite sprites.
-        %this.createAnimatedCompositeSprites();    
+        SpriteStressToy.startTimer( "createAnimatedCompositeSprites", SpriteStressToy.SpriteCreatePeriod );
     
         return;
     }    
     
     // Error.
     error( "SpriteStressToy::reset() - Unknown render mode." );
-}
-
-
-//-----------------------------------------------------------------------------
-
-function SpriteStressToy::cancelPendingEvents(%this)
-{
-    // Finish if there are not pending events.
-    if ( !isEventPending(%this.createSpriteScheduleId) )
-        return;
-        
-    // Cancel it.
-    cancel(%this.createSpriteScheduleId);
-    %this.createSpriteScheduleId = "";
 }
 
 //-----------------------------------------------------------------------------
@@ -249,12 +230,14 @@ function SpriteStressToy::updateRenderSortMode( %this )
 
 function SpriteStressToy::createStaticSprites( %this )
 {
-    // Reset the event schedule.
-    %this.createSpriteScheduleId = "";
-    
     // Finish if max sprites reached.
     if ( SpriteStressToy.SpriteCount >= SpriteStressToy.MaxSprite )
+    {
+        // Stop the timer.
+        SpriteStressToy.stopTimer();
+        
         return;
+    }
         
     // Create the sprites at the specified rate.
     for( %n = 0; %n < SpriteStressToy.SpriteCreateRate; %n++ )
@@ -299,7 +282,10 @@ function SpriteStressToy::createStaticSprites( %this )
         if ( SpriteStressToy.SpriteCount == SpriteStressToy.MaxSprite )
         {
             // Update the overlay.
-            %this.updateSpriteCountOverlay();              
+            %this.updateSpriteCountOverlay();
+            
+            // Stop the timer.
+            SpriteStressToy.stopTimer();         
             
             return;
         }
@@ -307,21 +293,20 @@ function SpriteStressToy::createStaticSprites( %this )
     
     // Update the overlay.
     %this.updateSpriteCountOverlay();  
-        
-    // Schedule to create more sprites.
-    %this.createSpriteScheduleId = %this.schedule( SpriteStressToy.SpriteCreatePeriod, "createStaticSprites" );        
 }
 
 //-----------------------------------------------------------------------------
 
 function SpriteStressToy::createAnimatedSprites( %this )
 {
-    // Reset the event schedule.
-    %this.createSpriteScheduleId = "";
-    
     // Finish if max sprites reached.
     if ( SpriteStressToy.SpriteCount >= SpriteStressToy.MaxSprite )
+    {
+        // Stop the timer.
+        SpriteStressToy.stopTimer();
+        
         return;
+    }
 
     // Create the sprites at the specified rate.
     for( %n = 0; %n < SpriteStressToy.SpriteCreateRate; %n++ )
@@ -365,27 +350,29 @@ function SpriteStressToy::createAnimatedSprites( %this )
             // Update the overlay.
             %this.updateSpriteCountOverlay();              
             
+            // Stop the timer.
+            SpriteStressToy.stopTimer();         
+            
             return;
         }
     }
     
     // Update the overlay.
     %this.updateSpriteCountOverlay();  
-    
-    // Schedule to create more sprites.
-    %this.createSpriteScheduleId = %this.schedule( SpriteStressToy.SpriteCreatePeriod, "createAnimatedSprites" );        
 }
 
 //-----------------------------------------------------------------------------
 
 function SpriteStressToy::createStaticCompositeSprites( %this )
 {
-    // Reset the event schedule.
-    %this.createSpriteScheduleId = "";
-    
     // Finish if max sprites reached.
     if ( SpriteStressToy.SpriteCount >= SpriteStressToy.MaxSprite )
+    {
+        // Stop the timer.
+        SpriteStressToy.stopTimer();
+        
         return;
+    }
 
     // Do we have a composite sprite yet?
     if ( !isObject(SpriteStressToy.CompositeSpriteObject) )
@@ -450,27 +437,29 @@ function SpriteStressToy::createStaticCompositeSprites( %this )
             // Update the overlay.
             %this.updateSpriteCountOverlay();              
             
+            // Stop the timer.
+            SpriteStressToy.stopTimer();         
+            
             return;
         }
     }
     
     // Update the overlay.
     %this.updateSpriteCountOverlay();  
-        
-    // Schedule to create more sprites.
-    %this.createSpriteScheduleId = %this.schedule( SpriteStressToy.SpriteCreatePeriod, "createStaticCompositeSprites" );        
 }
 
 //-----------------------------------------------------------------------------
 
 function SpriteStressToy::createAnimatedCompositeSprites( %this )
 {
-    // Reset the event schedule.
-    %this.createSpriteScheduleId = "";
-    
     // Finish if max sprites reached.
     if ( SpriteStressToy.SpriteCount >= SpriteStressToy.MaxSprite )
+    {
+        // Stop the timer.
+        SpriteStressToy.stopTimer();
+        
         return;
+    }
 
     // Do we have a composite sprite yet?
     if ( !isObject(SpriteStressToy.CompositeSpriteObject) )
@@ -534,6 +523,9 @@ function SpriteStressToy::createAnimatedCompositeSprites( %this )
         {
             // Update the overlay.
             %this.updateSpriteCountOverlay();              
+
+            // Stop the timer.
+            SpriteStressToy.stopTimer();         
             
             return;
         }
@@ -541,9 +533,6 @@ function SpriteStressToy::createAnimatedCompositeSprites( %this )
     
     // Update the overlay.
     %this.updateSpriteCountOverlay();  
-        
-    // Schedule to create more sprites.
-    %this.createSpriteScheduleId = %this.schedule( SpriteStressToy.SpriteCreatePeriod, "createAnimatedCompositeSprites" );        
 }
 
 //-----------------------------------------------------------------------------

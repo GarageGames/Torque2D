@@ -37,17 +37,12 @@ function AlphaBlendToy::create( %this )
 
 function AlphaBlendToy::destroy( %this )
 {
-    // Cancel any pending events.
-    AlphaBlendToy.cancelPendingEvents();
 }
 
 //-----------------------------------------------------------------------------
 
 function AlphaBlendToy::reset( %this )
 {
-    // Cancel any pending events.
-    AlphaBlendToy.cancelPendingEvents();
-    
     // Reset the sprite count.
     AlphaBlendToy.SpriteCount = 0;
     
@@ -66,23 +61,9 @@ function AlphaBlendToy::reset( %this )
     // Create background.
     %this.createBackground();
 
-    // Schedule to create a sprite.
-    %this.createSpriteScheduleId = %this.schedule( 50, "createBlendedSprites" );
+    // Start the timer.
+    AlphaBlendToy.startTimer( "createBlendedSprites", 50 );
 }
-
-//-----------------------------------------------------------------------------
-
-function AlphaBlendToy::cancelPendingEvents(%this)
-{
-    // Finish if there are not pending events.
-    if ( !isEventPending(%this.createSpriteScheduleId) )
-        return;
-        
-    // Cancel it.
-    cancel(%this.createSpriteScheduleId);
-    %this.createSpriteScheduleId = "";
-}
-
 
 //-----------------------------------------------------------------------------
 
@@ -127,12 +108,14 @@ function AlphaBlendToy::createBackground( %this )
 
 function AlphaBlendToy::createBlendedSprites( %this )
 {
-    // Reset the event schedule.
-    %this.createSpriteScheduleId = "";
-    
     // Finish if count reached.
     if ( AlphaBlendToy.SpriteCount >= AlphaBlendToy.SpriteCountTotal )
+    {
+        // Stop the timer.
+        AlphaBlendToy.stopTimer();
+        
         return;
+    }
         
     // Create the sprite.
     %object = new Sprite();
@@ -164,7 +147,12 @@ function AlphaBlendToy::createBlendedSprites( %this )
         AlphaBlendToy.CursorX = 0;
         AlphaBlendToy.CursorY++;
         if ( AlphaBlendToy.CursorY == AlphaBlendToy.SpriteCountY )
+        {
+            // Stop the timer.
+            AlphaBlendToy.stopTimer();
+            
             return;
+        }
     }
     
     // Update the sprite cursor alpha.
@@ -175,10 +163,10 @@ function AlphaBlendToy::createBlendedSprites( %this )
     
     // Finish if count reached.
     if ( AlphaBlendToy.SpriteCount == AlphaBlendToy.SpriteCountTotal )
-        return;
-    
-    // Schedule to create a sprite.
-    %this.createSpriteScheduleId = %this.schedule( 50, "createBlendedSprites" );    
+    {
+        // Stop the timer.
+        AlphaBlendToy.stopTimer();       
+    }
 }
 
 //-----------------------------------------------------------------------------

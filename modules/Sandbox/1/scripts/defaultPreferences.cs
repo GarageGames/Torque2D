@@ -30,6 +30,7 @@ $pref::Sandbox::defaultToyVersionId    = 1;
 $pref::Sandbox::defaultBackgroundColor = "Black";
 $pref::Sandbox::metricsOption   = false;
 $pref::Sandbox::fpsmetricsOption = true;
+$pref::Sandbox::controllersOption = false;
 $pref::Sandbox::jointsOption    = false;
 $pref::Sandbox::wireframeOption = false;
 $pref::Sandbox::aabbOption      = false;

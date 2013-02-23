@@ -326,8 +326,9 @@ void shutdownGame()
     if( Con::isFunction("onPreExit") )
         Con::executef(1, "onPreExit");
 
-    //exec the script onExit() function
-    Con::executef(1, "onExit");
+    // Perform the exit callback.
+    if( Con::isFunction("onExit") )
+        Con::executef(1, "onExit");
 
     // Unregister the module database.
     ModuleDatabase.unregisterObject();

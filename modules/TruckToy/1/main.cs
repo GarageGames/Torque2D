@@ -25,8 +25,6 @@ function TruckToy::create( %this )
     // Activate the package.
     activatePackage( TruckToyPackage );
 
-    TruckToy.createProjectileScheduleId = "";
-    
     TruckToy.ObstacleFriction = 1.5;
     TruckToy.CameraWidth = 20;
     TruckToy.CameraHeight = 15;
@@ -68,33 +66,14 @@ function TruckToy::create( %this )
 
 function TruckToy::destroy( %this )
 {
-    // Cancel any pending events.
-    TruckToy.cancelPendingEvents();
-        
     // Deactivate the package.
     deactivatePackage( TruckToyPackage );
 }
 
 //-----------------------------------------------------------------------------
 
-function TruckToy::cancelPendingEvents(%this)
-{
-    // Finish if there are not pending events.
-    if ( !isEventPending(%this.createProjectileScheduleId) )
-        return;
-        
-    // Cancel it.
-    cancel(%this.createProjectileScheduleId);
-    %this.createProjectileScheduleId = "";
-}
-
-//-----------------------------------------------------------------------------
-
 function TruckToy::reset( %this )
 {   
-    // Cancel any pending events.
-    %this.cancelPendingEvents();
-    
     // Clear the scene.
     SandboxScene.clear();    
     
@@ -194,8 +173,8 @@ function TruckToy::reset( %this )
     %truckStartY = 3;   
     %this.createTruck( %truckStartX, %truckStartY );    
     
-    // Schedule to create a projectile.
-    TruckToy.createProjectileScheduleId = %this.schedule( TruckToy.ProjectileRate, "createProjectile" );    
+    // Start the timer.
+    TruckToy.startTimer( "createProjectile", TruckToy.ProjectileRate );
 }
 
 // -----------------------------------------------------------------------------
@@ -665,15 +644,11 @@ function TruckToy::createBonfire(%this, %x, %y, %scale, %layer)
 
 function TruckToy::createProjectile(%this)
 {
-    // Reset the event schedule.
-    %this.createProjectileScheduleId = "";
-    
     // Fetch the truck position.
     %truckPositionX = TruckToy.TruckBody.getPositionX();
     
     %projectile = new Sprite() { class = "TruckProjectile"; };
     %projectile.Animation = "ToyAssets:Projectile_FireballAnim";
-    //%projectile.Image = "ToyAssets:Cannonball_projectile_1Sprite";
     %projectile.setPosition( getRandom( %truckPositionX - (TruckToy.CameraWidth * 0.2), %truckPositionX + (TruckToy.CameraWidth * 0.5) ), 12 );
     %projectile.setSceneLayer( TruckToy.BackgroundDomain-2 );
     %projectile.setSceneGroup( TruckToy.ProjectileDomain );
@@ -684,9 +659,6 @@ function TruckToy::createProjectile(%this)
     %projectile.setCollisionGroups( TruckToy.ObstacleDomain );
     %projectile.CollisionCallback = true;
     SandboxScene.add( %projectile ); 
-    
-    // Schedule to create a projectile.
-    %this.createProjectileScheduleId = %this.schedule( %this.ProjectileRate, "createProjectile" );         
 }
 
 // -----------------------------------------------------------------------------
@@ -938,11 +910,8 @@ function TruckToy::setProjectileRate( %this, %value )
 {
     %this.ProjectileRate = %value;
     
-    // Cancel any pending events.
-    %this.cancelPendingEvents();
-    
-    // Schedule to create a projectile.
-    %this.createProjectileScheduleId = %this.schedule( 1000, "createProjectile" );    
+    // Start the timer.
+    TruckToy.startTimer( "createProjectile", TruckToy.ProjectileRate );
 }
 
 //-----------------------------------------------------------------------------

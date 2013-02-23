@@ -23,20 +23,12 @@
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
-#ifndef _VECTOR_H_
-#include "collection/vector.h"
-#endif
-
 #ifndef _MMATH_H_
 #include "math/mMath.h"
 #endif
 
 #ifndef _VECTOR2_H_
 #include "2d/core/Vector2.h"
-#endif
-
-#ifndef _FILESTREAM_H_
-#include "io/fileStream.h"
 #endif
 
 #ifndef _NETOBJECT_H_
@@ -47,20 +39,12 @@
 #include "platform/Tickable.h"
 #endif
 
-#ifndef _DEBUG_STATS_H_
-#include "2d/scene/DebugStats.h"
-#endif
-
 #ifndef _PHYSICS_PROXY_H_
 #include "2d/scene/PhysicsProxy.h"
 #endif
 
 #ifndef _WORLD_QUERY_H_
 #include "2d/scene/WorldQuery.h"
-#endif
-
-#ifndef BOX2D_H
-#include "box2d\Box2D.h"
 #endif
 
 #ifndef _DEBUG_DRAW_H_
@@ -169,14 +153,6 @@ struct TickContact
 
 ///-----------------------------------------------------------------------------
 
-typedef HashMap<U32, b2Joint*>              typeJointHash;
-typedef HashMap<U32, U32>                   typeReverseJointHash;
-typedef Vector<tDeleteRequest>              typeDeleteVector;
-typedef Vector<TickContact>                 typeContactVector;
-typedef HashMap<b2Contact*, TickContact>    typeContactHash;
-
-///-----------------------------------------------------------------------------
-
 class Scene :
     public BehaviorComponent,
     public TamlChildren,
@@ -186,6 +162,12 @@ class Scene :
     public virtual Tickable
 {
 public:
+    typedef HashMap<U32, b2Joint*>              typeJointHash;
+    typedef HashMap<U32, U32>                   typeReverseJointHash;
+    typedef Vector<tDeleteRequest>              typeDeleteVector;
+    typedef Vector<TickContact>                 typeContactVector;
+    typedef HashMap<b2Contact*, TickContact>    typeContactHash;
+
     /// Scene Debug Options.
     enum DebugOption
     {
@@ -193,15 +175,16 @@ public:
         ///
         SCENE_DEBUG_METRICS            = BIT(0),
         SCENE_DEBUG_FPS_METRICS        = BIT(1),
-        SCENE_DEBUG_JOINTS             = BIT(2),
-        SCENE_DEBUG_WIREFRAME_RENDER   = BIT(3),
+        SCENE_DEBUG_CONTROLLERS        = BIT(2), 
+        SCENE_DEBUG_JOINTS             = BIT(3),
+        SCENE_DEBUG_WIREFRAME_RENDER   = BIT(4),
         ///
-        SCENE_DEBUG_AABB               = BIT(4),
-        SCENE_DEBUG_OOBB               = BIT(5),
-        SCENE_DEBUG_SLEEP              = BIT(6),
-        SCENE_DEBUG_COLLISION_SHAPES   = BIT(7),
-        SCENE_DEBUG_POSITION_AND_COM   = BIT(8),
-        SCENE_DEBUG_SORT_POINTS        = BIT(9),
+        SCENE_DEBUG_AABB               = BIT(16),
+        SCENE_DEBUG_OOBB               = BIT(17),
+        SCENE_DEBUG_SLEEP              = BIT(18),
+        SCENE_DEBUG_COLLISION_SHAPES   = BIT(19),
+        SCENE_DEBUG_POSITION_AND_COM   = BIT(20),
+        SCENE_DEBUG_SORT_POINTS        = BIT(21),
     };
 
     /// Pick mode.
@@ -237,6 +220,9 @@ private:
     typeJointHash               mJoints;
     typeReverseJointHash        mReverseJoints;
     U32                         mJointMasterId;
+
+	/// Scene controllers.
+	SimObjectPtr<SimSet>	    mControllers;
 
     /// Scene time.
     F32                         mSceneTime;
@@ -366,6 +352,8 @@ public:
     U32                     getSceneObjects( typeSceneObjectVector& objects, const U32 sceneLayer ) const;
 
     void                    mergeScene( const Scene* pScene );
+
+	inline SimSet*			getControllers( void )						{ return mControllers; }
 
     /// Scene time.
     inline F32              getSceneTime( void ) const                  { return mSceneTime; };

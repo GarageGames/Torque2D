@@ -703,7 +703,7 @@ bool AssetManager::isReferencedAsset( const char* pAssetId )
     StringTableEntry assetId = StringTable->insert( pAssetId );
 
     // Is asset Id the correct format?
-    if ( StringUnit::getUnitCount( assetId, ASSET_SCOPE_SEPARATOR ) != 2 )
+    if ( StringUnit::getUnitCount( assetId, ASSET_SCOPE_TOKEN ) != 2 )
     {
         // No, so warn.
         Con::warnf( "Asset Manager: Cannot check if asset Id '%s' is referenced as it is not the correct format.", assetId );
@@ -729,7 +729,7 @@ bool AssetManager::renameDeclaredAsset( const char* pAssetIdFrom, const char* pA
     StringTableEntry assetIdTo   = StringTable->insert( pAssetIdTo );
 
     // Is asset Id from the correct format?
-    if ( StringUnit::getUnitCount( assetIdFrom, ASSET_SCOPE_SEPARATOR ) != 2 )
+    if ( StringUnit::getUnitCount( assetIdFrom, ASSET_SCOPE_TOKEN ) != 2 )
     {
         // No, so warn.
         Con::warnf("Asset Manager: Cannot rename declared asset Id '%s' to asset Id '%s' as source asset Id is not the correct format.", assetIdFrom, assetIdTo );
@@ -737,7 +737,7 @@ bool AssetManager::renameDeclaredAsset( const char* pAssetIdFrom, const char* pA
     }
 
     // Is asset Id to the correct format?
-    if ( StringUnit::getUnitCount( assetIdTo, ASSET_SCOPE_SEPARATOR ) != 2 )
+    if ( StringUnit::getUnitCount( assetIdTo, ASSET_SCOPE_TOKEN ) != 2 )
     {
         // No, so warn.
         Con::warnf("Asset Manager: Cannot rename declared asset Id '%s' to asset Id '%s' as target asset Id is not the correct format.", assetIdFrom, assetIdTo );
@@ -761,8 +761,8 @@ bool AssetManager::renameDeclaredAsset( const char* pAssetIdFrom, const char* pA
     }
 
     // Split module Ids from asset Ids.
-    StringTableEntry moduleIdFrom = StringTable->insert( StringUnit::getUnit( assetIdFrom, 0, ASSET_SCOPE_SEPARATOR ) );
-    StringTableEntry moduleIdTo   = StringTable->insert( StringUnit::getUnit( assetIdTo, 0, ASSET_SCOPE_SEPARATOR ) );
+    StringTableEntry moduleIdFrom = StringTable->insert( StringUnit::getUnit( assetIdFrom, 0, ASSET_SCOPE_TOKEN ) );
+    StringTableEntry moduleIdTo   = StringTable->insert( StringUnit::getUnit( assetIdTo, 0, ASSET_SCOPE_TOKEN ) );
 
     // Are the module Ids the same?
     if ( moduleIdFrom != moduleIdTo )
@@ -805,7 +805,7 @@ bool AssetManager::renameDeclaredAsset( const char* pAssetIdFrom, const char* pA
 
     // Update asset definition.
     pAssetDefinition->mAssetId = assetIdTo;
-    pAssetDefinition->mAssetName = StringTable->insert( StringUnit::getUnit( assetIdTo, 1, ASSET_SCOPE_SEPARATOR ) );
+    pAssetDefinition->mAssetName = StringTable->insert( StringUnit::getUnit( assetIdTo, 1, ASSET_SCOPE_TOKEN ) );
 
     // Reinsert declared asset.
     mDeclaredAssets.erase( assetIdFrom );
@@ -850,7 +850,7 @@ bool AssetManager::renameReferencedAsset( const char* pAssetIdFrom, const char* 
     StringTableEntry assetIdTo   = StringTable->insert( pAssetIdTo );
 
     // Is asset Id from the correct format?
-    if ( StringUnit::getUnitCount( assetIdFrom, ASSET_SCOPE_SEPARATOR ) != 2 )
+    if ( StringUnit::getUnitCount( assetIdFrom, ASSET_SCOPE_TOKEN ) != 2 )
     {
         // No, so warn.
         Con::warnf("Asset Manager: Cannot rename referenced asset Id '%s' to asset Id '%s' as source asset Id is not the correct format.", assetIdFrom, assetIdTo );
@@ -858,7 +858,7 @@ bool AssetManager::renameReferencedAsset( const char* pAssetIdFrom, const char* 
     }
 
     // Is asset Id to the correct format?
-    if ( StringUnit::getUnitCount( assetIdTo, ASSET_SCOPE_SEPARATOR ) != 2 )
+    if ( StringUnit::getUnitCount( assetIdTo, ASSET_SCOPE_TOKEN ) != 2 )
     {
         // No, so warn.
         Con::warnf("Asset Manager: Cannot rename referenced asset Id '%s' to asset Id '%s' as target asset Id is not the correct format.", assetIdFrom, assetIdTo );
@@ -2556,7 +2556,7 @@ bool AssetManager::scanDeclaredAssets( const char* pPath, const char* pExtension
         char assetIdBuffer[1024];
         dSprintf(assetIdBuffer, sizeof(assetIdBuffer), "%s%s%s",
             pModuleDefinition->getModuleId(),
-            ASSET_SCOPE_SEPARATOR,
+            ASSET_SCOPE_TOKEN,
             foundAssetDefinition.mAssetName );
 
         // Set asset Id.
