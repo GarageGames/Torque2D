@@ -37,8 +37,8 @@
 
 //-----------------------------------------------------------------------------
 
-#define ASSETQUERY_CUSTO_PROPERTY_NAME      "Results"
-#define ASSETQUERY_TYPE_NAME            "Asset"
+#define ASSETQUERY_RESULTS_NODE_NAME     "Results"
+#define ASSETQUERY_ASSETNODE_NAME        "Asset"
 #define ASSETQUERY_ASSETID_FIELD_NAME   "AssetId"
 
 //-----------------------------------------------------------------------------

@@ -247,6 +247,53 @@ public:
         mNodeName = StringTable->insert( pNodeName );
     }
 
+    TamlCustomNode* addNode( const char* pNodeName, const bool ignoreEmpty = true )
+    {
+        // Create a custom node.
+        TamlCustomNode* pCustomNode = TamlCustomNodeFactory.createObject();
+
+        // Set node name.
+        pCustomNode->set( pNodeName );
+
+        // Set ignore-empty flag.
+        pCustomNode->mIgnoreEmpty = ignoreEmpty;
+
+        // Store node.
+        mChildren.push_back( pCustomNode );
+
+        return pCustomNode;
+    }
+
+    void removeNode( const U32 index )
+    {
+        // Sanity!
+        AssertFatal( index < (U32)mChildren.size(), "tamlCustomNode::removeNode() - Index is out of bounds." );
+
+        // Cache the custom node.
+        TamlCustomNodeFactory.cacheObject( mChildren[index] );
+
+        // Remove it.
+        mChildren.erase( index );
+    }
+
+    const TamlCustomNode* findNode( const char* pNodeName ) const
+    {
+        // Sanity!
+        AssertFatal( pNodeName != NULL, "Cannot find Taml node name that is NULL." );
+
+        // Fetch node name.
+        StringTableEntry nodeName = StringTable->insert( pNodeName );
+
+        // Find node.
+        for( Vector<TamlCustomNode*>::const_iterator nodeItr = mChildren.begin(); nodeItr != mChildren.end(); ++nodeItr )
+        {
+            if ( (*nodeItr)->mNodeName == nodeName )
+                return (*nodeItr);
+        }
+
+        return NULL;
+    }
+
     TamlCustomNodeField* addField( const char* pFieldName, const ColorI& fieldValue )
     {
         // Fetch the field value.
@@ -345,7 +392,7 @@ public:
                 continue;
 
             // Warn!
-            Con::warnf("Conflicting Taml node field name of '%s' in property alias of '%s'.", pFieldName, mNodeName );
+            Con::warnf("Conflicting Taml node field name of '%s' in node '%s'.", pFieldName, mNodeName );
 
             // Cache node field.
             TamlCustomNodeFieldFactory.cacheObject( pNodeField );
@@ -420,6 +467,9 @@ public:
         return NULL;
     }
 
+    const TamlCustomNodeVector& getChildren( void ) const { return mChildren; }
+    const TamlCustomNodeFieldVector& getFields( void ) const { return mFields; }
+
     StringTableEntry            mNodeName;
     Vector<TamlCustomNode*>     mChildren;
     TamlCustomNodeFieldVector   mFields;
@@ -475,12 +525,12 @@ public:
             // Warn!
             Con::warnf("Conflicting Taml custom node name of '%s'.", pNodeName );
 
-            // Cache property.
+            // Cache node.
             TamlCustomNodeFactory.cacheObject( pCustomNode );
             return NULL;
         }
 #endif
-        // Store property.
+        // Store node.
         mNodes.push_back( pCustomNode );
 
         return pCustomNode;
@@ -498,7 +548,7 @@ public:
         mNodes.erase( index );
     }
 
-    const TamlCustomNode* findProperty( const char* pNodeName ) const
+    const TamlCustomNode* findNode( const char* pNodeName ) const
     {
         // Sanity!
         AssertFatal( pNodeName != NULL, "Cannot find Taml node name that is NULL." );
@@ -515,6 +565,8 @@ public:
 
         return NULL;
     }
+
+    const TamlCustomNodeVector& getNodes( void ) const { return mNodes; }
 
 private:
     TamlCustomNodeVector mNodes;
