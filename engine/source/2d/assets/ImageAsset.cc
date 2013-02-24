@@ -109,8 +109,8 @@ IMPLEMENT_CONOBJECT(ImageAsset);
 
 static bool explicitCellPropertiesInitialized = false;
 
-static StringTableEntry cellCustomPropertyName;
-static StringTableEntry cellAliasName;
+static StringTableEntry cellCustomNodeName;
+static StringTableEntry cellNodeName;
 static StringTableEntry cellOffsetName;
 static StringTableEntry cellWidthName;
 static StringTableEntry cellHeightName;
@@ -184,8 +184,8 @@ ImageAsset::ImageAsset() :  mImageFile(StringTable->EmptyString),
     // Initialize explicit cell field names.
     if ( !explicitCellPropertiesInitialized )
     {
-        cellCustomPropertyName      = StringTable->insert( "Cells" );
-        cellAliasName               = StringTable->insert( "Cell" );
+        cellCustomNodeName          = StringTable->insert( "Cells" );
+        cellNodeName                = StringTable->insert( "Cell" );
         cellOffsetName              = StringTable->insert( "Offset" );
         cellWidthName               = StringTable->insert( "Width" );
         cellHeightName              = StringTable->insert( "Height" );
@@ -880,8 +880,8 @@ void ImageAsset::onTamlCustomWrite( TamlCustomNodes& customNodes )
     if ( !mExplicitMode )
         return;
 
-    // Add cell custom property.
-    TamlCustomProperty* pCellProperty = customProperties.addProperty( cellCustomPropertyName );
+    // Add cell custom node.
+    TamlCustomNode* pCustomCellNodes = customNodes.addNode( cellCustomNodeName );
 
     // Iterate explicit frames.
     for( typeExplicitFrameAreaVector::iterator frameItr = mExplicitFrames.begin(); frameItr != mExplicitFrames.end(); ++frameItr )
@@ -890,12 +890,12 @@ void ImageAsset::onTamlCustomWrite( TamlCustomNodes& customNodes )
         const FrameArea::PixelArea& pixelArea = *frameItr;
 
         // Add cell alias.
-        TamlPropertyAlias* pCellAlias = pCellProperty->addAlias( cellAliasName );
+        TamlCustomNode* pCellNode = pCustomCellNodes->addNode( cellNodeName );
 
         // Add cell properties.
-        pCellAlias->addField( cellOffsetName, pixelArea.mPixelOffset );
-        pCellAlias->addField( cellWidthName, pixelArea.mPixelWidth );
-        pCellAlias->addField( cellHeightName, pixelArea.mPixelHeight );
+        pCellNode->addField( cellOffsetName, pixelArea.mPixelOffset );
+        pCellNode->addField( cellWidthName, pixelArea.mPixelWidth );
+        pCellNode->addField( cellHeightName, pixelArea.mPixelHeight );
     }
 }
 
@@ -907,32 +907,35 @@ void ImageAsset::onTamlCustomRead( const TamlCustomNodes& customNodes )
     PROFILE_SCOPE(ImageAsset_OnTamlCustomRead);
 
     // Call parent.
-    Parent::onTamlCustomRead( customProperties );
+    Parent::onTamlCustomRead( customNodes );
 
-    // Find cell custom property
-    const TamlCustomProperty* pCellProperty = customProperties.findProperty( cellCustomPropertyName );
+    // Find cell custom node.
+    const TamlCustomNode* pCustomCellNodes = customNodes.findNode( cellCustomNodeName );
 
     // Finish if we don't have explicit cells.
-    if ( pCellProperty == NULL )
+    if ( pCustomCellNodes == NULL )
         return;
 
     // Set explicit mode.
     mExplicitMode = true;
 
-    // Iterate cells.
-    for( TamlCustomProperty::const_iterator propertyAliasItr = pCellProperty->begin(); propertyAliasItr != pCellProperty->end(); ++propertyAliasItr )
-    {
-        // Fetch property alias.
-        TamlPropertyAlias* pPropertyAlias = *propertyAliasItr;
+    // Fetch children cell nodes.
+    const TamlCustomNodeVector& cellNodes = pCustomCellNodes->getChildren();
 
-        // Fetch alias name.
-        StringTableEntry aliasName = pPropertyAlias->mAliasName;
+    // Iterate cells.
+    for( TamlCustomNodeVector::const_iterator cellNodeItr = cellNodes.begin(); cellNodeItr != cellNodes.end(); ++cellNodeItr )
+    {
+        // Fetch cell node.
+        TamlCustomNode* pCellNode = *cellNodeItr;
+
+        // Fetch node name.
+        StringTableEntry nodeName = pCellNode->mNodeName;
 
         // Is this a valid alias?
-        if ( aliasName != cellAliasName )
+        if ( nodeName != cellNodeName )
         {
             // No, so warn.
-            Con::warnf( "ImageAsset::onTamlCustomRead() - Encountered an unknown custom alias name of '%s'.  Only '%s' is valid.", aliasName, cellAliasName );
+            Con::warnf( "ImageAsset::onTamlCustomRead() - Encountered an unknown custom name of '%s'.  Only '%s' is valid.", nodeName, cellNodeName );
             continue;
         }
 
@@ -940,27 +943,30 @@ void ImageAsset::onTamlCustomRead( const TamlCustomNodes& customNodes )
         S32 cellWidth = 0;
         S32 cellHeight = 0;
 
+        // Fetch field nodes.
+        const TamlCustomFieldVector& fieldNodes = pCellNode->getFields();
+
         // Iterate property fields.
-        for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+        for ( TamlCustomFieldVector::const_iterator nodeFieldItr = fieldNodes.begin(); nodeFieldItr != fieldNodes.end(); ++nodeFieldItr )
         {
-            // Fetch property field.
-            TamlCustomNodeField* pPropertyField = *propertyFieldItr;
+            // Fetch node field.
+            TamlCustomNodeField* pNodeField = *nodeFieldItr;
 
             // Fetch property field name.
-            StringTableEntry fieldName = pPropertyField->getFieldName();
+            StringTableEntry fieldName = pNodeField->getFieldName();
 
             // Check common fields.
             if ( fieldName == cellOffsetName )
             {
-                pPropertyField->getFieldValue( cellOffset );
+                pNodeField->getFieldValue( cellOffset );
             }
             else if ( fieldName == cellWidthName )
             {
-                pPropertyField->getFieldValue( cellWidth );
+                pNodeField->getFieldValue( cellWidth );
             }
             else if ( fieldName == cellHeightName )
             {
-                pPropertyField->getFieldValue( cellHeight );
+                pNodeField->getFieldValue( cellHeight );
             }
             else
             {

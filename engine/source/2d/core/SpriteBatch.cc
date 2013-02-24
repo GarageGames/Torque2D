@@ -1171,11 +1171,11 @@ void SpriteBatch::onTamlCustomWrite( TamlCustomNode* pSpritesNode )
     // Write all sprites.
     for( typeSpriteBatchHash::iterator spriteItr = mSprites.begin(); spriteItr != mSprites.end(); ++spriteItr )
     {
-        // Add alias.
-        TamlPropertyAlias* pSpriteAlias = pSpritesProperty->addAlias( spriteItemTypeName );
+        // Add sprite node.
+        TamlCustomNode* pNode = pSpritesNode->addNode( spriteItemTypeName );
         
         // Write type with sprite item.
-        spriteItr->value->onTamlCustomWrite( pSpriteAlias );
+        spriteItr->value->onTamlCustomWrite( pNode );
     }
 }
 
@@ -1186,23 +1186,26 @@ void SpriteBatch::onTamlCustomRead( const TamlCustomNode* pSpritesNode )
     // Debug Profiling.
     PROFILE_SCOPE(SpriteBatch_TamlCustomRead);
 
-    // Fetch property names.
-    StringTableEntry spriteItemTypeName = StringTable->insert( "Sprite" );
+    // Fetch node name.
+    StringTableEntry spriteItemNodeName = StringTable->insert( "Sprite" );
+
+    // Fetch children nodes.
+    const TamlCustomNodeVector& spriteNodes = pSpritesNode->getChildren();
 
     // Iterate sprite item types.
-    for( TamlCustomProperty::const_iterator spriteAliasItr = pSpritesProperty->begin(); spriteAliasItr != pSpritesProperty->end(); ++spriteAliasItr )
+    for( TamlCustomNodeVector::const_iterator spriteItr = spriteNodes.begin(); spriteItr != spriteNodes.end(); ++spriteItr )
     {
-        // Fetch sprite alias.
-        TamlPropertyAlias* pSpriteAlias = *spriteAliasItr;
+        // Fetch sprite node.
+        TamlCustomNode* pNode = *spriteItr;
 
         // Fetch alias name.
-        StringTableEntry aliasName = pSpriteAlias->mAliasName;
+        StringTableEntry nodeName = pNode->mNodeName;
 
-        // Is this a known alias?
-        if ( aliasName != spriteItemTypeName )
+        // Is this a known node name?
+        if ( nodeName != spriteItemNodeName )
         {
             // No, so warn.
-            Con::warnf( "SpriteBatch - Unknown custom type '%s'.", aliasName );
+            Con::warnf( "SpriteBatch - Unknown custom type '%s'.", nodeName );
             continue;
         }
 
@@ -1210,7 +1213,7 @@ void SpriteBatch::onTamlCustomRead( const TamlCustomNode* pSpritesNode )
         SpriteBatchItem* pSpriteBatchItem = createSprite();
 
         // Read type with sprite item.
-        pSpriteBatchItem->onTamlCustomRead( pSpriteAlias );
+        pSpriteBatchItem->onTamlCustomRead( pNode );
 
         // Fetch logical position.
         const SpriteBatchItem::LogicalPosition& logicalPosition = pSpriteBatchItem->getLogicalPosition();
