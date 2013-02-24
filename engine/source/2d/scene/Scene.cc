@@ -88,56 +88,56 @@ static StringTableEntry jointObjectBName;
 static StringTableEntry jointLocalAnchorAName;
 static StringTableEntry jointLocalAnchorBName;
 
-static StringTableEntry jointDistanceTypeName;
+static StringTableEntry jointDistanceNodeName;
 static StringTableEntry jointDistanceLengthName;
 static StringTableEntry jointDistanceFrequencyName;
 static StringTableEntry jointDistanceDampingRatioName;
 
-static StringTableEntry jointRopeTypeName;
+static StringTableEntry jointRopeNodeName;
 static StringTableEntry jointRopeMaxLengthName;
 
-static StringTableEntry jointRevoluteTypeName;
+static StringTableEntry jointRevoluteNodeName;
 static StringTableEntry jointRevoluteLimitLowerAngleName;
 static StringTableEntry jointRevoluteLimitUpperAngleName;
 static StringTableEntry jointRevoluteMotorSpeedName;
 static StringTableEntry jointRevoluteMotorMaxTorqueName;
 
-static StringTableEntry jointWeldTypeName;
+static StringTableEntry jointWeldNodeName;
 static StringTableEntry jointWeldFrequencyName;
 static StringTableEntry jointWeldDampingRatioName;
 
-static StringTableEntry jointWheelTypeName;
+static StringTableEntry jointWheelNodeName;
 static StringTableEntry jointWheelWorldAxisName;
 static StringTableEntry jointWheelMotorSpeedName;
 static StringTableEntry jointWheelMotorMaxTorqueName;
 static StringTableEntry jointWheelFrequencyName;
 static StringTableEntry jointWheelDampingRatioName;
 
-static StringTableEntry jointFrictionTypeName;
+static StringTableEntry jointFrictionNodeName;
 static StringTableEntry jointFrictionMaxForceName;
 static StringTableEntry jointFrictionMaxTorqueName;
 
-static StringTableEntry jointPrismaticTypeName;
+static StringTableEntry jointPrismaticNodeName;
 static StringTableEntry jointPrismaticWorldAxisName;
 static StringTableEntry jointPrismaticLimitLowerTransName;
 static StringTableEntry jointPrismaticLimitUpperTransName;
 static StringTableEntry jointPrismaticMotorSpeedName;
 static StringTableEntry jointPrismaticMotorMaxForceName;
 
-static StringTableEntry jointPulleyTypeName;
+static StringTableEntry jointPulleyNodeName;
 static StringTableEntry jointPulleyGroundAnchorAName;
 static StringTableEntry jointPulleyGroundAnchorBName;
 static StringTableEntry jointPulleyLengthAName;
 static StringTableEntry jointPulleyLengthBName;
 static StringTableEntry jointPulleyRatioName;
 
-static StringTableEntry jointTargetTypeName;
+static StringTableEntry jointTargetNodeName;
 static StringTableEntry jointTargetWorldTargetName;
 static StringTableEntry jointTargetMaxForceName;
 static StringTableEntry jointTargetFrequencyName;
 static StringTableEntry jointTargetDampingRatioName;
 
-static StringTableEntry jointMotorTypeName;
+static StringTableEntry jointMotorNodeName;
 static StringTableEntry jointMotorLinearOffsetName;
 static StringTableEntry jointMotorAngularOffsetName;
 static StringTableEntry jointMotorMaxForceName;
@@ -189,56 +189,56 @@ Scene::Scene() :
         jointLocalAnchorAName             = StringTable->insert( "LocalAnchorA" );
         jointLocalAnchorBName             = StringTable->insert( "LocalAnchorB" );
 
-        jointDistanceTypeName             = StringTable->insert( "Distance" );
+        jointDistanceNodeName             = StringTable->insert( "Distance" );
         jointDistanceLengthName           = StringTable->insert( "Length" );
         jointDistanceFrequencyName        = StringTable->insert( "Frequency" );
         jointDistanceDampingRatioName     = StringTable->insert( "DampingRatio" );
 
-        jointRopeTypeName                 = StringTable->insert( "Rope" );
+        jointRopeNodeName                 = StringTable->insert( "Rope" );
         jointRopeMaxLengthName            = StringTable->insert( "MaxLength" );
 
-        jointRevoluteTypeName             = StringTable->insert( "Revolute" );
+        jointRevoluteNodeName             = StringTable->insert( "Revolute" );
         jointRevoluteLimitLowerAngleName  = StringTable->insert( "LowerAngle" );
         jointRevoluteLimitUpperAngleName  = StringTable->insert( "UpperAngle" );
         jointRevoluteMotorSpeedName       = StringTable->insert( "MotorSpeed" );
         jointRevoluteMotorMaxTorqueName   = StringTable->insert( "MaxTorque" );
 
-        jointWeldTypeName                 = StringTable->insert( "Weld" );
+        jointWeldNodeName                 = StringTable->insert( "Weld" );
         jointWeldFrequencyName            = jointDistanceFrequencyName;
         jointWeldDampingRatioName         = jointDistanceDampingRatioName;
 
-        jointWheelTypeName                = StringTable->insert( "Wheel" );
+        jointWheelNodeName                = StringTable->insert( "Wheel" );
         jointWheelWorldAxisName           = StringTable->insert( "WorldAxis" );
         jointWheelMotorSpeedName          = StringTable->insert( "MotorSpeed" );
         jointWheelMotorMaxTorqueName      = jointRevoluteMotorMaxTorqueName;
         jointWheelFrequencyName           = jointDistanceFrequencyName;
         jointWheelDampingRatioName        = jointDistanceDampingRatioName;
 
-        jointFrictionTypeName             = StringTable->insert( "Friction" );
+        jointFrictionNodeName             = StringTable->insert( "Friction" );
         jointFrictionMaxForceName         = StringTable->insert( "MaxForce" );
         jointFrictionMaxTorqueName        = jointRevoluteMotorMaxTorqueName;
 
-        jointPrismaticTypeName            = StringTable->insert( "Prismatic" );
+        jointPrismaticNodeName            = StringTable->insert( "Prismatic" );
         jointPrismaticWorldAxisName       = jointWheelWorldAxisName;
         jointPrismaticLimitLowerTransName = StringTable->insert( "LowerTranslation" );
         jointPrismaticLimitUpperTransName = StringTable->insert( "UpperTranslation" );
         jointPrismaticMotorSpeedName      = jointRevoluteMotorSpeedName;
         jointPrismaticMotorMaxForceName   = jointFrictionMaxForceName;
 
-        jointPulleyTypeName               = StringTable->insert( "Pulley" );
+        jointPulleyNodeName               = StringTable->insert( "Pulley" );
         jointPulleyGroundAnchorAName      = StringTable->insert( "GroundAnchorA" );
         jointPulleyGroundAnchorBName      = StringTable->insert( "GroundAnchorB" );
         jointPulleyLengthAName            = StringTable->insert( "LengthA" );
         jointPulleyLengthBName            = StringTable->insert( "LengthB" );
         jointPulleyRatioName              = StringTable->insert( "Ratio" );
 
-        jointTargetTypeName               = StringTable->insert( "Target" );
+        jointTargetNodeName               = StringTable->insert( "Target" );
         jointTargetWorldTargetName        = StringTable->insert( "WorldTarget" );
         jointTargetMaxForceName           = StringTable->insert( jointFrictionMaxForceName );
         jointTargetFrequencyName          = jointDistanceFrequencyName;
         jointTargetDampingRatioName       = jointDistanceDampingRatioName;
 
-        jointMotorTypeName                = StringTable->insert( "Motor" );
+        jointMotorNodeName                = StringTable->insert( "Motor" );
         jointMotorLinearOffsetName        = StringTable->insert( "LinearOffset" );
         jointMotorAngularOffsetName       = StringTable->insert( "AngularOffset" );
         jointMotorMaxForceName            = jointFrictionMaxForceName;
@@ -3629,20 +3629,23 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
     const TamlCustomNode* pJointNode = customNodes.findNode( jointCustomNodeName );
 
     // Finish if no joints.
-    if ( pJointProperty == NULL )
+    if ( pJointNode == NULL )
         return;
 
-    // Iterate joints.
-    for( TamlCustomProperty::const_iterator propertyAliasItr = pJointProperty->begin(); propertyAliasItr != pJointProperty->end(); ++propertyAliasItr )
-    {
-        // Fetch property alias.
-        TamlPropertyAlias* pPropertyAlias = *propertyAliasItr;
+    // Fetch children joint nodes.
+    const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
 
-        // Fetch alias name.
-        StringTableEntry aliasName = pPropertyAlias->mAliasName;
+    // Iterate joints.
+    for( TamlCustomNodeVector::const_iterator jointNodeItr = jointChildren.begin(); jointNodeItr != jointChildren.end(); ++jointNodeItr )
+    {
+        // Fetch joint node,
+        TamlCustomNode* pJointNode = *jointNodeItr;
+
+        // Fetch node name.
+        StringTableEntry nodeName = pJointNode->mNodeName;
 
         // Is this a distance joint?
-        if ( aliasName == jointDistanceTypeName )
+        if ( nodeName == jointDistanceNodeName )
         {
             SceneObject* pSceneObjectA = NULL;
             SceneObject* pSceneObjectB = NULL;
@@ -3654,47 +3657,50 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
             F32 frequency = 0.0f;
             F32 dampingRatio = 0.0f;
 
+            // Fetch joint fields.
+            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
             // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
             {
-                // Fetch property field.
-                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
+                // Fetch field node.
+                TamlCustomNodeField* pFieldNode = *jointFieldItr;
 
                 // Fetch property field name.
-                StringTableEntry fieldName = pPropertyField->getFieldName();
+                StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
                 if ( fieldName == jointObjectAName )
                 {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointObjectBName )
                 {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointLocalAnchorAName )
                 {
-                    pPropertyField->getFieldValue( localAnchorA );
+                    pFieldNode->getFieldValue( localAnchorA );
                 }
                 else if ( fieldName == jointLocalAnchorBName )
                 {
-                    pPropertyField->getFieldValue( localAnchorB );
+                    pFieldNode->getFieldValue( localAnchorB );
                 }
                 else if ( fieldName == jointCollideConnectedName )
                 {
-                    pPropertyField->getFieldValue( collideConnected );
+                    pFieldNode->getFieldValue( collideConnected );
                 }
                 else if ( fieldName == jointDistanceLengthName )
                 {
-                    pPropertyField->getFieldValue( length );
+                    pFieldNode->getFieldValue( length );
                 }
                 else if ( fieldName == jointDistanceFrequencyName )
                 {
-                    pPropertyField->getFieldValue( frequency );
+                    pFieldNode->getFieldValue( frequency );
                 }
                 else if ( fieldName == jointDistanceDampingRatioName )
                 {
-                    pPropertyField->getFieldValue( dampingRatio );
+                    pFieldNode->getFieldValue( dampingRatio );
                 }
             }
 
@@ -3702,7 +3708,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
             createDistanceJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, length, frequency, dampingRatio, collideConnected );
         }
         // is this a rope joint?
-        else if ( aliasName == jointRopeTypeName )
+        else if ( nodeName == jointRopeNodeName )
         {
             SceneObject* pSceneObjectA = NULL;
             SceneObject* pSceneObjectB = NULL;
@@ -3712,39 +3718,42 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
 
             F32 maxLength = -1.0f;
 
+            // Fetch joint fields.
+            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
             // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
             {
-                // Fetch property field.
-                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
+                // Fetch field node.
+                TamlCustomNodeField* pFieldNode = *jointFieldItr;
 
                 // Fetch property field name.
-                StringTableEntry fieldName = pPropertyField->getFieldName();
+                StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
                 if ( fieldName == jointObjectAName )
                 {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointObjectBName )
                 {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointLocalAnchorAName )
                 {
-                    pPropertyField->getFieldValue( localAnchorA );
+                    pFieldNode->getFieldValue( localAnchorA );
                 }
                 else if ( fieldName == jointLocalAnchorBName )
                 {
-                    pPropertyField->getFieldValue( localAnchorB );
+                    pFieldNode->getFieldValue( localAnchorB );
                 }
                 else if ( fieldName == jointCollideConnectedName )
                 {
-                    pPropertyField->getFieldValue( collideConnected );
+                    pFieldNode->getFieldValue( collideConnected );
                 }
                 else if ( fieldName == jointRopeMaxLengthName )
                 {
-                    pPropertyField->getFieldValue( maxLength );
+                    pFieldNode->getFieldValue( maxLength );
                 }
             }
 
@@ -3752,7 +3761,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
             createRopeJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, maxLength, collideConnected );
         }
         // Is this a revolute joint?
-        else if ( aliasName == jointRevoluteTypeName )
+        else if ( nodeName == jointRevoluteNodeName )
         {
             SceneObject* pSceneObjectA = NULL;
             SceneObject* pSceneObjectB = NULL;
@@ -3768,57 +3777,60 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
             F32 motorSpeed = b2_pi;
             F32 maxMotorTorque = 0.0f;
 
+            // Fetch joint fields.
+            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
             // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
             {
-                // Fetch property field.
-                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
+                // Fetch field node.
+                TamlCustomNodeField* pFieldNode = *jointFieldItr;
 
                 // Fetch property field name.
-                StringTableEntry fieldName = pPropertyField->getFieldName();
+                StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
                 if ( fieldName == jointObjectAName )
                 {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointObjectBName )
                 {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointLocalAnchorAName )
                 {
-                    pPropertyField->getFieldValue( localAnchorA );
+                    pFieldNode->getFieldValue( localAnchorA );
                 }
                 else if ( fieldName == jointLocalAnchorBName )
                 {
-                    pPropertyField->getFieldValue( localAnchorB );
+                    pFieldNode->getFieldValue( localAnchorB );
                 }
                 else if ( fieldName == jointCollideConnectedName )
                 {
-                    pPropertyField->getFieldValue( collideConnected );
+                    pFieldNode->getFieldValue( collideConnected );
                 }
                 else if ( fieldName == jointRevoluteLimitLowerAngleName )
                 {
-                    pPropertyField->getFieldValue( lowerAngle );
+                    pFieldNode->getFieldValue( lowerAngle );
                     lowerAngle = mDegToRad( lowerAngle );
                     enableLimit = true;
                 }
                 else if ( fieldName == jointRevoluteLimitUpperAngleName )
                 {
-                    pPropertyField->getFieldValue( upperAngle );
+                    pFieldNode->getFieldValue( upperAngle );
                     upperAngle = mDegToRad( upperAngle );
                     enableLimit = true;
                 }
                 else if ( fieldName == jointRevoluteMotorSpeedName )
                 {
-                    pPropertyField->getFieldValue( motorSpeed );
+                    pFieldNode->getFieldValue( motorSpeed );
                     motorSpeed = mDegToRad( motorSpeed );
                     enableMotor = true;
                 }
                 else if ( fieldName == jointRevoluteMotorMaxTorqueName )
                 {
-                    pPropertyField->getFieldValue( maxMotorTorque );
+                    pFieldNode->getFieldValue( maxMotorTorque );
                     enableMotor = true;
                 }
             }
@@ -3833,7 +3845,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 setRevoluteJointMotor( jointId, true, motorSpeed, maxMotorTorque );
         }
         // is this a weld joint?
-        else if ( aliasName == jointWeldTypeName )
+        else if ( nodeName == jointWeldNodeName )
         {
             SceneObject* pSceneObjectA = NULL;
             SceneObject* pSceneObjectB = NULL;
@@ -3844,43 +3856,46 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
             F32 frequency = 0.0f;
             F32 dampingRatio = 0.0f;
 
+            // Fetch joint fields.
+            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
             // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
             {
-                // Fetch property field.
-                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
+                // Fetch field node.
+                TamlCustomNodeField* pFieldNode = *jointFieldItr;
 
                 // Fetch property field name.
-                StringTableEntry fieldName = pPropertyField->getFieldName();
+                StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
                 if ( fieldName == jointObjectAName )
                 {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointObjectBName )
                 {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointLocalAnchorAName )
                 {
-                    pPropertyField->getFieldValue( localAnchorA );
+                    pFieldNode->getFieldValue( localAnchorA );
                 }
                 else if ( fieldName == jointLocalAnchorBName )
                 {
-                    pPropertyField->getFieldValue( localAnchorB );
+                    pFieldNode->getFieldValue( localAnchorB );
                 }
                 else if ( fieldName == jointCollideConnectedName )
                 {
-                    pPropertyField->getFieldValue( collideConnected );
+                    pFieldNode->getFieldValue( collideConnected );
                 }
                 else if ( fieldName == jointWeldFrequencyName )
                 {
-                    pPropertyField->getFieldValue( frequency );
+                    pFieldNode->getFieldValue( frequency );
                 }
                 else if ( fieldName == jointWeldDampingRatioName )
                 {
-                    pPropertyField->getFieldValue( dampingRatio );
+                    pFieldNode->getFieldValue( dampingRatio );
                 }
             }
 
@@ -3888,7 +3903,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
             createWeldJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, frequency, dampingRatio, collideConnected );
         }
         // Is this a wheel joint?
-        else if ( aliasName == jointWheelTypeName )
+        else if ( nodeName == jointWheelNodeName )
         {
             SceneObject* pSceneObjectA = NULL;
             SceneObject* pSceneObjectB = NULL;
@@ -3904,58 +3919,61 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
             F32 dampingRatio = 0.0f;
             b2Vec2 worldAxis( 0.0f, 1.0f );
 
+            // Fetch joint fields.
+            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
             // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
             {
-                // Fetch property field.
-                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
+                // Fetch field node.
+                TamlCustomNodeField* pFieldNode = *jointFieldItr;
 
                 // Fetch property field name.
-                StringTableEntry fieldName = pPropertyField->getFieldName();
+                StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
                 if ( fieldName == jointObjectAName )
                 {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointObjectBName )
                 {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointLocalAnchorAName )
                 {
-                    pPropertyField->getFieldValue( localAnchorA );
+                    pFieldNode->getFieldValue( localAnchorA );
                 }
                 else if ( fieldName == jointLocalAnchorBName )
                 {
-                    pPropertyField->getFieldValue( localAnchorB );
+                    pFieldNode->getFieldValue( localAnchorB );
                 }
                 else if ( fieldName == jointCollideConnectedName )
                 {
-                    pPropertyField->getFieldValue( collideConnected );
+                    pFieldNode->getFieldValue( collideConnected );
                 }
                 else if ( fieldName == jointWheelMotorSpeedName )
                 {
-                    pPropertyField->getFieldValue( motorSpeed );
+                    pFieldNode->getFieldValue( motorSpeed );
                     motorSpeed = mDegToRad( motorSpeed );
                     enableMotor = true;
                 }
                 else if ( fieldName == jointWheelMotorMaxTorqueName )
                 {
-                    pPropertyField->getFieldValue( maxMotorTorque );
+                    pFieldNode->getFieldValue( maxMotorTorque );
                     enableMotor = true;
                 }
                 else if ( fieldName == jointWheelFrequencyName )
                 {
-                    pPropertyField->getFieldValue( frequency );
+                    pFieldNode->getFieldValue( frequency );
                 }
                 else if ( fieldName == jointWheelDampingRatioName )
                 {
-                    pPropertyField->getFieldValue( dampingRatio );
+                    pFieldNode->getFieldValue( dampingRatio );
                 }
                 else if ( fieldName == jointWheelWorldAxisName )
                 {
-                    pPropertyField->getFieldValue( worldAxis );                    
+                    pFieldNode->getFieldValue( worldAxis );                    
                 }
             }
 
@@ -3969,7 +3987,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
             setWheelJointDampingRatio( jointId, dampingRatio );
         }
         // Is this a friction joint?
-        else if ( aliasName == jointFrictionTypeName )
+        else if ( nodeName == jointFrictionNodeName )
         {
             SceneObject* pSceneObjectA = NULL;
             SceneObject* pSceneObjectB = NULL;
@@ -3980,43 +3998,46 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
             F32 maxForce = 0.0f;
             F32 maxTorque = 0.0f;
 
+            // Fetch joint fields.
+            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
             // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
             {
-                // Fetch property field.
-                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
+                // Fetch field node.
+                TamlCustomNodeField* pFieldNode = *jointFieldItr;
 
                 // Fetch property field name.
-                StringTableEntry fieldName = pPropertyField->getFieldName();
+                StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
                 if ( fieldName == jointObjectAName )
                 {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointObjectBName )
                 {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointLocalAnchorAName )
                 {
-                    pPropertyField->getFieldValue( localAnchorA );
+                    pFieldNode->getFieldValue( localAnchorA );
                 }
                 else if ( fieldName == jointLocalAnchorBName )
                 {
-                    pPropertyField->getFieldValue( localAnchorB );
+                    pFieldNode->getFieldValue( localAnchorB );
                 }
                 else if ( fieldName == jointCollideConnectedName )
                 {
-                    pPropertyField->getFieldValue( collideConnected );
+                    pFieldNode->getFieldValue( collideConnected );
                 }
                 else if ( fieldName == jointFrictionMaxForceName )
                 {
-                    pPropertyField->getFieldValue( maxForce );
+                    pFieldNode->getFieldValue( maxForce );
                 }
                 else if ( fieldName == jointFrictionMaxTorqueName )
                 {
-                    pPropertyField->getFieldValue( maxTorque );
+                    pFieldNode->getFieldValue( maxTorque );
                 }
             }
 
@@ -4024,7 +4045,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
             createFrictionJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, maxForce, maxTorque, collideConnected );
         }
         // Is this a prismatic joint?
-        else if ( aliasName == jointPrismaticTypeName )
+        else if ( nodeName == jointPrismaticNodeName )
         {
             SceneObject* pSceneObjectA = NULL;
             SceneObject* pSceneObjectB = NULL;
@@ -4042,60 +4063,63 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
 
             b2Vec2 worldAxis( 0.0f, 1.0f );
 
+            // Fetch joint fields.
+            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
             // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
             {
-                // Fetch property field.
-                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
+                // Fetch field node.
+                TamlCustomNodeField* pFieldNode = *jointFieldItr;
 
                 // Fetch property field name.
-                StringTableEntry fieldName = pPropertyField->getFieldName();
+                StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
                 if ( fieldName == jointObjectAName )
                 {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointObjectBName )
                 {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointLocalAnchorAName )
                 {
-                    pPropertyField->getFieldValue( localAnchorA );
+                    pFieldNode->getFieldValue( localAnchorA );
                 }
                 else if ( fieldName == jointLocalAnchorBName )
                 {
-                    pPropertyField->getFieldValue( localAnchorB );
+                    pFieldNode->getFieldValue( localAnchorB );
                 }
                 else if ( fieldName == jointCollideConnectedName )
                 {
-                    pPropertyField->getFieldValue( collideConnected );
+                    pFieldNode->getFieldValue( collideConnected );
                 }
                 else if ( fieldName == jointPrismaticLimitLowerTransName )
                 {
-                    pPropertyField->getFieldValue( lowerTransLimit );
+                    pFieldNode->getFieldValue( lowerTransLimit );
                     enableLimit = true;
                 }
                 else if ( fieldName == jointPrismaticLimitUpperTransName )
                 {
-                    pPropertyField->getFieldValue( upperTransLimit );
+                    pFieldNode->getFieldValue( upperTransLimit );
                     enableLimit = true;
                 }
                 else if ( fieldName == jointPrismaticMotorSpeedName )
                 {
-                    pPropertyField->getFieldValue( motorSpeed );
+                    pFieldNode->getFieldValue( motorSpeed );
                     motorSpeed = mDegToRad( motorSpeed );
                     enableMotor = true;
                 }
                 else if ( fieldName == jointPrismaticMotorMaxForceName )
                 {
-                    pPropertyField->getFieldValue( maxMotorForce );
+                    pFieldNode->getFieldValue( maxMotorForce );
                     enableMotor = true;
                 }
                 else if ( fieldName == jointPrismaticWorldAxisName )
                 {
-                    pPropertyField->getFieldValue( worldAxis );
+                    pFieldNode->getFieldValue( worldAxis );
                 }
             }
 
@@ -4109,7 +4133,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 setPrismaticJointMotor( jointId, true, motorSpeed, maxMotorForce );
         }
         // Is this a pulley joint?
-        else if ( aliasName == jointPulleyTypeName )
+        else if ( nodeName == jointPulleyNodeName )
         {
             SceneObject* pSceneObjectA = NULL;
             SceneObject* pSceneObjectB = NULL;
@@ -4123,55 +4147,58 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
             b2Vec2 worldGroundAnchorA = b2Vec2_zero;
             b2Vec2 worldGroundAnchorB = b2Vec2_zero;
 
+            // Fetch joint fields.
+            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
             // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
             {
-                // Fetch property field.
-                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
+                // Fetch field node.
+                TamlCustomNodeField* pFieldNode = *jointFieldItr;
 
                 // Fetch property field name.
-                StringTableEntry fieldName = pPropertyField->getFieldName();
+                StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
                 if ( fieldName == jointObjectAName )
                 {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointObjectBName )
                 {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointLocalAnchorAName )
                 {
-                    pPropertyField->getFieldValue( localAnchorA );
+                    pFieldNode->getFieldValue( localAnchorA );
                 }
                 else if ( fieldName == jointLocalAnchorBName )
                 {
-                    pPropertyField->getFieldValue( localAnchorB );
+                    pFieldNode->getFieldValue( localAnchorB );
                 }
                 else if ( fieldName == jointCollideConnectedName )
                 {
-                    pPropertyField->getFieldValue( collideConnected );
+                    pFieldNode->getFieldValue( collideConnected );
                 }
                 else if ( fieldName == jointPulleyLengthAName )
                 {
-                    pPropertyField->getFieldValue( lengthA );
+                    pFieldNode->getFieldValue( lengthA );
                 }
                 else if ( fieldName == jointPulleyLengthBName )
                 {
-                    pPropertyField->getFieldValue( lengthB );
+                    pFieldNode->getFieldValue( lengthB );
                 }
                 else if ( fieldName == jointPulleyRatioName )
                 {
-                    pPropertyField->getFieldValue( ratio );
+                    pFieldNode->getFieldValue( ratio );
                 }
                 else if ( fieldName == jointPulleyGroundAnchorAName )
                 {
-                    pPropertyField->getFieldValue( worldGroundAnchorA );
+                    pFieldNode->getFieldValue( worldGroundAnchorA );
                 }
                 else if ( fieldName == jointPulleyGroundAnchorBName )
                 {
-                    pPropertyField->getFieldValue( worldGroundAnchorB );
+                    pFieldNode->getFieldValue( worldGroundAnchorB );
                 }
             }
 
@@ -4180,7 +4207,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
 
         }
         // Is this a target joint?
-        else if ( aliasName == jointTargetTypeName )
+        else if ( nodeName == jointTargetNodeName )
         {
             SceneObject* pSceneObject = NULL;
             bool collideConnected = false;
@@ -4189,39 +4216,42 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
             F32 frequency = 5.0f;
             F32 dampingRatio = 0.7f;
 
+            // Fetch joint fields.
+            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
             // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
             {
-                // Fetch property field.
-                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
+                // Fetch field node.
+                TamlCustomNodeField* pFieldNode = *jointFieldItr;
 
                 // Fetch property field name.
-                StringTableEntry fieldName = pPropertyField->getFieldName();
+                StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
                 if ( fieldName == jointObjectAName )
                 {
-                    pSceneObject = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObject = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointCollideConnectedName )
                 {
-                    pPropertyField->getFieldValue( collideConnected );
+                    pFieldNode->getFieldValue( collideConnected );
                 }
                 else if ( fieldName == jointTargetWorldTargetName )
                 {
-                    pPropertyField->getFieldValue( worldTarget );
+                    pFieldNode->getFieldValue( worldTarget );
                 }
                 else if ( fieldName == jointTargetMaxForceName )
                 {
-                    pPropertyField->getFieldValue( maxForce );
+                    pFieldNode->getFieldValue( maxForce );
                 }
                 else if ( fieldName == jointTargetFrequencyName )
                 {
-                    pPropertyField->getFieldValue( frequency );
+                    pFieldNode->getFieldValue( frequency );
                 }
                 else if ( fieldName == jointTargetDampingRatioName )
                 {
-                    pPropertyField->getFieldValue( dampingRatio );
+                    pFieldNode->getFieldValue( dampingRatio );
                 }
             }
 
@@ -4229,7 +4259,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
             createTargetJoint( pSceneObject, worldTarget, maxForce, frequency, dampingRatio, collideConnected );
         }
         // Is this a motor joint?
-        else if ( aliasName == jointMotorTypeName )
+        else if ( nodeName == jointMotorNodeName )
         {
             SceneObject* pSceneObjectA = NULL;
             SceneObject* pSceneObjectB = NULL;
@@ -4241,48 +4271,51 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
             F32 maxTorque = 1.0f;
             F32 correctionFactor = 0.3f;
 
+            // Fetch joint fields.
+            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
             // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
             {
-                // Fetch property field.
-                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
+                // Fetch field node.
+                TamlCustomNodeField* pFieldNode = *jointFieldItr;
 
                 // Fetch property field name.
-                StringTableEntry fieldName = pPropertyField->getFieldName();
+                StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
                 if ( fieldName == jointObjectAName )
                 {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointObjectBName )
                 {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pPropertyField->getFieldObject() );
+                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
                 }
                 else if ( fieldName == jointCollideConnectedName )
                 {
-                    pPropertyField->getFieldValue( collideConnected );
+                    pFieldNode->getFieldValue( collideConnected );
                 }
                 else if ( fieldName == jointMotorLinearOffsetName )
                 {
-                    pPropertyField->getFieldValue( linearOffset );
+                    pFieldNode->getFieldValue( linearOffset );
                 }
                 else if ( fieldName == jointMotorAngularOffsetName )
                 {
-                    pPropertyField->getFieldValue( angularOffset );
+                    pFieldNode->getFieldValue( angularOffset );
                     angularOffset = mDegToRad( angularOffset );
                 }
                 else if ( fieldName == jointMotorMaxForceName )
                 {
-                    pPropertyField->getFieldValue( maxForce );
+                    pFieldNode->getFieldValue( maxForce );
                 }
                 else if ( fieldName == jointMotorMaxTorqueName )
                 {
-                    pPropertyField->getFieldValue( maxTorque );
+                    pFieldNode->getFieldValue( maxTorque );
                 }
                 else if ( fieldName == jointMotorCorrectionFactorName )
                 {
-                    pPropertyField->getFieldValue( correctionFactor );
+                    pFieldNode->getFieldValue( correctionFactor );
                 }
             }
 
@@ -4294,7 +4327,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
         else
         {
             // Warn.
-            Con::warnf( "Unknown joint type of '%s' encountered.", aliasName );
+            Con::warnf( "Unknown joint type of '%s' encountered.", nodeName );
 
             // Sanity!
             AssertFatal( false, "Scene::onTamlCustomRead() - Unknown joint type detected." );
@@ -4317,8 +4350,8 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
     // Do we have any joints?
     if ( jointCount > 0 )
 	{
-		// Yes, so add joint property.
-		TamlCustomProperty* pJointProperty = customProperties.addProperty( jointCustomNodeName );
+		// Yes, so add joint custom node.
+		TamlCustomNode* pJointCustomNode = customNodes.addNode( jointCustomNodeName );
 
 		// Iterate joints.
 		for( typeJointHash::iterator jointItr = mJoints.begin(); jointItr != mJoints.end(); ++jointItr )
@@ -4326,9 +4359,9 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 			// Fetch base joint.
 			b2Joint* pBaseJoint = jointItr->value;
 
-			// Add joint alias.
-			// NOTE:    The name of the alias will get updated shortly.
-			TamlPropertyAlias* pJointAlias = pJointProperty->addAlias( StringTable->EmptyString );
+			// Add joint node.
+			// NOTE:    The name of the node will get updated shortly.
+			TamlCustomNode* pJointNode = pJointCustomNode->addNode( StringTable->EmptyString );
 
 			// Fetch common details.
 			b2Body* pBodyA = pBaseJoint->GetBodyA();
@@ -4351,8 +4384,8 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 			{
 				case e_distanceJoint:
 					{
-						// Set alias name.
-						pJointAlias->mAliasName = StringTable->insert( jointDistanceTypeName );
+						// Set joint name.
+                        pJointNode->mNodeName = StringTable->insert( jointDistanceNodeName );
 
 						// Fetch joint.
 						const b2DistanceJoint* pJoint = dynamic_cast<const b2DistanceJoint*>( pBaseJoint );
@@ -4361,34 +4394,34 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 						AssertFatal( pJoint != NULL, "Scene::onTamlCustomWrite() - Invalid distance joint type returned." );
 
 						// Add length.
-						pJointAlias->addField( jointDistanceLengthName, pJoint->GetLength() );
+						pJointNode->addField( jointDistanceLengthName, pJoint->GetLength() );
 
 						// Add frequency.
 						if ( mNotZero( pJoint->GetFrequency() ) )
-							pJointAlias->addField( jointDistanceFrequencyName, pJoint->GetFrequency() );
+							pJointNode->addField( jointDistanceFrequencyName, pJoint->GetFrequency() );
 
 						// Add damping ratio.
 						if ( mNotZero( pJoint->GetDampingRatio() ) )
-							pJointAlias->addField( jointDistanceDampingRatioName, pJoint->GetDampingRatio() );
+							pJointNode->addField( jointDistanceDampingRatioName, pJoint->GetDampingRatio() );
 
 						// Add local anchors.
 						if ( mNotZero( pJoint->GetLocalAnchorA().LengthSquared() ) )
-							pJointAlias->addField( jointLocalAnchorAName, pJoint->GetLocalAnchorA() );
+							pJointNode->addField( jointLocalAnchorAName, pJoint->GetLocalAnchorA() );
 						if ( mNotZero( pJoint->GetLocalAnchorB().LengthSquared() ) )
-							pJointAlias->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
+							pJointNode->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
 
 						// Add bodies.
 						if ( pSceneObjectA != NULL )
-							pJointAlias->addField( jointObjectAName, pSceneObjectA );
+							pJointNode->addField( jointObjectAName, pSceneObjectA );
 						if ( pSceneObjectB != NULL )
-							pJointAlias->addField( jointObjectBName, pSceneObjectB );
+							pJointNode->addField( jointObjectBName, pSceneObjectB );
 					}
 					break;
 
 				case e_ropeJoint:
 					{
-						// Set alias name.
-						pJointAlias->mAliasName = StringTable->insert( jointRopeTypeName );
+						// Set joint name.
+						pJointNode->mNodeName = StringTable->insert( jointRopeNodeName );
 
 						// Fetch joint.
 						const b2RopeJoint* pJoint = dynamic_cast<const b2RopeJoint*>( pBaseJoint );
@@ -4398,26 +4431,26 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 
 						// Add max length.
 						if ( mNotZero( pJoint->GetMaxLength() ) )
-							pJointAlias->addField( jointRopeMaxLengthName, pJoint->GetMaxLength() );
+							pJointNode->addField( jointRopeMaxLengthName, pJoint->GetMaxLength() );
 
 						// Add local anchors.
 						if ( mNotZero( pJoint->GetLocalAnchorA().LengthSquared() ) )
-							pJointAlias->addField( jointLocalAnchorAName, pJoint->GetLocalAnchorA() );
+							pJointNode->addField( jointLocalAnchorAName, pJoint->GetLocalAnchorA() );
 						if ( mNotZero( pJoint->GetLocalAnchorB().LengthSquared() ) )
-							pJointAlias->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
+							pJointNode->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
 
 						// Add bodies.
 						if ( pSceneObjectA != NULL )
-							pJointAlias->addField( jointObjectAName, pSceneObjectA );
+							pJointNode->addField( jointObjectAName, pSceneObjectA );
 						if ( pSceneObjectB != NULL )
-							pJointAlias->addField( jointObjectBName, pSceneObjectB );
+							pJointNode->addField( jointObjectBName, pSceneObjectB );
 					}
 					break;
 
 				case e_revoluteJoint:
 					{
-						// Set alias name.
-						pJointAlias->mAliasName = StringTable->insert( jointRevoluteTypeName );
+						// Set join name.
+						pJointNode->mNodeName = StringTable->insert( jointRevoluteNodeName );
 
 						// Fetch joint.
 						const b2RevoluteJoint* pJoint = dynamic_cast<const b2RevoluteJoint*>( pBaseJoint );
@@ -4429,36 +4462,36 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 						if ( pJoint->IsLimitEnabled() )
 						{
 							// Add limits.
-							pJointAlias->addField( jointRevoluteLimitLowerAngleName, mRadToDeg(pJoint->GetLowerLimit()) );
-							pJointAlias->addField( jointRevoluteLimitUpperAngleName, mRadToDeg(pJoint->GetUpperLimit()) );
+							pJointNode->addField( jointRevoluteLimitLowerAngleName, mRadToDeg(pJoint->GetLowerLimit()) );
+							pJointNode->addField( jointRevoluteLimitUpperAngleName, mRadToDeg(pJoint->GetUpperLimit()) );
 						}
 
 						// Add motor.
 						if ( pJoint->IsMotorEnabled() )
 						{
 							// Add motor.
-							pJointAlias->addField( jointRevoluteMotorSpeedName, mRadToDeg(pJoint->GetMotorSpeed()) );
-							pJointAlias->addField( jointRevoluteMotorMaxTorqueName, pJoint->GetMaxMotorTorque() );
+							pJointNode->addField( jointRevoluteMotorSpeedName, mRadToDeg(pJoint->GetMotorSpeed()) );
+							pJointNode->addField( jointRevoluteMotorMaxTorqueName, pJoint->GetMaxMotorTorque() );
 						}
 
 						// Add local anchors.
 						if ( mNotZero( pJoint->GetLocalAnchorA().LengthSquared() ) )
-							pJointAlias->addField( jointLocalAnchorAName, pJoint->GetLocalAnchorA() );
+							pJointNode->addField( jointLocalAnchorAName, pJoint->GetLocalAnchorA() );
 						if ( mNotZero( pJoint->GetLocalAnchorB().LengthSquared() ) )
-							pJointAlias->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
+							pJointNode->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
 
 						// Add bodies.
 						if ( pSceneObjectA != NULL )
-							pJointAlias->addField( jointObjectAName, pSceneObjectA );
+							pJointNode->addField( jointObjectAName, pSceneObjectA );
 						if ( pSceneObjectB != NULL )
-							pJointAlias->addField( jointObjectBName, pSceneObjectB );
+							pJointNode->addField( jointObjectBName, pSceneObjectB );
 					}
 					break;
 
 				case e_weldJoint:
 					{
-						// Set alias name.
-						pJointAlias->mAliasName = StringTable->insert( jointWeldTypeName );
+						// Set joint name.
+						pJointNode->mNodeName = StringTable->insert( jointWeldNodeName );
 
 						// Fetch joint.
 						const b2WeldJoint* pJoint = dynamic_cast<const b2WeldJoint*>( pBaseJoint );
@@ -4468,30 +4501,30 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 
 						// Add frequency.
 						if ( mNotZero( pJoint->GetFrequency() ) )
-							pJointAlias->addField( jointWeldFrequencyName, pJoint->GetFrequency() );
+							pJointNode->addField( jointWeldFrequencyName, pJoint->GetFrequency() );
 
 						// Add damping ratio.
 						if ( mNotZero( pJoint->GetDampingRatio() ) )
-							pJointAlias->addField( jointWeldDampingRatioName, pJoint->GetDampingRatio() );
+							pJointNode->addField( jointWeldDampingRatioName, pJoint->GetDampingRatio() );
 
 						// Add local anchors.
 						if ( mNotZero( pJoint->GetLocalAnchorA().LengthSquared() ) )
-							pJointAlias->addField( jointLocalAnchorAName, pJoint->GetLocalAnchorA() );
+							pJointNode->addField( jointLocalAnchorAName, pJoint->GetLocalAnchorA() );
 						if ( mNotZero( pJoint->GetLocalAnchorB().LengthSquared() ) )
-							pJointAlias->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
+							pJointNode->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
 
 						// Add bodies.
 						if ( pSceneObjectA != NULL )
-							pJointAlias->addField( jointObjectAName, pSceneObjectA );
+							pJointNode->addField( jointObjectAName, pSceneObjectA );
 						if ( pSceneObjectB != NULL )
-							pJointAlias->addField( jointObjectBName, pSceneObjectB );
+							pJointNode->addField( jointObjectBName, pSceneObjectB );
 					}
 					break;
 
 				case e_wheelJoint:
 					{
-						// Set alias name.
-						pJointAlias->mAliasName = StringTable->insert( jointWheelTypeName );
+						// Set joint name.
+						pJointNode->mNodeName = StringTable->insert( jointWheelNodeName );
 
 						// Fetch joint.
 						b2WheelJoint* pJoint = dynamic_cast<b2WheelJoint*>( pBaseJoint );
@@ -4503,70 +4536,70 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 						if ( pJoint->IsMotorEnabled() )
 						{
 							// Add motor.
-							pJointAlias->addField( jointWheelMotorSpeedName, mRadToDeg(pJoint->GetMotorSpeed()) );
-							pJointAlias->addField( jointWheelMotorMaxTorqueName, pJoint->GetMaxMotorTorque() );
+							pJointNode->addField( jointWheelMotorSpeedName, mRadToDeg(pJoint->GetMotorSpeed()) );
+							pJointNode->addField( jointWheelMotorMaxTorqueName, pJoint->GetMaxMotorTorque() );
 						}
 
 						// Add frequency.
 						if ( mNotZero( pJoint->GetSpringFrequencyHz() ) )
-							pJointAlias->addField( jointWheelFrequencyName, pJoint->GetSpringFrequencyHz() );
+							pJointNode->addField( jointWheelFrequencyName, pJoint->GetSpringFrequencyHz() );
 
 						// Add damping ratio.
 						if ( mNotZero( pJoint->GetSpringDampingRatio() ) )
-							pJointAlias->addField( jointWheelDampingRatioName, pJoint->GetSpringDampingRatio() );
+							pJointNode->addField( jointWheelDampingRatioName, pJoint->GetSpringDampingRatio() );
 
 						// Add world axis.
-						pJointAlias->addField( jointWheelWorldAxisName, pJoint->GetBodyA()->GetWorldVector( pJoint->GetLocalAxisA() ) );
+						pJointNode->addField( jointWheelWorldAxisName, pJoint->GetBodyA()->GetWorldVector( pJoint->GetLocalAxisA() ) );
 
 						// Add local anchors.
-						pJointAlias->addField( jointLocalAnchorAName, pJoint->GetLocalAnchorA() );
-						pJointAlias->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
+						pJointNode->addField( jointLocalAnchorAName, pJoint->GetLocalAnchorA() );
+						pJointNode->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
 
 						// Add bodies.
 						if ( pSceneObjectA != NULL )
-							pJointAlias->addField( jointObjectAName, pSceneObjectA );
+							pJointNode->addField( jointObjectAName, pSceneObjectA );
 						if ( pSceneObjectB != NULL )
-							pJointAlias->addField( jointObjectBName, pSceneObjectB );
+							pJointNode->addField( jointObjectBName, pSceneObjectB );
 					}
 					break;
 
 				case e_frictionJoint:
 					{
-						// Set alias name.
-						pJointAlias->mAliasName = StringTable->insert( jointFrictionTypeName );
+						// Set joint name.
+						pJointNode->mNodeName = StringTable->insert( jointFrictionNodeName );
 
 						// Fetch joint.
 						const b2FrictionJoint* pJoint = dynamic_cast<const b2FrictionJoint*>( pBaseJoint );
 
 						// Add max force.
 						if ( mNotZero( pJoint->GetMaxForce() ) )
-							pJointAlias->addField( jointFrictionMaxForceName, pJoint->GetMaxForce() );
+							pJointNode->addField( jointFrictionMaxForceName, pJoint->GetMaxForce() );
 
 						// Add max torque.
 						if ( mNotZero( pJoint->GetMaxTorque() ) )
-							pJointAlias->addField( jointFrictionMaxTorqueName, pJoint->GetMaxTorque() );
+							pJointNode->addField( jointFrictionMaxTorqueName, pJoint->GetMaxTorque() );
 
 						// Sanity!
 						AssertFatal( pJoint != NULL, "Scene::onTamlCustomWrite() - Invalid friction joint type returned." );
 
 						// Add local anchors.
 						if ( mNotZero( pJoint->GetLocalAnchorA().LengthSquared() ) )
-							pJointAlias->addField( jointLocalAnchorAName, pJoint->GetLocalAnchorA() );
+							pJointNode->addField( jointLocalAnchorAName, pJoint->GetLocalAnchorA() );
 						if ( mNotZero( pJoint->GetLocalAnchorB().LengthSquared() ) )
-							pJointAlias->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
+							pJointNode->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
 
 						// Add bodies.
 						if ( pSceneObjectA != NULL )
-							pJointAlias->addField( jointObjectAName, pSceneObjectA );
+							pJointNode->addField( jointObjectAName, pSceneObjectA );
 						if ( pSceneObjectB != NULL )
-							pJointAlias->addField( jointObjectBName, pSceneObjectB );
+							pJointNode->addField( jointObjectBName, pSceneObjectB );
 					}
 					break;
 
 				case e_prismaticJoint:
 					{
-						// Set alias name.
-						pJointAlias->mAliasName = StringTable->insert( jointPrismaticTypeName );
+						// Set joint name.
+						pJointNode->mNodeName = StringTable->insert( jointPrismaticNodeName );
 
 						// Fetch joint.
 						b2PrismaticJoint* pJoint = dynamic_cast<b2PrismaticJoint*>( pBaseJoint );
@@ -4578,37 +4611,37 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 						if ( pJoint->IsLimitEnabled() )
 						{
 							// Add limits.
-							pJointAlias->addField( jointPrismaticLimitLowerTransName, pJoint->GetLowerLimit() );
-							pJointAlias->addField( jointPrismaticLimitUpperTransName, pJoint->GetUpperLimit() );
+							pJointNode->addField( jointPrismaticLimitLowerTransName, pJoint->GetLowerLimit() );
+							pJointNode->addField( jointPrismaticLimitUpperTransName, pJoint->GetUpperLimit() );
 						}
 
 						// Add motor.
 						if ( pJoint->IsMotorEnabled() )
 						{
 							// Add motor.
-							pJointAlias->addField( jointPrismaticMotorSpeedName, mRadToDeg(pJoint->GetMotorSpeed()) );
-							pJointAlias->addField( jointPrismaticMotorMaxForceName, pJoint->GetMaxMotorForce() );
+							pJointNode->addField( jointPrismaticMotorSpeedName, mRadToDeg(pJoint->GetMotorSpeed()) );
+							pJointNode->addField( jointPrismaticMotorMaxForceName, pJoint->GetMaxMotorForce() );
 						}
 
 						// Add world axis.
-						pJointAlias->addField( jointPrismaticWorldAxisName, pJoint->GetBodyA()->GetWorldVector( pJoint->GetLocalAxisA() ) );
+						pJointNode->addField( jointPrismaticWorldAxisName, pJoint->GetBodyA()->GetWorldVector( pJoint->GetLocalAxisA() ) );
 
 						// Add local anchors.
-						pJointAlias->addField( jointLocalAnchorAName, pJoint->GetLocalAnchorA() );
-						pJointAlias->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
+						pJointNode->addField( jointLocalAnchorAName, pJoint->GetLocalAnchorA() );
+						pJointNode->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
 
 						// Add bodies.
 						if ( pSceneObjectA != NULL )
-							pJointAlias->addField( jointObjectAName, pSceneObjectA );
+							pJointNode->addField( jointObjectAName, pSceneObjectA );
 						if ( pSceneObjectB != NULL )
-							pJointAlias->addField( jointObjectBName, pSceneObjectB );
+							pJointNode->addField( jointObjectBName, pSceneObjectB );
 					}
 					break;
 
 				case e_pulleyJoint:
 					{
-						// Set alias name.
-						pJointAlias->mAliasName = StringTable->insert( jointPulleyTypeName );
+						// Set joint name.
+						pJointNode->mNodeName = StringTable->insert( jointPulleyNodeName );
 
 						// Fetch joint.
 						b2PulleyJoint* pJoint = dynamic_cast<b2PulleyJoint*>( pBaseJoint );
@@ -4617,32 +4650,32 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 						AssertFatal( pJoint != NULL, "Scene::onTamlCustomWrite() - Invalid pulley joint type returned." );
 
 						// Add lengths.
-						pJointAlias->addField( jointPulleyLengthAName, pJoint->GetLengthA() );
-						pJointAlias->addField( jointPulleyLengthBName, pJoint->GetLengthB() );
+						pJointNode->addField( jointPulleyLengthAName, pJoint->GetLengthA() );
+						pJointNode->addField( jointPulleyLengthBName, pJoint->GetLengthB() );
 
 						// Add ratio,
-						pJointAlias->addField( jointPulleyRatioName, pJoint->GetRatio() );
+						pJointNode->addField( jointPulleyRatioName, pJoint->GetRatio() );
 
 						// Add ground anchors.
-						pJointAlias->addField( jointPulleyGroundAnchorAName, pJoint->GetGroundAnchorA() );
-						pJointAlias->addField( jointPulleyGroundAnchorBName, pJoint->GetGroundAnchorB() );
+						pJointNode->addField( jointPulleyGroundAnchorAName, pJoint->GetGroundAnchorA() );
+						pJointNode->addField( jointPulleyGroundAnchorBName, pJoint->GetGroundAnchorB() );
 
 						// Add local anchors.
-						pJointAlias->addField( jointLocalAnchorAName, pJoint->GetBodyA()->GetLocalPoint( pJoint->GetAnchorA() ) );
-						pJointAlias->addField( jointLocalAnchorBName, pJoint->GetBodyB()->GetLocalPoint( pJoint->GetAnchorB() ) );
+						pJointNode->addField( jointLocalAnchorAName, pJoint->GetBodyA()->GetLocalPoint( pJoint->GetAnchorA() ) );
+						pJointNode->addField( jointLocalAnchorBName, pJoint->GetBodyB()->GetLocalPoint( pJoint->GetAnchorB() ) );
 
 						// Add bodies.
 						if ( pSceneObjectA != NULL )
-							pJointAlias->addField( jointObjectAName, pSceneObjectA );
+							pJointNode->addField( jointObjectAName, pSceneObjectA );
 						if ( pSceneObjectB != NULL )
-							pJointAlias->addField( jointObjectBName, pSceneObjectB );
+							pJointNode->addField( jointObjectBName, pSceneObjectB );
 					}
 					break;
 
 				case e_mouseJoint:
 					{
-						// Set alias name.
-						pJointAlias->mAliasName = StringTable->insert( jointTargetTypeName );
+						// Set joint name.
+						pJointNode->mNodeName = StringTable->insert( jointTargetNodeName );
 
 						// Fetch joint.
 						const b2MouseJoint* pJoint = dynamic_cast<const b2MouseJoint*>( pBaseJoint );
@@ -4651,29 +4684,29 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 						AssertFatal( pJoint != NULL, "Scene::onTamlCustomWrite() - Invalid target joint type returned." );
 
 						// Add target.
-						pJointAlias->addField( jointTargetWorldTargetName, pJoint->GetTarget() );
+						pJointNode->addField( jointTargetWorldTargetName, pJoint->GetTarget() );
 
 						// Add max force.
-						pJointAlias->addField( jointTargetMaxForceName, pJoint->GetMaxForce() );
+						pJointNode->addField( jointTargetMaxForceName, pJoint->GetMaxForce() );
 
 						// Add frequency
-						pJointAlias->addField( jointTargetFrequencyName, pJoint->GetFrequency() );
+						pJointNode->addField( jointTargetFrequencyName, pJoint->GetFrequency() );
 
 						// Add damping ratio.
-						pJointAlias->addField( jointTargetDampingRatioName, pJoint->GetDampingRatio() );
+						pJointNode->addField( jointTargetDampingRatioName, pJoint->GetDampingRatio() );
 
 						// Add body.
 						// NOTE: This joint uses BODYB as the object, BODYA is the ground-body however for easy of use
 						// we'll refer to this as OBJECTA in the persisted format.
 						if ( pSceneObjectB != NULL )
-							pJointAlias->addField( jointObjectAName, pSceneObjectB );
+							pJointNode->addField( jointObjectAName, pSceneObjectB );
 					}
 					break;
 
 				case e_motorJoint:
 					{
-						// Set alias name.
-						pJointAlias->mAliasName = StringTable->insert( jointMotorTypeName );
+						// Set joint name.
+						pJointNode->mNodeName = StringTable->insert( jointMotorNodeName );
 
 						// Fetch joint.
 						const b2MotorJoint* pJoint = dynamic_cast<const b2MotorJoint*>( pBaseJoint );
@@ -4683,26 +4716,26 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 
 						// Add linear offset.
 						if ( mNotZero( pJoint->GetLinearOffset().LengthSquared() ) )
-							pJointAlias->addField( jointMotorLinearOffsetName, pJoint->GetLinearOffset() );
+							pJointNode->addField( jointMotorLinearOffsetName, pJoint->GetLinearOffset() );
 
 						// Add angular offset.
 						if ( mNotZero( pJoint->GetAngularOffset() ) )
-							pJointAlias->addField( jointMotorAngularOffsetName, mRadToDeg( pJoint->GetAngularOffset() ) );
+							pJointNode->addField( jointMotorAngularOffsetName, mRadToDeg( pJoint->GetAngularOffset() ) );
 
 						// Add max force.
-						pJointAlias->addField( jointMotorMaxForceName, pJoint->GetMaxForce() );
+						pJointNode->addField( jointMotorMaxForceName, pJoint->GetMaxForce() );
 
 						// Add max torque.
-						pJointAlias->addField( jointMotorMaxTorqueName, pJoint->GetMaxTorque() );
+						pJointNode->addField( jointMotorMaxTorqueName, pJoint->GetMaxTorque() );
 
 						// Add correction factor.
-						pJointAlias->addField( jointMotorCorrectionFactorName, pJoint->GetCorrectionFactor() );
+						pJointNode->addField( jointMotorCorrectionFactorName, pJoint->GetCorrectionFactor() );
 
 						// Add bodies.
 						if ( pSceneObjectA != NULL )
-							pJointAlias->addField( jointObjectAName, pSceneObjectA );
+							pJointNode->addField( jointObjectAName, pSceneObjectA );
 						if ( pSceneObjectB != NULL )
-							pJointAlias->addField( jointObjectBName, pSceneObjectB );
+							pJointNode->addField( jointObjectBName, pSceneObjectB );
 					}
 					break;
 
@@ -4713,7 +4746,7 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 
 			// Add collide connected flag.
 			if ( pBaseJoint->GetCollideConnected() )
-				pJointAlias->addField( jointCollideConnectedName, pBaseJoint->GetCollideConnected() );
+				pJointNode->addField( jointCollideConnectedName, pBaseJoint->GetCollideConnected() );
 		}
 	}
 
@@ -4723,8 +4756,8 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 	// Do we have any scene controllers?
 	if ( sceneControllerCount > 0 )
 	{
-		// Yes, so add controller property.
-		TamlCustomProperty* pControllerProperty = customProperties.addProperty( controllerCustomNodeName );
+		// Yes, so add controller node.
+        TamlCustomNode* pControllerCustonNode = customNodes.addNode( controllerCustomNodeName );
 
 		// Fetch the scene controllers.
 		SimSet* pControllerSet = getControllers();
