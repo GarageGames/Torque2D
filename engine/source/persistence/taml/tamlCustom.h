@@ -64,11 +64,6 @@ class TamlCustomNodeField : public IFactoryObjectReset
 public:
     TamlCustomNodeField()
     {
-        // Reset field object.
-        // NOTE: This MUST be done before the state is reset otherwise we'll be touching uninitialized stuff.
-        mpFieldWriteNode = NULL;
-        mpFieldObject = NULL;
-
         resetState();
     }
 
@@ -80,13 +75,13 @@ public:
         // pretty much anything or everything could be invalid!
     }
 
-    virtual void resetState( void );
+    virtual void resetState( void )
+    {
+        mFieldName = StringTable->EmptyString;
+        *mFieldValue = 0;
+    }
 
     void set( const char* pFieldName, const char* pFieldValue );
-
-    void set( const char* pFieldName, SimObject* pFieldObject );
-
-    void setWriteNode( TamlWriteNode* pWriteNode );
 
     inline void getFieldValue( ColorF& fieldValue ) const
     {
@@ -158,12 +153,6 @@ public:
         return mFieldValue;
     }
 
-    SimObject* getFieldObject( void ) const;
-
-    inline const TamlWriteNode* getWriteNode( void ) const { return mpFieldWriteNode; }
-
-    bool isObjectField( void ) const;
-
     inline StringTableEntry getFieldName( void ) const { return mFieldName; }
 
     bool fieldNameBeginsWith( const char* pComparison )
@@ -191,8 +180,6 @@ public:
 private:
     StringTableEntry    mFieldName;
     char                mFieldValue[MAX_TAML_NODE_FIELDVALUE_LENGTH];
-    SimObject*          mpFieldObject;
-    TamlWriteNode*      mpFieldWriteNode;
 };
 
 static FactoryCache<TamlCustomNodeField> TamlCustomNodeFieldFactory;
@@ -205,6 +192,11 @@ class TamlCustomNode : public IFactoryObjectReset
 public:
     TamlCustomNode()
     {
+        // Reset proxy object.
+        // NOTE: This MUST be done before the state is reset otherwise we'll be touching uninitialized stuff.
+        mpProxyWriteNode = NULL;
+        mpProxyObject = NULL;
+
         resetState();
     }
 
@@ -218,6 +210,10 @@ public:
 
     virtual void resetState( void )
     {
+        // We don't need to delete the write node as it'll get destroyed when the compilation is reset!
+        mpProxyWriteNode = NULL;
+        mpProxyObject = NULL;
+
         // Cache the children.
         while ( mChildren.size() > 0 )
         {
@@ -246,6 +242,10 @@ public:
 
         mNodeName = StringTable->insert( pNodeName );
     }
+
+    void set( const char* pNodeName, SimObject* pProxyObject );
+
+    void setWriteNode( TamlWriteNode* pWriteNode );
 
     TamlCustomNode* addNode( const char* pNodeName, const bool ignoreEmpty = true )
     {
@@ -467,6 +467,12 @@ public:
         return NULL;
     }
 
+    inline bool isProxyObject( void ) const { return mpProxyObject != NULL; }
+    SimObject* getProxyObject( void ) const { return mpProxyObject != NULL ? mpProxyObject : NULL; }
+    inline const TamlWriteNode* getProxyWriteNode( void ) const { return mpProxyWriteNode; }
+
+
+
     const TamlCustomNodeVector& getChildren( void ) const { return mChildren; }
     const TamlCustomFieldVector& getFields( void ) const { return mFields; }
 
@@ -474,6 +480,9 @@ public:
     Vector<TamlCustomNode*> mChildren;
     TamlCustomFieldVector   mFields;
     bool                    mIgnoreEmpty;
+
+    SimObject*              mpProxyObject;
+    TamlWriteNode*          mpProxyWriteNode;
 };
 
 static FactoryCache<TamlCustomNode> TamlCustomNodeFactory;
