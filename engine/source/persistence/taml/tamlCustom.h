@@ -196,7 +196,7 @@ private:
 };
 
 static FactoryCache<TamlCustomNodeField> TamlCustomNodeFieldFactory;
-typedef Vector<TamlCustomNodeField*> TamlCustomNodeFieldVector;
+typedef Vector<TamlCustomNodeField*> TamlCustomFieldVector;
 
 //-----------------------------------------------------------------------------
 
@@ -429,7 +429,7 @@ public:
 
 #if TORQUE_DEBUG
         // Ensure a field name conflict does not exist.
-        for( TamlCustomNodeFieldVector::iterator nodeFieldItr = mFields.begin(); nodeFieldItr != mFields.end(); ++nodeFieldItr )
+        for( TamlCustomFieldVector::iterator nodeFieldItr = mFields.begin(); nodeFieldItr != mFields.end(); ++nodeFieldItr )
         {
             // Skip if field name is not the same.
             if ( pNodeField->getFieldName() != (*nodeFieldItr)->getFieldName() )
@@ -458,7 +458,7 @@ public:
         StringTableEntry fieldName = StringTable->insert( pFieldName );
 
         // Find node field.
-        for( TamlCustomNodeFieldVector::const_iterator fieldItr = mFields.begin(); fieldItr != mFields.end(); ++fieldItr )
+        for( TamlCustomFieldVector::const_iterator fieldItr = mFields.begin(); fieldItr != mFields.end(); ++fieldItr )
         {
             if ( (*fieldItr)->getFieldName() == fieldName )
                 return (*fieldItr);
@@ -468,12 +468,12 @@ public:
     }
 
     const TamlCustomNodeVector& getChildren( void ) const { return mChildren; }
-    const TamlCustomNodeFieldVector& getFields( void ) const { return mFields; }
+    const TamlCustomFieldVector& getFields( void ) const { return mFields; }
 
-    StringTableEntry            mNodeName;
-    Vector<TamlCustomNode*>     mChildren;
-    TamlCustomNodeFieldVector   mFields;
-    bool                        mIgnoreEmpty;
+    StringTableEntry        mNodeName;
+    Vector<TamlCustomNode*> mChildren;
+    TamlCustomFieldVector   mFields;
+    bool                    mIgnoreEmpty;
 };
 
 static FactoryCache<TamlCustomNode> TamlCustomNodeFactory;

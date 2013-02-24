@@ -695,7 +695,7 @@ void Taml::compileCustomProperties( TamlWriteNode* pTamlWriteNode )
             TamlPropertyAlias* pAlias = *typeAliasItr;
 
             // Iterate the fields.
-            for( TamlCustomNodeFieldVector::iterator fieldItr = pAlias->begin(); fieldItr != pAlias->end(); ++fieldItr )
+            for( TamlCustomFieldVector::iterator fieldItr = pAlias->begin(); fieldItr != pAlias->end(); ++fieldItr )
             {
                 TamlCustomNodeField* pPropertyField = *fieldItr;
 

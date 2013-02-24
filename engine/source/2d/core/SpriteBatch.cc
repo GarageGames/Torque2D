@@ -1160,7 +1160,7 @@ void SpriteBatch::destroySpriteBatchTree( void )
 
 //------------------------------------------------------------------------------
 
-void SpriteBatch::onTamlCustomWrite( TamlCustomProperty* pSpritesProperty )
+void SpriteBatch::onTamlCustomWrite( TamlCustomNode* pSpritesNode )
 {
     // Debug Profiling.
     PROFILE_SCOPE(SpriteBatch_TamlCustomWrite);
@@ -1181,7 +1181,7 @@ void SpriteBatch::onTamlCustomWrite( TamlCustomProperty* pSpritesProperty )
 
 //------------------------------------------------------------------------------
 
-void SpriteBatch::onTamlCustomRead( const TamlCustomProperty* pSpritesProperty )
+void SpriteBatch::onTamlCustomRead( const TamlCustomNode* pSpritesNode )
 {
     // Debug Profiling.
     PROFILE_SCOPE(SpriteBatch_TamlCustomRead);

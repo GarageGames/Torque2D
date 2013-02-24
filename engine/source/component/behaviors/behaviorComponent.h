@@ -34,8 +34,8 @@
 //-----------------------------------------------------------------------------
 
 #define BEHAVIOR_ID_FIELD_NAME                  "Id"
-#define BEHAVIOR_CUSTOMPROPERTY_NAME                "Behaviors"
-#define BEHAVIOR_CONNECTION_CUSTOMPROPERTY_NAME     "BehaviorConnections"
+#define BEHAVIOR_NODE_NAME                      "Behaviors"
+#define BEHAVIOR_CONNECTION_NODE_NAME           "BehaviorConnections"
 #define BEHAVIOR_CONNECTION_TYPE_NAME           "Connection"
 
 //-----------------------------------------------------------------------------

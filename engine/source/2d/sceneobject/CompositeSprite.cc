@@ -393,11 +393,11 @@ void CompositeSprite::onTamlCustomWrite( TamlCustomNodes& customNodes )
     if ( spriteCount == 0 )
         return;
 
-    // Add sprites property.
-    TamlCustomProperty* pSpritesProperty = customProperties.addProperty( StringTable->insert("Sprites") );
+    // Add sprites node.
+    TamlCustomNode* pSpritesNode = customNodes.addNode( StringTable->insert("Sprites") );
 
     // Write property with sprite batch.
-    SpriteBatch::onTamlCustomWrite( pSpritesProperty );
+    SpriteBatch::onTamlCustomWrite( pSpritesNode );
 }
 
 //-----------------------------------------------------------------------------
