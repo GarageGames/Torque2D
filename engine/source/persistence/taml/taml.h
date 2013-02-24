@@ -108,6 +108,7 @@ private:
     void compileDynamicFields( TamlWriteNode* pTamlWriteNode );
     void compileChildren( TamlWriteNode* pTamlWriteNode );
     void compileCustomState( TamlWriteNode* pTamlWriteNode );
+    void compileCustomNodeState( TamlCustomNode* pCustomNode );
 
     bool write( FileStream& stream, SimObject* pSimObject, const TamlFormatMode formatMode );
     SimObject* read( FileStream& stream, const TamlFormatMode formatMode );

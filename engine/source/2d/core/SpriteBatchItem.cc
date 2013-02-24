@@ -428,7 +428,7 @@ void SpriteBatchItem::onTamlCustomWrite( TamlCustomNode* pSpriteNode )
 
     // Write data object.
     if ( getDataObject() != NULL )
-        pSpriteNode->addField( spriteDataObjectName, getDataObject() );
+        pSpriteNode->addNode( getDataObject() );
 }
 
 //------------------------------------------------------------------------------
@@ -573,9 +573,12 @@ void SpriteBatchItem::onTamlCustomRead( const TamlCustomNode* pSpriteNode )
             // Set logical position.
             setLogicalPosition( LogicalPosition( pLogicalPositionArgs ) );
         }
-        else if ( fieldName == spriteDataObjectName )
-        {            
-            setDataObject( pSpriteField->getFieldObject() );
-        }
     }
+
+    // Fetch sprite children.
+    const TamlCustomNodeVector& spriteChildren = pSpriteNode->getChildren();
+
+    // Set the data object if a single child exists.
+    if ( spriteChildren.size() == 1 )
+        setDataObject( spriteChildren[0]->composeProxyObject<SimObject>() );
 }

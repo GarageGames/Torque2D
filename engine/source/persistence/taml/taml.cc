@@ -446,8 +446,8 @@ TamlWriteNode* Taml::compileObject( SimObject* pSimObject )
     // Compile children.
     compileChildren( pNewNode );
 
-    // Compile custom properties.
-    compileCustomProperties( pNewNode );
+    // Compile custom state.
+    compileCustomState( pNewNode );
 
     // Are there any Taml callbacks?
     if ( pNewNode->mpTamlCallbacks != NULL )
@@ -692,66 +692,49 @@ void Taml::compileCustomState( TamlWriteNode* pTamlWriteNode )
     {
         // Fetch the custom node.
         TamlCustomNode* pCustomNode = *customNodesItr;
-        
-        // Iterate alias.
-        for( TamlPropertyAliasVector::iterator typeAliasItr = pCustomProperty->begin(); typeAliasItr != pCustomProperty->end(); ++typeAliasItr )
-        {
-            TamlPropertyAlias* pAlias = *typeAliasItr;
 
-            // Iterate the fields.
-            for( TamlCustomFieldVector::iterator fieldItr = pAlias->begin(); fieldItr != pAlias->end(); ++fieldItr )
-            {
-                TamlCustomNodeField* pPropertyField = *fieldItr;
-
-                // Skip if not an object field.
-                if ( !pPropertyField->isObjectField() )
-                    continue;
-
-                // Compile the object.
-                TamlWriteNode* pCompiledWriteNode = compileObject( pPropertyField->getFieldObject() );
-
-                // Set reference field.
-                pCompiledWriteNode->mRefField = pPropertyField->getFieldName();
-
-                // Set the write node for the property field.
-                pPropertyField->setWriteNode( pCompiledWriteNode );
-            }
-        }
+        // Compile custom node state.
+        compileCustomNodeState( pCustomNode );
     }
+}
 
-#if 0
-    // Iterate the custom properties removing ignored items.
-    for( S32 customPropertyIndex = 0; customPropertyIndex < customProperties.size(); ++customPropertyIndex )
+//-----------------------------------------------------------------------------
+
+void Taml::compileCustomNodeState( TamlCustomNode* pCustomNode )
+{
+    // Sanity!
+    AssertFatal( pCustomNode != NULL, "Taml: Cannot compile NULL custom node state." );
+
+    // Fetch children.
+    const TamlCustomNodeVector& children = pCustomNode->getChildren();
+
+    // Fetch proxy object.
+    SimObject* pProxyObject = pCustomNode->getProxyObject();
+
+    // Do we have a proxy object?
+    if ( pProxyObject != NULL )
     {
-        // Fetch the custom property.
-        TamlCustomProperty* pCustomProperty = customProperties.at( customPropertyIndex );
+        // Yes, so sanity!
+        AssertFatal( children.size() == 0, "Taml: Cannot compile a proxy object on a custom node that has children." );
 
-        // Skip if we are not ignoring the custom property if empty.
-        if ( !pCustomProperty->mIgnoreEmpty )
-            continue;
-
-        // Iterate the alias.
-        for ( S32 typeAliasIndex = 0; typeAliasIndex < pCustomProperty->size(); ++typeAliasIndex )
-        {
-            // Fetch the alias.
-            TamlPropertyAlias* pAlias = pCustomProperty->at( typeAliasIndex );
-
-            // Skip If we're not ignoring the alias or the custom property is not empty.
-            if ( !pAlias->mIgnoreEmpty && pAlias->size() != 0 )
-                continue;
-
-            // Remove the alias.
-            pCustomProperty->removeAlias( typeAliasIndex-- );
-        }
-
-        // Skip if the custom property is not empty.
-        if ( pCustomProperty->size() != 0 )
-            continue;
-
-        // Remove the custom property.
-        customProperties.removeProperty( customPropertyIndex-- );
+        // Yes, so compile it.
+        pCustomNode->setWriteNode( compileObject( pProxyObject ) );
+        return;
     }
-#endif
+
+    // Finish if no children.
+    if ( children.size() == 0 )
+        return;
+
+    // Iterate children.
+    for( TamlCustomNodeVector::const_iterator childItr = children.begin(); childItr != children.end(); ++childItr )
+    {
+        // Fetch shape node.
+        TamlCustomNode* pChildNode = *childItr;
+
+        // Compile the child.
+        compileCustomNodeState( pChildNode );
+    }
 }
 
 //-----------------------------------------------------------------------------

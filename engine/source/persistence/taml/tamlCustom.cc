@@ -53,25 +53,6 @@ void TamlCustomNodeField::set( const char* pFieldName, const char* pFieldValue )
 
 //-----------------------------------------------------------------------------
 
-void TamlCustomNode::set( const char* pFieldName, SimObject* pProxyObject )
-{
-    // Sanity!
-    AssertFatal( pFieldName != NULL, "Field name cannot be NULL." );
-    AssertFatal( pProxyObject != NULL, "Field object cannot be NULL." );
-    AssertFatal( mpProxyWriteNode == NULL, "Field write node must be NULL." );
-
-    // Set node name.
-    mNodeName = StringTable->insert( pFieldName );
-
-    // Set proxy object.
-    mpProxyObject = pProxyObject;
-
-    // Remove any existing proxy write node.
-    SAFE_DELETE( mpProxyWriteNode );
-}
-
-//-----------------------------------------------------------------------------
-
 void TamlCustomNode::setWriteNode( TamlWriteNode* pWriteNode )
 {
     // Sanity!
@@ -83,5 +64,4 @@ void TamlCustomNode::setWriteNode( TamlWriteNode* pWriteNode )
     // Set proxy write node.
     mpProxyWriteNode = pWriteNode;
 }
-
 

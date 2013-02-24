@@ -243,9 +243,27 @@ public:
         mNodeName = StringTable->insert( pNodeName );
     }
 
-    void set( const char* pNodeName, SimObject* pProxyObject );
-
     void setWriteNode( TamlWriteNode* pWriteNode );
+
+    TamlCustomNode* addNode( SimObject* pProxyObject )
+    {
+        // Sanity!
+        AssertFatal( pNodeName != NULL, "Field name cannot be NULL." );
+        AssertFatal( pProxyObject != NULL, "Field object cannot be NULL." );
+        AssertFatal( mpProxyWriteNode == NULL, "Field write node must be NULL." );
+
+        // Create a custom node.
+        TamlCustomNode* pCustomNode = TamlCustomNodeFactory.createObject();
+
+        // Set node name.
+        mNodeName = StringTable->insert( pProxyObject->getClassName() );
+
+        // Set proxy object.
+        mpProxyObject = pProxyObject;
+
+        // Remove any existing proxy write node.
+        SAFE_DELETE( mpProxyWriteNode );
+    }
 
     TamlCustomNode* addNode( const char* pNodeName, const bool ignoreEmpty = true )
     {
@@ -470,8 +488,10 @@ public:
     inline bool isProxyObject( void ) const { return mpProxyObject != NULL; }
     SimObject* getProxyObject( void ) const { return mpProxyObject != NULL ? mpProxyObject : NULL; }
     inline const TamlWriteNode* getProxyWriteNode( void ) const { return mpProxyWriteNode; }
-
-
+    template<typename T> T* composeProxyObject( void ) const
+    {
+        return NULL;
+    }
 
     const TamlCustomNodeVector& getChildren( void ) const { return mChildren; }
     const TamlCustomFieldVector& getFields( void ) const { return mFields; }

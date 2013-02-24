@@ -83,8 +83,6 @@ static bool tamlPropertiesInitialized = false;
 // Joint property names.
 static StringTableEntry jointCustomNodeName;
 static StringTableEntry jointCollideConnectedName;
-static StringTableEntry jointObjectAName;
-static StringTableEntry jointObjectBName;
 static StringTableEntry jointLocalAnchorAName;
 static StringTableEntry jointLocalAnchorBName;
 
@@ -184,8 +182,6 @@ Scene::Scene() :
     {
         jointCustomNodeName           = StringTable->insert( "Joints" );
         jointCollideConnectedName         = StringTable->insert( "CollideConnected" );
-        jointObjectAName                  = StringTable->insert( "AnchorA" );
-        jointObjectBName                  = StringTable->insert( "AnchorB" );
         jointLocalAnchorAName             = StringTable->insert( "LocalAnchorA" );
         jointLocalAnchorBName             = StringTable->insert( "LocalAnchorB" );
 
@@ -3647,8 +3643,21 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
         // Is this a distance joint?
         if ( nodeName == jointDistanceNodeName )
         {
-            SceneObject* pSceneObjectA = NULL;
-            SceneObject* pSceneObjectB = NULL;
+            // Fetch joint children.
+            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+            // Fetch joint objects.
+            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+
+            // Did we get any connected objects?
+            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+            {
+                // No, so warn.
+                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                continue;
+            }
+
             b2Vec2 localAnchorA = b2Vec2_zero;
             b2Vec2 localAnchorB = b2Vec2_zero;
             bool collideConnected = false;
@@ -3670,15 +3679,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
-                if ( fieldName == jointObjectAName )
-                {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointObjectBName )
-                {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointLocalAnchorAName )
+                if ( fieldName == jointLocalAnchorAName )
                 {
                     pFieldNode->getFieldValue( localAnchorA );
                 }
@@ -3710,8 +3711,21 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
         // is this a rope joint?
         else if ( nodeName == jointRopeNodeName )
         {
-            SceneObject* pSceneObjectA = NULL;
-            SceneObject* pSceneObjectB = NULL;
+            // Fetch joint children.
+            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+            // Fetch joint objects.
+            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+
+            // Did we get any connected objects?
+            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+            {
+                // No, so warn.
+                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                continue;
+            }
+
             b2Vec2 localAnchorA = b2Vec2_zero;
             b2Vec2 localAnchorB = b2Vec2_zero;
             bool collideConnected = false;
@@ -3731,15 +3745,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
-                if ( fieldName == jointObjectAName )
-                {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointObjectBName )
-                {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointLocalAnchorAName )
+                if ( fieldName == jointLocalAnchorAName )
                 {
                     pFieldNode->getFieldValue( localAnchorA );
                 }
@@ -3763,8 +3769,21 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
         // Is this a revolute joint?
         else if ( nodeName == jointRevoluteNodeName )
         {
-            SceneObject* pSceneObjectA = NULL;
-            SceneObject* pSceneObjectB = NULL;
+            // Fetch joint children.
+            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+            // Fetch joint objects.
+            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+
+            // Did we get any connected objects?
+            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+            {
+                // No, so warn.
+                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                continue;
+            }
+
             b2Vec2 localAnchorA = b2Vec2_zero;
             b2Vec2 localAnchorB = b2Vec2_zero;
             bool collideConnected = false;
@@ -3790,15 +3809,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
-                if ( fieldName == jointObjectAName )
-                {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointObjectBName )
-                {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointLocalAnchorAName )
+                if ( fieldName == jointLocalAnchorAName )
                 {
                     pFieldNode->getFieldValue( localAnchorA );
                 }
@@ -3847,8 +3858,21 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
         // is this a weld joint?
         else if ( nodeName == jointWeldNodeName )
         {
-            SceneObject* pSceneObjectA = NULL;
-            SceneObject* pSceneObjectB = NULL;
+            // Fetch joint children.
+            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+            // Fetch joint objects.
+            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+
+            // Did we get any connected objects?
+            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+            {
+                // No, so warn.
+                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                continue;
+            }
+
             b2Vec2 localAnchorA = b2Vec2_zero;
             b2Vec2 localAnchorB = b2Vec2_zero;
             bool collideConnected = false;
@@ -3869,15 +3893,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
-                if ( fieldName == jointObjectAName )
-                {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointObjectBName )
-                {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointLocalAnchorAName )
+                if ( fieldName == jointLocalAnchorAName )
                 {
                     pFieldNode->getFieldValue( localAnchorA );
                 }
@@ -3905,8 +3921,21 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
         // Is this a wheel joint?
         else if ( nodeName == jointWheelNodeName )
         {
-            SceneObject* pSceneObjectA = NULL;
-            SceneObject* pSceneObjectB = NULL;
+            // Fetch joint children.
+            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+            // Fetch joint objects.
+            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+
+            // Did we get any connected objects?
+            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+            {
+                // No, so warn.
+                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                continue;
+            }
+
             b2Vec2 localAnchorA = b2Vec2_zero;
             b2Vec2 localAnchorB = b2Vec2_zero;
             bool collideConnected = false;
@@ -3932,15 +3961,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
-                if ( fieldName == jointObjectAName )
-                {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointObjectBName )
-                {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointLocalAnchorAName )
+                if ( fieldName == jointLocalAnchorAName )
                 {
                     pFieldNode->getFieldValue( localAnchorA );
                 }
@@ -3989,8 +4010,21 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
         // Is this a friction joint?
         else if ( nodeName == jointFrictionNodeName )
         {
-            SceneObject* pSceneObjectA = NULL;
-            SceneObject* pSceneObjectB = NULL;
+            // Fetch joint children.
+            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+            // Fetch joint objects.
+            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+
+            // Did we get any connected objects?
+            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+            {
+                // No, so warn.
+                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                continue;
+            }
+
             b2Vec2 localAnchorA = b2Vec2_zero;
             b2Vec2 localAnchorB = b2Vec2_zero;
             bool collideConnected = false;
@@ -4011,15 +4045,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
-                if ( fieldName == jointObjectAName )
-                {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointObjectBName )
-                {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointLocalAnchorAName )
+                if ( fieldName == jointLocalAnchorAName )
                 {
                     pFieldNode->getFieldValue( localAnchorA );
                 }
@@ -4047,8 +4073,21 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
         // Is this a prismatic joint?
         else if ( nodeName == jointPrismaticNodeName )
         {
-            SceneObject* pSceneObjectA = NULL;
-            SceneObject* pSceneObjectB = NULL;
+            // Fetch joint children.
+            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+            // Fetch joint objects.
+            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+
+            // Did we get any connected objects?
+            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+            {
+                // No, so warn.
+                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                continue;
+            }
+
             b2Vec2 localAnchorA = b2Vec2_zero;
             b2Vec2 localAnchorB = b2Vec2_zero;
             bool collideConnected = false;
@@ -4076,15 +4115,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
-                if ( fieldName == jointObjectAName )
-                {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointObjectBName )
-                {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointLocalAnchorAName )
+                if ( fieldName == jointLocalAnchorAName )
                 {
                     pFieldNode->getFieldValue( localAnchorA );
                 }
@@ -4135,8 +4166,21 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
         // Is this a pulley joint?
         else if ( nodeName == jointPulleyNodeName )
         {
-            SceneObject* pSceneObjectA = NULL;
-            SceneObject* pSceneObjectB = NULL;
+            // Fetch joint children.
+            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+            // Fetch joint objects.
+            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+
+            // Did we get any connected objects?
+            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+            {
+                // No, so warn.
+                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                continue;
+            }
+
             b2Vec2 localAnchorA = b2Vec2_zero;
             b2Vec2 localAnchorB = b2Vec2_zero;
             bool collideConnected = false;
@@ -4160,15 +4204,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
-                if ( fieldName == jointObjectAName )
-                {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointObjectBName )
-                {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointLocalAnchorAName )
+                if ( fieldName == jointLocalAnchorAName )
                 {
                     pFieldNode->getFieldValue( localAnchorA );
                 }
@@ -4209,7 +4245,20 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
         // Is this a target joint?
         else if ( nodeName == jointTargetNodeName )
         {
-            SceneObject* pSceneObject = NULL;
+            // Fetch joint children.
+            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+            // Fetch joint objects.
+            SceneObject* pSceneObject = jointChildren.size() == 1 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+
+            // Did we get any connected objects?
+            if( pSceneObject == NULL )
+            {
+                // No, so warn.
+                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has an invalid connected object.", nodeName );
+                continue;
+            }
+
             bool collideConnected = false;
             b2Vec2 worldTarget = b2Vec2_zero;
             F32 maxForce = 1.0f;
@@ -4229,11 +4278,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
-                if ( fieldName == jointObjectAName )
-                {
-                    pSceneObject = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointCollideConnectedName )
+                if ( fieldName == jointCollideConnectedName )
                 {
                     pFieldNode->getFieldValue( collideConnected );
                 }
@@ -4261,8 +4306,21 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
         // Is this a motor joint?
         else if ( nodeName == jointMotorNodeName )
         {
-            SceneObject* pSceneObjectA = NULL;
-            SceneObject* pSceneObjectB = NULL;
+            // Fetch joint children.
+            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+            // Fetch joint objects.
+            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+
+            // Did we get any connected objects?
+            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+            {
+                // No, so warn.
+                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                continue;
+            }
+
             bool collideConnected = false;
 
             b2Vec2 linearOffset = b2Vec2_zero;
@@ -4284,15 +4342,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Fetch fields.
-                if ( fieldName == jointObjectAName )
-                {
-                    pSceneObjectA = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointObjectBName )
-                {
-                    pSceneObjectB = dynamic_cast<SceneObject*>( pFieldNode->getFieldObject() );
-                }
-                else if ( fieldName == jointCollideConnectedName )
+                if ( fieldName == jointCollideConnectedName )
                 {
                     pFieldNode->getFieldValue( collideConnected );
                 }
@@ -4410,11 +4460,12 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 						if ( mNotZero( pJoint->GetLocalAnchorB().LengthSquared() ) )
 							pJointNode->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
 
-						// Add bodies.
+						// Add scene object bodies.
 						if ( pSceneObjectA != NULL )
-							pJointNode->addField( jointObjectAName, pSceneObjectA );
+                            pJointNode->addNode( pSceneObjectA );
+
 						if ( pSceneObjectB != NULL )
-							pJointNode->addField( jointObjectBName, pSceneObjectB );
+                            pJointNode->addNode( pSceneObjectB );
 					}
 					break;
 
@@ -4439,11 +4490,12 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 						if ( mNotZero( pJoint->GetLocalAnchorB().LengthSquared() ) )
 							pJointNode->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
 
-						// Add bodies.
+						// Add scene object bodies.
 						if ( pSceneObjectA != NULL )
-							pJointNode->addField( jointObjectAName, pSceneObjectA );
+                            pJointNode->addNode( pSceneObjectA );
+
 						if ( pSceneObjectB != NULL )
-							pJointNode->addField( jointObjectBName, pSceneObjectB );
+                            pJointNode->addNode( pSceneObjectB );
 					}
 					break;
 
@@ -4480,11 +4532,12 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 						if ( mNotZero( pJoint->GetLocalAnchorB().LengthSquared() ) )
 							pJointNode->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
 
-						// Add bodies.
+						// Add scene object bodies.
 						if ( pSceneObjectA != NULL )
-							pJointNode->addField( jointObjectAName, pSceneObjectA );
+                            pJointNode->addNode( pSceneObjectA );
+
 						if ( pSceneObjectB != NULL )
-							pJointNode->addField( jointObjectBName, pSceneObjectB );
+                            pJointNode->addNode( pSceneObjectB );
 					}
 					break;
 
@@ -4513,11 +4566,12 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 						if ( mNotZero( pJoint->GetLocalAnchorB().LengthSquared() ) )
 							pJointNode->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
 
-						// Add bodies.
+						// Add scene object bodies.
 						if ( pSceneObjectA != NULL )
-							pJointNode->addField( jointObjectAName, pSceneObjectA );
+                            pJointNode->addNode( pSceneObjectA );
+
 						if ( pSceneObjectB != NULL )
-							pJointNode->addField( jointObjectBName, pSceneObjectB );
+                            pJointNode->addNode( pSceneObjectB );
 					}
 					break;
 
@@ -4555,11 +4609,12 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 						pJointNode->addField( jointLocalAnchorAName, pJoint->GetLocalAnchorA() );
 						pJointNode->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
 
-						// Add bodies.
+						// Add scene object bodies.
 						if ( pSceneObjectA != NULL )
-							pJointNode->addField( jointObjectAName, pSceneObjectA );
+                            pJointNode->addNode( pSceneObjectA );
+
 						if ( pSceneObjectB != NULL )
-							pJointNode->addField( jointObjectBName, pSceneObjectB );
+                            pJointNode->addNode( pSceneObjectB );
 					}
 					break;
 
@@ -4588,11 +4643,12 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 						if ( mNotZero( pJoint->GetLocalAnchorB().LengthSquared() ) )
 							pJointNode->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
 
-						// Add bodies.
+						// Add scene object bodies.
 						if ( pSceneObjectA != NULL )
-							pJointNode->addField( jointObjectAName, pSceneObjectA );
+                            pJointNode->addNode( pSceneObjectA );
+
 						if ( pSceneObjectB != NULL )
-							pJointNode->addField( jointObjectBName, pSceneObjectB );
+                            pJointNode->addNode( pSceneObjectB );
 					}
 					break;
 
@@ -4630,11 +4686,12 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 						pJointNode->addField( jointLocalAnchorAName, pJoint->GetLocalAnchorA() );
 						pJointNode->addField( jointLocalAnchorBName, pJoint->GetLocalAnchorB() );
 
-						// Add bodies.
+						// Add scene object bodies.
 						if ( pSceneObjectA != NULL )
-							pJointNode->addField( jointObjectAName, pSceneObjectA );
+                            pJointNode->addNode( pSceneObjectA );
+
 						if ( pSceneObjectB != NULL )
-							pJointNode->addField( jointObjectBName, pSceneObjectB );
+                            pJointNode->addNode( pSceneObjectB );
 					}
 					break;
 
@@ -4664,11 +4721,12 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 						pJointNode->addField( jointLocalAnchorAName, pJoint->GetBodyA()->GetLocalPoint( pJoint->GetAnchorA() ) );
 						pJointNode->addField( jointLocalAnchorBName, pJoint->GetBodyB()->GetLocalPoint( pJoint->GetAnchorB() ) );
 
-						// Add bodies.
+						// Add scene object bodies.
 						if ( pSceneObjectA != NULL )
-							pJointNode->addField( jointObjectAName, pSceneObjectA );
+                            pJointNode->addNode( pSceneObjectA );
+
 						if ( pSceneObjectB != NULL )
-							pJointNode->addField( jointObjectBName, pSceneObjectB );
+                            pJointNode->addNode( pSceneObjectB );
 					}
 					break;
 
@@ -4699,7 +4757,7 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 						// NOTE: This joint uses BODYB as the object, BODYA is the ground-body however for easy of use
 						// we'll refer to this as OBJECTA in the persisted format.
 						if ( pSceneObjectB != NULL )
-							pJointNode->addField( jointObjectAName, pSceneObjectB );
+                            pJointNode->addNode( pSceneObjectB );
 					}
 					break;
 
@@ -4731,11 +4789,12 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 						// Add correction factor.
 						pJointNode->addField( jointMotorCorrectionFactorName, pJoint->GetCorrectionFactor() );
 
-						// Add bodies.
+						// Add scene object bodies.
 						if ( pSceneObjectA != NULL )
-							pJointNode->addField( jointObjectAName, pSceneObjectA );
+                            pJointNode->addNode( pSceneObjectA );
+
 						if ( pSceneObjectB != NULL )
-							pJointNode->addField( jointObjectBName, pSceneObjectB );
+                            pJointNode->addNode( pSceneObjectB );
 					}
 					break;
 
