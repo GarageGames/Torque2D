@@ -138,28 +138,33 @@ void TamlXmlWriter::compileCustomElements( TiXmlElement* pXmlElement, const Taml
     // Debug Profiling.
     PROFILE_SCOPE(TamlXmlWriter_CompileCustomElements);
 
-    // Fetch custom properties.
-    const TamlCustomNodes& customProperties = pTamlWriteNode->mCustomProperties;
+    // Fetch custom nodes.
+    const TamlCustomNodes& customNodes = pTamlWriteNode->mCustomNodes;
 
-    // Finish if no custom properties exist.
-    if ( customProperties.size() == 0 )
+    // Fetch custom nodes.
+    const TamlCustomNodeVector& nodes = customNodes.getNodes();
+
+    // Finish if no custom nodes to process.
+    if ( nodes.size() == 0 )
         return;
 
     // Iterate custom properties.
-    for( TamlCustomNodes::const_iterator customPropertyItr = customProperties.begin(); customPropertyItr != customProperties.end(); ++customPropertyItr )
+    for( TamlCustomNodeVector::const_iterator customNodesItr = nodes.begin(); customNodesItr != nodes.end(); ++customNodesItr )
     {
-        // Fetch custom property.
-        TamlCustomProperty* pCustomProperty = *customPropertyItr;
+        // Fetch the custom node.
+        TamlCustomNode* pCustomNode = *customNodesItr;
 
         // Format extended element name.
         char extendedElementNameBuffer[256];
-        dSprintf( extendedElementNameBuffer, sizeof(extendedElementNameBuffer), "%s.%s", pXmlElement->Value(), pCustomProperty->mPropertyName );
+        dSprintf( extendedElementNameBuffer, sizeof(extendedElementNameBuffer), "%s.%s", pXmlElement->Value(), pCustomNode->mNodeName );
         StringTableEntry extendedElementName = StringTable->insert( extendedElementNameBuffer );
 
         // Create element.
         TiXmlElement* pExtendedPropertyElement = new TiXmlElement( extendedElementName );
 
-        // Iterate property alias.
+        // Fetch node children.
+
+        // Iterate node children.
         for( TamlCustomProperty::const_iterator propertyAliasItr = pCustomProperty->begin(); propertyAliasItr != pCustomProperty->end(); ++propertyAliasItr )
         {
             // Fetch property alias.

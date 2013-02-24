@@ -661,34 +661,38 @@ void Taml::compileChildren( TamlWriteNode* pTamlWriteNode )
 
 //-----------------------------------------------------------------------------
 
-void Taml::compileCustomProperties( TamlWriteNode* pTamlWriteNode )
+void Taml::compileCustomState( TamlWriteNode* pTamlWriteNode )
 {
     // Debug Profiling.
     PROFILE_SCOPE(Taml_CompileCustomProperties);
 
     // Sanity!
-    AssertFatal( pTamlWriteNode != NULL, "Cannot compile custom properties on a NULL node." );
-    AssertFatal( pTamlWriteNode->mpSimObject != NULL, "Cannot compile custom properties on a node with no object." );
+    AssertFatal( pTamlWriteNode != NULL, "Cannot compile custom state on a NULL node." );
+    AssertFatal( pTamlWriteNode->mpSimObject != NULL, "Cannot compile custom state on a node with no object." );
 
-    // Fetch the custom properties on the write node.
-    TamlCustomNodes& customProperties = pTamlWriteNode->mCustomProperties;
+    // Fetch the custom node on the write node.
+    TamlCustomNodes& customNodes = pTamlWriteNode->mCustomNodes;
 
     // Are there any Taml callbacks?
     if ( pTamlWriteNode->mpTamlCallbacks != NULL )
     {
         // Yes, so call it.
-        tamlCustomWrite( pTamlWriteNode->mpTamlCallbacks, customProperties );
+        tamlCustomWrite( pTamlWriteNode->mpTamlCallbacks, customNodes );
     }
 
-    // Finish if no custom properties to process.
-    if ( customProperties.size() == 0 )
+    // Fetch custom nodes.
+    const TamlCustomNodeVector& nodes = customNodes.getNodes();
+
+    // Finish if no custom nodes to process.
+    if ( nodes.size() == 0 )
         return;
-
+    
     // Iterate custom properties.
-    for( TamlCustomPropertyVector::iterator propertyItr = customProperties.begin(); propertyItr != customProperties.end(); ++propertyItr )
+    for( TamlCustomNodeVector::const_iterator customNodesItr = nodes.begin(); customNodesItr != nodes.end(); ++customNodesItr )
     {
-        TamlCustomProperty* pCustomProperty = *propertyItr;
-
+        // Fetch the custom node.
+        TamlCustomNode* pCustomNode = *customNodesItr;
+        
         // Iterate alias.
         for( TamlPropertyAliasVector::iterator typeAliasItr = pCustomProperty->begin(); typeAliasItr != pCustomProperty->end(); ++typeAliasItr )
         {
