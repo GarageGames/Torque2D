@@ -87,7 +87,7 @@ static U32 sSceneObjectMasterSerialId = 0;
 // Collision shape property names.
 static bool collisionShapePropertiesInitialized = false;
 
-static StringTableEntry shapeCustomPropertyName;
+static StringTableEntry shapeCustomNodeName;
 
 static StringTableEntry shapeDensityName;
 static StringTableEntry shapeFrictionName;
@@ -208,7 +208,7 @@ SceneObject::SceneObject() :
     // Initialize collision shape field names.
     if ( !collisionShapePropertiesInitialized )
     {
-        shapeCustomPropertyName     = StringTable->insert( "CollisionShapes" );
+        shapeCustomNodeName     = StringTable->insert( "CollisionShapes" );
 
         shapeDensityName        = StringTable->insert( "Density" );
         shapeFrictionName       = StringTable->insert( "Friction" );
@@ -3386,8 +3386,8 @@ void SceneObject::onTamlCustomWrite( TamlCustomNodes& customNodes )
     if ( collisionShapeCount == 0 )
         return;
 
-    // Add collision shape property.
-    TamlCustomProperty* pCollisionShapeProperty = customProperties.addProperty( shapeCustomPropertyName );
+    // Add collision shape node.
+    TamlCustomNode* pCustomCollisionShapes = customNodes.addNode( shapeCustomNodeName );
 
     // Iterate collision shapes.
     for ( U32 shapeIndex = 0; shapeIndex < collisionShapeCount; ++shapeIndex )
@@ -3395,30 +3395,30 @@ void SceneObject::onTamlCustomWrite( TamlCustomNodes& customNodes )
         // Fetch collision shape definition.
         b2FixtureDef fixtureDef = getCollisionShapeDefinition( shapeIndex );
 
-        // Add collision shape alias.
-        // NOTE:    The name of the alias will get updated shortly.
-        TamlPropertyAlias* pCollisionShapeAlias = pCollisionShapeProperty->addAlias( StringTable->EmptyString );
+        // Add collision shape node.
+        // NOTE:    The name of the node will get updated shortly.
+        TamlCustomNode* pCollisionShapeNode = pCustomCollisionShapes->addNode( StringTable->EmptyString );
 
         // Add common collision shape fields.
         if ( mNotEqual( getDefaultDensity(), fixtureDef.density ) )
-            pCollisionShapeAlias->addField( shapeDensityName, fixtureDef.density );
+            pCollisionShapeNode->addField( shapeDensityName, fixtureDef.density );
 
         if ( mNotEqual( getDefaultFriction(), fixtureDef.friction ) )
-            pCollisionShapeAlias->addField( shapeFrictionName, fixtureDef.friction );
+            pCollisionShapeNode->addField( shapeFrictionName, fixtureDef.friction );
 
         if ( mNotEqual( getDefaultRestitution(), fixtureDef.restitution ) )
-            pCollisionShapeAlias->addField( shapeRestitutionName, fixtureDef.restitution );
+            pCollisionShapeNode->addField( shapeRestitutionName, fixtureDef.restitution );
 
         if ( fixtureDef.isSensor == true )
-            pCollisionShapeAlias->addField( shapeSensorName, fixtureDef.isSensor );
+            pCollisionShapeNode->addField( shapeSensorName, fixtureDef.isSensor );
 
         // Populate collision shape appropriately.
         switch( fixtureDef.shape->GetType() )
         {
         case b2Shape::e_circle:
             {
-                // Set alias name.
-                pCollisionShapeAlias->mAliasName = StringTable->insert( circleTypeName );
+                // Set node name.
+                pCollisionShapeNode->mNodeName = StringTable->insert( circleTypeName );
 
                 // Fetch shape.
                 const b2CircleShape* pShape = dynamic_cast<const b2CircleShape*>( fixtureDef.shape );
@@ -3427,18 +3427,18 @@ void SceneObject::onTamlCustomWrite( TamlCustomNodes& customNodes )
                 AssertFatal( pShape != NULL, "SceneObject::onTamlCustomWrite() - Invalid circle shape type returned." );
 
                 // Add radius property.
-                pCollisionShapeAlias->addField( circleRadiusName, pShape->m_radius );
+                pCollisionShapeNode->addField( circleRadiusName, pShape->m_radius );
 
                 // Add offset property (if not zero).
                 if ( !Vector2(pShape->m_p).isZero() )
-                    pCollisionShapeAlias->addField( circleOffsetName, pShape->m_p );
+                    pCollisionShapeNode->addField( circleOffsetName, pShape->m_p );
             }
             break;
 
         case b2Shape::e_polygon:
             {
-                // Set alias name.
-                pCollisionShapeAlias->mAliasName = StringTable->insert( polygonTypeName );
+                // Set node name.
+                pCollisionShapeNode->mNodeName = StringTable->insert( polygonTypeName );
 
                 // Fetch shape.
                 const b2PolygonShape* pShape = dynamic_cast<const b2PolygonShape*>( fixtureDef.shape );
@@ -3457,15 +3457,15 @@ void SceneObject::onTamlCustomWrite( TamlCustomNodes& customNodes )
                     dSprintf( pointIndexBuffer, sizeof(pointIndexBuffer), "%s%d", polygonPointName, pointIndex );
                     
                     // Add point property.
-                    pCollisionShapeAlias->addField( pointIndexBuffer, pShape->GetVertex( pointIndex ) );
+                    pCollisionShapeNode->addField( pointIndexBuffer, pShape->GetVertex( pointIndex ) );
                 }
             }
             break;
 
         case b2Shape::e_chain:
             {
-                // Set alias name.
-                pCollisionShapeAlias->mAliasName = StringTable->insert( chainTypeName );
+                // Set node name.
+                pCollisionShapeNode->mNodeName = StringTable->insert( chainTypeName );
 
                 // Fetch shape.
                 const b2ChainShape* pShape = dynamic_cast<const b2ChainShape*>( fixtureDef.shape );
@@ -3484,23 +3484,23 @@ void SceneObject::onTamlCustomWrite( TamlCustomNodes& customNodes )
                     dSprintf( pointIndexBuffer, sizeof(pointIndexBuffer), "%s%d", chainPointName, pointIndex );
                     
                     // Add point property.
-                    pCollisionShapeAlias->addField( pointIndexBuffer, pShape->m_vertices[pointIndex] );
+                    pCollisionShapeNode->addField( pointIndexBuffer, pShape->m_vertices[pointIndex] );
                 }
 
                 // Add adjacent start point (if specified).
                 if ( pShape->m_hasPrevVertex )
-                    pCollisionShapeAlias->addField( chainAdjacentStartName, pShape->m_prevVertex );
+                    pCollisionShapeNode->addField( chainAdjacentStartName, pShape->m_prevVertex );
 
                 // Add adjacent end point (if specified).
                 if ( pShape->m_hasNextVertex )
-                    pCollisionShapeAlias->addField( chainAdjacentEndName, pShape->m_nextVertex );
+                    pCollisionShapeNode->addField( chainAdjacentEndName, pShape->m_nextVertex );
             }
             break;
 
         case b2Shape::e_edge:
             {
-                // Set alias name.
-                pCollisionShapeAlias->mAliasName = StringTable->insert( edgeTypeName );
+                // Set node name.
+                pCollisionShapeNode->mNodeName = StringTable->insert( edgeTypeName );
 
                 // Fetch shape.
                 const b2EdgeShape* pShape = dynamic_cast<const b2EdgeShape*>( fixtureDef.shape );
@@ -3509,16 +3509,16 @@ void SceneObject::onTamlCustomWrite( TamlCustomNodes& customNodes )
                 AssertFatal( pShape != NULL, "SceneObject::onTamlCustomWrite() - Invalid edge shape type returned." );
 
                 // Add start/end points.
-                pCollisionShapeAlias->addField( edgeStartName, pShape->m_vertex1 );
-                pCollisionShapeAlias->addField( edgeEndName, pShape->m_vertex2 );
+                pCollisionShapeNode->addField( edgeStartName, pShape->m_vertex1 );
+                pCollisionShapeNode->addField( edgeEndName, pShape->m_vertex2 );
 
                 // Add adjacent start point (if specified).
                 if ( pShape->m_hasVertex0 )
-                    pCollisionShapeAlias->addField( edgeAdjacentStartName, pShape->m_vertex0 );
+                    pCollisionShapeNode->addField( edgeAdjacentStartName, pShape->m_vertex0 );
 
                 // Add adjacent end point (if specified).
                 if ( pShape->m_hasVertex3 )
-                    pCollisionShapeAlias->addField( edgeAdjacentEndName, pShape->m_vertex3 );
+                    pCollisionShapeNode->addField( edgeAdjacentEndName, pShape->m_vertex3 );
             }
             break;
 
@@ -3537,23 +3537,26 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
     PROFILE_SCOPE(SceneObject_OnTamlCustomRead);
 
     // Call parent.
-    Parent::onTamlCustomRead( customProperties );
+    Parent::onTamlCustomRead( customNodes );
 
-    // Find collision shape custom property.
-    const TamlCustomProperty* pCollisionShapeProperty = customProperties.findProperty( shapeCustomPropertyName );
+    // Find collision shape custom node.
+    const TamlCustomNode* pCustomCollisionShapes = customNodes.findNode( shapeCustomNodeName );
 
     // Finish if we don't have collision shapes.
-    if ( pCollisionShapeProperty == NULL )
+    if ( pCustomCollisionShapes == NULL )
         return;
 
+    // Fetch children shapes.
+    const TamlCustomNodeVector& collisionShapeChildren = pCustomCollisionShapes->getChildren();
+
     // Iterate collision shapes.
-    for( TamlCustomProperty::const_iterator propertyAliasItr = pCollisionShapeProperty->begin(); propertyAliasItr != pCollisionShapeProperty->end(); ++propertyAliasItr )
+    for( TamlCustomNodeVector::const_iterator shapeNodeItr = collisionShapeChildren.begin(); shapeNodeItr != collisionShapeChildren.end(); ++shapeNodeItr )
     {
-        // Fetch property alias.
-        TamlPropertyAlias* pPropertyAlias = *propertyAliasItr;
+        // Fetch shape node.
+        TamlCustomNode* pShapeNode = *shapeNodeItr;
 
         // Fetch alias name.
-        StringTableEntry aliasName = pPropertyAlias->mAliasName;
+        StringTableEntry aliasName = pShapeNode->mNodeName;
 
         // Ready common fields.
         F32 shapeDensity     = getDefaultDensity();
@@ -3570,40 +3573,43 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             F32 radius = 0.0f;
             b2Vec2 offset( 0.0f, 0.0f );
 
+            // Fetch shape children.
+            const TamlCustomFieldVector& shapeFields = pShapeNode->getFields();
+
             // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+            for ( TamlCustomFieldVector::const_iterator shapeFieldItr = shapeFields.begin(); shapeFieldItr != shapeFields.end(); ++shapeFieldItr )
             {
-                // Fetch property field.
-                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
+                // Fetch field node.
+                TamlCustomNodeField* pFieldNode = *shapeFieldItr;
 
                 // Fetch property field name.
-                StringTableEntry fieldName = pPropertyField->getFieldName();
+                StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Check common fields.
                 if ( fieldName == shapeDensityName )
                 {
-                    pPropertyField->getFieldValue( shapeDensity );
+                    pFieldNode->getFieldValue( shapeDensity );
                 }
                 else if ( fieldName == shapeFrictionName )
                 {
-                    pPropertyField->getFieldValue( shapeFriction );
+                    pFieldNode->getFieldValue( shapeFriction );
                 }
                 else if ( fieldName == shapeRestitutionName )
                 {
-                    pPropertyField->getFieldValue( shapeRestitution );
+                    pFieldNode->getFieldValue( shapeRestitution );
                 }
                 else if ( fieldName == shapeSensorName )
                 {
-                    pPropertyField->getFieldValue( shapeSensor );
+                    pFieldNode->getFieldValue( shapeSensor );
                 }
                 // Check circle fields.
                 else if ( fieldName == circleRadiusName )
                 {
-                    pPropertyField->getFieldValue( radius );
+                    pFieldNode->getFieldValue( radius );
                 }
                 else if ( fieldName == circleOffsetName )
                 {
-                    pPropertyField->getFieldValue( offset );
+                    pFieldNode->getFieldValue( offset );
                 }                   
             }
 
@@ -3627,34 +3633,37 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             b2Vec2 points[b2_maxPolygonVertices];
             U32 pointCount = 0;
 
+            // Fetch shape children.
+            const TamlCustomFieldVector& shapeFields = pShapeNode->getFields();
+
             // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+            for ( TamlCustomFieldVector::const_iterator shapeFieldItr = shapeFields.begin(); shapeFieldItr != shapeFields.end(); ++shapeFieldItr )
             {
-                // Fetch property field.
-                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
+                // Fetch field node.
+                TamlCustomNodeField* pFieldNode = *shapeFieldItr;
 
                 // Fetch property field name.
-                StringTableEntry fieldName = pPropertyField->getFieldName();
+                StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Check common fields.
                 if ( fieldName == shapeDensityName )
                 {
-                    pPropertyField->getFieldValue( shapeDensity );
+                    pFieldNode->getFieldValue( shapeDensity );
                 }
                 else if ( fieldName == shapeFrictionName )
                 {
-                    pPropertyField->getFieldValue( shapeFriction );
+                    pFieldNode->getFieldValue( shapeFriction );
                 }
                 else if ( fieldName == shapeRestitutionName )
                 {
-                    pPropertyField->getFieldValue( shapeRestitution );
+                    pFieldNode->getFieldValue( shapeRestitution );
                 }
                 else if ( fieldName == shapeSensorName )
                 {
-                    pPropertyField->getFieldValue( shapeSensor );
+                    pFieldNode->getFieldValue( shapeSensor );
                 }
                 // Check polygon fields.
-                else if ( pPropertyField->fieldNameBeginsWith( polygonPointName ) )
+                else if ( pFieldNode->fieldNameBeginsWith( polygonPointName ) )
                 {
                     // Is the point count at maximum?
                     if ( pointCount == b2_maxPolygonVertices )
@@ -3665,7 +3674,7 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
                     }
 
                     b2Vec2 point;
-                    pPropertyField->getFieldValue( point );
+                    pFieldNode->getFieldValue( point );
                     points[pointCount++] = point;
                 }
             }
@@ -3692,47 +3701,50 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             b2Vec2 adjacentStartPoint;
             b2Vec2 adjacentEndPoint;
 
+            // Fetch shape children.
+            const TamlCustomFieldVector& shapeFields = pShapeNode->getFields();
+
             // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+            for ( TamlCustomFieldVector::const_iterator shapeFieldItr = shapeFields.begin(); shapeFieldItr != shapeFields.end(); ++shapeFieldItr )
             {
-                // Fetch property field.
-                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
+                // Fetch field node.
+                TamlCustomNodeField* pFieldNode = *shapeFieldItr;
 
                 // Fetch property field name.
-                StringTableEntry fieldName = pPropertyField->getFieldName();
+                StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Check common fields.
                 if ( fieldName == shapeDensityName )
                 {
-                    pPropertyField->getFieldValue( shapeDensity );
+                    pFieldNode->getFieldValue( shapeDensity );
                 }
                 else if ( fieldName == shapeFrictionName )
                 {
-                    pPropertyField->getFieldValue( shapeFriction );
+                    pFieldNode->getFieldValue( shapeFriction );
                 }
                 else if ( fieldName == shapeRestitutionName )
                 {
-                    pPropertyField->getFieldValue( shapeRestitution );
+                    pFieldNode->getFieldValue( shapeRestitution );
                 }
                 else if ( fieldName == shapeSensorName )
                 {
-                    pPropertyField->getFieldValue( shapeSensor );
+                    pFieldNode->getFieldValue( shapeSensor );
                 }
                 // Check chain fields.
-                else if ( pPropertyField->fieldNameBeginsWith( chainPointName ) )
+                else if ( pFieldNode->fieldNameBeginsWith( chainPointName ) )
                 {
                     b2Vec2 point;
-                    pPropertyField->getFieldValue( point );
+                    pFieldNode->getFieldValue( point );
                     points.push_back( point );
                 }
                 else if ( fieldName == chainAdjacentStartName )
                 {
-                    pPropertyField->getFieldValue( adjacentStartPoint );
+                    pFieldNode->getFieldValue( adjacentStartPoint );
                     hasAdjacentStartPoint = true;
                 }
                 else if ( fieldName == chainAdjacentEndName )
                 {
-                    pPropertyField->getFieldValue( adjacentEndPoint );
+                    pFieldNode->getFieldValue( adjacentEndPoint );
                     hasAdjacentEndPoint = true;
                 }
             }
@@ -3760,49 +3772,52 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             b2Vec2 adjacentStartPoint;
             b2Vec2 adjacentEndPoint;
 
+            // Fetch shape children.
+            const TamlCustomFieldVector& shapeFields = pShapeNode->getFields();
+
             // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+            for ( TamlCustomFieldVector::const_iterator shapeFieldItr = shapeFields.begin(); shapeFieldItr != shapeFields.end(); ++shapeFieldItr )
             {
-                // Fetch property field.
-                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
+                // Fetch field node.
+                TamlCustomNodeField* pFieldNode = *shapeFieldItr;
 
                 // Fetch property field name.
-                StringTableEntry fieldName = pPropertyField->getFieldName();
+                StringTableEntry fieldName = pFieldNode->getFieldName();
 
                 // Check common fields.
                 if ( fieldName == shapeDensityName )
                 {
-                    pPropertyField->getFieldValue( shapeDensity );
+                    pFieldNode->getFieldValue( shapeDensity );
                 }
                 else if ( fieldName == shapeFrictionName )
                 {
-                    pPropertyField->getFieldValue( shapeFriction );
+                    pFieldNode->getFieldValue( shapeFriction );
                 }
                 else if ( fieldName == shapeRestitutionName )
                 {
-                    pPropertyField->getFieldValue( shapeRestitution );
+                    pFieldNode->getFieldValue( shapeRestitution );
                 }
                 else if ( fieldName == shapeSensorName )
                 {
-                    pPropertyField->getFieldValue( shapeSensor );
+                    pFieldNode->getFieldValue( shapeSensor );
                 }
                 // Check edge fields.
                 else if ( fieldName == edgeStartName )
                 {
-                    pPropertyField->getFieldValue( point0 );
+                    pFieldNode->getFieldValue( point0 );
                 }
                 else if ( fieldName == edgeEndName )
                 {
-                    pPropertyField->getFieldValue( point1 );
+                    pFieldNode->getFieldValue( point1 );
                 }
                 else if ( fieldName == edgeAdjacentStartName )
                 {
-                    pPropertyField->getFieldValue( adjacentStartPoint );
+                    pFieldNode->getFieldValue( adjacentStartPoint );
                     hasAdjacentStartPoint = true;
                 }
                 else if ( fieldName == edgeAdjacentEndName )
                 {
-                    pPropertyField->getFieldValue( adjacentEndPoint );
+                    pFieldNode->getFieldValue( adjacentEndPoint );
                     hasAdjacentEndPoint = true;
                 }
             }

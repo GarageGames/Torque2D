@@ -81,7 +81,7 @@ static U32 sSceneMasterIndex = 0;
 static bool tamlPropertiesInitialized = false;
 
 // Joint property names.
-static StringTableEntry jointCustomPropertyName;
+static StringTableEntry jointCustomNodeName;
 static StringTableEntry jointCollideConnectedName;
 static StringTableEntry jointObjectAName;
 static StringTableEntry jointObjectBName;
@@ -144,7 +144,7 @@ static StringTableEntry jointMotorMaxForceName;
 static StringTableEntry jointMotorMaxTorqueName;
 static StringTableEntry jointMotorCorrectionFactorName;
 
-static StringTableEntry controllerCustomPropertyName;
+static StringTableEntry controllerCustomNodeName;
 
 //-----------------------------------------------------------------------------
 
@@ -182,7 +182,7 @@ Scene::Scene() :
     // Initialize Taml property names.
     if ( !tamlPropertiesInitialized )
     {
-        jointCustomPropertyName           = StringTable->insert( "Joints" );
+        jointCustomNodeName           = StringTable->insert( "Joints" );
         jointCollideConnectedName         = StringTable->insert( "CollideConnected" );
         jointObjectAName                  = StringTable->insert( "AnchorA" );
         jointObjectBName                  = StringTable->insert( "AnchorB" );
@@ -245,7 +245,7 @@ Scene::Scene() :
         jointMotorMaxTorqueName           = jointRevoluteMotorMaxTorqueName;
         jointMotorCorrectionFactorName    = StringTable->insert( "CorrectionFactor" );
 
-		controllerCustomPropertyName	  = StringTable->insert( "Controllers" );
+		controllerCustomNodeName	  = StringTable->insert( "Controllers" );
 
         // Flag as initialized.
         tamlPropertiesInitialized = true;
@@ -3617,16 +3617,16 @@ void Scene::onTamlPreRead( void )
 
 //-----------------------------------------------------------------------------
 
-void Scene::onTamlPostRead( const TamlCustomNodes& customProperties )
+void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
 {
     // Call parent.
-    Parent::onTamlPostRead( customProperties );
+    Parent::onTamlPostRead( customNodes );
 
     // Reset the loading scene.
     Scene::LoadingScene = NULL;
 
-    // Find joint custom property.
-    const TamlCustomProperty* pJointProperty = customProperties.findProperty( jointCustomPropertyName );
+    // Find joint custom node.
+    const TamlCustomNode* pJointNode = customNodes.findNode( jointCustomNodeName );
 
     // Finish if no joints.
     if ( pJointProperty == NULL )
@@ -4306,7 +4306,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customProperties )
 
 //-----------------------------------------------------------------------------
 
-void Scene::onTamlCustomWrite( TamlCustomNodes& customProperties )
+void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Call parent.
     Parent::onTamlCustomWrite( customNodes );
@@ -4318,7 +4318,7 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customProperties )
     if ( jointCount > 0 )
 	{
 		// Yes, so add joint property.
-		TamlCustomProperty* pJointProperty = customProperties.addProperty( jointCustomPropertyName );
+		TamlCustomProperty* pJointProperty = customProperties.addProperty( jointCustomNodeName );
 
 		// Iterate joints.
 		for( typeJointHash::iterator jointItr = mJoints.begin(); jointItr != mJoints.end(); ++jointItr )
@@ -4724,7 +4724,7 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customProperties )
 	if ( sceneControllerCount > 0 )
 	{
 		// Yes, so add controller property.
-		TamlCustomProperty* pControllerProperty = customProperties.addProperty( controllerCustomPropertyName );
+		TamlCustomProperty* pControllerProperty = customProperties.addProperty( controllerCustomNodeName );
 
 		// Fetch the scene controllers.
 		SimSet* pControllerSet = getControllers();
@@ -4746,10 +4746,10 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customProperties )
 
 //-----------------------------------------------------------------------------
 
-void Scene::onTamlCustomRead( const TamlCustomNodes& customProperties )
+void Scene::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Call parent.
-    Parent::onTamlCustomRead( customProperties );
+    Parent::onTamlCustomRead( customNodes );
 }
 
 //-----------------------------------------------------------------------------

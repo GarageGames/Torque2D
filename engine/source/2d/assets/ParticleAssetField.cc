@@ -509,34 +509,34 @@ F32 ParticleAssetField::calculateFieldBVLE( const ParticleAssetField& base, cons
 
 //------------------------------------------------------------------------------
 
-void ParticleAssetField::onTamlCustomWrite( TamlCustomProperty* pCustomProperty )
+void ParticleAssetField::onTamlCustomWrite( TamlCustomNode* pCustomNode )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ParticleAssetField_OnTamlCustomWrite);
 
-    // Add a alias (ignore it if there ends up being no properties).
-    TamlPropertyAlias* pPropertyAlias = pCustomProperty->addAlias( getFieldName(), true );
+    // Add a child (ignore it if there ends up being no children).
+    TamlCustomNode* pAssetFieldNode = pCustomNode->addNode( getFieldName(), true );
 
     // Sanity!
-    AssertFatal( pPropertyAlias != NULL, "ParticleAssetField::onTamlCustomWrite() - Could not create field alias." );
+    AssertFatal( pAssetFieldNode != NULL, "ParticleAssetField::onTamlCustomWrite() - Could not create field node." );
 
     if ( mValueBoundsDirty && (mNotEqual( getMinValue(), 0.0f ) || mNotEqual( getMaxValue(), 0.0f )) )
     {
-        pPropertyAlias->addField( particleAssetFieldMinValueName, getMinValue() );
-        pPropertyAlias->addField( particleAssetFieldMaxValueName, getMaxValue() );
+        pAssetFieldNode->addField( particleAssetFieldMinValueName, getMinValue() );
+        pAssetFieldNode->addField( particleAssetFieldMaxValueName, getMaxValue() );
     }
     
     if ( mValueBoundsDirty && mNotEqual( getMaxTime(), 1.0f ) )
-        pPropertyAlias->addField( particleAssetFieldMaxTimeName, getMaxTime() );
+        pAssetFieldNode->addField( particleAssetFieldMaxTimeName, getMaxTime() );
 
     if ( mValueBoundsDirty && mNotEqual( getDefaultValue(), 1.0f ) )
-        pPropertyAlias->addField( particleAssetFieldDefaultValueName, getDefaultValue() );
+        pAssetFieldNode->addField( particleAssetFieldDefaultValueName, getDefaultValue() );
 
     if ( mNotEqual( getValueScale(), 1.0f ) )
-        pPropertyAlias->addField( particleAssetFieldValueScaleName, getValueScale() );
+        pAssetFieldNode->addField( particleAssetFieldValueScaleName, getValueScale() );
 
     if ( mNotEqual( getRepeatTime(), 1.0f ) )
-        pPropertyAlias->addField( particleAssetFieldRepeatTimeName, getRepeatTime() );
+        pAssetFieldNode->addField( particleAssetFieldRepeatTimeName, getRepeatTime() );
 
     // Fetch key count.
     const U32 keyCount = getDataKeyCount();
@@ -550,7 +550,7 @@ void ParticleAssetField::onTamlCustomWrite( TamlCustomProperty* pCustomProperty 
         return;
 
     // Format the keys,
-    char keysBuffer[MAX_TAML_PROPERTY_FIELDVALUE_LENGTH];
+    char keysBuffer[MAX_TAML_NODE_FIELDVALUE_LENGTH];
     char* pKeysBuffer = keysBuffer;
     S32 bufferSize = sizeof(keysBuffer);
 
@@ -566,12 +566,12 @@ void ParticleAssetField::onTamlCustomWrite( TamlCustomProperty* pCustomProperty 
         bufferSize -= written;
     }
 
-    pPropertyAlias->addField( particleAssetFieldDataKeysName, keysBuffer );
+    pAssetFieldNode->addField( particleAssetFieldDataKeysName, keysBuffer );
 }
 
 //-----------------------------------------------------------------------------
 
-void ParticleAssetField::onTamlCustomRead( const TamlPropertyAlias* pPropertyAlias )
+void ParticleAssetField::onTamlCustomRead( const TamlCustomNode* pCustomNode )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ParticleAssetField_OnTamlCustomRead);
@@ -590,46 +590,49 @@ void ParticleAssetField::onTamlCustomRead( const TamlPropertyAlias* pPropertyAli
     // Clear the existing keys.
     mDataKeys.clear();
 
+    // Fetch children nodes.
+    const TamlCustomFieldVector& fieldNodes = pCustomNode->getFields();
+
     // Iterate property fields.
-    for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+    for ( TamlCustomFieldVector::const_iterator fieldNodeItr = fieldNodes.begin(); fieldNodeItr != fieldNodes.end(); ++fieldNodeItr )
     {
-        // Fetch property field.
-        TamlCustomNodeField* pPropertyField = *propertyFieldItr;
+        // Fetch field node.
+        TamlCustomNodeField* pFieldNode = *fieldNodeItr;
 
         // Fetch property field name.
-        StringTableEntry fieldName = pPropertyField->getFieldName();
+        StringTableEntry fieldName = pFieldNode->getFieldName();
 
         if ( fieldName == particleAssetFieldRepeatTimeName )
         {
-            pPropertyField->getFieldValue( repeatTime );
+            pFieldNode->getFieldValue( repeatTime );
         }
         else if ( fieldName == particleAssetFieldMaxTimeName )
         {
-            pPropertyField->getFieldValue( maxTime );
+            pFieldNode->getFieldValue( maxTime );
             mValueBoundsDirty = true;
         }
         else if ( fieldName == particleAssetFieldMinValueName )
         {
-            pPropertyField->getFieldValue( minValue );
+            pFieldNode->getFieldValue( minValue );
             mValueBoundsDirty = true;
         }
         else if ( fieldName == particleAssetFieldMaxValueName )
         {
-            pPropertyField->getFieldValue( maxValue );
+            pFieldNode->getFieldValue( maxValue );
             mValueBoundsDirty = true;
         }
         else if ( fieldName == particleAssetFieldDefaultValueName )
         {
-            pPropertyField->getFieldValue( defaultValue );
+            pFieldNode->getFieldValue( defaultValue );
             mValueBoundsDirty = true;
         }
         else if ( fieldName == particleAssetFieldValueScaleName )
         {
-            pPropertyField->getFieldValue( valueScale );
+            pFieldNode->getFieldValue( valueScale );
         }
         else if ( fieldName == particleAssetFieldDataKeysName )
         {
-            const char* pDataKeys = pPropertyField->getFieldValue();
+            const char* pDataKeys = pFieldNode->getFieldValue();
             const S32 elementCount = StringUnit::getUnitCount( pDataKeys, " ,\t" );
 
             // Are there a valid number of elements?

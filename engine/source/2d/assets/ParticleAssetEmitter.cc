@@ -495,7 +495,7 @@ void ParticleAssetEmitter::onTamlCustomWrite( TamlCustomNodes& customNodes )
     PROFILE_SCOPE(ParticleAssetEmitter_OnTamlCustomWrite);
 
     // Write the fields.
-    mParticleFields.onTamlCustomWrite( customProperties );
+    mParticleFields.onTamlCustomWrite( customNodes );
 }
 
 //-----------------------------------------------------------------------------
@@ -506,6 +506,6 @@ void ParticleAssetEmitter::onTamlCustomRead( const TamlCustomNodes& customNodes 
     PROFILE_SCOPE(ParticleAssetEmitter_OnTamlCustomRead);
 
     // Read the fields.
-    mParticleFields.onTamlCustomRead( customProperties );
+    mParticleFields.onTamlCustomRead( customNodes );
 }
 
