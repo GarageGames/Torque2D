@@ -671,7 +671,7 @@ void Taml::compileCustomProperties( TamlWriteNode* pTamlWriteNode )
     AssertFatal( pTamlWriteNode->mpSimObject != NULL, "Cannot compile custom properties on a node with no object." );
 
     // Fetch the custom properties on the write node.
-    TamlCustomProperties& customProperties = pTamlWriteNode->mCustomProperties;
+    TamlCustomNodes& customProperties = pTamlWriteNode->mCustomProperties;
 
     // Are there any Taml callbacks?
     if ( pTamlWriteNode->mpTamlCallbacks != NULL )
@@ -695,9 +695,9 @@ void Taml::compileCustomProperties( TamlWriteNode* pTamlWriteNode )
             TamlPropertyAlias* pAlias = *typeAliasItr;
 
             // Iterate the fields.
-            for( TamlPropertyFieldVector::iterator fieldItr = pAlias->begin(); fieldItr != pAlias->end(); ++fieldItr )
+            for( TamlCustomNodeFieldVector::iterator fieldItr = pAlias->begin(); fieldItr != pAlias->end(); ++fieldItr )
             {
-                TamlPropertyField* pPropertyField = *fieldItr;
+                TamlCustomNodeField* pPropertyField = *fieldItr;
 
                 // Skip if not an object field.
                 if ( !pPropertyField->isObjectField() )

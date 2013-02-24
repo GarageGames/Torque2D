@@ -381,10 +381,10 @@ SpriteBatchItem* CompositeSprite::createCustomLayout( const SpriteBatchItem::Log
 
 //-----------------------------------------------------------------------------
 
-void CompositeSprite::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void CompositeSprite::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Call parent.
-    Parent::onTamlCustomWrite( customProperties );
+    Parent::onTamlCustomWrite( customNodes );
 
     // Fetch sprite count.
     const U32 spriteCount = getSpriteCount();
@@ -402,7 +402,7 @@ void CompositeSprite::onTamlCustomWrite( TamlCustomProperties& customProperties 
 
 //-----------------------------------------------------------------------------
 
-void CompositeSprite::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void CompositeSprite::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Call parent.
     Parent::onTamlCustomRead( customProperties );

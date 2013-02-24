@@ -139,14 +139,14 @@ void TamlXmlWriter::compileCustomElements( TiXmlElement* pXmlElement, const Taml
     PROFILE_SCOPE(TamlXmlWriter_CompileCustomElements);
 
     // Fetch custom properties.
-    const TamlCustomProperties& customProperties = pTamlWriteNode->mCustomProperties;
+    const TamlCustomNodes& customProperties = pTamlWriteNode->mCustomProperties;
 
     // Finish if no custom properties exist.
     if ( customProperties.size() == 0 )
         return;
 
     // Iterate custom properties.
-    for( TamlCustomProperties::const_iterator customPropertyItr = customProperties.begin(); customPropertyItr != customProperties.end(); ++customPropertyItr )
+    for( TamlCustomNodes::const_iterator customPropertyItr = customProperties.begin(); customPropertyItr != customProperties.end(); ++customPropertyItr )
     {
         // Fetch custom property.
         TamlCustomProperty* pCustomProperty = *customPropertyItr;
@@ -176,7 +176,7 @@ void TamlXmlWriter::compileCustomElements( TiXmlElement* pXmlElement, const Taml
             for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
             {
                 // Fetch property field.
-                TamlPropertyField* pPropertyField = *propertyFieldItr;
+                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
 
                 // Is it an object field?
                 if ( pPropertyField->isObjectField() )

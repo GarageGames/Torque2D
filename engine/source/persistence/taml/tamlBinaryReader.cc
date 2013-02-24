@@ -191,7 +191,7 @@ SimObject* TamlBinaryReader::parseElement( Stream& stream, const U32 versionId )
     }
 
     // Parse custom elements.
-    TamlCustomProperties customProperties;
+    TamlCustomNodes customProperties;
 
     // Parse children.
     parseChildren( stream, pCallbacks, pSimObject, versionId );
@@ -212,7 +212,7 @@ SimObject* TamlBinaryReader::parseElement( Stream& stream, const U32 versionId )
 
 //-----------------------------------------------------------------------------
 
-void TamlBinaryReader::parseCustomElements( Stream& stream, TamlCallbacks* pCallbacks, TamlCustomProperties& customProperties, const U32 versionId )
+void TamlBinaryReader::parseCustomElements( Stream& stream, TamlCallbacks* pCallbacks, TamlCustomNodes& customNodes, const U32 versionId )
 {
     // Debug Profiling.
     PROFILE_SCOPE(TamlBinaryReader_ParseCustomElement);

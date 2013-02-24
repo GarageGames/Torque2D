@@ -51,7 +51,7 @@
 
 //-----------------------------------------------------------------------------
 
-#define MAX_TAML_PROPERTY_FIELDVALUE_LENGTH 2048
+#define MAX_TAML_NODE_FIELDVALUE_LENGTH 2048
 
 //-----------------------------------------------------------------------------
 
@@ -59,10 +59,10 @@ class TamlWriteNode;
 
 //-----------------------------------------------------------------------------
 
-class TamlPropertyField : public IFactoryObjectReset
+class TamlCustomNodeField : public IFactoryObjectReset
 {
 public:
-    TamlPropertyField()
+    TamlCustomNodeField()
     {
         // Reset field object.
         // NOTE: This MUST be done before the state is reset otherwise we'll be touching uninitialized stuff.
@@ -72,7 +72,7 @@ public:
         resetState();
     }
 
-    virtual ~TamlPropertyField()
+    virtual ~TamlCustomNodeField()
     {
         // Everything should already be cleared in a state reset.
         // Touching any memory here is dangerous as this type is typically
@@ -111,7 +111,7 @@ public:
         if ( dSscanf( mFieldValue, "%d %d", &fieldValue.x, &fieldValue.y ) != 2 )
         {
             // Warn.
-            Con::warnf( "TamlPropertyField - Reading point2I but it has an incorrect format: '%s'.", mFieldValue );
+            Con::warnf( "TamlCustomNodeField - Reading point2I but it has an incorrect format: '%s'.", mFieldValue );
         }
     }
 
@@ -120,7 +120,7 @@ public:
         if ( dSscanf( mFieldValue, "%g %g", &fieldValue.x, &fieldValue.y ) != 2 )
         {
             // Warn.
-            Con::warnf( "TamlPropertyField - Reading point2F but it has an incorrect format: '%s'.", mFieldValue );
+            Con::warnf( "TamlCustomNodeField - Reading point2F but it has an incorrect format: '%s'.", mFieldValue );
         }
     }
 
@@ -129,7 +129,7 @@ public:
         if ( dSscanf( mFieldValue, "%g %g", &fieldValue.x, &fieldValue.y ) != 2 )
         {
             // Warn.
-            Con::warnf( "TamlPropertyField - Reading vector but it has an incorrect format: '%s'.", mFieldValue );
+            Con::warnf( "TamlCustomNodeField - Reading vector but it has an incorrect format: '%s'.", mFieldValue );
         }
     }
 
@@ -179,7 +179,7 @@ public:
         char fieldNameBuffer[1024];
 
         // Sanity!
-        AssertFatal( fieldNameLength < sizeof(fieldNameBuffer), "TamlPropertyField: Field name is too long." );
+        AssertFatal( fieldNameLength < sizeof(fieldNameBuffer), "TamlCustomNodeField: Field name is too long." );
 
         dStrcpy( fieldNameBuffer, mFieldName );
         fieldNameBuffer[fieldNameLength-1] = 0;
@@ -190,28 +190,25 @@ public:
 
 private:
     StringTableEntry    mFieldName;
-    char                mFieldValue[MAX_TAML_PROPERTY_FIELDVALUE_LENGTH];
+    char                mFieldValue[MAX_TAML_NODE_FIELDVALUE_LENGTH];
     SimObject*          mpFieldObject;
     TamlWriteNode*      mpFieldWriteNode;
 };
 
-static FactoryCache<TamlPropertyField> TamlPropertyFieldFactory;
+static FactoryCache<TamlCustomNodeField> TamlCustomNodeFieldFactory;
+typedef Vector<TamlCustomNodeField*> TamlCustomNodeFieldVector;
 
 //-----------------------------------------------------------------------------
 
-typedef Vector<TamlPropertyField*> TamlPropertyFieldVector;
-
-class TamlPropertyAlias :
-    public TamlPropertyFieldVector,
-    public IFactoryObjectReset
+class TamlCustomNode : public IFactoryObjectReset
 {
 public:
-    TamlPropertyAlias()
+    TamlCustomNode()
     {
         resetState();
     }
 
-    virtual ~TamlPropertyAlias()
+    virtual ~TamlCustomNode()
     {
         // Everything should already be cleared in a state reset.
         // Touching any memory here is dangerous as this type is typically
@@ -221,25 +218,36 @@ public:
 
     virtual void resetState( void )
     {
-        while( size() > 0 )
+        // Cache the children.
+        while ( mChildren.size() > 0 )
         {
-            TamlPropertyFieldFactory.cacheObject( back() );
-            pop_back();
+            TamlCustomNodeFactory.cacheObject( mChildren.back() );
+            mChildren.pop_back();
         }
 
-        mAliasName = StringTable->EmptyString;
+        // Cache the fields.
+        while( mFields.size() > 0 )
+        {
+            TamlCustomNodeFieldFactory.cacheObject( mFields.back() );
+            mFields.pop_back();
+        }
+
+        // Reset the node name.
+        mNodeName = StringTable->EmptyString;
+
+        // Reset the ignore empty flag.
         mIgnoreEmpty = false;
     }
 
-    void set( const char* pAliasName )
+    void set( const char* pNodeName )
     {
         // Sanity!
-        AssertFatal( pAliasName != NULL, "Type alias cannot be NULL." );
+        AssertFatal( pNodeName != NULL, "Node name cannot be NULL." );
 
-        mAliasName = StringTable->insert( pAliasName );
+        mNodeName = StringTable->insert( pNodeName );
     }
 
-    TamlPropertyField* addField( const char* pFieldName, const ColorI& fieldValue )
+    TamlCustomNodeField* addField( const char* pFieldName, const ColorI& fieldValue )
     {
         // Fetch the field value.
         const char* pFieldValue = Con::getData( TypeColorI, &const_cast<ColorI&>(fieldValue), 0 );
@@ -248,14 +256,14 @@ public:
         if ( pFieldValue == NULL )
         {
             // No, so warn.
-            Con::warnf( "Taml: Failed to add property field name '%s' with ColorI value.", pFieldName );
+            Con::warnf( "Taml: Failed to add node field name '%s' with ColorI value.", pFieldName );
             pFieldValue = StringTable->EmptyString;
         }
 
         return addField( pFieldName, pFieldValue );
     }
 
-    TamlPropertyField* addField( const char* pFieldName, const ColorF& fieldValue )
+    TamlCustomNodeField* addField( const char* pFieldName, const ColorF& fieldValue )
     {
         // Fetch the field value.
         const char* pFieldValue = Con::getData( TypeColorF, &const_cast<ColorF&>(fieldValue), 0 );
@@ -264,137 +272,137 @@ public:
         if ( pFieldValue == NULL )
         {
             // No, so warn.
-            Con::warnf( "Taml: Failed to add property field name '%s' with ColorF value.", pFieldName );
+            Con::warnf( "Taml: Failed to add node field name '%s' with ColorF value.", pFieldName );
             pFieldValue = StringTable->EmptyString;
         }
 
         return addField( pFieldName, pFieldValue );
     }
 
-    TamlPropertyField* addField( const char* pFieldName, const Point2I& fieldValue )
+    TamlCustomNodeField* addField( const char* pFieldName, const Point2I& fieldValue )
     {
         char fieldValueBuffer[32];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%d %d", fieldValue.x, fieldValue.y );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    TamlPropertyField* addField( const char* pFieldName, const Point2F& fieldValue )
+    TamlCustomNodeField* addField( const char* pFieldName, const Point2F& fieldValue )
     {
         char fieldValueBuffer[32];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%.5g %0.5g", fieldValue.x, fieldValue.y );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    TamlPropertyField* addField( const char* pFieldName, const b2Vec2& fieldValue )
+    TamlCustomNodeField* addField( const char* pFieldName, const b2Vec2& fieldValue )
     {
         char fieldValueBuffer[32];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%.5g %.5g", fieldValue.x, fieldValue.y );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    TamlPropertyField* addField( const char* pFieldName, const U32 fieldValue )
+    TamlCustomNodeField* addField( const char* pFieldName, const U32 fieldValue )
     {
         char fieldValueBuffer[16];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%d", fieldValue );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    TamlPropertyField* addField( const char* pFieldName, const bool fieldValue )
+    TamlCustomNodeField* addField( const char* pFieldName, const bool fieldValue )
     {
         char fieldValueBuffer[16];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%d", fieldValue );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    TamlPropertyField* addField( const char* pFieldName, const S32 fieldValue )
+    TamlCustomNodeField* addField( const char* pFieldName, const S32 fieldValue )
     {
         char fieldValueBuffer[16];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%d", fieldValue );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    TamlPropertyField* addField( const char* pFieldName, const float fieldValue )
+    TamlCustomNodeField* addField( const char* pFieldName, const float fieldValue )
     {
         char fieldValueBuffer[16];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%.5g", fieldValue );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    TamlPropertyField* addField( const char* pFieldName, const char* pFieldValue )
+    TamlCustomNodeField* addField( const char* pFieldName, const char* pFieldValue )
     {
-        // Create a property field.
-        TamlPropertyField* pPropertyField = TamlPropertyFieldFactory.createObject();
+        // Create a node field.
+        TamlCustomNodeField* pNodeField = TamlCustomNodeFieldFactory.createObject();
 
-        // Set property field.
-        pPropertyField->set( pFieldName, pFieldValue );
+        // Set node field.
+        pNodeField->set( pFieldName, pFieldValue );
 
 #if TORQUE_DEBUG
         // Ensure a field name conflict does not exist.
-        for( Vector<TamlPropertyField*>::iterator propertyFieldItr = begin(); propertyFieldItr != end(); ++propertyFieldItr )
+        for( Vector<TamlCustomNodeField*>::iterator nodeFieldItr = mFields.begin(); nodeFieldItr != mFields.end(); ++nodeFieldItr )
         {
             // Skip if field name is not the same.
-            if ( pPropertyField->getFieldName() != (*propertyFieldItr)->getFieldName() )
+            if ( pNodeField->getFieldName() != (*nodeFieldItr)->getFieldName() )
                 continue;
 
             // Warn!
-            Con::warnf("Conflicting Taml property field name of '%s' in property alias of '%s'.", pFieldName, mAliasName );
+            Con::warnf("Conflicting Taml node field name of '%s' in property alias of '%s'.", pFieldName, mNodeName );
 
-            // Cache property field.
-            TamlPropertyFieldFactory.cacheObject( pPropertyField );
+            // Cache node field.
+            TamlCustomNodeFieldFactory.cacheObject( pNodeField );
             return NULL;
         }
 
         // Ensure the field value is not too long.
-        if ( dStrlen( pFieldValue ) >= MAX_TAML_PROPERTY_FIELDVALUE_LENGTH )
+        if ( dStrlen( pFieldValue ) >= MAX_TAML_NODE_FIELDVALUE_LENGTH )
         {
             // Warn.
             Con::warnf("Taml field name '%s' has a field value that is too long (Max:%d): '%s'.",
                 pFieldName,
-                MAX_TAML_PROPERTY_FIELDVALUE_LENGTH,
+                MAX_TAML_NODE_FIELDVALUE_LENGTH,
                 pFieldValue );
 
-            // Cache property field.
-            TamlPropertyFieldFactory.cacheObject( pPropertyField );
+            // Cache node field.
+            TamlCustomNodeFieldFactory.cacheObject( pNodeField );
             return NULL;
         }
 #endif
-        // Store property field.
-        push_back( pPropertyField );
+        // Store node field.
+        mFields.push_back( pNodeField );
 
-        return pPropertyField;
+        return pNodeField;
     }
 
-    TamlPropertyField* addField( const char* pFieldName, SimObject* pFieldObject )
+    TamlCustomNodeField* addField( const char* pFieldName, SimObject* pFieldObject )
     {
-        // Create a property field.
-        TamlPropertyField* pPropertyField = TamlPropertyFieldFactory.createObject();
+        // Create a node field.
+        TamlCustomNodeField* pNodeField = TamlCustomNodeFieldFactory.createObject();
 
-        // Set property field.
-        pPropertyField->set( pFieldName, pFieldObject );
+        // Set node field.
+        pNodeField->set( pFieldName, pFieldObject );
 
 #if TORQUE_DEBUG
         // Ensure a field name conflict does not exist.
-        for( TamlPropertyFieldVector::iterator propertyFieldItr = begin(); propertyFieldItr != end(); ++propertyFieldItr )
+        for( TamlCustomNodeFieldVector::iterator nodeFieldItr = mFields.begin(); nodeFieldItr != mFields.end(); ++nodeFieldItr )
         {
             // Skip if field name is not the same.
-            if ( pPropertyField->getFieldName() != (*propertyFieldItr)->getFieldName() )
+            if ( pNodeField->getFieldName() != (*nodeFieldItr)->getFieldName() )
                 continue;
 
             // Warn!
-            Con::warnf("Conflicting Taml property field name of '%s' in property alias of '%s'.", pFieldName, mAliasName );
+            Con::warnf("Conflicting Taml node field name of '%s' in property alias of '%s'.", pFieldName, mNodeName );
 
-            // Cache property field.
-            TamlPropertyFieldFactory.cacheObject( pPropertyField );
+            // Cache node field.
+            TamlCustomNodeFieldFactory.cacheObject( pNodeField );
             return NULL;
         }
 #endif
-        // Store property field.
-        push_back( pPropertyField );
+        // Store node field.
+        mFields.push_back( pNodeField );
 
-        return pPropertyField;
+        return pNodeField;
     }
 
-    const TamlPropertyField* findField( const char* pFieldName ) const
+    const TamlCustomNodeField* findField( const char* pFieldName ) const
     {
         // Sanity!
         AssertFatal( pFieldName != NULL, "Cannot find Taml field name that is NULL." );
@@ -402,8 +410,8 @@ public:
         // Fetch field name.
         StringTableEntry fieldName = StringTable->insert( pFieldName );
 
-        // Find property field.
-        for( TamlPropertyFieldVector::const_iterator fieldItr = begin(); fieldItr != end(); ++fieldItr )
+        // Find node field.
+        for( TamlCustomNodeFieldVector::const_iterator fieldItr = mFields.begin(); fieldItr != mFields.end(); ++fieldItr )
         {
             if ( (*fieldItr)->getFieldName() == fieldName )
                 return (*fieldItr);
@@ -412,175 +420,104 @@ public:
         return NULL;
     }
 
-    StringTableEntry    mAliasName;
-    bool                mIgnoreEmpty;
+    StringTableEntry            mNodeName;
+    Vector<TamlCustomNode*>     mChildren;
+    TamlCustomNodeFieldVector   mFields;
+    bool                        mIgnoreEmpty;
 };
 
-static FactoryCache<TamlPropertyAlias> TamlPropertyAliasFactory;
+static FactoryCache<TamlCustomNode> TamlCustomNodeFactory;
+typedef Vector<TamlCustomNode*> TamlCustomNodeVector;
 
 //-----------------------------------------------------------------------------
 
-typedef Vector<TamlPropertyAlias*> TamlPropertyAliasVector;
-
-class TamlCustomProperty :
-    public TamlPropertyAliasVector,
-    public IFactoryObjectReset
+class TamlCustomNodes : public IFactoryObjectReset
 {
 public:
-    TamlCustomProperty()
+    TamlCustomNodes()
     {
     }
 
-    virtual ~TamlCustomProperty()
-    {
-        // Everything should already be cleared in a state reset.
-        // Touching any memory here is dangerous as this type is typically
-        // held in a static factory cache until shutdown at which point
-        // pretty much anything or everything could be invalid!
-    }
-
-    virtual void resetState( void )
-    {
-        while( size() > 0 )
-        {
-            TamlPropertyAliasFactory.cacheObject( back() );
-            pop_back();
-        }
-        mIgnoreEmpty = true;
-    }
-
-    void set( const char* pPropertyName )
-    {
-        // Sanity!
-        AssertFatal( pPropertyName != NULL, "TamlCustomProperty::set() - Property name cannot be NULL." );
-
-        mPropertyName = StringTable->insert( pPropertyName );
-    }
-
-    TamlPropertyAlias* addAlias( const char* pAliasName, const bool ignoreEmpty = false )
-    {
-        // Create a alias.
-        TamlPropertyAlias* pAlias = TamlPropertyAliasFactory.createObject();
-
-        // Set alias name.
-        pAlias->set( pAliasName );
-
-        // Set ignore-empty flag.
-        pAlias->mIgnoreEmpty = ignoreEmpty;
-
-        // Store alias.
-        push_back( pAlias );
-
-        return pAlias;
-    }
-
-    void removeAlias( const U32 index )
-    {
-        // Sanity!
-        AssertFatal( index < (U32)size(), "TamlCustomProperty::removeAlias() - Index is out of bounds." );
-
-        // Cache the alias.
-        TamlPropertyAliasFactory.cacheObject( at(index) );
-
-        // Remove it.
-        erase( index );
-    }
-
-    StringTableEntry mPropertyName;
-    bool mIgnoreEmpty;
-};
-
-static FactoryCache<TamlCustomProperty> TamlCustomPropertyFactory;
-
-//-----------------------------------------------------------------------------
-
-typedef Vector<TamlCustomProperty*> TamlCustomPropertyVector;
-
-class TamlCustomProperties :
-    public TamlCustomPropertyVector,
-    public IFactoryObjectReset
-{
-public:
-    TamlCustomProperties()
-    {
-    }
-
-    virtual ~TamlCustomProperties()
+    virtual ~TamlCustomNodes()
     {
         resetState();
     }
 
     virtual void resetState( void )
     {
-        while( size() > 0 )
+        // Cache the nodes.
+        while ( mNodes.size() > 0 )
         {
-            TamlCustomPropertyFactory.cacheObject( back() );
-            pop_back();
+            TamlCustomNodeFactory.cacheObject( mNodes.back() );
+            mNodes.pop_back();
         }
     }
 
-    TamlCustomProperty* addProperty( const char* pPropertyName, const bool ignoreEmpty = true )
+    TamlCustomNode* addNode( const char* pNodeName, const bool ignoreEmpty = true )
     {
-        // Create a custom property.
-        TamlCustomProperty* pCustomProperty = TamlCustomPropertyFactory.createObject();
+        // Create a custom node.
+        TamlCustomNode* pCustomNode = TamlCustomNodeFactory.createObject();
 
-        // Set property name.
-        pCustomProperty->set( pPropertyName );
+        // Set node name.
+        pCustomNode->set( pNodeName );
 
         // Set ignore-empty flag.
-        pCustomProperty->mIgnoreEmpty = ignoreEmpty;
+        pCustomNode->mIgnoreEmpty = ignoreEmpty;
 
 #if TORQUE_DEBUG
-        // Ensure an property name conflict does not exist.
-        for( TamlCustomPropertyVector::iterator propertyItr = begin(); propertyItr != end(); ++propertyItr )
+        // Ensure a node name conflict does not exist.
+        for( TamlCustomNodeVector::iterator nodeItr = mNodes.begin(); nodeItr != mNodes.end(); ++nodeItr )
         {
-            // Skip if property name is not the same.
-            if ( pCustomProperty->mPropertyName != (*propertyItr)->mPropertyName )
+            // Skip if node name is not the same.
+            if ( pCustomNode->mNodeName != (*nodeItr)->mNodeName )
                 continue;
 
             // Warn!
-            Con::warnf("Conflicting Taml custom property name of '%s'.", pPropertyName );
+            Con::warnf("Conflicting Taml custom node name of '%s'.", pNodeName );
 
             // Cache property.
-            TamlCustomPropertyFactory.cacheObject( pCustomProperty );
+            TamlCustomNodeFactory.cacheObject( pCustomNode );
             return NULL;
         }
 #endif
         // Store property.
-        push_back( pCustomProperty );
+        mNodes.push_back( pCustomNode );
 
-        return pCustomProperty;
+        return pCustomNode;
     }
 
-    void removeProperty( const U32 index )
+    void removeNode( const U32 index )
     {
         // Sanity!
-        AssertFatal( index < (U32)size(), "TamlCustomProperty::removeProperty() - Index is out of bounds." );
+        AssertFatal( index < (U32)mNodes.size(), "tamlCustomNode::removeNode() - Index is out of bounds." );
 
-        // Cache the custom property.
-        TamlCustomPropertyFactory.cacheObject( at(index) );
+        // Cache the custom node.
+        TamlCustomNodeFactory.cacheObject( mNodes[index] );
 
         // Remove it.
-        erase( index );
+        mNodes.erase( index );
     }
 
-    const TamlCustomProperty* findProperty( const char* pPropertyName ) const
+    const TamlCustomNode* findProperty( const char* pNodeName ) const
     {
         // Sanity!
-        AssertFatal( pPropertyName != NULL, "Cannot find Taml property name that is NULL." );
+        AssertFatal( pNodeName != NULL, "Cannot find Taml node name that is NULL." );
 
-        // Fetch property name.
-        StringTableEntry propertyName = StringTable->insert( pPropertyName );
+        // Fetch node name.
+        StringTableEntry nodeName = StringTable->insert( pNodeName );
 
-        // Find property.
-        for( Vector<TamlCustomProperty*>::const_iterator propertyItr = begin(); propertyItr != end(); ++propertyItr )
+        // Find node.
+        for( Vector<TamlCustomNode*>::const_iterator nodeItr = mNodes.begin(); nodeItr != mNodes.end(); ++nodeItr )
         {
-            if ( (*propertyItr)->mPropertyName == propertyName )
-                return (*propertyItr);
+            if ( (*nodeItr)->mNodeName == nodeName )
+                return (*nodeItr);
         }
 
         return NULL;
     }
+
+private:
+    TamlCustomNodeVector mNodes;
 };
 
 #endif // _TAML_CUSTOM_H_

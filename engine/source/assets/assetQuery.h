@@ -49,8 +49,8 @@ private:
     typedef SimObject Parent;
 
 protected:
-    virtual void onTamlCustomWrite( TamlCustomProperties& customProperties );
-    virtual void onTamlCustomRead( const TamlCustomProperties& customProperties );
+    virtual void onTamlCustomWrite( TamlCustomNodes& customNodes );
+    virtual void onTamlCustomRead( const TamlCustomNodes& customNodes );
 
     static const char* getCount(void* obj, const char* data) { return Con::getIntArg(static_cast<AssetQuery*>(obj)->size()); }
     static bool writeCount( void* obj, StringTableEntry pFieldName ) { return false; }

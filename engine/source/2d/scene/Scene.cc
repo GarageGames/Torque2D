@@ -3617,7 +3617,7 @@ void Scene::onTamlPreRead( void )
 
 //-----------------------------------------------------------------------------
 
-void Scene::onTamlPostRead( const TamlCustomProperties& customProperties )
+void Scene::onTamlPostRead( const TamlCustomNodes& customProperties )
 {
     // Call parent.
     Parent::onTamlPostRead( customProperties );
@@ -3658,7 +3658,7 @@ void Scene::onTamlPostRead( const TamlCustomProperties& customProperties )
             for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
             {
                 // Fetch property field.
-                TamlPropertyField* pPropertyField = *propertyFieldItr;
+                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
 
                 // Fetch property field name.
                 StringTableEntry fieldName = pPropertyField->getFieldName();
@@ -3716,7 +3716,7 @@ void Scene::onTamlPostRead( const TamlCustomProperties& customProperties )
             for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
             {
                 // Fetch property field.
-                TamlPropertyField* pPropertyField = *propertyFieldItr;
+                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
 
                 // Fetch property field name.
                 StringTableEntry fieldName = pPropertyField->getFieldName();
@@ -3772,7 +3772,7 @@ void Scene::onTamlPostRead( const TamlCustomProperties& customProperties )
             for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
             {
                 // Fetch property field.
-                TamlPropertyField* pPropertyField = *propertyFieldItr;
+                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
 
                 // Fetch property field name.
                 StringTableEntry fieldName = pPropertyField->getFieldName();
@@ -3848,7 +3848,7 @@ void Scene::onTamlPostRead( const TamlCustomProperties& customProperties )
             for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
             {
                 // Fetch property field.
-                TamlPropertyField* pPropertyField = *propertyFieldItr;
+                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
 
                 // Fetch property field name.
                 StringTableEntry fieldName = pPropertyField->getFieldName();
@@ -3908,7 +3908,7 @@ void Scene::onTamlPostRead( const TamlCustomProperties& customProperties )
             for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
             {
                 // Fetch property field.
-                TamlPropertyField* pPropertyField = *propertyFieldItr;
+                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
 
                 // Fetch property field name.
                 StringTableEntry fieldName = pPropertyField->getFieldName();
@@ -3984,7 +3984,7 @@ void Scene::onTamlPostRead( const TamlCustomProperties& customProperties )
             for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
             {
                 // Fetch property field.
-                TamlPropertyField* pPropertyField = *propertyFieldItr;
+                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
 
                 // Fetch property field name.
                 StringTableEntry fieldName = pPropertyField->getFieldName();
@@ -4046,7 +4046,7 @@ void Scene::onTamlPostRead( const TamlCustomProperties& customProperties )
             for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
             {
                 // Fetch property field.
-                TamlPropertyField* pPropertyField = *propertyFieldItr;
+                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
 
                 // Fetch property field name.
                 StringTableEntry fieldName = pPropertyField->getFieldName();
@@ -4127,7 +4127,7 @@ void Scene::onTamlPostRead( const TamlCustomProperties& customProperties )
             for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
             {
                 // Fetch property field.
-                TamlPropertyField* pPropertyField = *propertyFieldItr;
+                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
 
                 // Fetch property field name.
                 StringTableEntry fieldName = pPropertyField->getFieldName();
@@ -4193,7 +4193,7 @@ void Scene::onTamlPostRead( const TamlCustomProperties& customProperties )
             for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
             {
                 // Fetch property field.
-                TamlPropertyField* pPropertyField = *propertyFieldItr;
+                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
 
                 // Fetch property field name.
                 StringTableEntry fieldName = pPropertyField->getFieldName();
@@ -4245,7 +4245,7 @@ void Scene::onTamlPostRead( const TamlCustomProperties& customProperties )
             for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
             {
                 // Fetch property field.
-                TamlPropertyField* pPropertyField = *propertyFieldItr;
+                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
 
                 // Fetch property field name.
                 StringTableEntry fieldName = pPropertyField->getFieldName();
@@ -4306,10 +4306,10 @@ void Scene::onTamlPostRead( const TamlCustomProperties& customProperties )
 
 //-----------------------------------------------------------------------------
 
-void Scene::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void Scene::onTamlCustomWrite( TamlCustomNodes& customProperties )
 {
     // Call parent.
-    Parent::onTamlCustomWrite( customProperties );
+    Parent::onTamlCustomWrite( customNodes );
 
     // Fetch joint count.
     const U32 jointCount = getJointCount();
@@ -4746,7 +4746,7 @@ void Scene::onTamlCustomWrite( TamlCustomProperties& customProperties )
 
 //-----------------------------------------------------------------------------
 
-void Scene::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void Scene::onTamlCustomRead( const TamlCustomNodes& customProperties )
 {
     // Call parent.
     Parent::onTamlCustomRead( customProperties );

@@ -58,7 +58,7 @@ private:
     void resetParse( void );
 
     SimObject* parseElement( Stream& stream, const U32 versionId );
-    void parseCustomElements( Stream& stream, TamlCallbacks* pCallbacks, TamlCustomProperties& customProperties, const U32 versionId );
+    void parseCustomElements( Stream& stream, TamlCallbacks* pCallbacks, TamlCustomNodes& customNodes, const U32 versionId );
     void parseAttributes( Stream& stream, SimObject* pSimObject, const U32 versionId );
     void parseChildren( Stream& stream, TamlCallbacks* pCallbacks, SimObject* pSimObject, const U32 versionId );
 };

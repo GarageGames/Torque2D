@@ -594,7 +594,7 @@ void ParticleAssetField::onTamlCustomRead( const TamlPropertyAlias* pPropertyAli
     for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
     {
         // Fetch property field.
-        TamlPropertyField* pPropertyField = *propertyFieldItr;
+        TamlCustomNodeField* pPropertyField = *propertyFieldItr;
 
         // Fetch property field name.
         StringTableEntry fieldName = pPropertyField->getFieldName();

@@ -132,13 +132,13 @@ void TamlBinaryWriter::writeCustomElements( Stream& stream, const TamlWriteNode*
     PROFILE_SCOPE(TamlBinaryWriter_WriteCustomElements);
 
     // Fetch custom properties.
-    const TamlCustomProperties& customProperties = pTamlWriteNode->mCustomProperties;
+    const TamlCustomNodes& customNodes = pTamlWriteNode->mCustomProperties;
 
     // Write custom element count.
     stream.write( (U32)customProperties.size() );
 
     // Iterate custom properties.
-    for( TamlCustomProperties::const_iterator customPropertyItr = customProperties.begin(); customPropertyItr != customProperties.end(); ++customPropertyItr )
+    for( TamlCustomNodes::const_iterator customPropertyItr = customProperties.begin(); customPropertyItr != customProperties.end(); ++customPropertyItr )
     {
         // Fetch custom property.
         TamlCustomProperty* pCustomProperty = *customPropertyItr;
@@ -176,7 +176,7 @@ void TamlBinaryWriter::writeCustomElements( Stream& stream, const TamlWriteNode*
             for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
             {
                 // Fetch property field.
-                TamlPropertyField* pPropertyField = *propertyFieldItr;
+                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
 
                 // Fetch object field flag,
                 const bool isObjectField = pPropertyField->isObjectField();

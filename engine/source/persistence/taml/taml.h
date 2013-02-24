@@ -129,10 +129,10 @@ private:
     inline void tamlPreWrite( TamlCallbacks* pCallbacks )                                           { pCallbacks->onTamlPreWrite(); }
     inline void tamlPostWrite( TamlCallbacks* pCallbacks )                                          { pCallbacks->onTamlPostWrite(); }
     inline void tamlPreRead( TamlCallbacks* pCallbacks )                                            { pCallbacks->onTamlPreRead(); }
-    inline void tamlPostRead( TamlCallbacks* pCallbacks, const TamlCustomProperties& customProperties )   { pCallbacks->onTamlPostRead( customProperties ); }
+    inline void tamlPostRead( TamlCallbacks* pCallbacks, const TamlCustomNodes& customNodes )   { pCallbacks->onTamlPostRead( customProperties ); }
     inline void tamlAddParent( TamlCallbacks* pCallbacks, SimObject* pParentObject )                { pCallbacks->onTamlAddParent( pParentObject ); }
-    inline void tamlCustomWrite( TamlCallbacks* pCallbacks, TamlCustomProperties& customProperties )      { pCallbacks->onTamlCustomWrite( customProperties ); }
-    inline void tamlCustomRead( TamlCallbacks* pCallbacks, const TamlCustomProperties& customProperties ) { pCallbacks->onTamlCustomRead( customProperties ); }
+    inline void tamlCustomWrite( TamlCallbacks* pCallbacks, TamlCustomNodes& customNodes )      { pCallbacks->onTamlCustomWrite( customProperties ); }
+    inline void tamlCustomRead( TamlCallbacks* pCallbacks, const TamlCustomNodes& customNodes ) { pCallbacks->onTamlCustomRead( customProperties ); }
 
 public:
     Taml();

@@ -489,7 +489,7 @@ void ParticleAssetEmitter::onAssetRefreshed( AssetPtrBase* pAssetPtrBase )
 
 //------------------------------------------------------------------------------
 
-void ParticleAssetEmitter::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void ParticleAssetEmitter::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ParticleAssetEmitter_OnTamlCustomWrite);
@@ -500,7 +500,7 @@ void ParticleAssetEmitter::onTamlCustomWrite( TamlCustomProperties& customProper
 
 //-----------------------------------------------------------------------------
 
-void ParticleAssetEmitter::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void ParticleAssetEmitter::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ParticleAssetEmitter_OnTamlCustomRead);

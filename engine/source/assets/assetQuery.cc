@@ -51,13 +51,13 @@ void AssetQuery::initPersistFields()
 
 //-----------------------------------------------------------------------------
 
-void AssetQuery::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void AssetQuery::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Call parent.
-    Parent::onTamlCustomWrite( customProperties );
+    Parent::onTamlCustomWrite( customNodes );
 
-    // Add property.
-    TamlCustomProperty* pProperty = customProperties.addProperty( ASSETQUERY_CUSTO_PROPERTY_NAME );
+    // Add node.
+    TamlCustomNode* pCustomNode = customNodes..addProperty( ASSETQUERY_CUSTO_PROPERTY_NAME );
 
     // Finish if no assets.
     if ( size() == 0 )
@@ -76,7 +76,7 @@ void AssetQuery::onTamlCustomWrite( TamlCustomProperties& customProperties )
 
 //-----------------------------------------------------------------------------
 
-void AssetQuery::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void AssetQuery::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Call parent.
     Parent::onTamlCustomRead( customProperties );
@@ -102,7 +102,7 @@ void AssetQuery::onTamlCustomRead( const TamlCustomProperties& customProperties 
             continue;
 
         // Fetch field.
-        const TamlPropertyField* pField = pAlias->findField( ASSETQUERY_ASSETID_FIELD_NAME );
+        const TamlCustomNodeField* pField = pAlias->findField( ASSETQUERY_ASSETID_FIELD_NAME );
 
         // Do we find the field?
         if ( pField == NULL )

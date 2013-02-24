@@ -88,8 +88,8 @@ protected:
     virtual const char* _callMethod( U32 argc, const char *argv[], bool callThis = true );
 
     /// Taml callbacks.
-    virtual void onTamlCustomWrite( TamlCustomProperties& customProperties );
-    virtual void onTamlCustomRead( const TamlCustomProperties& customProperties );
+    virtual void onTamlCustomWrite( TamlCustomNodes& customNodes );
+    virtual void onTamlCustomRead( const TamlCustomNodes& customNodes );
 
 private:
     void destroyBehaviorOutputConnections( BehaviorInstance* pOutputBehavior );

@@ -442,7 +442,7 @@ void SpriteBatchItem::onTamlCustomRead( const TamlPropertyAlias* pSpriteAlias )
     for ( TamlPropertyAlias::const_iterator propertyFieldItr = pSpriteAlias->begin(); propertyFieldItr != pSpriteAlias->end(); ++propertyFieldItr )
     {
         // Fetch sprite field.
-        TamlPropertyField* pSpriteField = *propertyFieldItr;
+        TamlCustomNodeField* pSpriteField = *propertyFieldItr;
 
         // Fetch sprite field name.
         StringTableEntry fieldName = pSpriteField->getFieldName();

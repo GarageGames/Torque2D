@@ -166,7 +166,7 @@ SimObject* TamlXmlReader::parseElement( TiXmlElement* pXmlElement )
     // Fetch any children.
     TiXmlNode* pChildXmlNode = pXmlElement->FirstChild();
 
-    TamlCustomProperties customProperties;
+    TamlCustomNodes customProperties;
 
     // Do we have any element children?
     if ( pChildXmlNode != NULL )
@@ -247,7 +247,7 @@ SimObject* TamlXmlReader::parseElement( TiXmlElement* pXmlElement )
 
 //-----------------------------------------------------------------------------
 
-void TamlXmlReader::parseCustomElement( TiXmlElement* pXmlElement, TamlCustomProperties& customProperties )
+void TamlXmlReader::parseCustomElement( TiXmlElement* pXmlElement, TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(TamlXmlReader_ParseCustomElement);

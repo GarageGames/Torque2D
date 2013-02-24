@@ -422,7 +422,7 @@ F32 ParticleAssetFieldCollection::getValueScale( void ) const
 
 //------------------------------------------------------------------------------
 
-void ParticleAssetFieldCollection::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void ParticleAssetFieldCollection::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ParticleAssetFieldCollection_OnTamlCustomWrite);
@@ -443,7 +443,7 @@ void ParticleAssetFieldCollection::onTamlCustomWrite( TamlCustomProperties& cust
 
 //-----------------------------------------------------------------------------
 
-void ParticleAssetFieldCollection::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void ParticleAssetFieldCollection::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ParticleAssetFieldCollection_OnTamlCustomRead);

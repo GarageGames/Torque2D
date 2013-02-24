@@ -113,7 +113,7 @@ public:
     const char*                 mpObjectName;
     Vector<TamlWriteNode::FieldValuePair*> mFields;
     Vector<TamlWriteNode*>*     mChildren;
-    TamlCustomProperties        mCustomProperties;
+    TamlCustomNodes        mCustomProperties;
 };
 
 #endif // _TAML_WRITE_NODE_H_

@@ -28,7 +28,7 @@
 
 //-----------------------------------------------------------------------------
 
-void TamlPropertyField::resetState( void )
+void TamlCustomNodeField::resetState( void )
 {
     mFieldName = StringTable->EmptyString;
     *mFieldValue = 0;
@@ -40,7 +40,7 @@ void TamlPropertyField::resetState( void )
 
 //-----------------------------------------------------------------------------
 
-void TamlPropertyField::set( const char* pFieldName, const char* pFieldValue )
+void TamlCustomNodeField::set( const char* pFieldName, const char* pFieldValue )
 {
     // Sanity!
     AssertFatal( pFieldName != NULL, "Field name cannot be NULL." );
@@ -69,7 +69,7 @@ void TamlPropertyField::set( const char* pFieldName, const char* pFieldValue )
 
 //-----------------------------------------------------------------------------
 
-void TamlPropertyField::set( const char* pFieldName, SimObject* pFieldObject )
+void TamlCustomNodeField::set( const char* pFieldName, SimObject* pFieldObject )
 {
     // Sanity!
     AssertFatal( pFieldName != NULL, "Field name cannot be NULL." );
@@ -88,7 +88,7 @@ void TamlPropertyField::set( const char* pFieldName, SimObject* pFieldObject )
 
 //-----------------------------------------------------------------------------
 
-void TamlPropertyField::setWriteNode( TamlWriteNode* pWriteNode )
+void TamlCustomNodeField::setWriteNode( TamlWriteNode* pWriteNode )
 {
     // Sanity!
     AssertFatal( mFieldName != StringTable->EmptyString, "Cannot set write node with an empty field name." );
@@ -105,14 +105,14 @@ void TamlPropertyField::setWriteNode( TamlWriteNode* pWriteNode )
 
 //-----------------------------------------------------------------------------
 
-SimObject* TamlPropertyField::getFieldObject( void ) const
+SimObject* TamlCustomNodeField::getFieldObject( void ) const
 {
     return mpFieldObject != NULL ? mpFieldObject : NULL;
 }
 
 //-----------------------------------------------------------------------------
 
-bool TamlPropertyField::isObjectField( void ) const
+bool TamlCustomNodeField::isObjectField( void ) const
 {
     return mpFieldObject != NULL;
 }

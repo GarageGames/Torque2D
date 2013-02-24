@@ -868,13 +868,13 @@ void ImageAsset::onTamlPostWrite( void )
 
 //------------------------------------------------------------------------------
 
-void ImageAsset::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void ImageAsset::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ImageAsset_OnTamlCustomWrite);
 
     // Call parent.
-    Parent::onTamlCustomWrite( customProperties );
+    Parent::onTamlCustomWrite( customNodes );
 
     // Finish if not in explicit mode.
     if ( !mExplicitMode )
@@ -901,7 +901,7 @@ void ImageAsset::onTamlCustomWrite( TamlCustomProperties& customProperties )
 
 //-----------------------------------------------------------------------------
 
-void ImageAsset::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void ImageAsset::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ImageAsset_OnTamlCustomRead);
@@ -944,7 +944,7 @@ void ImageAsset::onTamlCustomRead( const TamlCustomProperties& customProperties 
         for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
         {
             // Fetch property field.
-            TamlPropertyField* pPropertyField = *propertyFieldItr;
+            TamlCustomNodeField* pPropertyField = *propertyFieldItr;
 
             // Fetch property field name.
             StringTableEntry fieldName = pPropertyField->getFieldName();

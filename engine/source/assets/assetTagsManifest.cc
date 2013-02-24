@@ -118,10 +118,10 @@ void AssetTagsManifest::renameAssetId( const char* pAssetIdFrom, const char* pAs
 
 //-----------------------------------------------------------------------------
 
-void AssetTagsManifest::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void AssetTagsManifest::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Call parent.
-    Parent::onTamlCustomWrite( customProperties );
+    Parent::onTamlCustomWrite( customNodes );
 
     // Finish if no tags.
     if ( mTagNameDatabase.size() == 0 )
@@ -157,7 +157,7 @@ void AssetTagsManifest::onTamlCustomWrite( TamlCustomProperties& customPropertie
 
 //-----------------------------------------------------------------------------
 
-void AssetTagsManifest::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void AssetTagsManifest::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Call parent.
     Parent::onTamlCustomRead( customProperties );
@@ -183,7 +183,7 @@ void AssetTagsManifest::onTamlCustomRead( const TamlCustomProperties& customProp
             continue;
 
         // Fetch "Name" field.
-        const TamlPropertyField* pTagNameField = pAlias->findField( ASSETTAGS_TAGS_NAME_FIELD );
+        const TamlCustomNodeField* pTagNameField = pAlias->findField( ASSETTAGS_TAGS_NAME_FIELD );
 
         // Do we find the field?
         if ( pTagNameField == NULL )
@@ -218,7 +218,7 @@ void AssetTagsManifest::onTamlCustomRead( const TamlCustomProperties& customProp
             continue;
 
         // Fetch "AssetId" field.
-        const TamlPropertyField* pAssetIdField = pAlias->findField( ASSETTAGS_ASSETS_ASSETID_FIELD );
+        const TamlCustomNodeField* pAssetIdField = pAlias->findField( ASSETTAGS_ASSETS_ASSETID_FIELD );
 
         // Do we find the field?
         if ( pAssetIdField == NULL )
@@ -229,7 +229,7 @@ void AssetTagsManifest::onTamlCustomRead( const TamlCustomProperties& customProp
         }
 
         // Fetch "Tag" field.
-        const TamlPropertyField* pTagField = pAlias->findField( ASSETTAGS_ASSETS_TAG_FIELD );
+        const TamlCustomNodeField* pTagField = pAlias->findField( ASSETTAGS_ASSETS_TAG_FIELD );
 
         // Do we find the field?
         if ( pTagField == NULL )

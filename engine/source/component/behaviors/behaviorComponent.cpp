@@ -886,10 +886,10 @@ const BehaviorComponent::typePortConnectionVector* BehaviorComponent::getBehavio
 
 //-----------------------------------------------------------------------------
 
-void BehaviorComponent::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void BehaviorComponent::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Call parent.
-    Parent::onTamlCustomWrite( customProperties );
+    Parent::onTamlCustomWrite( customNodes );
 
     // Fetch behavior count.
     const U32 behaviorCount = (U32)mBehaviors.size();
@@ -987,7 +987,7 @@ void BehaviorComponent::onTamlCustomWrite( TamlCustomProperties& customPropertie
 
 //-----------------------------------------------------------------------------
 
-void BehaviorComponent::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Call parent.
     Parent::onTamlCustomRead( customProperties );
@@ -1051,7 +1051,7 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomProperties& customProp
             for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
             {
                 // Fetch property field.
-                TamlPropertyField* pPropertyField = *propertyFieldItr;
+                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
 
                 // Fetch field name.
                 const char* pFieldName = pPropertyField->getFieldName();
@@ -1139,8 +1139,8 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomProperties& customProp
             }
 
             // Fetch property field #1.
-            TamlPropertyField* pPropertyField1 = *pPropertyAlias->begin();
-            TamlPropertyField* pPropertyField2 = *(pPropertyAlias->begin()+1);
+            TamlCustomNodeField* pPropertyField1 = *pPropertyAlias->begin();
+            TamlCustomNodeField* pPropertyField2 = *(pPropertyAlias->begin()+1);
            
             // Fetch behavior instances #1.
             BehaviorInstance* pBehaviorInstance1 = getBehaviorByInstanceId( dAtoi( pPropertyField1->getFieldValue() ) );
