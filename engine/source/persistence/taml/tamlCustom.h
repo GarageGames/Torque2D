@@ -56,6 +56,12 @@
 //-----------------------------------------------------------------------------
 
 class TamlWriteNode;
+class TamlCustomNode;
+class TamlCustomNodeField;
+extern FactoryCache<TamlCustomNode> TamlCustomNodeFactory;
+extern FactoryCache<TamlCustomNodeField> TamlCustomNodeFieldFactory;
+typedef Vector<TamlCustomNode*> TamlCustomNodeVector;
+typedef Vector<TamlCustomNodeField*> TamlCustomFieldVector;
 
 //-----------------------------------------------------------------------------
 
@@ -182,9 +188,6 @@ private:
     char                mFieldValue[MAX_TAML_NODE_FIELDVALUE_LENGTH];
 };
 
-static FactoryCache<TamlCustomNodeField> TamlCustomNodeFieldFactory;
-typedef Vector<TamlCustomNodeField*> TamlCustomFieldVector;
-
 //-----------------------------------------------------------------------------
 
 class TamlCustomNode : public IFactoryObjectReset
@@ -245,10 +248,9 @@ public:
 
     void setWriteNode( TamlWriteNode* pWriteNode );
 
-    TamlCustomNode* addNode( SimObject* pProxyObject )
+    inline TamlCustomNode* addNode( SimObject* pProxyObject )
     {
         // Sanity!
-        AssertFatal( pNodeName != NULL, "Field name cannot be NULL." );
         AssertFatal( pProxyObject != NULL, "Field object cannot be NULL." );
         AssertFatal( mpProxyWriteNode == NULL, "Field write node must be NULL." );
 
@@ -261,11 +263,10 @@ public:
         // Set proxy object.
         mpProxyObject = pProxyObject;
 
-        // Remove any existing proxy write node.
-        SAFE_DELETE( mpProxyWriteNode );
+        return pCustomNode;
     }
 
-    TamlCustomNode* addNode( const char* pNodeName, const bool ignoreEmpty = true )
+    inline TamlCustomNode* addNode( const char* pNodeName, const bool ignoreEmpty = true )
     {
         // Create a custom node.
         TamlCustomNode* pCustomNode = TamlCustomNodeFactory.createObject();
@@ -282,7 +283,7 @@ public:
         return pCustomNode;
     }
 
-    void removeNode( const U32 index )
+    inline void removeNode( const U32 index )
     {
         // Sanity!
         AssertFatal( index < (U32)mChildren.size(), "tamlCustomNode::removeNode() - Index is out of bounds." );
@@ -294,7 +295,7 @@ public:
         mChildren.erase( index );
     }
 
-    const TamlCustomNode* findNode( const char* pNodeName ) const
+    inline const TamlCustomNode* findNode( const char* pNodeName ) const
     {
         // Sanity!
         AssertFatal( pNodeName != NULL, "Cannot find Taml node name that is NULL." );
@@ -312,7 +313,7 @@ public:
         return NULL;
     }
 
-    TamlCustomNodeField* addField( const char* pFieldName, const ColorI& fieldValue )
+    inline TamlCustomNodeField* addField( const char* pFieldName, const ColorI& fieldValue )
     {
         // Fetch the field value.
         const char* pFieldValue = Con::getData( TypeColorI, &const_cast<ColorI&>(fieldValue), 0 );
@@ -328,7 +329,7 @@ public:
         return addField( pFieldName, pFieldValue );
     }
 
-    TamlCustomNodeField* addField( const char* pFieldName, const ColorF& fieldValue )
+    inline TamlCustomNodeField* addField( const char* pFieldName, const ColorF& fieldValue )
     {
         // Fetch the field value.
         const char* pFieldValue = Con::getData( TypeColorF, &const_cast<ColorF&>(fieldValue), 0 );
@@ -344,56 +345,56 @@ public:
         return addField( pFieldName, pFieldValue );
     }
 
-    TamlCustomNodeField* addField( const char* pFieldName, const Point2I& fieldValue )
+    inline TamlCustomNodeField* addField( const char* pFieldName, const Point2I& fieldValue )
     {
         char fieldValueBuffer[32];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%d %d", fieldValue.x, fieldValue.y );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    TamlCustomNodeField* addField( const char* pFieldName, const Point2F& fieldValue )
+    inline TamlCustomNodeField* addField( const char* pFieldName, const Point2F& fieldValue )
     {
         char fieldValueBuffer[32];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%.5g %0.5g", fieldValue.x, fieldValue.y );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    TamlCustomNodeField* addField( const char* pFieldName, const b2Vec2& fieldValue )
+    inline TamlCustomNodeField* addField( const char* pFieldName, const b2Vec2& fieldValue )
     {
         char fieldValueBuffer[32];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%.5g %.5g", fieldValue.x, fieldValue.y );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    TamlCustomNodeField* addField( const char* pFieldName, const U32 fieldValue )
+    inline TamlCustomNodeField* addField( const char* pFieldName, const U32 fieldValue )
     {
         char fieldValueBuffer[16];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%d", fieldValue );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    TamlCustomNodeField* addField( const char* pFieldName, const bool fieldValue )
+    inline TamlCustomNodeField* addField( const char* pFieldName, const bool fieldValue )
     {
         char fieldValueBuffer[16];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%d", fieldValue );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    TamlCustomNodeField* addField( const char* pFieldName, const S32 fieldValue )
+    inline TamlCustomNodeField* addField( const char* pFieldName, const S32 fieldValue )
     {
         char fieldValueBuffer[16];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%d", fieldValue );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    TamlCustomNodeField* addField( const char* pFieldName, const float fieldValue )
+    inline TamlCustomNodeField* addField( const char* pFieldName, const float fieldValue )
     {
         char fieldValueBuffer[16];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%.5g", fieldValue );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    TamlCustomNodeField* addField( const char* pFieldName, const char* pFieldValue )
+    inline TamlCustomNodeField* addField( const char* pFieldName, const char* pFieldValue )
     {
         // Create a node field.
         TamlCustomNodeField* pNodeField = TamlCustomNodeFieldFactory.createObject();
@@ -437,37 +438,7 @@ public:
         return pNodeField;
     }
 
-    TamlCustomNodeField* addField( const char* pFieldName, SimObject* pFieldObject )
-    {
-        // Create a node field.
-        TamlCustomNodeField* pNodeField = TamlCustomNodeFieldFactory.createObject();
-
-        // Set node field.
-        pNodeField->set( pFieldName, pFieldObject );
-
-#if TORQUE_DEBUG
-        // Ensure a field name conflict does not exist.
-        for( TamlCustomFieldVector::iterator nodeFieldItr = mFields.begin(); nodeFieldItr != mFields.end(); ++nodeFieldItr )
-        {
-            // Skip if field name is not the same.
-            if ( pNodeField->getFieldName() != (*nodeFieldItr)->getFieldName() )
-                continue;
-
-            // Warn!
-            Con::warnf("Conflicting Taml node field name of '%s' in property alias of '%s'.", pFieldName, mNodeName );
-
-            // Cache node field.
-            TamlCustomNodeFieldFactory.cacheObject( pNodeField );
-            return NULL;
-        }
-#endif
-        // Store node field.
-        mFields.push_back( pNodeField );
-
-        return pNodeField;
-    }
-
-    const TamlCustomNodeField* findField( const char* pFieldName ) const
+    inline const TamlCustomNodeField* findField( const char* pFieldName ) const
     {
         // Sanity!
         AssertFatal( pFieldName != NULL, "Cannot find Taml field name that is NULL." );
@@ -486,15 +457,12 @@ public:
     }
 
     inline bool isProxyObject( void ) const { return mpProxyObject != NULL; }
-    SimObject* getProxyObject( void ) const { return mpProxyObject != NULL ? mpProxyObject : NULL; }
+    inline SimObject* getProxyObject( void ) const { return mpProxyObject != NULL ? mpProxyObject : NULL; }
     inline const TamlWriteNode* getProxyWriteNode( void ) const { return mpProxyWriteNode; }
-    template<typename T> T* composeProxyObject( void ) const
-    {
-        return NULL;
-    }
+    template<typename T> T* composeProxyObject( void ) const;
 
-    const TamlCustomNodeVector& getChildren( void ) const { return mChildren; }
-    const TamlCustomFieldVector& getFields( void ) const { return mFields; }
+    inline const Vector<TamlCustomNode*>& getChildren( void ) const { return mChildren; }
+    inline const TamlCustomFieldVector& getFields( void ) const { return mFields; }
 
     StringTableEntry        mNodeName;
     Vector<TamlCustomNode*> mChildren;
@@ -504,9 +472,6 @@ public:
     SimObject*              mpProxyObject;
     TamlWriteNode*          mpProxyWriteNode;
 };
-
-static FactoryCache<TamlCustomNode> TamlCustomNodeFactory;
-typedef Vector<TamlCustomNode*> TamlCustomNodeVector;
 
 //-----------------------------------------------------------------------------
 
@@ -532,7 +497,7 @@ public:
         }
     }
 
-    TamlCustomNode* addNode( const char* pNodeName, const bool ignoreEmpty = true )
+    inline TamlCustomNode* addNode( const char* pNodeName, const bool ignoreEmpty = true )
     {
         // Create a custom node.
         TamlCustomNode* pCustomNode = TamlCustomNodeFactory.createObject();
@@ -565,7 +530,7 @@ public:
         return pCustomNode;
     }
 
-    void removeNode( const U32 index )
+    inline void removeNode( const U32 index )
     {
         // Sanity!
         AssertFatal( index < (U32)mNodes.size(), "tamlCustomNode::removeNode() - Index is out of bounds." );
@@ -577,7 +542,7 @@ public:
         mNodes.erase( index );
     }
 
-    const TamlCustomNode* findNode( const char* pNodeName ) const
+    inline const TamlCustomNode* findNode( const char* pNodeName ) const
     {
         // Sanity!
         AssertFatal( pNodeName != NULL, "Cannot find Taml node name that is NULL." );
@@ -595,10 +560,18 @@ public:
         return NULL;
     }
 
-    const TamlCustomNodeVector& getNodes( void ) const { return mNodes; }
+    inline const TamlCustomNodeVector& getNodes( void ) const { return mNodes; }
 
 private:
     TamlCustomNodeVector mNodes;
 };
+
+//-----------------------------------------------------------------------------
+
+template<typename T> T* TamlCustomNode::composeProxyObject( void ) const
+{
+    return NULL;
+}
+
 
 #endif // _TAML_CUSTOM_H_

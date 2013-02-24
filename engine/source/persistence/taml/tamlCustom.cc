@@ -28,6 +28,11 @@
 
 //-----------------------------------------------------------------------------
 
+FactoryCache<TamlCustomNodeField> TamlCustomNodeFieldFactory;
+FactoryCache<TamlCustomNode> TamlCustomNodeFactory;
+
+//-----------------------------------------------------------------------------
+
 void TamlCustomNodeField::set( const char* pFieldName, const char* pFieldValue )
 {
     // Sanity!
