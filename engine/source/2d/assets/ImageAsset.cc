@@ -109,8 +109,8 @@ IMPLEMENT_CONOBJECT(ImageAsset);
 
 static bool explicitCellPropertiesInitialized = false;
 
-static StringTableEntry cellCustomPropertyName;
-static StringTableEntry cellAliasName;
+static StringTableEntry cellCustomNodeName;
+static StringTableEntry cellNodeName;
 static StringTableEntry cellOffsetName;
 static StringTableEntry cellWidthName;
 static StringTableEntry cellHeightName;
@@ -184,8 +184,8 @@ ImageAsset::ImageAsset() :  mImageFile(StringTable->EmptyString),
     // Initialize explicit cell field names.
     if ( !explicitCellPropertiesInitialized )
     {
-        cellCustomPropertyName      = StringTable->insert( "Cells" );
-        cellAliasName               = StringTable->insert( "Cell" );
+        cellCustomNodeName          = StringTable->insert( "Cells" );
+        cellNodeName                = StringTable->insert( "Cell" );
         cellOffsetName              = StringTable->insert( "Offset" );
         cellWidthName               = StringTable->insert( "Width" );
         cellHeightName              = StringTable->insert( "Height" );
@@ -868,20 +868,20 @@ void ImageAsset::onTamlPostWrite( void )
 
 //------------------------------------------------------------------------------
 
-void ImageAsset::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void ImageAsset::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ImageAsset_OnTamlCustomWrite);
 
     // Call parent.
-    Parent::onTamlCustomWrite( customProperties );
+    Parent::onTamlCustomWrite( customNodes );
 
     // Finish if not in explicit mode.
     if ( !mExplicitMode )
         return;
 
-    // Add cell custom property.
-    TamlCustomProperty* pCellProperty = customProperties.addProperty( cellCustomPropertyName );
+    // Add cell custom node.
+    TamlCustomNode* pCustomCellNodes = customNodes.addNode( cellCustomNodeName );
 
     // Iterate explicit frames.
     for( typeExplicitFrameAreaVector::iterator frameItr = mExplicitFrames.begin(); frameItr != mExplicitFrames.end(); ++frameItr )
@@ -890,49 +890,52 @@ void ImageAsset::onTamlCustomWrite( TamlCustomProperties& customProperties )
         const FrameArea::PixelArea& pixelArea = *frameItr;
 
         // Add cell alias.
-        TamlPropertyAlias* pCellAlias = pCellProperty->addAlias( cellAliasName );
+        TamlCustomNode* pCellNode = pCustomCellNodes->addNode( cellNodeName );
 
         // Add cell properties.
-        pCellAlias->addField( cellOffsetName, pixelArea.mPixelOffset );
-        pCellAlias->addField( cellWidthName, pixelArea.mPixelWidth );
-        pCellAlias->addField( cellHeightName, pixelArea.mPixelHeight );
+        pCellNode->addField( cellOffsetName, pixelArea.mPixelOffset );
+        pCellNode->addField( cellWidthName, pixelArea.mPixelWidth );
+        pCellNode->addField( cellHeightName, pixelArea.mPixelHeight );
     }
 }
 
 //-----------------------------------------------------------------------------
 
-void ImageAsset::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void ImageAsset::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ImageAsset_OnTamlCustomRead);
 
     // Call parent.
-    Parent::onTamlCustomRead( customProperties );
+    Parent::onTamlCustomRead( customNodes );
 
-    // Find cell custom property
-    const TamlCustomProperty* pCellProperty = customProperties.findProperty( cellCustomPropertyName );
+    // Find cell custom node.
+    const TamlCustomNode* pCustomCellNodes = customNodes.findNode( cellCustomNodeName );
 
     // Finish if we don't have explicit cells.
-    if ( pCellProperty == NULL )
+    if ( pCustomCellNodes == NULL )
         return;
 
     // Set explicit mode.
     mExplicitMode = true;
 
-    // Iterate cells.
-    for( TamlCustomProperty::const_iterator propertyAliasItr = pCellProperty->begin(); propertyAliasItr != pCellProperty->end(); ++propertyAliasItr )
-    {
-        // Fetch property alias.
-        TamlPropertyAlias* pPropertyAlias = *propertyAliasItr;
+    // Fetch children cell nodes.
+    const TamlCustomNodeVector& cellNodes = pCustomCellNodes->getChildren();
 
-        // Fetch alias name.
-        StringTableEntry aliasName = pPropertyAlias->mAliasName;
+    // Iterate cells.
+    for( TamlCustomNodeVector::const_iterator cellNodeItr = cellNodes.begin(); cellNodeItr != cellNodes.end(); ++cellNodeItr )
+    {
+        // Fetch cell node.
+        TamlCustomNode* pCellNode = *cellNodeItr;
+
+        // Fetch node name.
+        StringTableEntry nodeName = pCellNode->getNodeName();
 
         // Is this a valid alias?
-        if ( aliasName != cellAliasName )
+        if ( nodeName != cellNodeName )
         {
             // No, so warn.
-            Con::warnf( "ImageAsset::onTamlCustomRead() - Encountered an unknown custom alias name of '%s'.  Only '%s' is valid.", aliasName, cellAliasName );
+            Con::warnf( "ImageAsset::onTamlCustomRead() - Encountered an unknown custom name of '%s'.  Only '%s' is valid.", nodeName, cellNodeName );
             continue;
         }
 
@@ -940,27 +943,30 @@ void ImageAsset::onTamlCustomRead( const TamlCustomProperties& customProperties 
         S32 cellWidth = 0;
         S32 cellHeight = 0;
 
-        // Iterate property fields.
-        for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
-        {
-            // Fetch property field.
-            TamlPropertyField* pPropertyField = *propertyFieldItr;
+        // Fetch fields.
+        const TamlCustomFieldVector& fields = pCellNode->getFields();
 
-            // Fetch property field name.
-            StringTableEntry fieldName = pPropertyField->getFieldName();
+        // Iterate property fields.
+        for ( TamlCustomFieldVector::const_iterator fieldItr = fields.begin(); fieldItr != fields.end(); ++fieldItr )
+        {
+            // Fetch field.
+            const TamlCustomField* pField = *fieldItr;
+
+            // Fetch field name.
+            StringTableEntry fieldName = pField->getFieldName();
 
             // Check common fields.
             if ( fieldName == cellOffsetName )
             {
-                pPropertyField->getFieldValue( cellOffset );
+                pField->getFieldValue( cellOffset );
             }
             else if ( fieldName == cellWidthName )
             {
-                pPropertyField->getFieldValue( cellWidth );
+                pField->getFieldValue( cellWidth );
             }
             else if ( fieldName == cellHeightName )
             {
-                pPropertyField->getFieldValue( cellHeight );
+                pField->getFieldValue( cellHeight );
             }
             else
             {

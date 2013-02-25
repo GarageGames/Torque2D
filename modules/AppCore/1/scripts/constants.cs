@@ -20,40 +20,32 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _TAML_XMLWRITER_H_
-#define _TAML_XMLWRITER_H_
+$iOS::constant::iPhone = 0;
+$iOS::constant::iPad = 1;
+$iOS::constant::iPhone5 = 2;
 
-#ifndef _TAML_H_
-#include "persistence/taml/taml.h"
-#endif
+$iOS::constant::Landscape = 0;
+$iOS::constant::Portrait = 1;
+$iOS::constant::ResolutionFull = 0;
+$iOS::constant::ResolutionSmall = 1;
 
-#ifndef TINYXML_INCLUDED
-#include "persistence/tinyXML/tinyxml.h"
-#endif
+$iOS::constant::iPhoneWidth = 480;
+$iOS::constant::iPhoneHeight = 320;
 
+$iOS::constant::iPhone4Width = 960;
+$iOS::constant::iPhone4Height = 640;
 
-//-----------------------------------------------------------------------------
+$iOS::constant::iPadWidth = 1024;
+$iOS::constant::iPadHeight = 768;
 
-class TamlXmlWriter
-{
-public:
-    TamlXmlWriter( Taml* pTaml ) :
-        mpTaml( pTaml )
-    {
-    }
-    virtual ~TamlXmlWriter() {}
+$iOS::constant::NewiPadWidth = 2048;
+$iOS::constant::NewiPadHeight = 1536;
 
-    /// Write.
-    bool write( FileStream& stream, const TamlWriteNode* pTamlWriteNode );
+$iOS::constant::iPhone5Width = 1136;
+$iOS::constant::iPhone5Height = 640;
 
-private:
-    Taml* mpTaml;
-
-private:
-    TiXmlNode* compileElement( const TamlWriteNode* pTamlWriteNode );
-    void compileAttributes( TiXmlElement* pXmlElement, const TamlWriteNode* pTamlWriteNode );
-    void compileCustomElements( TiXmlElement* pXmlElement, const TamlWriteNode* pTamlWriteNode );
-    void compileCustomNode( TiXmlElement* pXmlElement, const TamlCustomNode* pCustomNode );
-};
-
-#endif // _TAML_XMLWRITER_H_
+$iOS::constant::OrientationUnknown = 0;
+$iOS::constant::OrientationLandscapeLeft = 1;
+$iOS::constant::OrientationLandscapeRight = 2;
+$iOS::constant::OrientationPortrait = 3;
+$iOS::constant::OrientationPortraitUpsideDown = 4;

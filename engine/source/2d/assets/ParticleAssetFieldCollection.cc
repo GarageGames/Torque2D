@@ -24,7 +24,7 @@
 
 //-----------------------------------------------------------------------------
 
-static StringTableEntry particleAssetFieldCollectionName;
+static StringTableEntry particleAssetFieldNodeName;
 
 //-----------------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ ParticleAssetFieldCollection::ParticleAssetFieldCollection() :
                                     mpSelectedField( NULL )
 {
     // Set custom property name.
-    particleAssetFieldCollectionName = StringTable->insert("Fields");
+    particleAssetFieldNodeName = StringTable->insert("Fields");
 }
 
 //-----------------------------------------------------------------------------
@@ -422,7 +422,7 @@ F32 ParticleAssetFieldCollection::getValueScale( void ) const
 
 //------------------------------------------------------------------------------
 
-void ParticleAssetFieldCollection::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void ParticleAssetFieldCollection::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ParticleAssetFieldCollection_OnTamlCustomWrite);
@@ -431,52 +431,55 @@ void ParticleAssetFieldCollection::onTamlCustomWrite( TamlCustomProperties& cust
     if ( mFields.size() == 0 )
         return;
 
-    // Add particle asset custom property.
-    TamlCustomProperty* pParticleAssetCustomProperty = customProperties.addProperty( particleAssetFieldCollectionName );
+    // Add particle asset custom node.
+    TamlCustomNode* pParticleAssetCustomNode = customNodes.addNode( particleAssetFieldNodeName );
 
     // Iterate the fields.
     for( typeFieldHash::iterator fieldItr = mFields.begin(); fieldItr != mFields.end(); ++fieldItr )
     {
-        fieldItr->value->onTamlCustomWrite( pParticleAssetCustomProperty );
+        fieldItr->value->onTamlCustomWrite( pParticleAssetCustomNode );
     }
 }
 
 //-----------------------------------------------------------------------------
 
-void ParticleAssetFieldCollection::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void ParticleAssetFieldCollection::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ParticleAssetFieldCollection_OnTamlCustomRead);
 
-    // Find the particle asset custom property.
-    const TamlCustomProperty* pParticleAssetCustomProperty = customProperties.findProperty( particleAssetFieldCollectionName );
+    // Find the particle asset custom node.
+    const TamlCustomNode* pParticleAssetCustomNode = customNodes.findNode( particleAssetFieldNodeName );
 
-    // Finish if we don't have a custom property.
-    if ( pParticleAssetCustomProperty == NULL )
+    // Finish if we don't have a custom node.
+    if ( pParticleAssetCustomNode == NULL )
         return;
 
-    // Iterate the custom properties.
-    for( TamlCustomProperty::const_iterator propertyAliasItr = pParticleAssetCustomProperty->begin(); propertyAliasItr != pParticleAssetCustomProperty->end(); ++propertyAliasItr )
-    {
-        // Fetch property alias.
-        TamlPropertyAlias* pPropertyAlias = *propertyAliasItr;
+    // Fetch children.
+    const TamlCustomNodeVector& children = pParticleAssetCustomNode->getChildren();
 
-        // Fetch alias name.
-        StringTableEntry aliasName = pPropertyAlias->mAliasName;
+    // Iterate the custom properties.
+    for( TamlCustomNodeVector::const_iterator childNodeItr = children.begin(); childNodeItr != children.end(); ++childNodeItr )
+    {
+        // Fetch child node.
+        TamlCustomNode* pChildNode = *childNodeItr;
+
+        // Fetch node name.
+        StringTableEntry nodeName = pChildNode->getNodeName();
 
         // Find the field.
-        ParticleAssetField* pParticleAssetField = findField( aliasName );
+        ParticleAssetField* pParticleAssetField = findField( nodeName );
 
         // Did we find the field?
         if ( pParticleAssetField == NULL )
         {
             // No, so warn.
-            Con::warnf( "ParticleAssetFieldCollection::onTamlCustomRead() - Cannot find data field '%s'.", aliasName );
+            Con::warnf( "ParticleAssetFieldCollection::onTamlCustomRead() - Cannot find data field '%s'.", nodeName );
             continue;
         }
 
         // Read the alias.
-        pParticleAssetField->onTamlCustomRead( pPropertyAlias );
+        pParticleAssetField->onTamlCustomRead( pChildNode );
     }
 }
 
