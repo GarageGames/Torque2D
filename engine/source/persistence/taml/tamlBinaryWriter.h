@@ -48,9 +48,10 @@ private:
 
 private:
     void writeElement( Stream& stream, const TamlWriteNode* pTamlWriteNode );
-    void writeCustomElements( Stream& stream, const TamlWriteNode* pTamlWriteNode );
     void writeAttributes( Stream& stream, const TamlWriteNode* pTamlWriteNode );
     void writeChildren( Stream& stream, const TamlWriteNode* pTamlWriteNode );
+    void writeCustomElements( Stream& stream, const TamlWriteNode* pTamlWriteNode );
+    void writeCustomNode( Stream& stream, const TamlCustomNode* pCustomNode );
 };
 
 #endif // _TAML_BINARYWRITER_H_

@@ -53,7 +53,7 @@ private:
     TiXmlNode* compileElement( const TamlWriteNode* pTamlWriteNode );
     void compileAttributes( TiXmlElement* pXmlElement, const TamlWriteNode* pTamlWriteNode );
     void compileCustomElements( TiXmlElement* pXmlElement, const TamlWriteNode* pTamlWriteNode );
-    void compileCustomNodes( TiXmlElement* pXmlElement, const TamlCustomNode* pCustomNode );
+    void compileCustomNode( TiXmlElement* pXmlElement, const TamlCustomNode* pCustomNode );
 };
 
 #endif // _TAML_XMLWRITER_H_

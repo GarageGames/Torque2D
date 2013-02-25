@@ -159,7 +159,7 @@ void TamlXmlWriter::compileCustomElements( TiXmlElement* pXmlElement, const Taml
     if ( nodes.size() == 0 )
         return;
 
-    // Iterate custom properties.
+    // Iterate custom nodes.
     for( TamlCustomNodeVector::const_iterator customNodesItr = nodes.begin(); customNodesItr != nodes.end(); ++customNodesItr )
     {
         // Fetch the custom node.
@@ -182,8 +182,8 @@ void TamlXmlWriter::compileCustomElements( TiXmlElement* pXmlElement, const Taml
             // Fetch child node.
             const TamlCustomNode* pChildNode = *childNodeItr;
 
-            // Compile the custom nodes.
-            compileCustomNodes( pExtendedPropertyElement, pChildNode );
+            // Compile the custom node.
+            compileCustomNode( pExtendedPropertyElement, pChildNode );
         }
 
         // Finish if the node is set to ignore if empty and it is empty.
@@ -203,7 +203,7 @@ void TamlXmlWriter::compileCustomElements( TiXmlElement* pXmlElement, const Taml
 
 //-----------------------------------------------------------------------------
 
-void TamlXmlWriter::compileCustomNodes( TiXmlElement* pXmlElement, const TamlCustomNode* pCustomNode )
+void TamlXmlWriter::compileCustomNode( TiXmlElement* pXmlElement, const TamlCustomNode* pCustomNode )
 {
     // Finish if the node is set to ignore if empty and it is empty.
     if ( pCustomNode->mIgnoreEmpty && pCustomNode->isEmpty() )
@@ -226,18 +226,19 @@ void TamlXmlWriter::compileCustomNodes( TiXmlElement* pXmlElement, const TamlCus
         {
             // Yes, so write the proxy object.
             pNodeElement->LinkEndChild( compileElement( pChildNode->getProxyWriteNode() ) );
+            continue;
         }
         else
         {
-            // No, so compile the child nodes.
-            compileCustomNodes( pNodeElement, pChildNode );
+            // No, so compile the child node.
+            compileCustomNode( pNodeElement, pChildNode );
         }
     }
 
     // Fetch node fields.
     const TamlCustomFieldVector& nodeFields = pCustomNode->getFields();
 
-    // Iterate property fields.
+    // Iterate node fields.
     for ( TamlCustomFieldVector::const_iterator nodeFieldItr = nodeFields.begin(); nodeFieldItr != nodeFields.end(); ++nodeFieldItr )
     {
         // Fetch node field.

@@ -126,89 +126,6 @@ void TamlBinaryWriter::writeElement( Stream& stream, const TamlWriteNode* pTamlW
 
 //-----------------------------------------------------------------------------
 
-void TamlBinaryWriter::writeCustomElements( Stream& stream, const TamlWriteNode* pTamlWriteNode )
-{
-    // Debug Profiling.
-    PROFILE_SCOPE(TamlBinaryWriter_WriteCustomElements);
-
-    // Fetch custom properties.
-    const TamlCustomNodes& customNodes = pTamlWriteNode->mCustomProperties;
-
-    // Write custom element count.
-    stream.write( (U32)customProperties.size() );
-
-    // Iterate custom properties.
-    for( TamlCustomNodes::const_iterator customPropertyItr = customProperties.begin(); customPropertyItr != customProperties.end(); ++customPropertyItr )
-    {
-        // Fetch custom property.
-        TamlCustomProperty* pCustomProperty = *customPropertyItr;
-
-        // Write custom element name.
-        stream.writeString( pCustomProperty->mPropertyName );
-
-        // Fetch property alias count.
-        U32 propertyAliasCount = (U32)pCustomProperty->size();
-
-        // Write property count.
-        stream.write( propertyAliasCount );
-
-        // Skip if no property alias.
-        if (propertyAliasCount == 0 )
-            continue;
-
-        // Iterate property alias.
-        for( TamlCustomProperty::const_iterator propertyAliasItr = pCustomProperty->begin(); propertyAliasItr != pCustomProperty->end(); ++propertyAliasItr )
-        {
-            // Fetch property alias.
-            TamlPropertyAlias* pPropertyAlias = *propertyAliasItr;
-
-            // Write property alias name.
-            stream.writeString( pPropertyAlias->mAliasName );
-
-            // Write property field count.
-            stream.write( (U32)pPropertyAlias->size() );
-
-            // Skip if no property fields.
-            if ( pPropertyAlias->size() == 0 )
-                continue;
-
-            // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
-            {
-                // Fetch property field.
-                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
-
-                // Fetch object field flag,
-                const bool isObjectField = pPropertyField->isObjectField();
-
-                // Write flag.
-                stream.write( isObjectField );
-
-                // Is it an object field?
-                if ( isObjectField )
-                {
-                    // Yes, so fetch write node.
-                    const TamlWriteNode* pObjectWriteField = pPropertyField->getWriteNode();
-
-                    // Write reference field.
-                    stream.writeString( pObjectWriteField->mRefField );
-
-                    // Write field object.
-                    writeElement( stream, pObjectWriteField );
-                }
-                else
-                {
-                    // No, so write property attribute.
-                    stream.writeString( pPropertyField->getFieldName() );
-                    stream.writeLongString( MAX_TAML_NODE_FIELDVALUE_LENGTH, pPropertyField->getFieldValue() );
-                }
-            }
-        }
-    }
-}
-
-//-----------------------------------------------------------------------------
-
 void TamlBinaryWriter::writeAttributes( Stream& stream, const TamlWriteNode* pTamlWriteNode )
 {
     // Debug Profiling.
@@ -260,5 +177,105 @@ void TamlBinaryWriter::writeChildren( Stream& stream, const TamlWriteNode* pTaml
     {
         // Write child.
         writeElement( stream, (*itr) );
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void TamlBinaryWriter::writeCustomElements( Stream& stream, const TamlWriteNode* pTamlWriteNode )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(TamlBinaryWriter_WriteCustomElements);
+
+    // Fetch custom nodes.
+    const TamlCustomNodes& customNodes = pTamlWriteNode->mCustomNodes;
+
+    // Fetch custom nodes.
+    const TamlCustomNodeVector& nodes = customNodes.getNodes();
+
+    // Write custom element count.
+    stream.write( (U32)nodes.size() );
+
+    // Finish if there are no nodes.
+    if ( nodes.size() == 0 )
+        return;
+
+    // Iterate custom nodes.
+    for( TamlCustomNodeVector::const_iterator customNodesItr = nodes.begin(); customNodesItr != nodes.end(); ++customNodesItr )
+    {
+        // Fetch the custom node.
+        TamlCustomNode* pCustomNode = *customNodesItr;
+
+        // Write the custom node.
+        writeCustomNode( stream, pCustomNode );
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void TamlBinaryWriter::writeCustomNode( Stream& stream, const TamlCustomNode* pCustomNode )
+{
+    // Write custom node name.
+    stream.writeString( pCustomNode->mNodeName );
+
+    // Is the node a proxy object?
+    if ( pCustomNode->isProxyObject() )
+    {
+        // Yes, so flag as element.
+        stream.write( true );
+
+        // Write the element.
+        writeElement( stream, pCustomNode->getProxyWriteNode() );
+        return;
+    }
+
+    // No, so flag as custom node.
+    stream.write( false );
+
+    // Fetch node children.
+    const TamlCustomNodeVector& nodeChildren = pCustomNode->getChildren();
+
+    // Fetch node count.
+    const U32 customNodeCount = (U32)nodeChildren.size();
+
+    // Write custom node count.
+    stream.write( customNodeCount );
+
+    // Do we have any nodes.
+    if ( customNodeCount > 0 )
+    {
+        // Yes, so iterate children nodes.
+        for( TamlCustomNodeVector::const_iterator childNodeItr = nodeChildren.begin(); childNodeItr != nodeChildren.end(); ++childNodeItr )
+        {
+            // Fetch child node.
+            const TamlCustomNode* pChildNode = *childNodeItr;
+
+            // Write the custom node.
+            writeCustomNode( stream, pChildNode );
+        }
+    }
+
+    // Fetch node fields.
+    const TamlCustomFieldVector& nodeFields = pCustomNode->getFields();
+
+    // Fetch node field count.
+    const U32 nodeFieldCount = (U32)nodeFields.size();
+
+    // Write custom node field count.
+    stream.write( nodeFieldCount );
+
+    // Do we have any node fields?
+    if ( nodeFieldCount > 0 )
+    {
+        // Yes, so iterate node fields.
+        for ( TamlCustomFieldVector::const_iterator nodeFieldItr = nodeFields.begin(); nodeFieldItr != nodeFields.end(); ++nodeFieldItr )
+        {
+            // Fetch node field.
+            const TamlCustomNodeField* pNodeField = *nodeFieldItr;
+
+            // Write the node field.
+            stream.writeString( pNodeField->getFieldName() );
+            stream.writeLongString( MAX_TAML_NODE_FIELDVALUE_LENGTH, pNodeField->getFieldValue() );
+        }
     }
 }
