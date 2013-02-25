@@ -524,7 +524,6 @@ public:
         if ( deleteIfNotType && pTypeCast == NULL )
         {
             mpProxyObject->deleteObject();
-            const_cast<SimObject*>(mpProxyObject) = NULL;
             return NULL;
         }
 
