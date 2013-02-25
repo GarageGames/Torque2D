@@ -161,7 +161,7 @@ public:
 
     inline StringTableEntry getFieldName( void ) const { return mFieldName; }
 
-    bool fieldNameBeginsWith( const char* pComparison )
+    bool fieldNameBeginsWith( const char* pComparison ) const
     {
         const U32 comparisonLength = dStrlen( pComparison );
         const U32 fieldNameLength = dStrlen( mFieldName );
