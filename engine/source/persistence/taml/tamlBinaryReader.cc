@@ -362,6 +362,11 @@ void TamlBinaryReader::parseCustomNode( Stream& stream, TamlCustomNode* pCustomN
     // Add child node.
     TamlCustomNode* pChildNode = pCustomNode->addNode( nodeName );
 
+    // Read child node text.
+    char childNodeTextBuffer[MAX_TAML_NODE_FIELDVALUE_LENGTH];
+    stream.readLongString( MAX_TAML_NODE_FIELDVALUE_LENGTH, childNodeTextBuffer );
+    pChildNode->setNodeText( childNodeTextBuffer );
+
     // Read child node count.
     U32 childNodeCount;
     stream.read( &childNodeCount );

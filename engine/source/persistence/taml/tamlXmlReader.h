@@ -70,7 +70,7 @@ private:
 
     SimObject* parseElement( TiXmlElement* pXmlElement );
     void parseAttributes( TiXmlElement* pXmlElement, SimObject* pSimObject );
-    void parseCustomElement( TiXmlElement* pXmlElement, TamlCustomNodes& customNodes );
+    void parseCustomElement( TiXmlElement* pXmlElement, TamlCustomNodes& pCustomNode );
     void parseCustomNode( TiXmlElement* pXmlElement, TamlCustomNode* pCustomNode );
 
     U32 getTamlRefId( TiXmlElement* pXmlElement );

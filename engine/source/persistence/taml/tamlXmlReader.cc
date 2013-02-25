@@ -330,8 +330,32 @@ void TamlXmlReader::parseCustomNode( TiXmlElement* pXmlElement, TamlCustomNode* 
         return;
     }
 
-    // Add child node.
+    // Yes, so add child node.
     TamlCustomNode* pChildNode = pCustomNode->addNode( pXmlElement->Value() );
+
+    // Iterate attributes.
+    for ( TiXmlAttribute* pAttribute = pXmlElement->FirstAttribute(); pAttribute; pAttribute = pAttribute->Next() )
+    {
+        // Insert attribute name.
+        StringTableEntry attributeName = StringTable->insert( pAttribute->Name() );
+
+        // Skip if a Taml reference attribute.
+        if ( attributeName == mTamlRefId || attributeName == mTamlRefToId )
+            continue;
+
+        // Add node field.
+        pChildNode->addField( attributeName, pAttribute->Value() );
+    }
+
+    // Fetch any element text.
+    const char* pElementText = pXmlElement->GetText();
+
+    // Do we have any element text?
+    if ( pElementText != NULL )
+    {
+        // Yes, so store it.
+        pChildNode->setNodeText( pElementText );
+    }
 
     // Fetch any children.
     TiXmlNode* pChildXmlNode = pXmlElement->FirstChild();
@@ -355,20 +379,6 @@ void TamlXmlReader::parseCustomNode( TiXmlElement* pXmlElement, TamlCustomNode* 
             parseCustomNode( pChildXmlElement, pChildNode );
         }
         while( pChildXmlNode != NULL );
-    }
-
-    // Iterate attributes.
-    for ( TiXmlAttribute* pAttribute = pXmlElement->FirstAttribute(); pAttribute; pAttribute = pAttribute->Next() )
-    {
-        // Insert attribute name.
-        StringTableEntry attributeName = StringTable->insert( pAttribute->Name() );
-
-        // Skip if a Taml reference attribute.
-        if ( attributeName == mTamlRefId || attributeName == mTamlRefToId )
-            continue;
-
-        // Add node field.
-        pChildNode->addField( attributeName, pAttribute->Value() );
     }
 }
 

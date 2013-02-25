@@ -245,6 +245,9 @@ void TamlBinaryWriter::writeCustomNode( Stream& stream, const TamlCustomNode* pC
     // Write custom node name.
     stream.writeString( pCustomNode->getNodeName() );
 
+    // Write custom node text.
+    stream.writeString( pCustomNode->getNodeText().getFieldValue(), MAX_TAML_NODE_FIELDVALUE_LENGTH );
+
     // Fetch node children.
     const TamlCustomNodeVector& nodeChildren = pCustomNode->getChildren();
 

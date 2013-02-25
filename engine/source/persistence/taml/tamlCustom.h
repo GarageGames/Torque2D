@@ -183,6 +183,8 @@ public:
         return ( fieldName == comparison );
     }
 
+    inline bool isValueEmpty( void ) const { return *mFieldValue == 0; }
+
 private:
     StringTableEntry    mFieldName;
     char                mFieldValue[MAX_TAML_NODE_FIELDVALUE_LENGTH];
@@ -234,6 +236,9 @@ public:
         // Reset the node name.
         mNodeName = StringTable->EmptyString;
 
+        // Reset node text.
+        mNodeText.resetState();
+
         // Reset the ignore empty flag.
         mIgnoreEmpty = false;
     }
@@ -258,17 +263,14 @@ public:
 
     inline TamlCustomNode* addNode( const char* pNodeName, const bool ignoreEmpty = true )
     {
-        // Sanity!
-        AssertFatal( pNodeName != NULL, "Cannot add a NULL node name." );
-
         // Create a custom node.
         TamlCustomNode* pCustomNode = TamlCustomNodeFactory.createObject();
 
         // Fetch node name.
-        StringTableEntry nodeName = StringTable->insert( pNodeName );
+        pCustomNode->setNodeName( pNodeName );
 
         // Set ignore-empty flag.
-        pCustomNode->mIgnoreEmpty = ignoreEmpty;
+        pCustomNode->setIgnoreEmpty( ignoreEmpty );
 
         // Store node.
         mChildren.push_back( pCustomNode );
@@ -459,9 +461,15 @@ public:
 
     inline StringTableEntry getNodeName( void ) const { return mNodeName; }
 
-
-
     void setWriteNode( TamlWriteNode* pWriteNode );
+
+    inline void setNodeText( const char* pNodeText )
+    {
+        AssertFatal( dStrlen( pNodeText ) >= MAX_TAML_NODE_FIELDVALUE_LENGTH, "Custom node text is too long." );
+
+        mNodeText.set( StringTable->EmptyString, pNodeText );
+    }
+    inline const TamlCustomField& getNodeText( void ) const { return mNodeText; }
 
     inline const Vector<TamlCustomNode*>& getChildren( void ) const { return mChildren; }
     inline const TamlCustomFieldVector& getFields( void ) const { return mFields; }
@@ -478,6 +486,7 @@ public:
 
 private:
     StringTableEntry        mNodeName;
+    TamlCustomField         mNodeText;
     Vector<TamlCustomNode*> mChildren;
     TamlCustomFieldVector   mFields;
     bool                    mIgnoreEmpty;

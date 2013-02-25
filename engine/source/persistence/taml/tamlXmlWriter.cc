@@ -212,6 +212,26 @@ void TamlXmlWriter::compileCustomNode( TiXmlElement* pXmlElement, const TamlCust
     // Create element.
     TiXmlElement* pNodeElement = new TiXmlElement( pCustomNode->getNodeName() );
 
+    // Is there any node text?
+    if ( !pCustomNode->getNodeText().isValueEmpty() )
+    {
+        // Yes, so add a text node.
+        pNodeElement->LinkEndChild( new TiXmlText( pCustomNode->getNodeText().getFieldValue() ) );
+    }
+
+    // Fetch fields.
+    const TamlCustomFieldVector& fields = pCustomNode->getFields();
+
+    // Iterate fields.
+    for ( TamlCustomFieldVector::const_iterator fieldItr = fields.begin(); fieldItr != fields.end(); ++fieldItr )
+    {
+        // Fetch field.
+        const TamlCustomField* pField = *fieldItr;
+
+        // Set field.
+        pNodeElement->SetAttribute( pField->getFieldName(), pField->getFieldValue() );
+    }
+
     // Fetch node children.
     const TamlCustomNodeVector& nodeChildren = pCustomNode->getChildren();
 
@@ -233,19 +253,6 @@ void TamlXmlWriter::compileCustomNode( TiXmlElement* pXmlElement, const TamlCust
             // No, so compile the child node.
             compileCustomNode( pNodeElement, pChildNode );
         }
-    }
-
-    // Fetch fields.
-    const TamlCustomFieldVector& fields = pCustomNode->getFields();
-
-    // Iterate fields.
-    for ( TamlCustomFieldVector::const_iterator fieldItr = fields.begin(); fieldItr != fields.end(); ++fieldItr )
-    {
-        // Fetch field.
-        const TamlCustomField* pField = *fieldItr;
-
-        // Set field.
-        pNodeElement->SetAttribute( pField->getFieldName(), pField->getFieldValue() );
     }
 
     // Finish if the node is set to ignore if empty and it is empty (including fields).
