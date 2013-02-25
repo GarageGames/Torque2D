@@ -3624,765 +3624,809 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
     // Find joint custom node.
     const TamlCustomNode* pJointNode = customNodes.findNode( jointCustomNodeName );
 
-    // Finish if no joints.
-    if ( pJointNode == NULL )
-        return;
-
-    // Fetch children joint nodes.
-    const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
-
-    // Iterate joints.
-    for( TamlCustomNodeVector::const_iterator jointNodeItr = jointChildren.begin(); jointNodeItr != jointChildren.end(); ++jointNodeItr )
+    // Do we have any joints?
+    if ( pJointNode != NULL )
     {
-        // Fetch joint node,
-        TamlCustomNode* pJointNode = *jointNodeItr;
+        // Yes, so fetch children joint nodes.
+        const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
 
-        // Fetch node name.
-        StringTableEntry nodeName = pJointNode->mNodeName;
-
-        // Is this a distance joint?
-        if ( nodeName == jointDistanceNodeName )
+        // Iterate joints.
+        for( TamlCustomNodeVector::const_iterator jointNodeItr = jointChildren.begin(); jointNodeItr != jointChildren.end(); ++jointNodeItr )
         {
-            // Fetch joint children.
-            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+            // Fetch joint node,
+            TamlCustomNode* pJointNode = *jointNodeItr;
 
-            // Fetch joint objects.
-            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
-            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+            // Fetch node name.
+            StringTableEntry nodeName = pJointNode->mNodeName;
 
-            // Did we get any connected objects?
-            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+            // Is this a distance joint?
+            if ( nodeName == jointDistanceNodeName )
             {
-                // No, so warn.
-                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
-                continue;
+                // Fetch joint children.
+                const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+                // Fetch joint objects.
+                SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+                SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+
+                // Did we get any connected objects?
+                if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+                {
+                    // No, so warn.
+                    Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                    continue;
+                }
+
+                b2Vec2 localAnchorA = b2Vec2_zero;
+                b2Vec2 localAnchorB = b2Vec2_zero;
+                bool collideConnected = false;
+
+                F32 length = -1.0f;
+                F32 frequency = 0.0f;
+                F32 dampingRatio = 0.0f;
+
+                // Fetch joint fields.
+                const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
+                // Iterate property fields.
+                for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
+                {
+                    // Fetch field node.
+                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+
+                    // Fetch property field name.
+                    StringTableEntry fieldName = pFieldNode->getFieldName();
+
+                    // Fetch fields.
+                    if ( fieldName == jointLocalAnchorAName )
+                    {
+                        pFieldNode->getFieldValue( localAnchorA );
+                    }
+                    else if ( fieldName == jointLocalAnchorBName )
+                    {
+                        pFieldNode->getFieldValue( localAnchorB );
+                    }
+                    else if ( fieldName == jointCollideConnectedName )
+                    {
+                        pFieldNode->getFieldValue( collideConnected );
+                    }
+                    else if ( fieldName == jointDistanceLengthName )
+                    {
+                        pFieldNode->getFieldValue( length );
+                    }
+                    else if ( fieldName == jointDistanceFrequencyName )
+                    {
+                        pFieldNode->getFieldValue( frequency );
+                    }
+                    else if ( fieldName == jointDistanceDampingRatioName )
+                    {
+                        pFieldNode->getFieldValue( dampingRatio );
+                    }
+                }
+
+                // Create joint.
+                createDistanceJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, length, frequency, dampingRatio, collideConnected );
             }
-
-            b2Vec2 localAnchorA = b2Vec2_zero;
-            b2Vec2 localAnchorB = b2Vec2_zero;
-            bool collideConnected = false;
-
-            F32 length = -1.0f;
-            F32 frequency = 0.0f;
-            F32 dampingRatio = 0.0f;
-
-            // Fetch joint fields.
-            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
-
-            // Iterate property fields.
-            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
+            // is this a rope joint?
+            else if ( nodeName == jointRopeNodeName )
             {
-                // Fetch field node.
-                TamlCustomNodeField* pFieldNode = *jointFieldItr;
+                // Fetch joint children.
+                const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
 
-                // Fetch property field name.
-                StringTableEntry fieldName = pFieldNode->getFieldName();
+                // Fetch joint objects.
+                SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+                SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
 
-                // Fetch fields.
-                if ( fieldName == jointLocalAnchorAName )
+                // Did we get any connected objects?
+                if( pSceneObjectA == NULL && pSceneObjectB == NULL )
                 {
-                    pFieldNode->getFieldValue( localAnchorA );
+                    // No, so warn.
+                    Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                    continue;
                 }
-                else if ( fieldName == jointLocalAnchorBName )
+
+                b2Vec2 localAnchorA = b2Vec2_zero;
+                b2Vec2 localAnchorB = b2Vec2_zero;
+                bool collideConnected = false;
+
+                F32 maxLength = -1.0f;
+
+                // Fetch joint fields.
+                const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
+                // Iterate property fields.
+                for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
                 {
-                    pFieldNode->getFieldValue( localAnchorB );
+                    // Fetch field node.
+                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+
+                    // Fetch property field name.
+                    StringTableEntry fieldName = pFieldNode->getFieldName();
+
+                    // Fetch fields.
+                    if ( fieldName == jointLocalAnchorAName )
+                    {
+                        pFieldNode->getFieldValue( localAnchorA );
+                    }
+                    else if ( fieldName == jointLocalAnchorBName )
+                    {
+                        pFieldNode->getFieldValue( localAnchorB );
+                    }
+                    else if ( fieldName == jointCollideConnectedName )
+                    {
+                        pFieldNode->getFieldValue( collideConnected );
+                    }
+                    else if ( fieldName == jointRopeMaxLengthName )
+                    {
+                        pFieldNode->getFieldValue( maxLength );
+                    }
                 }
-                else if ( fieldName == jointCollideConnectedName )
-                {
-                    pFieldNode->getFieldValue( collideConnected );
-                }
-                else if ( fieldName == jointDistanceLengthName )
-                {
-                    pFieldNode->getFieldValue( length );
-                }
-                else if ( fieldName == jointDistanceFrequencyName )
-                {
-                    pFieldNode->getFieldValue( frequency );
-                }
-                else if ( fieldName == jointDistanceDampingRatioName )
-                {
-                    pFieldNode->getFieldValue( dampingRatio );
-                }
+
+                // Create joint.
+                createRopeJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, maxLength, collideConnected );
             }
-
-            // Create joint.
-            createDistanceJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, length, frequency, dampingRatio, collideConnected );
-        }
-        // is this a rope joint?
-        else if ( nodeName == jointRopeNodeName )
-        {
-            // Fetch joint children.
-            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
-
-            // Fetch joint objects.
-            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
-            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
-
-            // Did we get any connected objects?
-            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+            // Is this a revolute joint?
+            else if ( nodeName == jointRevoluteNodeName )
             {
-                // No, so warn.
-                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
-                continue;
-            }
+                // Fetch joint children.
+                const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
 
-            b2Vec2 localAnchorA = b2Vec2_zero;
-            b2Vec2 localAnchorB = b2Vec2_zero;
-            bool collideConnected = false;
+                // Fetch joint objects.
+                SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+                SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
 
-            F32 maxLength = -1.0f;
-
-            // Fetch joint fields.
-            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
-
-            // Iterate property fields.
-            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
-            {
-                // Fetch field node.
-                TamlCustomNodeField* pFieldNode = *jointFieldItr;
-
-                // Fetch property field name.
-                StringTableEntry fieldName = pFieldNode->getFieldName();
-
-                // Fetch fields.
-                if ( fieldName == jointLocalAnchorAName )
+                // Did we get any connected objects?
+                if( pSceneObjectA == NULL && pSceneObjectB == NULL )
                 {
-                    pFieldNode->getFieldValue( localAnchorA );
+                    // No, so warn.
+                    Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                    continue;
                 }
-                else if ( fieldName == jointLocalAnchorBName )
+
+                b2Vec2 localAnchorA = b2Vec2_zero;
+                b2Vec2 localAnchorB = b2Vec2_zero;
+                bool collideConnected = false;
+
+                bool enableLimit = false;
+                F32 lowerAngle = 0.0f;
+                F32 upperAngle = 0.0f;
+
+                bool enableMotor = false;
+                F32 motorSpeed = b2_pi;
+                F32 maxMotorTorque = 0.0f;
+
+                // Fetch joint fields.
+                const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
+                // Iterate property fields.
+                for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
                 {
-                    pFieldNode->getFieldValue( localAnchorB );
+                    // Fetch field node.
+                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+
+                    // Fetch property field name.
+                    StringTableEntry fieldName = pFieldNode->getFieldName();
+
+                    // Fetch fields.
+                    if ( fieldName == jointLocalAnchorAName )
+                    {
+                        pFieldNode->getFieldValue( localAnchorA );
+                    }
+                    else if ( fieldName == jointLocalAnchorBName )
+                    {
+                        pFieldNode->getFieldValue( localAnchorB );
+                    }
+                    else if ( fieldName == jointCollideConnectedName )
+                    {
+                        pFieldNode->getFieldValue( collideConnected );
+                    }
+                    else if ( fieldName == jointRevoluteLimitLowerAngleName )
+                    {
+                        pFieldNode->getFieldValue( lowerAngle );
+                        lowerAngle = mDegToRad( lowerAngle );
+                        enableLimit = true;
+                    }
+                    else if ( fieldName == jointRevoluteLimitUpperAngleName )
+                    {
+                        pFieldNode->getFieldValue( upperAngle );
+                        upperAngle = mDegToRad( upperAngle );
+                        enableLimit = true;
+                    }
+                    else if ( fieldName == jointRevoluteMotorSpeedName )
+                    {
+                        pFieldNode->getFieldValue( motorSpeed );
+                        motorSpeed = mDegToRad( motorSpeed );
+                        enableMotor = true;
+                    }
+                    else if ( fieldName == jointRevoluteMotorMaxTorqueName )
+                    {
+                        pFieldNode->getFieldValue( maxMotorTorque );
+                        enableMotor = true;
+                    }
                 }
-                else if ( fieldName == jointCollideConnectedName )
-                {
-                    pFieldNode->getFieldValue( collideConnected );
-                }
-                else if ( fieldName == jointRopeMaxLengthName )
-                {
-                    pFieldNode->getFieldValue( maxLength );
-                }
-            }
 
-            // Create joint.
-            createRopeJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, maxLength, collideConnected );
-        }
-        // Is this a revolute joint?
-        else if ( nodeName == jointRevoluteNodeName )
-        {
-            // Fetch joint children.
-            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
-
-            // Fetch joint objects.
-            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
-            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
-
-            // Did we get any connected objects?
-            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
-            {
-                // No, so warn.
-                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
-                continue;
-            }
-
-            b2Vec2 localAnchorA = b2Vec2_zero;
-            b2Vec2 localAnchorB = b2Vec2_zero;
-            bool collideConnected = false;
-
-            bool enableLimit = false;
-            F32 lowerAngle = 0.0f;
-            F32 upperAngle = 0.0f;
-
-            bool enableMotor = false;
-            F32 motorSpeed = b2_pi;
-            F32 maxMotorTorque = 0.0f;
-
-            // Fetch joint fields.
-            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
-
-            // Iterate property fields.
-            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
-            {
-                // Fetch field node.
-                TamlCustomNodeField* pFieldNode = *jointFieldItr;
-
-                // Fetch property field name.
-                StringTableEntry fieldName = pFieldNode->getFieldName();
-
-                // Fetch fields.
-                if ( fieldName == jointLocalAnchorAName )
-                {
-                    pFieldNode->getFieldValue( localAnchorA );
-                }
-                else if ( fieldName == jointLocalAnchorBName )
-                {
-                    pFieldNode->getFieldValue( localAnchorB );
-                }
-                else if ( fieldName == jointCollideConnectedName )
-                {
-                    pFieldNode->getFieldValue( collideConnected );
-                }
-                else if ( fieldName == jointRevoluteLimitLowerAngleName )
-                {
-                    pFieldNode->getFieldValue( lowerAngle );
-                    lowerAngle = mDegToRad( lowerAngle );
-                    enableLimit = true;
-                }
-                else if ( fieldName == jointRevoluteLimitUpperAngleName )
-                {
-                    pFieldNode->getFieldValue( upperAngle );
-                    upperAngle = mDegToRad( upperAngle );
-                    enableLimit = true;
-                }
-                else if ( fieldName == jointRevoluteMotorSpeedName )
-                {
-                    pFieldNode->getFieldValue( motorSpeed );
-                    motorSpeed = mDegToRad( motorSpeed );
-                    enableMotor = true;
-                }
-                else if ( fieldName == jointRevoluteMotorMaxTorqueName )
-                {
-                    pFieldNode->getFieldValue( maxMotorTorque );
-                    enableMotor = true;
-                }
-            }
-
-            // Create joint.
-            const U32 jointId = createRevoluteJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, collideConnected );
+                // Create joint.
+                const U32 jointId = createRevoluteJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, collideConnected );
             
-            if ( enableLimit )
-                setRevoluteJointLimit( jointId, true, lowerAngle, upperAngle );
+                if ( enableLimit )
+                    setRevoluteJointLimit( jointId, true, lowerAngle, upperAngle );
 
-            if ( enableMotor )
-                setRevoluteJointMotor( jointId, true, motorSpeed, maxMotorTorque );
+                if ( enableMotor )
+                    setRevoluteJointMotor( jointId, true, motorSpeed, maxMotorTorque );
+            }
+            // is this a weld joint?
+            else if ( nodeName == jointWeldNodeName )
+            {
+                // Fetch joint children.
+                const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+                // Fetch joint objects.
+                SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+                SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+
+                // Did we get any connected objects?
+                if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+                {
+                    // No, so warn.
+                    Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                    continue;
+                }
+
+                b2Vec2 localAnchorA = b2Vec2_zero;
+                b2Vec2 localAnchorB = b2Vec2_zero;
+                bool collideConnected = false;
+
+                F32 frequency = 0.0f;
+                F32 dampingRatio = 0.0f;
+
+                // Fetch joint fields.
+                const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
+                // Iterate property fields.
+                for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
+                {
+                    // Fetch field node.
+                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+
+                    // Fetch property field name.
+                    StringTableEntry fieldName = pFieldNode->getFieldName();
+
+                    // Fetch fields.
+                    if ( fieldName == jointLocalAnchorAName )
+                    {
+                        pFieldNode->getFieldValue( localAnchorA );
+                    }
+                    else if ( fieldName == jointLocalAnchorBName )
+                    {
+                        pFieldNode->getFieldValue( localAnchorB );
+                    }
+                    else if ( fieldName == jointCollideConnectedName )
+                    {
+                        pFieldNode->getFieldValue( collideConnected );
+                    }
+                    else if ( fieldName == jointWeldFrequencyName )
+                    {
+                        pFieldNode->getFieldValue( frequency );
+                    }
+                    else if ( fieldName == jointWeldDampingRatioName )
+                    {
+                        pFieldNode->getFieldValue( dampingRatio );
+                    }
+                }
+
+                // Create joint.
+                createWeldJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, frequency, dampingRatio, collideConnected );
+            }
+            // Is this a wheel joint?
+            else if ( nodeName == jointWheelNodeName )
+            {
+                // Fetch joint children.
+                const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+                // Fetch joint objects.
+                SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+                SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+
+                // Did we get any connected objects?
+                if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+                {
+                    // No, so warn.
+                    Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                    continue;
+                }
+
+                b2Vec2 localAnchorA = b2Vec2_zero;
+                b2Vec2 localAnchorB = b2Vec2_zero;
+                bool collideConnected = false;
+
+                bool enableMotor = false;
+                F32 motorSpeed = b2_pi;
+                F32 maxMotorTorque = 0.0f;
+
+                F32 frequency = 0.0f;
+                F32 dampingRatio = 0.0f;
+                b2Vec2 worldAxis( 0.0f, 1.0f );
+
+                // Fetch joint fields.
+                const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
+                // Iterate property fields.
+                for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
+                {
+                    // Fetch field node.
+                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+
+                    // Fetch property field name.
+                    StringTableEntry fieldName = pFieldNode->getFieldName();
+
+                    // Fetch fields.
+                    if ( fieldName == jointLocalAnchorAName )
+                    {
+                        pFieldNode->getFieldValue( localAnchorA );
+                    }
+                    else if ( fieldName == jointLocalAnchorBName )
+                    {
+                        pFieldNode->getFieldValue( localAnchorB );
+                    }
+                    else if ( fieldName == jointCollideConnectedName )
+                    {
+                        pFieldNode->getFieldValue( collideConnected );
+                    }
+                    else if ( fieldName == jointWheelMotorSpeedName )
+                    {
+                        pFieldNode->getFieldValue( motorSpeed );
+                        motorSpeed = mDegToRad( motorSpeed );
+                        enableMotor = true;
+                    }
+                    else if ( fieldName == jointWheelMotorMaxTorqueName )
+                    {
+                        pFieldNode->getFieldValue( maxMotorTorque );
+                        enableMotor = true;
+                    }
+                    else if ( fieldName == jointWheelFrequencyName )
+                    {
+                        pFieldNode->getFieldValue( frequency );
+                    }
+                    else if ( fieldName == jointWheelDampingRatioName )
+                    {
+                        pFieldNode->getFieldValue( dampingRatio );
+                    }
+                    else if ( fieldName == jointWheelWorldAxisName )
+                    {
+                        pFieldNode->getFieldValue( worldAxis );                    
+                    }
+                }
+
+                // Create joint.
+                const U32 jointId = createWheelJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, worldAxis, collideConnected );
+
+                if ( enableMotor )
+                    setWheelJointMotor( jointId, true, motorSpeed, maxMotorTorque );
+
+                setWheelJointFrequency( jointId, frequency );
+                setWheelJointDampingRatio( jointId, dampingRatio );
+            }
+            // Is this a friction joint?
+            else if ( nodeName == jointFrictionNodeName )
+            {
+                // Fetch joint children.
+                const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+                // Fetch joint objects.
+                SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+                SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+
+                // Did we get any connected objects?
+                if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+                {
+                    // No, so warn.
+                    Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                    continue;
+                }
+
+                b2Vec2 localAnchorA = b2Vec2_zero;
+                b2Vec2 localAnchorB = b2Vec2_zero;
+                bool collideConnected = false;
+
+                F32 maxForce = 0.0f;
+                F32 maxTorque = 0.0f;
+
+                // Fetch joint fields.
+                const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
+                // Iterate property fields.
+                for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
+                {
+                    // Fetch field node.
+                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+
+                    // Fetch property field name.
+                    StringTableEntry fieldName = pFieldNode->getFieldName();
+
+                    // Fetch fields.
+                    if ( fieldName == jointLocalAnchorAName )
+                    {
+                        pFieldNode->getFieldValue( localAnchorA );
+                    }
+                    else if ( fieldName == jointLocalAnchorBName )
+                    {
+                        pFieldNode->getFieldValue( localAnchorB );
+                    }
+                    else if ( fieldName == jointCollideConnectedName )
+                    {
+                        pFieldNode->getFieldValue( collideConnected );
+                    }
+                    else if ( fieldName == jointFrictionMaxForceName )
+                    {
+                        pFieldNode->getFieldValue( maxForce );
+                    }
+                    else if ( fieldName == jointFrictionMaxTorqueName )
+                    {
+                        pFieldNode->getFieldValue( maxTorque );
+                    }
+                }
+
+                // Create joint.
+                createFrictionJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, maxForce, maxTorque, collideConnected );
+            }
+            // Is this a prismatic joint?
+            else if ( nodeName == jointPrismaticNodeName )
+            {
+                // Fetch joint children.
+                const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+                // Fetch joint objects.
+                SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+                SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+
+                // Did we get any connected objects?
+                if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+                {
+                    // No, so warn.
+                    Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                    continue;
+                }
+
+                b2Vec2 localAnchorA = b2Vec2_zero;
+                b2Vec2 localAnchorB = b2Vec2_zero;
+                bool collideConnected = false;
+
+                bool enableLimit;
+                F32 lowerTransLimit = 0.0f;
+                F32 upperTransLimit = 1.0f;
+
+                bool enableMotor = false;
+                F32 motorSpeed = b2_pi;
+                F32 maxMotorForce = 0.0f;
+
+                b2Vec2 worldAxis( 0.0f, 1.0f );
+
+                // Fetch joint fields.
+                const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
+                // Iterate property fields.
+                for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
+                {
+                    // Fetch field node.
+                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+
+                    // Fetch property field name.
+                    StringTableEntry fieldName = pFieldNode->getFieldName();
+
+                    // Fetch fields.
+                    if ( fieldName == jointLocalAnchorAName )
+                    {
+                        pFieldNode->getFieldValue( localAnchorA );
+                    }
+                    else if ( fieldName == jointLocalAnchorBName )
+                    {
+                        pFieldNode->getFieldValue( localAnchorB );
+                    }
+                    else if ( fieldName == jointCollideConnectedName )
+                    {
+                        pFieldNode->getFieldValue( collideConnected );
+                    }
+                    else if ( fieldName == jointPrismaticLimitLowerTransName )
+                    {
+                        pFieldNode->getFieldValue( lowerTransLimit );
+                        enableLimit = true;
+                    }
+                    else if ( fieldName == jointPrismaticLimitUpperTransName )
+                    {
+                        pFieldNode->getFieldValue( upperTransLimit );
+                        enableLimit = true;
+                    }
+                    else if ( fieldName == jointPrismaticMotorSpeedName )
+                    {
+                        pFieldNode->getFieldValue( motorSpeed );
+                        motorSpeed = mDegToRad( motorSpeed );
+                        enableMotor = true;
+                    }
+                    else if ( fieldName == jointPrismaticMotorMaxForceName )
+                    {
+                        pFieldNode->getFieldValue( maxMotorForce );
+                        enableMotor = true;
+                    }
+                    else if ( fieldName == jointPrismaticWorldAxisName )
+                    {
+                        pFieldNode->getFieldValue( worldAxis );
+                    }
+                }
+
+                // Create joint.
+                const U32 jointId = createPrismaticJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, worldAxis, collideConnected );
+
+                if ( enableLimit )
+                    setPrismaticJointLimit( jointId, true, lowerTransLimit, upperTransLimit );
+
+                if ( enableMotor )
+                    setPrismaticJointMotor( jointId, true, motorSpeed, maxMotorForce );
+            }
+            // Is this a pulley joint?
+            else if ( nodeName == jointPulleyNodeName )
+            {
+                // Fetch joint children.
+                const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+                // Fetch joint objects.
+                SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+                SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+
+                // Did we get any connected objects?
+                if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+                {
+                    // No, so warn.
+                    Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                    continue;
+                }
+
+                b2Vec2 localAnchorA = b2Vec2_zero;
+                b2Vec2 localAnchorB = b2Vec2_zero;
+                bool collideConnected = false;
+
+                F32 lengthA = -1.0f;
+                F32 lengthB = -1.0f;
+                F32 ratio = 0.5f;
+                b2Vec2 worldGroundAnchorA = b2Vec2_zero;
+                b2Vec2 worldGroundAnchorB = b2Vec2_zero;
+
+                // Fetch joint fields.
+                const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
+                // Iterate property fields.
+                for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
+                {
+                    // Fetch field node.
+                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+
+                    // Fetch property field name.
+                    StringTableEntry fieldName = pFieldNode->getFieldName();
+
+                    // Fetch fields.
+                    if ( fieldName == jointLocalAnchorAName )
+                    {
+                        pFieldNode->getFieldValue( localAnchorA );
+                    }
+                    else if ( fieldName == jointLocalAnchorBName )
+                    {
+                        pFieldNode->getFieldValue( localAnchorB );
+                    }
+                    else if ( fieldName == jointCollideConnectedName )
+                    {
+                        pFieldNode->getFieldValue( collideConnected );
+                    }
+                    else if ( fieldName == jointPulleyLengthAName )
+                    {
+                        pFieldNode->getFieldValue( lengthA );
+                    }
+                    else if ( fieldName == jointPulleyLengthBName )
+                    {
+                        pFieldNode->getFieldValue( lengthB );
+                    }
+                    else if ( fieldName == jointPulleyRatioName )
+                    {
+                        pFieldNode->getFieldValue( ratio );
+                    }
+                    else if ( fieldName == jointPulleyGroundAnchorAName )
+                    {
+                        pFieldNode->getFieldValue( worldGroundAnchorA );
+                    }
+                    else if ( fieldName == jointPulleyGroundAnchorBName )
+                    {
+                        pFieldNode->getFieldValue( worldGroundAnchorB );
+                    }
+                }
+
+                // Create joint.
+                createPulleyJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, worldGroundAnchorA, worldGroundAnchorB, ratio, lengthA, lengthB, collideConnected );
+
+            }
+            // Is this a target joint?
+            else if ( nodeName == jointTargetNodeName )
+            {
+                // Fetch joint children.
+                const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+                // Fetch joint objects.
+                SceneObject* pSceneObject = jointChildren.size() == 1 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+
+                // Did we get any connected objects?
+                if( pSceneObject == NULL )
+                {
+                    // No, so warn.
+                    Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has an invalid connected object.", nodeName );
+                    continue;
+                }
+
+                bool collideConnected = false;
+                b2Vec2 worldTarget = b2Vec2_zero;
+                F32 maxForce = 1.0f;
+                F32 frequency = 5.0f;
+                F32 dampingRatio = 0.7f;
+
+                // Fetch joint fields.
+                const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
+                // Iterate property fields.
+                for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
+                {
+                    // Fetch field node.
+                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+
+                    // Fetch property field name.
+                    StringTableEntry fieldName = pFieldNode->getFieldName();
+
+                    // Fetch fields.
+                    if ( fieldName == jointCollideConnectedName )
+                    {
+                        pFieldNode->getFieldValue( collideConnected );
+                    }
+                    else if ( fieldName == jointTargetWorldTargetName )
+                    {
+                        pFieldNode->getFieldValue( worldTarget );
+                    }
+                    else if ( fieldName == jointTargetMaxForceName )
+                    {
+                        pFieldNode->getFieldValue( maxForce );
+                    }
+                    else if ( fieldName == jointTargetFrequencyName )
+                    {
+                        pFieldNode->getFieldValue( frequency );
+                    }
+                    else if ( fieldName == jointTargetDampingRatioName )
+                    {
+                        pFieldNode->getFieldValue( dampingRatio );
+                    }
+                }
+
+                // Create joint.
+                createTargetJoint( pSceneObject, worldTarget, maxForce, frequency, dampingRatio, collideConnected );
+            }
+            // Is this a motor joint?
+            else if ( nodeName == jointMotorNodeName )
+            {
+                // Fetch joint children.
+                const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
+
+                // Fetch joint objects.
+                SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
+                SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
+
+                // Did we get any connected objects?
+                if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+                {
+                    // No, so warn.
+                    Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                    continue;
+                }
+
+                bool collideConnected = false;
+
+                b2Vec2 linearOffset = b2Vec2_zero;
+                F32 angularOffset = 0.0f;
+                F32 maxForce = 1.0f;
+                F32 maxTorque = 1.0f;
+                F32 correctionFactor = 0.3f;
+
+                // Fetch joint fields.
+                const TamlCustomFieldVector& jointFields = pJointNode->getFields();
+
+                // Iterate property fields.
+                for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
+                {
+                    // Fetch field node.
+                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+
+                    // Fetch property field name.
+                    StringTableEntry fieldName = pFieldNode->getFieldName();
+
+                    // Fetch fields.
+                    if ( fieldName == jointCollideConnectedName )
+                    {
+                        pFieldNode->getFieldValue( collideConnected );
+                    }
+                    else if ( fieldName == jointMotorLinearOffsetName )
+                    {
+                        pFieldNode->getFieldValue( linearOffset );
+                    }
+                    else if ( fieldName == jointMotorAngularOffsetName )
+                    {
+                        pFieldNode->getFieldValue( angularOffset );
+                        angularOffset = mDegToRad( angularOffset );
+                    }
+                    else if ( fieldName == jointMotorMaxForceName )
+                    {
+                        pFieldNode->getFieldValue( maxForce );
+                    }
+                    else if ( fieldName == jointMotorMaxTorqueName )
+                    {
+                        pFieldNode->getFieldValue( maxTorque );
+                    }
+                    else if ( fieldName == jointMotorCorrectionFactorName )
+                    {
+                        pFieldNode->getFieldValue( correctionFactor );
+                    }
+                }
+
+                // Create joint.
+                createMotorJoint( pSceneObjectA, pSceneObjectB, linearOffset, angularOffset, maxForce, maxTorque, correctionFactor, collideConnected );
+
+            }
+            // Unknown joint type!
+            else
+            {
+                // Warn.
+                Con::warnf( "Unknown joint type of '%s' encountered.", nodeName );
+
+                // Sanity!
+                AssertFatal( false, "Scene::onTamlCustomRead() - Unknown joint type detected." );
+
+                continue;
+            }
         }
-        // is this a weld joint?
-        else if ( nodeName == jointWeldNodeName )
+    }
+
+    // Find controller custom node.
+    const TamlCustomNode* pControllerNode = customNodes.findNode( controllerCustomNodeName );
+
+    // Do we have any controllers?
+    if ( pControllerNode != NULL )
+    {
+		// Yes, so fetch the scene controllers.
+		SimSet* pControllerSet = getControllers();
+
+        // Fetch children controller nodes.
+        const TamlCustomNodeVector& controllerChildren = pControllerNode->getChildren();
+
+        // Iterate controllers.
+        for( TamlCustomNodeVector::const_iterator controllerNodeItr = controllerChildren.begin(); controllerNodeItr != controllerChildren.end(); ++controllerNodeItr )
         {
-            // Fetch joint children.
-            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
-
-            // Fetch joint objects.
-            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
-            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
-
-            // Did we get any connected objects?
-            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+            // Is the node a proxy object?
+            if ( !pControllerNode->isProxyObject() )
             {
                 // No, so warn.
-                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                Con::warnf("Scene::onTamlPostRead() - Reading scene controllers but node '%s'is not an object.", pControllerNode->getNodeName() );
+
                 continue;
             }
 
-            b2Vec2 localAnchorA = b2Vec2_zero;
-            b2Vec2 localAnchorB = b2Vec2_zero;
-            bool collideConnected = false;
+            // Add the proxy object.
+            SimObject* pProxyObject = pControllerNode->getProxyObject();
 
-            F32 frequency = 0.0f;
-            F32 dampingRatio = 0.0f;
-
-            // Fetch joint fields.
-            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
-
-            // Iterate property fields.
-            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
-            {
-                // Fetch field node.
-                TamlCustomNodeField* pFieldNode = *jointFieldItr;
-
-                // Fetch property field name.
-                StringTableEntry fieldName = pFieldNode->getFieldName();
-
-                // Fetch fields.
-                if ( fieldName == jointLocalAnchorAName )
-                {
-                    pFieldNode->getFieldValue( localAnchorA );
-                }
-                else if ( fieldName == jointLocalAnchorBName )
-                {
-                    pFieldNode->getFieldValue( localAnchorB );
-                }
-                else if ( fieldName == jointCollideConnectedName )
-                {
-                    pFieldNode->getFieldValue( collideConnected );
-                }
-                else if ( fieldName == jointWeldFrequencyName )
-                {
-                    pFieldNode->getFieldValue( frequency );
-                }
-                else if ( fieldName == jointWeldDampingRatioName )
-                {
-                    pFieldNode->getFieldValue( dampingRatio );
-                }
-            }
-
-            // Create joint.
-            createWeldJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, frequency, dampingRatio, collideConnected );
-        }
-        // Is this a wheel joint?
-        else if ( nodeName == jointWheelNodeName )
-        {
-            // Fetch joint children.
-            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
-
-            // Fetch joint objects.
-            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
-            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
-
-            // Did we get any connected objects?
-            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
+            // Is it a scene controller?
+            if ( dynamic_cast<SceneController*>( pProxyObject ) == NULL )
             {
                 // No, so warn.
-                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
+                Con::warnf("Scene::onTamlPostRead() - Reading scene controllers but node '%s'is not a scene controller.", pControllerNode->getNodeName() );
+
+                // Delete the object.
+                pProxyObject->deleteObject();
+
                 continue;
             }
 
-            b2Vec2 localAnchorA = b2Vec2_zero;
-            b2Vec2 localAnchorB = b2Vec2_zero;
-            bool collideConnected = false;
-
-            bool enableMotor = false;
-            F32 motorSpeed = b2_pi;
-            F32 maxMotorTorque = 0.0f;
-
-            F32 frequency = 0.0f;
-            F32 dampingRatio = 0.0f;
-            b2Vec2 worldAxis( 0.0f, 1.0f );
-
-            // Fetch joint fields.
-            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
-
-            // Iterate property fields.
-            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
-            {
-                // Fetch field node.
-                TamlCustomNodeField* pFieldNode = *jointFieldItr;
-
-                // Fetch property field name.
-                StringTableEntry fieldName = pFieldNode->getFieldName();
-
-                // Fetch fields.
-                if ( fieldName == jointLocalAnchorAName )
-                {
-                    pFieldNode->getFieldValue( localAnchorA );
-                }
-                else if ( fieldName == jointLocalAnchorBName )
-                {
-                    pFieldNode->getFieldValue( localAnchorB );
-                }
-                else if ( fieldName == jointCollideConnectedName )
-                {
-                    pFieldNode->getFieldValue( collideConnected );
-                }
-                else if ( fieldName == jointWheelMotorSpeedName )
-                {
-                    pFieldNode->getFieldValue( motorSpeed );
-                    motorSpeed = mDegToRad( motorSpeed );
-                    enableMotor = true;
-                }
-                else if ( fieldName == jointWheelMotorMaxTorqueName )
-                {
-                    pFieldNode->getFieldValue( maxMotorTorque );
-                    enableMotor = true;
-                }
-                else if ( fieldName == jointWheelFrequencyName )
-                {
-                    pFieldNode->getFieldValue( frequency );
-                }
-                else if ( fieldName == jointWheelDampingRatioName )
-                {
-                    pFieldNode->getFieldValue( dampingRatio );
-                }
-                else if ( fieldName == jointWheelWorldAxisName )
-                {
-                    pFieldNode->getFieldValue( worldAxis );                    
-                }
-            }
-
-            // Create joint.
-            const U32 jointId = createWheelJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, worldAxis, collideConnected );
-
-            if ( enableMotor )
-                setWheelJointMotor( jointId, true, motorSpeed, maxMotorTorque );
-
-            setWheelJointFrequency( jointId, frequency );
-            setWheelJointDampingRatio( jointId, dampingRatio );
-        }
-        // Is this a friction joint?
-        else if ( nodeName == jointFrictionNodeName )
-        {
-            // Fetch joint children.
-            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
-
-            // Fetch joint objects.
-            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
-            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
-
-            // Did we get any connected objects?
-            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
-            {
-                // No, so warn.
-                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
-                continue;
-            }
-
-            b2Vec2 localAnchorA = b2Vec2_zero;
-            b2Vec2 localAnchorB = b2Vec2_zero;
-            bool collideConnected = false;
-
-            F32 maxForce = 0.0f;
-            F32 maxTorque = 0.0f;
-
-            // Fetch joint fields.
-            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
-
-            // Iterate property fields.
-            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
-            {
-                // Fetch field node.
-                TamlCustomNodeField* pFieldNode = *jointFieldItr;
-
-                // Fetch property field name.
-                StringTableEntry fieldName = pFieldNode->getFieldName();
-
-                // Fetch fields.
-                if ( fieldName == jointLocalAnchorAName )
-                {
-                    pFieldNode->getFieldValue( localAnchorA );
-                }
-                else if ( fieldName == jointLocalAnchorBName )
-                {
-                    pFieldNode->getFieldValue( localAnchorB );
-                }
-                else if ( fieldName == jointCollideConnectedName )
-                {
-                    pFieldNode->getFieldValue( collideConnected );
-                }
-                else if ( fieldName == jointFrictionMaxForceName )
-                {
-                    pFieldNode->getFieldValue( maxForce );
-                }
-                else if ( fieldName == jointFrictionMaxTorqueName )
-                {
-                    pFieldNode->getFieldValue( maxTorque );
-                }
-            }
-
-            // Create joint.
-            createFrictionJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, maxForce, maxTorque, collideConnected );
-        }
-        // Is this a prismatic joint?
-        else if ( nodeName == jointPrismaticNodeName )
-        {
-            // Fetch joint children.
-            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
-
-            // Fetch joint objects.
-            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
-            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
-
-            // Did we get any connected objects?
-            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
-            {
-                // No, so warn.
-                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
-                continue;
-            }
-
-            b2Vec2 localAnchorA = b2Vec2_zero;
-            b2Vec2 localAnchorB = b2Vec2_zero;
-            bool collideConnected = false;
-
-            bool enableLimit;
-            F32 lowerTransLimit = 0.0f;
-            F32 upperTransLimit = 1.0f;
-
-            bool enableMotor = false;
-            F32 motorSpeed = b2_pi;
-            F32 maxMotorForce = 0.0f;
-
-            b2Vec2 worldAxis( 0.0f, 1.0f );
-
-            // Fetch joint fields.
-            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
-
-            // Iterate property fields.
-            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
-            {
-                // Fetch field node.
-                TamlCustomNodeField* pFieldNode = *jointFieldItr;
-
-                // Fetch property field name.
-                StringTableEntry fieldName = pFieldNode->getFieldName();
-
-                // Fetch fields.
-                if ( fieldName == jointLocalAnchorAName )
-                {
-                    pFieldNode->getFieldValue( localAnchorA );
-                }
-                else if ( fieldName == jointLocalAnchorBName )
-                {
-                    pFieldNode->getFieldValue( localAnchorB );
-                }
-                else if ( fieldName == jointCollideConnectedName )
-                {
-                    pFieldNode->getFieldValue( collideConnected );
-                }
-                else if ( fieldName == jointPrismaticLimitLowerTransName )
-                {
-                    pFieldNode->getFieldValue( lowerTransLimit );
-                    enableLimit = true;
-                }
-                else if ( fieldName == jointPrismaticLimitUpperTransName )
-                {
-                    pFieldNode->getFieldValue( upperTransLimit );
-                    enableLimit = true;
-                }
-                else if ( fieldName == jointPrismaticMotorSpeedName )
-                {
-                    pFieldNode->getFieldValue( motorSpeed );
-                    motorSpeed = mDegToRad( motorSpeed );
-                    enableMotor = true;
-                }
-                else if ( fieldName == jointPrismaticMotorMaxForceName )
-                {
-                    pFieldNode->getFieldValue( maxMotorForce );
-                    enableMotor = true;
-                }
-                else if ( fieldName == jointPrismaticWorldAxisName )
-                {
-                    pFieldNode->getFieldValue( worldAxis );
-                }
-            }
-
-            // Create joint.
-            const U32 jointId = createPrismaticJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, worldAxis, collideConnected );
-
-            if ( enableLimit )
-                setPrismaticJointLimit( jointId, true, lowerTransLimit, upperTransLimit );
-
-            if ( enableMotor )
-                setPrismaticJointMotor( jointId, true, motorSpeed, maxMotorForce );
-        }
-        // Is this a pulley joint?
-        else if ( nodeName == jointPulleyNodeName )
-        {
-            // Fetch joint children.
-            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
-
-            // Fetch joint objects.
-            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
-            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
-
-            // Did we get any connected objects?
-            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
-            {
-                // No, so warn.
-                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
-                continue;
-            }
-
-            b2Vec2 localAnchorA = b2Vec2_zero;
-            b2Vec2 localAnchorB = b2Vec2_zero;
-            bool collideConnected = false;
-
-            F32 lengthA = -1.0f;
-            F32 lengthB = -1.0f;
-            F32 ratio = 0.5f;
-            b2Vec2 worldGroundAnchorA = b2Vec2_zero;
-            b2Vec2 worldGroundAnchorB = b2Vec2_zero;
-
-            // Fetch joint fields.
-            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
-
-            // Iterate property fields.
-            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
-            {
-                // Fetch field node.
-                TamlCustomNodeField* pFieldNode = *jointFieldItr;
-
-                // Fetch property field name.
-                StringTableEntry fieldName = pFieldNode->getFieldName();
-
-                // Fetch fields.
-                if ( fieldName == jointLocalAnchorAName )
-                {
-                    pFieldNode->getFieldValue( localAnchorA );
-                }
-                else if ( fieldName == jointLocalAnchorBName )
-                {
-                    pFieldNode->getFieldValue( localAnchorB );
-                }
-                else if ( fieldName == jointCollideConnectedName )
-                {
-                    pFieldNode->getFieldValue( collideConnected );
-                }
-                else if ( fieldName == jointPulleyLengthAName )
-                {
-                    pFieldNode->getFieldValue( lengthA );
-                }
-                else if ( fieldName == jointPulleyLengthBName )
-                {
-                    pFieldNode->getFieldValue( lengthB );
-                }
-                else if ( fieldName == jointPulleyRatioName )
-                {
-                    pFieldNode->getFieldValue( ratio );
-                }
-                else if ( fieldName == jointPulleyGroundAnchorAName )
-                {
-                    pFieldNode->getFieldValue( worldGroundAnchorA );
-                }
-                else if ( fieldName == jointPulleyGroundAnchorBName )
-                {
-                    pFieldNode->getFieldValue( worldGroundAnchorB );
-                }
-            }
-
-            // Create joint.
-            createPulleyJoint( pSceneObjectA, pSceneObjectB, localAnchorA, localAnchorB, worldGroundAnchorA, worldGroundAnchorB, ratio, lengthA, lengthB, collideConnected );
-
-        }
-        // Is this a target joint?
-        else if ( nodeName == jointTargetNodeName )
-        {
-            // Fetch joint children.
-            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
-
-            // Fetch joint objects.
-            SceneObject* pSceneObject = jointChildren.size() == 1 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
-
-            // Did we get any connected objects?
-            if( pSceneObject == NULL )
-            {
-                // No, so warn.
-                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has an invalid connected object.", nodeName );
-                continue;
-            }
-
-            bool collideConnected = false;
-            b2Vec2 worldTarget = b2Vec2_zero;
-            F32 maxForce = 1.0f;
-            F32 frequency = 5.0f;
-            F32 dampingRatio = 0.7f;
-
-            // Fetch joint fields.
-            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
-
-            // Iterate property fields.
-            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
-            {
-                // Fetch field node.
-                TamlCustomNodeField* pFieldNode = *jointFieldItr;
-
-                // Fetch property field name.
-                StringTableEntry fieldName = pFieldNode->getFieldName();
-
-                // Fetch fields.
-                if ( fieldName == jointCollideConnectedName )
-                {
-                    pFieldNode->getFieldValue( collideConnected );
-                }
-                else if ( fieldName == jointTargetWorldTargetName )
-                {
-                    pFieldNode->getFieldValue( worldTarget );
-                }
-                else if ( fieldName == jointTargetMaxForceName )
-                {
-                    pFieldNode->getFieldValue( maxForce );
-                }
-                else if ( fieldName == jointTargetFrequencyName )
-                {
-                    pFieldNode->getFieldValue( frequency );
-                }
-                else if ( fieldName == jointTargetDampingRatioName )
-                {
-                    pFieldNode->getFieldValue( dampingRatio );
-                }
-            }
-
-            // Create joint.
-            createTargetJoint( pSceneObject, worldTarget, maxForce, frequency, dampingRatio, collideConnected );
-        }
-        // Is this a motor joint?
-        else if ( nodeName == jointMotorNodeName )
-        {
-            // Fetch joint children.
-            const TamlCustomNodeVector& jointChildren = pJointNode->getChildren();
-
-            // Fetch joint objects.
-            SceneObject* pSceneObjectA = jointChildren.size() > 0 ? jointChildren[0]->composeProxyObject<SceneObject>() : NULL;
-            SceneObject* pSceneObjectB = jointChildren.size() == 2 ? jointChildren[1]->composeProxyObject<SceneObject>() : NULL;
-
-            // Did we get any connected objects?
-            if( pSceneObjectA == NULL && pSceneObjectB == NULL )
-            {
-                // No, so warn.
-                Con::warnf( "Scene::onTamlPostRead() - Encountered a joint '%s' but it has invalid connected objects.", nodeName );
-                continue;
-            }
-
-            bool collideConnected = false;
-
-            b2Vec2 linearOffset = b2Vec2_zero;
-            F32 angularOffset = 0.0f;
-            F32 maxForce = 1.0f;
-            F32 maxTorque = 1.0f;
-            F32 correctionFactor = 0.3f;
-
-            // Fetch joint fields.
-            const TamlCustomFieldVector& jointFields = pJointNode->getFields();
-
-            // Iterate property fields.
-            for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
-            {
-                // Fetch field node.
-                TamlCustomNodeField* pFieldNode = *jointFieldItr;
-
-                // Fetch property field name.
-                StringTableEntry fieldName = pFieldNode->getFieldName();
-
-                // Fetch fields.
-                if ( fieldName == jointCollideConnectedName )
-                {
-                    pFieldNode->getFieldValue( collideConnected );
-                }
-                else if ( fieldName == jointMotorLinearOffsetName )
-                {
-                    pFieldNode->getFieldValue( linearOffset );
-                }
-                else if ( fieldName == jointMotorAngularOffsetName )
-                {
-                    pFieldNode->getFieldValue( angularOffset );
-                    angularOffset = mDegToRad( angularOffset );
-                }
-                else if ( fieldName == jointMotorMaxForceName )
-                {
-                    pFieldNode->getFieldValue( maxForce );
-                }
-                else if ( fieldName == jointMotorMaxTorqueName )
-                {
-                    pFieldNode->getFieldValue( maxTorque );
-                }
-                else if ( fieldName == jointMotorCorrectionFactorName )
-                {
-                    pFieldNode->getFieldValue( correctionFactor );
-                }
-            }
-
-            // Create joint.
-            createMotorJoint( pSceneObjectA, pSceneObjectB, linearOffset, angularOffset, maxForce, maxTorque, correctionFactor, collideConnected );
-
-        }
-        // Unknown joint type!
-        else
-        {
-            // Warn.
-            Con::warnf( "Unknown joint type of '%s' encountered.", nodeName );
-
-            // Sanity!
-            AssertFatal( false, "Scene::onTamlCustomRead() - Unknown joint type detected." );
-
-            continue;
+            // Add to scene controllers.
+            pControllerSet->addObject( pProxyObject );
         }
     }
 }
@@ -4816,7 +4860,7 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 	if ( sceneControllerCount > 0 )
 	{
 		// Yes, so add controller node.
-        TamlCustomNode* pControllerCustonNode = customNodes.addNode( controllerCustomNodeName );
+        TamlCustomNode* pControllerCustomNode = customNodes.addNode( controllerCustomNodeName );
 
 		// Fetch the scene controllers.
 		SimSet* pControllerSet = getControllers();
@@ -4831,7 +4875,8 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 			if ( pController == NULL )
 				continue;
 
-
+            // Add controller node.
+            pControllerCustomNode->addNode( pController );
 		}
 	}
 }

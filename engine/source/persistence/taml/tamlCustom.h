@@ -456,15 +456,18 @@ public:
         return NULL;
     }
 
+    inline StringTableEntry getNodeName( void ) const { return mNodeName; }
+
+    inline const Vector<TamlCustomNode*>& getChildren( void ) const { return mChildren; }
+    inline const TamlCustomFieldVector& getFields( void ) const { return mFields; }
+
     inline bool isProxyObject( void ) const { return mpProxyObject != NULL; }
     inline SimObject* getProxyObject( void ) const { return mpProxyObject != NULL ? mpProxyObject : NULL; }
     inline const TamlWriteNode* getProxyWriteNode( void ) const { return mpProxyWriteNode; }
     template<typename T> T* composeProxyObject( void ) const;
 
-    inline const Vector<TamlCustomNode*>& getChildren( void ) const { return mChildren; }
-    inline const TamlCustomFieldVector& getFields( void ) const { return mFields; }
-
     inline bool isEmpty( void ) const { return mChildren.size() == 0 && mFields.size() == 0; }
+    inline bool getIgnoreEmpty( void ) const { return mIgnoreEmpty; }
 
     StringTableEntry        mNodeName;
     Vector<TamlCustomNode*> mChildren;
