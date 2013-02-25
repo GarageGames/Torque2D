@@ -170,6 +170,11 @@ void TamlXmlWriter::compileCustomElements( TiXmlElement* pXmlElement, const Taml
         dSprintf( extendedElementNameBuffer, sizeof(extendedElementNameBuffer), "%s.%s", pXmlElement->Value(), pCustomNode->getNodeName() );
         StringTableEntry extendedElementName = StringTable->insert( extendedElementNameBuffer );
 
+        if ( dStricmp(pCustomNode->getNodeName(), "controllers") == 0 )
+        {
+            S32 a = 0;
+        }
+
         // Create element.
         TiXmlElement* pExtendedPropertyElement = new TiXmlElement( extendedElementName );
 
@@ -209,6 +214,14 @@ void TamlXmlWriter::compileCustomNode( TiXmlElement* pXmlElement, const TamlCust
     if ( pCustomNode->getIgnoreEmpty() && pCustomNode->isEmpty() )
         return;
 
+    // Is the node a proxy object?
+    if ( pCustomNode->isProxyObject() )
+    {
+        // Yes, so write the proxy object.
+        pXmlElement->LinkEndChild( compileElement( pCustomNode->getProxyWriteNode() ) );
+        return;
+    }
+
     // Create element.
     TiXmlElement* pNodeElement = new TiXmlElement( pCustomNode->getNodeName() );
 
@@ -241,18 +254,8 @@ void TamlXmlWriter::compileCustomNode( TiXmlElement* pXmlElement, const TamlCust
         // Fetch child node.
         const TamlCustomNode* pChildNode = *childNodeItr;
 
-        // Is the node a proxy object?
-        if ( pChildNode->isProxyObject() )
-        {
-            // Yes, so write the proxy object.
-            pNodeElement->LinkEndChild( compileElement( pChildNode->getProxyWriteNode() ) );
-            continue;
-        }
-        else
-        {
-            // No, so compile the child node.
-            compileCustomNode( pNodeElement, pChildNode );
-        }
+        // Compile the child node.
+        compileCustomNode( pNodeElement, pChildNode );
     }
 
     // Finish if the node is set to ignore if empty and it is empty (including fields).
