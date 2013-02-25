@@ -61,6 +61,6 @@ void TamlWriteNode::resetNode( void )
     // Reset callbacks.
     mpTamlCallbacks = NULL;
 
-    // Reset custom properties.
-    mCustomProperties.resetState();
+    // Reset custom nodes.
+    mCustomNodes.resetState();
 }

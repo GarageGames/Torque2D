@@ -291,9 +291,9 @@ private:
 protected:
     /// Taml callbacks.
     virtual void            onTamlPreRead( void );
-    virtual void            onTamlPostRead( const TamlCustomProperties& customProperties );
-    virtual void            onTamlCustomWrite( TamlCustomProperties& customProperties );
-    virtual void            onTamlCustomRead( const TamlCustomProperties& customProperties );
+    virtual void            onTamlPostRead( const TamlCustomNodes& customNodes );
+    virtual void            onTamlCustomWrite( TamlCustomNodes& customNodes );
+    virtual void            onTamlCustomRead( const TamlCustomNodes& customNodes );
 
 public:
     Scene();
