@@ -20,45 +20,31 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
-// Audio channel descriptions.
-//------------------------------------------------------------------------------
-$musicAudioType = 1;
-$effectsAudioType = 2;
-
-//------------------------------------------------------------------------------
-// initializeOpenAL
-// Starts up the OpenAL driver.
-//------------------------------------------------------------------------------
-function initializeOpenAL()
+function AppCore::create( %this )
 {
-    // Just in case it is already started.
-    shutdownOpenAL();
-
-    echo("OpenAL Driver Init");
-
-    if (!OpenALInitDriver())
-    {
-        echo("OpenALInitDriver() failed");
-        $Audio::initFailed = true;
-    }
-    else
-    {
-        // Set the master volume.
-        alxListenerf(AL_GAIN_LINEAR, $pref::Audio::masterVolume);
-
-        // Set the channel volumes.
-        for (%channel = 1; %channel <= 3; %channel++)
-            alxSetChannelVolume(%channel, $pref::Audio::channelVolume[%channel]);
-
-        echo("OpenAL Driver Init Success");
-    }
+    // Load system scripts
+    exec("./scripts/constants.cs");
+    exec("./scripts/defaultPreferences.cs");
+    exec("./scripts/canvas.cs");
+    exec("./scripts/openal.cs");
+    
+    // Initialize the canvas
+    initializeCanvas("Torque 2D");
+    
+    // Set the canvas color
+    Canvas.BackgroundColor = "CornflowerBlue";
+    Canvas.UseBackgroundColor = false;
+    
+    // Initialize audio
+    initializeOpenAL();
+    
+    ModuleDatabase.loadGroup("gameBase");
 }
 
-//------------------------------------------------------------------------------
-// shutdownOpenAL
-//------------------------------------------------------------------------------
-function shutdownOpenAL()
+//-----------------------------------------------------------------------------
+
+function AppCore::destroy( %this )
 {
-    OpenALShutdownDriver();
+
 }
+
