@@ -173,7 +173,7 @@ void BuoyancyController::integrate( Scene* pScene, const F32 totalTime, const F3
 
 		areaCenter.x /= area;
 		areaCenter.y /= area;
-        const b2Vec2 localCentroid = b2MulT(pSceneObject->getTransform(), areaCenter);
+        //const b2Vec2 localCentroid = b2MulT(pSceneObject->getTransform(), areaCenter);
 		massCenter.x /= mass;
 		massCenter.y /= mass;
 

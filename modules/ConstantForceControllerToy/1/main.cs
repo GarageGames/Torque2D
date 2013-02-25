@@ -36,7 +36,7 @@ function ConstantForceControllerToy::create( %this )
 
     // Add options.    
     addNumericOption("Force Angle", -359, 359, 1, "setForceAngle", ConstantForceControllerToy.ForceAngle, false, "The angle of the constant force.");   
-    addNumericOption("Force Magnitude", 1, 1000, 10, "setForceMagnitude", ConstantForceControllerToy.ForceMagnitude, false, "The magnitude of the constant force.");   
+    addNumericOption("Force Magnitude", 0, 1000, 10, "setForceMagnitude", ConstantForceControllerToy.ForceMagnitude, false, "The magnitude of the constant force.");   
     addNumericOption("Debris Count", 10, 1000, 10, "setDebrisCount", ConstantForceControllerToy.DebrisCount, true, "The amount of debris affected by the constant force controller.");
     
     // Reset the toy.
@@ -94,8 +94,9 @@ function ConstantForceControllerToy::createBackground( %this )
     // Create border collisions.
     %object.createEdgeCollisionShape( -50, -37.5, -50, 37.5 );
     %object.createEdgeCollisionShape( 50, -37.5, 50, 37.5 );
-    %object.createEdgeCollisionShape( -50, -37.5, 50, -37.5 );
     %object.createEdgeCollisionShape( -50, 37.5, 50, 37.5 );
+    %object.createEdgeCollisionShape( -50, -34.5, 50, -34.5 );
+    
            
     // Add the sprite to the scene.
     SandboxScene.add( %object );    

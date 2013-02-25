@@ -209,8 +209,8 @@ protected:
     void createSpriteBatchTree( void );
     void destroySpriteBatchTree( void );
 
-    void onTamlCustomWrite( TamlCustomProperty* pSpritesProperty );
-    void onTamlCustomRead( const TamlCustomProperty* pSpritesProperty );
+    void onTamlCustomWrite( TamlCustomNode* pSpritesNode );
+    void onTamlCustomRead( const TamlCustomNode* pSpritesNode );
 
 private:
     bool destroySprite( const U32 batchId );

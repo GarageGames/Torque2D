@@ -118,72 +118,75 @@ void AssetTagsManifest::renameAssetId( const char* pAssetIdFrom, const char* pAs
 
 //-----------------------------------------------------------------------------
 
-void AssetTagsManifest::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void AssetTagsManifest::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Call parent.
-    Parent::onTamlCustomWrite( customProperties );
+    Parent::onTamlCustomWrite( customNodes );
 
     // Finish if no tags.
     if ( mTagNameDatabase.size() == 0 )
         return;
 
-    // Add property.
-    TamlCustomProperty* pTagProperty = customProperties.addProperty( ASSETTAGS_TAGS_CUSTOMPROPERTY_NAME );
+    // Add node.
+    TamlCustomNode* pTagsNode = customNodes.addNode( ASSETTAGS_TAGS_NODE_NAME );
 
     // Iterate tags.
     for( typeTagNameHash::iterator tagItr = mTagNameDatabase.begin(); tagItr != mTagNameDatabase.end(); ++tagItr )
     {
-        // Add alias.
-        TamlPropertyAlias* pAlias = pTagProperty->addAlias( ASSETTAGS_TAGS_TYPE_NAME );
+        // Add tag node.
+        TamlCustomNode* pTagNode = pTagsNode->addNode( ASSETTAGS_TAGS_TYPE_NAME );
 
         // Add fields.
-        pAlias->addField( ASSETTAGS_TAGS_NAME_FIELD, tagItr->key );
+        pTagNode->addField( ASSETTAGS_TAGS_NAME_FIELD, tagItr->key );
     }
 
-    // Add property.
-    TamlCustomProperty* pAssetTagProperty = customProperties.addProperty( ASSETTAGS_ASSETS_CUSTOMPROPERTY_NAME );
+    // Add node.
+    TamlCustomNode* pAssetTagsNode = customNodes.addNode( ASSETTAGS_ASSETS_NODE_NAME );
 
     // Iterate asset locations.
     for( typeAssetToTagHash::iterator assetTagItr = mAssetToTagDatabase.begin(); assetTagItr != mAssetToTagDatabase.end(); ++assetTagItr )
     {
-        // Add alias.
-        TamlPropertyAlias* pAlias = pAssetTagProperty->addAlias( ASSETTAGS_ASSETS_TYPE_NAME );
+        // Add asset tag node.
+        TamlCustomNode* pAssetNode = pAssetTagsNode->addNode( ASSETTAGS_ASSETS_TYPE_NAME );
 
         // Add fields.
-        pAlias->addField( ASSETTAGS_ASSETS_ASSETID_FIELD, assetTagItr->key );
-        pAlias->addField( ASSETTAGS_ASSETS_TAG_FIELD, assetTagItr->value->mTagName );
+        pAssetNode->addField( ASSETTAGS_ASSETS_ASSETID_FIELD, assetTagItr->key );
+        pAssetNode->addField( ASSETTAGS_ASSETS_TAG_FIELD, assetTagItr->value->mTagName );
     }
 }
 
 //-----------------------------------------------------------------------------
 
-void AssetTagsManifest::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void AssetTagsManifest::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Call parent.
-    Parent::onTamlCustomRead( customProperties );
+    Parent::onTamlCustomRead( customNodes );
 
-    // Find custom property name.
-    const TamlCustomProperty* pTagProperty = customProperties.findProperty( ASSETTAGS_TAGS_CUSTOMPROPERTY_NAME );
+    // Find tags nodes.
+    const TamlCustomNode* pTagProperty = customNodes.findNode( ASSETTAGS_TAGS_NODE_NAME );
 
-    // Finish if we don't have a property name.
+    // Finish if we don't have a tags node name.
     if ( pTagProperty == NULL )
         return;
 
-    // Fetch alias name.
-    StringTableEntry tagAliasName = StringTable->insert( ASSETTAGS_TAGS_TYPE_NAME );
+    // Fetch node name.
+    StringTableEntry tagNodeName = StringTable->insert( ASSETTAGS_TAGS_TYPE_NAME );
 
-    // Iterate property alias.
-    for( TamlCustomProperty::const_iterator propertyAliasItr = pTagProperty->begin(); propertyAliasItr != pTagProperty->end(); ++propertyAliasItr )
+    // Fetch children asset nodes.
+    const TamlCustomNodeVector& tagNodes = pTagProperty->getChildren();
+
+    // Iterate tag nodes.
+    for( TamlCustomNodeVector::const_iterator tagNodeItr = tagNodes.begin(); tagNodeItr != tagNodes.end(); ++tagNodeItr )
     {
-        // Fetch property alias.
-        const TamlPropertyAlias* pAlias = *propertyAliasItr;
+        // Fetch tag node.
+        const TamlCustomNode* pTagNode = *tagNodeItr;
 
-        // Skip if an unknown alias name.
-        if ( pAlias->mAliasName != tagAliasName )
+        // Skip if an unknown node name.
+        if ( pTagNode->getNodeName() != tagNodeName )
             continue;
 
         // Fetch "Name" field.
-        const TamlPropertyField* pTagNameField = pAlias->findField( ASSETTAGS_TAGS_NAME_FIELD );
+        const TamlCustomField* pTagNameField = pTagNode->findField( ASSETTAGS_TAGS_NAME_FIELD );
 
         // Do we find the field?
         if ( pTagNameField == NULL )
@@ -197,28 +200,31 @@ void AssetTagsManifest::onTamlCustomRead( const TamlCustomProperties& customProp
         createTag( pTagNameField->getFieldValue() );
     }
 
-    // Find custom property name.
-    const TamlCustomProperty* pAssetTagProperty = customProperties.findProperty( ASSETTAGS_ASSETS_CUSTOMPROPERTY_NAME );
+    // Find asset tags node.
+    const TamlCustomNode* pAssetTagProperty = customNodes.findNode( ASSETTAGS_ASSETS_NODE_NAME );
 
-    // Finish if we don't have a property name.
+    // Finish if we don't have an asset tags node name.
     if ( pAssetTagProperty == NULL )
         return;
 
-    // Fetch alias name.
-    StringTableEntry assetTagAliasName = StringTable->insert( ASSETTAGS_ASSETS_TYPE_NAME );
+    // Fetch node name.
+    StringTableEntry assetTagNodeName = StringTable->insert( ASSETTAGS_ASSETS_TYPE_NAME );
+
+    // Fetch children asset tag nodes.
+    const TamlCustomNodeVector& assetTagNodes = pAssetTagProperty->getChildren();
 
     // Iterate property alias.
-    for( TamlCustomProperty::const_iterator propertyAliasItr = pAssetTagProperty->begin(); propertyAliasItr != pAssetTagProperty->end(); ++propertyAliasItr )
+    for( TamlCustomNodeVector::const_iterator assetTagNodeItr = assetTagNodes.begin(); assetTagNodeItr != assetTagNodes.end(); ++assetTagNodeItr )
     {
-        // Fetch property alias.
-        const TamlPropertyAlias* pAlias = *propertyAliasItr;
+        // Fetch asset node.
+        const TamlCustomNode* pAssetTagNode = *assetTagNodeItr;
 
-        // Skip if an unknown alias name.
-        if ( pAlias->mAliasName != assetTagAliasName )
+        // Skip if an unknown node name.
+        if ( pAssetTagNode->getNodeName() != assetTagNodeName )
             continue;
 
         // Fetch "AssetId" field.
-        const TamlPropertyField* pAssetIdField = pAlias->findField( ASSETTAGS_ASSETS_ASSETID_FIELD );
+        const TamlCustomField* pAssetIdField = pAssetTagNode->findField( ASSETTAGS_ASSETS_ASSETID_FIELD );
 
         // Do we find the field?
         if ( pAssetIdField == NULL )
@@ -229,7 +235,7 @@ void AssetTagsManifest::onTamlCustomRead( const TamlCustomProperties& customProp
         }
 
         // Fetch "Tag" field.
-        const TamlPropertyField* pTagField = pAlias->findField( ASSETTAGS_ASSETS_TAG_FIELD );
+        const TamlCustomField* pTagField = pAssetTagNode->findField( ASSETTAGS_ASSETS_TAG_FIELD );
 
         // Do we find the field?
         if ( pTagField == NULL )

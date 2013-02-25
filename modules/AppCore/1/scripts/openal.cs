@@ -20,40 +20,45 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _TAML_XMLWRITER_H_
-#define _TAML_XMLWRITER_H_
+//------------------------------------------------------------------------------
+// Audio channel descriptions.
+//------------------------------------------------------------------------------
+$musicAudioType = 1;
+$effectsAudioType = 2;
 
-#ifndef _TAML_H_
-#include "persistence/taml/taml.h"
-#endif
-
-#ifndef TINYXML_INCLUDED
-#include "persistence/tinyXML/tinyxml.h"
-#endif
-
-
-//-----------------------------------------------------------------------------
-
-class TamlXmlWriter
+//------------------------------------------------------------------------------
+// initializeOpenAL
+// Starts up the OpenAL driver.
+//------------------------------------------------------------------------------
+function initializeOpenAL()
 {
-public:
-    TamlXmlWriter( Taml* pTaml ) :
-        mpTaml( pTaml )
+    // Just in case it is already started.
+    shutdownOpenAL();
+
+    echo("OpenAL Driver Init");
+
+    if (!OpenALInitDriver())
     {
+        echo("OpenALInitDriver() failed");
+        $Audio::initFailed = true;
     }
-    virtual ~TamlXmlWriter() {}
+    else
+    {
+        // Set the master volume.
+        alxListenerf(AL_GAIN_LINEAR, $pref::Audio::masterVolume);
 
-    /// Write.
-    bool write( FileStream& stream, const TamlWriteNode* pTamlWriteNode );
+        // Set the channel volumes.
+        for (%channel = 1; %channel <= 3; %channel++)
+            alxSetChannelVolume(%channel, $pref::Audio::channelVolume[%channel]);
 
-private:
-    Taml* mpTaml;
+        echo("OpenAL Driver Init Success");
+    }
+}
 
-private:
-    TiXmlNode* compileElement( const TamlWriteNode* pTamlWriteNode );
-    void compileAttributes( TiXmlElement* pXmlElement, const TamlWriteNode* pTamlWriteNode );
-    void compileCustomElements( TiXmlElement* pXmlElement, const TamlWriteNode* pTamlWriteNode );
-    void compileCustomNode( TiXmlElement* pXmlElement, const TamlCustomNode* pCustomNode );
-};
-
-#endif // _TAML_XMLWRITER_H_
+//------------------------------------------------------------------------------
+// shutdownOpenAL
+//------------------------------------------------------------------------------
+function shutdownOpenAL()
+{
+    OpenALShutdownDriver();
+}
