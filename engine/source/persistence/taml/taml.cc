@@ -716,7 +716,7 @@ void Taml::compileCustomNodeState( TamlCustomNode* pCustomNode )
     const TamlCustomNodeVector& children = pCustomNode->getChildren();
 
     // Fetch proxy object.
-    SimObject* pProxyObject = pCustomNode->getProxyObject();
+    SimObject* pProxyObject = pCustomNode->getProxyObject<SimObject>(false);
 
     // Do we have a proxy object?
     if ( pProxyObject != NULL )

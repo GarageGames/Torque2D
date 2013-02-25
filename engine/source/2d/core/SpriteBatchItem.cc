@@ -580,5 +580,5 @@ void SpriteBatchItem::onTamlCustomRead( const TamlCustomNode* pSpriteNode )
 
     // Set the data object if a single child exists.
     if ( spriteChildren.size() == 1 )
-        setDataObject( spriteChildren[0]->composeProxyObject<SimObject>() );
+        setDataObject( spriteChildren[0]->getProxyObject<SimObject>(true) );
 }

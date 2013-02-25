@@ -508,7 +508,25 @@ public:
     inline const TamlCustomFieldVector& getFields( void ) const { return mFields; }
 
     inline bool isProxyObject( void ) const { return mpProxyObject != NULL; }
-    inline SimObject* getProxyObject( void ) const { return mpProxyObject != NULL ? mpProxyObject : NULL; }
+    template<typename T> T* getProxyObject( const bool deleteIfNotType ) const
+    {
+        // Return nothing if no proxy object.
+        if ( mpProxyObject == NULL )
+            return NULL;
+
+        // Cast object to specified type.
+        T* pTypeCast = dynamic_cast<T*>( mpProxyObject );
+
+        // Destroy the object if not the specified type and requested to do so.
+        if ( deleteIfNotType && pTypeCast == NULL )
+        {
+            mpProxyObject->deleteObject();
+            const_cast<SimObject*>(mpProxyObject) = NULL;
+            return NULL;
+        }
+
+        return pTypeCast;
+    }
     inline const TamlWriteNode* getProxyWriteNode( void ) const { return mpProxyWriteNode; }
 
     inline bool isEmpty( void ) const { return mNodeText.isValueEmpty() && mFields.size() == 0 && mChildren.size() == 0; }

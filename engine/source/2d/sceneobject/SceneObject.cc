@@ -3687,7 +3687,8 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             const U32 shapeChildrenCount = (U32)shapeChildren.size();
 
             // Do we have any shape children.
-            if ( shapeChildrenCount > 0 )
+            // NOTE: Only do this if the old methods has not been used.
+            if ( pointCount == 0 && shapeChildrenCount > 0 )
             {
                 // Yes, so iterate them.
                 for( TamlCustomNodeVector::const_iterator childItr = shapeChildren.begin(); childItr != shapeChildren.end(); ++childItr )
@@ -3776,6 +3777,36 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
                 {
                     pField->getFieldValue( adjacentEndPoint );
                     hasAdjacentEndPoint = true;
+                }
+            }
+
+            // Fetch shape children.
+            const TamlCustomNodeVector& shapeChildren = pShapeNode->getChildren();
+
+            // Fetch shape children count.
+            const U32 shapeChildrenCount = (U32)shapeChildren.size();
+
+            // Do we have any shape children.
+            // NOTE: Only do this if the old methods has not been used.
+            if ( points.size() == 0 && shapeChildrenCount > 0 )
+            {
+                // Yes, so iterate them.
+                for( TamlCustomNodeVector::const_iterator childItr = shapeChildren.begin(); childItr != shapeChildren.end(); ++childItr )
+                {
+                    TamlCustomNode* pChildNode = *childItr;
+
+                    // Skip if it's not a point.
+                    if ( pChildNode->getNodeName() != polygonPointName )
+                        continue;
+                    
+                    // Skip if it's empty.
+                    if ( pChildNode->getNodeTextField().isValueEmpty() )
+                        continue;
+
+                    // Read point.
+                    b2Vec2 point;
+                    pChildNode->getNodeTextField().getFieldValue( point );
+                    points.push_back( point );
                 }
             }
 
