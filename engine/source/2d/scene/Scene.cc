@@ -3672,35 +3672,35 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
                 {
                     // Fetch field node.
-                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+                    TamlCustomField* pField = *jointFieldItr;
 
                     // Fetch property field name.
-                    StringTableEntry fieldName = pFieldNode->getFieldName();
+                    StringTableEntry fieldName = pField->getFieldName();
 
                     // Fetch fields.
                     if ( fieldName == jointLocalAnchorAName )
                     {
-                        pFieldNode->getFieldValue( localAnchorA );
+                        pField->getFieldValue( localAnchorA );
                     }
                     else if ( fieldName == jointLocalAnchorBName )
                     {
-                        pFieldNode->getFieldValue( localAnchorB );
+                        pField->getFieldValue( localAnchorB );
                     }
                     else if ( fieldName == jointCollideConnectedName )
                     {
-                        pFieldNode->getFieldValue( collideConnected );
+                        pField->getFieldValue( collideConnected );
                     }
                     else if ( fieldName == jointDistanceLengthName )
                     {
-                        pFieldNode->getFieldValue( length );
+                        pField->getFieldValue( length );
                     }
                     else if ( fieldName == jointDistanceFrequencyName )
                     {
-                        pFieldNode->getFieldValue( frequency );
+                        pField->getFieldValue( frequency );
                     }
                     else if ( fieldName == jointDistanceDampingRatioName )
                     {
-                        pFieldNode->getFieldValue( dampingRatio );
+                        pField->getFieldValue( dampingRatio );
                     }
                 }
 
@@ -3738,27 +3738,27 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
                 {
                     // Fetch field node.
-                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+                    TamlCustomField* pField = *jointFieldItr;
 
                     // Fetch property field name.
-                    StringTableEntry fieldName = pFieldNode->getFieldName();
+                    StringTableEntry fieldName = pField->getFieldName();
 
                     // Fetch fields.
                     if ( fieldName == jointLocalAnchorAName )
                     {
-                        pFieldNode->getFieldValue( localAnchorA );
+                        pField->getFieldValue( localAnchorA );
                     }
                     else if ( fieldName == jointLocalAnchorBName )
                     {
-                        pFieldNode->getFieldValue( localAnchorB );
+                        pField->getFieldValue( localAnchorB );
                     }
                     else if ( fieldName == jointCollideConnectedName )
                     {
-                        pFieldNode->getFieldValue( collideConnected );
+                        pField->getFieldValue( collideConnected );
                     }
                     else if ( fieldName == jointRopeMaxLengthName )
                     {
-                        pFieldNode->getFieldValue( maxLength );
+                        pField->getFieldValue( maxLength );
                     }
                 }
 
@@ -3802,45 +3802,45 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
                 {
                     // Fetch field node.
-                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+                    TamlCustomField* pField = *jointFieldItr;
 
                     // Fetch property field name.
-                    StringTableEntry fieldName = pFieldNode->getFieldName();
+                    StringTableEntry fieldName = pField->getFieldName();
 
                     // Fetch fields.
                     if ( fieldName == jointLocalAnchorAName )
                     {
-                        pFieldNode->getFieldValue( localAnchorA );
+                        pField->getFieldValue( localAnchorA );
                     }
                     else if ( fieldName == jointLocalAnchorBName )
                     {
-                        pFieldNode->getFieldValue( localAnchorB );
+                        pField->getFieldValue( localAnchorB );
                     }
                     else if ( fieldName == jointCollideConnectedName )
                     {
-                        pFieldNode->getFieldValue( collideConnected );
+                        pField->getFieldValue( collideConnected );
                     }
                     else if ( fieldName == jointRevoluteLimitLowerAngleName )
                     {
-                        pFieldNode->getFieldValue( lowerAngle );
+                        pField->getFieldValue( lowerAngle );
                         lowerAngle = mDegToRad( lowerAngle );
                         enableLimit = true;
                     }
                     else if ( fieldName == jointRevoluteLimitUpperAngleName )
                     {
-                        pFieldNode->getFieldValue( upperAngle );
+                        pField->getFieldValue( upperAngle );
                         upperAngle = mDegToRad( upperAngle );
                         enableLimit = true;
                     }
                     else if ( fieldName == jointRevoluteMotorSpeedName )
                     {
-                        pFieldNode->getFieldValue( motorSpeed );
+                        pField->getFieldValue( motorSpeed );
                         motorSpeed = mDegToRad( motorSpeed );
                         enableMotor = true;
                     }
                     else if ( fieldName == jointRevoluteMotorMaxTorqueName )
                     {
-                        pFieldNode->getFieldValue( maxMotorTorque );
+                        pField->getFieldValue( maxMotorTorque );
                         enableMotor = true;
                     }
                 }
@@ -3886,31 +3886,31 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
                 {
                     // Fetch field node.
-                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+                    TamlCustomField* pField = *jointFieldItr;
 
                     // Fetch property field name.
-                    StringTableEntry fieldName = pFieldNode->getFieldName();
+                    StringTableEntry fieldName = pField->getFieldName();
 
                     // Fetch fields.
                     if ( fieldName == jointLocalAnchorAName )
                     {
-                        pFieldNode->getFieldValue( localAnchorA );
+                        pField->getFieldValue( localAnchorA );
                     }
                     else if ( fieldName == jointLocalAnchorBName )
                     {
-                        pFieldNode->getFieldValue( localAnchorB );
+                        pField->getFieldValue( localAnchorB );
                     }
                     else if ( fieldName == jointCollideConnectedName )
                     {
-                        pFieldNode->getFieldValue( collideConnected );
+                        pField->getFieldValue( collideConnected );
                     }
                     else if ( fieldName == jointWeldFrequencyName )
                     {
-                        pFieldNode->getFieldValue( frequency );
+                        pField->getFieldValue( frequency );
                     }
                     else if ( fieldName == jointWeldDampingRatioName )
                     {
-                        pFieldNode->getFieldValue( dampingRatio );
+                        pField->getFieldValue( dampingRatio );
                     }
                 }
 
@@ -3954,46 +3954,46 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
                 {
                     // Fetch field node.
-                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+                    TamlCustomField* pField = *jointFieldItr;
 
                     // Fetch property field name.
-                    StringTableEntry fieldName = pFieldNode->getFieldName();
+                    StringTableEntry fieldName = pField->getFieldName();
 
                     // Fetch fields.
                     if ( fieldName == jointLocalAnchorAName )
                     {
-                        pFieldNode->getFieldValue( localAnchorA );
+                        pField->getFieldValue( localAnchorA );
                     }
                     else if ( fieldName == jointLocalAnchorBName )
                     {
-                        pFieldNode->getFieldValue( localAnchorB );
+                        pField->getFieldValue( localAnchorB );
                     }
                     else if ( fieldName == jointCollideConnectedName )
                     {
-                        pFieldNode->getFieldValue( collideConnected );
+                        pField->getFieldValue( collideConnected );
                     }
                     else if ( fieldName == jointWheelMotorSpeedName )
                     {
-                        pFieldNode->getFieldValue( motorSpeed );
+                        pField->getFieldValue( motorSpeed );
                         motorSpeed = mDegToRad( motorSpeed );
                         enableMotor = true;
                     }
                     else if ( fieldName == jointWheelMotorMaxTorqueName )
                     {
-                        pFieldNode->getFieldValue( maxMotorTorque );
+                        pField->getFieldValue( maxMotorTorque );
                         enableMotor = true;
                     }
                     else if ( fieldName == jointWheelFrequencyName )
                     {
-                        pFieldNode->getFieldValue( frequency );
+                        pField->getFieldValue( frequency );
                     }
                     else if ( fieldName == jointWheelDampingRatioName )
                     {
-                        pFieldNode->getFieldValue( dampingRatio );
+                        pField->getFieldValue( dampingRatio );
                     }
                     else if ( fieldName == jointWheelWorldAxisName )
                     {
-                        pFieldNode->getFieldValue( worldAxis );                    
+                        pField->getFieldValue( worldAxis );                    
                     }
                 }
 
@@ -4038,31 +4038,31 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
                 {
                     // Fetch field node.
-                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+                    TamlCustomField* pField = *jointFieldItr;
 
                     // Fetch property field name.
-                    StringTableEntry fieldName = pFieldNode->getFieldName();
+                    StringTableEntry fieldName = pField->getFieldName();
 
                     // Fetch fields.
                     if ( fieldName == jointLocalAnchorAName )
                     {
-                        pFieldNode->getFieldValue( localAnchorA );
+                        pField->getFieldValue( localAnchorA );
                     }
                     else if ( fieldName == jointLocalAnchorBName )
                     {
-                        pFieldNode->getFieldValue( localAnchorB );
+                        pField->getFieldValue( localAnchorB );
                     }
                     else if ( fieldName == jointCollideConnectedName )
                     {
-                        pFieldNode->getFieldValue( collideConnected );
+                        pField->getFieldValue( collideConnected );
                     }
                     else if ( fieldName == jointFrictionMaxForceName )
                     {
-                        pFieldNode->getFieldValue( maxForce );
+                        pField->getFieldValue( maxForce );
                     }
                     else if ( fieldName == jointFrictionMaxTorqueName )
                     {
-                        pFieldNode->getFieldValue( maxTorque );
+                        pField->getFieldValue( maxTorque );
                     }
                 }
 
@@ -4108,48 +4108,48 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
                 {
                     // Fetch field node.
-                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+                    TamlCustomField* pField = *jointFieldItr;
 
                     // Fetch property field name.
-                    StringTableEntry fieldName = pFieldNode->getFieldName();
+                    StringTableEntry fieldName = pField->getFieldName();
 
                     // Fetch fields.
                     if ( fieldName == jointLocalAnchorAName )
                     {
-                        pFieldNode->getFieldValue( localAnchorA );
+                        pField->getFieldValue( localAnchorA );
                     }
                     else if ( fieldName == jointLocalAnchorBName )
                     {
-                        pFieldNode->getFieldValue( localAnchorB );
+                        pField->getFieldValue( localAnchorB );
                     }
                     else if ( fieldName == jointCollideConnectedName )
                     {
-                        pFieldNode->getFieldValue( collideConnected );
+                        pField->getFieldValue( collideConnected );
                     }
                     else if ( fieldName == jointPrismaticLimitLowerTransName )
                     {
-                        pFieldNode->getFieldValue( lowerTransLimit );
+                        pField->getFieldValue( lowerTransLimit );
                         enableLimit = true;
                     }
                     else if ( fieldName == jointPrismaticLimitUpperTransName )
                     {
-                        pFieldNode->getFieldValue( upperTransLimit );
+                        pField->getFieldValue( upperTransLimit );
                         enableLimit = true;
                     }
                     else if ( fieldName == jointPrismaticMotorSpeedName )
                     {
-                        pFieldNode->getFieldValue( motorSpeed );
+                        pField->getFieldValue( motorSpeed );
                         motorSpeed = mDegToRad( motorSpeed );
                         enableMotor = true;
                     }
                     else if ( fieldName == jointPrismaticMotorMaxForceName )
                     {
-                        pFieldNode->getFieldValue( maxMotorForce );
+                        pField->getFieldValue( maxMotorForce );
                         enableMotor = true;
                     }
                     else if ( fieldName == jointPrismaticWorldAxisName )
                     {
-                        pFieldNode->getFieldValue( worldAxis );
+                        pField->getFieldValue( worldAxis );
                     }
                 }
 
@@ -4197,43 +4197,43 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
                 {
                     // Fetch field node.
-                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+                    TamlCustomField* pField = *jointFieldItr;
 
                     // Fetch property field name.
-                    StringTableEntry fieldName = pFieldNode->getFieldName();
+                    StringTableEntry fieldName = pField->getFieldName();
 
                     // Fetch fields.
                     if ( fieldName == jointLocalAnchorAName )
                     {
-                        pFieldNode->getFieldValue( localAnchorA );
+                        pField->getFieldValue( localAnchorA );
                     }
                     else if ( fieldName == jointLocalAnchorBName )
                     {
-                        pFieldNode->getFieldValue( localAnchorB );
+                        pField->getFieldValue( localAnchorB );
                     }
                     else if ( fieldName == jointCollideConnectedName )
                     {
-                        pFieldNode->getFieldValue( collideConnected );
+                        pField->getFieldValue( collideConnected );
                     }
                     else if ( fieldName == jointPulleyLengthAName )
                     {
-                        pFieldNode->getFieldValue( lengthA );
+                        pField->getFieldValue( lengthA );
                     }
                     else if ( fieldName == jointPulleyLengthBName )
                     {
-                        pFieldNode->getFieldValue( lengthB );
+                        pField->getFieldValue( lengthB );
                     }
                     else if ( fieldName == jointPulleyRatioName )
                     {
-                        pFieldNode->getFieldValue( ratio );
+                        pField->getFieldValue( ratio );
                     }
                     else if ( fieldName == jointPulleyGroundAnchorAName )
                     {
-                        pFieldNode->getFieldValue( worldGroundAnchorA );
+                        pField->getFieldValue( worldGroundAnchorA );
                     }
                     else if ( fieldName == jointPulleyGroundAnchorBName )
                     {
-                        pFieldNode->getFieldValue( worldGroundAnchorB );
+                        pField->getFieldValue( worldGroundAnchorB );
                     }
                 }
 
@@ -4271,31 +4271,31 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
                 {
                     // Fetch field node.
-                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+                    TamlCustomField* pField = *jointFieldItr;
 
                     // Fetch property field name.
-                    StringTableEntry fieldName = pFieldNode->getFieldName();
+                    StringTableEntry fieldName = pField->getFieldName();
 
                     // Fetch fields.
                     if ( fieldName == jointCollideConnectedName )
                     {
-                        pFieldNode->getFieldValue( collideConnected );
+                        pField->getFieldValue( collideConnected );
                     }
                     else if ( fieldName == jointTargetWorldTargetName )
                     {
-                        pFieldNode->getFieldValue( worldTarget );
+                        pField->getFieldValue( worldTarget );
                     }
                     else if ( fieldName == jointTargetMaxForceName )
                     {
-                        pFieldNode->getFieldValue( maxForce );
+                        pField->getFieldValue( maxForce );
                     }
                     else if ( fieldName == jointTargetFrequencyName )
                     {
-                        pFieldNode->getFieldValue( frequency );
+                        pField->getFieldValue( frequency );
                     }
                     else if ( fieldName == jointTargetDampingRatioName )
                     {
-                        pFieldNode->getFieldValue( dampingRatio );
+                        pField->getFieldValue( dampingRatio );
                     }
                 }
 
@@ -4335,36 +4335,36 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
                 for ( TamlCustomFieldVector::const_iterator jointFieldItr = jointFields.begin(); jointFieldItr != jointFields.end(); ++jointFieldItr )
                 {
                     // Fetch field node.
-                    TamlCustomNodeField* pFieldNode = *jointFieldItr;
+                    TamlCustomField* pField = *jointFieldItr;
 
                     // Fetch property field name.
-                    StringTableEntry fieldName = pFieldNode->getFieldName();
+                    StringTableEntry fieldName = pField->getFieldName();
 
                     // Fetch fields.
                     if ( fieldName == jointCollideConnectedName )
                     {
-                        pFieldNode->getFieldValue( collideConnected );
+                        pField->getFieldValue( collideConnected );
                     }
                     else if ( fieldName == jointMotorLinearOffsetName )
                     {
-                        pFieldNode->getFieldValue( linearOffset );
+                        pField->getFieldValue( linearOffset );
                     }
                     else if ( fieldName == jointMotorAngularOffsetName )
                     {
-                        pFieldNode->getFieldValue( angularOffset );
+                        pField->getFieldValue( angularOffset );
                         angularOffset = mDegToRad( angularOffset );
                     }
                     else if ( fieldName == jointMotorMaxForceName )
                     {
-                        pFieldNode->getFieldValue( maxForce );
+                        pField->getFieldValue( maxForce );
                     }
                     else if ( fieldName == jointMotorMaxTorqueName )
                     {
-                        pFieldNode->getFieldValue( maxTorque );
+                        pField->getFieldValue( maxTorque );
                     }
                     else if ( fieldName == jointMotorCorrectionFactorName )
                     {
-                        pFieldNode->getFieldValue( correctionFactor );
+                        pField->getFieldValue( correctionFactor );
                     }
                 }
 

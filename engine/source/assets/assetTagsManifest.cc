@@ -186,7 +186,7 @@ void AssetTagsManifest::onTamlCustomRead( const TamlCustomNodes& customNodes )
             continue;
 
         // Fetch "Name" field.
-        const TamlCustomNodeField* pTagNameField = pTagNode->findField( ASSETTAGS_TAGS_NAME_FIELD );
+        const TamlCustomField* pTagNameField = pTagNode->findField( ASSETTAGS_TAGS_NAME_FIELD );
 
         // Do we find the field?
         if ( pTagNameField == NULL )
@@ -224,7 +224,7 @@ void AssetTagsManifest::onTamlCustomRead( const TamlCustomNodes& customNodes )
             continue;
 
         // Fetch "AssetId" field.
-        const TamlCustomNodeField* pAssetIdField = pAssetTagNode->findField( ASSETTAGS_ASSETS_ASSETID_FIELD );
+        const TamlCustomField* pAssetIdField = pAssetTagNode->findField( ASSETTAGS_ASSETS_ASSETID_FIELD );
 
         // Do we find the field?
         if ( pAssetIdField == NULL )
@@ -235,7 +235,7 @@ void AssetTagsManifest::onTamlCustomRead( const TamlCustomNodes& customNodes )
         }
 
         // Fetch "Tag" field.
-        const TamlCustomNodeField* pTagField = pAssetTagNode->findField( ASSETTAGS_ASSETS_TAG_FIELD );
+        const TamlCustomField* pTagField = pAssetTagNode->findField( ASSETTAGS_ASSETS_TAG_FIELD );
 
         // Do we find the field?
         if ( pTagField == NULL )

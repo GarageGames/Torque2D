@@ -268,27 +268,27 @@ void TamlBinaryWriter::writeCustomNode( Stream& stream, const TamlCustomNode* pC
         }
     }
 
-    // Fetch node fields.
-    const TamlCustomFieldVector& nodeFields = pCustomNode->getFields();
+    // Fetch fields.
+    const TamlCustomFieldVector& fields = pCustomNode->getFields();
 
     // Fetch child field count.
-    const U32 childFieldCount = (U32)nodeFields.size();
+    const U32 childFieldCount = (U32)fields.size();
 
-    // Write custom node field count.
+    // Write custom field count.
     stream.write( childFieldCount );
 
     // Do we have any child fields?
     if ( childFieldCount > 0 )
     {
-        // Yes, so iterate node fields.
-        for ( TamlCustomFieldVector::const_iterator nodeFieldItr = nodeFields.begin(); nodeFieldItr != nodeFields.end(); ++nodeFieldItr )
+        // Yes, so iterate  fields.
+        for ( TamlCustomFieldVector::const_iterator fieldItr = fields.begin(); fieldItr != fields.end(); ++fieldItr )
         {
             // Fetch node field.
-            const TamlCustomNodeField* pNodeField = *nodeFieldItr;
+            const TamlCustomField* pField = *fieldItr;
 
             // Write the node field.
-            stream.writeString( pNodeField->getFieldName() );
-            stream.writeLongString( MAX_TAML_NODE_FIELDVALUE_LENGTH, pNodeField->getFieldValue() );
+            stream.writeString( pField->getFieldName() );
+            stream.writeLongString( MAX_TAML_NODE_FIELDVALUE_LENGTH, pField->getFieldValue() );
         }
     }
 }

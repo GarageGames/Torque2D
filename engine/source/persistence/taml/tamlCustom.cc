@@ -28,12 +28,12 @@
 
 //-----------------------------------------------------------------------------
 
-FactoryCache<TamlCustomNodeField> TamlCustomNodeFieldFactory;
+FactoryCache<TamlCustomField> TamlCustomFieldFactory;
 FactoryCache<TamlCustomNode> TamlCustomNodeFactory;
 
 //-----------------------------------------------------------------------------
 
-void TamlCustomNodeField::set( const char* pFieldName, const char* pFieldValue )
+void TamlCustomField::set( const char* pFieldName, const char* pFieldValue )
 {
     // Sanity!
     AssertFatal( pFieldName != NULL, "Field name cannot be NULL." );

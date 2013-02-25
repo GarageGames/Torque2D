@@ -57,23 +57,23 @@
 
 class TamlWriteNode;
 class TamlCustomNode;
-class TamlCustomNodeField;
+class TamlCustomField;
 extern FactoryCache<TamlCustomNode> TamlCustomNodeFactory;
-extern FactoryCache<TamlCustomNodeField> TamlCustomNodeFieldFactory;
+extern FactoryCache<TamlCustomField> TamlCustomFieldFactory;
 typedef Vector<TamlCustomNode*> TamlCustomNodeVector;
-typedef Vector<TamlCustomNodeField*> TamlCustomFieldVector;
+typedef Vector<TamlCustomField*> TamlCustomFieldVector;
 
 //-----------------------------------------------------------------------------
 
-class TamlCustomNodeField : public IFactoryObjectReset
+class TamlCustomField : public IFactoryObjectReset
 {
 public:
-    TamlCustomNodeField()
+    TamlCustomField()
     {
         resetState();
     }
 
-    virtual ~TamlCustomNodeField()
+    virtual ~TamlCustomField()
     {
         // Everything should already be cleared in a state reset.
         // Touching any memory here is dangerous as this type is typically
@@ -112,7 +112,7 @@ public:
         if ( dSscanf( mFieldValue, "%d %d", &fieldValue.x, &fieldValue.y ) != 2 )
         {
             // Warn.
-            Con::warnf( "TamlCustomNodeField - Reading point2I but it has an incorrect format: '%s'.", mFieldValue );
+            Con::warnf( "TamlCustomField - Reading point2I but it has an incorrect format: '%s'.", mFieldValue );
         }
     }
 
@@ -121,7 +121,7 @@ public:
         if ( dSscanf( mFieldValue, "%g %g", &fieldValue.x, &fieldValue.y ) != 2 )
         {
             // Warn.
-            Con::warnf( "TamlCustomNodeField - Reading point2F but it has an incorrect format: '%s'.", mFieldValue );
+            Con::warnf( "TamlCustomField - Reading point2F but it has an incorrect format: '%s'.", mFieldValue );
         }
     }
 
@@ -130,7 +130,7 @@ public:
         if ( dSscanf( mFieldValue, "%g %g", &fieldValue.x, &fieldValue.y ) != 2 )
         {
             // Warn.
-            Con::warnf( "TamlCustomNodeField - Reading vector but it has an incorrect format: '%s'.", mFieldValue );
+            Con::warnf( "TamlCustomField - Reading vector but it has an incorrect format: '%s'.", mFieldValue );
         }
     }
 
@@ -174,7 +174,7 @@ public:
         char fieldNameBuffer[1024];
 
         // Sanity!
-        AssertFatal( fieldNameLength < sizeof(fieldNameBuffer), "TamlCustomNodeField: Field name is too long." );
+        AssertFatal( fieldNameLength < sizeof(fieldNameBuffer), "TamlCustomField: Field name is too long." );
 
         dStrcpy( fieldNameBuffer, mFieldName );
         fieldNameBuffer[fieldNameLength-1] = 0;
@@ -227,7 +227,7 @@ public:
         // Cache the fields.
         while( mFields.size() > 0 )
         {
-            TamlCustomNodeFieldFactory.cacheObject( mFields.back() );
+            TamlCustomFieldFactory.cacheObject( mFields.back() );
             mFields.pop_back();
         }
 
@@ -306,7 +306,7 @@ public:
         return NULL;
     }
 
-    inline TamlCustomNodeField* addField( const char* pFieldName, const ColorI& fieldValue )
+    inline TamlCustomField* addField( const char* pFieldName, const ColorI& fieldValue )
     {
         // Fetch the field value.
         const char* pFieldValue = Con::getData( TypeColorI, &const_cast<ColorI&>(fieldValue), 0 );
@@ -322,7 +322,7 @@ public:
         return addField( pFieldName, pFieldValue );
     }
 
-    inline TamlCustomNodeField* addField( const char* pFieldName, const ColorF& fieldValue )
+    inline TamlCustomField* addField( const char* pFieldName, const ColorF& fieldValue )
     {
         // Fetch the field value.
         const char* pFieldValue = Con::getData( TypeColorF, &const_cast<ColorF&>(fieldValue), 0 );
@@ -338,66 +338,66 @@ public:
         return addField( pFieldName, pFieldValue );
     }
 
-    inline TamlCustomNodeField* addField( const char* pFieldName, const Point2I& fieldValue )
+    inline TamlCustomField* addField( const char* pFieldName, const Point2I& fieldValue )
     {
         char fieldValueBuffer[32];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%d %d", fieldValue.x, fieldValue.y );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    inline TamlCustomNodeField* addField( const char* pFieldName, const Point2F& fieldValue )
+    inline TamlCustomField* addField( const char* pFieldName, const Point2F& fieldValue )
     {
         char fieldValueBuffer[32];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%.5g %0.5g", fieldValue.x, fieldValue.y );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    inline TamlCustomNodeField* addField( const char* pFieldName, const b2Vec2& fieldValue )
+    inline TamlCustomField* addField( const char* pFieldName, const b2Vec2& fieldValue )
     {
         char fieldValueBuffer[32];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%.5g %.5g", fieldValue.x, fieldValue.y );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    inline TamlCustomNodeField* addField( const char* pFieldName, const U32 fieldValue )
+    inline TamlCustomField* addField( const char* pFieldName, const U32 fieldValue )
     {
         char fieldValueBuffer[16];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%d", fieldValue );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    inline TamlCustomNodeField* addField( const char* pFieldName, const bool fieldValue )
+    inline TamlCustomField* addField( const char* pFieldName, const bool fieldValue )
     {
         char fieldValueBuffer[16];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%d", fieldValue );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    inline TamlCustomNodeField* addField( const char* pFieldName, const S32 fieldValue )
+    inline TamlCustomField* addField( const char* pFieldName, const S32 fieldValue )
     {
         char fieldValueBuffer[16];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%d", fieldValue );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    inline TamlCustomNodeField* addField( const char* pFieldName, const float fieldValue )
+    inline TamlCustomField* addField( const char* pFieldName, const float fieldValue )
     {
         char fieldValueBuffer[16];
         dSprintf( fieldValueBuffer, sizeof(fieldValueBuffer), "%.5g", fieldValue );
         return addField( pFieldName, fieldValueBuffer );
     }
 
-    inline TamlCustomNodeField* addField( const char* pFieldName, const char* pFieldValue )
+    inline TamlCustomField* addField( const char* pFieldName, const char* pFieldValue )
     {
         // Create a node field.
-        TamlCustomNodeField* pNodeField = TamlCustomNodeFieldFactory.createObject();
+        TamlCustomField* pNodeField = TamlCustomFieldFactory.createObject();
 
         // Set node field.
         pNodeField->set( pFieldName, pFieldValue );
 
 #if TORQUE_DEBUG
         // Ensure a field name conflict does not exist.
-        for( Vector<TamlCustomNodeField*>::iterator nodeFieldItr = mFields.begin(); nodeFieldItr != mFields.end(); ++nodeFieldItr )
+        for( Vector<TamlCustomField*>::iterator nodeFieldItr = mFields.begin(); nodeFieldItr != mFields.end(); ++nodeFieldItr )
         {
             // Skip if field name is not the same.
             if ( pNodeField->getFieldName() != (*nodeFieldItr)->getFieldName() )
@@ -407,7 +407,7 @@ public:
             Con::warnf("Conflicting Taml node field name of '%s' in node '%s'.", pFieldName, mNodeName );
 
             // Cache node field.
-            TamlCustomNodeFieldFactory.cacheObject( pNodeField );
+            TamlCustomFieldFactory.cacheObject( pNodeField );
             return NULL;
         }
 
@@ -421,7 +421,7 @@ public:
                 pFieldValue );
 
             // Cache node field.
-            TamlCustomNodeFieldFactory.cacheObject( pNodeField );
+            TamlCustomFieldFactory.cacheObject( pNodeField );
             return NULL;
         }
 #endif
@@ -431,7 +431,7 @@ public:
         return pNodeField;
     }
 
-    inline const TamlCustomNodeField* findField( const char* pFieldName ) const
+    inline const TamlCustomField* findField( const char* pFieldName ) const
     {
         // Sanity!
         AssertFatal( pFieldName != NULL, "Cannot find Taml field name that is NULL." );

@@ -235,21 +235,21 @@ void TamlXmlWriter::compileCustomNode( TiXmlElement* pXmlElement, const TamlCust
         }
     }
 
-    // Fetch node fields.
-    const TamlCustomFieldVector& nodeFields = pCustomNode->getFields();
+    // Fetch fields.
+    const TamlCustomFieldVector& fields = pCustomNode->getFields();
 
-    // Iterate node fields.
-    for ( TamlCustomFieldVector::const_iterator nodeFieldItr = nodeFields.begin(); nodeFieldItr != nodeFields.end(); ++nodeFieldItr )
+    // Iterate fields.
+    for ( TamlCustomFieldVector::const_iterator fieldItr = fields.begin(); fieldItr != fields.end(); ++fieldItr )
     {
-        // Fetch node field.
-        const TamlCustomNodeField* pNodeField = *nodeFieldItr;
+        // Fetch field.
+        const TamlCustomField* pField = *fieldItr;
 
         // Set field.
-        pNodeElement->SetAttribute( pNodeField->getFieldName(), pNodeField->getFieldValue() );
+        pNodeElement->SetAttribute( pField->getFieldName(), pField->getFieldValue() );
     }
 
     // Finish if the node is set to ignore if empty and it is empty (including fields).
-    if ( pCustomNode->getIgnoreEmpty() && nodeFields.size() == 0 && pNodeElement->NoChildren() )
+    if ( pCustomNode->getIgnoreEmpty() && fields.size() == 0 && pNodeElement->NoChildren() )
     {
         // Yes, so delete the extended element.
         delete pNodeElement;

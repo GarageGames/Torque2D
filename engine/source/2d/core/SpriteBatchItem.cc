@@ -445,7 +445,7 @@ void SpriteBatchItem::onTamlCustomRead( const TamlCustomNode* pSpriteNode )
     for ( TamlCustomFieldVector::const_iterator fieldItr = spriteField.begin(); fieldItr != spriteField.end(); ++fieldItr )
     {
         // Fetch sprite field.
-        TamlCustomNodeField* pSpriteField = *fieldItr;
+        TamlCustomField* pSpriteField = *fieldItr;
 
         // Fetch sprite field name.
         StringTableEntry fieldName = pSpriteField->getFieldName();

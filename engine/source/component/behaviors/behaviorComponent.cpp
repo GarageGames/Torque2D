@@ -1051,19 +1051,19 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
             S32 behaviorId = 0;
 
             // Fetch field nodes.
-            const TamlCustomFieldVector& fieldNodes = pBehaviorNode->getFields();
+            const TamlCustomFieldVector& fields = pBehaviorNode->getFields();
 
-            // Iterate node fields.
-            for ( TamlCustomFieldVector::const_iterator nodeFieldItr = fieldNodes.begin(); nodeFieldItr != fieldNodes.end(); ++nodeFieldItr )
+            // Iterate fields.
+            for ( TamlCustomFieldVector::const_iterator nodeFieldItr = fields.begin(); nodeFieldItr != fields.end(); ++nodeFieldItr )
             {
-                // Fetch node field.
-                TamlCustomNodeField* pNodeField = *nodeFieldItr;
+                // Fetch field.
+                TamlCustomField* pField = *nodeFieldItr;
 
                 // Fetch field name.
-                const char* pFieldName = pNodeField->getFieldName();
+                const char* pFieldName = pField->getFieldName();
 
                 // Fetch field value.
-                const char* pFieldValue = pNodeField->getFieldValue();
+                const char* pFieldValue = pField->getFieldValue();
 
                 // Is this the behavior field Id name?
                 if ( pFieldName == behaviorFieldIdName )
@@ -1102,7 +1102,7 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
                 }
 
                 // Set field.
-                pBehaviorInstance->setPrefixedDynamicDataField( pNodeField->getFieldName(), NULL, pNodeField->getFieldValue(), fieldType );
+                pBehaviorInstance->setPrefixedDynamicDataField( pField->getFieldName(), NULL, pField->getFieldValue(), fieldType );
             }
 
             // Add behavior.
@@ -1151,8 +1151,8 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
             }
 
             // Fetch property field #1.
-            TamlCustomNodeField* pPropertyField1 = *connectionFieldNodes.begin();
-            TamlCustomNodeField* pPropertyField2 = *(connectionFieldNodes.begin()+1);
+            TamlCustomField* pPropertyField1 = *connectionFieldNodes.begin();
+            TamlCustomField* pPropertyField2 = *(connectionFieldNodes.begin()+1);
            
             // Fetch behavior instances #1.
             BehaviorInstance* pBehaviorInstance1 = getBehaviorByInstanceId( dAtoi( pPropertyField1->getFieldValue() ) );

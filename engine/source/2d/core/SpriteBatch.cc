@@ -1199,7 +1199,7 @@ void SpriteBatch::onTamlCustomRead( const TamlCustomNode* pSpritesNode )
         TamlCustomNode* pNode = *spriteItr;
 
         // Fetch alias name.
-        StringTableEntry nodeName = pNode->mNodeName;
+        StringTableEntry nodeName = pNode->getNodeName();
 
         // Is this a known node name?
         if ( nodeName != spriteItemNodeName )

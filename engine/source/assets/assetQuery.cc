@@ -69,7 +69,7 @@ void AssetQuery::onTamlCustomWrite( TamlCustomNodes& customNodes )
         // Add asset node.
         TamlCustomNode* pAssetNode = pCustomNode->addNode( ASSETQUERY_ASSETNODE_NAME );
 
-        // Add fields.
+        // Add field.
         pAssetNode->addField( ASSETQUERY_ASSETID_FIELD_NAME, *assetItr );
     }
 }
@@ -105,7 +105,7 @@ void AssetQuery::onTamlCustomRead( const TamlCustomNodes& customNodes )
             continue;
 
         // Fetch field.
-        const TamlCustomNodeField* pField = pAssetNode->findField( ASSETQUERY_ASSETID_FIELD_NAME );
+        const TamlCustomField* pField = pAssetNode->findField( ASSETQUERY_ASSETID_FIELD_NAME );
 
         // Do we find the field?
         if ( pField == NULL )

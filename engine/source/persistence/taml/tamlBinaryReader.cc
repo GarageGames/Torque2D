@@ -394,7 +394,7 @@ void TamlBinaryReader::parseCustomNode( Stream& stream, TamlCustomNode* pCustomN
             char valueBuffer[MAX_TAML_NODE_FIELDVALUE_LENGTH];
             stream.readLongString( MAX_TAML_NODE_FIELDVALUE_LENGTH, valueBuffer );
 
-            // Add node field.
+            // Add field.
             pChildNode->addField( fieldName, valueBuffer );
         }
     }
