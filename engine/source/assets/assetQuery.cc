@@ -51,13 +51,13 @@ void AssetQuery::initPersistFields()
 
 //-----------------------------------------------------------------------------
 
-void AssetQuery::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void AssetQuery::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Call parent.
-    Parent::onTamlCustomWrite( customProperties );
+    Parent::onTamlCustomWrite( customNodes );
 
-    // Add property.
-    TamlCustomProperty* pProperty = customProperties.addProperty( ASSETQUERY_CUSTO_PROPERTY_NAME );
+    // Add node.
+    TamlCustomNode* pCustomNode = customNodes.addNode( ASSETQUERY_RESULTS_NODE_NAME );
 
     // Finish if no assets.
     if ( size() == 0 )
@@ -66,43 +66,46 @@ void AssetQuery::onTamlCustomWrite( TamlCustomProperties& customProperties )
     // Iterate asset.
     for( Vector<StringTableEntry>::iterator assetItr = begin(); assetItr != end(); ++assetItr )
     {
-        // Add alias.
-        TamlPropertyAlias* pAlias = pProperty->addAlias( ASSETQUERY_TYPE_NAME );
+        // Add asset node.
+        TamlCustomNode* pAssetNode = pCustomNode->addNode( ASSETQUERY_ASSETNODE_NAME );
 
-        // Add fields.
-        pAlias->addField( ASSETQUERY_ASSETID_FIELD_NAME, *assetItr );
+        // Add field.
+        pAssetNode->addField( ASSETQUERY_ASSETID_FIELD_NAME, *assetItr );
     }
 }
 
 //-----------------------------------------------------------------------------
 
-void AssetQuery::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void AssetQuery::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Call parent.
-    Parent::onTamlCustomRead( customProperties );
+    Parent::onTamlCustomRead( customNodes );
 
-    // Find custom property name.
-    const TamlCustomProperty* pProperty = customProperties.findProperty( ASSETQUERY_CUSTO_PROPERTY_NAME );
+    // Find custom node name.
+    const TamlCustomNode* pResultsNode = customNodes.findNode( ASSETQUERY_RESULTS_NODE_NAME );
 
-    // Finish if we don't have a property name.
-    if ( pProperty == NULL )
+    // Finish if we don't have a results name.
+    if ( pResultsNode == NULL )
         return;
 
-    // Fetch alias name.
-    StringTableEntry typeAliasName = StringTable->insert( ASSETQUERY_TYPE_NAME );
+    // Fetch node name.
+    StringTableEntry assetNodeName = StringTable->insert( ASSETQUERY_ASSETNODE_NAME );
 
-    // Iterate property alias.
-    for( TamlCustomProperty::const_iterator propertyAliasItr = pProperty->begin(); propertyAliasItr != pProperty->end(); ++propertyAliasItr )
+    // Fetch children asset nodes.
+    const TamlCustomNodeVector& assetNodes = pResultsNode->getChildren();
+
+    // Iterate asset nodes.
+    for( TamlCustomNodeVector::const_iterator assetNodeItr = assetNodes.begin(); assetNodeItr != assetNodes.end(); ++assetNodeItr )
     {
-        // Fetch property alias.
-        const TamlPropertyAlias* pAlias = *propertyAliasItr;
+        // Fetch asset node.
+        const TamlCustomNode* pAssetNode = *assetNodeItr;
 
-        // Skip if an unknown alias name.
-        if ( pAlias->mAliasName != typeAliasName )
+        // Skip if an unknown node name.
+        if ( pAssetNode->getNodeName() != assetNodeName )
             continue;
 
         // Fetch field.
-        const TamlPropertyField* pField = pAlias->findField( ASSETQUERY_ASSETID_FIELD_NAME );
+        const TamlCustomField* pField = pAssetNode->findField( ASSETQUERY_ASSETID_FIELD_NAME );
 
         // Do we find the field?
         if ( pField == NULL )

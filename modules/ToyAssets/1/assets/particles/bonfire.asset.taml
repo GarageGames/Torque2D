@@ -26,8 +26,13 @@
 				Keys="0 0" />				
             <FixedForceVariation
                 Keys="0 0" />				
-            <SizeXLife
-                Keys="0 0 0.2 1 0.5 1 0.9 1 1 0" />
+            <SizeXLife>
+				<Key Time="0" Value="0"/>
+				<Key Time="0.2" Value="1"/>
+				<Key Time="0.5" Value="1"/>
+				<Key Time="0.9" Value="1"/>
+				<Key Time="1" Value="0"/>
+			</SizeXLife>
             <SizeXVariation
                 Keys="0 0.3" />				
             <SpinVariation

@@ -28,19 +28,12 @@
 
 //-----------------------------------------------------------------------------
 
-void TamlPropertyField::resetState( void )
-{
-    mFieldName = StringTable->EmptyString;
-    *mFieldValue = 0;
-
-    // We don't need to delete the write node as it'll get destroyed when the compilation is reset!
-    mpFieldWriteNode = NULL;
-    mpFieldObject = NULL;
-}
+FactoryCache<TamlCustomField> TamlCustomFieldFactory;
+FactoryCache<TamlCustomNode> TamlCustomNodeFactory;
 
 //-----------------------------------------------------------------------------
 
-void TamlPropertyField::set( const char* pFieldName, const char* pFieldValue )
+void TamlCustomField::set( const char* pFieldName, const char* pFieldValue )
 {
     // Sanity!
     AssertFatal( pFieldName != NULL, "Field name cannot be NULL." );
@@ -61,59 +54,19 @@ void TamlPropertyField::set( const char* pFieldName, const char* pFieldValue )
 #endif
     // Copy field value.
     dStrcpy( mFieldValue, pFieldValue );
-
-    // Reset field object.
-    mpFieldObject = NULL;
-    SAFE_DELETE( mpFieldWriteNode );
 }
 
 //-----------------------------------------------------------------------------
 
-void TamlPropertyField::set( const char* pFieldName, SimObject* pFieldObject )
+void TamlCustomNode::setWriteNode( TamlWriteNode* pWriteNode )
 {
     // Sanity!
-    AssertFatal( pFieldName != NULL, "Field name cannot be NULL." );
-    AssertFatal( pFieldObject != NULL, "Field object cannot be NULL." );
-    AssertFatal( mpFieldWriteNode == NULL, "Field write node must be NULL." );
-
-    // Set field name.
-    mFieldName = StringTable->insert( pFieldName );
-
-    mpFieldObject = pFieldObject;
-    SAFE_DELETE( mpFieldWriteNode );
-
-    // Reset field value.
-    *mFieldValue = 0;
-}
-
-//-----------------------------------------------------------------------------
-
-void TamlPropertyField::setWriteNode( TamlWriteNode* pWriteNode )
-{
-    // Sanity!
-    AssertFatal( mFieldName != StringTable->EmptyString, "Cannot set write node with an empty field name." );
+    AssertFatal( mNodeName != StringTable->EmptyString, "Cannot set write node with an empty node name." );
     AssertFatal( pWriteNode != NULL, "Write node cannot be NULL." );
-    AssertFatal( pWriteNode->mpSimObject == mpFieldObject, "Write node does not match existing field object." );
-    AssertFatal( mpFieldWriteNode == NULL, "Field write node must be NULL." );
+    AssertFatal( pWriteNode->mpSimObject == mpProxyObject, "Write node does not match existing proxy object." );
+    AssertFatal( mpProxyWriteNode == NULL, "Field write node must be NULL." );
 
-    // Set field object.
-    mpFieldWriteNode = pWriteNode;
-
-    // Reset field value.
-    *mFieldValue = 0;
-}
-
-//-----------------------------------------------------------------------------
-
-SimObject* TamlPropertyField::getFieldObject( void ) const
-{
-    return mpFieldObject != NULL ? mpFieldObject : NULL;
-}
-
-//-----------------------------------------------------------------------------
-
-bool TamlPropertyField::isObjectField( void ) const
-{
-    return mpFieldObject != NULL;
+    // Set proxy write node.
+    mpProxyWriteNode = pWriteNode;
 }
 
