@@ -213,10 +213,10 @@ void TamlXmlWriter::compileCustomNode( TiXmlElement* pXmlElement, const TamlCust
     TiXmlElement* pNodeElement = new TiXmlElement( pCustomNode->getNodeName() );
 
     // Is there any node text?
-    if ( !pCustomNode->getNodeText().isValueEmpty() )
+    if ( !pCustomNode->getNodeTextField().isValueEmpty() )
     {
         // Yes, so add a text node.
-        pNodeElement->LinkEndChild( new TiXmlText( pCustomNode->getNodeText().getFieldValue() ) );
+        pNodeElement->LinkEndChild( new TiXmlText( pCustomNode->getNodeTextField().getFieldValue() ) );
     }
 
     // Fetch fields.

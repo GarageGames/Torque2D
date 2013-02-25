@@ -89,9 +89,6 @@ static bool collisionShapePropertiesInitialized = false;
 
 static StringTableEntry shapeCustomNodeName;
 
-static StringTableEntry pointXName;
-static StringTableEntry pointYName;
-
 static StringTableEntry shapeDensityName;
 static StringTableEntry shapeFrictionName;
 static StringTableEntry shapeRestitutionName;
@@ -212,9 +209,6 @@ SceneObject::SceneObject() :
     if ( !collisionShapePropertiesInitialized )
     {
         shapeCustomNodeName     = StringTable->insert( "CollisionShapes" );
-
-        pointXName              = StringTable->insert( "x" );
-        pointYName              = StringTable->insert( "y" );
 
         shapeDensityName        = StringTable->insert( "Density" );
         shapeFrictionName       = StringTable->insert( "Friction" );
@@ -3465,8 +3459,7 @@ void SceneObject::onTamlCustomWrite( TamlCustomNodes& customNodes )
                     const b2Vec2& point = pShape->GetVertex( pointIndex );
 
                     // Add point fields.
-                    pPointNode->addField( pointXName, point.x );
-                    pPointNode->addField( pointYName, point.y );
+                    pPointNode->getNodeTextField().setFieldValue( StringTable->EmptyString, point );
                 }
             }
             break;
@@ -3488,12 +3481,11 @@ void SceneObject::onTamlCustomWrite( TamlCustomNodes& customNodes )
                 // Add shape properties.
                 for ( U32 pointIndex = 0; pointIndex < pointCount; ++pointIndex )
                 {
-                    // Format point index name.
-                    char pointIndexBuffer[16];
-                    dSprintf( pointIndexBuffer, sizeof(pointIndexBuffer), "%s%d", chainPointName, pointIndex );
-                    
-                    // Add point property.
-                    pCollisionShapeNode->addField( pointIndexBuffer, pShape->m_vertices[pointIndex] );
+                    // Add point node.
+                    TamlCustomNode* pPointNode = pCollisionShapeNode->addNode( chainPointName );
+
+                    // Add point fields.
+                    pPointNode->getNodeTextField().setFieldValue( StringTable->EmptyString, pShape->m_vertices[pointIndex] );
                 }
 
                 // Add adjacent start point (if specified).
@@ -3642,7 +3634,7 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             b2Vec2 points[b2_maxPolygonVertices];
             U32 pointCount = 0;
 
-            // Fetch shape children.
+            // Fetch shape fields.
             const TamlCustomFieldVector& shapeFields = pShapeNode->getFields();
 
             // Iterate property fields.
@@ -3684,6 +3676,35 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
 
                     b2Vec2 point;
                     pField->getFieldValue( point );
+                    points[pointCount++] = point;
+                }
+            }
+
+            // Fetch shape children.
+            const TamlCustomNodeVector& shapeChildren = pShapeNode->getChildren();
+
+            // Fetch shape children count.
+            const U32 shapeChildrenCount = (U32)shapeChildren.size();
+
+            // Do we have any shape children.
+            if ( shapeChildrenCount > 0 )
+            {
+                // Yes, so iterate them.
+                for( TamlCustomNodeVector::const_iterator childItr = shapeChildren.begin(); childItr != shapeChildren.end(); ++childItr )
+                {
+                    TamlCustomNode* pChildNode = *childItr;
+
+                    // Skip if it's not a point.
+                    if ( pChildNode->getNodeName() != polygonPointName )
+                        continue;
+                    
+                    // Skip if it's empty.
+                    if ( pChildNode->getNodeTextField().isValueEmpty() )
+                        continue;
+
+                    // Read point.
+                    b2Vec2 point;
+                    pChildNode->getNodeTextField().getFieldValue( point );
                     points[pointCount++] = point;
                 }
             }
