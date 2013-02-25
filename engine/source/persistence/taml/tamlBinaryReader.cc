@@ -348,10 +348,10 @@ void TamlBinaryReader::parseCustomNode( Stream& stream, TamlCustomNode* pCustomN
     if ( isProxyObject )
     {
         // Yes, so parse proxy object.
-        SimObject* pSimObject = parseElement( stream, versionId );
+        SimObject* pProxyObject = parseElement( stream, versionId );
 
         // Add child node.
-        pCustomNode->addNode( pSimObject );
+        pCustomNode->addNode( pProxyObject );
 
         return;
     }

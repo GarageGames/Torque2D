@@ -379,7 +379,7 @@ Taml::TamlFormatMode Taml::getFileAutoFormatMode( const char* pFilename )
 
 //-----------------------------------------------------------------------------
 
-TamlWriteNode* Taml::compileObject( SimObject* pSimObject )
+TamlWriteNode* Taml::compileObject( SimObject* pSimObject, const bool forceId )
 {
     // Debug Profiling.
     PROFILE_SCOPE(Taml_CompileObject);
@@ -425,6 +425,13 @@ TamlWriteNode* Taml::compileObject( SimObject* pSimObject )
     // No, so create write node.
     TamlWriteNode* pNewNode = new TamlWriteNode();
     pNewNode->set( pSimObject );
+
+    // Is an Id being forced for this object?
+    if ( forceId )
+    {
+        // Yes, so allocate one.
+        pNewNode->mRefId = ++mMasterNodeId;
+    }
 
     // Push new node.
     mCompiledNodes.push_back( pNewNode );
@@ -718,7 +725,10 @@ void Taml::compileCustomNodeState( TamlCustomNode* pCustomNode )
         AssertFatal( children.size() == 0, "Taml: Cannot compile a proxy object on a custom node that has children." );
 
         // Yes, so compile it.
-        pCustomNode->setWriteNode( compileObject( pProxyObject ) );
+        // NOTE: We force an Id for custom compiled objects so we guarantee an Id.  The reason for this is fairly
+        // weak in that the XML parser currently has no way of distinguishing between a compiled object node
+        // and a custom node.  If the node has an Id or an Id-Ref then it's obviously an object and should be parsed as such.
+        pCustomNode->setWriteNode( compileObject( pProxyObject, true ) );
         return;
     }
 

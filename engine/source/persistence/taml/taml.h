@@ -103,7 +103,7 @@ private:
 private:
     void resetCompilation( void );
 
-    TamlWriteNode* compileObject( SimObject* pSimObject );
+    TamlWriteNode* compileObject( SimObject* pSimObject, const bool forceId = false );
     void compileStaticFields( TamlWriteNode* pTamlWriteNode );
     void compileDynamicFields( TamlWriteNode* pTamlWriteNode );
     void compileChildren( TamlWriteNode* pTamlWriteNode );
