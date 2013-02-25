@@ -339,10 +339,13 @@ public:
         TamlCustomNode* pCustomNode = TamlCustomNodeFactory.createObject();
 
         // Set node name.
-        mNodeName = StringTable->insert( pProxyObject->getClassName() );
+        pCustomNode->setNodeName( pProxyObject->getClassName() );
 
         // Set proxy object.
-        mpProxyObject = pProxyObject;
+        pCustomNode->mpProxyObject = pProxyObject;
+
+        // Store node.
+        mChildren.push_back( pCustomNode );
 
         return pCustomNode;
     }
