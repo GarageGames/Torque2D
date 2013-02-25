@@ -101,7 +101,7 @@ void AssetQuery::onTamlCustomRead( const TamlCustomNodes& customNodes )
         const TamlCustomNode* pAssetNode = *assetNodeItr;
 
         // Skip if an unknown node name.
-        if ( pAssetNode->mNodeName != assetNodeName )
+        if ( pAssetNode->getNodeName() != assetNodeName )
             continue;
 
         // Fetch field.

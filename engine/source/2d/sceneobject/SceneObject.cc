@@ -89,6 +89,9 @@ static bool collisionShapePropertiesInitialized = false;
 
 static StringTableEntry shapeCustomNodeName;
 
+static StringTableEntry pointXName;
+static StringTableEntry pointYName;
+
 static StringTableEntry shapeDensityName;
 static StringTableEntry shapeFrictionName;
 static StringTableEntry shapeRestitutionName;
@@ -209,6 +212,9 @@ SceneObject::SceneObject() :
     if ( !collisionShapePropertiesInitialized )
     {
         shapeCustomNodeName     = StringTable->insert( "CollisionShapes" );
+
+        pointXName              = StringTable->insert( "x" );
+        pointYName              = StringTable->insert( "y" );
 
         shapeDensityName        = StringTable->insert( "Density" );
         shapeFrictionName       = StringTable->insert( "Friction" );
@@ -3418,7 +3424,7 @@ void SceneObject::onTamlCustomWrite( TamlCustomNodes& customNodes )
         case b2Shape::e_circle:
             {
                 // Set node name.
-                pCollisionShapeNode->mNodeName = StringTable->insert( circleTypeName );
+                pCollisionShapeNode->setNodeName( circleTypeName );
 
                 // Fetch shape.
                 const b2CircleShape* pShape = dynamic_cast<const b2CircleShape*>( fixtureDef.shape );
@@ -3438,7 +3444,7 @@ void SceneObject::onTamlCustomWrite( TamlCustomNodes& customNodes )
         case b2Shape::e_polygon:
             {
                 // Set node name.
-                pCollisionShapeNode->mNodeName = StringTable->insert( polygonTypeName );
+                pCollisionShapeNode->setNodeName( polygonTypeName );
 
                 // Fetch shape.
                 const b2PolygonShape* pShape = dynamic_cast<const b2PolygonShape*>( fixtureDef.shape );
@@ -3452,12 +3458,15 @@ void SceneObject::onTamlCustomWrite( TamlCustomNodes& customNodes )
                 // Add shape properties.
                 for ( U32 pointIndex = 0; pointIndex < pointCount; ++pointIndex )
                 {
-                    // Format point index name.
-                    char pointIndexBuffer[16];
-                    dSprintf( pointIndexBuffer, sizeof(pointIndexBuffer), "%s%d", polygonPointName, pointIndex );
-                    
-                    // Add point property.
-                    pCollisionShapeNode->addField( pointIndexBuffer, pShape->GetVertex( pointIndex ) );
+                    // Add point node.
+                    TamlCustomNode* pPointNode = pCollisionShapeNode->addNode( polygonPointName );
+
+                    // Fetch point.
+                    const b2Vec2& point = pShape->GetVertex( pointIndex );
+
+                    // Add point fields.
+                    pPointNode->addField( pointXName, point.x );
+                    pPointNode->addField( pointYName, point.y );
                 }
             }
             break;
@@ -3465,7 +3474,7 @@ void SceneObject::onTamlCustomWrite( TamlCustomNodes& customNodes )
         case b2Shape::e_chain:
             {
                 // Set node name.
-                pCollisionShapeNode->mNodeName = StringTable->insert( chainTypeName );
+                pCollisionShapeNode->setNodeName( chainTypeName );
 
                 // Fetch shape.
                 const b2ChainShape* pShape = dynamic_cast<const b2ChainShape*>( fixtureDef.shape );
@@ -3500,7 +3509,7 @@ void SceneObject::onTamlCustomWrite( TamlCustomNodes& customNodes )
         case b2Shape::e_edge:
             {
                 // Set node name.
-                pCollisionShapeNode->mNodeName = StringTable->insert( edgeTypeName );
+                pCollisionShapeNode->setNodeName( edgeTypeName );
 
                 // Fetch shape.
                 const b2EdgeShape* pShape = dynamic_cast<const b2EdgeShape*>( fixtureDef.shape );
@@ -3555,8 +3564,8 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
         // Fetch shape node.
         TamlCustomNode* pShapeNode = *shapeNodeItr;
 
-        // Fetch alias name.
-        StringTableEntry aliasName = pShapeNode->mNodeName;
+        // Fetch shape name.
+        StringTableEntry shapeName = pShapeNode->getNodeName();
 
         // Ready common fields.
         F32 shapeDensity     = getDefaultDensity();
@@ -3567,7 +3576,7 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
         S32 shapeIndex;
 
         // Is this a circle shape?
-        if ( aliasName == circleTypeName )
+        if ( shapeName == circleTypeName )
         {
             // Yes, so ready fields.
             F32 radius = 0.0f;
@@ -3627,7 +3636,7 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             shapeIndex = createCircleCollisionShape( radius, offset );
         }
         // Is this a polygon shape?
-        else if ( aliasName == polygonTypeName )
+        else if ( shapeName == polygonTypeName )
         {
             // Yes, so ready fields.
             b2Vec2 points[b2_maxPolygonVertices];
@@ -3692,7 +3701,7 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             shapeIndex = createPolygonCollisionShape( pointCount, points );
         }
         // Is this a chain shape?
-        else if ( aliasName == chainTypeName )
+        else if ( shapeName == chainTypeName )
         {
             // Yes, so ready fields.
             Vector<b2Vec2> points;
@@ -3762,7 +3771,7 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             shapeIndex = createChainCollisionShape( points.size(), points.address(), hasAdjacentStartPoint, hasAdjacentEndPoint, adjacentStartPoint, adjacentEndPoint );
         }
         // Is this an edge shape?
-        else if ( aliasName == edgeTypeName )
+        else if ( shapeName == edgeTypeName )
         {
             // Yes, so ready fields.
             b2Vec2 point0;
@@ -3829,7 +3838,7 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
         else
         {
             // Warn.
-            Con::warnf( "Unknown shape type of '%s' encountered.", aliasName );
+            Con::warnf( "Unknown shape type of '%s' encountered.", shapeName );
 
             // Sanity!
             AssertFatal( false, "SceneObject::onTamlCustomRead() - Unknown shape type detected." );

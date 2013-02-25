@@ -310,7 +310,6 @@ void TamlXmlReader::parseCustomElement( TiXmlElement* pXmlElement, TamlCustomNod
 
         // Parse custom node.
         parseCustomNode( pCustomXmlElement, pCustomNode );
-
     }
     while ( pCustomXmlNode != NULL );
 }

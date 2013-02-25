@@ -50,6 +50,10 @@ static StringTableEntry particleAssetFieldDefaultValueName;
 static StringTableEntry particleAssetFieldValueScaleName;
 static StringTableEntry particleAssetFieldDataKeysName;
 
+static StringTableEntry particleAssetFieldDataKeyName;
+static StringTableEntry particleAssetFieldDataKeyTimeName;
+static StringTableEntry particleAssetFieldDataKeyValueName;
+
 ParticleAssetField::DataKey ParticleAssetField::BadDataKey( -1.0f, 0.0f );
 
 //-----------------------------------------------------------------------------
@@ -77,6 +81,10 @@ ParticleAssetField::ParticleAssetField() :
         particleAssetFieldDefaultValueName = StringTable->insert( "DefaultValue" );
         particleAssetFieldValueScaleName   = StringTable->insert( "ValueScale" );
         particleAssetFieldDataKeysName     = StringTable->insert( "Keys" );
+
+        particleAssetFieldDataKeyName      = StringTable->insert( "Key" );
+        particleAssetFieldDataKeyTimeName  = StringTable->insert( "Time" );
+        particleAssetFieldDataKeyValueName = StringTable->insert( "Value" );
 
         // Flag as initialized.
         particleAssetFieldPropertiesInitialized = true;
@@ -549,24 +557,19 @@ void ParticleAssetField::onTamlCustomWrite( TamlCustomNode* pCustomNode )
     if ( keyCount == 1 && mIsEqual(mDataKeys[0].mTime, 0.0f) && mIsEqual(mDataKeys[0].mValue, mDefaultValue) )
         return;
 
-    // Format the keys,
-    char keysBuffer[MAX_TAML_NODE_FIELDVALUE_LENGTH];
-    char* pKeysBuffer = keysBuffer;
-    S32 bufferSize = sizeof(keysBuffer);
-
     // Iterate the keys.
     for( U32 index = 0; index < keyCount; ++index )
     {
         // Fetch the data key.
         const DataKey& dataKey = mDataKeys[index];
 
-        // Format the key.
-        S32 written = dSprintf( pKeysBuffer, bufferSize, index == 0 ? "%.5g %.5g" : " %.5g %.5g", dataKey.mTime, dataKey.mValue );
-        pKeysBuffer += written;
-        bufferSize -= written;
-    }
+        // Add a key node.
+        TamlCustomNode* pKeyNode = pCustomNode->addNode( particleAssetFieldDataKeyName );
 
-    pAssetFieldNode->addField( particleAssetFieldDataKeysName, keysBuffer );
+        // Add key fields.
+        pKeyNode->addField( particleAssetFieldDataKeyTimeName, dataKey.mTime );
+        pKeyNode->addField( particleAssetFieldDataKeyValueName, dataKey.mValue );
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -593,7 +596,7 @@ void ParticleAssetField::onTamlCustomRead( const TamlCustomNode* pCustomNode )
     // Fetch children nodes.
     const TamlCustomFieldVector& fieldNodes = pCustomNode->getFields();
 
-    // Iterate property fields.
+    // Iterate node fields.
     for ( TamlCustomFieldVector::const_iterator fieldNodeItr = fieldNodes.begin(); fieldNodeItr != fieldNodes.end(); ++fieldNodeItr )
     {
         // Fetch field node.
@@ -655,6 +658,39 @@ void ParticleAssetField::onTamlCustomRead( const TamlCustomNode* pCustomNode )
         }
     }
 
+    // Fetch any children.
+    const TamlCustomNodeVector& childNodes = pCustomNode->getChildren();
+
+    // Iterate node children.
+    for( TamlCustomNodeVector::const_iterator childNodeItr = childNodes.begin(); childNodeItr != childNodes.end(); ++childNodeItr )
+    {
+        // Fetch node.
+        TamlCustomNode* pKeyNode = *childNodeItr;
+
+        // Ignore anything that isn't a key.
+        if ( pKeyNode->getNodeName() != particleAssetFieldDataKeyName )
+            continue;
+
+        // Fetch the fields.
+        const TamlCustomNodeField* pTimeField = pKeyNode->findField( particleAssetFieldDataKeyTimeName );
+        const TamlCustomNodeField* pValueField = pKeyNode->findField( particleAssetFieldDataKeyValueName );
+
+        // Did we find the fields?
+        if ( pTimeField == NULL || pValueField == NULL )
+        {
+            // No, so warn.
+            Con::warnf("ParticleAssetField::onTamlCustomRead() - Found a key but it did not have a time and value field." );
+
+            continue;
+        }
+
+        // Read key.
+        DataKey key;
+        pTimeField->getFieldValue( key.mTime );
+        pValueField->getFieldValue( key.mValue );
+        keys.push_back( key );
+    }
+
     // Set the value bounds.
     setValueBounds( maxTime, minValue, maxValue, defaultValue );
 
@@ -665,9 +701,5 @@ void ParticleAssetField::onTamlCustomRead( const TamlCustomNode* pCustomNode )
     setRepeatTime( repeatTime );
 
     // Set the data keys.
-    for ( S32 index = 0; index < keys.size(); ++index )
-    {
-        const DataKey& key = keys[index];
-        addDataKey( key.mTime, key.mValue );
-    }
+    mDataKeys = keys;
 }

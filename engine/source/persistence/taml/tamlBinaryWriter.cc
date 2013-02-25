@@ -207,7 +207,7 @@ void TamlBinaryWriter::writeCustomElements( Stream& stream, const TamlWriteNode*
         TamlCustomNode* pCustomNode = *customNodesItr;
 
         // Write custom node name.
-        stream.writeString( pCustomNode->mNodeName );
+        stream.writeString( pCustomNode->getNodeName() );
 
         // Fetch node children.
         const TamlCustomNodeVector& nodeChildren = pCustomNode->getChildren();
@@ -243,7 +243,7 @@ void TamlBinaryWriter::writeCustomNode( Stream& stream, const TamlCustomNode* pC
     stream.write( false );
 
     // Write custom node name.
-    stream.writeString( pCustomNode->mNodeName );
+    stream.writeString( pCustomNode->getNodeName() );
 
     // Fetch node children.
     const TamlCustomNodeVector& nodeChildren = pCustomNode->getChildren();

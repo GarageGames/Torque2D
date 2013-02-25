@@ -1017,16 +1017,16 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
             TamlCustomNode* pBehaviorNode = *behaviorNodeItr;
 
             // Fetch template.
-            BehaviorTemplate* pTemplate = dynamic_cast<BehaviorTemplate *>( Sim::findObject( pBehaviorNode->mNodeName ) );
+            BehaviorTemplate* pTemplate = dynamic_cast<BehaviorTemplate *>( Sim::findObject( pBehaviorNode->getNodeName() ) );
 
             // Find template?
             if( pTemplate == NULL )
             {
                 // No, so warn appropriately.
-                Con::warnf( "BehaviorComponent::onTamlCustomRead() - Missing Behavior '%s'", pBehaviorNode->mNodeName );
+                Con::warnf( "BehaviorComponent::onTamlCustomRead() - Missing Behavior '%s'", pBehaviorNode->getNodeName() );
 
                 if( isMethod( "onBehaviorMissing" ) )
-                    Con::executef( this, 2, "onBehaviorMissing", pBehaviorNode->mNodeName );
+                    Con::executef( this, 2, "onBehaviorMissing", pBehaviorNode->getNodeName() );
 
                 // Skip it.
                 continue;
@@ -1039,10 +1039,10 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
             if ( pBehaviorInstance == NULL )
             {
                 // No, so warn appropriately.
-                Con::warnf( "BehaviorComponent::onTamlCustomRead() - Found behavior could not create an instance '%s'", pBehaviorNode->mNodeName );
+                Con::warnf( "BehaviorComponent::onTamlCustomRead() - Found behavior could not create an instance '%s'", pBehaviorNode->getNodeName() );
 
                 if( isMethod( "onBehaviorMissing" ) )
-                    Con::executef( this, 2, "onBehaviorMissing", pBehaviorNode->mNodeName );
+                    Con::executef( this, 2, "onBehaviorMissing", pBehaviorNode->getNodeName() );
 
                 // Skip it.
                 continue;
@@ -1077,7 +1077,7 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
                         // No, so warn.
                         Con::warnf( "BehaviorComponent::onTamlCustomRead() - Encountered an invalid behavior Id of '%d' on behavior '%s'.",
                             behaviorId,
-                            pBehaviorNode->mNodeName );
+                            pBehaviorNode->getNodeName() );
                     }
 
                     // Update maximum behavior Id found.
@@ -1136,7 +1136,7 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
             TamlCustomNode* pConnectionNode = *connectionNodeItr;
 
             // Skip if the alias isn't a connection.
-            if ( pConnectionNode->mNodeName != connectionNodeName )
+            if ( pConnectionNode->getNodeName() != connectionNodeName )
                 continue;
 
             // Fetch field nodes.

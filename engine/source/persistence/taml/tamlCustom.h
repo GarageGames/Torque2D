@@ -238,16 +238,6 @@ public:
         mIgnoreEmpty = false;
     }
 
-    void set( const char* pNodeName )
-    {
-        // Sanity!
-        AssertFatal( pNodeName != NULL, "Node name cannot be NULL." );
-
-        mNodeName = StringTable->insert( pNodeName );
-    }
-
-    void setWriteNode( TamlWriteNode* pWriteNode );
-
     inline TamlCustomNode* addNode( SimObject* pProxyObject )
     {
         // Sanity!
@@ -268,11 +258,14 @@ public:
 
     inline TamlCustomNode* addNode( const char* pNodeName, const bool ignoreEmpty = true )
     {
+        // Sanity!
+        AssertFatal( pNodeName != NULL, "Cannot add a NULL node name." );
+
         // Create a custom node.
         TamlCustomNode* pCustomNode = TamlCustomNodeFactory.createObject();
 
-        // Set node name.
-        pCustomNode->set( pNodeName );
+        // Fetch node name.
+        StringTableEntry nodeName = StringTable->insert( pNodeName );
 
         // Set ignore-empty flag.
         pCustomNode->mIgnoreEmpty = ignoreEmpty;
@@ -306,7 +299,7 @@ public:
         // Find node.
         for( Vector<TamlCustomNode*>::const_iterator nodeItr = mChildren.begin(); nodeItr != mChildren.end(); ++nodeItr )
         {
-            if ( (*nodeItr)->mNodeName == nodeName )
+            if ( (*nodeItr)->getNodeName() == nodeName )
                 return (*nodeItr);
         }
 
@@ -456,7 +449,19 @@ public:
         return NULL;
     }
 
+    inline void setNodeName( const char* pNodeName )
+    {
+        // Sanity!
+        AssertFatal( pNodeName != NULL, "Cannot add a NULL node name." );
+
+        mNodeName = StringTable->insert( pNodeName );
+    }
+
     inline StringTableEntry getNodeName( void ) const { return mNodeName; }
+
+
+
+    void setWriteNode( TamlWriteNode* pWriteNode );
 
     inline const Vector<TamlCustomNode*>& getChildren( void ) const { return mChildren; }
     inline const TamlCustomFieldVector& getFields( void ) const { return mFields; }
@@ -467,8 +472,11 @@ public:
     template<typename T> T* composeProxyObject( void ) const;
 
     inline bool isEmpty( void ) const { return mChildren.size() == 0 && mFields.size() == 0; }
+
+    inline void setIgnoreEmpty( const bool ignoreEmpty ) { mIgnoreEmpty = ignoreEmpty; }
     inline bool getIgnoreEmpty( void ) const { return mIgnoreEmpty; }
 
+private:
     StringTableEntry        mNodeName;
     Vector<TamlCustomNode*> mChildren;
     TamlCustomFieldVector   mFields;
@@ -508,17 +516,17 @@ public:
         TamlCustomNode* pCustomNode = TamlCustomNodeFactory.createObject();
 
         // Set node name.
-        pCustomNode->set( pNodeName );
+        pCustomNode->setNodeName( pNodeName );
 
         // Set ignore-empty flag.
-        pCustomNode->mIgnoreEmpty = ignoreEmpty;
+        pCustomNode->setIgnoreEmpty( ignoreEmpty );
 
 #if TORQUE_DEBUG
         // Ensure a node name conflict does not exist.
         for( TamlCustomNodeVector::iterator nodeItr = mNodes.begin(); nodeItr != mNodes.end(); ++nodeItr )
         {
             // Skip if node name is not the same.
-            if ( pCustomNode->mNodeName != (*nodeItr)->mNodeName )
+            if ( pCustomNode->getNodeName() != (*nodeItr)->getNodeName() )
                 continue;
 
             // Warn!
@@ -558,7 +566,7 @@ public:
         // Find node.
         for( Vector<TamlCustomNode*>::const_iterator nodeItr = mNodes.begin(); nodeItr != mNodes.end(); ++nodeItr )
         {
-            if ( (*nodeItr)->mNodeName == nodeName )
+            if ( (*nodeItr)->getNodeName() == nodeName )
                 return (*nodeItr);
         }
 

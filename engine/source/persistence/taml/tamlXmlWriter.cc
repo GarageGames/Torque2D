@@ -167,7 +167,7 @@ void TamlXmlWriter::compileCustomElements( TiXmlElement* pXmlElement, const Taml
 
         // Format extended element name.
         char extendedElementNameBuffer[256];
-        dSprintf( extendedElementNameBuffer, sizeof(extendedElementNameBuffer), "%s.%s", pXmlElement->Value(), pCustomNode->mNodeName );
+        dSprintf( extendedElementNameBuffer, sizeof(extendedElementNameBuffer), "%s.%s", pXmlElement->Value(), pCustomNode->getNodeName() );
         StringTableEntry extendedElementName = StringTable->insert( extendedElementNameBuffer );
 
         // Create element.
@@ -187,7 +187,7 @@ void TamlXmlWriter::compileCustomElements( TiXmlElement* pXmlElement, const Taml
         }
 
         // Finish if the node is set to ignore if empty and it is empty.
-        if ( pCustomNode->mIgnoreEmpty && pExtendedPropertyElement->NoChildren() )
+        if ( pCustomNode->getIgnoreEmpty() && pExtendedPropertyElement->NoChildren() )
         {
             // Yes, so delete the extended element.
             delete pExtendedPropertyElement;
@@ -206,11 +206,11 @@ void TamlXmlWriter::compileCustomElements( TiXmlElement* pXmlElement, const Taml
 void TamlXmlWriter::compileCustomNode( TiXmlElement* pXmlElement, const TamlCustomNode* pCustomNode )
 {
     // Finish if the node is set to ignore if empty and it is empty.
-    if ( pCustomNode->mIgnoreEmpty && pCustomNode->isEmpty() )
+    if ( pCustomNode->getIgnoreEmpty() && pCustomNode->isEmpty() )
         return;
 
     // Create element.
-    TiXmlElement* pNodeElement = new TiXmlElement( pCustomNode->mNodeName );
+    TiXmlElement* pNodeElement = new TiXmlElement( pCustomNode->getNodeName() );
 
     // Fetch node children.
     const TamlCustomNodeVector& nodeChildren = pCustomNode->getChildren();
@@ -249,7 +249,7 @@ void TamlXmlWriter::compileCustomNode( TiXmlElement* pXmlElement, const TamlCust
     }
 
     // Finish if the node is set to ignore if empty and it is empty (including fields).
-    if ( pCustomNode->mIgnoreEmpty && nodeFields.size() == 0 && pNodeElement->NoChildren() )
+    if ( pCustomNode->getIgnoreEmpty() && nodeFields.size() == 0 && pNodeElement->NoChildren() )
     {
         // Yes, so delete the extended element.
         delete pNodeElement;

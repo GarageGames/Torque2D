@@ -465,7 +465,7 @@ void ParticleAssetFieldCollection::onTamlCustomRead( const TamlCustomNodes& cust
         TamlCustomNode* pChildNode = *childNodeItr;
 
         // Fetch node name.
-        StringTableEntry nodeName = pChildNode->mNodeName;
+        StringTableEntry nodeName = pChildNode->getNodeName();
 
         // Find the field.
         ParticleAssetField* pParticleAssetField = findField( nodeName );

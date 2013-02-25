@@ -3637,7 +3637,7 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
             TamlCustomNode* pJointNode = *jointNodeItr;
 
             // Fetch node name.
-            StringTableEntry nodeName = pJointNode->mNodeName;
+            StringTableEntry nodeName = pJointNode->getNodeName();
 
             // Is this a distance joint?
             if ( nodeName == jointDistanceNodeName )
@@ -4479,7 +4479,7 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 				case e_distanceJoint:
 					{
 						// Set joint name.
-                        pJointNode->mNodeName = StringTable->insert( jointDistanceNodeName );
+                        pJointNode->setNodeName( jointDistanceNodeName );
 
 						// Fetch joint.
 						const b2DistanceJoint* pJoint = dynamic_cast<const b2DistanceJoint*>( pBaseJoint );
@@ -4516,7 +4516,7 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 				case e_ropeJoint:
 					{
 						// Set joint name.
-						pJointNode->mNodeName = StringTable->insert( jointRopeNodeName );
+						pJointNode->setNodeName( jointRopeNodeName );
 
 						// Fetch joint.
 						const b2RopeJoint* pJoint = dynamic_cast<const b2RopeJoint*>( pBaseJoint );
@@ -4546,7 +4546,7 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 				case e_revoluteJoint:
 					{
 						// Set join name.
-						pJointNode->mNodeName = StringTable->insert( jointRevoluteNodeName );
+						pJointNode->setNodeName( jointRevoluteNodeName );
 
 						// Fetch joint.
 						const b2RevoluteJoint* pJoint = dynamic_cast<const b2RevoluteJoint*>( pBaseJoint );
@@ -4588,7 +4588,7 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 				case e_weldJoint:
 					{
 						// Set joint name.
-						pJointNode->mNodeName = StringTable->insert( jointWeldNodeName );
+						pJointNode->setNodeName( jointWeldNodeName );
 
 						// Fetch joint.
 						const b2WeldJoint* pJoint = dynamic_cast<const b2WeldJoint*>( pBaseJoint );
@@ -4622,7 +4622,7 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 				case e_wheelJoint:
 					{
 						// Set joint name.
-						pJointNode->mNodeName = StringTable->insert( jointWheelNodeName );
+						pJointNode->setNodeName( jointWheelNodeName );
 
 						// Fetch joint.
 						b2WheelJoint* pJoint = dynamic_cast<b2WheelJoint*>( pBaseJoint );
@@ -4665,7 +4665,7 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 				case e_frictionJoint:
 					{
 						// Set joint name.
-						pJointNode->mNodeName = StringTable->insert( jointFrictionNodeName );
+						pJointNode->setNodeName( jointFrictionNodeName );
 
 						// Fetch joint.
 						const b2FrictionJoint* pJoint = dynamic_cast<const b2FrictionJoint*>( pBaseJoint );
@@ -4699,7 +4699,7 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 				case e_prismaticJoint:
 					{
 						// Set joint name.
-						pJointNode->mNodeName = StringTable->insert( jointPrismaticNodeName );
+						pJointNode->setNodeName( jointPrismaticNodeName );
 
 						// Fetch joint.
 						b2PrismaticJoint* pJoint = dynamic_cast<b2PrismaticJoint*>( pBaseJoint );
@@ -4742,7 +4742,7 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 				case e_pulleyJoint:
 					{
 						// Set joint name.
-						pJointNode->mNodeName = StringTable->insert( jointPulleyNodeName );
+						pJointNode->setNodeName( jointPulleyNodeName );
 
 						// Fetch joint.
 						b2PulleyJoint* pJoint = dynamic_cast<b2PulleyJoint*>( pBaseJoint );
@@ -4777,7 +4777,7 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 				case e_mouseJoint:
 					{
 						// Set joint name.
-						pJointNode->mNodeName = StringTable->insert( jointTargetNodeName );
+						pJointNode->setNodeName( jointTargetNodeName );
 
 						// Fetch joint.
 						const b2MouseJoint* pJoint = dynamic_cast<const b2MouseJoint*>( pBaseJoint );
@@ -4808,7 +4808,7 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 				case e_motorJoint:
 					{
 						// Set joint name.
-						pJointNode->mNodeName = StringTable->insert( jointMotorNodeName );
+						pJointNode->setNodeName( jointMotorNodeName );
 
 						// Fetch joint.
 						const b2MotorJoint* pJoint = dynamic_cast<const b2MotorJoint*>( pBaseJoint );

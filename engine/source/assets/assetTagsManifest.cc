@@ -182,7 +182,7 @@ void AssetTagsManifest::onTamlCustomRead( const TamlCustomNodes& customNodes )
         const TamlCustomNode* pTagNode = *tagNodeItr;
 
         // Skip if an unknown node name.
-        if ( pTagNode->mNodeName != tagNodeName )
+        if ( pTagNode->getNodeName() != tagNodeName )
             continue;
 
         // Fetch "Name" field.
@@ -220,7 +220,7 @@ void AssetTagsManifest::onTamlCustomRead( const TamlCustomNodes& customNodes )
         const TamlCustomNode* pAssetTagNode = *assetTagNodeItr;
 
         // Skip if an unknown node name.
-        if ( pAssetTagNode->mNodeName != assetTagNodeName )
+        if ( pAssetTagNode->getNodeName() != assetTagNodeName )
             continue;
 
         // Fetch "AssetId" field.

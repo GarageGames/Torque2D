@@ -929,7 +929,7 @@ void ImageAsset::onTamlCustomRead( const TamlCustomNodes& customNodes )
         TamlCustomNode* pCellNode = *cellNodeItr;
 
         // Fetch node name.
-        StringTableEntry nodeName = pCellNode->mNodeName;
+        StringTableEntry nodeName = pCellNode->getNodeName();
 
         // Is this a valid alias?
         if ( nodeName != cellNodeName )
