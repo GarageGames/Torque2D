@@ -497,7 +497,7 @@ public:
 
     inline void setNodeText( const char* pNodeText )
     {
-        AssertFatal( dStrlen( pNodeText ) >= MAX_TAML_NODE_FIELDVALUE_LENGTH, "Custom node text is too long." );
+        AssertFatal( dStrlen( pNodeText ) < MAX_TAML_NODE_FIELDVALUE_LENGTH, "Custom node text is too long." );
 
         mNodeText.set( StringTable->EmptyString, pNodeText );
     }
