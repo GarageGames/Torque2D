@@ -5061,9 +5061,9 @@ b2JointType Scene::getJointTypeEnum(const char* label)
 
 static EnumTable::Enums pickModeLookup[] =
                 {
-                { Scene::PICK_ANY,          "ANY" },
-                { Scene::PICK_SIZE,         "SIZE" },
-                { Scene::PICK_COLLISION,    "COLLISION" },
+                { Scene::PICK_ANY,          "Any" },
+                { Scene::PICK_SIZE,         "Size" },
+                { Scene::PICK_COLLISION,    "Collision" },
                 };
 
 //-----------------------------------------------------------------------------
