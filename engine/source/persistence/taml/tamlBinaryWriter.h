@@ -34,7 +34,7 @@ class TamlBinaryWriter
 public:
     TamlBinaryWriter( Taml* pTaml ) :
         mpTaml( pTaml ),
-        mVersionId(1)
+        mVersionId(2)
     {
     }
     virtual ~TamlBinaryWriter() {}

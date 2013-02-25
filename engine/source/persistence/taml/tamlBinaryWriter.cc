@@ -193,7 +193,7 @@ void TamlBinaryWriter::writeCustomElements( Stream& stream, const TamlWriteNode*
     // Fetch custom nodes.
     const TamlCustomNodeVector& nodes = customNodes.getNodes();
 
-    // Write custom element count.
+    // Write custom node count.
     stream.write( (U32)nodes.size() );
 
     // Finish if there are no nodes.
@@ -206,8 +206,21 @@ void TamlBinaryWriter::writeCustomElements( Stream& stream, const TamlWriteNode*
         // Fetch the custom node.
         TamlCustomNode* pCustomNode = *customNodesItr;
 
-        // Write the custom node.
-        writeCustomNode( stream, pCustomNode );
+        // Write custom node name.
+        stream.writeString( pCustomNode->mNodeName );
+
+        // Fetch node children.
+        const TamlCustomNodeVector& nodeChildren = pCustomNode->getChildren();
+
+        // Iterate children nodes.
+        for( TamlCustomNodeVector::const_iterator childNodeItr = nodeChildren.begin(); childNodeItr != nodeChildren.end(); ++childNodeItr )
+        {
+            // Fetch child node.
+            const TamlCustomNode* pChildNode = *childNodeItr;
+
+            // Write the custom node.
+            writeCustomNode( stream, pChildNode );
+        }
     }
 }
 
@@ -215,13 +228,10 @@ void TamlBinaryWriter::writeCustomElements( Stream& stream, const TamlWriteNode*
 
 void TamlBinaryWriter::writeCustomNode( Stream& stream, const TamlCustomNode* pCustomNode )
 {
-    // Write custom node name.
-    stream.writeString( pCustomNode->mNodeName );
-
     // Is the node a proxy object?
     if ( pCustomNode->isProxyObject() )
     {
-        // Yes, so flag as element.
+        // Yes, so flag as proxy object.
         stream.write( true );
 
         // Write the element.
@@ -232,17 +242,20 @@ void TamlBinaryWriter::writeCustomNode( Stream& stream, const TamlCustomNode* pC
     // No, so flag as custom node.
     stream.write( false );
 
+    // Write custom node name.
+    stream.writeString( pCustomNode->mNodeName );
+
     // Fetch node children.
     const TamlCustomNodeVector& nodeChildren = pCustomNode->getChildren();
 
-    // Fetch node count.
-    const U32 customNodeCount = (U32)nodeChildren.size();
+    // Fetch child node count.
+    const U32 childNodeCount = (U32)nodeChildren.size();
 
     // Write custom node count.
-    stream.write( customNodeCount );
+    stream.write( childNodeCount );
 
-    // Do we have any nodes.
-    if ( customNodeCount > 0 )
+    // Do we have any children nodes.
+    if ( childNodeCount > 0 )
     {
         // Yes, so iterate children nodes.
         for( TamlCustomNodeVector::const_iterator childNodeItr = nodeChildren.begin(); childNodeItr != nodeChildren.end(); ++childNodeItr )
@@ -258,14 +271,14 @@ void TamlBinaryWriter::writeCustomNode( Stream& stream, const TamlCustomNode* pC
     // Fetch node fields.
     const TamlCustomFieldVector& nodeFields = pCustomNode->getFields();
 
-    // Fetch node field count.
-    const U32 nodeFieldCount = (U32)nodeFields.size();
+    // Fetch child field count.
+    const U32 childFieldCount = (U32)nodeFields.size();
 
     // Write custom node field count.
-    stream.write( nodeFieldCount );
+    stream.write( childFieldCount );
 
-    // Do we have any node fields?
-    if ( nodeFieldCount > 0 )
+    // Do we have any child fields?
+    if ( childFieldCount > 0 )
     {
         // Yes, so iterate node fields.
         for ( TamlCustomFieldVector::const_iterator nodeFieldItr = nodeFields.begin(); nodeFieldItr != nodeFields.end(); ++nodeFieldItr )
