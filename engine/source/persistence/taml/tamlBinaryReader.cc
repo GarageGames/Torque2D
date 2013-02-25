@@ -284,8 +284,8 @@ void TamlBinaryReader::parseCustomElements( Stream& stream, TamlCallbacks* pCall
                     StringTableEntry propertyFieldName = stream.readSTString();
 
                     // Read field value.
-                    char valueBuffer[MAX_TAML_PROPERTY_FIELDVALUE_LENGTH];
-                    stream.readLongString( MAX_TAML_PROPERTY_FIELDVALUE_LENGTH, valueBuffer );
+                    char valueBuffer[MAX_TAML_NODE_FIELDVALUE_LENGTH];
+                    stream.readLongString( MAX_TAML_NODE_FIELDVALUE_LENGTH, valueBuffer );
 
                     // Add property field.
                     pPropertyAlias->addField( propertyFieldName, valueBuffer );

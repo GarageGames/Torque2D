@@ -944,15 +944,15 @@ void ImageAsset::onTamlCustomRead( const TamlCustomNodes& customNodes )
         S32 cellHeight = 0;
 
         // Fetch field nodes.
-        const TamlCustomFieldVector& fieldNodes = pCellNode->getFields();
+        const TamlCustomFieldVector& nodeFields = pCellNode->getFields();
 
         // Iterate property fields.
-        for ( TamlCustomFieldVector::const_iterator nodeFieldItr = fieldNodes.begin(); nodeFieldItr != fieldNodes.end(); ++nodeFieldItr )
+        for ( TamlCustomFieldVector::const_iterator nodeFieldItr = nodeFields.begin(); nodeFieldItr != nodeFields.end(); ++nodeFieldItr )
         {
             // Fetch node field.
-            TamlCustomNodeField* pNodeField = *nodeFieldItr;
+            const TamlCustomNodeField* pNodeField = *nodeFieldItr;
 
-            // Fetch property field name.
+            // Fetch field name.
             StringTableEntry fieldName = pNodeField->getFieldName();
 
             // Check common fields.

@@ -3580,7 +3580,7 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             for ( TamlCustomFieldVector::const_iterator shapeFieldItr = shapeFields.begin(); shapeFieldItr != shapeFields.end(); ++shapeFieldItr )
             {
                 // Fetch field node.
-                TamlCustomNodeField* pFieldNode = *shapeFieldItr;
+                const TamlCustomNodeField* pFieldNode = *shapeFieldItr;
 
                 // Fetch property field name.
                 StringTableEntry fieldName = pFieldNode->getFieldName();
@@ -3640,7 +3640,7 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             for ( TamlCustomFieldVector::const_iterator shapeFieldItr = shapeFields.begin(); shapeFieldItr != shapeFields.end(); ++shapeFieldItr )
             {
                 // Fetch field node.
-                TamlCustomNodeField* pFieldNode = *shapeFieldItr;
+                const TamlCustomNodeField* pFieldNode = *shapeFieldItr;
 
                 // Fetch property field name.
                 StringTableEntry fieldName = pFieldNode->getFieldName();
@@ -3708,7 +3708,7 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             for ( TamlCustomFieldVector::const_iterator shapeFieldItr = shapeFields.begin(); shapeFieldItr != shapeFields.end(); ++shapeFieldItr )
             {
                 // Fetch field node.
-                TamlCustomNodeField* pFieldNode = *shapeFieldItr;
+                const TamlCustomNodeField* pFieldNode = *shapeFieldItr;
 
                 // Fetch property field name.
                 StringTableEntry fieldName = pFieldNode->getFieldName();
@@ -3779,7 +3779,7 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             for ( TamlCustomFieldVector::const_iterator shapeFieldItr = shapeFields.begin(); shapeFieldItr != shapeFields.end(); ++shapeFieldItr )
             {
                 // Fetch field node.
-                TamlCustomNodeField* pFieldNode = *shapeFieldItr;
+                const TamlCustomNodeField* pFieldNode = *shapeFieldItr;
 
                 // Fetch property field name.
                 StringTableEntry fieldName = pFieldNode->getFieldName();

@@ -80,22 +80,8 @@ TiXmlNode* TamlXmlWriter::compileElement( const TamlWriteNode* pTamlWriteNode )
         // Set reference to Id attribute.
         pElement->SetAttribute( TAML_REFID_ATTRIBUTE_NAME, referenceToId );
 
-        // Do we have a reference field?
-        if ( pTamlWriteNode->mRefField != StringTable->EmptyString )
-        {
-            // Yes, so set attribute.
-            pElement->SetAttribute( TAML_REF_FIELD_NAME, pTamlWriteNode->mRefField );
-        }
-
         // Finish because we're a reference to another object.
         return pElement;
-    }
-
-    // Do we have a reference field?
-    if ( pTamlWriteNode->mRefField != StringTable->EmptyString )
-    {
-        // Yes, so set attribute.
-        pElement->SetAttribute( TAML_REF_FIELD_NAME, pTamlWriteNode->mRefField );
     }
 
     // Fetch object name.
@@ -133,6 +119,31 @@ TiXmlNode* TamlXmlWriter::compileElement( const TamlWriteNode* pTamlWriteNode )
 
 //-----------------------------------------------------------------------------
 
+void TamlXmlWriter::compileAttributes( TiXmlElement* pXmlElement, const TamlWriteNode* pTamlWriteNode )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(TamlXmlWriter_CompileAttributes);
+
+    // Fetch fields.
+    const Vector<TamlWriteNode::FieldValuePair*>& fields = pTamlWriteNode->mFields;
+
+    // Ignore if no fields.
+    if ( fields.size() == 0 )
+        return;
+
+    // Iterate fields.
+    for( Vector<TamlWriteNode::FieldValuePair*>::const_iterator itr = fields.begin(); itr != fields.end(); ++itr )
+    {
+        // Fetch field/value pair.
+        TamlWriteNode::FieldValuePair* pFieldValue = (*itr);
+
+        // Set field attribute.
+        pXmlElement->SetAttribute( pFieldValue->mName, pFieldValue->mpValue );
+    }
+}
+
+//-----------------------------------------------------------------------------
+
 void TamlXmlWriter::compileCustomElements( TiXmlElement* pXmlElement, const TamlWriteNode* pTamlWriteNode )
 {
     // Debug Profiling.
@@ -163,45 +174,20 @@ void TamlXmlWriter::compileCustomElements( TiXmlElement* pXmlElement, const Taml
         TiXmlElement* pExtendedPropertyElement = new TiXmlElement( extendedElementName );
 
         // Fetch node children.
+        const TamlCustomNodeVector& nodeChildren = pCustomNode->getChildren();
 
-        // Iterate node children.
-        for( TamlCustomProperty::const_iterator propertyAliasItr = pCustomProperty->begin(); propertyAliasItr != pCustomProperty->end(); ++propertyAliasItr )
+        // Iterate children nodes.
+        for( TamlCustomNodeVector::const_iterator childNodeItr = nodeChildren.begin(); childNodeItr != nodeChildren.end(); ++childNodeItr )
         {
-            // Fetch property alias.
-            TamlPropertyAlias* pPropertyAlias = *propertyAliasItr;
+            // Fetch child node.
+            const TamlCustomNode* pChildNode = *childNodeItr;
 
-            // Skip if the alias is set to ignore no properties and there are none.
-            if ( pPropertyAlias->mIgnoreEmpty && pPropertyAlias->size() == 0 )
-                continue;
-
-            // Create element.
-            TiXmlElement* pPropertyElement = new TiXmlElement( pPropertyAlias->mAliasName );
-
-            // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
-            {
-                // Fetch property field.
-                TamlCustomNodeField* pPropertyField = *propertyFieldItr;
-
-                // Is it an object field?
-                if ( pPropertyField->isObjectField() )
-                {
-                    // Yes, so write child element.
-                    pPropertyElement->LinkEndChild( compileElement( pPropertyField->getWriteNode() ) );
-                }
-                else
-                {
-                    // No, so set property attribute.
-                    pPropertyElement->SetAttribute( pPropertyField->getFieldName(), pPropertyField->getFieldValue() );
-                }
-            }
-
-            // Write property element as child.
-            pExtendedPropertyElement->LinkEndChild( pPropertyElement );
+            // Compile the custom nodes.
+            compileCustomNodes( pExtendedPropertyElement, pChildNode );
         }
 
-        // Is the custom property set to ignore no alias' and there are none.
-        if ( pCustomProperty->mIgnoreEmpty && pExtendedPropertyElement->NoChildren() )
+        // Finish if the node is set to ignore if empty and it is empty.
+        if ( pCustomNode->mIgnoreEmpty && pExtendedPropertyElement->NoChildren() )
         {
             // Yes, so delete the extended element.
             delete pExtendedPropertyElement;
@@ -209,7 +195,7 @@ void TamlXmlWriter::compileCustomElements( TiXmlElement* pXmlElement, const Taml
         }
         else
         {
-            // No, so write the extended property element as child.
+            // No, so add elementt as child.
             pXmlElement->LinkEndChild( pExtendedPropertyElement );
         }
     }
@@ -217,25 +203,60 @@ void TamlXmlWriter::compileCustomElements( TiXmlElement* pXmlElement, const Taml
 
 //-----------------------------------------------------------------------------
 
-void TamlXmlWriter::compileAttributes( TiXmlElement* pXmlElement, const TamlWriteNode* pTamlWriteNode )
+void TamlXmlWriter::compileCustomNodes( TiXmlElement* pXmlElement, const TamlCustomNode* pCustomNode )
 {
-    // Debug Profiling.
-    PROFILE_SCOPE(TamlXmlWriter_CompileAttributes);
-
-    // Fetch fields.
-    const Vector<TamlWriteNode::FieldValuePair*>& fields = pTamlWriteNode->mFields;
-
-    // Ignore if no fields.
-    if ( fields.size() == 0 )
+    // Finish if the node is set to ignore if empty and it is empty.
+    if ( pCustomNode->mIgnoreEmpty && pCustomNode->isEmpty() )
         return;
 
-    // Iterate fields.
-    for( Vector<TamlWriteNode::FieldValuePair*>::const_iterator itr = fields.begin(); itr != fields.end(); ++itr )
-    {
-        // Fetch field/value pair.
-        TamlWriteNode::FieldValuePair* pFieldValue = (*itr);
+    // Create element.
+    TiXmlElement* pNodeElement = new TiXmlElement( pCustomNode->mNodeName );
 
-        // Set field attribute.
-        pXmlElement->SetAttribute( pFieldValue->mName, pFieldValue->mpValue );
+    // Fetch node children.
+    const TamlCustomNodeVector& nodeChildren = pCustomNode->getChildren();
+
+    // Iterate children nodes.
+    for( TamlCustomNodeVector::const_iterator childNodeItr = nodeChildren.begin(); childNodeItr != nodeChildren.end(); ++childNodeItr )
+    {
+        // Fetch child node.
+        const TamlCustomNode* pChildNode = *childNodeItr;
+
+        // Is the node a proxy object?
+        if ( pChildNode->isProxyObject() )
+        {
+            // Yes, so write the proxy object.
+            pNodeElement->LinkEndChild( compileElement( pChildNode->getProxyWriteNode() ) );
+        }
+        else
+        {
+            // No, so compile the child nodes.
+            compileCustomNodes( pNodeElement, pChildNode );
+        }
+    }
+
+    // Fetch node fields.
+    const TamlCustomFieldVector& nodeFields = pCustomNode->getFields();
+
+    // Iterate property fields.
+    for ( TamlCustomFieldVector::const_iterator nodeFieldItr = nodeFields.begin(); nodeFieldItr != nodeFields.end(); ++nodeFieldItr )
+    {
+        // Fetch node field.
+        const TamlCustomNodeField* pNodeField = *nodeFieldItr;
+
+        // Set field.
+        pNodeElement->SetAttribute( pNodeField->getFieldName(), pNodeField->getFieldValue() );
+    }
+
+    // Finish if the node is set to ignore if empty and it is empty (including fields).
+    if ( pCustomNode->mIgnoreEmpty && nodeFields.size() == 0 && pNodeElement->NoChildren() )
+    {
+        // Yes, so delete the extended element.
+        delete pNodeElement;
+        pNodeElement = NULL;
+    }
+    else
+    {
+        // Add node element as child.
+        pXmlElement->LinkEndChild( pNodeElement );
     }
 }

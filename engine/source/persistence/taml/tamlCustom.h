@@ -464,6 +464,8 @@ public:
     inline const Vector<TamlCustomNode*>& getChildren( void ) const { return mChildren; }
     inline const TamlCustomFieldVector& getFields( void ) const { return mFields; }
 
+    inline bool isEmpty( void ) const { return mChildren.size() == 0 && mFields.size() == 0; }
+
     StringTableEntry        mNodeName;
     Vector<TamlCustomNode*> mChildren;
     TamlCustomFieldVector   mFields;

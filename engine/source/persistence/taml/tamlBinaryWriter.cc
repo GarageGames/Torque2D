@@ -200,7 +200,7 @@ void TamlBinaryWriter::writeCustomElements( Stream& stream, const TamlWriteNode*
                 {
                     // No, so write property attribute.
                     stream.writeString( pPropertyField->getFieldName() );
-                    stream.writeLongString( MAX_TAML_PROPERTY_FIELDVALUE_LENGTH, pPropertyField->getFieldValue() );
+                    stream.writeLongString( MAX_TAML_NODE_FIELDVALUE_LENGTH, pPropertyField->getFieldValue() );
                 }
             }
         }
