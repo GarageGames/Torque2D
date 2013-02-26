@@ -907,6 +907,9 @@ void SpriteBatch::setSpriteName( const char* pName )
     if ( findSpriteName( pName ) )
         return;
 
+    // Insert sprite name.
+    mSpriteNames.insert( StringTable->insert( pName ), mSelectedSprite );
+
     // Set name.
     mSelectedSprite->setName( pName );
 }
@@ -1223,6 +1226,17 @@ void SpriteBatch::onTamlCustomRead( const TamlCustomNode* pSpritesNode )
         {
             // Yes, so insert into sprite positions.
             mSpritePositions.insert( logicalPosition, pSpriteBatchItem );
+        }
+
+        // Fetch sprite name.
+        StringTableEntry spriteName = pSpriteBatchItem->getName();
+
+        // Did we get a sprite name?
+        if ( spriteName != StringTable->EmptyString )
+        {
+            // Yes, so insert into sprite names if it doesn't already exist.
+            if ( mSpriteNames.find( spriteName ) != mSpriteNames.end() ) 
+                mSpriteNames.insert( spriteName, mSelectedSprite );
         }
     }
 }
