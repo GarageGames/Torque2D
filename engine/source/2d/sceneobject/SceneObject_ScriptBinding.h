@@ -2380,13 +2380,23 @@ ConsoleMethod( SceneObject, createPolygonCollisionShape, S32, 3, 3,  "(localPoin
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, createPolygonBoxCollisionShape, S32, 3, 7,  "(width, height, [localCentroidX, localCentroidY], [angle]) Creates a polygon box collision shape.\n"
+ConsoleMethod( SceneObject, createPolygonBoxCollisionShape, S32, 2, 7,  "(width, height, [localCentroidX, localCentroidY], [angle]) Creates a polygon box collision shape.\n"
                                                                             "@param width The width of the box."
                                                                             "@param height The height of the box."
                                                                             "@param localCentroidX/Y The local position of the box centroid."
                                                                             "@param angle The angle of the box."
                                                                             "@return (int shapeIndex) The index of the collision shape or (-1) if not created.")
 {
+    // Were any dimensions specified?
+    if( argc == 2 )
+    {
+        // No, so fetch the objects size.
+        const Vector2& size = object->getSize();
+
+        // Create a box surrounding the object.
+        return object->createPolygonBoxCollisionShape( size.x, size.y );
+    }
+
     // Width and height.
     const U32 widthHeightElementCount = Utility::mGetStringElementCount(argv[2]);
 
