@@ -389,7 +389,7 @@ void Scene::initPersistFields()
     Parent::initPersistFields();
 
     // Physics.
-    addProtectedField("Gravity", TypeT2DVector, Offset(mWorldGravity, Scene), &setGravity, &getGravity, &writeGravity, "" );
+    addProtectedField("Gravity", TypeVector2, Offset(mWorldGravity, Scene), &setGravity, &getGravity, &writeGravity, "" );
     addField("VelocityIterations", TypeS32, Offset(mVelocityIterations, Scene), &writeVelocityIterations, "" );
     addField("PositionIterations", TypeS32, Offset(mPositionIterations, Scene), &writePositionIterations, "" );
 
