@@ -136,6 +136,6 @@ void PointForceController::renderOverlay( Scene* pScene, const SceneRenderState*
     // Call parent.
     Parent::renderOverlay( pScene, pSceneRenderState, pBatchRenderer );
 
-    // Draw camera pause distance.
-    pScene->mDebugDraw.DrawCircle( mPosition, mRadius, b2Color(1.0f, 1.0f, 0.0f ) );
+    // Draw force radius.
+    pScene->mDebugDraw.DrawCircle( mPosition, mRadius, ColorF(1.0f, 1.0f, 0.0f ) );
 }

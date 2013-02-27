@@ -59,25 +59,7 @@ struct Vector2 : b2Vec2
     inline Vector2( const Point2I& point ) : b2Vec2( F32(point.x), F32(point.y) ) {}
     inline Vector2( const Point2F& point ) : b2Vec2( point.x, point.y ) {}
     inline Vector2( const Point2D& point ) : b2Vec2( F32(point.x), F32(point.y) ) {}
-    inline Vector2( const char* pString )
-    {
-        const U32 elementCount = Utility::mGetStringElementCount(pString);
-
-        if ( elementCount == 0 )
-        {
-            SetZero();
-            return;
-        }
-
-        if ( elementCount == 1 )
-        {
-            x = y = dAtof(Utility::mGetStringElement(pString,0));
-            return;
-        }
-
-        x = dAtof(Utility::mGetStringElement(pString,0));
-        y = dAtof(Utility::mGetStringElement(pString,1));
-    }
+    inline Vector2( const char* pString ) { setString( pString ); }
 
     /// Operators.
     inline Vector2& operator /= (const F32 s)                           { x /= s; y /= s; return *this; }
@@ -106,6 +88,25 @@ struct Vector2 : b2Vec2
     /// Utility.
     inline void setAngle(const F32 radians)                             { x = mSin(radians); y = mCos(radians); }
     inline void setPolar(const F32 radians,F32 length)                  { x = mSin(radians)*length; y = mCos(radians)*length; }
+    inline void setString(const char* pString )
+    {
+        const U32 elementCount = Utility::mGetStringElementCount(pString);
+
+        if ( elementCount == 0 )
+        {
+            SetZero();
+            return;
+        }
+
+        if ( elementCount == 1 )
+        {
+            x = y = dAtof(Utility::mGetStringElement(pString,0));
+            return;
+        }
+
+        x = dAtof(Utility::mGetStringElement(pString,0));
+        y = dAtof(Utility::mGetStringElement(pString,1));
+    }
     inline const Vector2& setZero()                                     { (*this) = getZero(); return *this; }
     inline const Vector2& setOne()                                      { (*this) = getOne(); return *this; }
     inline static const Vector2& getZero()                              { static const Vector2 v(0.0f, 0.0f); return v; }

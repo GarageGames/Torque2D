@@ -58,6 +58,10 @@ struct Vector2;
 typedef Vector<SceneObject*> typeSceneObjectVector;
 typedef const Vector<SceneObject*>& typeSceneObjectVectorConstRef;
 
+///-----------------------------------------------------------------------------
+
+DefineConsoleType( Typeb2AABB )
+
 //-----------------------------------------------------------------------------
 
 namespace Utility

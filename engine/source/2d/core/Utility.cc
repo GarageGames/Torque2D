@@ -30,6 +30,49 @@
 
 //-----------------------------------------------------------------------------
 
+ConsoleType( b2AABB, Typeb2AABB, sizeof(b2AABB), "" )
+
+ConsoleGetType( Typeb2AABB )
+{
+    // Fetch AABB.
+    const b2AABB* pAABB = (b2AABB*)dptr;
+
+    // Format AABB.
+    char* pBuffer = Con::getReturnBuffer(64);
+    dSprintf(pBuffer, 64, "%.5g %.5g", pAABB->lowerBound.x, pAABB->lowerBound.y, pAABB->upperBound.x, pAABB->upperBound.y );
+    return pBuffer;
+}
+
+ConsoleSetType( Typeb2AABB )
+{
+    // Fetch AABB.
+    b2AABB* pAABB = (b2AABB*)dptr;
+
+    // "lowerX lowerY upperX upperY".
+    if( argc == 1 )
+    {
+        if ( dSscanf(argv[0], "%g %g %g %g", &(pAABB->lowerBound.x), &(pAABB->lowerBound.y), &(pAABB->upperBound.x), &(pAABB->upperBound.y) ) == 4 )
+            return;
+    }
+    
+    // "lowerX,lowerY,upperX,upperY".
+    else if( argc == 4 )
+    {
+        pAABB->lowerBound.Set( dAtof(argv[0]), dAtof(argv[1] ) );
+        pAABB->upperBound.Set( dAtof(argv[2]), dAtof(argv[3] ) );
+        return;
+    }
+
+    // Reset the AABB.
+    pAABB->lowerBound.SetZero();
+    pAABB->upperBound.SetZero();
+
+    // Warn.
+    Con::printf("Typeb2AABB must be set as { lowerX, lowerY, upperX, upperY } or \"lowerX lowerY upperX upperY\"");
+}
+
+//-----------------------------------------------------------------------------
+
 namespace Utility
 {
 

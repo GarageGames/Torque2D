@@ -806,19 +806,19 @@ void SceneObject::sceneRenderOverlay( const SceneRenderState* sceneRenderState )
     // AABB debug draw.
     if ( debugMask & Scene::SCENE_DEBUG_AABB )
     {
-        pScene->mDebugDraw.DrawAABB( mCurrentAABB );
+        pScene->mDebugDraw.DrawAABB( mCurrentAABB, ColorF(0.7f, 0.7f, 0.9f) );
     }
 
     // OOBB debug draw.
     if ( debugMask & Scene::SCENE_DEBUG_OOBB )
     {
-        pScene->mDebugDraw.DrawOOBB( mRenderOOBB );
+        pScene->mDebugDraw.DrawOOBB( mRenderOOBB, ColorF(0.9f, 0.9f, 1.0f) );
     }
 
     // Asleep debug draw.
     if ( !getAwake() && debugMask & Scene::SCENE_DEBUG_SLEEP )
     {
-        pScene->mDebugDraw.DrawAsleep( mRenderOOBB );
+        pScene->mDebugDraw.DrawAsleep( mRenderOOBB, ColorF( 0.0f, 1.0f, 0.0f ) );
     }
 
     // Collision Shapes.
@@ -832,8 +832,8 @@ void SceneObject::sceneRenderOverlay( const SceneRenderState* sceneRenderState )
     {
         const b2Vec2 renderPosition = getRenderPosition();
 
-        pScene->mDebugDraw.DrawPoint( renderPosition + getLocalCenter(), 6, b2Color( 0.0f, 1.0f, 0.4f ) );
-        pScene->mDebugDraw.DrawPoint( renderPosition, 4, b2Color( 0.0f, 0.4f, 1.0f ) );
+        pScene->mDebugDraw.DrawPoint( renderPosition + getLocalCenter(), 6, ColorF( 0.0f, 1.0f, 0.4f ) );
+        pScene->mDebugDraw.DrawPoint( renderPosition, 4, ColorF( 0.0f, 0.4f, 1.0f ) );
     }
 
     // Sort Points.
