@@ -94,6 +94,9 @@ static ALenum getEnum(const char * name, U32 flags)
       { "AL_LOOPING",                     AL_LOOPING,                      (Source|Get|Set|Int) },
       //{ "AL_STREAMING",                   AL_STREAMING,                    (Source|Get|Set|Int) },
       //{ "AL_BUFFER",                      AL_BUFFER,                       (Source|Get|Set|Int) },
+      { "AL_SAMPLE_OFFSET",				  AL_SAMPLE_OFFSET,					(Source|Get|Set|Int) },
+      { "AL_SEC_OFFSET",				  AL_SEC_OFFSET,					(Source|Get|Set|Int) },
+      { "AL_BYTE_OFFSET",				  AL_BYTE_OFFSET,					(Source|Get|Set|Int) },
 
       { "AL_VENDOR",                      AL_VENDOR,                       (Context|Get) },
       { "AL_VERSION",                     AL_VERSION,                      (Context|Get) },
@@ -335,14 +338,14 @@ ConsoleFunction(alxSourcei, void, 4, 4, "( handle , ALEnum , value ) Use the alx
                                                                 "@return No return value.\n"
                                                                 "@sa alxGetSource*, al*Listener*")
 {
-   ALenum e = getEnum(argv[2], (Source|Set|Int));
-   if(e == AL_INVALID)
-   {
-      Con::errorf(ConsoleLogEntry::General, "cAudio_alxSourcei: invalid enum name '%s'", argv[2]);
-      return;
-   }
+	ALenum e = getEnum(argv[2], (Source|Set|Int));
+	if(e == AL_INVALID)
+	{
+		Con::errorf(ConsoleLogEntry::General, "cAudio_alxSourcei: invalid enum name '%s'", argv[2]);
+		return;
+	}
 
-   alxSourcei(dAtoi(argv[1]), e, dAtoi(argv[3]));
+	alxSourcei(dAtoi(argv[1]), e, static_cast<ALint>(dAtoi(argv[3])));
 }
 
 
@@ -406,9 +409,9 @@ ConsoleFunction(alxGetSourcei, S32, 3, 3, "( handle , ALEnum ) Use the alxGetSou
       return(0);
    }
 
-   S32 value;
+   ALint value;
    alxGetSourcei(dAtoi(argv[1]), e, &value);
-   return(value);
+   return (static_cast<S32>(value));
 }
 
 
