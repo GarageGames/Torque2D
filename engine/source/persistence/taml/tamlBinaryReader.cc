@@ -191,7 +191,7 @@ SimObject* TamlBinaryReader::parseElement( Stream& stream, const U32 versionId )
     }
 
     // Parse custom elements.
-    TamlCustomProperties customProperties;
+    TamlCustomNodes customProperties;
 
     // Parse children.
     parseChildren( stream, pCallbacks, pSimObject, versionId );
@@ -208,102 +208,6 @@ SimObject* TamlBinaryReader::parseElement( Stream& stream, const U32 versionId )
 
     // Return object.
     return pSimObject;
-}
-
-//-----------------------------------------------------------------------------
-
-void TamlBinaryReader::parseCustomElements( Stream& stream, TamlCallbacks* pCallbacks, TamlCustomProperties& customProperties, const U32 versionId )
-{
-    // Debug Profiling.
-    PROFILE_SCOPE(TamlBinaryReader_ParseCustomElement);
-
-    // Read custom element count.
-    U32 customPropertyCount;
-    stream.read( &customPropertyCount );
-
-    // Finish if no custom properties.
-    if ( customPropertyCount == 0 )
-        return;
-
-    // Iterate custom properties.
-    for ( U32 propertyIndex = 0; propertyIndex < customPropertyCount; ++propertyIndex )
-    {
-        // Read custom element name.
-        StringTableEntry propertyName = stream.readSTString();
-
-        // Add custom property.
-        TamlCustomProperty* pCustomProperty = customProperties.addProperty( propertyName );
-
-        // Read property alias count.
-        U32 propertyAliasCount;
-        stream.read( &propertyAliasCount );
-
-        // Skip if no property alias.
-        if ( propertyAliasCount == 0 )
-            continue;
-
-        // Iterate property alias.
-        for( U32 propertyAliasIndex = 0; propertyAliasIndex < propertyAliasCount; ++propertyAliasIndex )
-        {
-            // Read property alias name.
-            StringTableEntry propertyAliasName = stream.readSTString();
-
-            // Add property alias.
-            TamlPropertyAlias* pPropertyAlias = pCustomProperty->addAlias( propertyAliasName );
-
-            // Read property field count.
-            U32 propertyFieldCount;
-            stream.read( &propertyFieldCount );
-
-            // Skip if no property fields.
-            if ( propertyFieldCount == 0 )
-                continue;
-
-            // Iterate property fields.
-            for( U32 propertyFieldIndex = 0; propertyFieldIndex < propertyFieldCount; ++propertyFieldIndex )
-            {
-                // Read is object field flag.
-                bool isObjectField;
-                stream.read( &isObjectField );
-
-                // Is it an object field?
-                if ( isObjectField )
-                {
-                    // Yes, so read reference field.
-                    StringTableEntry fieldName = stream.readSTString();
-
-                    // Read field object.
-                    SimObject* pFieldObject = parseElement( stream, versionId );
-
-                    // Add property field.
-                    pPropertyAlias->addField( fieldName, pFieldObject );
-                }
-                else
-                {
-                    // No, so read field name.
-                    StringTableEntry propertyFieldName = stream.readSTString();
-
-                    // Read field value.
-                    char valueBuffer[MAX_TAML_PROPERTY_FIELDVALUE_LENGTH];
-                    stream.readLongString( MAX_TAML_PROPERTY_FIELDVALUE_LENGTH, valueBuffer );
-
-                    // Add property field.
-                    pPropertyAlias->addField( propertyFieldName, valueBuffer );
-                }
-            }
-        }
-    }
-
-    // Do we have callbacks?
-    if ( pCallbacks == NULL )
-    {
-        // No, so warn.
-        Con::warnf( "Taml: Encountered custom data but object does not support custom data." );
-        return;
-    }
-
-    // Custom read callback.
-    mpTaml->tamlCustomRead( pCallbacks, customProperties );
 }
 
 //-----------------------------------------------------------------------------
@@ -388,6 +292,115 @@ void TamlBinaryReader::parseChildren( Stream& stream, TamlCallbacks* pCallbacks,
         {
             // Yes, so perform callback.
             mpTaml->tamlAddParent( pChildCallbacks, pSimObject );
+        }
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void TamlBinaryReader::parseCustomElements( Stream& stream, TamlCallbacks* pCallbacks, TamlCustomNodes& customNodes, const U32 versionId )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(TamlBinaryReader_ParseCustomElement);
+
+    // Read custom node count.
+    U32 customNodeCount;
+    stream.read( &customNodeCount );
+
+    // Finish if no custom nodes.
+    if ( customNodeCount == 0 )
+        return;
+
+    // Iterate custom nodes.
+    for ( U32 nodeIndex = 0; nodeIndex < customNodeCount; ++nodeIndex )
+    {
+        //Read custom node name.
+        StringTableEntry nodeName = stream.readSTString();
+
+        // Add custom node.
+        TamlCustomNode* pCustomNode = customNodes.addNode( nodeName );
+
+        // Parse the custom node.
+        parseCustomNode( stream, pCustomNode, versionId );
+    }
+
+    // Do we have callbacks?
+    if ( pCallbacks == NULL )
+    {
+        // No, so warn.
+        Con::warnf( "Taml: Encountered custom data but object does not support custom data." );
+        return;
+    }
+
+    // Custom read callback.
+    mpTaml->tamlCustomRead( pCallbacks, customNodes );
+}
+
+//-----------------------------------------------------------------------------
+
+void TamlBinaryReader::parseCustomNode( Stream& stream, TamlCustomNode* pCustomNode, const U32 versionId )
+{
+    // Fetch if a proxy object.
+    bool isProxyObject;
+    stream.read( &isProxyObject );
+
+    // Is this a proxy object?
+    if ( isProxyObject )
+    {
+        // Yes, so parse proxy object.
+        SimObject* pProxyObject = parseElement( stream, versionId );
+
+        // Add child node.
+        pCustomNode->addNode( pProxyObject );
+
+        return;
+    }
+
+    // No, so read custom node name.
+    StringTableEntry nodeName = stream.readSTString();
+
+    // Add child node.
+    TamlCustomNode* pChildNode = pCustomNode->addNode( nodeName );
+
+    // Read child node text.
+    char childNodeTextBuffer[MAX_TAML_NODE_FIELDVALUE_LENGTH];
+    stream.readLongString( MAX_TAML_NODE_FIELDVALUE_LENGTH, childNodeTextBuffer );
+    pChildNode->setNodeText( childNodeTextBuffer );
+
+    // Read child node count.
+    U32 childNodeCount;
+    stream.read( &childNodeCount );
+
+    // Do we have any children nodes?
+    if ( childNodeCount > 0 )
+    {
+        // Yes, so parse children nodes.
+        for( U32 childIndex = 0; childIndex < childNodeCount; ++childIndex )
+        {
+            // Parse child node.
+            parseCustomNode( stream, pChildNode, versionId );
+        }
+    }
+
+    // Read child field count.
+    U32 childFieldCount;
+    stream.read( &childFieldCount );
+
+    // Do we have any child fields?
+    if ( childFieldCount > 0 )
+    {
+        // Yes, so parse child fields.
+        for( U32 childFieldIndex = 0; childFieldIndex < childFieldCount; ++childFieldIndex )
+        {
+            // Read field name.
+            StringTableEntry fieldName = stream.readSTString();
+
+            // Read field value.
+            char valueBuffer[MAX_TAML_NODE_FIELDVALUE_LENGTH];
+            stream.readLongString( MAX_TAML_NODE_FIELDVALUE_LENGTH, valueBuffer );
+
+            // Add field.
+            pChildNode->addField( fieldName, valueBuffer );
         }
     }
 }

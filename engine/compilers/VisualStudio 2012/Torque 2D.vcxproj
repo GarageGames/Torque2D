@@ -92,6 +92,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings>4800;4100;4127;4512</DisableSpecificWarnings>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -245,6 +246,10 @@
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetEmitter.cc" />
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetField.cc" />
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetFieldCollection.cc" />
+    <ClCompile Include="..\..\source\2d\controllers\PointForceController.cc" />
+    <ClCompile Include="..\..\source\2d\controllers\BuoyancyController.cc" />
+    <ClCompile Include="..\..\source\2d\controllers\ConstantForceController.cc" />
+    <ClCompile Include="..\..\source\2d\controllers\SceneController.cc" />
     <ClCompile Include="..\..\source\2d\core\BatchRender.cc" />
     <ClCompile Include="..\..\source\2d\core\CoreMath.cc" />
     <ClCompile Include="..\..\source\2d\core\ParticleSystem.cc" />
@@ -263,6 +268,8 @@
     <ClCompile Include="..\..\source\2d\sceneobject\ImageFont.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\ParticlePlayer.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\SceneObject.cc" />
+    <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectList.cc" />
+    <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectSet.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Scroller.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\ShapeVector.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Sprite.cc" />
@@ -618,6 +625,14 @@
     <ClInclude Include="..\..\source\2d\assets\ParticleAssetField.h" />
     <ClInclude Include="..\..\source\2d\assets\ParticleAssetFieldCollection.h" />
     <ClInclude Include="..\..\source\2d\assets\ParticleAsset_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\controllers\PointForceController.h" />
+    <ClInclude Include="..\..\source\2d\controllers\PointForceController_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\controllers\BuoyancyController.h" />
+    <ClInclude Include="..\..\source\2d\controllers\BuoyancyController_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\controllers\ConstantForceController.h" />
+    <ClInclude Include="..\..\source\2d\controllers\ConstantForceController_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\controllers\SceneController.h" />
+    <ClInclude Include="..\..\source\2d\controllers\SceneController_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\core\BatchRender.h" />
     <ClInclude Include="..\..\source\2d\core\CoreMath.h" />
     <ClInclude Include="..\..\source\2d\core\ParticleSystem.h" />
@@ -645,8 +660,11 @@
     <ClInclude Include="..\..\source\2d\sceneobject\ParticlePlayer.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\ParticlePlayer_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObject.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectList.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectMoveToEvent.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectRotateToEvent.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Scroller.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Scroller_ScriptBinding.h" />

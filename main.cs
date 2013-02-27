@@ -41,7 +41,7 @@ $Scripts::ignoreDSOs = true;
 // The name of the game. Used to form the path to save preferences. Defaults to C++ engine define TORQUE_GAME_NAME
 // if not specified.
 // Appending version string to avoid conflicts with existing versions and other versions.
-setCompanyAndProduct("GarageGames", "Sandbox" );
+setCompanyAndProduct("GarageGames", "Torque 2D" );
 
 // Set module database information echo.
 ModuleDatabase.EchoInfo = false;
@@ -56,13 +56,13 @@ AssetDatabase.IgnoreAutoUnload = true;
 // Scan modules.
 ModuleDatabase.scanModules( "modules" );
 
-// Load sandbox module.
-ModuleDatabase.LoadExplicit( "Sandbox" );
+// Load AppCore module.
+ModuleDatabase.LoadExplicit( "AppCore" );
 
 //-----------------------------------------------------------------------------
 
 function onExit()
 {
-    // Unload the sandbox module.
-    ModuleDatabase.unloadExplicit( "Sandbox" );
+    // Unload the AppCore module.
+    ModuleDatabase.unloadExplicit( "AppCore" );
 }

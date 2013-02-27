@@ -20,45 +20,46 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
-// Audio channel descriptions.
-//------------------------------------------------------------------------------
-$musicAudioType = 1;
-$effectsAudioType = 2;
+#ifndef _ATTRACTOR_CONTROLLER_H_
+#define _ATTRACTOR_CONTROLLER_H_
+
+#ifndef _SCENE_CONTROLLER_H_
+#include "2d/controllers/sceneController.h"
+#endif
+
+#ifndef _VECTOR2_H_
+#include "2d/core/vector2.h"
+#endif
 
 //------------------------------------------------------------------------------
-// initializeOpenAL
-// Starts up the OpenAL driver.
-//------------------------------------------------------------------------------
-function initializeOpenAL()
+
+class PointForceController : public SceneController
 {
-    // Just in case it is already started.
-    shutdownOpenAL();
+private:
+    typedef SceneController Parent;
 
-    echo("OpenAL Driver Init");
+    Vector2 mPosition;
+    F32 mRadius;
+    F32 mForce;
 
-    if (!OpenALInitDriver())
-    {
-        echo("OpenALInitDriver() failed");
-        $Audio::initFailed = true;
-    }
-    else
-    {
-        // Set the master volume.
-        alxListenerf(AL_GAIN_LINEAR, $pref::Audio::masterVolume);
+public:
+    PointForceController();
+    virtual ~PointForceController();
 
-        // Set the channel volumes.
-        for (%channel = 1; %channel <= 3; %channel++)
-            alxSetChannelVolume(%channel, $pref::Audio::channelVolume[%channel]);
+    static void initPersistFields();
+    virtual void copyTo(SimObject* object);
 
-        echo("OpenAL Driver Init Success");
-    }
-}
+    /// Integration.
+    virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
 
-//------------------------------------------------------------------------------
-// shutdownOpenAL
-//------------------------------------------------------------------------------
-function shutdownOpenAL()
-{
-    OpenALShutdownDriver();
-}
+    // Scene render.
+    virtual void renderOverlay( Scene* pScene, const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer );
+
+    inline void setForce( const F32& force ) { mForce = force; }
+    inline const F32 getForce( void ) const { return mForce; }
+
+    /// Declare Console Object.
+    DECLARE_CONOBJECT( PointForceController );
+};
+
+#endif // _ATTRACTOR_CONTROLLER_H_

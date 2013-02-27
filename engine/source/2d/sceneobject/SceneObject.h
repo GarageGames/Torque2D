@@ -165,7 +165,7 @@ protected:
     bool                    mCollisionSuppress;
     b2FixtureDef            mDefaultFixture;
     bool                    mGatherContacts;
-    typeContactVector*      mpCurrentContacts;
+    Scene::typeContactVector* mpCurrentContacts;
 
     /// General collision shape access.
     typeCollisionFixtureDefVector mCollisionFixtureDefs;
@@ -241,8 +241,8 @@ protected:
     void                    initializeContactGathering( void );
 
     /// Taml callbacks.
-    virtual void            onTamlCustomWrite( TamlCustomProperties& customProperties );
-    virtual void            onTamlCustomRead( const TamlCustomProperties& customProperties );
+    virtual void            onTamlCustomWrite( TamlCustomNodes& customNodes );
+    virtual void            onTamlCustomRead( const TamlCustomNodes& customNodes );
 
 public:
     SceneObject();
@@ -374,7 +374,7 @@ public:
     inline F32              getDefaultRestitution( void ) const         { return mDefaultFixture.restitution; }
     inline void             setCollisionSuppress( const bool status )   { mCollisionSuppress = status; }
     inline bool             getCollisionSuppress(void) const            { return mCollisionSuppress; }
-    inline const typeContactVector* getCurrentContacts( void ) const    { return mpCurrentContacts; }
+    inline const Scene::typeContactVector* getCurrentContacts( void ) const    { return mpCurrentContacts; }
     inline U32              getCurrentContactCount( void ) const        { if ( mpCurrentContacts != NULL ) return mpCurrentContacts->size(); else return 0; }
     virtual void            setGatherContacts( const bool gatherContacts ) { mGatherContacts = gatherContacts; initializeContactGathering(); }
     inline bool             getGatherContacts( void ) const             { return mGatherContacts; }
@@ -565,7 +565,6 @@ public:
     inline bool             getIsAlwaysInScope(void) const              { return mAlwaysInScope; }
     inline void             setWorldQueryKey( const U32 key )           { mWorldQueryKey = key; }
     inline U32              getWorldQueryKey( void ) const              { return mWorldQueryKey; }
-    BehaviorInstance*       behavior(const char *name);
     static U32              getGlobalSceneObjectCount( void );
     inline U32              getSerialId( void ) const                   { return mSerialId; }
 

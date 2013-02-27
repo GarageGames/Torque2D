@@ -982,7 +982,7 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
     }
 
     // Fetch contacts.
-    const typeContactVector* pCurrentContacts = object->getCurrentContacts();
+    const Scene::typeContactVector* pCurrentContacts = object->getCurrentContacts();
 
     // Sanity!
     AssertFatal( pCurrentContacts != NULL, "SceneObject::getContact() - Contacts not initialized correctly." );
@@ -1617,7 +1617,7 @@ ConsoleMethod(SceneObject, getAngularDamping, F32, 2, 2, "() - Gets the angular 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, moveTo, bool, 4, 7,  "(worldPoint X/Y, time, [autoStop = true], [warpToTarget = true]) - Moves the object to the specified world point.\n"
+ConsoleMethod(SceneObject, moveTo, bool, 4, 7,  "(worldPoint X/Y, speed, [autoStop = true], [warpToTarget = true]) - Moves the object to the specified world point.\n"
                                                 "The point is moved by calculating the initial linear velocity required and applies it.\n"
                                                 "The object may never reach the point if it has linear damping applied or collides with another object.\n"
                                                 "@param worldPoint/Y The world point to move the object to.\n"
@@ -2380,13 +2380,23 @@ ConsoleMethod( SceneObject, createPolygonCollisionShape, S32, 3, 3,  "(localPoin
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, createPolygonBoxCollisionShape, S32, 3, 7,  "(width, height, [localCentroidX, localCentroidY], [angle]) Creates a polygon box collision shape.\n"
+ConsoleMethod( SceneObject, createPolygonBoxCollisionShape, S32, 2, 7,  "(width, height, [localCentroidX, localCentroidY], [angle]) Creates a polygon box collision shape.\n"
                                                                             "@param width The width of the box."
                                                                             "@param height The height of the box."
                                                                             "@param localCentroidX/Y The local position of the box centroid."
                                                                             "@param angle The angle of the box."
                                                                             "@return (int shapeIndex) The index of the collision shape or (-1) if not created.")
 {
+    // Were any dimensions specified?
+    if( argc == 2 )
+    {
+        // No, so fetch the objects size.
+        const Vector2& size = object->getSize();
+
+        // Create a box surrounding the object.
+        return object->createPolygonBoxCollisionShape( size.x, size.y );
+    }
+
     // Width and height.
     const U32 widthHeightElementCount = Utility::mGetStringElementCount(argv[2]);
 
@@ -3725,12 +3735,3 @@ ConsoleMethod(SceneObject, safeDelete, void, 2, 2, "() - Safely deletes object.\
     object->safeDelete();
 }
 
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(SceneObject, behavior, S32, 3, 3, "(string behaviorName) - Gets the behavior instance ID off of the object based on the behavior name passed.\n"
-                                                   "@param behaviorName The name of the behavior you want to get the instance ID of.\n"
-                                                   "@return (integer behaviorID) The id of the behavior instance.")
-{
-   BehaviorInstance *inst = object->behavior(argv[2]);
-   return inst ? inst->getId() : 0;
-}

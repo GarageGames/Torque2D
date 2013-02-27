@@ -474,22 +474,22 @@ void ParticleAsset::moveEmitter( S32 fromIndex, S32 toIndex )
 
 //------------------------------------------------------------------------------
 
-void ParticleAsset::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void ParticleAsset::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ParticleAsset_OnTamlCustomWrite);
 
     // Write the fields.
-    mParticleFields.onTamlCustomWrite( customProperties );
+    mParticleFields.onTamlCustomWrite( customNodes );
 }
 
 //-----------------------------------------------------------------------------
 
-void ParticleAsset::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void ParticleAsset::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ParticleAsset_OnTamlCustomRead);
 
     // Read the fields.
-    mParticleFields.onTamlCustomRead( customProperties );
+    mParticleFields.onTamlCustomRead( customNodes );
 }

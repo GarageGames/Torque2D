@@ -631,7 +631,7 @@ struct WinMessage
    UINT message;
    WPARAM wParam;
    LPARAM lParam;
-
+   WinMessage() {};
    WinMessage(UINT m, WPARAM w, LPARAM l) : message(m), wParam(w), lParam(l) {}
 };
 

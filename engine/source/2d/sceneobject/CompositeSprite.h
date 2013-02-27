@@ -85,8 +85,8 @@ protected:
     virtual SpriteBatchItem* createSpriteIsometricLayout( const SpriteBatchItem::LogicalPosition& logicalPosition );
     virtual SpriteBatchItem* createCustomLayout( const SpriteBatchItem::LogicalPosition& logicalPosition );
 
-    virtual void onTamlCustomWrite( TamlCustomProperties& customProperties );
-    virtual void onTamlCustomRead( const TamlCustomProperties& customProperties );
+    virtual void onTamlCustomWrite( TamlCustomNodes& customNodes );
+    virtual void onTamlCustomRead( const TamlCustomNodes& customNodes );
 
 protected:
     static bool         setDefaultSpriteAngle(void* obj, const char* data)                  { STATIC_VOID_CAST_TO(CompositeSprite, SpriteBatch, obj)->setDefaultSpriteAngle(mDegToRad(dAtof(data))); return false; }

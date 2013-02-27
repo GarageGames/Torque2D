@@ -1,6 +1,6 @@
 <ImageAsset
     AssetName="{{texture.trimmedName}}"
-    ImageFile="@assetFile=#{{texture.fullName}}">	
+    ImageFile="@assetFile={{texture.fullName}}">	
 	<ImageAsset.Cells>
 		{% for sprite in allSprites %}<Cell Offset="{{sprite.frameRect.x}} {{sprite.frameRect.y}}" Width="{{sprite.frameRect.width}}" Height="{{sprite.frameRect.height}}"/>
 		{% endfor %}

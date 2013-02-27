@@ -705,7 +705,7 @@ void ParticlePlayer::sceneRenderOverlay( const SceneRenderState* sceneRenderStat
         return;
 
     // Draw camera pause distance.
-    pScene->mDebugDraw.DrawCircle( getRenderPosition(), mCameraIdleDistance, b2Color(1.0f, 1.0f, 0.0f ) );
+    pScene->mDebugDraw.DrawCircle( getRenderPosition(), mCameraIdleDistance, ColorF(1.0f, 1.0f, 0.0f ) );
 }
 
 //-----------------------------------------------------------------------------

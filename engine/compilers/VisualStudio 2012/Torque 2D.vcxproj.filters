@@ -166,6 +166,9 @@
     <Filter Include="testing\tests">
       <UniqueIdentifier>{57e1271d-4358-4180-b168-4b9c2cbac907}</UniqueIdentifier>
     </Filter>
+    <Filter Include="2d\controllers">
+      <UniqueIdentifier>{a9e97335-bed5-4f6a-9959-12f5f41dbdcb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\audio\audio.cc">
@@ -1268,6 +1271,24 @@
     </ClCompile>
     <ClCompile Include="..\..\source\persistence\taml\tamlCustom.cc">
       <Filter>persistence\taml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\controllers\SceneController.cc">
+      <Filter>2d\controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectSet.cc">
+      <Filter>2d\sceneobject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectList.cc">
+      <Filter>2d\sceneobject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\controllers\ConstantForceController.cc">
+      <Filter>2d\controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\controllers\BuoyancyController.cc">
+      <Filter>2d\controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\controllers\PointForceController.cc">
+      <Filter>2d\controllers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2585,6 +2606,39 @@
     </ClInclude>
     <ClInclude Include="..\..\source\sim\simObjectTimerEvent.h">
       <Filter>sim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\controllers\SceneController.h">
+      <Filter>2d\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\controllers\SceneController_ScriptBinding.h">
+      <Filter>2d\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet.h">
+      <Filter>2d\sceneobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectList.h">
+      <Filter>2d\sceneobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet_ScriptBinding.h">
+      <Filter>2d\sceneobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\controllers\ConstantForceController.h">
+      <Filter>2d\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\controllers\ConstantForceController_ScriptBinding.h">
+      <Filter>2d\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\controllers\BuoyancyController.h">
+      <Filter>2d\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\controllers\BuoyancyController_ScriptBinding.h">
+      <Filter>2d\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\controllers\PointForceController.h">
+      <Filter>2d\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\controllers\PointForceController_ScriptBinding.h">
+      <Filter>2d\controllers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

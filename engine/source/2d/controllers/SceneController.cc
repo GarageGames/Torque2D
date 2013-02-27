@@ -20,32 +20,58 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-$iOS::constant::iPhone = 0;
-$iOS::constant::iPad = 1;
-$iOS::constant::iPhone5 = 2;
+#ifndef _SCENE_CONTROLLER_H_
+#include "2d/controllers/SceneController.h"
+#endif
 
-$iOS::constant::Landscape = 0;
-$iOS::constant::Portrait = 1;
-$iOS::constant::ResolutionFull = 0;
-$iOS::constant::ResolutionSmall = 1;
+#ifndef _SCENE_OBJECT_SET_H_
+#include "2d/sceneObject/sceneObjectSet.h"
+#endif
 
-$iOS::constant::iPhoneWidth = 480;
-$iOS::constant::iPhoneHeight = 320;
+#ifndef _SCENE_H_
+#include "2d/scene/scene.h"
+#endif
 
-$iOS::constant::iPhone4Width = 960;
-$iOS::constant::iPhone4Height = 640;
+// Script bindings.
+#include "SceneController_ScriptBinding.h"
 
-$iOS::constant::iPadWidth = 1024;
-$iOS::constant::iPadHeight = 768;
+//------------------------------------------------------------------------------
 
-$iOS::constant::NewiPadWidth = 2048;
-$iOS::constant::NewiPadHeight = 1536;
+IMPLEMENT_CONOBJECT(SceneController);
 
-$iOS::constant::iPhone5Width = 1136;
-$iOS::constant::iPhone5Height = 640;
+//------------------------------------------------------------------------------
 
-$iOS::constant::OrientationUnknown				= 0;
-$iOS::constant::OrientationLandscapeLeft		= 1;
-$iOS::constant::OrientationLandscapeRight		= 2;
-$iOS::constant::OrientationPortrait				= 3;
-$iOS::constant::OrientationPortraitUpsideDown	= 4;
+SceneController::SceneController()
+{
+}
+
+//------------------------------------------------------------------------------
+
+SceneController::~SceneController()
+{
+}
+
+
+//------------------------------------------------------------------------------
+
+void SceneController::initPersistFields()
+{
+    // Call parent.
+    Parent::initPersistFields();
+
+}
+
+//------------------------------------------------------------------------------
+
+void SceneController::copyTo(SimObject* object)
+{
+    // Call to parent.
+    Parent::copyTo(object);
+
+    // Cast to controller.
+    SceneController* pController = static_cast<SceneController*>(object);
+
+    // Sanity!
+    AssertFatal(pController != NULL, "SceneController::copyTo() - Object is not the correct type.");
+}
+
