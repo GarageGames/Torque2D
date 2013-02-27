@@ -38,20 +38,18 @@ ConsoleSetType( TypeVector2 )
 {
     // Fetch vector.
     Vector2* pVector = (Vector2*)dptr;
+
     // "x y".
     if( argc == 1 )
     {
-        if ( dSscanf(argv[0], "%g %g", &(pVector->x), &(pVector->y)) == 2 )
-            return;
-
-        pVector->y = pVector->x;
+        pVector->setString( argv[0] );
         return;
     }
 
     // "x,y".
     if( argc == 2 )
     {
-        *((Vector2*)dptr) = Vector2(dAtof(argv[0]), dAtof(argv[1]));
+        pVector->Set(dAtof(argv[0]), dAtof(argv[1]));
         return;
     }
 

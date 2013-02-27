@@ -565,7 +565,6 @@ public:
     inline bool             getIsAlwaysInScope(void) const              { return mAlwaysInScope; }
     inline void             setWorldQueryKey( const U32 key )           { mWorldQueryKey = key; }
     inline U32              getWorldQueryKey( void ) const              { return mWorldQueryKey; }
-    BehaviorInstance*       behavior(const char *name);
     static U32              getGlobalSceneObjectCount( void );
     inline U32              getSerialId( void ) const                   { return mSerialId; }
 

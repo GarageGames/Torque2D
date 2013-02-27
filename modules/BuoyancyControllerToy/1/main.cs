@@ -33,6 +33,7 @@ function BuoyancyControllerToy::create( %this )
     SandboxScene.setGravity( 0, -29.8 );
     
     // Configure settings.
+    BuoyancyControllerToy.FluidArea = "-30 -30 30 0";
     BuoyancyControllerToy.SurfaceNormal = "0 1";
     BuoyancyControllerToy.SurfaceOffset = 0;
     BuoyancyControllerToy.FluidDensity = 2.5;
@@ -402,6 +403,7 @@ function BuoyancyControllerToy::updateBuoyancyController( %this )
     %controller = BuoyancyControllerToy.SceneController;
     
     // Update the controller.
+    %controller.FluidArea = BuoyancyControllerToy.FluidArea;
     %controller.SurfaceNormal = BuoyancyControllerToy.SurfaceNormal;
     %controller.SurfaceOffset = BuoyancyControllerToy.SurfaceOffset;
     %controller.FluidDensity = BuoyancyControllerToy.FluidDensity;

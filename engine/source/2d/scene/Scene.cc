@@ -389,7 +389,7 @@ void Scene::initPersistFields()
     Parent::initPersistFields();
 
     // Physics.
-    addProtectedField("Gravity", TypeT2DVector, Offset(mWorldGravity, Scene), &setGravity, &getGravity, &writeGravity, "" );
+    addProtectedField("Gravity", TypeVector2, Offset(mWorldGravity, Scene), &setGravity, &getGravity, &writeGravity, "" );
     addField("VelocityIterations", TypeS32, Offset(mVelocityIterations, Scene), &writeVelocityIterations, "" );
     addField("PositionIterations", TypeS32, Offset(mPositionIterations, Scene), &writePositionIterations, "" );
 
@@ -972,8 +972,17 @@ void Scene::sceneRender( const SceneRenderState* pSceneRenderState )
     // Clear the background color if requested.
     if ( mUseBackgroundColor )
     {
+        // Enable the scissor.
+        const RectI& clipRect = dglGetClipRect();
+        glEnable(GL_SCISSOR_TEST );
+        glScissor( clipRect.point.x, clipRect.point.y, clipRect.len_x(), clipRect.len_y() );
+
+        // Clear the background.
         glClearColor( mBackgroundColor.red, mBackgroundColor.green, mBackgroundColor.blue, mBackgroundColor.alpha );
-        glClear(GL_COLOR_BUFFER_BIT);	
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // Disable the scissor.
+        glDisable( GL_SCISSOR_TEST );
     }
 
     // Debug Profiling.

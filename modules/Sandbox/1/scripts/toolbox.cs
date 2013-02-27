@@ -222,8 +222,8 @@ function BackgroundColorSelectList::onSelect(%this)
         return;
             
     // Set the scene color.
-    Canvas.BackgroundColor = getStockColorName($activeBackgroundColor);
-    Canvas.UseBackgroundColor = true;
+    SandboxScene.BackgroundColor = getStockColorName($activeBackgroundColor);
+    SandboxScene.UseBackgroundColor = true;
 }
 
 //-----------------------------------------------------------------------------
@@ -296,8 +296,8 @@ function updateToolboxOptions()
         return;
         
     // Set the scene color.
-    Canvas.BackgroundColor = getStockColorName($activeBackgroundColor);
-    Canvas.UseBackgroundColor = true;        
+    SandboxScene.BackgroundColor = getStockColorName($activeBackgroundColor);
+    SandboxScene.UseBackgroundColor = true;        
        
     // Set option.
     if ( $pref::Sandbox::metricsOption )
