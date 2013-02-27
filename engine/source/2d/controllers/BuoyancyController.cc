@@ -103,14 +103,27 @@ void BuoyancyController::copyTo(SimObject* object)
 
 void BuoyancyController::integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats )
 {
-    // Process all the scene objects.
-    for( SceneObjectSet::iterator itr = begin(); itr != end(); ++itr )
+    // Prepare query filter.
+    WorldQuery* pWorldQuery = prepareQueryFilter( pScene );
+
+    // Query for candidate objects.
+    pWorldQuery->anyQueryArea( mFluidArea ); 
+
+    // Fetch results.
+    typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
+
+    // Iterate the results.
+    for ( U32 n = 0; n < (U32)queryResults.size(); n++ )
     {
         // Fetch the scene object.
-        SceneObject* pSceneObject = *itr;
+        SceneObject* pSceneObject = queryResults[n].mpSceneObject;
 
         // Skip if asleep.
         if ( !pSceneObject->getAwake() )
+            continue;
+
+        // Ignore if it's a static body.
+        if ( pSceneObject->getBodyType() == b2BodyType::b2_staticBody )
             continue;
 
         // Fetch the shape count.
@@ -202,14 +215,6 @@ F32 BuoyancyController::ComputeCircleSubmergedArea( const b2Transform& bodyTrans
     // Sanity!
     AssertFatal( pShape != NULL, "BuoyancyController::ComputeCircleSubmergedArea() - Invalid shape." );
 
-    // Calculate the shape AABB.
-    b2AABB shapeAABB;
-    pShape->ComputeAABB( &shapeAABB, bodyTransform, 0 );
-
-    // If no overlap then the object cannot be submerged at all so return zero area submerged.
-    if ( !b2TestOverlap( mFluidArea, shapeAABB ) )
-        return 0.0f;
-
     // Calculate the world shape center.
     const b2Vec2 worldShapeCenter = b2Mul( bodyTransform, pShape->m_p );
 
@@ -252,14 +257,6 @@ F32 BuoyancyController::ComputePolygonSubmergedArea( const b2Transform& bodyTran
 {
     // Sanity!
     AssertFatal( pShape != NULL, "BuoyancyController::ComputePolygonSubmergedArea() - Invalid shape." );
-
-    // Calculate the shape AABB.
-    b2AABB shapeAABB;
-    pShape->ComputeAABB( &shapeAABB, bodyTransform, 0 );
-
-    // If no overlap then the object cannot be submerged at all so return zero area submerged.
-    if ( !b2TestOverlap( mFluidArea, shapeAABB ) )
-        return 0.0f;
 
     // Transform plane into shape co-ordinates
     b2Vec2 normalL = b2MulT( bodyTransform.q, mSurfaceNormal);

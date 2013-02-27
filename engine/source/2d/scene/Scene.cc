@@ -49,7 +49,7 @@
 #endif
 
 #ifndef _SCENE_CONTROLLER_H_
-#include "2d/controllers/SceneController.h"
+#include "2d/controllers/core/SceneController.h"
 #endif
 
 #ifndef _PARTICLE_SYSTEM_H_
@@ -1310,30 +1310,9 @@ void Scene::clearScene( bool deleteObjects )
     if ( pControllerSet == NULL )
         return;
 
-	// Fetch scene controller count.
-	const S32 sceneControllerCount = (S32)pControllerSet->size();
-
-	// Iterate scene controllers.
-	for( S32 i = 0; i < sceneControllerCount; i++ )
-	{
-		// Fetch the scene controller.
-		SceneController* pController = dynamic_cast<SceneController*>((*pControllerSet)[i]);
-
-        // Clear objects from the controller.
-        pController->clear();
-	}
-
-    // Are we deleting objects?
-    if ( deleteObjects )
-    {
-        // Yes, so delete the controllers.
-        pControllerSet->deleteObjects();
-    }
-    else
-    {
-        // No, so just clear the controllers.
-        pControllerSet->clear();
-    }
+    // Delete all the scene controllers.
+    while( pControllerSet->size() > 0 )
+        pControllerSet->at(0)->deleteObject();
 }
 
 //-----------------------------------------------------------------------------
@@ -4877,15 +4856,15 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 		// Iterate scene controllers.
 		for( S32 i = 0; i < sceneControllerCount; i++ )
 		{
-			// Fetch the scene controller.
-			SceneController* pController = dynamic_cast<SceneController*>((*pControllerSet)[i]);
+            // Fetch the set object.
+            SimObject* pSetObject = pControllerSet->at(i);
 
 			// Skip if not a controller.
-			if ( pController == NULL )
+            if ( !pSetObject->isType<SceneController*>() )
 				continue;
 
             // Add controller node.
-            pControllerCustomNode->addNode( pController );
+            pControllerCustomNode->addNode( pSetObject );
 		}
 	}
 }

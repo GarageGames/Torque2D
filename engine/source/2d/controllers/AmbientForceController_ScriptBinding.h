@@ -20,9 +20,9 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ConstantForceController, setForce, void, 3, 4,    "(float x, float y) - Sets the constant (world) force to use.\n"
-                                                                "@param x The component of the constant force along the horizontal (world) axis.\n"
-                                                                "@param y The component of the constant force along the vertical (world) axis.\n"
+ConsoleMethod(AmbientForceController, setForce, void, 3, 4,     "(float x, float y) - Sets the ambient force to use.\n"
+                                                                "@param x The component of the ambient force along the horizontal (world) axis.\n"
+                                                                "@param y The component of the ambient force along the vertical (world) axis.\n"
                                                                 "@return No return value.")
 {
     // The new force.
@@ -42,7 +42,7 @@ ConsoleMethod(ConstantForceController, setForce, void, 3, 4,    "(float x, float
     // Invalid
     else
     {
-        Con::warnf("ConstantForceController::setForce() - Invalid number of parameters!");
+        Con::warnf("AmbientForceController::setForce() - Invalid number of parameters!");
         return;
     }
 
@@ -51,8 +51,8 @@ ConsoleMethod(ConstantForceController, setForce, void, 3, 4,    "(float x, float
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ConstantForceController, getForce, const char*, 2, 2, "() Gets the constant (world) force being used.\n"
-                                                                    "@return The constant (world) force being used.")
+ConsoleMethod(AmbientForceController, getForce, const char*, 2, 2, "() Gets the ambient force being used.\n"
+                                                                    "@return The ambient force being used.")
 {
     return object->getForce().scriptThis();
 }

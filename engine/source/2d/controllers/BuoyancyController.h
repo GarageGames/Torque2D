@@ -23,8 +23,8 @@
 #ifndef _BUOYANCY_CONTROLLER_H_
 #define _BUOYANCY_CONTROLLER_H_
 
-#ifndef _SCENE_CONTROLLER_H_
-#include "2d/controllers/sceneController.h"
+#ifndef _PICKING_SCENE_CONTROLLER_H_
+#include "2d/controllers/core/pickingSceneController.h"
 #endif
 
 #ifndef _VECTOR2_H_
@@ -33,10 +33,10 @@
 
 //------------------------------------------------------------------------------
 
-class BuoyancyController : public SceneController
+class BuoyancyController : public PickingSceneController
 {
 private:
-    typedef SceneController Parent;
+    typedef PickingSceneController Parent;
 
     /// The fluid area.
     b2AABB mFluidArea;

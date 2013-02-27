@@ -85,7 +85,7 @@ function RotateToToy::createBackground( %this )
     %object.Image = "ToyAssets:highlightBackground";
     
     // Set the blend color.
-    %object.BlendColor = Bisque;
+    %object.BlendColor = SlateGray;
             
     // Add the sprite to the scene.
     SandboxScene.add( %object );    
