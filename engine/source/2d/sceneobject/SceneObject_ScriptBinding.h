@@ -3725,12 +3725,3 @@ ConsoleMethod(SceneObject, safeDelete, void, 2, 2, "() - Safely deletes object.\
     object->safeDelete();
 }
 
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(SceneObject, behavior, S32, 3, 3, "(string behaviorName) - Gets the behavior instance ID off of the object based on the behavior name passed.\n"
-                                                   "@param behaviorName The name of the behavior you want to get the instance ID of.\n"
-                                                   "@return (integer behaviorID) The id of the behavior instance.")
-{
-   BehaviorInstance *inst = object->behavior(argv[2]);
-   return inst ? inst->getId() : 0;
-}

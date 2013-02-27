@@ -3322,31 +3322,6 @@ void SceneObject::notifyComponentsUpdate( void )
 
 //-----------------------------------------------------------------------------
 
-BehaviorInstance* SceneObject::behavior(const char *name)
-{
-    // Debug Profiling.
-    PROFILE_SCOPE(SceneObject_BehaviorName);
-
-    StringTableEntry stName = StringTable->insert(name);
-    VectorPtr<SimComponent *>&componentList = lockComponentList();
-
-    for( SimComponentIterator nItr = componentList.begin(); nItr != componentList.end(); nItr++ )
-    {
-        BehaviorInstance* pComponent = dynamic_cast<BehaviorInstance*>(*nItr);
-        if( pComponent && StringTable->insert(pComponent->getTemplateName()) == stName )
-        {
-            unlockComponentList();
-            return pComponent;
-        }
-    }
-
-    unlockComponentList();
-
-    return NULL;
-}
-
-//-----------------------------------------------------------------------------
-
 U32 SceneObject::getGlobalSceneObjectCount( void )
 {
     return sGlobalSceneObjectCount;
