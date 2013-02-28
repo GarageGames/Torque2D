@@ -223,11 +223,11 @@ function Deathball::updateRollAnimation(%this)
 {
     %this.rollSchedule = "";
 
-    %velocity = %this.getLinearVelocity();
-    %scaledVelocity = (mAbs(getWord(%velocity, 0))) + mAbs(getWord(%velocity, 1)) / 50;
+    %velocity = %this.getLinearVelocity();    
+    %scaledVelocity = VectorLen(%velocity); // (mAbs(getWord(%velocity, 0))) + mAbs(getWord(%velocity, 1)) / 50;
     %flooredVelocity = mFloatLength(%scaledVelocity, 1);
 
-    %this.setAnimationTimeScale(%flooredVelocity / 15);
+    %this.setAnimationTimeScale(%flooredVelocity / 20);
 
     %this.rollSchedule = %this.schedule(100, updateRollAnimation);
 }
@@ -478,11 +478,12 @@ function SandboxWindow::onTouchUp(%this, %touchID, %worldPosition)
 {
     %origin = Deathball.getPosition();
     %angle = -mRadToDeg( mAtan( getWord(%worldPosition,0)-getWord(%origin,0), getWord(%worldPosition,1)-getWord(%origin,1) ) );
-
-    Deathball.RotateTo( %angle, DeathBallToy.rotateSpeed );
-
-    %adjustedSpeed = (DeathBallToy.ballSpeed / DeathBallToy.maxBallSpeed) * 3000;
-
+    // We don't need to rotate here since we will rotate onTouchDown and onTouchDragged.  commenting out.
+    // Deathball.RotateTo( %angle, DeathBallToy.rotateSpeed );
+    
+    // Since the speed is used instead of time, we can use the current velocity to set it's speed.
+    %adjustedSpeed = VectorLen(DeathBall.getLinearVelocity());// (DeathBallToy.ballSpeed / DeathBallToy.maxBallSpeed) * 3000;
+   
     Deathball.MoveTo( %worldPosition, %adjustedSpeed, true, false );
 }
 
