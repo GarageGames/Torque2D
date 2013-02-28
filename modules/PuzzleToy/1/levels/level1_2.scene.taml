@@ -1,0 +1,160 @@
+<Scene
+   Name="Level_2"
+   NextLevel="Level1_3"
+   UseBackgroundColor="1"
+   MusicAsset="ToyAssets:level1Music"
+   BackgroundColor="InvisibleBlack">
+   <Sprite
+      SceneLayer="31"
+      size="160 90"
+      BodyType="static"
+      Active="0"
+      Awake="0"        
+      Image="@asset=Sandbox:blueGradient"
+      Frame="0" />
+   <Sprite
+      SceneLayer="2"
+      size="12 12"
+      Position="-65 -35"        
+      BlendColor="TransparentWhite"
+      Image="@asset=PuzzleToy:SoundOff"
+      Frame="0"
+      Name="bSoundOff" />
+   <Sprite
+      SceneLayer="2"
+      size="12 12"
+      Position="-65 -35"        
+      Image="@asset=PuzzleToy:SoundOn"
+      Frame="0"
+      MouseEvents="1"
+      Name="bSoundOn" />
+   <Sprite
+      class="soundButton"
+      SceneLayer="1"
+      size="12 12"
+      Position="-65 -35"        
+      BlendColor="TransparentWhite"
+      UseInputEvents="1"
+      Image="@asset=PuzzleToy:SmallMenuBar"
+      Frame="0"
+      bSoundEnabled="1"
+      Name="sButton" />
+   <Sprite
+      SceneLayer="3"
+      size="40 40"
+      Position="-700 -460"        
+      Animation="@asset=PuzzleToy:PaintBreakAnim"
+      Name="pBreak" />	
+   <Sprite
+      Class="gelPiece"
+      SceneLayer="1"
+      Position="-700 -460"
+      UseInputEvents="1"
+      LinearDamping="0"
+      Name="pFront"
+      Image="PuzzleToy:GamePiece"
+      Frame="1"
+      size="8.0 8.0" />
+   <Sprite
+      SceneLayer="4"
+      size="40 40"
+      Position="-700 -460"        
+      Image="@asset=PuzzleToy:CanvasTexture"
+      Frame="0"
+      DefaultDensity="0"
+      DefaultFriction="0"
+      LinearDamping="0"
+      Name="pCanvas" />
+   <Sprite        
+      Level="1-1"
+      SceneLayer="11"
+      size="56.3 70.3"
+      Position="0 -0.5"        
+      UpdateCallback="1"
+      Image="@asset=PuzzleToy:DarkOverlay"
+      Frame="0" />
+   <Sprite
+      class="gameBoard"
+      Level="1-2"
+      SceneLayer="10"
+      size="56 70"
+      Position="0 -0.5"        
+      UpdateCallback="1"
+      Image="@asset=PuzzleToy:DarkOverlay"
+      Frame="0"		
+      Name="gBoard" />
+   <Sprite        		
+      SceneLayer="8"
+      size="56 70"
+      Position="0 -0.5"        
+      UpdateCallback="1"
+      Image="@asset=PuzzleToy:Complete1-2"
+      Visible="0"		
+      Name="bCompleteImage" />
+   <CompositeSprite	
+      BatchLayout="Rect"
+      BatchCulling="0"		
+      SceneLayer="9"	
+      DefaultSpriteStride="7 7"
+      DefaultSpriteSize="7 7"
+      Position="-24.5 -32.0"		
+      UseInputEvents="1"		
+      Name="bBoardImage" />
+      <CompositeSprite	
+      BatchLayout="Rect"
+      BatchCulling="0"		
+      SceneLayer="4"	
+      DefaultSpriteStride="7 7"
+      DefaultSpriteSize="7 7"
+      Position="-24.5 -32.0"		
+      UseInputEvents="1"		
+      Name="bCanvas" />
+   <Sprite        
+      SceneLayer="12"
+      Position="0 0.725"
+      size="62 77.5"        
+      UpdateCallback="1"
+      Image="@asset=Sandbox:largeContainer"
+      Frame="0" />
+   <Sprite        
+      SceneLayer="4"
+      Position="0 36.5"
+      size="50 3"              
+      Image="@asset=PuzzleToy:TimeBarBack"
+      Frame="0"
+      Name="bTimeBack"		/>
+   <Sprite    
+      class="TimeBar"
+      SceneLayer="3"
+      Position="0 36.5"
+      size="50 3"                
+      Image="@asset=PuzzleToy:TimeBarFront"
+      Frame="0"		
+      Name="bTimeFront" />
+   <Sprite
+      class="nextButton"
+      SceneLayer="1"
+      size="10 10"
+      Position="55 -35"               
+      UseInputEvents="1"
+      Image="@asset=PuzzleToy:NextBtn"
+      Frame="0"
+      Enabled="0"        
+      Name="nButton" />	
+   <Sprite
+      class="mainMenuButton"
+      SceneLayer="1"
+      size="20 10"
+      Position="55 30"                
+      UseInputEvents="1"
+      Image="@asset=PuzzleToy:MainMenuBtn"
+      Frame="0" 		
+      Name="mButton" />
+   <ImageFont
+      Image="ToyAssets:Font"
+      TextAlignment="Center"
+      Text="Level 1-2"
+      FontSize="3 3"
+      FontPadding="0"
+      Position="-55 30" />
+</Scene>

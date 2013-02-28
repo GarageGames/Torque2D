@@ -1,0 +1,6 @@
+<AudioAsset
+    AssetName="BadMoveSound"
+    AudioFile="BadMoveSound.wav"
+    VolumeChannel="2"
+	Volume="0.5"
+	/>

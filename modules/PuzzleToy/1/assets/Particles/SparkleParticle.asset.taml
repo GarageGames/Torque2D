@@ -1,0 +1,30 @@
+<ParticleAsset
+    AssetName="Sparkles"
+	ParticleInterpolation="1"
+	LifeMode="kill"
+	Lifetime= "0.5" >		
+		<ParticleAssetEmitter			
+			EmitterName="Sparkle"			
+			FixedAspect="1"			
+			IntenseParticles="0"
+			Animation="@asset=PuzzleToy:SparkleAnim"
+			EmitterType="box"
+			EmitterAngle="90"
+			FixedForceAngle="90"
+			EmitterSize="8 8" >
+			<ParticleAssetEmitter.Fields>
+				<Lifetime
+					Keys="0 1.0" />
+				<Quantity
+					Keys="0 30" />
+				<SizeX
+					Keys="0 2" />
+				<Speed
+					Keys="0 0.5" />
+				<FixedForce
+					Keys="0 50" />
+				<AlphaChannel
+					Keys="0 1 0.8 0.5 1 0.0" />				
+			</ParticleAssetEmitter.Fields>
+		</ParticleAssetEmitter>
+</ParticleAsset>

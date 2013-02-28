@@ -1,0 +1,5 @@
+<AudioAsset
+    AssetName="SelectOptionSound"
+    AudioFile="SelectOptionSound.wav"
+    VolumeChannel="2" 
+	Volume="1.0" />
