@@ -135,7 +135,7 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
 {
     // Calculate the angle to the mouse.
     %origin = RotateToToy.TargetObject.getPosition();
-    %angle = -mRadToDeg( mAtan( getWord(%worldPosition,0)-getWord(%origin,0), getWord(%worldPosition,1)-getWord(%origin,1) ) );
+    %angle = -mRadToDeg( mAtan( %worldPosition.x-%origin.x, %worldPosition.y-%origin.y ) );
     
     //Rotate to the touched angle.
     RotateToToy.TargetObject.RotateTo( %angle, RotateToToy.rotateSpeed );
@@ -151,7 +151,7 @@ function SandboxWindow::onTouchMoved(%this, %touchID, %worldPosition)
         
     // Calculate the angle to the mouse.
     %origin = RotateToToy.TargetObject.getPosition();
-    %angle = -mRadToDeg( mAtan( getWord(%worldPosition,0)-getWord(%origin,0), getWord(%worldPosition,1)-getWord(%origin,1) ) );
+    %angle = -mRadToDeg( mAtan( %worldPosition.x-%origin.x, %worldPosition.y-%origin.y ) );
     
     //Rotate to the touched angle.
     RotateToToy.TargetObject.RotateTo( %angle, RotateToToy.rotateSpeed );        

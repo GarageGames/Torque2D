@@ -58,11 +58,11 @@ function initializeCanvas(%windowName)
 
     if ($platform $= "windows" || $platform $= "macos")
     {
-        setScreenMode( GetWord( %resolution , 0 ), GetWord( %resolution, 1 ), GetWord( %resolution , 2 ), $pref::Video::fullScreen );
+        setScreenMode( %resolution._0, %resolution._1, %resolution._2, $pref::Video::fullScreen );
     }
     else
     {
-        setScreenMode( GetWord( %resolution , 0 ), GetWord( %resolution, 1 ), GetWord( %resolution, 2 ), false );
+        setScreenMode( %resolution._0, %resolution._1, %resolution._2, false );
     }
 
     $canvasCreated = true;

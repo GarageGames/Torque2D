@@ -354,7 +354,7 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
             return;
         
         // Fetch the pick count.
-        %pickCount = getWordCount( %picked );
+        %pickCount = %picked.Count;
         
         for( %n = 0; %n < %pickCount; %n++ )
         {

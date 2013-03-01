@@ -78,11 +78,11 @@ function BuoyancyControllerToy::reset( %this )
     SandboxScene.clear();
     
     // Calculate fluid bounds to help layout only.
-    BuoyancyControllerToy.FluidLeft = getWord( BuoyancyControllerToy.FluidArea, 0 );
-    BuoyancyControllerToy.FluidBottom = getWord( BuoyancyControllerToy.FluidArea, 1 );
-    BuoyancyControllerToy.FluidRight = getWord( BuoyancyControllerToy.FluidArea, 2 );
-    BuoyancyControllerToy.FluidTop = getWord( BuoyancyControllerToy.FluidArea, 3 );    
-
+    BuoyancyControllerToy.FluidLeft = BuoyancyControllerToy.FluidArea._0;
+    BuoyancyControllerToy.FluidBottom = BuoyancyControllerToy.FluidArea._1;
+    BuoyancyControllerToy.FluidRight = BuoyancyControllerToy.FluidArea._2;
+    BuoyancyControllerToy.FluidTop = BuoyancyControllerToy.FluidArea._3;
+    
     // Create a background.
     %this.createBackground();
    
@@ -193,10 +193,10 @@ function BuoyancyControllerToy::createDebris( %this )
 
 function BuoyancyControllerToy::createFluid( %this, %area )
 {
-    %areaLeft = getWord( %area, 0 );
-    %areaBottom = getWord( %area, 1 );
-    %areaRight = getWord( %area, 2 );
-    %areaTop = getWord( %area, 3 );
+    %areaLeft = %area._0;
+    %areaBottom = %area._1;
+    %areaRight = %area._2;
+    %areaTop = %area._3;
 
     %crestHeight = 0.2;
     %crestY = %areaTop - ((%areaTop - %areaBottom) * %crestHeight);
