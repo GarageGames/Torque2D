@@ -1,4 +1,5 @@
 <AudioAsset
     AssetName="titleMusic"
     AssetAutoUnload="0"
+	Looping="1"
     AudioFile="TD_Medieval_TitleAudio.wav" />
