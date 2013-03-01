@@ -167,10 +167,10 @@
       <UniqueIdentifier>{57e1271d-4358-4180-b168-4b9c2cbac907}</UniqueIdentifier>
     </Filter>
     <Filter Include="2d\controllers">
-      <UniqueIdentifier>{a9e97335-bed5-4f6a-9959-12f5f41dbdcb}</UniqueIdentifier>
+      <UniqueIdentifier>{9f1a4eec-8f4f-46f1-8af0-e442729cc71a}</UniqueIdentifier>
     </Filter>
     <Filter Include="2d\controllers\core">
-      <UniqueIdentifier>{e11e344e-6418-4ed0-980a-77d66cd64d65}</UniqueIdentifier>
+      <UniqueIdentifier>{6aeaed85-4546-4496-8415-72a392e830ba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1275,11 +1275,14 @@
     <ClCompile Include="..\..\source\persistence\taml\tamlCustom.cc">
       <Filter>persistence\taml</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectList.cc">
+      <Filter>2d\sceneobject</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectSet.cc">
       <Filter>2d\sceneobject</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectList.cc">
-      <Filter>2d\sceneobject</Filter>
+    <ClCompile Include="..\..\source\2d\controllers\AmbientForceController.cc">
+      <Filter>2d\controllers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\2d\controllers\BuoyancyController.cc">
       <Filter>2d\controllers</Filter>
@@ -1292,9 +1295,6 @@
     </ClCompile>
     <ClCompile Include="..\..\source\2d\controllers\core\PickingSceneController.cc">
       <Filter>2d\controllers\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\2d\controllers\AmbientForceController.cc">
-      <Filter>2d\controllers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2375,6 +2375,9 @@
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectRotateToEvent.h">
       <Filter>2d\sceneobject</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectTimerEvent.h">
+      <Filter>2d\sceneobject</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\source\2d\sceneobject\Scroller.h">
       <Filter>2d\sceneobject</Filter>
     </ClInclude>
@@ -2613,14 +2616,20 @@
     <ClInclude Include="..\..\source\sim\simObjectTimerEvent.h">
       <Filter>sim</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet.h">
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectList.h">
       <Filter>2d\sceneobject</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectList.h">
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet.h">
       <Filter>2d\sceneobject</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet_ScriptBinding.h">
       <Filter>2d\sceneobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\controllers\AmbientForceController.h">
+      <Filter>2d\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\controllers\AmbientForceController_ScriptBinding.h">
+      <Filter>2d\controllers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\2d\controllers\BuoyancyController.h">
       <Filter>2d\controllers</Filter>
@@ -2648,12 +2657,6 @@
     </ClInclude>
     <ClInclude Include="..\..\source\2d\controllers\core\SceneController.h">
       <Filter>2d\controllers\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\2d\controllers\AmbientForceController.h">
-      <Filter>2d\controllers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\2d\controllers\AmbientForceController_ScriptBinding.h">
-      <Filter>2d\controllers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
