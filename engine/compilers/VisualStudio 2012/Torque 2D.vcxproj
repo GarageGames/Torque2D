@@ -245,18 +245,11 @@
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetEmitter.cc" />
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetField.cc" />
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetFieldCollection.cc" />
-<<<<<<< HEAD
-    <ClCompile Include="..\..\source\2d\controllers\BuoyancyController.cc" />
-    <ClCompile Include="..\..\source\2d\controllers\ConstantForceController.cc" />
-    <ClCompile Include="..\..\source\2d\controllers\PointForceController.cc" />
-    <ClCompile Include="..\..\source\2d\controllers\SceneController.cc" />
-=======
     <ClCompile Include="..\..\source\2d\controllers\AmbientForceController.cc" />
+    <ClCompile Include="..\..\source\2d\controllers\BuoyancyController.cc" />
     <ClCompile Include="..\..\source\2d\controllers\core\GroupedSceneController.cc" />
     <ClCompile Include="..\..\source\2d\controllers\core\PickingSceneController.cc" />
     <ClCompile Include="..\..\source\2d\controllers\PointForceController.cc" />
-    <ClCompile Include="..\..\source\2d\controllers\BuoyancyController.cc" />
->>>>>>> upstream/development
     <ClCompile Include="..\..\source\2d\core\BatchRender.cc" />
     <ClCompile Include="..\..\source\2d\core\CoreMath.cc" />
     <ClCompile Include="..\..\source\2d\core\ParticleSystem.cc" />
@@ -632,18 +625,10 @@
     <ClInclude Include="..\..\source\2d\assets\ParticleAssetField.h" />
     <ClInclude Include="..\..\source\2d\assets\ParticleAssetFieldCollection.h" />
     <ClInclude Include="..\..\source\2d\assets\ParticleAsset_ScriptBinding.h" />
-<<<<<<< HEAD
-    <ClInclude Include="..\..\source\2d\controllers\BuoyancyController.h" />
-    <ClInclude Include="..\..\source\2d\controllers\BuoyancyController_ScriptBinding.h" />
-    <ClInclude Include="..\..\source\2d\controllers\ConstantForceController.h" />
-    <ClInclude Include="..\..\source\2d\controllers\ConstantForceController_ScriptBinding.h" />
-    <ClInclude Include="..\..\source\2d\controllers\PointForceController.h" />
-    <ClInclude Include="..\..\source\2d\controllers\PointForceController_ScriptBinding.h" />
-    <ClInclude Include="..\..\source\2d\controllers\SceneController.h" />
-    <ClInclude Include="..\..\source\2d\controllers\SceneController_ScriptBinding.h" />
-=======
     <ClInclude Include="..\..\source\2d\controllers\AmbientForceController.h" />
     <ClInclude Include="..\..\source\2d\controllers\AmbientForceController_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\controllers\BuoyancyController.h" />
+    <ClInclude Include="..\..\source\2d\controllers\BuoyancyController_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\controllers\core\GroupedSceneController.h" />
     <ClInclude Include="..\..\source\2d\controllers\core\GroupedSceneController_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\controllers\core\PickingSceneController.h" />
@@ -651,9 +636,6 @@
     <ClInclude Include="..\..\source\2d\controllers\core\SceneController.h" />
     <ClInclude Include="..\..\source\2d\controllers\PointForceController.h" />
     <ClInclude Include="..\..\source\2d\controllers\PointForceController_ScriptBinding.h" />
-    <ClInclude Include="..\..\source\2d\controllers\BuoyancyController.h" />
-    <ClInclude Include="..\..\source\2d\controllers\BuoyancyController_ScriptBinding.h" />
->>>>>>> upstream/development
     <ClInclude Include="..\..\source\2d\core\BatchRender.h" />
     <ClInclude Include="..\..\source\2d\core\CoreMath.h" />
     <ClInclude Include="..\..\source\2d\core\ParticleSystem.h" />
@@ -685,6 +667,7 @@
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectMoveToEvent.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectRotateToEvent.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectTimerEvent.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Scroller.h" />
@@ -1047,6 +1030,7 @@
     <ClInclude Include="..\..\source\sim\simObject.h" />
     <ClInclude Include="..\..\source\sim\SimObjectList.h" />
     <ClInclude Include="..\..\source\sim\simObjectPtr.h" />
+    <ClInclude Include="..\..\source\sim\simObjectTimerEvent.h" />
     <ClInclude Include="..\..\source\sim\simSet.h" />
     <ClInclude Include="..\..\source\string\findMatch.h" />
     <ClInclude Include="..\..\source\string\stringBuffer.h" />

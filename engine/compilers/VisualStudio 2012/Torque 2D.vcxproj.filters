@@ -167,10 +167,10 @@
       <UniqueIdentifier>{57e1271d-4358-4180-b168-4b9c2cbac907}</UniqueIdentifier>
     </Filter>
     <Filter Include="2d\controllers">
-      <UniqueIdentifier>{a16f6dcb-1bfe-4d4a-841b-59cdff56267f}</UniqueIdentifier>
+      <UniqueIdentifier>{9f1a4eec-8f4f-46f1-8af0-e442729cc71a}</UniqueIdentifier>
     </Filter>
     <Filter Include="2d\controllers\core">
-      <UniqueIdentifier>{e11e344e-6418-4ed0-980a-77d66cd64d65}</UniqueIdentifier>
+      <UniqueIdentifier>{6aeaed85-4546-4496-8415-72a392e830ba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1275,38 +1275,26 @@
     <ClCompile Include="..\..\source\persistence\taml\tamlCustom.cc">
       <Filter>persistence\taml</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectList.cc">
+      <Filter>2d\sceneobject</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectSet.cc">
       <Filter>2d\sceneobject</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\2d\controllers\BuoyancyController.cc">
+    <ClCompile Include="..\..\source\2d\controllers\AmbientForceController.cc">
       <Filter>2d\controllers</Filter>
     </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="..\..\source\2d\controllers\ConstantForceController.cc">
+    <ClCompile Include="..\..\source\2d\controllers\BuoyancyController.cc">
       <Filter>2d\controllers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\2d\controllers\PointForceController.cc">
-=======
-    <ClCompile Include="..\..\source\2d\controllers\BuoyancyController.cc">
->>>>>>> upstream/development
       <Filter>2d\controllers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\2d\controllers\SceneController.cc">
-      <Filter>2d\controllers</Filter>
-    </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectList.cc">
-      <Filter>2d\sceneobject</Filter>
-=======
     <ClCompile Include="..\..\source\2d\controllers\core\GroupedSceneController.cc">
       <Filter>2d\controllers\core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\2d\controllers\core\PickingSceneController.cc">
       <Filter>2d\controllers\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\2d\controllers\AmbientForceController.cc">
-      <Filter>2d\controllers</Filter>
->>>>>>> upstream/development
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2625,14 +2613,23 @@
     <ClInclude Include="..\..\source\persistence\taml\tamlCustom.h">
       <Filter>persistence\taml</Filter>
     </ClInclude>
-<<<<<<< HEAD
-=======
     <ClInclude Include="..\..\source\sim\simObjectTimerEvent.h">
       <Filter>sim</Filter>
     </ClInclude>
->>>>>>> upstream/development
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectList.h">
+      <Filter>2d\sceneobject</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet.h">
       <Filter>2d\sceneobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet_ScriptBinding.h">
+      <Filter>2d\sceneobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\controllers\AmbientForceController.h">
+      <Filter>2d\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\controllers\AmbientForceController_ScriptBinding.h">
+      <Filter>2d\controllers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\2d\controllers\BuoyancyController.h">
       <Filter>2d\controllers</Filter>
@@ -2640,32 +2637,12 @@
     <ClInclude Include="..\..\source\2d\controllers\BuoyancyController_ScriptBinding.h">
       <Filter>2d\controllers</Filter>
     </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="..\..\source\2d\controllers\ConstantForceController.h">
-      <Filter>2d\controllers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\2d\controllers\ConstantForceController_ScriptBinding.h">
-      <Filter>2d\controllers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\2d\controllers\PointForceController.h">
-=======
-    <ClInclude Include="..\..\source\2d\controllers\BuoyancyController.h">
->>>>>>> upstream/development
       <Filter>2d\controllers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\2d\controllers\PointForceController_ScriptBinding.h">
       <Filter>2d\controllers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\2d\controllers\SceneController.h">
-      <Filter>2d\controllers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\2d\controllers\SceneController_ScriptBinding.h">
-      <Filter>2d\controllers</Filter>
-    </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectList.h">
-      <Filter>2d\sceneobject</Filter>
-=======
     <ClInclude Include="..\..\source\2d\controllers\core\GroupedSceneController.h">
       <Filter>2d\controllers\core</Filter>
     </ClInclude>
@@ -2680,13 +2657,6 @@
     </ClInclude>
     <ClInclude Include="..\..\source\2d\controllers\core\SceneController.h">
       <Filter>2d\controllers\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\2d\controllers\AmbientForceController.h">
-      <Filter>2d\controllers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\2d\controllers\AmbientForceController_ScriptBinding.h">
-      <Filter>2d\controllers</Filter>
->>>>>>> upstream/development
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
