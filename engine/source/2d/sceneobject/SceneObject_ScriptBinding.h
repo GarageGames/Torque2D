@@ -514,24 +514,6 @@ ConsoleMethod(SceneObject, getPosition, const char*, 2, 2, "() Gets the object's
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getPositionX, F32, 2, 2, "() Gets the object's x position.\n"
-                                                       "@return (float x) The horizontal position of the object")
-{
-    // Get Position X-Component.
-    return object->getPosition().x;
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(SceneObject, getPositionY, F32, 2, 2, "() Gets the object's y position.\n"
-                                                       "@return (float y) The vertical position of the object")
-{
-    // Get Position Y-Component.
-    return object->getPosition().y;
-}
-
-//-----------------------------------------------------------------------------
-
 ConsoleMethod(SceneObject, getRenderPosition, const char*, 2, 2, "() Gets the current render position.\n"
                                                                     "@return (float x/float y) The x and y (horizontal and vertical) render position of the object.")
 {

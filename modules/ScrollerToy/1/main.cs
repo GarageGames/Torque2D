@@ -158,7 +158,7 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
 {   
     // Set the scrollers speed to be the distance from the farground scrollers origin.
     // Also use the sign to control the direction of scrolling.
-    %scrollerSpeed = getWord(%worldPosition,0) - ScrollerToy.FarScroller .getPositionX();
+    %scrollerSpeed = %worldPosition.x - ScrollerToy.FarScroller.Position.x;
 
     // Set the scroller speeds.
     ScrollerToy.FarScroller.ScrollX = %scrollerSpeed;

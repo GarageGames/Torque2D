@@ -48,8 +48,6 @@ ModuleDefinition::ModuleDefinition() :
     mVersionId( 0 ),
     mBuildId( 0 ),
     mEnabled( true ),
-    mPublished( true ),
-    mPurchased( false ),
     mSynchronized( false ),
     mDeprecated( false ),
     mCriticalMerge( false ),
@@ -88,9 +86,7 @@ void ModuleDefinition::initPersistFields()
     addProtectedField( "VersionId", TypeS32, Offset(mVersionId, ModuleDefinition), &setVersionId, &defaultProtectedGetFn, "The version Id.  Breaking changes to a module should use a higher version Id." );
     addProtectedField( "BuildId", TypeS32, Offset(mBuildId, ModuleDefinition), &setBuildId, &defaultProtectedGetFn, &writeBuildId, "The build Id.  Non-breaking changes to a module should use a higher build Id.  Optional: If not specified then the build Id will be zero." );
     addProtectedField( "Enabled", TypeBool, Offset(mEnabled, ModuleDefinition), &setEnabled, &defaultProtectedGetFn, &writeEnabled, "Whether the module is enabled or not.  When disabled, it is effectively ignored.  Optional: If not specified then the module is enabled." );
-    addProtectedField( "Published", TypeBool, Offset(mPublished, ModuleDefinition), &setPublished, &defaultProtectedGetFn, &writePublished, "Whether the module should be published to the web-services or not.  Optional: If not specified then the module is published." );
-    addProtectedField( "Purchased", TypeBool, Offset(mPurchased, ModuleDefinition), &setPurchased, &defaultProtectedGetFn, &writePurchased, "Whether the module should be purchased via the web-services or not.  Optional: If not specified then the module is purchased." );
-    addProtectedField( "Synchronized", TypeBool, Offset(mSynchronized, ModuleDefinition), &setSynchronized, &defaultProtectedGetFn, &writeSynchronized, "Whether the module is should be synchronized or not.  Optional: If not specified then the module is not synchronized." );
+    addProtectedField( "Synchronized", TypeBool, Offset(mSynchronized, ModuleDefinition), &setSynchronized, &defaultProtectedGetFn, &writeSynchronized, "Whether the module should be synchronized or not.  Optional: If not specified then the module is not synchronized." );
     addProtectedField( "Deprecated", TypeBool, Offset(mDeprecated, ModuleDefinition), &setDeprecated, &defaultProtectedGetFn, &writeDeprecated, "Whether the module is deprecated or not.  Optional: If not specified then the module is not deprecated." );
     addProtectedField( "CriticalMerge", TypeBool, Offset(mCriticalMerge, ModuleDefinition), &setDeprecated, &defaultProtectedGetFn, &writeCriticalMerge, "Whether the merging of a module prior to a restart is critical or not.  Optional: If not specified then the module is not merge critical." );
     addProtectedField( "Description", TypeString, Offset(mModuleDescription, ModuleDefinition), &setModuleDescription, &defaultProtectedGetFn, &writeModuleDescription, "The description displayed for debugging purposes." );

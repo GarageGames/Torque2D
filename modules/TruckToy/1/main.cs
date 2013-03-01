@@ -645,7 +645,7 @@ function TruckToy::createBonfire(%this, %x, %y, %scale, %layer)
 function TruckToy::createProjectile(%this)
 {
     // Fetch the truck position.
-    %truckPositionX = TruckToy.TruckBody.getPositionX();
+    %truckPositionX = TruckToy.TruckBody.Position.x;
     
     %projectile = new Sprite() { class = "TruckProjectile"; };
     %projectile.Animation = "ToyAssets:Projectile_FireballAnim";
@@ -933,7 +933,7 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
         return;
 
     // If we touch in-front of the truck then move forward else reverse.
-    if ( getWord(%worldPosition,0) >= TruckToy.TruckBody.getPositionX() )
+    if ( %worldPosition.x >= TruckToy.TruckBody.Position.x )
     {
         truckForward( true );
     }
