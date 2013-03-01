@@ -9,7 +9,7 @@ function startButton::onTouchDown(%this, %modifier, %worldPosition, %clicks)
    // Change the image to the down image so it looks pressed visually
    %this.setImage("PuzzleToy:PlayBtnDown", 0);
    // If the sound is enabled, play the select option sound
-   if ($soundEnabled)
+   if (PuzzleToy.soundEnabled)
       alxPlay("PuzzleToy:SelectOptionSound");
       
    // Call our custom loadLevel function to schedule the load.

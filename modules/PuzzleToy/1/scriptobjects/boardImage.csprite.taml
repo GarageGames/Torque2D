@@ -1,0 +1,9 @@
+<CompositeSprite	
+      BatchLayout="Rect"
+      BatchCulling="0"		
+      SceneLayer="9"	
+      DefaultSpriteStride="7 7"
+      DefaultSpriteSize="7 7"
+      Position="-24.5 -32.0"		
+      UseInputEvents="1"		
+      Name="bBoardImage" />

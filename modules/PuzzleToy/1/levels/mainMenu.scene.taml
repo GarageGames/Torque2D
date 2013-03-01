@@ -31,40 +31,16 @@
       Frame="0"
       Name="bStartButton" />
    <Sprite
-      SceneLayer="2"
-      size="12 12"
-      Position="-65 -35"
-      CollisionSuppress="1"
-      BlendColor="TransparentWhite"
-      Image="@asset=PuzzleToy:SoundOff"
-      Frame="0" />
-   <Sprite
-      SceneLayer="2"
-      size="12 12"
-      Position="-65 -35"
-      CollisionSuppress="1"
-      BlendColor="TransparentWhite"
-      Image="@asset=PuzzleToy:SoundOff"
-      Frame="0"
-      Name="bSoundOff" />
-   <Sprite
-      SceneLayer="2"
-      size="12 12"
-      Position="-65 -35"
-      CollisionSuppress="1"
-      Image="@asset=PuzzleToy:SoundOn"
-      Frame="0"
-      MouseEvents="1"
-      Name="bSoundOn" />
-   <Sprite
       class="soundButton"
       SceneLayer="1"
       size="12 12"
-      Position="-65 -35"
-      CollisionSuppress="1"
-      BlendColor="TransparentWhite"
+      Position="-65 -35"        
+      BlendColor="White"
       UseInputEvents="1"
       Image="@asset=PuzzleToy:SmallMenuBar"
+      onImage="PuzzleToy:SoundOn"
+      offImage="PuzzleToy:SoundOff"
       Frame="0"
-      Name="sButton"	/>
+      bSoundEnabled="1"
+      Name="sButton" /> 
 </Scene>

@@ -4,22 +4,40 @@
 // Global constants can be placed in any scripts that are executed.  
 // I'm placing it here because it is specifically used for the gameBoard class.
 
-// the default amount of time to complete a board in case this is not set.
-$gameBoard::DefaultTime = 360000;
-// The minimum time allowed.
-$gameBoard::MinTime = 60000;
-// The color count. How many colors should be used
-$gameBoard::ColorCount = 5;
-// What size should our pieces be
-$gameBoard::PieceSize = 7;
-
 ///-----------------------------------------------------------------------------
 /// onAdd called when the object is added to a scene.
 ///-----------------------------------------------------------------------------
 function gameBoard::onAddToScene(%this, %scenegraph)
-{
+{   
+   // the default amount of time to complete a board in case this is not set.
+   %this.DefaultTime = 360000;
+   // The minimum time allowed.
+   %this.MinTime = 60000;
+   // The color count. How many colors should be used
+   %this.ColorCount = 5;
+   // What size should our pieces be
+   %this.PieceSize = 7;
    // When a gameBoard is added to the scene, I want to make sure we know it hasn't yet been completed.   
-	$BoardComplete = false;	
+	%this.BoardComplete = false;	
+}
+
+function gameBoard::loadBoardObjects(%this)
+{
+   // The game piece
+   TamlRead("^PuzzleToy/scriptobjects/gamepiece.sprite.taml").addToScene(SandboxScene);
+   // The break anim
+   TamlRead("^PuzzleToy/scriptobjects/breakpiece.sprite.taml").addToScene(SandboxScene);
+   // the canvas piece
+   TamlRead("^PuzzleToy/scriptobjects/canvaspiece.sprite.taml").addToScene(SandboxScene);
+   // The board composite sprite
+   TamlRead("^PuzzleToy/scriptobjects/boardImage.csprite.taml").addToScene(SandboxScene);
+   
+   // The canvas composite sprite
+   TamlRead("^PuzzleToy/scriptobjects/boardCanvas.csprite.taml").addToScene(SandboxScene);   
+   // The time bar pieces, front and back.
+   TamlRead("^PuzzleToy/scriptobjects/boardTimefront.sprite.taml").addToScene(SandboxScene);   
+   TamlRead("^PuzzleToy/scriptobjects/boardTimeback.sprite.taml").addToScene(SandboxScene);
+   
 }
 
 ///-----------------------------------------------------------------------------
@@ -32,12 +50,15 @@ function gameBoard::onAddToScene(%this, %scenegraph)
 ///-----------------------------------------------------------------------------
 function gameBoard::initialize(%this, %xcellcount, %ycellcount, %colorcount)
 {
+   // Some objects are in all gameboards, so I took them out of the level tamls and now have them in their own in scriptobjects.
+   // I will load them here since some of my initialization below relies on them existing.
+   %this.loadBoardObjects();
    // set the color count global variable
-   $gameBoard::ColorCount = %colorcount;
+   %this.ColorCount = %colorcount;
    // If the level time is not set to a valid value, set it to the default time
-   if ($LevelTime < $MinTime)
+   if (PuzzleToy.LevelTime < %this.MinTime)
    {
-      $LevelTime = $gameBoard::DefaultTime;
+      PuzzleToy.LevelTime = %this.DefaultTime;
    }
    // Start out our timeElapsed at 0.
    %this.timeElapsed = 0;
@@ -53,7 +74,7 @@ function gameBoard::initialize(%this, %xcellcount, %ycellcount, %colorcount)
    // This value is to track whether or not we are spawning new pieces.   
    %this.isFilling = false;   
    // figure out how big the game pieces should be for sizing the break anim and sparkle particle effect objects when needed..   
-   $gameBoard::PieceSize = %this.getSizeX()/%this.cellCountX;
+   %this.PieceSize = %this.getSizeX()/%this.cellCountX;
    // calculate the bottom left position for a piece and store it
    // so we don't have to do it every time we make a new piece.
    // get this boards position so we don't rely on it being in a specific place.
@@ -66,8 +87,8 @@ function gameBoard::initialize(%this, %xcellcount, %ycellcount, %colorcount)
    %halfY = %this.getSizeY()/2;
    // The bottom left is the current position minus half the size of the board then offset by half the size 
    // of a piece since the position is at the center of the object.
-   %this.startLocationX = %positionX - %halfX + ($gameBoard::PieceSize/2);	
-	%this.startLocationY = %positionY - %halfY + ($gameBoard::PieceSize/2);
+   %this.startLocationX = %positionX - %halfX + (%this.PieceSize/2);	
+	%this.startLocationY = %positionY - %halfY + (%this.PieceSize/2);
    // some simsets we need to be persistent ish.
    // Since I don't want to have to create and destroy these simsets all the time, I will create them here.
    %this.tempBreakList = new SimSet() {};   
@@ -135,11 +156,11 @@ function gameBoard::setObjectBlendColor(%this, %object, %alpha)
    // I am using a switch here, but I could go with a cleaner approach and set the
    // blend color by name if I didn't have special color values I wanted to use.
    // The commented funciton on the next line would set the color by name. 
-   // %object.setBlendColor(getWord($gelPiece::colors, %object.color));
+   // %object.setBlendColor(getWord(PuzzleToy.colors, %object.color));
    
    // I use getWord here to get the string from my enum which is essentially a tab separated list.
    // This makes it easier to understand what is happening here.
-   switch$(getWord($gelPiece::colors, %object.color))
+   switch$(getWord(PuzzleToy.colors, %object.color))
    {
       case "White":
          %object.setBlendColor(1.0, 1.0, 1.0, %alpha);      
@@ -177,7 +198,7 @@ function gameBoard::getBlendFromColor(%this, %newcolor)
    // make sure we have a valid color stored in case something goes wrong.
    %blendColor = "1.0 1.0 1.0 1.0";
    // Choose the blend color based on the color of the object.
-   switch$(getWord($gelPiece::colors, %newcolor))
+   switch$(getWord(PuzzleToy.colors, %newcolor))
    {
       case "White":
          %blendColor = "1.0 1.0 1.0 1.0";      
@@ -221,7 +242,7 @@ function gameBoard::onAdd(%this)
 function gameBoard::onUpdate(%this)
 {         
    // if the board is complete, we don't need any updating so just return.
-   if ($BoardComplete)
+   if (%this.BoardComplete)
       return;
    // if the board is initialized.  we should top fill, otherwise we should initialize
    if (%this.bInit)
@@ -283,35 +304,35 @@ function gameBoard::onUpdate(%this)
       }
    }   
    // Check if we are out of time, if we aren't, increment our time counter.
-   if (%this.TimeElapsed < $LevelTime)
+   if (%this.TimeElapsed < PuzzleToy.LevelTime)
    {
       // store the current time value as the current time.
       %this.currentTime = getRealTime();
       // Increment our elapsed time by the time since our last update.
       %this.TimeElapsed += %this.currentTime - %this.previousTime;
       // If we have run out of time, fail the board
-      if (%this.TimeElapsed >= $LevelTime)
+      if (%this.TimeElapsed >= PuzzleToy.LevelTime)
       {
          // time is over, we should give a failure screen. 
          // set the board as complete so no more updating can occur
-         $BoardComplete = true;
+         %this.BoardComplete = true;
          // clear the board pieces
          %this.clearBoard();
-         // set the complete image to the failure one.
-         bCompleteImage.setImage("PuzzleToy:Failed");         
+         // set the complete image to the failure one.         
+         bCompleteImage.setImage(bCompleteImage.failImage);         
          // set the complete image as visible
          bCompleteImage.setVisible(true);
          // Set the elapsed time to the total time in case we went over.
-         %this.TimeElapsed = $LevelTime;
+         %this.TimeElapsed = PuzzleToy.LevelTime;
       }            
       // Update the time bar with the new time left.
-      bTimeFront.UpdateTime( ($LevelTime - %this.TimeElapsed)/$LevelTime );      
+      bTimeFront.UpdateTime( (PuzzleToy.LevelTime - %this.TimeElapsed)/PuzzleToy.LevelTime );      
       // store our current time as previous time so we can calculate elapsed time
       // in the next update
       %this.previousTime = %this.currentTime;
    }   
    // If the board is initialized and not yet complete, check if the board is completed
-   if (%this.bInit && !$BoardComplete)
+   if (%this.bInit && !%this.BoardComplete)
       %this.checkDone();
 }
 
@@ -363,7 +384,7 @@ function gameBoard::setSelectedPiece(%this, %gamepiece)
             // If neither break, this is an invalid move, move the pieces back.
             %this.swapPieces(%this.selectedPiece, %gamepiece);
             //If sound is enabled, play the bad move sound
-            if ($soundEnabled)
+            if (PuzzleToy.soundEnabled)
                alxPlay("PuzzleToy:BadMoveSound");
          }
          else
@@ -379,7 +400,7 @@ function gameBoard::setSelectedPiece(%this, %gamepiece)
             // Flag the %gamepiece for checkbreaks.
             %gamepiece.bCheckBreaks = true; 
             // if sound is enabled, play the move sound.
-            if ($soundEnabled)
+            if (PuzzleToy.soundEnabled)
                alxPlay("PuzzleToy:MoveSound");        
          }
          
@@ -398,7 +419,7 @@ function gameBoard::setSelectedPiece(%this, %gamepiece)
       // Change the flag so we know we have a piece selected.
       %this.bPieceSelected = true;
       // If sound is enabled play the select sound.
-      if ($soundEnabled)
+      if (PuzzleToy.soundEnabled)
          alxPlay("PuzzleToy:SelectSound");
    }
 }
@@ -714,11 +735,11 @@ function gameBoard::BreakPiece(%this, %gamepiece)
    // Use our custom function to set the blend color
    %this.setObjectBlendColor(%breakanim, %alpha);
    // Our template piece may not be sized correctly, set it to the correct size.
-   %breakanim.setSize($gameBoard::PieceSize, $gameBoard::PieceSize);
+   %breakanim.setSize(%this.PieceSize, %this.PieceSize);
    // When you clone an object, it clones it's position, so we need to set it's position.
    // Calculate it's position based on location   
-   %destX = (%this.startLocationX + (%gamepiece.locationX * $gameBoard::PieceSize));
-   %destY = (%this.startLocationY + (%gamepiece.locationY * $gameBoard::PieceSize));
+   %destX = (%this.startLocationX + (%gamepiece.locationX * %this.PieceSize));
+   %destY = (%this.startLocationY + (%gamepiece.locationY * %this.PieceSize));
    // Set the position
    %breakanim.setPosition(%destX, %destY);
    // We also want a particle effect to play when a piece breaks.
@@ -756,7 +777,7 @@ function gameBoard::BreakPiece(%this, %gamepiece)
    // In order to clean up the piece, we need to remove it from the scene.   
    %gamepiece.removeFromScene();   
    // If sound is enabled play the break sound.
-   if ($soundEnabled)
+   if (PuzzleToy.soundEnabled)
       alxPlay("PuzzleToy:BreakSound"); 
 }
 ///-----------------------------------------------------------------------------
@@ -776,6 +797,7 @@ function gameBoard::topFill(%this)
          // There isn't, so we need to create a new piece                  
          // clone  a new piece from our template pFront         
          %newpiece = pFront.clone(true);
+         
          // Start it as invisible so we don't see it moving to it's starting
          // location.
          %newpiece.isVisible = false;
@@ -879,7 +901,7 @@ function gameBoard::checkDone(%this)
    }
    // If we get past this, we are done.
    // Set the board to complete so it won't update.
-   $BoardComplete = true;   
+   %this.BoardComplete = true;   
    // Clear the game pieces
    %this.clearBoard();
    // Show the complete image by setting it's visibility
@@ -887,7 +909,7 @@ function gameBoard::checkDone(%this)
    // Enable the next button so the player can progress to the next level.
    nButton.setEnabled(true);   
    // If sound is enabled
-   if ($soundEnabled)
+   if (PuzzleToy.soundEnabled)
    {
       // Stop currently playing sound
       alxStopAll();

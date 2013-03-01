@@ -7,10 +7,10 @@
 function mainMenuButton::onTouchDown(%this, %modifier, %worldPosition, %clicks)
 {   
    /// Set the image for the button so it looks pressed
-   %this.setImage("PuzzleToy:MainMenuBtnDown", 0);
+   %this.setImage(%this.downImage);
    
    // If sound is enabled, play the select option sound
-   if ($soundEnabled)
+   if (PuzzleToy.soundEnabled)
       alxPlay("PuzzleToy:SelectOptionSound");
       
    // Call our custom loadLevel function to schedule the main menu scene to be loaded

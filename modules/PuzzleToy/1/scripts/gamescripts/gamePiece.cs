@@ -2,16 +2,10 @@
 // Gel Piece Class
 //------------------------------------------------------------------------------
 
-// This is a tab separated list of color strings so that we can use a color index
-// to store a game pieces color and then use this list to find out it's color string
-// We do this using getWord($gelPiece::colors, index)
-$gelPiece::colors =  "Black" TAB "White" TAB "Red" TAB "Blue" TAB "Yellow" TAB 
-                     "Green" TAB "Orange" TAB "Purple" TAB "Grey" TAB "Bucket" 
-                     TAB "Bomb" TAB "Eraser";
 ///-----------------------------------------------------------------------------
 /// onAdd called when the object is added to a scene.
 ///-----------------------------------------------------------------------------
-function gelPiece::onAdd(%this)
+function gamePiece::onAdd(%this)
 {
    // default the color to 0 or black.	
 	%this.color = 0;
@@ -43,16 +37,16 @@ function gelPiece::onAdd(%this)
 /// param %colorNumber - color index
 /// returns the color name as a string
 ///-----------------------------------------------------------------------------
-function gelPiece::getColor(%this, %colorNumber)
+function gamePiece::getColor(%this, %colorNumber)
 {
    // get the field at the supplied index
-   return getField($gelPiece::colors, %colorNumber);
+   return getField(PuzzleToy.colors, %colorNumber);
    
 }
 ///-----------------------------------------------------------------------------
 /// set the game pieces blend color based on it's color index
 ///-----------------------------------------------------------------------------
-function gelPiece::setPieceBlendColor(%this)
+function gamePiece::setPieceBlendColor(%this)
 {
    // default the alpha to 1.0 in case this piece isn't selected
    %alpha = 1;
@@ -69,7 +63,7 @@ function gelPiece::setPieceBlendColor(%this)
 /// Set the object to selected or not so it renders correctly
 /// Param %bSelect - Whether or not the piece is selected
 ///-----------------------------------------------------------------------------
-function gelPiece::setSelected(%this, %bSelect)
+function gamePiece::setSelected(%this, %bSelect)
 {
    // Set whether or not we are selected based on the supplied bool
    %this.bSelected = %bSelect;
@@ -80,7 +74,7 @@ function gelPiece::setSelected(%this, %bSelect)
 /// update function for the game piece
 /// This is called from the gameBoard if it needs to be updated.
 ///-----------------------------------------------------------------------------
-function gelPiece::myUpdate(%this)
+function gamePiece::myUpdate(%this)
 {
    // if we aren't moving, check if we should move down.
    if (!%this.bMoving)
@@ -95,14 +89,14 @@ function gelPiece::myUpdate(%this)
 ///-----------------------------------------------------------------------------
 /// Pick a random color index for the object
 ///-----------------------------------------------------------------------------
-function gelPiece::pickColor(%this)
+function gamePiece::pickColor(%this)
 {
    // set tempcolor to 0 so we can use the while loop
    %tempcolor = 0;
    // I want a good amount of randomness, so I'm going to use a much larger range
    // for my random numbers, this means I need to know what to divide the result
    // by to get my actual color index.   
-   %divisor = 1000/$gameBoard::ColorCount;
+   %divisor = 1000/%this.gameBoard.ColorCount;
    // while the color is 0 or less, keep trying for a good color
    while (%tempcolor <= 0)
    {
@@ -124,7 +118,7 @@ function gelPiece::pickColor(%this)
 /// Set the gameboard reference and choose the pieces color
 /// param %gameboard - the gameBoard this piece belongs to.
 ///-----------------------------------------------------------------------------
-function gelPiece::setGameBoard(%this, %gameboard)
+function gamePiece::setGameBoard(%this, %gameboard)
 {
    // Set our gameBoard reference to the supplied gameboard.
    // This is so I can access the gameboard that this piece is associated with.
@@ -137,7 +131,7 @@ function gelPiece::setGameBoard(%this, %gameboard)
 ///-----------------------------------------------------------------------------
 /// update the pieces target location based on it's location on the game board
 ///-----------------------------------------------------------------------------
-function gelPiece::updateTargetLocation(%this)
+function gamePiece::updateTargetLocation(%this)
 {
    // If we have already set up our gameboard then it's okay to update our target 
    // location. This is just a safeguard to keep us from accessing the gameBoard 
@@ -148,12 +142,12 @@ function gelPiece::updateTargetLocation(%this)
       %currentX = %this.getPositionX();
       %currentY = %this.getPositionY();
       // Calculate where we should be based on our locationX and Y indexes.      
-      %this.destX = (%this.gameBoard.startLocationX + (%this.locationX * $gameBoard::PieceSize));
-      %this.destY = (%this.gameBoard.startLocationY + (%this.locationY * $gameBoard::PieceSize));
+      %this.destX = (%this.gameBoard.startLocationX + (%this.locationX * %this.gameBoard.PieceSize));
+      %this.destY = (%this.gameBoard.startLocationY + (%this.locationY * %this.gameBoard.PieceSize));
       // Create a vector2 for our target destination.
       %targetDest = %this.destX SPC %this.destY;
       // Move to our target destination
-      %this.moveTo( %targetDest, 50 );
+      %this.moveTo( %targetDest, 30 );
       // Since we are moving, set bMoving to true.
       %this.bMoving = true;
       // Are we already at our target destination?
@@ -168,7 +162,7 @@ function gelPiece::updateTargetLocation(%this)
 /// moveToComplete callback
 /// Called when the alotted time passes from a moveTo command
 ///-----------------------------------------------------------------------------
-function gelPiece::onMoveToComplete(%this)
+function gamePiece::onMoveToComplete(%this)
 {   
    // When we move, if we are swapping, we need to put one piece above and one
    // below, so we set the scene layer on one to 0 and the other to 1.
@@ -195,7 +189,7 @@ function gelPiece::onMoveToComplete(%this)
 /// Check the location below this piece on the gameBoard and move down if
 /// there isn't a piece there.
 ///-----------------------------------------------------------------------------
-function gelPiece::checkDownMove(%this)
+function gamePiece::checkDownMove(%this)
 {
    // If our current location is such that it could move down
    // and there is no piece below this piece then we need to move down.
@@ -225,11 +219,11 @@ function gelPiece::checkDownMove(%this)
 ///-----------------------------------------------------------------------------
 /// Set the location we start at based on the board, piece size, and locationX
 ///-----------------------------------------------------------------------------
-function gelPiece::setStartLocation(%this)
+function gamePiece::setStartLocation(%this)
 {
    // Calculate our starting destX and destY.
-   %this.destX = (%this.gameBoard.startLocationX + (%this.locationX * $gameBoard::PieceSize));
-   %this.destY = (%this.gameBoard.startLocationY + ((%this.locationY + 1) * $gameBoard::PieceSize));
+   %this.destX = (%this.gameBoard.startLocationX + (%this.locationX * %this.gameBoard.PieceSize));
+   %this.destY = (%this.gameBoard.startLocationY + ((%this.locationY + 1) * %this.gameBoard.PieceSize));
    // Set our position
    %this.setPosition(%this.destX, %this.destY); 
    // Clear out our linear velocity.
@@ -248,7 +242,7 @@ function gelPiece::setStartLocation(%this)
 ///-----------------------------------------------------------------------------
 /// onTouchDown input callback for the game piece.
 ///-----------------------------------------------------------------------------
-function gelPiece::onTouchDown(%this, %modifier, %worldPosition, %clicks)
+function gamePiece::onTouchDown(%this, %modifier, %worldPosition, %clicks)
 {
    // if we are paused just return
    if (SandboxScene.getScenePause())
@@ -265,7 +259,7 @@ function gelPiece::onTouchDown(%this, %modifier, %worldPosition, %clicks)
 ///-----------------------------------------------------------------------------
 /// onTouchDragged input callback for the game piece.
 ///-----------------------------------------------------------------------------
-function gelPiece::onTouchDragged(%this, %modifier, %worldPosition, %clicks)
+function gamePiece::onTouchDragged(%this, %modifier, %worldPosition, %clicks)
 {
    // if we are paused then return
    if (SandboxScene.getScenePause())

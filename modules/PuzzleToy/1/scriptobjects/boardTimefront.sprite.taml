@@ -1,0 +1,8 @@
+<Sprite    
+      class="TimeBar"
+      SceneLayer="3"
+      Position="0 36.5"
+      size="50 3"             
+      Image="@asset=PuzzleToy:TimeBarFront"
+      Frame="0"		
+      Name="bTimeFront" />

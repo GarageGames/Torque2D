@@ -6,10 +6,10 @@
 function nextButton::onTouchDown(%this, %modifier, %worldPosition, %clicks)
 {   
    /// Set the image for the button so it looks pressed
-   %this.setImage("PuzzleToy:NextBtnDown", 0);
+   %this.setImage(%this.downImage);
    
    // If sound is enabled, play the select option sound
-   if ($soundEnabled)
+   if (PuzzleToy.soundEnabled)
       alxPlay("PuzzleToy:SelectOptionSound");
    
    // Since our scenes only store the simple name of the level, call setSelectedLevel

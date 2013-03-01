@@ -1,0 +1,7 @@
+<Sprite        
+      SceneLayer="4"
+      Position="0 36.5"
+      size="50 3"              
+      Image="@asset=PuzzleToy:TimeBarBack"
+      Frame="0"
+      Name="bTimeBack" />

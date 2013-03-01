@@ -1,0 +1,6 @@
+<Sprite
+      SceneLayer="3"
+      size="40 40"
+      Position="-700 -460"        
+      Animation="@asset=PuzzleToy:PaintBreakAnim"
+      Name="pBreak" />

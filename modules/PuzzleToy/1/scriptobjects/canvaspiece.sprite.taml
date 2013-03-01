@@ -1,0 +1,10 @@
+<Sprite
+      SceneLayer="4"
+      size="40 40"
+      Position="-700 -460"        
+      Image="@asset=PuzzleToy:CanvasTexture"
+      Frame="0"
+      DefaultDensity="0"
+      DefaultFriction="0"
+      LinearDamping="0"
+      Name="pCanvas" />

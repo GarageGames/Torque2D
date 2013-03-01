@@ -1,0 +1,10 @@
+<Sprite
+		Class="gamePiece"
+		Name="pFront"
+		SceneLayer="1"
+		Position="-700 -460"
+		UseInputEvents="1"
+		LinearDamping="0"		
+		Image="PuzzleToy:GamePiece"
+		Frame="1"
+		size="8.0 8.0" />

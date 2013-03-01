@@ -6,13 +6,19 @@
 /// Function used to create the toy.
 ///-----------------------------------------------------------------------------
 function PuzzleToy::create( %this )
-{   
+{
+   // This is a tab separated list of color strings so that we can use a color index
+   // to store a game pieces color and then use this list to find out it's color string
+   // We do this using getWord(PuzzleToy::colors, index)
+   PuzzleToy.colors =  "Black" TAB "White" TAB "Red" TAB "Blue" TAB "Yellow" TAB 
+                     "Green" TAB "Orange" TAB "Purple" TAB "Grey" TAB "Bucket" 
+                     TAB "Bomb" TAB "Eraser"; 
    // default the current level to the main menu scene.
-   $currentLevel = "./levels/mainMenu.scene.taml";
+   PuzzleToy.currentLevel = "./levels/mainMenu.scene.taml";
    
    // load up my game specific game scripts    
    exec("./scripts/gamescripts/gameBoard.cs");   
-   exec("./scripts/gamescripts/gelPiece.cs");
+   exec("./scripts/gamescripts/gamePiece.cs");
    exec("./scripts/gamescripts/soundButton.cs");   
    exec("./scripts/gamescripts/startButton.cs");
    exec("./scripts/gamescripts/nextButton.cs");
@@ -20,15 +26,15 @@ function PuzzleToy::create( %this )
    exec("./scripts/gamescripts/timeBar.cs");
    // Set some global variables
    // this will be false until the options, level time etc are set.
-	$bToyInit = false;
-	$soundEnabled = true;
-	$LevelTime = 360000;
+   PuzzleToy.bToyInit = false;	
+	PuzzleToy.soundEnabled = true;	
+	PuzzleToy.LevelTime = 360000;	
 	
 	// add some options in the tool ui.
 	addNumericOption("LevelTime in Minutes", 1, 10, 1, "setLevelTime", 6,  true);
    addSelectionOption(getLevelList(), "Select Level", 5, "setSelectedLevel", false);  
-   // now my toy options are initialized, so set $bToyInit to true.
-   $bToyInit = true;
+   // now my toy options are initialized, so set bToyInit to true.
+   PuzzleToy.bToyInit = true;   
    
    // I moved all the script loading up the main menu and such in the reset function 
    // so I don't have to write it twice.
@@ -46,7 +52,7 @@ function PuzzleToy::setSelectedLevel( %this, %value )
 {
    // Only set if we have already initialized the toy.
    // this is to keep from resetting when the toolbox options are added.
-   if ($bToyInit)
+   if (PuzzleToy.bToyInit)
    {
       // Create the filename string.
       %levelToLoad = "./levels/" @ %value @ ".scene.taml";
@@ -64,10 +70,10 @@ function PuzzleToy::setLevelTime( %this, %value )
 {
    // Only set if we have already initialized the toy.
    // this is to keep from resetting when the toolbox options are added.
-   if ($bToyInit)
+   if (PuzzleToy.bToyInit)
    {
       // Set the time allowed to complete a level
-      $LevelTime = %value * 60000;
+      PuzzleToy.LevelTime = %value * 60000;
    }
 }
 ///-----------------------------------------------------------------------------
@@ -94,7 +100,8 @@ function PuzzleToy::destroy( %this )
    alxStopAll();
    // Since I changed these, I am setting them back to their defaults
    SandboxWindow.setUseWindowInputEvents( true );
-   SandboxWindow.setUseObjectInputEvents( false );   
+   SandboxWindow.setUseObjectInputEvents( false ); 
+   
 }
 
 ///-----------------------------------------------------------------------------
@@ -140,22 +147,22 @@ function loadLevel(%this)
    // Any time we load a level we should stop any playing sounds.
    alxStopAll();   
    
-   // Set our scene by reading in the level file value stored in $currentLevel
-   setCustomScene(TamlRead($currentLevel));
+   // Set our scene by reading in the level file value stored in currentLevel
+   setCustomScene(TamlRead(PuzzleToy.currentLevel));
    
    // If we are loading the loading scene, schedule the next level to load with
    // loading as false.
-   if ($loading)
+   if (PuzzleToy.loading)
    {
       // set loading to false since we already loaded the loading scene.
-      $loading = false;
+      PuzzleToy.loading = false;
       // Schedule the level we intend to load next
-      PuzzleToy.loadLevel($nextLevel, false);
+      PuzzleToy.loadLevel(PuzzleToy.nextLevel, false);
    }
    else
    {
       // play this levels background music if the sound is enabled.
-      if ($soundEnabled)
+      if (PuzzleToy.soundEnabled)
          alxPlay(SandboxScene.MusicAsset);
       
    }
@@ -185,23 +192,23 @@ function PuzzleToy::loadLevel( %this, %levelName, %loading )
    // There shoudln't be any load events at this point, so clear out the load event id.
    %this.loadEventId = "";
    // Set our global bool to know whether or not we should load the loading scene.
-   $loading = %loading;
+   PuzzleToy.loading = %loading;
    
    // Should we show the loading scene, or load the specified level?
-   if ($loading)
+   if (PuzzleToy.loading)
    {
       // set the current level to the loading scene so we can schedule the load.
-      $currentLevel = "./levels/LoadLevel.scene.taml";
+      PuzzleToy.currentLevel = "./levels/LoadLevel.scene.taml";
       // Since we aren't loading the supplied %levelName, we need to store it in 
       // $nextLevel so we can load it after the loading scene.
-      $nextLevel = %levelName;
+      PuzzleToy.nextLevel = %levelName;
       // Schedule the load and store the schedule event Id so we can cancel it if needed.
       %this.loadEventId = schedule(500, 0, "loadLevel" );
    }
    else
    {
       // Set the current level to the supplied level so we can schedule the load.
-      $currentLevel = %levelName;
+      PuzzleToy.currentLevel = %levelName;
       // Schedule the load and store the schedule event Id so we can cancel it if needed.
       %this.loadEventId = schedule(1000, 0, "loadLevel" );
    }
