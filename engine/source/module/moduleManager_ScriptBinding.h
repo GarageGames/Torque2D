@@ -128,25 +128,6 @@ ConsoleMethod(ModuleManager, findModule, const char*, 4, 4,     "(moduleId, vers
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ModuleManager, findLoadedModule, const char*, 3, 3,   "(moduleId) - Find the specific loaded module Id.\n"
-                                                                    "@param moduleId The module Id to find.\n"
-                                                                    "@return The module definition object or NULL if the module was not found or loaded.")
-{
-    // Fetch module Id.
-    const char* pModuleId = argv[2];
-
-    // Find loaded module definition.
-    ModuleDefinition* pModuleDefinition = object->findLoadedModule( pModuleId );
-
-    // Return nothing if not found.
-    if ( pModuleDefinition == NULL )
-        return StringTable->EmptyString;
-
-    return pModuleDefinition->getIdString();
-}
-
-//-----------------------------------------------------------------------------
-
 ConsoleMethod(ModuleManager, findModules, const char*, 3, 3,    "(loadedOnly?) - Find all the modules registered with the specified loaded state.\n"
                                                                 "@param loadedOnly Whether to return only modules that are loaded or not.\n"
                                                                 "@return A list of space-separated module definition object Ids.")
