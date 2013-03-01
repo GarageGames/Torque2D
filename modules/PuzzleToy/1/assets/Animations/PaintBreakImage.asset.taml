@@ -1,0 +1,8 @@
+<ImageAsset
+    AssetName="PaintBreak"
+    AssetCategory="sprites"
+	CellCountX="4"
+	CellCountY="2"
+	CellWidth="40"
+	CellHeight="40"
+    ImageFile="PaintBreak.png" />

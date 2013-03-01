@@ -1,0 +1,14 @@
+<Scene
+   Name="LoadLevel"
+   UseBackgroundColor="1"
+   BackgroundColor="InvisibleBlack" >
+   <Sprite
+      SceneLayer="31"
+      size="160 90"
+      BodyType="static"
+      Active="0"
+      Awake="0"
+      CollisionSuppress="1"
+      Image="@asset=PuzzleToy:Loading"
+      Frame="0" />
+</Scene>

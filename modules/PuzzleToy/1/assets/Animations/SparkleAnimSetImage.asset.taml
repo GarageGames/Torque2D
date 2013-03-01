@@ -1,0 +1,8 @@
+<ImageAsset
+    AssetName="Sparkle"
+    AssetCategory="sprites"
+	CellCountX="2"
+	CellCountY="2"
+	CellWidth="40"
+	CellHeight="40"
+    ImageFile="SparkleAnimSet.png" />

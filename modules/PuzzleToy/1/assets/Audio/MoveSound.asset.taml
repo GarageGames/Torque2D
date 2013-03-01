@@ -1,0 +1,5 @@
+<AudioAsset
+    AssetName="MoveSound"
+    AudioFile="MoveSound.wav"
+    VolumeChannel="2" 
+	Volume="0.5" />

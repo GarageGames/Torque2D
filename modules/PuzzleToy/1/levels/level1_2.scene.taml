@@ -1,0 +1,92 @@
+<Scene
+   Name="Level_2"
+   NextLevel="Level1_3"
+   UseBackgroundColor="1"
+   MusicAsset="ToyAssets:level1Music"
+   BackgroundColor="InvisibleBlack">
+   <Sprite
+      SceneLayer="31"
+      size="160 90"
+      BodyType="static"
+      Active="0"
+      Awake="0"        
+      Image="@asset=Sandbox:blueGradient"
+      Frame="0" />   
+   <Sprite
+      class="soundButton"
+      SceneLayer="1"
+      size="12 12"
+      Position="-65 -35"        
+      BlendColor="White"
+      UseInputEvents="1"
+      Image="@asset=PuzzleToy:SmallMenuBar"
+      onImage="PuzzleToy:SoundOn"
+      offImage="PuzzleToy:SoundOff"
+      Frame="0"
+      bSoundEnabled="1"
+      Name="sButton" />   
+   <Sprite        
+      Level="1-1"
+      SceneLayer="11"
+      size="56.3 70.3"
+      Position="0 -0.5"        
+      UpdateCallback="1"
+      Image="@asset=PuzzleToy:DarkOverlay"
+      Frame="0" />
+   <Sprite
+      class="gameBoard"
+      Level="1-2"
+      SceneLayer="10"
+      size="56 70"
+      Position="0 -0.5"        
+      UpdateCallback="1"
+      Image="@asset=PuzzleToy:DarkOverlay"
+      Frame="0"		
+      Name="gBoard" />
+   <Sprite        		
+      SceneLayer="8"
+      size="56 70"
+      Position="0 -0.5"        
+      UpdateCallback="1"
+      Image="@asset=PuzzleToy:Complete1-2"
+      failImage="PuzzleToy:Failed"
+      Visible="0"		
+      Name="bCompleteImage" />   
+   <Sprite        
+      SceneLayer="12"
+      Position="0 0.725"
+      size="62 77.5"        
+      UpdateCallback="1"
+      Image="@asset=Sandbox:largeContainer"
+      Frame="0" />   
+   <Sprite
+      class="nextButton"
+      SceneLayer="1"
+      size="10 10"
+      Position="55 -35"                
+      UseInputEvents="1"
+      Image="@asset=PuzzleToy:NextBtn"  
+      upImage="PuzzleToy:NextBtn"
+      downImage="PuzzleToy:NextBtnDown"
+      Frame="0" 
+      Enabled="0"
+      Name="nButton" />
+   <Sprite
+      class="mainMenuButton"
+      SceneLayer="1"
+      size="20 10"
+      Position="55 30"                
+      UseInputEvents="1"
+      Image="@asset=PuzzleToy:MainMenuBtn"
+      upImage="PuzzleToy:MainMenuBtn"
+      downImage="PuzzleToy:MainMenuBtnDown"
+      Frame="0" 		
+      Name="mButton" />
+   <ImageFont
+      Image="ToyAssets:Font"
+      TextAlignment="Center"
+      Text="Level 1-2"
+      FontSize="3 3"
+      FontPadding="0"
+      Position="-55 30" />
+</Scene>

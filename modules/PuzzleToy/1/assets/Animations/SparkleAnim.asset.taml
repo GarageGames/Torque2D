@@ -1,0 +1,6 @@
+<AnimationAsset
+    AssetName="SparkleAnim"
+    AssetCategory="sprites"
+    Image="@asset=PuzzleToy:Sparkle"
+    AnimationFrames="0 1 2 3"
+    AnimationTime="0.8" />

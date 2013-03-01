@@ -1,0 +1,46 @@
+<Scene
+   Name="MainMenu"	
+   UseBackgroundColor="1"
+   MusicAsset="ToyAssets:titleMusic"
+   BackgroundColor="InvisibleBlack">
+   <Sprite
+      SceneLayer="31"
+      size="160 90"
+      BodyType="static"
+      Active="0"
+      Awake="0"
+      CollisionSuppress="1"
+      Image="@asset=PuzzleToy:TitleBackGround"
+      Frame="0" />
+   <Sprite		
+      SceneLayer="0"
+      size="60 15"
+      Position="0 15"
+      CollisionSuppress="1" 
+      UseInputEvents="1"
+      Image="@asset=PuzzleToy:TitleBar"
+      Frame="0" />
+   <Sprite
+      Class="startButton"
+      SceneLayer="0"
+      size="20 10"
+      Position="0 0"
+      CollisionSuppress="1" 
+      UseInputEvents="1"
+      Image="@asset=PuzzleToy:PlayBtn"
+      Frame="0"
+      Name="bStartButton" />
+   <Sprite
+      class="soundButton"
+      SceneLayer="1"
+      size="12 12"
+      Position="-65 -35"        
+      BlendColor="White"
+      UseInputEvents="1"
+      Image="@asset=PuzzleToy:SmallMenuBar"
+      onImage="PuzzleToy:SoundOn"
+      offImage="PuzzleToy:SoundOff"
+      Frame="0"
+      bSoundEnabled="1"
+      Name="sButton" /> 
+</Scene>

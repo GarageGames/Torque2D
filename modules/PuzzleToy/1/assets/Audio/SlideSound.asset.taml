@@ -1,0 +1,5 @@
+<AudioAsset
+    AssetName="SlideSound"
+    AudioFile="SlideSound.wav"
+    VolumeChannel="2" 
+	Volume="0.5" />
