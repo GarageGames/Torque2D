@@ -20,68 +20,60 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _CONSTANT_FORCE_CONTROLLER_H_
-#include "2d/controllers/ConstantForceController.h"
+#ifndef PickingSceneController
+#include "2d/controllers/core/PickingSceneController.h"
 #endif
 
 // Script bindings.
-#include "ConstantForceController_ScriptBinding.h"
+#include "2d/controllers/core/PickingSceneController_ScriptBinding.h"
 
 //------------------------------------------------------------------------------
 
-IMPLEMENT_CONOBJECT(ConstantForceController);
+IMPLEMENT_CONOBJECT(PickingSceneController);
 
 //------------------------------------------------------------------------------
 
-ConstantForceController::ConstantForceController()        
+PickingSceneController::PickingSceneController() :
+        mControlGroupMask( MASK_ALL ),
+        mControlLayerMask( MASK_ALL )
 {
-    // Reset the constant force.
-    mForce.SetZero();
+}
+
+//------------------------------------------------------------------------------
+
+PickingSceneController::~PickingSceneController()
+{
 }
 
 //------------------------------------------------------------------------------
 
-ConstantForceController::~ConstantForceController()
-{
-}
-
-
-//------------------------------------------------------------------------------
-
-void ConstantForceController::initPersistFields()
-{
-    // Call parent.
-    Parent::initPersistFields();
-
-    // Force.
-    addProtectedField("Force", TypeVector2, Offset( mForce, ConstantForceController), &defaultProtectedSetFn, &defaultProtectedGetFn, "The constant force to apply.");
-}
-
-//------------------------------------------------------------------------------
-
-void ConstantForceController::copyTo(SimObject* object)
+void PickingSceneController::copyTo(SimObject* object)
 {
     // Call to parent.
     Parent::copyTo(object);
 
     // Cast to controller.
-    ConstantForceController* pController = static_cast<ConstantForceController*>(object);
+    PickingSceneController* pController = static_cast<PickingSceneController*>(object);
 
     // Sanity!
-    AssertFatal(pController != NULL, "ConstantForceController::copyTo() - Object is not the correct type.");
+    AssertFatal(pController != NULL, "PickingSceneController::copyTo() - Object is not the correct type.");
 
-    // Copy state.
-    pController->setForce( getForce() );
+    // Set masks.
+    pController->setControlGroupMask( getControlGroupMask() );
+    pController->setControlLayerMask( getControlLayerMask() );
 }
 
 //------------------------------------------------------------------------------
 
-void ConstantForceController::integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats )
+WorldQuery* PickingSceneController::prepareQueryFilter( Scene* pScene, const bool clearQuery )
 {
-    // Process all the scene objects.
-    for( SceneObjectSet::iterator itr = begin(); itr != end(); ++itr )
-    {
-        // Apply the force.
-        (*itr)->applyForce( mForce, true );
-    }
+    // Fetch world query and clear results.
+    WorldQuery* pWorldQuery = pScene->getWorldQuery( clearQuery );
+
+    // Set filter.
+    WorldQueryFilter queryFilter( mControlLayerMask, mControlGroupMask, true, false, true, true );
+    pWorldQuery->setQueryFilter( queryFilter );
+
+    return pWorldQuery;
 }
+

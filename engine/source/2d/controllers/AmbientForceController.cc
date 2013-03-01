@@ -20,45 +20,68 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
-// Audio channel descriptions.
-//------------------------------------------------------------------------------
-$musicAudioType = 1;
-$effectsAudioType = 2;
+#ifndef _AMBIENT_FORCE_CONTROLLER_H_
+#include "2d/controllers/AmbientForceController.h"
+#endif
+
+// Script bindings.
+#include "AmbientForceController_ScriptBinding.h"
 
 //------------------------------------------------------------------------------
-// initializeOpenAL
-// Starts up the OpenAL driver.
+
+IMPLEMENT_CONOBJECT(AmbientForceController);
+
 //------------------------------------------------------------------------------
-function initializeOpenAL()
+
+AmbientForceController::AmbientForceController()        
 {
-    // Just in case it is already started.
-    shutdownOpenAL();
-
-    echo("OpenAL Driver Init");
-
-    if (!OpenALInitDriver())
-    {
-        echo("OpenALInitDriver() failed");
-        $Audio::initFailed = true;
-    }
-    else
-    {
-        // Set the master volume.
-        alxListenerf(AL_GAIN_LINEAR, $pref::Audio::masterVolume);
-
-        // Set the channel volumes.
-        for (%channel = 1; %channel <= 3; %channel++)
-            alxSetChannelVolume(%channel, $pref::Audio::channelVolume[%channel]);
-
-        echo("OpenAL Driver Init Success");
-    }
+    // Reset the constant force.
+    mForce.SetZero();
 }
 
 //------------------------------------------------------------------------------
-// shutdownOpenAL
-//------------------------------------------------------------------------------
-function shutdownOpenAL()
+
+AmbientForceController::~AmbientForceController()
 {
-    OpenALShutdownDriver();
+}
+
+
+//------------------------------------------------------------------------------
+
+void AmbientForceController::initPersistFields()
+{
+    // Call parent.
+    Parent::initPersistFields();
+
+    // Force.
+    addProtectedField("Force", TypeVector2, Offset( mForce, AmbientForceController), &defaultProtectedSetFn, &defaultProtectedGetFn, "The constant force to apply.");
+}
+
+//------------------------------------------------------------------------------
+
+void AmbientForceController::copyTo(SimObject* object)
+{
+    // Call to parent.
+    Parent::copyTo(object);
+
+    // Cast to controller.
+    AmbientForceController* pController = static_cast<AmbientForceController*>(object);
+
+    // Sanity!
+    AssertFatal(pController != NULL, "AmbientForceController::copyTo() - Object is not the correct type.");
+
+    // Copy state.
+    pController->setForce( getForce() );
+}
+
+//------------------------------------------------------------------------------
+
+void AmbientForceController::integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats )
+{
+    // Process all the scene objects.
+    for( SceneObjectSet::iterator itr = begin(); itr != end(); ++itr )
+    {
+        // Apply the force.
+        (*itr)->applyForce( mForce, true );
+    }
 }

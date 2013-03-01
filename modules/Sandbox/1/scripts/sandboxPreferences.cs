@@ -20,58 +20,20 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _SCENE_CONTROLLER_H_
-#include "2d/controllers/SceneController.h"
-#endif
-
-#ifndef _SCENE_OBJECT_SET_H_
-#include "2d/sceneObject/sceneObjectSet.h"
-#endif
-
-#ifndef _SCENE_H_
-#include "2d/scene/scene.h"
-#endif
-
-// Script bindings.
-#include "SceneController_ScriptBinding.h"
-
-//------------------------------------------------------------------------------
-
-IMPLEMENT_CONOBJECT(SceneController);
-
-//------------------------------------------------------------------------------
-
-SceneController::SceneController()
-{
-}
-
-//------------------------------------------------------------------------------
-
-SceneController::~SceneController()
-{
-}
-
-
-//------------------------------------------------------------------------------
-
-void SceneController::initPersistFields()
-{
-    // Call parent.
-    Parent::initPersistFields();
-
-}
-
-//------------------------------------------------------------------------------
-
-void SceneController::copyTo(SimObject* object)
-{
-    // Call to parent.
-    Parent::copyTo(object);
-
-    // Cast to controller.
-    SceneController* pController = static_cast<SceneController*>(object);
-
-    // Sanity!
-    AssertFatal(pController != NULL, "SceneController::copyTo() - Object is not the correct type.");
-}
-
+// Sandbox.
+$pref::Sandbox::defaultToyId           = "TruckToy";
+$pref::Sandbox::defaultToyVersionId    = 1;
+$pref::Sandbox::defaultBackgroundColor = "Black";
+$pref::Sandbox::metricsOption   = false;
+$pref::Sandbox::fpsmetricsOption = true;
+$pref::Sandbox::controllersOption = false;
+$pref::Sandbox::jointsOption    = false;
+$pref::Sandbox::wireframeOption = false;
+$pref::Sandbox::aabbOption      = false;
+$pref::Sandbox::oobbOption      = false;
+$pref::Sandbox::sleepOption     = false;
+$pref::Sandbox::collisionOption = false;
+$pref::Sandbox::positionOption  = false;
+$pref::Sandbox::sortOption      = false;
+$pref::Sandbox::cameraMouseZoomRate = 0.1;
+$pref::Sandbox::cameraTouchZoomRate = 0.001;

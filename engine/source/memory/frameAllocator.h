@@ -281,12 +281,10 @@ public:
 
    // This ifdef is to satisfy the ever so pedantic GCC compiler
    //  Which seems to upset visual studio.
-#if defined(TORQUE_COMPILER_GCC)   
    T& operator[]( const U32 idx ) { return mMemory[idx]; }
    const T& operator[]( const U32 idx ) const { return mMemory[idx]; }
    T& operator[]( const S32 idx ) { return mMemory[idx]; }
    const T& operator[]( const S32 idx ) const { return mMemory[idx]; }   
-#endif
 };
 
 //-----------------------------------------------------------------------------

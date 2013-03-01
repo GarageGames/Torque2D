@@ -215,14 +215,14 @@ function toggleToolbox(%make)
 function BackgroundColorSelectList::onSelect(%this)
 {           
     // Fetch the index.
-    $activeSceneColor = %this.getSelected();
+    $activeBackgroundColor = %this.getSelected();
  
     // Finish if the sandbox scene is not available.
     if ( !isObject(SandboxScene) )
         return;
             
     // Set the scene color.
-    SandboxScene.BackgroundColor = getStockColorName($activeSceneColor);
+    SandboxScene.BackgroundColor = getStockColorName($activeBackgroundColor);
     SandboxScene.UseBackgroundColor = true;
 }
 
@@ -296,7 +296,7 @@ function updateToolboxOptions()
         return;
         
     // Set the scene color.
-    SandboxScene.BackgroundColor = getStockColorName($activeSceneColor);
+    SandboxScene.BackgroundColor = getStockColorName($activeBackgroundColor);
     SandboxScene.UseBackgroundColor = true;        
        
     // Set option.

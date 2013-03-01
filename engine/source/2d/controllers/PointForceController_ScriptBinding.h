@@ -20,4 +20,75 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(PointForceController, setPosition, void, 3, 4,    "(float x, float y) - Sets the position of the force center.\n"
+                                                                "@param x The position along the horizontal axis.\n"
+                                                                "@param y The position along the vertical axis.\n"
+                                                                "@return No return value.")
+{
+    // The new position.
+    b2Vec2 position;
 
+    // Elements in the first argument.
+    U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+
+    // ("x y")
+    if ((elementCount == 2) && (argc == 3))
+        position = Utility::mGetStringElementVector(argv[2]);
+
+    // (x, y)
+    else if ((elementCount == 1) && (argc == 4))
+        position.Set(dAtof(argv[2]), dAtof(argv[3]));
+
+    // Invalid
+    else
+    {
+        Con::warnf("PointForceController::setPosition() - Invalid number of parameters!");
+        return;
+    }
+
+    // Set Position.
+    object->setPosition(position);
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(PointForceController, PointForceController, const char*, 2, 2,    "() Gets the position of the force center.\n"
+                                                                                "@return (float x/float y) The x and y (horizontal and vertical) position of the force center.")
+{
+    // Get position.
+    return object->getPosition().scriptThis();
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(PointForceController, setRadius, void, 3, 3,       "(radius) - Sets the radius of the point force to use.\n"
+                                                                "@param radius The radius of the point force to use.\n"
+                                                                "@return No return value.")
+{
+    object->setRadius( dAtof(argv[2]) );
+} 
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(PointForceController, getRadius, F32, 2, 2,        "() Gets the radius of the point force being used.\n"
+                                                                "@return The radius of the point force being used.")
+{
+    return object->getRadius();
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(PointForceController, setForce, void, 3, 3,       "(force) - Sets the point force to use.\n"
+                                                                "@param force The point force to use.\n"
+                                                                "@return No return value.")
+{
+    object->setForce( dAtof(argv[2]) );
+} 
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(PointForceController, getForce, F32, 2, 2,        "() Gets the point force being used.\n"
+                                                                "@return The point force being used.")
+{
+    return object->getForce();
+}

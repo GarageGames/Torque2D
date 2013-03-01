@@ -381,10 +381,10 @@ SpriteBatchItem* CompositeSprite::createCustomLayout( const SpriteBatchItem::Log
 
 //-----------------------------------------------------------------------------
 
-void CompositeSprite::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void CompositeSprite::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Call parent.
-    Parent::onTamlCustomWrite( customProperties );
+    Parent::onTamlCustomWrite( customNodes );
 
     // Fetch sprite count.
     const U32 spriteCount = getSpriteCount();
@@ -393,27 +393,27 @@ void CompositeSprite::onTamlCustomWrite( TamlCustomProperties& customProperties 
     if ( spriteCount == 0 )
         return;
 
-    // Add sprites property.
-    TamlCustomProperty* pSpritesProperty = customProperties.addProperty( StringTable->insert("Sprites") );
+    // Add sprites node.
+    TamlCustomNode* pSpritesNode = customNodes.addNode( StringTable->insert("Sprites") );
 
-    // Write property with sprite batch.
-    SpriteBatch::onTamlCustomWrite( pSpritesProperty );
+    // Write node with sprite batch.
+    SpriteBatch::onTamlCustomWrite( pSpritesNode );
 }
 
 //-----------------------------------------------------------------------------
 
-void CompositeSprite::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void CompositeSprite::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Call parent.
-    Parent::onTamlCustomRead( customProperties );
+    Parent::onTamlCustomRead( customNodes );
 
-    // Find sprites custom property.
-    const TamlCustomProperty* pSpritesProperty = customProperties.findProperty( StringTable->insert("Sprites") );
+    // Find sprites custom node.
+    const TamlCustomNode* pSpritesNode = customNodes.findNode( StringTable->insert("Sprites") );
 
-    // Finish if we don't have the property.
-    if ( pSpritesProperty == NULL )
+    // Finish if we don't have the node.
+    if ( pSpritesNode == NULL )
         return;
 
-    // Read property with sprite batch.
-    SpriteBatch::onTamlCustomRead( pSpritesProperty );
+    // Read node with sprite batch.
+    SpriteBatch::onTamlCustomRead( pSpritesNode );
 }

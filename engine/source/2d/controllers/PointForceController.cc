@@ -86,12 +86,8 @@ void PointForceController::integrate( Scene* pScene, const F32 totalTime, const 
     if ( mIsZero( mForce ) || mIsZero( mRadius ) )
         return;
 
-    // Fetch world query and clear results.
-    WorldQuery* pWorldQuery = pScene->getWorldQuery( true );
-
-    // Set filter.
-    WorldQueryFilter queryFilter( 0xFFFFFFFF, 0xFFFFFFFF, true, false, true, true );
-    pWorldQuery->setQueryFilter( queryFilter );
+    // Prepare query filter.
+    WorldQuery* pWorldQuery = prepareQueryFilter( pScene );
 
     // Calculate the AABB of the attractor.
     b2AABB aabb;
@@ -136,6 +132,6 @@ void PointForceController::renderOverlay( Scene* pScene, const SceneRenderState*
     // Call parent.
     Parent::renderOverlay( pScene, pSceneRenderState, pBatchRenderer );
 
-    // Draw camera pause distance.
-    pScene->mDebugDraw.DrawCircle( mPosition, mRadius, b2Color(1.0f, 1.0f, 0.0f ) );
+    // Draw force radius.
+    pScene->mDebugDraw.DrawCircle( mPosition, mRadius, ColorF(1.0f, 1.0f, 0.0f ) );
 }

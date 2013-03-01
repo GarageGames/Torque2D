@@ -89,7 +89,7 @@ function PointForceControllerToy::createBackground( %this )
     %object.Image = "ToyAssets:highlightBackground";
     
     // Set the blend color.
-    %object.BlendColor = LightBlue;
+    %object.BlendColor = SlateGray;
     
     // Create border collisions.
     %object.createEdgeCollisionShape( -50, -37.5, -50, 37.5 );

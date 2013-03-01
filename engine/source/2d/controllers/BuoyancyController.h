@@ -23,8 +23,8 @@
 #ifndef _BUOYANCY_CONTROLLER_H_
 #define _BUOYANCY_CONTROLLER_H_
 
-#ifndef _SCENE_CONTROLLER_H_
-#include "2d/controllers/sceneController.h"
+#ifndef _PICKING_SCENE_CONTROLLER_H_
+#include "2d/controllers/core/pickingSceneController.h"
 #endif
 
 #ifndef _VECTOR2_H_
@@ -33,16 +33,13 @@
 
 //------------------------------------------------------------------------------
 
-class BuoyancyController : public SceneController
+class BuoyancyController : public PickingSceneController
 {
 private:
-    typedef SceneController Parent;
+    typedef PickingSceneController Parent;
 
-	/// The outer fluid surface normal.
-	Vector2 mSurfaceNormal;
-
-	/// The height of the fluid surface along the normal.
-	F32 mSurfaceOffset;
+    /// The fluid area.
+    b2AABB mFluidArea;
 
 	/// The fluid density.
 	F32 mFluidDensity;
@@ -62,9 +59,12 @@ private:
 	/// Whether to use the collision shape densities or assume a uniform density.
 	bool mUseShapeDensity;
 
+	/// The outer fluid surface normal.
+	Vector2 mSurfaceNormal;
+
 protected:
-    F32 ComputeCircleSubmergedArea( const b2Body* pBody, const b2CircleShape* pShape, Vector2& center );
-    F32 ComputePolygonSubmergedArea( const b2Body* pBody, const b2PolygonShape* pShape, Vector2& center );
+    F32 ComputeCircleSubmergedArea( const b2Transform& bodyTransform, const b2CircleShape* pShape, Vector2& center );
+    F32 ComputePolygonSubmergedArea( const b2Transform& bodyTransform, const b2PolygonShape* pShape, Vector2& center );
 
 public:
     BuoyancyController();
@@ -75,6 +75,9 @@ public:
 
     /// Integration.
     virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
+
+    // Scene render.
+    virtual void renderOverlay( Scene* pScene, const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer );
 
     /// Declare Console Object.
     DECLARE_CONOBJECT( BuoyancyController );

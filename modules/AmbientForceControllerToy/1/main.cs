@@ -20,7 +20,7 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-function ConstantForceControllerToy::create( %this )
+function AmbientForceControllerToy::create( %this )
 {
     // Set the sandbox drag mode availability.
     Sandbox.allowManipulation( pan );
@@ -30,29 +30,29 @@ function ConstantForceControllerToy::create( %this )
     Sandbox.useManipulation( pull );
     
     // Configure settings.
-    ConstantForceControllerToy.ForceAngle = 45;
-    ConstantForceControllerToy.ForceMagnitude = 50;
-    ConstantForceControllerToy.DebrisCount = 100;
+    AmbientForceControllerToy.ForceAngle = 45;
+    AmbientForceControllerToy.ForceMagnitude = 50;
+    AmbientForceControllerToy.DebrisCount = 100;
 
     // Add options.    
-    addNumericOption("Force Angle", -359, 359, 1, "setForceAngle", ConstantForceControllerToy.ForceAngle, false, "The angle of the constant force.");   
-    addNumericOption("Force Magnitude", 0, 1000, 10, "setForceMagnitude", ConstantForceControllerToy.ForceMagnitude, false, "The magnitude of the constant force.");   
-    addNumericOption("Debris Count", 10, 1000, 10, "setDebrisCount", ConstantForceControllerToy.DebrisCount, true, "The amount of debris affected by the constant force controller.");
+    addNumericOption("Force Angle", -359, 359, 1, "setForceAngle", AmbientForceControllerToy.ForceAngle, false, "The angle of the ambient force.");   
+    addNumericOption("Force Magnitude", 0, 1000, 10, "setForceMagnitude", AmbientForceControllerToy.ForceMagnitude, false, "The magnitude of the ambient force.");   
+    addNumericOption("Debris Count", 10, 1000, 10, "setDebrisCount", AmbientForceControllerToy.DebrisCount, true, "The amount of debris affected by the ambient force controller.");
     
     // Reset the toy.
-    ConstantForceControllerToy.reset();
+    AmbientForceControllerToy.reset();
 }
 
 
 //-----------------------------------------------------------------------------
 
-function ConstantForceControllerToy::destroy( %this )
+function AmbientForceControllerToy::destroy( %this )
 {
 }
 
 //-----------------------------------------------------------------------------
 
-function ConstantForceControllerToy::reset( %this )
+function AmbientForceControllerToy::reset( %this )
 {
     // Clear the scene.
     SandboxScene.clear();
@@ -60,13 +60,13 @@ function ConstantForceControllerToy::reset( %this )
     // Create background.
     %this.createBackground();
     
-    // Create constant force controller.
-    %this.createConstantForceController();
+    // Create ambient force controller.
+    %this.createAmbientForceController();
 }
 
 //-----------------------------------------------------------------------------
 
-function ConstantForceControllerToy::createBackground( %this )
+function AmbientForceControllerToy::createBackground( %this )
 {    
     // Create the sprite.
     %object = new Sprite();
@@ -89,7 +89,7 @@ function ConstantForceControllerToy::createBackground( %this )
     %object.Image = "ToyAssets:highlightBackground";
     
     // Set the blend color.
-    %object.BlendColor = LightBlue;
+    %object.BlendColor = DarkGray;
     
     // Create border collisions.
     %object.createEdgeCollisionShape( -50, -37.5, -50, 37.5 );
@@ -104,7 +104,7 @@ function ConstantForceControllerToy::createBackground( %this )
 
 //-----------------------------------------------------------------------------
 
-function ConstantForceControllerToy::createSprite( %this, %asset, %position, %size, %angle, %blendColor )
+function AmbientForceControllerToy::createSprite( %this, %asset, %position, %size, %angle, %blendColor )
 {    
     // Create the sprite.
     %object = new Sprite();
@@ -132,22 +132,22 @@ function ConstantForceControllerToy::createSprite( %this, %asset, %position, %si
 
 //-----------------------------------------------------------------------------
 
-function ConstantForceControllerToy::createConstantForceController( %this )
+function AmbientForceControllerToy::createAmbientForceController( %this )
 {
     // Create a new controller.
-    %controller = new ConstantForceController();
+    %controller = new AmbientForceController();
     
     // Set scene controller.
-    ConstantForceControllerToy.SceneController = %controller;
+    AmbientForceControllerToy.SceneController = %controller;
 
-    // Update the constant force controller.
-    %this.updateConstantForceController();
+    // Update the ambient force controller.
+    %this.updateAmbientForceController();
     
     // Add the controller.
     SandboxScene.Controllers.add( %controller );
    
     // Create some sprites used by the controller.
-    for( %n = 0; %n < ConstantForceControllerToy.DebrisCount; %n++ )
+    for( %n = 0; %n < AmbientForceControllerToy.DebrisCount; %n++ )
     {    
         %sizeX = getRandom(1,4);
         %sizeY = getRandom(1,4);
@@ -178,35 +178,35 @@ function ConstantForceControllerToy::createConstantForceController( %this )
 
 //-----------------------------------------------------------------------------
 
-function ConstantForceControllerToy::updateConstantForceController( %this )
+function AmbientForceControllerToy::updateAmbientForceController( %this )
 {
     // Calculate the force.
-    ConstantForceControllerToy.SceneController.Force = Vector2Direction( %this.ForceAngle, %this.ForceMagnitude );
+    AmbientForceControllerToy.SceneController.Force = Vector2Direction( %this.ForceAngle, %this.ForceMagnitude );
 }
 
 //-----------------------------------------------------------------------------
 
-function ConstantForceControllerToy::setForceAngle(%this, %value)
+function AmbientForceControllerToy::setForceAngle(%this, %value)
 {
     %this.ForceAngle = %value;
     
-    // Update the constant force.
-    %this.updateConstantForceController();   
+    // Update the ambient force.
+    %this.updateAmbientForceController();   
 }
 
 //-----------------------------------------------------------------------------
 
-function ConstantForceControllerToy::setForceMagnitude(%this, %value)
+function AmbientForceControllerToy::setForceMagnitude(%this, %value)
 {
     %this.ForceMagnitude = %value;
     
-    // Update the constant force.
-    %this.updateConstantForceController();    
+    // Update the ambient force.
+    %this.updateAmbientForceController();    
 }
 
 //-----------------------------------------------------------------------------
 
-function ConstantForceControllerToy::setDebrisCount(%this, %value)
+function AmbientForceControllerToy::setDebrisCount(%this, %value)
 {
     %this.DebrisCount = %value;
 }

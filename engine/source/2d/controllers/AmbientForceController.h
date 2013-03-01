@@ -20,32 +20,41 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-$iOS::constant::iPhone = 0;
-$iOS::constant::iPad = 1;
-$iOS::constant::iPhone5 = 2;
+#ifndef _AMBIENT_FORCE_CONTROLLER_H_
+#define _AMBIENT_FORCE_CONTROLLER_H_
 
-$iOS::constant::Landscape = 0;
-$iOS::constant::Portrait = 1;
-$iOS::constant::ResolutionFull = 0;
-$iOS::constant::ResolutionSmall = 1;
+#ifndef _GROUPED_SCENE_CONTROLLER_H_
+#include "2d/controllers/core/GroupedSceneController.h"
+#endif
 
-$iOS::constant::iPhoneWidth = 480;
-$iOS::constant::iPhoneHeight = 320;
+#ifndef _VECTOR2_H_
+#include "2d/core/vector2.h"
+#endif
 
-$iOS::constant::iPhone4Width = 960;
-$iOS::constant::iPhone4Height = 640;
+//------------------------------------------------------------------------------
 
-$iOS::constant::iPadWidth = 1024;
-$iOS::constant::iPadHeight = 768;
+class AmbientForceController : public GroupedSceneController
+{
+private:
+    typedef GroupedSceneController Parent;
 
-$iOS::constant::NewiPadWidth = 2048;
-$iOS::constant::NewiPadHeight = 1536;
+    Vector2 mForce;
 
-$iOS::constant::iPhone5Width = 1136;
-$iOS::constant::iPhone5Height = 640;
+public:
+    AmbientForceController();
+    virtual ~AmbientForceController();
 
-$iOS::constant::OrientationUnknown				= 0;
-$iOS::constant::OrientationLandscapeLeft		= 1;
-$iOS::constant::OrientationLandscapeRight		= 2;
-$iOS::constant::OrientationPortrait				= 3;
-$iOS::constant::OrientationPortraitUpsideDown	= 4;
+    static void initPersistFields();
+    virtual void copyTo(SimObject* object);
+
+    /// Integration.
+    virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
+
+    inline void setForce( const Vector2& force ) { mForce = force; }
+    inline const Vector2& getForce( void ) const { return mForce; }
+
+    /// Declare Console Object.
+    DECLARE_CONOBJECT( AmbientForceController );
+};
+
+#endif // _AMBIENT_FORCE_CONTROLLER_H_

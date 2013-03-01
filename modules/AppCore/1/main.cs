@@ -20,40 +20,31 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ConstantForceController, setForce, void, 3, 4,    "(float x, float y) - Sets the constant (world) force to use.\n"
-                                                                "@param x The component of the constant force along the horizontal (world) axis.\n"
-                                                                "@param y The component of the constant force along the vertical (world) axis.\n"
-                                                                "@return No return value.")
+function AppCore::create( %this )
 {
-    // The new force.
-    b2Vec2 force;
-
-    // Elements in the first argument.
-    const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
-
-    // ("x y")
-    if ((elementCount == 2) && (argc == 3))
-        force = Utility::mGetStringElementVector(argv[2]);
-
-    // (x, y)
-    else if ((elementCount == 1) && (argc == 4))
-        force.Set(dAtof(argv[2]), dAtof(argv[3]));
-
-    // Invalid
-    else
-    {
-        Con::warnf("ConstantForceController::setForce() - Invalid number of parameters!");
-        return;
-    }
-
-    object->setForce( force );
-} 
+    // Load system scripts
+    exec("./scripts/constants.cs");
+    exec("./scripts/defaultPreferences.cs");
+    exec("./scripts/canvas.cs");
+    exec("./scripts/openal.cs");
+    
+    // Initialize the canvas
+    initializeCanvas("Torque 2D");
+    
+    // Set the canvas color
+    Canvas.BackgroundColor = "CornflowerBlue";
+    Canvas.UseBackgroundColor = true;
+    
+    // Initialize audio
+    initializeOpenAL();
+    
+    ModuleDatabase.loadGroup("gameBase");
+}
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ConstantForceController, getForce, const char*, 2, 2, "() Gets the constant (world) force being used.\n"
-                                                                    "@return The constant (world) force being used.")
+function AppCore::destroy( %this )
 {
-    return object->getForce().scriptThis();
+
 }
 

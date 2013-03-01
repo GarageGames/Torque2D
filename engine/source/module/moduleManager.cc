@@ -293,8 +293,9 @@ bool ModuleManager::loadModuleGroup( const char* pModuleGroup )
         if ( mEchoInfo )
         {
             Con::printf( "Module Manager: No modules found for module group '%s'.", moduleGroup );
-            return true;
         }
+        
+        return true;
     }
 
     // Yes, so fetch the module Ids.
@@ -480,7 +481,7 @@ bool ModuleManager::unloadModuleGroup( const char* pModuleGroup )
     // Find the group loaded iterator.
     typeGroupVector::iterator groupLoadedItr = findGroupLoaded( moduleGroup );
 
-    // Is the module group already loaded?
+    // Is the module group already unloaded?
     if ( groupLoadedItr == NULL )
     {
         // No, so warn.

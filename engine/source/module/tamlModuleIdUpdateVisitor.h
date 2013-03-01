@@ -110,7 +110,7 @@ public:
     void setModuleIdFrom( const char* pModuleIdFrom )
     {
         // Sanity!
-        AssertFatal( pModuleIdFrom != NULL, "Asset Id from cannot be NULL." );
+        AssertFatal( pModuleIdFrom != NULL, "Module Id from cannot be NULL." );
 
         // Set module Id.
         mModuleIdFrom = StringTable->insert( pModuleIdFrom );
@@ -121,7 +121,7 @@ public:
     void setModuleIdTo( const char* pModuleIdTo )
     {
         // Sanity!
-        AssertFatal( pModuleIdTo != NULL, "Asset Id to cannot be NULL." );
+        AssertFatal( pModuleIdTo != NULL, "Module Id to cannot be NULL." );
 
         // Set module Id.
         mModuleIdTo = StringTable->insert( pModuleIdTo );

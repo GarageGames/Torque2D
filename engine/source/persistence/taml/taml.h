@@ -103,11 +103,12 @@ private:
 private:
     void resetCompilation( void );
 
-    TamlWriteNode* compileObject( SimObject* pSimObject );
+    TamlWriteNode* compileObject( SimObject* pSimObject, const bool forceId = false );
     void compileStaticFields( TamlWriteNode* pTamlWriteNode );
     void compileDynamicFields( TamlWriteNode* pTamlWriteNode );
     void compileChildren( TamlWriteNode* pTamlWriteNode );
-    void compileCustomProperties( TamlWriteNode* pTamlWriteNode );
+    void compileCustomState( TamlWriteNode* pTamlWriteNode );
+    void compileCustomNodeState( TamlCustomNode* pCustomNode );
 
     bool write( FileStream& stream, SimObject* pSimObject, const TamlFormatMode formatMode );
     SimObject* read( FileStream& stream, const TamlFormatMode formatMode );
@@ -129,10 +130,10 @@ private:
     inline void tamlPreWrite( TamlCallbacks* pCallbacks )                                           { pCallbacks->onTamlPreWrite(); }
     inline void tamlPostWrite( TamlCallbacks* pCallbacks )                                          { pCallbacks->onTamlPostWrite(); }
     inline void tamlPreRead( TamlCallbacks* pCallbacks )                                            { pCallbacks->onTamlPreRead(); }
-    inline void tamlPostRead( TamlCallbacks* pCallbacks, const TamlCustomProperties& customProperties )   { pCallbacks->onTamlPostRead( customProperties ); }
+    inline void tamlPostRead( TamlCallbacks* pCallbacks, const TamlCustomNodes& customNodes )       { pCallbacks->onTamlPostRead( customNodes ); }
     inline void tamlAddParent( TamlCallbacks* pCallbacks, SimObject* pParentObject )                { pCallbacks->onTamlAddParent( pParentObject ); }
-    inline void tamlCustomWrite( TamlCallbacks* pCallbacks, TamlCustomProperties& customProperties )      { pCallbacks->onTamlCustomWrite( customProperties ); }
-    inline void tamlCustomRead( TamlCallbacks* pCallbacks, const TamlCustomProperties& customProperties ) { pCallbacks->onTamlCustomRead( customProperties ); }
+    inline void tamlCustomWrite( TamlCallbacks* pCallbacks, TamlCustomNodes& customNodes )          { pCallbacks->onTamlCustomWrite( customNodes ); }
+    inline void tamlCustomRead( TamlCallbacks* pCallbacks, const TamlCustomNodes& customNodes )     { pCallbacks->onTamlCustomRead( customNodes ); }
 
 public:
     Taml();

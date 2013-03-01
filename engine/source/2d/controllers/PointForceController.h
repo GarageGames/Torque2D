@@ -23,8 +23,8 @@
 #ifndef _ATTRACTOR_CONTROLLER_H_
 #define _ATTRACTOR_CONTROLLER_H_
 
-#ifndef _SCENE_CONTROLLER_H_
-#include "2d/controllers/sceneController.h"
+#ifndef _PICKING_SCENE_CONTROLLER_H_
+#include "2d/controllers/core/pickingSceneController.h"
 #endif
 
 #ifndef _VECTOR2_H_
@@ -33,10 +33,10 @@
 
 //------------------------------------------------------------------------------
 
-class PointForceController : public SceneController
+class PointForceController : public PickingSceneController
 {
 private:
-    typedef SceneController Parent;
+    typedef PickingSceneController Parent;
 
     Vector2 mPosition;
     F32 mRadius;
@@ -49,14 +49,18 @@ public:
     static void initPersistFields();
     virtual void copyTo(SimObject* object);
 
+    inline void setPosition( const Vector2& position ) { mPosition = position; }
+    inline const Vector2& getPosition( void ) const { return mPosition; }
+    inline void setRadius( const F32 radius ) { mRadius = getMax( radius, FLT_MIN ); }
+    inline F32 getRadius( void ) const { return mRadius; }
+    inline void setForce( const F32 force ) { mForce = force; }
+    inline F32 getForce( void ) const { return mForce; }
+
     /// Integration.
     virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
 
     // Scene render.
     virtual void renderOverlay( Scene* pScene, const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer );
-
-    inline void setForce( const F32& force ) { mForce = force; }
-    inline const F32 getForce( void ) const { return mForce; }
 
     /// Declare Console Object.
     DECLARE_CONOBJECT( PointForceController );
