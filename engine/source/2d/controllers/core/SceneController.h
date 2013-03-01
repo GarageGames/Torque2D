@@ -20,50 +20,29 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _ATTRACTOR_CONTROLLER_H_
-#define _ATTRACTOR_CONTROLLER_H_
-
-#ifndef _PICKING_SCENE_CONTROLLER_H_
-#include "2d/controllers/core/pickingSceneController.h"
-#endif
-
-#ifndef _VECTOR2_H_
-#include "2d/core/vector2.h"
-#endif
+#ifndef _SCENE_CONTROLLER_H_
+#define _SCENE_CONTROLLER_H_
 
 //------------------------------------------------------------------------------
 
-class PointForceController : public PickingSceneController
+class Scene;
+struct SceneRenderState;
+class BatchRender;
+class DebugStats;
+
+//------------------------------------------------------------------------------
+
+class SceneController
 {
-private:
-    typedef PickingSceneController Parent;
-
-    Vector2 mPosition;
-    F32 mRadius;
-    F32 mForce;
-
 public:
-    PointForceController();
-    virtual ~PointForceController();
-
-    static void initPersistFields();
-    virtual void copyTo(SimObject* object);
-
-    inline void setPosition( const Vector2& position ) { mPosition = position; }
-    inline const Vector2& getPosition( void ) const { return mPosition; }
-    inline void setRadius( const F32 radius ) { mRadius = getMax( radius, FLT_MIN ); }
-    inline F32 getRadius( void ) const { return mRadius; }
-    inline void setForce( const F32 force ) { mForce = force; }
-    inline F32 getForce( void ) const { return mForce; }
+    SceneController() {}
+    virtual ~SceneController() {}
 
     /// Integration.
-    virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
+    virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats ) = 0;
 
     // Scene render.
-    virtual void renderOverlay( Scene* pScene, const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer );
-
-    /// Declare Console Object.
-    DECLARE_CONOBJECT( PointForceController );
+    virtual void renderOverlay( Scene* pScene, const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer ) = 0;
 };
 
-#endif // _ATTRACTOR_CONTROLLER_H_
+#endif // _SCENE_CONTROLLER_H_

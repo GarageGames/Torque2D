@@ -20,11 +20,11 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _ATTRACTOR_CONTROLLER_H_
-#define _ATTRACTOR_CONTROLLER_H_
+#ifndef _AMBIENT_FORCE_CONTROLLER_H_
+#define _AMBIENT_FORCE_CONTROLLER_H_
 
-#ifndef _PICKING_SCENE_CONTROLLER_H_
-#include "2d/controllers/core/pickingSceneController.h"
+#ifndef _GROUPED_SCENE_CONTROLLER_H_
+#include "2d/controllers/core/GroupedSceneController.h"
 #endif
 
 #ifndef _VECTOR2_H_
@@ -33,37 +33,28 @@
 
 //------------------------------------------------------------------------------
 
-class PointForceController : public PickingSceneController
+class AmbientForceController : public GroupedSceneController
 {
 private:
-    typedef PickingSceneController Parent;
+    typedef GroupedSceneController Parent;
 
-    Vector2 mPosition;
-    F32 mRadius;
-    F32 mForce;
+    Vector2 mForce;
 
 public:
-    PointForceController();
-    virtual ~PointForceController();
+    AmbientForceController();
+    virtual ~AmbientForceController();
 
     static void initPersistFields();
     virtual void copyTo(SimObject* object);
 
-    inline void setPosition( const Vector2& position ) { mPosition = position; }
-    inline const Vector2& getPosition( void ) const { return mPosition; }
-    inline void setRadius( const F32 radius ) { mRadius = getMax( radius, FLT_MIN ); }
-    inline F32 getRadius( void ) const { return mRadius; }
-    inline void setForce( const F32 force ) { mForce = force; }
-    inline F32 getForce( void ) const { return mForce; }
-
     /// Integration.
     virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
 
-    // Scene render.
-    virtual void renderOverlay( Scene* pScene, const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer );
+    inline void setForce( const Vector2& force ) { mForce = force; }
+    inline const Vector2& getForce( void ) const { return mForce; }
 
     /// Declare Console Object.
-    DECLARE_CONOBJECT( PointForceController );
+    DECLARE_CONOBJECT( AmbientForceController );
 };
 
-#endif // _ATTRACTOR_CONTROLLER_H_
+#endif // _AMBIENT_FORCE_CONTROLLER_H_

@@ -1437,27 +1437,20 @@ void SceneObject::applyAngularImpulse( const F32 impulse, const bool wake )
 
 //-----------------------------------------------------------------------------
 
-void SceneObject::setCollisionMasks( const U32 groupMask, const U32 layerMask )
-{
-    // Set Group/Layer Collision Masks.
-    mCollisionGroupMask = groupMask;
-    mCollisionLayerMask = layerMask;
-}
-
-//-----------------------------------------------------------------------------
-
 void SceneObject::setCollisionAgainst( const SceneObject* pSceneObject, const bool clearMasks )
 {
     // Do we need to clear existing masks?
     if ( clearMasks )
     {
         // Yes, so just set the masks to the referenced-objects' masks.
-        setCollisionMasks( pSceneObject->getSceneGroupMask(), pSceneObject->getSceneLayerMask() );
+        setCollisionGroupMask( pSceneObject->getCollisionGroupMask() );
+        setCollisionLayerMask( pSceneObject->getCollisionLayerMask() ); 
     }
     else
     {
         // No, so merge with existing masks.
-        setCollisionMasks( getCollisionGroupMask() | pSceneObject->getSceneGroupMask(), getCollisionLayerMask() | pSceneObject->getSceneLayerMask() );
+        setCollisionGroupMask( getCollisionGroupMask() | pSceneObject->getCollisionGroupMask() );
+        setCollisionLayerMask( getCollisionLayerMask() | pSceneObject->getCollisionLayerMask() ); 
     }
 }
 
@@ -2878,8 +2871,8 @@ void SceneObject::copyTo( SimObject* obj )
     pSceneObject->setSleepingAllowed( getSleepingAllowed() );
 
     /// Collision control.
-    pSceneObject->setCollisionGroups( getCollisionGroupMask() );
-    pSceneObject->setCollisionLayers( getCollisionLayerMask() );
+    pSceneObject->setCollisionGroupMask( getCollisionGroupMask() );
+    pSceneObject->setCollisionLayerMask( getCollisionLayerMask() );
     pSceneObject->setCollisionSuppress( getCollisionSuppress() );
     pSceneObject->setGatherContacts( getGatherContacts() );
     pSceneObject->setDefaultDensity( getDefaultDensity() );

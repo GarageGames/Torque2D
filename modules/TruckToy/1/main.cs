@@ -185,7 +185,7 @@ function TruckToy::createBackground(%this)
     %obj = new Sprite();
     %obj.setBodyType( "static" );
     %obj.setImage( "ToyAssets:highlightBackground" );
-    //%obj.setImage( "TruckToy:background_day" );
+    %obj.BlendColor = DarkGray;
     %obj.setSize( TruckToy.WorldWidth * (TruckToy.CameraWidth*2), 75 );
     %obj.setSceneLayer( TruckToy.BackdropDomain );
     %obj.setSceneGroup( TruckToy.BackdropDomain );

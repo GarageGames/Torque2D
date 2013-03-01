@@ -1080,7 +1080,8 @@ ConsoleMethod(SceneObject, setCollisionMasks, void, 3, 4,    "(groupMask, [layer
     const U32 layerMask = (argc > 3) ? dAtoi(argv[3]) : MASK_ALL;
 
     // Set Collision Masks.
-    object->setCollisionMasks( groupMask, layerMask );
+    object->setCollisionGroupMask( groupMask );
+    object->setCollisionLayerMask( layerMask );
 }
 
 //-----------------------------------------------------------------------------
@@ -1125,121 +1126,121 @@ ConsoleMethod(SceneObject, setCollisionAgainst, void, 3, 4, "(SceneObject object
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(SceneObject, setCollisionLayers, void, 3, 2 + MASK_BITCOUNT, "(layers$) - Sets the collision layers(s).\n"
-                                                                                  "@param layers A list of layers numbers to collide with.\n"
+                                                                                  "@param layers A list of layers to collide with.\n"
                                                       "@return No return value.")
 {
-   // The mask.
-   U32 mask = 0;
+    // The mask.
+    U32 mask = 0;
 
-   // Grab the element count of the first parameter.
-   const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+    // Grab the element count of the first parameter.
+    const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
 
-   // Make sure we get at least one number.
-   if (elementCount < 1)
-   {
-      object->setCollisionLayers(0);
-      return;
-   }
+    // Make sure we get at least one number.
+    if (elementCount < 1)
+    {
+        object->setCollisionLayerMask(MASK_ALL);
+        return;
+    }
 
-   // Space separated list.
-   if (argc == 3)
-   {
-      // Convert the string to a mask.
-      for (U32 i = 0; i < elementCount; i++)
-      {
-         S32 bit = dAtoi(Utility::mGetStringElement(argv[2], i));
+    // Space separated list.
+    if (argc == 3)
+    {
+        // Convert the string to a mask.
+        for (U32 i = 0; i < elementCount; i++)
+        {
+            S32 bit = dAtoi(Utility::mGetStringElement(argv[2], i));
          
-         // Make sure the group is valid.
-         if ((bit < 0) || (bit >= MASK_BITCOUNT))
-         {
+            // Make sure the group is valid.
+            if ((bit < 0) || (bit >= MASK_BITCOUNT))
+            {
             Con::warnf("SceneObject::setCollisionLayers() - Invalid layer specified (%d); skipped!", bit);
             continue;
-         }
+            }
          
-         mask |= (1 << bit);
-      }
-   }
+            mask |= (1 << bit);
+        }
+    }
 
-   // Comma separated list.
-   else
-   {
-      // Convert the list to a mask.
-      for (U32 i = 2; i < (U32)argc; i++)
-      {
-         S32 bit = dAtoi(argv[i]);
+    // Comma separated list.
+    else
+    {
+        // Convert the list to a mask.
+        for (U32 i = 2; i < (U32)argc; i++)
+        {
+            S32 bit = dAtoi(argv[i]);
          
-         // Make sure the group is valid.
-         if ((bit < 0) || (bit >= MASK_BITCOUNT))
-         {
+            // Make sure the group is valid.
+            if ((bit < 0) || (bit >= MASK_BITCOUNT))
+            {
             Con::warnf("SceneObject::setCollisionLayers() - Invalid layer specified (%d); skipped!", bit);
             continue;
-         }
+            }
 
-         mask |= (1 << bit);
-      }
-   }
-   // Set Collision Groups.
-   object->setCollisionLayers(mask);
+            mask |= (1 << bit);
+        }
+    }
+    // Set Collision Layers
+    object->setCollisionLayerMask(mask);
 }
 
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(SceneObject, setCollisionGroups, void, 3, 2 + MASK_BITCOUNT, "(groups$) - Sets the collision group(s).\n"
-                                                                                  "@param groups A list of collision group numbers to collide with.\n"
+                                                                                  "@param groups A list of collision groups to collide with.\n"
                                                                                 "@return No return value.")
 {
-   // The mask.
-   U32 mask = 0;
+    // The mask.
+    U32 mask = 0;
 
-   // Grab the element count of the first parameter.
-   const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+    // Grab the element count of the first parameter.
+    const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
 
-   // Make sure we get at least one number.
-   if (elementCount < 1)
-   {
-      object->setCollisionGroups(0);
-      return;
-   }
+    // Make sure we get at least one number.
+    if (elementCount < 1)
+    {
+        object->setCollisionGroupMask(MASK_ALL);
+        return;
+    }
 
-   // Space separated list.
-   if (argc == 3)
-   {
-      // Convert the string to a mask.
-      for (U32 i = 0; i < elementCount; i++)
-      {
-         S32 bit = dAtoi(Utility::mGetStringElement(argv[2], i));
+    // Space separated list.
+    if (argc == 3)
+    {
+        // Convert the string to a mask.
+        for (U32 i = 0; i < elementCount; i++)
+        {
+            S32 bit = dAtoi(Utility::mGetStringElement(argv[2], i));
          
-         // Make sure the group is valid.
-         if ((bit < 0) || (bit >= MASK_BITCOUNT))
-         {
+            // Make sure the group is valid.
+            if ((bit < 0) || (bit >= MASK_BITCOUNT))
+            {
             Con::warnf("SceneObject::setCollisionGroups() - Invalid group specified (%d); skipped!", bit);
             continue;
-         }
+            }
          
-         mask |= (1 << bit);
-      }
-   }
+            mask |= (1 << bit);
+        }
+    }
 
-   // Comma separated list.
-   else
-   {
-      // Convert the list to a mask.
-      for (U32 i = 2; i < (U32)argc; i++)
-      {
-         S32 bit = dAtoi(argv[i]);
+    // Comma separated list.
+    else
+    {
+        // Convert the list to a mask.
+        for (U32 i = 2; i < (U32)argc; i++)
+        {
+            S32 bit = dAtoi(argv[i]);
          
-         // Make sure the group is valid.
-         if ((bit < 0) || (bit >= MASK_BITCOUNT))
-         {
+            // Make sure the group is valid.
+            if ((bit < 0) || (bit >= MASK_BITCOUNT))
+            {
             Con::warnf("SceneObject::setCollisionGroups() - Invalid group specified (%d); skipped!", bit);
             continue;
-         }
+            }
 
-         mask |= (1 << bit);
-      }
-   }
-   // Set Collision Groups.
-   object->setCollisionGroups(mask);
+            mask |= (1 << bit);
+        }
+    }
+    // Set Collision Groups.
+    object->setCollisionGroupMask(mask);
 }
 
 //-----------------------------------------------------------------------------
@@ -1247,23 +1248,23 @@ ConsoleMethod(SceneObject, setCollisionGroups, void, 3, 2 + MASK_BITCOUNT, "(gro
 ConsoleMethod(SceneObject, getCollisionLayers, const char*, 2, 2, "() - Gets the collision layers.\n"
                                                                      "@return (collisionLayers) A list of collision layers.")
 {
-   U32 mask = object->getCollisionLayerMask();
+    U32 mask = object->getCollisionLayerMask();
 
-   bool first = true;
-   char* bits = Con::getReturnBuffer(128);
-   bits[0] = '\0';
-   for (S32 i = 0; i < MASK_BITCOUNT; i++)
-   {
-      if (mask & BIT(i))
-      {
-         char bit[4];
-         dSprintf(bit, 4, "%s%d", first ? "" : " ", i);
-         first = false;
-         dStrcat(bits, bit);
-      }
-   }
+    bool first = true;
+    char* bits = Con::getReturnBuffer(128);
+    bits[0] = '\0';
+    for (S32 i = 0; i < MASK_BITCOUNT; i++)
+    {
+        if (mask & BIT(i))
+        {
+            char bit[4];
+            dSprintf(bit, 4, "%s%d", first ? "" : " ", i);
+            first = false;
+            dStrcat(bits, bit);
+        }
+    }
 
-   return bits;
+    return bits;
 }
 
 //-----------------------------------------------------------------------------
@@ -1271,23 +1272,23 @@ ConsoleMethod(SceneObject, getCollisionLayers, const char*, 2, 2, "() - Gets the
 ConsoleMethod(SceneObject, getCollisionGroups, const char*, 2, 2, "() - Gets the collision groups.\n"
                                                                      "@return (collisionGroups) A list of collision groups.")
 {
-   U32 mask = object->getCollisionGroupMask();
+    U32 mask = object->getCollisionGroupMask();
 
-   bool first = true;
-   char* bits = Con::getReturnBuffer(128);
-   bits[0] = '\0';
-   for (S32 i = 0; i < MASK_BITCOUNT; i++)
-   {
-      if (mask & BIT(i))
-      {
-         char bit[4];
-         dSprintf(bit, 4, "%s%d", first ? "" : " ", i);
-         first = false;
-         dStrcat(bits, bit);
-      }
-   }
+    bool first = true;
+    char* bits = Con::getReturnBuffer(128);
+    bits[0] = '\0';
+    for (S32 i = 0; i < MASK_BITCOUNT; i++)
+    {
+        if (mask & BIT(i))
+        {
+            char bit[4];
+            dSprintf(bit, 4, "%s%d", first ? "" : " ", i);
+            first = false;
+            dStrcat(bits, bit);
+        }
+    }
 
-   return bits;
+    return bits;
 }
 
 //-----------------------------------------------------------------------------

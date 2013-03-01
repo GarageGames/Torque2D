@@ -727,6 +727,8 @@ public:
     SimObject* clone( const bool copyDynamicFields );
     virtual void copyTo(SimObject* object);
 
+    template<typename T> bool isType(void) { return dynamic_cast<T>(this) != NULL; }
+
     // Component Console Overrides
     virtual bool handlesConsoleMethod(const char * fname, S32 * routingId) { return false; }
     DECLARE_CONOBJECT(SimObject);

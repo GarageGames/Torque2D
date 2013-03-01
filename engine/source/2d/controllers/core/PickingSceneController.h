@@ -20,50 +20,57 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _ATTRACTOR_CONTROLLER_H_
-#define _ATTRACTOR_CONTROLLER_H_
-
 #ifndef _PICKING_SCENE_CONTROLLER_H_
-#include "2d/controllers/core/pickingSceneController.h"
+#define _PICKING_SCENE_CONTROLLER_H_
+
+#ifndef _CONSOLETYPES_H_
+#include "console/consoleTypes.h"
 #endif
 
-#ifndef _VECTOR2_H_
-#include "2d/core/vector2.h"
+#ifndef _SCENE_H_
+#include "2d/scene/scene.h"
+#endif
+
+#ifndef _SCENE_OBJECT_H_
+#include "2d/sceneObject/sceneObject.h"
+#endif
+
+#ifndef _SCENE_CONTROLLER_H_
+#include "2d/controllers/core/sceneController.h"
 #endif
 
 //------------------------------------------------------------------------------
 
-class PointForceController : public PickingSceneController
+class PickingSceneController : public SimObject, public SceneController
 {
-private:
-    typedef PickingSceneController Parent;
+    typedef SimObject Parent;
 
-    Vector2 mPosition;
-    F32 mRadius;
-    F32 mForce;
+private:
+    U32 mControlGroupMask;
+    U32 mControlLayerMask;
 
 public:
-    PointForceController();
-    virtual ~PointForceController();
+    PickingSceneController();
+    virtual ~PickingSceneController();
 
-    static void initPersistFields();
     virtual void copyTo(SimObject* object);
 
-    inline void setPosition( const Vector2& position ) { mPosition = position; }
-    inline const Vector2& getPosition( void ) const { return mPosition; }
-    inline void setRadius( const F32 radius ) { mRadius = getMax( radius, FLT_MIN ); }
-    inline F32 getRadius( void ) const { return mRadius; }
-    inline void setForce( const F32 force ) { mForce = force; }
-    inline F32 getForce( void ) const { return mForce; }
+    inline void setControlGroupMask( const U32 groupMask ) { mControlGroupMask = groupMask; }
+    inline U32 getControlGroupMask( void ) const { return mControlGroupMask; }
+    inline void setControlLayerMask( const U32 layerMask ) { mControlLayerMask = layerMask; }
+    inline U32 getControlLayerMask( void ) const { return mControlLayerMask; }
 
     /// Integration.
-    virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
+    virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats ) {}
 
     // Scene render.
-    virtual void renderOverlay( Scene* pScene, const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer );
+    virtual void renderOverlay( Scene* pScene, const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer ) {}
 
     /// Declare Console Object.
-    DECLARE_CONOBJECT( PointForceController );
+    DECLARE_CONOBJECT( PickingSceneController );
+
+protected:
+    WorldQuery* prepareQueryFilter( Scene* pScene, const bool clearQuery = true );
 };
 
-#endif // _ATTRACTOR_CONTROLLER_H_
+#endif // _PICKING_SCENE_CONTROLLER_H_
