@@ -551,11 +551,6 @@ void Scene::dispatchBeginContactCallbacks( void )
     if ( contactCount == 0 )
         return;
 
-    // Finish if no collision method exists on scene.
-    Namespace* pNamespace = getNamespace();
-    if ( pNamespace != NULL && pNamespace->lookup( StringTable->insert( "onCollision" ) ) == NULL )
-        return;
-
     // Iterate all contacts.
     for ( typeContactHash::iterator contactItr = mBeginContacts.begin(); contactItr != mBeginContacts.end(); ++contactItr )
     {
@@ -594,9 +589,9 @@ void Scene::dispatchBeginContactCallbacks( void )
 
         // Format objects.
         char* pSceneObjectABuffer = Con::getArgBuffer( 8 );
-        char* pSceneObjectBuffer = Con::getArgBuffer( 8 );
+        char* pSceneObjectBBuffer = Con::getArgBuffer( 8 );
         dSprintf( pSceneObjectABuffer, 8, "%d", pSceneObjectA->getId() );
-        dSprintf( pSceneObjectBuffer, 8, "%d", pSceneObjectB->getId() );
+        dSprintf( pSceneObjectBBuffer, 8, "%d", pSceneObjectB->getId() );
 
         // Format miscellaneous information.
         char* pMiscInfoBuffer = Con::getArgBuffer(128);
@@ -630,11 +625,52 @@ void Scene::dispatchBeginContactCallbacks( void )
                 shapeIndexA, shapeIndexB );
 		}
 
-        // Script callback.
-        Con::executef( this, 4, "onCollision",
-            pSceneObjectABuffer,
-            pSceneObjectBuffer,
-            pMiscInfoBuffer );
+        // Does the scene handle the collision callback?
+        Namespace* pNamespace = getNamespace();
+        if ( pNamespace != NULL && pNamespace->lookup( StringTable->insert( "onCollision" ) ) != NULL )
+        {
+            // Yes, so perform script callback on the Scene.
+            Con::executef( this, 4, "onCollision",
+                pSceneObjectABuffer,
+                pSceneObjectBBuffer,
+                pMiscInfoBuffer );
+        }
+        else
+        {
+            // No, so call it on its behaviors.
+            const char* args[4] = { "onCollision", pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
+            callOnBehaviors( 4, args );
+        }
+
+        // Does the scene object A handle the collision callback?
+        if ( pSceneObjectA->isMethod("onCollision") )            
+        {
+            // Yes, so perform the script callback on it.
+            Con::executef( pSceneObjectA, 4, "onCollision",
+                pSceneObjectBBuffer,
+                pMiscInfoBuffer );
+        }
+        else
+        {
+            // No, so call it on its behaviors.
+            const char* args[3] = { "onCollision", pSceneObjectBBuffer, pMiscInfoBuffer };
+            pSceneObjectA->callOnBehaviors( 3, args );
+        }
+
+        // Does the scene object B handle the collision callback?
+        if ( pSceneObjectB->isMethod("onCollision") )            
+        {
+            // Yes, so perform the script callback on it.
+            Con::executef( pSceneObjectB, 4, "onCollision",
+                pSceneObjectABuffer,
+                pMiscInfoBuffer );
+        }
+        else
+        {
+            // No, so call it on its behaviors.
+            const char* args[3] = { "onCollision", pSceneObjectABuffer, pMiscInfoBuffer };
+            pSceneObjectB->callOnBehaviors( 3, args );
+        }
     }
 }
 
@@ -696,11 +732,41 @@ void Scene::dispatchEndContactCallbacks( void )
         char* pMiscInfoBuffer = Con::getArgBuffer(32);
         dSprintf(pMiscInfoBuffer, 32, "%d %d", shapeIndexA, shapeIndexB );
 
-        // Script callback.
+        // Perform the script callback on the Scene.
         Con::executef( this, 4, "onEndCollision",
             pSceneObjectABuffer,
             pSceneObjectBBuffer,
             pMiscInfoBuffer );
+
+        // Does scene object A handle the collision?
+        if ( pSceneObjectA->isMethod("onEndCollision") )            
+        {
+            // Yes, so perform the script callback on it.
+            Con::executef( pSceneObjectA, 4, "onEndCollision",
+                pSceneObjectBBuffer,
+                pMiscInfoBuffer );
+        }
+        else
+        {
+            // No, so call it on its behaviors.
+            const char* args[3] = { "onEndCollision", pSceneObjectBBuffer, pMiscInfoBuffer };
+            pSceneObjectA->callOnBehaviors( 3, args );
+        }
+
+        // Does scene object B handle the collision?
+        if ( pSceneObjectB->isMethod("onEndCollision") )            
+        {
+            // Yes, so perform the script callback on it.
+            Con::executef( pSceneObjectB, 4, "onEndCollision",
+                pSceneObjectABuffer,
+                pMiscInfoBuffer );
+        }
+        else
+        {
+            // No, so call it on its behaviors.
+            const char* args[3] = { "onEndCollision", pSceneObjectABuffer, pMiscInfoBuffer };
+            pSceneObjectB->callOnBehaviors( 3, args );
+        }
     }
 }
 
