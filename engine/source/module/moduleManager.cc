@@ -1836,6 +1836,39 @@ bool ModuleManager::removeModuleDefinition( ModuleDefinition* pModuleDefinition 
         // Delete module definition.
         pModuleDefinition->deleteObject();
 
+        // Are there any modules left for this module Id?
+        if ( findModuleId( moduleId ) == NULL )
+        {
+            bool moduleIdFound = false;
+
+            // No, so remove from groups.
+            for( typeGroupModuleHash::iterator moduleGroupItr = mGroupModules.begin(); moduleGroupItr != mGroupModules.end(); ++moduleGroupItr )
+            {
+                // Fetch module Ids.
+                typeModuleIdVector* pModuleIds = moduleGroupItr->value;
+
+                // Iterate module Id.
+                for( typeModuleIdVector::iterator moduleIdItr = pModuleIds->begin(); moduleIdItr != pModuleIds->end(); ++moduleIdItr )
+                {
+                    // Skip if this isn't the Id.
+                    if ( *moduleIdItr != moduleId )
+                        continue;
+
+                    // Remove the module Id.
+                    pModuleIds->erase( moduleIdItr );
+
+                    // Flag as found.
+                    moduleIdFound = true;
+
+                    break;
+                }
+
+                // Finish if found.
+                if ( moduleIdFound )
+                    break;
+            }
+        }
+
         return true;
     }
 
@@ -2039,11 +2072,12 @@ bool ModuleManager::registerModule( const char* pModulePath, const char* pModule
         for( typeModuleIdVector::iterator moduleIdItr = pModuleIds->begin(); moduleIdItr != pModuleIds->end(); ++moduleIdItr )
         {
             // Skip if this isn't the Id.
-            if ( *moduleIdItr == moduleId )
-            {
-                moduleIdFound = true;
-                break;
-            }
+            if ( *moduleIdItr != moduleId )
+                continue;
+
+            // Flag as found.
+            moduleIdFound = true;
+            break;
         }
 
         // Add if module Id was not found.
@@ -2096,6 +2130,31 @@ bool ModuleManager::registerModule( const char* pModulePath, const char* pModule
     }
 
     return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool ModuleManager::unregisterModule( const char* pModuleId, const U32 versionId )
+{
+    // Sanity!
+    AssertFatal( pModuleId != NULL, "A module Id cannot be NULL." );
+
+    // Fetch module Id.
+    StringTableEntry moduleId = StringTable->insert( pModuleId );
+
+    // Find the module definition.
+    ModuleDefinition* pModuleDefinition = findModule( pModuleId, versionId );
+
+    // Did we find the module definition?
+    if ( pModuleDefinition == NULL )
+    {
+        // No, so warn.
+        Con::warnf( "Module Manager: Cannot unregister module Id '%s' as it is not registered.", moduleId );
+        return false;
+    }
+
+    // Remove the module definition.
+    return removeModuleDefinition( pModuleDefinition );
 }
 
 //-----------------------------------------------------------------------------

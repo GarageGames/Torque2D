@@ -54,6 +54,23 @@ ConsoleMethod(ModuleManager, scanModules, bool, 3, 4,   "(moduleRootPath, [rootO
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(ModuleManager, unregisterModule, bool, 4, 4,  "(moduleId, versionId) - Unregister the specified module.\n"
+                                                            "@param moduleId The module Id to unregister.\n"
+                                                            "@param versionId The version Id to unregister.\n"
+                                                            "@return Whether the module was unregister or not.")
+{
+    // Fetch the module Id.
+    const char* pModuleId = argv[2];
+
+    // Fetch the version Id.
+    const U32 versionId = (U32)dAtoi(argv[3]);
+
+    // Unregister the module.
+    return object->unregisterModule( pModuleId, versionId );
+}
+
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(ModuleManager, loadGroup, bool, 3, 3,     "(moduleGroup) - Load the specified module group.\n"
                                                         "@param moduleGroup The module group to load.\n"
                                                         "@return Whether the module group was loaded or not.")
