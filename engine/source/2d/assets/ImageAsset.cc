@@ -1016,6 +1016,11 @@ void ImageAsset::calculateImage( void )
     // Clear frames.
     mFrames.clear();
 
+    // If we have an existing texture and we're setting to the same bitmap then force the texture manager
+    // to refresh the texture itself.
+    if ( !mImageTextureHandle.IsNull() && dStricmp(mImageTextureHandle.getTextureKey(), mImageFile) == 0 )
+        TextureManager::refresh( mImageFile );
+
     // Get image texture.
     mImageTextureHandle.set( mImageFile, TextureHandle::BitmapTexture, true, getForce16Bit() );
 

@@ -689,6 +689,38 @@ void TextureManager::refresh( TextureObject* pTextureObject )
 
 //--------------------------------------------------------------------------------------------------------------------
 
+void TextureManager::refresh( const char *textureName )
+{
+    // Finish if no texture name specified.
+    AssertFatal( textureName != NULL, "Texture Manager:  Cannot refresh a NULL texture name." );
+
+    // Find the texture object.
+    TextureObject* pTextureObject = TextureDictionary::find( textureName );
+
+    // Finish if no texture for this texture name.
+    if ( pTextureObject == NULL )
+        return;
+
+    // Finish if the texture object is a kept bitmap.
+    if ( pTextureObject->getHandleType() == TextureHandle::BitmapKeepTexture )
+        return;
+
+    // Load the bitmap.
+    GBitmap* pBitmap = loadBitmap( pTextureObject->mTextureKey );
+
+    // Finish if bitmap could not be loaded.
+    if ( pBitmap == NULL )
+        return;
+
+    // Register texture.
+    TextureObject* pNewTextureObject = registerTexture(pTextureObject->mTextureKey, pBitmap, pTextureObject->mHandleType, pTextureObject->mClamp);
+
+    // Sanity!
+    AssertFatal(pNewTextureObject == pTextureObject, "A new texture was returned during refresh.");
+}
+
+//--------------------------------------------------------------------------------------------------------------------
+
 void TextureManager::createGLName( TextureObject* pTextureObject )
 {
     // Finish if not appropriate.
