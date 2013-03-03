@@ -531,7 +531,7 @@ function ToyListArray::initialize(%this, %index)
     {
         // Fetch the toy module.
         %moduleDefinition = SandboxToys.getObject( %toyIndex );
-
+        
         // Skip the toy module if the "all" category is not selected and if the toy is not in the selected category.
         if ( %index != $toyAllCategoryIndex && %moduleDefinition.ToyCategoryIndex != %index )
             continue;
