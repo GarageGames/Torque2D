@@ -1296,6 +1296,9 @@
     <ClCompile Include="..\..\source\2d\controllers\AmbientForceController.cc">
       <Filter>2d\controllers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\2d\core\SpriteBatchQuery.cc">
+      <Filter>2d\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\audio\audio.h">
@@ -2654,6 +2657,12 @@
     </ClInclude>
     <ClInclude Include="..\..\source\2d\controllers\AmbientForceController_ScriptBinding.h">
       <Filter>2d\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\core\SpriteBatchQuery.h">
+      <Filter>2d\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\core\SpriteBatchQueryResult.h">
+      <Filter>2d\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

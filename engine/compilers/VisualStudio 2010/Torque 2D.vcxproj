@@ -251,6 +251,7 @@
     <ClCompile Include="..\..\source\2d\core\SpriteBase.cc" />
     <ClCompile Include="..\..\source\2d\core\SpriteBatch.cc" />
     <ClCompile Include="..\..\source\2d\core\SpriteBatchItem.cc" />
+    <ClCompile Include="..\..\source\2d\core\SpriteBatchQuery.cc" />
     <ClCompile Include="..\..\source\2d\core\SpriteProxyBase.cc" />
     <ClCompile Include="..\..\source\2d\core\Utility.cc" />
     <ClCompile Include="..\..\source\2d\core\Vector2.cc" />
@@ -639,6 +640,8 @@
     <ClInclude Include="..\..\source\2d\core\SpriteBase_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\core\SpriteBatch.h" />
     <ClInclude Include="..\..\source\2d\core\SpriteBatchItem.h" />
+    <ClInclude Include="..\..\source\2d\core\SpriteBatchQuery.h" />
+    <ClInclude Include="..\..\source\2d\core\SpriteBatchQueryResult.h" />
     <ClInclude Include="..\..\source\2d\core\SpriteProxyBase.h" />
     <ClInclude Include="..\..\source\2d\core\Utility.h" />
     <ClInclude Include="..\..\source\2d\core\Vector2.h" />

@@ -119,7 +119,7 @@ void SpriteBatchItem::resetState( void )
         AssertFatal( mSpriteBatch != NULL, "Cannot remove proxy with NULL sprite batch." );
 
         // Destroy proxy.
-        mSpriteBatch->destroyTreeProxy( this );
+        mSpriteBatch->destroyQueryProxy( this );
     }
 
     mSpriteBatch = NULL;
@@ -157,6 +157,8 @@ void SpriteBatchItem::resetState( void )
     mRenderPosition.setZero();
     mLastBatchTransformId = 0;
 
+    mSpriteBatchQueryKey = 0;
+
     // Require self ticking.
     mSelfTick = true;
 }
@@ -175,7 +177,7 @@ void SpriteBatchItem::setBatchParent( SpriteBatch* pSpriteBatch, const U32 batch
     mBatchId = batchId;
 
     // Create proxy.
-    mSpriteBatch->createTreeProxy( mLocalAABB, this );
+    mSpriteBatch->createQueryProxy( this );
 }
 
 //------------------------------------------------------------------------------
@@ -289,8 +291,8 @@ void SpriteBatchItem::updateLocalTransform( void )
     // Calculate local AABB.
     CoreMath::mOOBBtoAABB( mLocalOOBB, mLocalAABB );
 
-    // Move tree proxy.
-    mSpriteBatch->moveTreeProxy( this, mLocalAABB );
+    // Move query proxy.
+    mSpriteBatch->moveQueryProxy( this, mLocalAABB );
 
     // Flag local transform as NOT dirty.
     mLocalTransformDirty = false;

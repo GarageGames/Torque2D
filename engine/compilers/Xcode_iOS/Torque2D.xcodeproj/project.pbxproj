@@ -15,6 +15,7 @@
 		2AB4C1B116DE9F6700B02479 /* PickingSceneController.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AB4C1AD16DE9F6700B02479 /* PickingSceneController.cc */; };
 		2AB97A2116B66BE50080F940 /* tamlCustom.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AB97A1F16B66BE50080F940 /* tamlCustom.cc */; };
 		2AC4404E16B0144500FC4091 /* ImageFont.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AC4404C16B0144500FC4091 /* ImageFont.cc */; };
+		2ACF5A2C16E52D6A00F838D9 /* SpriteBatchQuery.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ACF5A2916E52D6A00F838D9 /* SpriteBatchQuery.cc */; };
 		2AE2F55916D6B07200B6A058 /* BuoyancyController.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AE2F55716D6B07200B6A058 /* BuoyancyController.cc */; };
 		2AED7D9316B70102003482CF /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AED7D9216B70102003482CF /* CoreText.framework */; };
 		2AF1C54B16B439D900C1CF3A /* declaredAssets.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AF1C54716B439D900C1CF3A /* declaredAssets.cc */; };
@@ -503,6 +504,9 @@
 		2AC4404B16B0144500FC4091 /* ImageFont_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFont_ScriptBinding.h; sourceTree = "<group>"; };
 		2AC4404C16B0144500FC4091 /* ImageFont.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageFont.cc; sourceTree = "<group>"; };
 		2AC4404D16B0144500FC4091 /* ImageFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFont.h; sourceTree = "<group>"; };
+		2ACF5A2916E52D6A00F838D9 /* SpriteBatchQuery.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpriteBatchQuery.cc; sourceTree = "<group>"; };
+		2ACF5A2A16E52D6A00F838D9 /* SpriteBatchQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteBatchQuery.h; sourceTree = "<group>"; };
+		2ACF5A2B16E52D6A00F838D9 /* SpriteBatchQueryResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteBatchQueryResult.h; sourceTree = "<group>"; };
 		2AD07B2716D15F8E0070DC79 /* simObjectTimerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simObjectTimerEvent.h; sourceTree = "<group>"; };
 		2AE2F55616D6B07200B6A058 /* BuoyancyController_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BuoyancyController_ScriptBinding.h; path = controllers/BuoyancyController_ScriptBinding.h; sourceTree = "<group>"; };
 		2AE2F55716D6B07200B6A058 /* BuoyancyController.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BuoyancyController.cc; path = controllers/BuoyancyController.cc; sourceTree = "<group>"; };
@@ -1591,6 +1595,9 @@
 		867BAD0C16AEC9050033868F /* core */ = {
 			isa = PBXGroup;
 			children = (
+				2ACF5A2916E52D6A00F838D9 /* SpriteBatchQuery.cc */,
+				2ACF5A2A16E52D6A00F838D9 /* SpriteBatchQuery.h */,
+				2ACF5A2B16E52D6A00F838D9 /* SpriteBatchQueryResult.h */,
 				867BAD0D16AEC9050033868F /* BatchRender.cc */,
 				867BAD0E16AEC9050033868F /* BatchRender.h */,
 				867BAD0F16AEC9050033868F /* CoreMath.cc */,
@@ -3406,6 +3413,7 @@
 				2AB4C1A716DE9F4B00B02479 /* AmbientForceController.cc in Sources */,
 				2AB4C1B016DE9F6700B02479 /* GroupedSceneController.cc in Sources */,
 				2AB4C1B116DE9F6700B02479 /* PickingSceneController.cc in Sources */,
+				2ACF5A2C16E52D6A00F838D9 /* SpriteBatchQuery.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
