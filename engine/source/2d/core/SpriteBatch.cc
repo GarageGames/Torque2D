@@ -1276,15 +1276,24 @@ bool SpriteBatch::destroySprite( const U32 batchId )
     // Debug Profiling.
     PROFILE_SCOPE(SpriteBatch_DestroySprite);
 
-    // Find sprite.    
-    SpriteBatchItem* pSpriteBatchItem = findSpriteId( batchId );
+    // Find sprite.
+    typeSpriteBatchHash::iterator spriteItr = mSprites.find( batchId );
 
-    // Finish if not found.
-    if ( pSpriteBatchItem == NULL )
+    // Finish if sprite not found.
+    if ( spriteItr == mSprites.end() )
         return false;
+
+    // Find sprite.    
+    SpriteBatchItem* pSpriteBatchItem = spriteItr->value;
+
+    // Sanity!
+    AssertFatal( pSpriteBatchItem != NULL, "SpriteBatch::destroySprite() - Found sprite but it was NULL." );
 
     // Cache sprite.
     SpriteBatchItemFactory.cacheObject( pSpriteBatchItem );
+
+    // Remove from sprites.
+    mSprites.erase( batchId );
 
     return true;
 }

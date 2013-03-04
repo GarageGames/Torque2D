@@ -901,6 +901,12 @@ ConsoleMethod(CompositeSprite, pickPoint, const char*, 3, 4,    "(x / y ) Picks 
         return NULL;
     }
 
+    // Fetch the render transform.
+    const b2Transform& renderTransform = object->getRenderTransform();
+
+    // Transform into local space.
+    point = b2MulT( renderTransform, point );
+
     // Perform query.
     pSpriteBatchQuery->renderQueryPoint( point );
 
@@ -1008,12 +1014,22 @@ ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y )
         return NULL;
     }
 
+    // Fetch the render transform.
+    const b2Transform& renderTransform = object->getRenderTransform();
+    
+    // Translate into local space.
+    v1 -= renderTransform.p;
+    v2 -= renderTransform.p;
+
     // Calculate normalized AABB.
     b2AABB aabb;
     aabb.lowerBound.x = getMin( v1.x, v2.x );
     aabb.lowerBound.y = getMin( v1.y, v2.y );
     aabb.upperBound.x = getMax( v1.x, v2.x );
     aabb.upperBound.y = getMax( v1.y, v2.y );
+
+    // Rotate the AABB into local space.
+    CoreMath::mRotateAABB( aabb, -renderTransform.q.GetAngle(), aabb );
 
     // Perform query.
     pSpriteBatchQuery->renderQueryArea( aabb );
@@ -1121,6 +1137,13 @@ ConsoleMethod(CompositeSprite, pickRay, const char*, 4, 6,  "(startx/y, endx/y) 
         Con::warnf("CompositeSprite::pickRay() - Invalid number of parameters!");
         return NULL;
     }
+
+    // Fetch the render transform.
+    const b2Transform& renderTransform = object->getRenderTransform();
+
+    // Transform into local space.
+    v1 = b2MulT( renderTransform, v1 );
+    v2 = b2MulT( renderTransform, v2 );
 
     // Perform query.
     pSpriteBatchQuery->renderQueryRay( v1, v2 );
