@@ -3706,7 +3706,7 @@ ConsoleMethod(SceneObject, setPickingAllowed, void, 3, 3,   "(bool pickingAllowe
     // Fetch flag.
     const bool pickingAllowed = dAtob(argv[2]);
 
-    object->setPickingAllowed( pickingAllowed )
+    object->setPickingAllowed( pickingAllowed );
 }
 
 //-----------------------------------------------------------------------------
