@@ -242,10 +242,6 @@ private:
     /// Window rendering.
     SceneWindow*                mpCurrentRenderWindow;
 
-    /// Background color.
-    ColorF                      mBackgroundColor;
-    bool                        mUseBackgroundColor;
-
     /// Window attachments.
     SimSet                      mAttachedSceneWindows;
 
@@ -333,12 +329,6 @@ public:
     inline S32              getVelocityIterations( void ) const         { return mVelocityIterations; }
     inline void             setPositionIterations( const S32 iterations ) { mPositionIterations = iterations; }
     inline S32              getPositionIterations( void ) const         { return mPositionIterations; }
-
-    /// Background color.
-    inline void             setBackgroundColor( const ColorF& backgroundColor ) { mBackgroundColor = backgroundColor; }
-    inline const ColorF&    getBackgroundColor( void ) const            { return mBackgroundColor; }
-    inline void             setUseBackgroundColor( const bool useBackgroundColor ) { mUseBackgroundColor = useBackgroundColor; }
-    inline bool             getUseBackgroundColor( void ) const         { return mUseBackgroundColor; }
 
     /// Scene occupancy.
     void                    clearScene( bool deleteObjects = true );
@@ -676,8 +666,6 @@ protected:
     static bool writeGravity( void* obj, StringTableEntry pFieldName )              { return Vector2(static_cast<Scene*>(obj)->getGravity()).notEqual( Vector2::getZero() ); }
     static bool writeVelocityIterations( void* obj, StringTableEntry pFieldName )   { return static_cast<Scene*>(obj)->getVelocityIterations() != 8; }
     static bool writePositionIterations( void* obj, StringTableEntry pFieldName )   { return static_cast<Scene*>(obj)->getPositionIterations() != 3; }
-    static bool writeBackgroundColor( void* obj, StringTableEntry pFieldName )      { return static_cast<Scene*>(obj)->mUseBackgroundColor; }
-    static bool writeUseBackgroundColor( void* obj, StringTableEntry pFieldName )   { return static_cast<Scene*>(obj)->mUseBackgroundColor; }
 
     static bool writeLayerSortMode( void* obj, StringTableEntry pFieldName )
     {

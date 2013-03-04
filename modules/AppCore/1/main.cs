@@ -33,7 +33,7 @@ function AppCore::create( %this )
     
     // Set the canvas color
     Canvas.BackgroundColor = "CornflowerBlue";
-    Canvas.UseBackgroundColor = false;
+    Canvas.UseBackgroundColor = true;
     
     // Initialize audio
     initializeOpenAL();

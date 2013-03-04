@@ -94,6 +94,10 @@ private:
     Point2F             mPreTickPosition;
     Point2F             mPostTickPosition;
 
+    /// Background color.
+    ColorF                      mBackgroundColor;
+    bool                        mUseBackgroundColor;
+
     /// Camera Attachment.
     bool                mCameraMounted;
     SceneObject*        mpMountedTo;
@@ -197,6 +201,12 @@ public:
     bool getLockMouse( void ) { return mLockMouse; };
     Vector2 getMousePosition( void );
     void setMousePosition( const Vector2& mousePosition );
+
+    /// Background color.
+    inline void             setBackgroundColor( const ColorF& backgroundColor ) { mBackgroundColor = backgroundColor; }
+    inline const ColorF&    getBackgroundColor( void ) const            { return mBackgroundColor; }
+    inline void             setUseBackgroundColor( const bool useBackgroundColor ) { mUseBackgroundColor = useBackgroundColor; }
+    inline bool             getUseBackgroundColor( void ) const         { return mUseBackgroundColor; }
 
     /// Input.
     void setObjectInputEventFilter( const U32 groupMask, const U32 layerMask, const bool useInvisible = false );
@@ -317,6 +327,8 @@ protected:
     static bool writeLockMouse( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneWindow*>(obj)->mLockMouse == true; }
     static bool writeUseWindowInputEvents( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneWindow*>(obj)->mUseWindowInputEvents == false; }
     static bool writeUseObjectInputEvents( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneWindow*>(obj)->mUseObjectInputEvents == true; }
+    static bool writeBackgroundColor( void* obj, StringTableEntry pFieldName )      { return static_cast<SceneWindow*>(obj)->mUseBackgroundColor == true; }
+    static bool writeUseBackgroundColor( void* obj, StringTableEntry pFieldName )   { return static_cast<SceneWindow*>(obj)->mUseBackgroundColor == true; }
 };
 
 #endif // _SCENE_WINDOW_H_
