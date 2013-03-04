@@ -1084,7 +1084,7 @@ void Scene::sceneRender( const SceneRenderState* pSceneRenderState )
         // Enable the scissor.
         const RectI& clipRect = dglGetClipRect();
         glEnable(GL_SCISSOR_TEST );
-        glScissor( clipRect.point.x, clipRect.point.y, clipRect.len_x(), clipRect.len_y() );
+        glScissor( clipRect.point.x, Platform::getWindowSize().y - (clipRect.point.y + clipRect.extent.y), clipRect.len_x(), clipRect.len_y() );
 
         // Clear the background.
         glClearColor( mBackgroundColor.red, mBackgroundColor.green, mBackgroundColor.blue, mBackgroundColor.alpha );

@@ -29,6 +29,7 @@
 
 //-----------------------------------------------------------------------------
 
+class GuiControl;
 class RectF;
 class DebugStats;
 struct b2AABB;
@@ -44,7 +45,8 @@ struct SceneRenderState
         U32 renderLayerMask,
         U32 renderGroupMask,
         const Vector2& renderScale,
-        DebugStats* pDebugStats )
+        DebugStats* pDebugStats,
+        GuiControl* pGuiControl )
     {
         mRenderArea       = renderArea;
         mRenderAABB       = CoreMath::mRectFtoAABB( renderArea );
@@ -54,6 +56,7 @@ struct SceneRenderState
         mRenderLayerMask  = renderLayerMask;
         mRenderGroupMask  = renderGroupMask;
         mpDebugStats      = pDebugStats;
+        mpGuiControl      = pGuiControl;
     }
 
     RectF           mRenderArea;
@@ -64,6 +67,8 @@ struct SceneRenderState
     U32             mRenderGroupMask;
     Vector2         mRenderScale;
     DebugStats*     mpDebugStats;
+    GuiControl*     mpGuiControl;
+
 
 };
 

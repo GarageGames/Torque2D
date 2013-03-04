@@ -1612,7 +1612,8 @@ void SceneWindow::onRender( Point2I offset, const RectI& updateRect )
         mRenderLayerMask,
         mRenderGroupMask,
         Vector2( mCameraCurrent.mSceneWindowScale ),
-        &debugStats );
+        &debugStats,
+        this );
 
     // Render View.
     pScene->sceneRender( &sceneRenderState );
