@@ -422,7 +422,7 @@ bool WorldQuery::ReportFixture( b2Fixture* fixture )
         return true;
 
     // Picking allowed filter.
-    if ( mQueryFilter.mPickingAllowedFilter && !pSceneObject->getIsPickingAllowed() )
+    if ( mQueryFilter.mPickingAllowedFilter && !pSceneObject->getPickingAllowed() )
         return true;
 
     // Check fixture point.
@@ -475,7 +475,7 @@ F32 WorldQuery::ReportFixture( b2Fixture* fixture, const b2Vec2& point, const b2
         return 1.0f;
 
     // Picking allowed filter.
-    if ( mQueryFilter.mPickingAllowedFilter && !pSceneObject->getIsPickingAllowed() )
+    if ( mQueryFilter.mPickingAllowedFilter && !pSceneObject->getPickingAllowed() )
         return 1.0f;
 
     // Tag with world query key.
@@ -530,7 +530,7 @@ bool WorldQuery::QueryCallback( S32 proxyId )
         return true;
 
     // Picking allowed filter.
-    if ( mQueryFilter.mPickingAllowedFilter && !pSceneObject->getIsPickingAllowed() )
+    if ( mQueryFilter.mPickingAllowedFilter && !pSceneObject->getPickingAllowed() )
         return true;
 
     // Tag with world query key.
@@ -579,7 +579,7 @@ F32 WorldQuery::RayCastCallback( const b2RayCastInput& input, S32 proxyId )
         return 1.0f;
 
     // Picking allowed filter.
-    if ( mQueryFilter.mPickingAllowedFilter && !pSceneObject->getIsPickingAllowed() )
+    if ( mQueryFilter.mPickingAllowedFilter && !pSceneObject->getPickingAllowed() )
         return 1.0f;
 
     // Tag with world query key.
@@ -633,7 +633,7 @@ void WorldQuery::injectAlwaysInScope( void )
             continue;
 
         // Picking allowed filter.
-        if ( mQueryFilter.mPickingAllowedFilter && !pSceneObject->getIsPickingAllowed() )
+        if ( mQueryFilter.mPickingAllowedFilter && !pSceneObject->getPickingAllowed() )
             continue;
 
         // Fetch layer and group masks.

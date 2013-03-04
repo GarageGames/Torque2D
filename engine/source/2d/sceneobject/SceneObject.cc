@@ -179,9 +179,6 @@ SceneObject::SceneObject() :
     mpAttachedGui(NULL),
     mpAttachedGuiSceneWindow(NULL),
 
-    /// Pathing.
-    mAttachedToPath(NULL),
-
     /// Safe deletion.
     mBeingSafeDeleted(false),
     mSafeDeleteReady(true),
@@ -348,6 +345,8 @@ void SceneObject::initPersistFields()
 
     /// Input events.
     addField("UseInputEvents", TypeBool, Offset(mUseInputEvents, SceneObject), &writeUseInputEvents, "");
+
+    addField("PickingAllowed", TypeBool, Offset(mPickingAllowed, SceneObject), &writePickingAllowed, "");
 
     // Script callbacks.
     addField("UpdateCallback", TypeBool, Offset(mUpdateCallback, SceneObject), &writeUpdateCallback, "");

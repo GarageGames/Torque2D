@@ -204,9 +204,6 @@ protected:
     GuiControl*             mpAttachedGui;
     SceneWindow*            mpAttachedGuiSceneWindow;
 
-    /// Pathing.
-    SimObjectPtr<SceneObject> mAttachedToPath;
-
     /// Safe deletion.
     bool                    mBeingSafeDeleted;
     bool                    mSafeDeleteReady;
@@ -533,9 +530,9 @@ public:
     void                    detachGui( void );
     inline void             updateAttachedGui( void );
 
-    /// Pathing.
-    inline                  void setAttachedToPath(SceneObject* path){ mAttachedToPath = path; }
-    inline SceneObject*     getAttachedToPath() const                   { return mAttachedToPath; }
+    // Picking.
+    inline void             setPickingAllowed( const bool pickingAllowed ) { mPickingAllowed = pickingAllowed; }
+    inline bool             getPickingAllowed(void) const               { return mPickingAllowed; }
 
     /// Cloning.
     virtual void            copyFrom( SceneObject* pSceneObject, const bool copyDynamicFields );
@@ -560,7 +557,6 @@ public:
 
     /// Miscellaneous.
     inline const char*      scriptThis(void) const                      { return Con::getIntArg(getId()); }
-    inline bool             getIsPickingAllowed(void) const             { return mPickingAllowed; }
     inline bool             getIsAlwaysInScope(void) const              { return mAlwaysInScope; }
     inline void             setWorldQueryKey( const U32 key )           { mWorldQueryKey = key; }
     inline U32              getWorldQueryKey( void ) const              { return mWorldQueryKey; }
@@ -707,6 +703,9 @@ protected:
 
     /// Input events.
     static bool             writeUseInputEvents( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getUseInputEvents() == true; }
+
+    /// Picking.
+    static bool             writePickingAllowed( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getPickingAllowed() == true; }    
 
     /// Script callbacks.
     static bool             writeUpdateCallback( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getUpdateCallback() == true; }
