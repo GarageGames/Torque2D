@@ -133,6 +133,9 @@ package RotateToToyPackage
 
 function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
 {
+    // Call parent.
+    Parent::onTouchDown(%this, %touchID, %worldPosition );
+    
     // Calculate the angle to the mouse.
     %origin = RotateToToy.TargetObject.getPosition();
     %angle = -mRadToDeg( mAtan( %worldPosition.x-%origin.x, %worldPosition.y-%origin.y ) );
@@ -145,6 +148,9 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
 
 function SandboxWindow::onTouchMoved(%this, %touchID, %worldPosition)
 {
+    // Call parent.
+    Parent::onTouchMoved(%this, %touchID, %worldPosition );
+    
     // Finish if not tracking the mouse.
     if ( !RotateToToy.trackMouse )
         return;
