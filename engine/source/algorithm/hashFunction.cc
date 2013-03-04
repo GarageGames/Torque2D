@@ -34,8 +34,8 @@
 
 #include "algorithm/hashFunction.h"
 
-#define hashsize(n) ((U32)1<<(n))
-#define hashmask(n) (hashsize(n)-1)
+#define hashsize(n) ((U32)1 << (n))
+#define hashmask(n) (hashsize(n) - 1)
 
 /*
 --------------------------------------------------------------------
@@ -65,15 +65,15 @@ to choose from.  I only looked at a billion or so.
 */
 #define mix(a,b,c) \
 { \
-   a -= b; a -= c; a ^= (c>>13); \
-   b -= c; b -= a; b ^= (a<<8); \
-   c -= a; c -= b; c ^= (b>>13); \
-   a -= b; a -= c; a ^= (c>>12);  \
-   b -= c; b -= a; b ^= (a<<16); \
-   c -= a; c -= b; c ^= (b>>5); \
-   a -= b; a -= c; a ^= (c>>3);  \
-   b -= c; b -= a; b ^= (a<<10); \
-   c -= a; c -= b; c ^= (b>>15); \
+   a -= b; a -= c; a ^= (c >> 13); \
+   b -= c; b -= a; b ^= (a << 8); \
+   c -= a; c -= b; c ^= (b >> 13); \
+   a -= b; a -= c; a ^= (c >> 12);  \
+   b -= c; b -= a; b ^= (a << 16); \
+   c -= a; c -= b; c ^= (b >> 5); \
+   a -= b; a -= c; a ^= (c >> 3);  \
+   b -= c; b -= a; b ^= (a << 10); \
+   c -= a; c -= b; c ^= (b >> 15); \
 }
 
 /*
@@ -109,7 +109,7 @@ U32 hash(register U8 *k, register U32 length, register U32 initval)
     // Debug Profiling.
     PROFILE_SCOPE(HashFunction);
 
-   register U32 a,b,c,len;
+   register U32 a, b, c, len;
 
    /* Set up the internal state */
    len = length;
@@ -119,32 +119,35 @@ U32 hash(register U8 *k, register U32 length, register U32 initval)
    /*---------------------------------------- handle most of the key */
    while (len >= 12)
    {
-      a += (k[0] +((U32)k[1]<<8) +((U32)k[2]<<16) +((U32)k[3]<<24));
-      b += (k[4] +((U32)k[5]<<8) +((U32)k[6]<<16) +((U32)k[7]<<24));
-      c += (k[8] +((U32)k[9]<<8) +((U32)k[10]<<16)+((U32)k[11]<<24));
-      mix(a,b,c);
-      k += 12; len -= 12;
+      a += (k[0] + ((U32)k[1] << 8) + ((U32)k[ 2] << 16) + ((U32)k[ 3] << 24));
+      b += (k[4] + ((U32)k[5] << 8) + ((U32)k[ 6] << 16) + ((U32)k[ 7] << 24));
+      c += (k[8] + ((U32)k[9] << 8) + ((U32)k[10] << 16) + ((U32)k[11] << 24));
+      mix(a, b, c);
+      k += 12;
+      len -= 12;
    }
 
    /*------------------------------------- handle the last 11 bytes */
    c += length;
-   switch(len)              /* all the case statements fall through */
+   
+   switch (len)              /* all the case statements fall through */
    {
-   case 11: c+=((U32)k[10]<<24);
-   case 10: c+=((U32)k[9]<<16);
-   case 9 : c+=((U32)k[8]<<8);
+      case 11: c += ((U32)k[10] << 24);
+      case 10: c += ((U32)k[9] << 16);
+      case 9 : c += ((U32)k[8] << 8);
       /* the first byte of c is reserved for the length */
-   case 8 : b+=((U32)k[7]<<24);
-   case 7 : b+=((U32)k[6]<<16);
-   case 6 : b+=((U32)k[5]<<8);
-   case 5 : b+=k[4];
-   case 4 : a+=((U32)k[3]<<24);
-   case 3 : a+=((U32)k[2]<<16);
-   case 2 : a+=((U32)k[1]<<8);
-   case 1 : a+=k[0];
+      case 8 : b += ((U32)k[7] << 24);
+      case 7 : b += ((U32)k[6] << 16);
+      case 6 : b += ((U32)k[5] << 8);
+      case 5 : b += k[4];
+      case 4 : a += ((U32)k[3] << 24);
+      case 3 : a += ((U32)k[2] << 16);
+      case 2 : a += ((U32)k[1] << 8);
+      case 1 : a += k[0];
       /* case 0: nothing left to add */
    }
-   mix(a,b,c);
+   
+   mix(a, b, c);
    /*-------------------------------------------- report the result */
    return c;
 }
