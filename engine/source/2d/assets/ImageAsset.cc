@@ -178,9 +178,6 @@ ImageAsset::ImageAsset() :  mImageFile(StringTable->EmptyString),
     VECTOR_SET_ASSOCIATION( mFrames );
     VECTOR_SET_ASSOCIATION( mExplicitFrames );
 
-    // Set the default filter mode.    
-    setFilterMode( FILTER_BILINEAR );
-
     // Initialize explicit cell field names.
     if ( !explicitCellPropertiesInitialized )
     {
@@ -1032,32 +1029,29 @@ void ImageAsset::calculateImage( void )
         return;
     }
 
-    // Fetch global filter.
-    const char* pGlobalFilter = Con::getVariable( "$pref::T2D::imageAssetGlobalFilterMode" );
-
-    // Fetch global filter mode.
-    TextureFilterMode filterMode;
-
-    // Set the filter mode.
-    if ( pGlobalFilter != NULL && dStrlen(pGlobalFilter) > 0 )
-        filterMode = getFilterModeEnum( pGlobalFilter );
-    else
-        filterMode = FILTER_INVALID;
-    
-    // If global filter mode is invalid then use local filter mode.
-    if ( filterMode == FILTER_INVALID )
-        filterMode = mLocalFilterMode;
-
-    // Set filter mode.
-    if ( filterMode != FILTER_INVALID )
+    // Is the local filter mode specified?
+    if ( mLocalFilterMode != FILTER_INVALID )
     {
-        // Set filter mode if valid.
-        setTextureFilter( filterMode );
+        // Yes, so set filter mode.
+        setTextureFilter( mLocalFilterMode );
     }
     else
     {
-        // Set to nearest if invalid.
-        setTextureFilter( FILTER_NEAREST );
+        TextureFilterMode filterMode;
+
+        // No, so fetch the global filter.
+        const char* pGlobalFilter = Con::getVariable( "$pref::T2D::imageAssetGlobalFilterMode" );
+
+        // Fetch the global filter mode.
+        if ( pGlobalFilter != NULL && dStrlen(pGlobalFilter) > 0 )
+            filterMode = getFilterModeEnum( pGlobalFilter );
+
+        // If global filter mode is invalid then use local filter mode.
+        if ( filterMode == FILTER_INVALID )
+            filterMode = FILTER_NEAREST;
+
+        // Set filter mode.
+        setTextureFilter( filterMode );
     }
 
     // Calculate according to mode.
