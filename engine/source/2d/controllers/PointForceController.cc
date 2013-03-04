@@ -107,7 +107,7 @@ void PointForceController::integrate( Scene* pScene, const F32 totalTime, const 
         SceneObject* pSceneObject = queryResults[n].mpSceneObject;
 
         // Ignore if it's a static body.
-        if ( pSceneObject->getBodyType() == b2BodyType::b2_staticBody )
+        if ( pSceneObject->getBodyType() == b2_staticBody )
             continue;
 
         // Calculate the force direction to the controllers position.
