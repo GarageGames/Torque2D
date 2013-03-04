@@ -2348,8 +2348,11 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
         AssertFatal( false, "Unsupported pick mode." );
     }
 
+    // Fetch result count.
+    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+
     // Finish if no results.
-    if ( pWorldQuery->getQueryResultsCount() == 0 )
+    if ( resultCount == 0 )
         return NULL;
 
     // Fetch results.
@@ -2365,7 +2368,7 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
     U32 bufferCount = 0;
 
     // Add picked objects.
-    for ( U32 n = 0; n < (U32)queryResults.size(); n++ )
+    for ( U32 n = 0; n < resultCount; n++ )
     {
         // Output Object ID.
         bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
@@ -2490,8 +2493,11 @@ ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroup
     // Sanity!
     AssertFatal( pWorldQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );
 
+    // Fetch result count.
+    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+
     // Finish if no results.
-    if ( pWorldQuery->getQueryResultsCount() == 0 )
+    if ( resultCount == 0 )
         return NULL;
 
     // Sort ray-cast result.
@@ -2510,7 +2516,7 @@ ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroup
     U32 bufferCount = 0;
 
     // Add Picked Objects to List.
-    for ( U32 n = 0; n < (U32)queryResults.size(); n++ )
+    for ( U32 n = 0; n < resultCount; n++ )
     {
         // Output Object ID.
         bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
@@ -2608,9 +2614,11 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
     // Sanity!
     AssertFatal( pWorldQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );
 
+    // Fetch result count.
+    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+
     // Finish if no results.
-    const U32 queryResultCount = pWorldQuery->getQueryResultsCount();
-    if ( queryResultCount == 0 )
+    if ( resultCount == 0 )
         return NULL;
 
     // Sort ray-cast result.
@@ -2629,7 +2637,7 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
     U32 bufferCount = 0;
 
     // Add Picked Objects to List.
-    for ( U32 n = 0; n < queryResultCount; n++ )
+    for ( U32 n = 0; n < resultCount; n++ )
     {
         // Fetch query result.
         const WorldQueryResult& queryResult = queryResults[n];
@@ -2744,8 +2752,11 @@ ConsoleMethod(Scene, pickPoint, const char*, 3, 7, "(x / y, [sceneGroupMask], [s
         AssertFatal( false, "Unsupported pick mode." );
     }
 
+    // Fetch result count.
+    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+
     // Finish if no results.
-    if ( pWorldQuery->getQueryResultsCount() == 0 )
+    if ( resultCount == 0 )
         return NULL;
 
     // Fetch results.
@@ -2761,7 +2772,7 @@ ConsoleMethod(Scene, pickPoint, const char*, 3, 7, "(x / y, [sceneGroupMask], [s
     U32 bufferCount = 0;
 
     // Add Picked Objects to List.
-    for ( U32 n = 0; n < (U32)queryResults.size(); n++ )
+    for ( U32 n = 0; n < resultCount; n++ )
     {
         // Output Object ID.
         bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
