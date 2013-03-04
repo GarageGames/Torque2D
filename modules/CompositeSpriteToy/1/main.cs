@@ -22,6 +22,9 @@
 
 function CompositeSpriteToy::create( %this )
 {
+    // Activate the package.
+    activatePackage( CompositeSpriteToyPackage );
+    
     // Load scripts.
     exec( "./scripts/noLayout.cs" );
     exec( "./scripts/rectLayout.cs" );
@@ -55,6 +58,8 @@ function CompositeSpriteToy::create( %this )
 
 function CompositeSpriteToy::destroy( %this )
 {
+    // Deactivate the package.
+    deactivatePackage( CompositeSpriteToyPackage );    
 }
 
 //-----------------------------------------------------------------------------
@@ -135,3 +140,41 @@ function CompositeSpriteToy::createBackground(%this)
     // Add to the scene.
     SandboxScene.add( %obj );   
 }
+
+
+package CompositeSpriteToyPackage
+{
+
+function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
+{
+    // Call parent.
+    Parent::onTouchDown(%this, %touchID, %worldPosition );
+    
+    // Fetch the composite sprite.
+    %compositeSprite = CompositeSpriteToy.CompositeSprite;
+    
+    // Pick sprites.
+    %sprites = %compositeSprite.pickPoint( %worldPosition );    
+
+    // Fetch sprite count.    
+    %spriteCount = %sprites.count;
+    
+    // Finish if no sprites picked.
+    if ( %spriteCount == 0 )
+        return;    
+        
+    // Iterate sprites.
+    for( %i = 0; %i < %spriteCount; %i++ )
+    {
+        // Fetch sprite Id.
+        %spriteId = getWord( %sprites, %i );
+        
+        // Select the sprite Id.
+        %compositeSprite.selectSpriteId( %spriteId );
+        
+        // Remove the se
+        %compositeSprite.removeSprite();
+    }
+}
+  
+};
