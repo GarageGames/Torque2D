@@ -31,10 +31,12 @@ function MultiWindowToy::create( %this )
     // Configure the toy.
     MultiWindowToy.MaxGems = 10;
     MultiWindowToy.MountSubWindow = true;
+    MultiWindowToy.SubWindowBackground = true;
     
     // Add configuration option.
     addNumericOption("Max Balls", 1, 100, 10, "setMaxGems", MultiWindowToy.MaxGems, true, "Sets the number of gems created.");
     addFlagOption("Mount Sub-Window", "setMountSubWindow", MultiWindowToy.MountSubWindow, true, "Whether mount the sub-window to a random gem or not." );
+    addFlagOption("Sub-Window Background", "setSubWindowBackground", MultiWindowToy.SubWindowBackground, true, "Whether render the sub-window background or not." );
     
     // Create a scene window.
     new SceneWindow(SandboxWindow2)
@@ -43,7 +45,7 @@ function MultiWindowToy::create( %this )
         Position = "64 64";
         Extent = "320 240";
     };
-        
+            
     // Set it to the scene.
     SandboxWindow2.setScene( SandboxScene );
         
@@ -76,9 +78,24 @@ function MultiWindowToy::reset( %this )
     // Create gems.
     %this.createGems();
     
-   // Reset the camera position if not mounted.    
-    if ( MultiWindowToy.MountSubWindow == false )
+    // Reset the camera position if not mounted.    
+    if ( !MultiWindowToy.MountSubWindow )
+    {
         SandboxWindow2.setCameraPosition( "0 0" );
+        SandboxWindow2.setCameraAngle( 0 );
+    }
+        
+    // Set the scene layers to render.
+    if ( MultiWindowToy.SubWindowBackground )        
+    {
+        // Render the layers #20 & #31 i.e. the gems and backgound.
+        SandboxWindow2.setRenderLayers( "20 31" );    
+    }
+    else
+    {
+        // Render the layer #20 only i.e. the gems.
+        SandboxWindow2.setRenderLayers( "20" );    
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -97,7 +114,7 @@ function MultiWindowToy::createBackground( %this )
     %object.Position = "0 0";
 
     // Set the size.        
-    %object.Size = "200 150";
+    %object.Size = "400 300";
     
     // Set to the furthest background layer.
     %object.SceneLayer = 31;
@@ -133,29 +150,36 @@ function MultiWindowToy::createGems( %this )
         %object.Size = 5;
         
         // Set the layer.
-        %object.Layer = 20;
+        %object.SceneLayer = 20;
         
         // Create a circle collision shape.
         %object.setDefaultRestitution( 1 );
-        %object.setDefaultFriction( 0.0 );
+        %object.setDefaultFriction( 0.2 );
         %object.createCircleCollisionShape( 2 );
         
-        // Set the sprite to use an image.  This is known as "static" image mode.
-        %object.Image = "ToyAssets:Gems";
-        
-        // We don't really need to do this as the frame is set to zero by default.
-        %object.Frame = getRandom(0,63);
-
         // Set velocities.
         %object.SetLinearVelocity( getRandom(-40,40) SPC getRandom(-30,30) );
-        %object.SetAngularVelocity( getRandom(-360,360) );    
+        %object.SetAngularVelocity( getRandom(-15,15) );    
             
         // Add the sprite to the scene.
         SandboxScene.add( %object );
 
         // Mount to sub-window to the first object if selected.        
         if ( MultiWindowToy.MountSubWindow == true && %n == 0 )
-            SandboxWindow2.mount( %object );
+        {
+            // Set the sprite to use an image.
+            %object.Image = "ToyAssets:CrossHair2";
+            %object.BlendColor = LimeGreen;
+            
+            // Mount to the object.
+            SandboxWindow2.mount( %object, "0 0", 0, true, true );
+        }
+        else
+        {
+            // Set the sprite to use an image.
+            %object.Image = "ToyAssets:Gems";
+            %object.Frame = getRandom(0,63);
+        }
     }
 }
 
@@ -171,4 +195,11 @@ function MultiWindowToy::setMaxGems(%this, %value)
 function MultiWindowToy::setMountSubWindow(%this, %value)
 {
     %this.MountSubWindow = %value;
+}
+
+//-----------------------------------------------------------------------------
+
+function MultiWindowToy::setSubWindowBackground(%this, %value)
+{
+    %this.SubWindowBackground = %value;
 }
