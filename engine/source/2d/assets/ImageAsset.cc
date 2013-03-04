@@ -1037,7 +1037,7 @@ void ImageAsset::calculateImage( void )
     }
     else
     {
-        TextureFilterMode filterMode;
+        TextureFilterMode filterMode = FILTER_NEAREST;
 
         // No, so fetch the global filter.
         const char* pGlobalFilter = Con::getVariable( "$pref::T2D::imageAssetGlobalFilterMode" );
