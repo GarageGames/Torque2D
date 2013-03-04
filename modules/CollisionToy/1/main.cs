@@ -173,7 +173,7 @@ function CollisionToy::createBalls( %this )
 
 //-----------------------------------------------------------------------------
 
-function CollisionToyBall::onSelfCollision(%this, %object, %collisionDetails)
+function CollisionToyBall::onCollision(%this, %object, %collisionDetails)
 {
     // Finish if there are no contact points (this happens with sensors).
     if ( %collisionDetails.count <= 2 )

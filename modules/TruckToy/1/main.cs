@@ -663,7 +663,7 @@ function TruckToy::createProjectile(%this)
 
 // -----------------------------------------------------------------------------
 
-function TruckProjectile::onSelfCollision(%this, %object, %collisionDetails)
+function TruckProjectile::onCollision(%this, %object, %collisionDetails)
 {   
     // Create an impact explosion at the projectiles position.
     %particlePlayer = new ParticlePlayer();
