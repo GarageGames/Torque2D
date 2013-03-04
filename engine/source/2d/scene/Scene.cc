@@ -642,33 +642,33 @@ void Scene::dispatchBeginContactCallbacks( void )
             callOnBehaviors( 4, args );
         }
 
-        // Does the scene object A handle the collision callback?
-        if ( pSceneObjectA->isMethod("onCollision") )            
+        // Does the scene object A handle the self-collision callback?
+        if ( pSceneObjectA->isMethod("onSelfCollision") )            
         {
             // Yes, so perform the script callback on it.
-            Con::executef( pSceneObjectA, 4, "onCollision",
+            Con::executef( pSceneObjectA, 3, "onSelfCollision",
                 pSceneObjectBBuffer,
                 pMiscInfoBuffer );
         }
         else
         {
             // No, so call it on its behaviors.
-            const char* args[3] = { "onCollision", pSceneObjectBBuffer, pMiscInfoBuffer };
+            const char* args[3] = { "onSelfCollision", pSceneObjectBBuffer, pMiscInfoBuffer };
             pSceneObjectA->callOnBehaviors( 3, args );
         }
 
-        // Does the scene object B handle the collision callback?
-        if ( pSceneObjectB->isMethod("onCollision") )            
+        // Does the scene object B handle the self-collision callback?
+        if ( pSceneObjectB->isMethod("onSelfCollision") )            
         {
             // Yes, so perform the script callback on it.
-            Con::executef( pSceneObjectB, 4, "onCollision",
+            Con::executef( pSceneObjectB, 3, "onSelfCollision",
                 pSceneObjectABuffer,
                 pMiscInfoBuffer );
         }
         else
         {
             // No, so call it on its behaviors.
-            const char* args[3] = { "onCollision", pSceneObjectABuffer, pMiscInfoBuffer };
+            const char* args[3] = { "onSelfCollision", pSceneObjectABuffer, pMiscInfoBuffer };
             pSceneObjectB->callOnBehaviors( 3, args );
         }
     }
