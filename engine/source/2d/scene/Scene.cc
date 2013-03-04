@@ -638,8 +638,8 @@ void Scene::dispatchBeginContactCallbacks( void )
         else
         {
             // No, so call it on its behaviors.
-            const char* args[4] = { "onCollision", pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
-            callOnBehaviors( 4, args );
+            const char* args[5] = { "onCollision", this->getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
+            callOnBehaviors( 5, args );
         }
 
         // Does the scene object A handle the self-collision callback?
@@ -653,8 +653,8 @@ void Scene::dispatchBeginContactCallbacks( void )
         else
         {
             // No, so call it on its behaviors.
-            const char* args[3] = { "onSelfCollision", pSceneObjectBBuffer, pMiscInfoBuffer };
-            pSceneObjectA->callOnBehaviors( 3, args );
+            const char* args[4] = { "onSelfCollision", pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
+            pSceneObjectA->callOnBehaviors( 4, args );
         }
 
         // Does the scene object B handle the self-collision callback?
@@ -668,8 +668,8 @@ void Scene::dispatchBeginContactCallbacks( void )
         else
         {
             // No, so call it on its behaviors.
-            const char* args[3] = { "onSelfCollision", pSceneObjectABuffer, pMiscInfoBuffer };
-            pSceneObjectB->callOnBehaviors( 3, args );
+            const char* args[4] = { "onSelfCollision", pSceneObjectBBuffer, pSceneObjectABuffer, pMiscInfoBuffer };
+            pSceneObjectB->callOnBehaviors( 4, args );
         }
     }
 }
