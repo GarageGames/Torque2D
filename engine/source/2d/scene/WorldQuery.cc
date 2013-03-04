@@ -545,7 +545,7 @@ bool WorldQuery::QueryCallback( S32 proxyId )
     {
         WorldQueryResult queryResult( pSceneObject );
         mLayeredQueryResults[pSceneObject->getSceneLayer()].push_back( queryResult );
-        mQueryResults.push_back( pSceneObject );
+        mQueryResults.push_back( queryResult );
     }
 
     return true;
@@ -643,8 +643,9 @@ void WorldQuery::injectAlwaysInScope( void )
         // Compare masks and report.
         if ( (mQueryFilter.mSceneLayerMask & sceneLayerMask) != 0 && (mQueryFilter.mSceneGroupMask & sceneGroupMask) != 0 )
         {
-            mLayeredQueryResults[pSceneObject->getSceneLayer()].push_back( pSceneObject );
-            mQueryResults.push_back( pSceneObject );
+            WorldQueryResult queryResult( pSceneObject );
+            mLayeredQueryResults[pSceneObject->getSceneLayer()].push_back( queryResult );
+            mQueryResults.push_back( queryResult );
         }
     }
 }
