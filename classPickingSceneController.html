@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>BehaviorInstance Class Reference</title>
+<title>PickingSceneController Class Reference</title>
 <link href="torquedoc.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
@@ -22,19 +22,27 @@
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="classBehaviorInstance-members.html">List of all members</a> &#124;
+<a href="classPickingSceneController-members.html">List of all members</a> &#124;
 <a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
-<div class="title">BehaviorInstance Class Reference</div>  </div>
+<div class="title">PickingSceneController Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p>Inherits <a class="el" href="classSimObject.html">SimObject</a>.</p>
+
+<p>Inherited by <a class="el" href="classBuoyancyController.html">BuoyancyController</a>, and <a class="el" href="classPointForceController.html">PointForceController</a>.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a46e1c80243a024ee4dde729d036b67a1"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBehaviorInstance.html#a46e1c80243a024ee4dde729d036b67a1">getTemplateName</a> ()</td></tr>
-<tr class="separator:a46e1c80243a024ee4dde729d036b67a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a077bf0e4f334704c51fe1eda0b106b43"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPickingSceneController.html#a077bf0e4f334704c51fe1eda0b106b43">getControlGroups</a> ()</td></tr>
+<tr class="separator:a077bf0e4f334704c51fe1eda0b106b43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae124d39791da44e8f8df9c2618c937e1"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPickingSceneController.html#ae124d39791da44e8f8df9c2618c937e1">getControlLayers</a> ()</td></tr>
+<tr class="separator:ae124d39791da44e8f8df9c2618c937e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7f65a5de0446ecfcabeabe964ff2b91"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPickingSceneController.html#ad7f65a5de0446ecfcabeabe964ff2b91">setControlGroups</a> (groups $)</td></tr>
+<tr class="separator:ad7f65a5de0446ecfcabeabe964ff2b91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f751ddb6714ac66349c2f43e5bb2180"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPickingSceneController.html#a7f751ddb6714ac66349c2f43e5bb2180">setControlLayers</a> (layers $)</td></tr>
+<tr class="separator:a7f751ddb6714ac66349c2f43e5bb2180"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classSimObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classSimObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classSimObject.html">SimObject</a></td></tr>
 <tr class="memitem:aa19815069e82c393e2c10885eabf8016 inherit pub_methods_classSimObject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#aa19815069e82c393e2c10885eabf8016">addFieldFilter</a> (fieldName)</td></tr>
 <tr class="separator:aa19815069e82c393e2c10885eabf8016 inherit pub_methods_classSimObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -111,25 +119,18 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr><td colspan="2"><div class="groupHeader">Behavior</div></td></tr>
-<tr class="memitem:a1b2752b13ea094aa222e4e69e5085488"><td class="memItemLeft" align="right" valign="top">SimObjectName&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBehaviorInstance.html#a1b2752b13ea094aa222e4e69e5085488">template</a></td></tr>
-<tr class="separator:a1b2752b13ea094aa222e4e69e5085488"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3fb7027a674bcd37f6a9e8aa1985bda3"><td class="memItemLeft" align="right" valign="top">SimObjectPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBehaviorInstance.html#a3fb7027a674bcd37f6a9e8aa1985bda3">Owner</a></td></tr>
-<tr class="separator:a3fb7027a674bcd37f6a9e8aa1985bda3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66e3cad2628605bc9d8f2fd8816c096c"><td class="memItemLeft" align="right" valign="top">SimObjectPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBehaviorInstance.html#a66e3cad2628605bc9d8f2fd8816c096c">template</a></td></tr>
-<tr class="separator:a66e3cad2628605bc9d8f2fd8816c096c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">SimBase</div></td></tr>
-<tr class="memitem:a73eecd6a2e78dc469cce7ac6139804f6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBehaviorInstance.html#a73eecd6a2e78dc469cce7ac6139804f6">canSaveDynamicFields</a></td></tr>
-<tr class="separator:a73eecd6a2e78dc469cce7ac6139804f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86d1ef0f6d1c8da1cf4d65090245bc5b"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBehaviorInstance.html#a86d1ef0f6d1c8da1cf4d65090245bc5b">internalName</a></td></tr>
-<tr class="separator:a86d1ef0f6d1c8da1cf4d65090245bc5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a025fd10b256d93d3fb21356b159a75b3"><td class="memItemLeft" align="right" valign="top">SimObjectPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBehaviorInstance.html#a025fd10b256d93d3fb21356b159a75b3">parentGroup</a></td></tr>
-<tr class="separator:a025fd10b256d93d3fb21356b159a75b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ae66eca6be0b1378c60cba85ef6305c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPickingSceneController.html#a6ae66eca6be0b1378c60cba85ef6305c">canSaveDynamicFields</a></td></tr>
+<tr class="separator:a6ae66eca6be0b1378c60cba85ef6305c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a302236ffcbc7f923e9debaeb1faaaf61"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPickingSceneController.html#a302236ffcbc7f923e9debaeb1faaaf61">internalName</a></td></tr>
+<tr class="separator:a302236ffcbc7f923e9debaeb1faaaf61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ecd0c286fde76be22f27da2392abde9"><td class="memItemLeft" align="right" valign="top">SimObjectPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPickingSceneController.html#a5ecd0c286fde76be22f27da2392abde9">parentGroup</a></td></tr>
+<tr class="separator:a5ecd0c286fde76be22f27da2392abde9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Namespace Linking</div></td></tr>
-<tr class="memitem:a2fa659b4c7d6f3411fc5bb12e3fe7d3e"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBehaviorInstance.html#a2fa659b4c7d6f3411fc5bb12e3fe7d3e">superclass</a></td></tr>
-<tr class="separator:a2fa659b4c7d6f3411fc5bb12e3fe7d3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa828dd19c614bfe18a233202322c1a2e"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBehaviorInstance.html#aa828dd19c614bfe18a233202322c1a2e">class</a></td></tr>
-<tr class="separator:aa828dd19c614bfe18a233202322c1a2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a563d726e7d853c026e891f2f93d19c84"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPickingSceneController.html#a563d726e7d853c026e891f2f93d19c84">superclass</a></td></tr>
+<tr class="separator:a563d726e7d853c026e891f2f93d19c84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5abc5142757278384a3d75851be11001"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPickingSceneController.html#a5abc5142757278384a3d75851be11001">class</a></td></tr>
+<tr class="separator:a5abc5142757278384a3d75851be11001"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_classSimObject"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classSimObject')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classSimObject.html">SimObject</a></td></tr>
 <tr class="memitem:ab49fae316a2d0c12834f50c3d77202e6 inherit pub_attribs_classSimObject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#ab49fae316a2d0c12834f50c3d77202e6">canSaveDynamicFields</a></td></tr>
 <tr class="separator:ab49fae316a2d0c12834f50c3d77202e6 inherit pub_attribs_classSimObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -143,7 +144,7 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ab83c7a59a66018d9b5eec3c8dcd3397d inherit pub_attribs_classSimObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a46e1c80243a024ee4dde729d036b67a1"></a>
+<a class="anchor" id="a077bf0e4f334704c51fe1eda0b106b43"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -151,7 +152,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual string BehaviorInstance::getTemplateName </td>
+          <td class="memname">virtual string PickingSceneController::getControlGroups </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -164,31 +165,126 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <ul>
-<li>Get the template name of this behavior <dl class="section return"><dt>Returns</dt><dd>(string name) The name of the template this behavior was created from </dd></dl>
+<li>Gets the control groups. <dl class="section return"><dt>Returns</dt><dd>(controlGroups) A list of groups that are affected by the controller. </dd></dl>
+</li>
+</ul>
+
+</div>
+</div>
+<a class="anchor" id="ae124d39791da44e8f8df9c2618c937e1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual string PickingSceneController::getControlLayers </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<ul>
+<li>Gets the control layers. <dl class="section return"><dt>Returns</dt><dd>(controlLayers) A list of layers that are affected by the controller. </dd></dl>
+</li>
+</ul>
+
+</div>
+</div>
+<a class="anchor" id="ad7f65a5de0446ecfcabeabe964ff2b91"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void PickingSceneController::setControlGroups </td>
+          <td>(</td>
+          <td class="paramtype">groups&#160;</td>
+          <td class="paramname"><em>$</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<ul>
+<li>Sets the control group(s). <dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">groups</td><td>A list of groups that are affected by the controller. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>No return value. </dd></dl>
+</li>
+</ul>
+
+</div>
+</div>
+<a class="anchor" id="a7f751ddb6714ac66349c2f43e5bb2180"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void PickingSceneController::setControlLayers </td>
+          <td>(</td>
+          <td class="paramtype">layers&#160;</td>
+          <td class="paramname"><em>$</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<ul>
+<li>Sets the control layers(s). <dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">layers</td><td>A list of layers that are affected by the controller. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>No return value. </dd></dl>
 </li>
 </ul>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a73eecd6a2e78dc469cce7ac6139804f6"></a>
+<a class="anchor" id="a6ae66eca6be0b1378c60cba85ef6305c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool BehaviorInstance::canSaveDynamicFields</td>
+          <td class="memname">bool PickingSceneController::canSaveDynamicFields</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="aa828dd19c614bfe18a233202322c1a2e"></a>
+<a class="anchor" id="a5abc5142757278384a3d75851be11001"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">string BehaviorInstance::class</td>
+          <td class="memname">string PickingSceneController::class</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -196,37 +292,24 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a86d1ef0f6d1c8da1cf4d65090245bc5b"></a>
+<a class="anchor" id="a302236ffcbc7f923e9debaeb1faaaf61"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">string BehaviorInstance::internalName</td>
+          <td class="memname">string PickingSceneController::internalName</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="a3fb7027a674bcd37f6a9e8aa1985bda3"></a>
+<a class="anchor" id="a5ecd0c286fde76be22f27da2392abde9"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">SimObjectPtr BehaviorInstance::Owner</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Behavior component owner. </p>
-
-</div>
-</div>
-<a class="anchor" id="a025fd10b256d93d3fb21356b159a75b3"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">SimObjectPtr BehaviorInstance::parentGroup</td>
+          <td class="memname">SimObjectPtr PickingSceneController::parentGroup</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -234,42 +317,16 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a2fa659b4c7d6f3411fc5bb12e3fe7d3e"></a>
+<a class="anchor" id="a563d726e7d853c026e891f2f93d19c84"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">string BehaviorInstance::superclass</td>
+          <td class="memname">string PickingSceneController::superclass</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Script Class of object. </p>
-
-</div>
-</div>
-<a class="anchor" id="a1b2752b13ea094aa222e4e69e5085488"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">SimObjectName BehaviorInstance::template</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Template this instance was created from. </p>
-
-</div>
-</div>
-<a class="anchor" id="a66e3cad2628605bc9d8f2fd8816c096c"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">SimObjectPtr BehaviorInstance::template</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>The behavior instances template. </p>
 
 </div>
 </div>
