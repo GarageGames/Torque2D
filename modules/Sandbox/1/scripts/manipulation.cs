@@ -354,7 +354,7 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
             return;
         
         // Fetch the pick count.
-        %pickCount = getWordCount( %picked );
+        %pickCount = %picked.Count;
         
         for( %n = 0; %n < %pickCount; %n++ )
         {
@@ -363,10 +363,6 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
             
             // Skip if the object is static.
             if ( %pickedObject.getBodyType() $= "static" )
-                continue;
-                
-            // Skipp if the object is ignoring being picked.
-            if ( %pickedObject.ignorePick )
                 continue;
                 
             // Set the pull object.

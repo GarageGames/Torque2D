@@ -85,7 +85,7 @@ function RotateToToy::createBackground( %this )
     %object.Image = "ToyAssets:highlightBackground";
     
     // Set the blend color.
-    %object.BlendColor = Bisque;
+    %object.BlendColor = SlateGray;
             
     // Add the sprite to the scene.
     SandboxScene.add( %object );    
@@ -133,9 +133,12 @@ package RotateToToyPackage
 
 function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
 {
+    // Call parent.
+    Parent::onTouchDown(%this, %touchID, %worldPosition );
+    
     // Calculate the angle to the mouse.
     %origin = RotateToToy.TargetObject.getPosition();
-    %angle = -mRadToDeg( mAtan( getWord(%worldPosition,0)-getWord(%origin,0), getWord(%worldPosition,1)-getWord(%origin,1) ) );
+    %angle = -mRadToDeg( mAtan( %worldPosition.x-%origin.x, %worldPosition.y-%origin.y ) );
     
     //Rotate to the touched angle.
     RotateToToy.TargetObject.RotateTo( %angle, RotateToToy.rotateSpeed );
@@ -145,13 +148,16 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
 
 function SandboxWindow::onTouchMoved(%this, %touchID, %worldPosition)
 {
+    // Call parent.
+    Parent::onTouchMoved(%this, %touchID, %worldPosition );
+    
     // Finish if not tracking the mouse.
     if ( !RotateToToy.trackMouse )
         return;
         
     // Calculate the angle to the mouse.
     %origin = RotateToToy.TargetObject.getPosition();
-    %angle = -mRadToDeg( mAtan( getWord(%worldPosition,0)-getWord(%origin,0), getWord(%worldPosition,1)-getWord(%origin,1) ) );
+    %angle = -mRadToDeg( mAtan( %worldPosition.x-%origin.x, %worldPosition.y-%origin.y ) );
     
     //Rotate to the touched angle.
     RotateToToy.TargetObject.RotateTo( %angle, RotateToToy.rotateSpeed );        

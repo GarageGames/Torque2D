@@ -41,11 +41,11 @@
 
 //-----------------------------------------------------------------------------
 
-#define ASSETTAGS_TAGS_CUSTOMPROPERTY_NAME      "Tags"
+#define ASSETTAGS_TAGS_NODE_NAME                "Tags"
 #define ASSETTAGS_TAGS_TYPE_NAME                "Tag"
 #define ASSETTAGS_TAGS_NAME_FIELD               "Name"
 
-#define ASSETTAGS_ASSETS_CUSTOMPROPERTY_NAME    "Assets"
+#define ASSETTAGS_ASSETS_NODE_NAME              "Assets"
 #define ASSETTAGS_ASSETS_TYPE_NAME              "Tag"
 #define ASSETTAGS_ASSETS_ASSETID_FIELD          "AssetId"
 #define ASSETTAGS_ASSETS_TAG_FIELD              "Name"
@@ -120,8 +120,8 @@ private:
     void renameAssetId( const char* pAssetIdFrom, const char* pAssetIdTo );
 
 protected:
-    virtual void onTamlCustomWrite( TamlCustomProperties& customProperties );
-    virtual void onTamlCustomRead( const TamlCustomProperties& customProperties );
+    virtual void onTamlCustomWrite( TamlCustomNodes& customNodes );
+    virtual void onTamlCustomRead( const TamlCustomNodes& customNodes );
 
 public:
     AssetTagsManifest();

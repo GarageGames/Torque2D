@@ -115,7 +115,7 @@ void Trigger::integrateObject( const F32 totalTime, const F32 elapsedTime, Debug
     }
 
     // Fetch current contacts.
-    const typeContactVector* pCurrentContacts = getCurrentContacts();
+    const Scene::typeContactVector* pCurrentContacts = getCurrentContacts();
 
     // Sanity!
     AssertFatal( pCurrentContacts != NULL, "Trigger::integrateObject() - Contacts not initialized correctly." );
@@ -126,7 +126,7 @@ void Trigger::integrateObject( const F32 totalTime, const F32 elapsedTime, Debug
         // Debug Profiling.
         PROFILE_SCOPE(Trigger_OnStayCallback);
 
-        for ( typeContactVector::const_iterator contactItr = pCurrentContacts->begin(); contactItr != pCurrentContacts->end(); ++contactItr )
+        for ( Scene::typeContactVector::const_iterator contactItr = pCurrentContacts->begin(); contactItr != pCurrentContacts->end(); ++contactItr )
         {
             // Fetch colliding object.
             SceneObject* pCollideWidth = contactItr->getCollideWith( this );

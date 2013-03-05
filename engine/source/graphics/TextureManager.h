@@ -56,7 +56,7 @@ public:
     {
         BeginZombification,
         BeginResurrection,
-        EndResurrection
+        EndResurrection,
     };
 
     typedef void (*TextureEventCallback)(const TextureEventCode eventCode, void *userData);
@@ -93,6 +93,7 @@ public:
     static void killManager();
     static void resurrectManager();
     static void flush();
+    static void refresh( const char *textureName );
     static S32 getBitmapResidentSize( void ) { return mBitmapResidentSize; }
     static S32 getTextureResidentSize( void ) { return mTextureResidentSize; }
     static S32 getTextureResidentWasteSize( void ) { return mTextureResidentWasteSize; }
