@@ -185,7 +185,6 @@ function CollisionToyBall::onCollision(%this, %object, %collisionDetails)
     // Create a marker sprite with a limited lifetime.
     // Also set this so that it can't be picked so you can't drag it via the Sandbox "pull" feature.
     %object = new Sprite();
-    //%object.BodyType = static;
     %object.Position = %contactPosition;
     %object.Layer = 10;   
     %object.Size = 3;
