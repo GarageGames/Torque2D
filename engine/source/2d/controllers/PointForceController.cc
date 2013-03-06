@@ -109,14 +109,19 @@ void PointForceController::integrate( Scene* pScene, const F32 totalTime, const 
     // Fetch result count.
     const U32 resultCount = (U32)queryResults.size();
 
+    // Finish if nothing to process.
+    if ( resultCount == 0 )
+        return;
+
+    // Calculate the radius squared.
+    const F32 radiusSqr = mRadius * mRadius;
+
     // Calculate the force squared in-case we need it.
     const F32 forceSqr = mForce * mForce;
 
     // Calculate drag coefficients (time-integrated).
     const F32 linearDrag = mClampF( mLinearDrag, 0.0f, 1.0f ) * elapsedTime;
     const F32 angularDrag = mClampF( mAngularDrag, 0.0f, 1.0f ) * elapsedTime;
-
-    // Calculate 
 
     // Iterate the results.
     for ( U32 n = 0; n < resultCount; n++ )
@@ -132,7 +137,7 @@ void PointForceController::integrate( Scene* pScene, const F32 totalTime, const 
         Vector2 distanceForce = mPosition - pSceneObject->getPosition();
 
         // Skip if the position is outside the radius.
-        if ( distanceForce.Length() > mRadius )
+        if ( distanceForce.LengthSquared() > radiusSqr )
             continue;
 
         // Non-Linear force?
