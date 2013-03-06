@@ -40,8 +40,7 @@ function BuoyancyControllerToy::create( %this )
     BuoyancyControllerToy.FluidGravity = "0 -29.8";    
     BuoyancyControllerToy.UseShapeDensity = false;
 
-    BuoyancyControllerToy.FlowAngle = 90;
-    BuoyancyControllerToy.FlowMagnitude = 0;
+    BuoyancyControllerToy.FlowMagnitude = 13;
     
     BuoyancyControllerToy.MaxDebrisCount = 50;
     BuoyancyControllerToy.MinDebrisDensity = 1;
@@ -51,7 +50,6 @@ function BuoyancyControllerToy::create( %this )
 
     // Add options.    
     addNumericOption("Fluid Density", 0, 10, 0.1, "setFluidDensity", BuoyancyControllerToy.FluidDensity, false, "The fluid density.");   
-    addNumericOption("Fluid Flow Angle", -359, 359, 1, "setFluidFlowAngle", BuoyancyControllerToy.FlowAngle, true, "The angle of the constant force.");   
     addNumericOption("Fluid Flow Magnitude", 0, 1000, 10, "setFluidFlowMagnitude", BuoyancyControllerToy.FlowMagnitude, true, "The magnitude of the constant force.");      
     addNumericOption("Linear Drag", 0, 10, 0.1, "setLinearDrag", BuoyancyControllerToy.LinearDrag, false, "The linear drag co-efficient for the fluid.");
     addNumericOption("Angular Drag", 0, 10, 0.1, "setAngularDrag", BuoyancyControllerToy.AngularDrag, false, "The angular drag co-efficient for the fluid.");
@@ -87,16 +85,17 @@ function BuoyancyControllerToy::reset( %this )
     %this.createBackground();
    
     // Create fluid.
-    %this.createFluid("-45 -30 -30 -20");
-    %this.createFluid("-35 5 10 20");
-    %this.createFluid("-25 -25 15 -5");
-    %this.createFluid("25 -25 45 10");
+    %this.createFluid( "-50 20 30 30", "1 0", Navy );
+    %this.createFluid( "-10 2 50 12", "-1 0", Cyan );
+    %this.createFluid("-40 -16 30 -6", "1 0", LightBlue );
+    %this.createFluid( "-50 -34 50 -24", "-1 0", Green );
+    %this.createFluid( "-50 -34 -40 30", "0 0", Blue );
+
+    // Update the buoyancy controllers.
+    %this.updateBuoyancyControllers();     
     
     // Create debris.    
     %this.createDebris();   
-    
-    // Update the buoyancy controllers.
-    %this.updateBuoyancyControllers();     
 }
 
 //-----------------------------------------------------------------------------
@@ -112,11 +111,17 @@ function BuoyancyControllerToy::createBackground( %this )
     %object.Image = "ToyAssets:highlightBackground";
     %object.BlendColor = SlateGray;
     SandboxScene.add( %object );
+
+    %object.setDefaultFriction( 0 );    
     
     // Create border collisions.
-    %object.createEdgeCollisionShape( -50, -37.5, -50, 37.5 );
-    %object.createEdgeCollisionShape( 50, -37.5, 50, 37.5 );
+    %object.createEdgeCollisionShape( -50, -37.5, -50, 100 );
+    %object.createEdgeCollisionShape( 50, -37.5, 50, 100 );
     %object.createEdgeCollisionShape( -50, -34, 50, -34 );
+    
+    // Vertical fluid edge.
+    %object.createEdgeCollisionShape( -39.8, -16.2, -39.8, 20 );    
+    %object.createEdgeCollisionShape( -39.8, -16.2, -20, -16.2 );    
                 
     // Add the sprite to the scene.
     SandboxScene.add( %object );    
@@ -165,7 +170,7 @@ function BuoyancyControllerToy::createDebris( %this )
             %size = 2;
             
             // Create some sprites.
-            %sprite = %this.createSprite( "ToyAssets:football", getRandom(-40,40) SPC getRandom(50,70), %size, getRandom(0,360) );
+            %sprite = %this.createSprite( "ToyAssets:football", getRandom(-45,20) SPC getRandom(40,50), %size, getRandom(0,360) );
             %sprite.setDefaultFriction( 0.5 );
             %sprite.setDefaultDensity( getRandom(%this.MinDebrisDensity, %this.MaxDebrisDensity) );
             %sprite.createCircleCollisionShape( %size * 0.5 );
@@ -178,7 +183,7 @@ function BuoyancyControllerToy::createDebris( %this )
             %size = %sizeX SPC %sizeY;
             
             // Create some sprites.
-            %sprite = %this.createSprite( "ToyAssets:Blocks", getRandom(-40,40) SPC getRandom(50,70), %size, getRandom(0,360) );
+            %sprite = %this.createSprite( "ToyAssets:Blocks", getRandom(-45,20) SPC getRandom(40,50), %size, getRandom(0,360) );
             %sprite.Frame = getRandom( 0, 55 );
             %sprite.setDefaultFriction( 0.5 );
             %sprite.setDefaultDensity( getRandom(%this.MinDebrisDensity, %this.MaxDebrisDensity) );
@@ -191,22 +196,28 @@ function BuoyancyControllerToy::createDebris( %this )
 
 //-----------------------------------------------------------------------------
 
-function BuoyancyControllerToy::createFluid( %this, %area )
+function BuoyancyControllerToy::createFluid( %this, %area, %flowVelocity, %color )
 {
     %areaLeft = %area._0;
     %areaBottom = %area._1;
     %areaRight = %area._2;
     %areaTop = %area._3;
 
-    %crestHeight = 0.2;
-    %crestY = %areaTop - ((%areaTop - %areaBottom) * %crestHeight);
+    %crestY = %areaTop - 3;
+    %width = %areaRight - %areaLeft;
+    
+    // Create a new controller.
+    %controller = new BuoyancyController();
+    %controller.FluidArea = %area;
+    %controller.FlowVelocity = %flowVelocity;
+    SandboxScene.Controllers.add( %controller );     
     
     // Add the water.
     %water = new Sprite();
     %water.BodyType = static;
     %water.setArea( %areaLeft SPC %areaBottom SPC %areaRight SPC %crestY);
     %water.Image = "ToyAssets:Blank";
-    %water.BlendColor = Navy;    
+    %water.BlendColor = %color;    
     %water.SetBlendAlpha( 0.5 );
     SandboxScene.add( %water );
 
@@ -214,36 +225,23 @@ function BuoyancyControllerToy::createFluid( %this, %area )
     %crests1 = new Scroller();   
     %crests1.setArea( %areaLeft SPC %crestY SPC %areaRight SPC %areaTop );
     %crests1.Image = "BuoyancyControllerToy:WaveCrests";
-    %crests1.BlendColor = Navy;    
+    %crests1.BlendColor = %color;    
     %crests1.SetBlendAlpha( 0.3 );
+    %crests1.RepeatX = %width / 50;
     %crests1.ScrollX = getRandom(5,10);
-    %crests2.ScrollPositionX = getRandom(0,50);
+    %crests1.ScrollPositionX = getRandom(0,50);
     SandboxScene.add( %crests1 );
     
     // Create some wave crests.
     %crests2 = new Scroller();   
     %crests2.setArea( %areaLeft SPC %crestY SPC %areaRight SPC %areaTop );
     %crests2.Image = "BuoyancyControllerToy:WaveCrests";
-    %crests2.BlendColor = Navy;    
+    %crests2.BlendColor = %color;    
     %crests2.SetBlendAlpha( 0.3 );
+    %crests2.RepeatX = %width / 50;
     %crests2.ScrollX = getRandom(-5,-10);
     %crests2.ScrollPositionX = getRandom(0,50);
-    SandboxScene.add( %crests2 );    
-        
-    // Create a new controller.
-    %controller = new BuoyancyController();
-    %controller.FluidArea = %area;
-    SandboxScene.Controllers.add( %controller );    
-}
-
-//-----------------------------------------------------------------------------
-
-function BuoyancyControllerToy::setFluidFlowAngle(%this, %value)
-{
-    %this.FlowAngle = %value;
-    
-    // Update the controllers.
-    %this.updateBuoyancyControllers();   
+    SandboxScene.add( %crests2 );         
 }
 
 //-----------------------------------------------------------------------------
@@ -346,7 +344,7 @@ function BuoyancyControllerToy::updateBuoyancyControllers( %this )
 
         // Update the controllers.
         %controller.FluidDensity = BuoyancyControllerToy.FluidDensity;
-        %controller.FlowVelocity = Vector2Direction( %this.FlowAngle, %this.FlowMagnitude );
+        %controller.FlowVelocity = Vector2Direction( Vector2AngleToPoint("0 0",%controller.FlowVelocity), %this.FlowMagnitude );
         %controller.LinearDrag = BuoyancyControllerToy.LinearDrag;
         %controller.AngularDrag = BuoyancyControllerToy.AngularDrag;
         %controller.FluidGravity = BuoyancyControllerToy.FluidGravity;
