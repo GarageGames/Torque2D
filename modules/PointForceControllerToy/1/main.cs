@@ -36,7 +36,7 @@ function PointForceControllerToy::create( %this )
     PointForceControllerToy.showPlanetoid = true;
     PointForceControllerToy.showExplosions = true;    
     PointForceControllerToy.nonLinearController = true;
-    PointForceControllerToy.controllerForce = 55;
+    PointForceControllerToy.controllerForce = 35;
     PointForceControllerToy.controllerRadius = 36;
     PointForceControllerToy.controllerLinearDrag = 0.1;
     PointForceControllerToy.controllerAngularDrag = 0;
@@ -177,7 +177,8 @@ function Planetoid::onCollision( %this, %object, %collisionDetails )
     }
     
     // Delete the asteroid.
-    %object.Trail.stop(false);
+    %object.Trail.LinearVelocity = 0;
+    %object.Trail.AngularVelocity = 0;
     %object.Trail.safeDelete();
     %object.safeDelete();  
 }
