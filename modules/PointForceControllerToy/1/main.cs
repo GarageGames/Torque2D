@@ -57,7 +57,7 @@ function PointForceControllerToy::create( %this )
     addNumericOption("Controller Angular Drag", 0, 1, 0.1, "setControllerAngularDrag", PointForceControllerToy.controllerAngularDrag, true, "Sets the controller angular drag.");
     addNumericOption("Planetoid Size", 1, 30, 1, "setPlanetoidSize", PointForceControllerToy.planetoidSize, true, "Sets the planetoid size.");
     addNumericOption("Asteroid Size", 1, 10, 1, "setAsteroidSize", PointForceControllerToy.asteroidSize, true, "Sets the asteroid size.");
-    addNumericOption("Asteroid Density", 1, 10, 1, "setAsteroidDensity", PointForceControllerToy.asteroidDensity, true, "Sets the asteroid density.");
+    addNumericOption("Asteroid Density", 0.1, 10, 0.1, "setAsteroidDensity", PointForceControllerToy.asteroidDensity, true, "Sets the asteroid density.");
     addNumericOption("Asteroid Lifetime", 1, 10, 1, "setAsteroidLifetime", PointForceControllerToy.asteroidLifetime, true, "Sets the asteroid lifetime.");
     addNumericOption("Asteroid Speed", 1, 100, 1, "setAsteroidSpeed", PointForceControllerToy.asteroidSpeed, true, "Sets the asteroid speed.");
       
