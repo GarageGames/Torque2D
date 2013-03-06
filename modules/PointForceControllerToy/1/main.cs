@@ -157,9 +157,6 @@ function PointForceControllerToy::createPointForceController( %this )
         %sprite.Frame = getRandom( 0, 55 );
         %sprite.createPolygonBoxCollisionShape( %sizeX, %sizeY );
         %sprite.setAngularVelocity(getRandom(-180,180));
-        
-        // Add to the controller.
-        %controller.add( %sprite );
     }   
     
 }
@@ -174,6 +171,9 @@ function PointForceControllerToy::updatePointForceController( %this )
     // Update the controller.
     %controller.Radius = %this.ForceRadius;
     %controller.Force = %this.ForceMagnitude;
+    %controller.NonLinear = false;
+    %controller.LinearDrag = 0.0;
+    %controller.AngularDrag = 0.0;
 }
 
 //-----------------------------------------------------------------------------
