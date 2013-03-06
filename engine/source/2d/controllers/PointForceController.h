@@ -38,9 +38,23 @@ class PointForceController : public PickingSceneController
 private:
     typedef PickingSceneController Parent;
 
+    /// Controller position.
     Vector2 mPosition;
+
+    /// Controller radius.
     F32 mRadius;
+
+    /// Controller force.
     F32 mForce;
+
+    /// Whether to apply the force non-linearly (using the inverse square law) or linearly.
+    bool mNonLinear;
+
+	/// Linear drag co-efficient.
+	F32 mLinearDrag;
+
+	/// Linear drag co-efficient.
+	F32 mAngularDrag;
 
 public:
     PointForceController();
@@ -55,6 +69,12 @@ public:
     inline F32 getRadius( void ) const { return mRadius; }
     inline void setForce( const F32 force ) { mForce = force; }
     inline F32 getForce( void ) const { return mForce; }
+    inline void setNonLinear( const bool nonLinear ) { mNonLinear = nonLinear; }
+    inline bool getNonLinear( void ) const { return mNonLinear; }
+    inline void setLinearDrag( const F32 linearDrag ) { mLinearDrag = linearDrag; }
+    inline F32 getLinearDrag( void ) const { return mLinearDrag; }
+    inline void setAngularDrag( const F32 angularDrag ) { mAngularDrag = angularDrag; }
+    inline F32 getAngularDrag( void ) const { return mAngularDrag; }
 
     /// Integration.
     virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );

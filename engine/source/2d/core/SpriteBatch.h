@@ -105,10 +105,10 @@ public:
     inline bool getBatchCulling( void ) const { return mBatchCulling; }
 
     inline void setDefaultSpriteStride( const Vector2& defaultStride ) { mDefaultSpriteStride = defaultStride; }
-    inline Vector2 getDefaultSpriteStride( void ) const { return mDefaultSpriteStride; }
+    inline const Vector2& getDefaultSpriteStride( void ) const { return mDefaultSpriteStride; }
 
     inline void setDefaultSpriteSize( const Vector2& defaultSize ) { mDefaultSpriteSize = defaultSize; }
-    inline Vector2 getDefaultSpriteSize( void ) const { return mDefaultSpriteSize; }
+    inline const Vector2& getDefaultSpriteSize( void ) const { return mDefaultSpriteSize; }
 
     inline void setDefaultSpriteAngle( const F32 defaultAngle ) { mDefaultSpriteAngle = defaultAngle; }
     inline F32 getDefaultSpriteAngle( void ) const { return mDefaultSpriteAngle; }
