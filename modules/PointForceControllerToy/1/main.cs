@@ -51,7 +51,7 @@ function PointForceControllerToy::create( %this )
     addFlagOption("Show Planetoid", "setShowPlanetoid", PointForceControllerToy.showPlanetoid, true, "Whether to show the planetoid or not or not." );
     addFlagOption("Show Explosions", "setShowExplosions", PointForceControllerToy.showExplosions, false, "Whether to show the explosions or not or not." );
     addFlagOption("Controller Non-Linear", "setNonLinearController", PointForceControllerToy.nonLinearController, true, " Whether to apply the controller force non-linearly (using the inverse square law) or linearly" );
-    addNumericOption("Controller Force", 1, 1000, 10, "setControllerForce", PointForceControllerToy.controllerForce, true, "Sets the controller force.");
+    addNumericOption("Controller Force", -1000, 1000, 10, "setControllerForce", PointForceControllerToy.controllerForce, true, "Sets the controller force.");
     addNumericOption("Controller Radius", 1, 30, 1, "setControllerRadius", PointForceControllerToy.controllerRadius, true, "Sets the controller radius.");
     addNumericOption("Controller Linear Drag", 0, 1, 0.1, "setControllerLinearDrag", PointForceControllerToy.controllerLinearDrag, true, "Sets the controller linear drag.");
     addNumericOption("Controller Angular Drag", 0, 1, 0.1, "setControllerAngularDrag", PointForceControllerToy.controllerAngularDrag, true, "Sets the controller angular drag.");
