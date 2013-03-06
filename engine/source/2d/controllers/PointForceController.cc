@@ -117,7 +117,7 @@ void PointForceController::integrate( Scene* pScene, const F32 totalTime, const 
     const F32 radiusSqr = mRadius * mRadius;
 
     // Calculate the force squared in-case we need it.
-    const F32 forceSqr = mForce * mForce;
+    const F32 forceSqr = mForce * mForce * (( mForce < 0.0f ) ? -1.0f : 1.0f);
 
     // Calculate drag coefficients (time-integrated).
     const F32 linearDrag = mClampF( mLinearDrag, 0.0f, 1.0f ) * elapsedTime;
