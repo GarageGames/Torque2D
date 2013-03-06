@@ -155,7 +155,10 @@ package ScrollerToyPackage
 {
 
 function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
-{   
+{
+    // Call parent.
+    Parent::onTouchDown(%this, %touchID, %worldPosition );
+
     // Set the scrollers speed to be the distance from the farground scrollers origin.
     // Also use the sign to control the direction of scrolling.
     %scrollerSpeed = %worldPosition.x - ScrollerToy.FarScroller.Position.x;

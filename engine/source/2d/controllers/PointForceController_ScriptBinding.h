@@ -92,3 +92,55 @@ ConsoleMethod(PointForceController, getForce, F32, 2, 2,        "() Gets the poi
 {
     return object->getForce();
 }
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(PointForceController, setLinearDrag, void, 3, 3,  "(linearDrag) - Sets the linear drag coefficient (0.0 to 1.0).\n"
+                                                                "@param linearDrag The linear drag coefficient\n"
+                                                                "@return No return value.")
+{
+    object->setLinearDrag( dAtof(argv[2]) );
+} 
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(PointForceController, getLinearDrag, F32, 2, 2,   "() Gets the linear drag coefficient.\n"
+                                                                "@return The linear drag coefficient.")
+{
+    return object->getLinearDrag();
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(PointForceController, setAngularDrag, void, 3, 3, "(angularDrag) - Sets the angular drag coefficient (0.0 to 1.0).\n"
+                                                                "@param angularDrag The angular drag coefficient\n"
+                                                                "@return No return value.")
+{
+    object->setAngularDrag( dAtof(argv[2]) );
+} 
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(PointForceController, getAngularDrag, F32, 2, 2,  "() Gets the angular drag coefficient.\n"
+                                                                "@return The angular drag coefficient.")
+{
+    return object->getAngularDrag();
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(PointForceController, setNonLinear, void, 3, 3,   "(nonLinear) - Sets whether to apply the force non-linearly (using the inverse square law) or linearly.\n"
+                                                                "@param nonLinear whether to apply the force non-linearly (using the inverse square law) or linearly.\n"
+                                                                "@return No return value.")
+{
+    object->setNonLinear( dAtob(argv[2]) );
+} 
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(PointForceController, getNonLinear, bool, 2, 2,  "() Gets whether to apply the force non-linearly (using the inverse square law) or linearly.\n"
+                                                                "@return Whether to apply the force non-linearly (using the inverse square law) or linearly.")
+{
+    return object->getNonLinear();
+}
+

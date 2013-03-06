@@ -1,0 +1,49 @@
+<ParticleAsset
+    AssetName="ForceBubble">
+    <ParticleAssetEmitter
+        EmitterName="PermanentBubble"
+        Image="@asset=ToyAssets:Particles5"
+        Frame="1"
+		SingleParticle="1">
+        <ParticleAssetEmitter.Fields>
+            <SizeX>
+				<Key Time="0" Value="72"/>
+            </SizeX>
+            <AlphaChannel>
+				<Key Time="0" Value="0.2"/>
+			</AlphaChannel>
+        </ParticleAssetEmitter.Fields>
+    </ParticleAssetEmitter>
+    <ParticleAssetEmitter
+        EmitterName="MovingBubbles"
+        Image="@asset=ToyAssets:Particles5"
+        Frame="1">
+        <ParticleAssetEmitter.Fields>
+            <Quantity>
+				<Key Time="0" Value="0.2"/>
+            </Quantity>
+            <QuantityVariation>
+				<Key Time="0" Value="0.1"/>
+            </QuantityVariation>			
+            <Lifetime>
+				<Key Time="0" Value="5"/>
+            </Lifetime>						
+            <Speed>
+				<Key Time="0" Value="0"/>
+            </Speed>			
+            <SizeX>
+				<Key Time="0" Value="72.0"/>
+            </SizeX>			
+            <SizeXLife>
+				<Key Time="0" Value="0.3"/>
+				<Key Time="1" Value="1.0"/>
+            </SizeXLife>			
+            <AlphaChannel>
+				<Key Time="0.0" Value="0.0"/>
+				<Key Time="0.3" Value="0.2"/>
+				<Key Time="0.9" Value="0.1"/>
+				<Key Time="1.0" Value="0.0"/>				
+			</AlphaChannel>
+        </ParticleAssetEmitter.Fields>
+    </ParticleAssetEmitter>	
+</ParticleAsset>

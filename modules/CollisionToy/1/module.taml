@@ -1,7 +1,7 @@
 <ModuleDefinition
-	ModuleId="PointForceControllerToy"
+	ModuleId="CollisionToy"
 	VersionId="1"
-	Description="Demonstrates the point-force controller."
+	Description="Demonstrates collision callbacks."
 	Dependencies="ToyAssets=1"
 	Type="toy"
 	ToyCategoryIndex="3"

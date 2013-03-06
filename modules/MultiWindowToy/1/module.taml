@@ -1,7 +1,7 @@
 <ModuleDefinition
-	ModuleId="PointForceControllerToy"
+	ModuleId="MultiWindowToy"
 	VersionId="1"
-	Description="Demonstrates the point-force controller."
+	Description="Demonstrates creating multiple windows."
 	Dependencies="ToyAssets=1"
 	Type="toy"
 	ToyCategoryIndex="3"

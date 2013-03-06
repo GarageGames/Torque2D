@@ -365,10 +365,6 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
             if ( %pickedObject.getBodyType() $= "static" )
                 continue;
                 
-            // Skipp if the object is ignoring being picked.
-            if ( %pickedObject.ignorePick )
-                continue;
-                
             // Set the pull object.
             Sandbox.ManipulationPullObject[%touchID] = %pickedObject;
             Sandbox.ManipulationPullJointId[%touchID] = SandboxScene.createTargetJoint( %pickedObject, %worldPosition, Sandbox.ManipulationPullMaxForce );            

@@ -33,35 +33,12 @@
 
 //------------------------------------------------------------------------------  
 
+class SpriteBatchQuery;
+
+//------------------------------------------------------------------------------  
+
 class SpriteBatch
 {
-protected:
-    /// Sprite batch tree.
-    class SpriteBatchTree : public b2DynamicTree
-    {
-        friend class b2DynamicTree;
-
-    public:
-        // Render query.
-        inline bool QueryCallback( S32 proxyId )
-        {    
-            // Fetch sprite batch item.    
-            SpriteBatchItem* pSpriteBatchItem = static_cast<SpriteBatchItem*>( GetUserData( proxyId ) );
-
-            // Ignore if not visible.
-            if ( !pSpriteBatchItem->getVisible() )
-                return true;
-
-            // Use sprite batch item.
-            mBatchQuery.push_back( pSpriteBatchItem );
-
-            return true;
-        }
-
-        typedef Vector< SpriteBatchItem* > typeSpriteItemVector;
-        typeSpriteItemVector mBatchQuery;
-    };
-
 public:
     static const S32                INVALID_SPRITE_PROXY = -1;  
 
@@ -81,7 +58,7 @@ protected:
     F32                             mDefaultSpriteAngle;
 
 private:
-    SpriteBatchTree*                mpSpriteBatchTree;
+    SpriteBatchQuery*               mpSpriteBatchQuery;
     U32                             mMasterBatchId;
 
     b2Transform                     mBatchTransform;
@@ -107,9 +84,11 @@ public:
     inline bool getLocalExtentsDirty( void ) const { return mLocalExtentsDirty; }
     inline const Vector2& getLocalExtents( void ) { if ( getLocalExtentsDirty() ) updateLocalExtents(); return mLocalExtents; }
 
-    void createTreeProxy( const b2AABB& localAABB, SpriteBatchItem* spriteBatchItem );
-    void destroyTreeProxy( SpriteBatchItem* spriteBatchItem );
-    void moveTreeProxy( SpriteBatchItem* spriteBatchItem, const b2AABB& localAABB );         
+    void createQueryProxy( SpriteBatchItem* pSpriteBatchItem );
+    void destroyQueryProxy( SpriteBatchItem* pSpriteBatchItem );
+    void moveQueryProxy( SpriteBatchItem* pSpriteBatchItem, const b2AABB& localAABB );    
+    SpriteBatchQuery* getSpriteBatchQuery( const bool clearQuery = false );
+
 
     virtual void copyTo( SpriteBatch* pSpriteBatch ) const;
 
@@ -126,10 +105,10 @@ public:
     inline bool getBatchCulling( void ) const { return mBatchCulling; }
 
     inline void setDefaultSpriteStride( const Vector2& defaultStride ) { mDefaultSpriteStride = defaultStride; }
-    inline Vector2 getDefaultSpriteStride( void ) const { return mDefaultSpriteStride; }
+    inline const Vector2& getDefaultSpriteStride( void ) const { return mDefaultSpriteStride; }
 
     inline void setDefaultSpriteSize( const Vector2& defaultSize ) { mDefaultSpriteSize = defaultSize; }
-    inline Vector2 getDefaultSpriteSize( void ) const { return mDefaultSpriteSize; }
+    inline const Vector2& getDefaultSpriteSize( void ) const { return mDefaultSpriteSize; }
 
     inline void setDefaultSpriteAngle( const F32 defaultAngle ) { mDefaultSpriteAngle = defaultAngle; }
     inline F32 getDefaultSpriteAngle( void ) const { return mDefaultSpriteAngle; }
@@ -206,8 +185,8 @@ protected:
     void setBatchTransform( const b2Transform& batchTransform );
     void updateLocalExtents( void );
 
-    void createSpriteBatchTree( void );
-    void destroySpriteBatchTree( void );
+    void createSpriteBatchQuery( void );
+    void destroySpriteBatchQuery( void );
 
     void onTamlCustomWrite( TamlCustomNode* pSpritesNode );
     void onTamlCustomRead( const TamlCustomNode* pSpritesNode );

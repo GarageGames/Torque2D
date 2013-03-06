@@ -48,15 +48,18 @@ function TruckToy::create( %this )
     TruckToy.ProjectileRate = 3000;
     TruckToy.ExplosionScale = 1;
     
+    TruckToy.RotateCamera = true;
+    
     // Add the custom controls.
     addNumericOption( "Wheel Speed", 100, 1000, 50, "setWheelSpeed", TruckToy.WheelSpeed, false, "Sets the rotational speed of the wheel when it is put into drive." );
     addNumericOption( "Wheel Friction", 0, 10, 1, "setWheelFriction", TruckToy.WheelFriction, true, "Sets the friction for the surface of each wheel." );
     addNumericOption( "Front Wheel Density", 1, 20, 1, "setFrontWheelDensity", TruckToy.FrontWheelDensity, true, "Sets the density of the front wheel." );
     addNumericOption( "Rear Wheel Density", 1, 20, 1, "setFrontWheelDensity", TruckToy.RearWheelDensity, true, "Sets the density of the rear wheel." );
-    addFlagOption("Front Wheel Drive", "setFrontWheelDrive", TruckToy.FrontWheelDrive, false, "Whether the motor on the front wheel is active or not." );
-    addFlagOption("Rear Wheel Drive", "setRearWheelDrive", TruckToy.RearWheelDrive, false, "Whether the motor on the rear wheel is active or not." );
     addNumericOption( "Projectile Rate (ms)", 100, 60000, 100, "setProjectileRate", TruckToy.ProjectileRate, false, "Sets the time interval in-between projectiles appearing." );
     addNumericOption( "Explosion Scale", 1, 11, 1, "setExplosionScale", TruckToy.ExplosionScale, false, "Sets the size scale of the explosions caused by a projectile landing." );
+    addFlagOption("Front Wheel Drive", "setFrontWheelDrive", TruckToy.FrontWheelDrive, false, "Whether the motor on the front wheel is active or not." );
+    addFlagOption("Rear Wheel Drive", "setRearWheelDrive", TruckToy.RearWheelDrive, false, "Whether the motor on the rear wheel is active or not." );
+    addFlagOption("Rotate Camera", "setRotateCamera", TruckToy.RotateCamera, true, "Whether the rotate the camera that is mounted to the truck or not." );
     
     // Reset the toy.
     %this.reset();
@@ -82,6 +85,7 @@ function TruckToy::reset( %this )
 
     // Camera Configuration
     SandboxWindow.setCameraPosition( TruckToy.WorldLeft + (TruckToy.CameraWidth/2) - 10, 0 );
+    SandboxWindow.setCameraAngle( 0 );
     SandboxWindow.setCameraSize( TruckToy.CameraWidth, TruckToy.CameraHeight );
     SandboxWindow.setViewLimitOn( TruckToy.WorldLeft, TruckToy.CameraHeight/-2, TruckToy.WorldRight, TruckToy.CameraHeight/2 );
 
@@ -663,7 +667,7 @@ function TruckToy::createProjectile(%this)
 
 // -----------------------------------------------------------------------------
 
-function TruckProjectile::handleCollision(%this, %object, %collisionDetails)
+function TruckProjectile::onCollision(%this, %object, %collisionDetails)
 {   
     // Create an impact explosion at the projectiles position.
     %particlePlayer = new ParticlePlayer();
@@ -716,10 +720,7 @@ function TruckToy::createTruck( %this, %posX, %posY )
 
 
     // Mount camera to truck body.
-    SandboxWindow.mount( TruckToy.TruckBody, "0 0", 3, true, true );
-
-    //SandboxScene.setDebugSceneObject( TruckToy.TruckBody );
-
+    SandboxWindow.mount( TruckToy.TruckBody, "0 0", 3, true, TruckToy.RotateCamera );
 
     // Tires.
     // Suspension = -1.0 : -1.5   
@@ -923,11 +924,21 @@ function TruckToy::setExplosionScale( %this, %value )
 
 //-----------------------------------------------------------------------------
 
+function TruckToy::setRotateCamera( %this, %value )
+{
+    %this.RotateCamera = %value;
+}
+
+//-----------------------------------------------------------------------------
+
 package TruckToyPackage
 {
 
 function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
 {
+    // Call parent.
+    Parent::onTouchDown(%this, %touchID, %worldPosition );
+    
     // Finish if truck is already moving.
     if ( TruckToy.TruckMoving )
         return;
@@ -947,6 +958,9 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
 
 function SandboxWindow::onTouchUp(%this, %touchID, %worldPosition)
 {
+    // Call parent.
+    Parent::onTouchUp(%this, %touchID, %worldPosition );
+    
     // Stop the truck.
     TruckToy.truckStop();
 }

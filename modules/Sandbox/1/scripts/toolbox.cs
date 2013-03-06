@@ -222,8 +222,8 @@ function BackgroundColorSelectList::onSelect(%this)
         return;
             
     // Set the scene color.
-    SandboxScene.BackgroundColor = getStockColorName($activeBackgroundColor);
-    SandboxScene.UseBackgroundColor = true;
+    Canvas.BackgroundColor = getStockColorName($activeBackgroundColor);
+    Canvas.UseBackgroundColor = true;
 }
 
 //-----------------------------------------------------------------------------
@@ -296,8 +296,8 @@ function updateToolboxOptions()
         return;
         
     // Set the scene color.
-    SandboxScene.BackgroundColor = getStockColorName($activeBackgroundColor);
-    SandboxScene.UseBackgroundColor = true;        
+    Canvas.BackgroundColor = getStockColorName($activeBackgroundColor);
+    Canvas.UseBackgroundColor = true;        
        
     // Set option.
     if ( $pref::Sandbox::metricsOption )
@@ -531,7 +531,7 @@ function ToyListArray::initialize(%this, %index)
     {
         // Fetch the toy module.
         %moduleDefinition = SandboxToys.getObject( %toyIndex );
-
+        
         // Skip the toy module if the "all" category is not selected and if the toy is not in the selected category.
         if ( %index != $toyAllCategoryIndex && %moduleDefinition.ToyCategoryIndex != %index )
             continue;
