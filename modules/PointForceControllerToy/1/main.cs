@@ -208,6 +208,7 @@ function PointForceControllerToy::createAsteroid( %this, %position )
     %player.EmissionRateScale = 3;
     %player.SizeScale = 2;
     %player.SceneLayer = 11;
+    %player.setLifetime( PointForceControllerToy.asteroidLifetime );  
     SandboxScene.add( %player );
     %jointId = SandboxScene.createRevoluteJoint( %object, %player );
     SandboxScene.setRevoluteJointLimit( %jointId, 0, 0 );    
