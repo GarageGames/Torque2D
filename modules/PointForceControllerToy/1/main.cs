@@ -90,6 +90,8 @@ function PointForceControllerToy::reset( %this )
     // Start a timer throwing asteroids.
     if ( PointForceControllerToy.autoSpawnAsteroids )
         %this.startTimer( "createAsteroid", 1000 );
+    else
+        %this.stopTimer();        
 }
 
 //-----------------------------------------------------------------------------
