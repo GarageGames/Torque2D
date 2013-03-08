@@ -41,9 +41,9 @@ ConsoleMethod( AssetManager, compileReferencedAssets, bool, 3, 3,  "(moduleDefin
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetManager, addDeclaredAssets, bool, 3, 3,     "(moduleDefinition) - Add any the declared assets specified by the module definition.\n"
-                                                                "@param moduleDefinition The module definition specifies the asset manifest.\n"
-                                                                "@return Whether adding declared assets was successful or not." )
+ConsoleMethod( AssetManager, addModuleDeclaredAssets, bool, 3, 3,   "(moduleDefinition) - Add any the declared assets specified by the module definition.\n"
+                                                                    "@param moduleDefinition The module definition specifies the asset manifest.\n"
+                                                                    "@return Whether adding declared assets was successful or not." )
 {
     // Fetch module definition.
     ModuleDefinition* pModuleDefinition = Sim::findObject<ModuleDefinition>( argv[2] );
@@ -56,15 +56,15 @@ ConsoleMethod( AssetManager, addDeclaredAssets, bool, 3, 3,     "(moduleDefiniti
         return false;
     }
 
-    // Add declared assets.
-    return object->addDeclaredAssets( pModuleDefinition );
+    // Add module declared assets.
+    return object->addModuleDeclaredAssets( pModuleDefinition );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetManager, addSingleDeclaredAsset, bool, 4, 4,    "(moduleDefinition, assetFilePath) - Add the specified asset against the specified module definition.\n"
-                                                                    "@param moduleDefinition The module definition that may contain declared assets.\n"
-                                                                    "@return Whether adding declared assets was successful or not." )
+ConsoleMethod( AssetManager, addDeclaredAsset, bool, 4, 4,  "(moduleDefinition, assetFilePath) - Add the specified asset against the specified module definition.\n"
+                                                            "@param moduleDefinition The module definition that may contain declared assets.\n"
+                                                            "@return Whether adding declared assets was successful or not." )
 {
     // Fetch module definition.
     ModuleDefinition* pModuleDefinition = Sim::findObject<ModuleDefinition>( argv[2] );
@@ -73,15 +73,15 @@ ConsoleMethod( AssetManager, addSingleDeclaredAsset, bool, 4, 4,    "(moduleDefi
     if ( pModuleDefinition == NULL )
     {
         // No, so warn.
-        Con::warnf( "AssetManager::addSingleDeclaredAsset() - Could not find the module definition '%s'.", argv[2] );        
+        Con::warnf( "AssetManager::addDeclaredAsset() - Could not find the module definition '%s'.", argv[2] );        
         return false;
     }
 
     // Fetch asset file-path.
     const char* pAssetFilePath = argv[3];
 
-    // Add single declared assets.
-    return object->addSingleDeclaredAsset( pModuleDefinition, pAssetFilePath );
+    // Add declared asset.
+    return object->addDeclaredAsset( pModuleDefinition, pAssetFilePath );
 }
 
 //-----------------------------------------------------------------------------
@@ -128,12 +128,12 @@ ConsoleMethod( AssetManager, removeDeclaredAssets, bool, 3, 3,  "(moduleDefiniti
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetManager, removeSingleDeclaredAsset, bool, 3, 3, "(assetId) - Remove the specified declared asset Id.\n"
-                                                                    "@param assetId The selected asset Id.\n"
-                                                                    "@return Whether removing the declared asset was successful or not." )
+ConsoleMethod( AssetManager, removeDeclaredAsset, bool, 3, 3,   "(assetId) - Remove the specified declared asset Id.\n"
+                                                                "@param assetId The selected asset Id.\n"
+                                                                "@return Whether removing the declared asset was successful or not." )
 {
     // Remove the declared asset Id.
-    return object->removeSingleDeclaredAsset( argv[2] );
+    return object->removeDeclaredAsset( argv[2] );
 }
 
 //-----------------------------------------------------------------------------

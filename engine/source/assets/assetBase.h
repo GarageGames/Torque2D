@@ -67,6 +67,7 @@ public:
 
     /// Engine.
     static void initPersistFields();
+    virtual void copyTo(SimObject* object);
 
     /// Asset configuration.
     inline void             setAssetName( const char* pAssetName )              { if ( mpOwningAssetManager == NULL ) mpAssetDefinition->mAssetName = StringTable->insert(pAssetName); }

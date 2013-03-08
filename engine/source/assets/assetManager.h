@@ -125,11 +125,11 @@ public:
     static void initPersistFields();
 
     /// Declared assets.
-    bool addDeclaredAssets( ModuleDefinition* pModuleDefinition );
-    bool addSingleDeclaredAsset( ModuleDefinition* pModuleDefinition, const char* pAssetFilePath );
+    bool addModuleDeclaredAssets( ModuleDefinition* pModuleDefinition );
+    bool addDeclaredAsset( ModuleDefinition* pModuleDefinition, const char* pAssetFilePath );
     StringTableEntry addPrivateAsset( AssetBase* pAssetBase );
     bool removeDeclaredAssets( ModuleDefinition* pModuleDefinition );
-    bool removeSingleDeclaredAsset( const char* pAssetId );
+    bool removeDeclaredAsset( const char* pAssetId );
     bool renameDeclaredAsset( const char* pAssetIdFrom, const char* pAssetIdTo );
     StringTableEntry getAssetName( const char* pAssetId );
     StringTableEntry getAssetDescription( const char* pAssetId );
