@@ -48,8 +48,6 @@ ModuleDefinition::ModuleDefinition() :
     mVersionId( 0 ),
     mBuildId( 0 ),
     mEnabled( true ),
-    mPublished( true ),
-    mPurchased( false ),
     mSynchronized( false ),
     mDeprecated( false ),
     mCriticalMerge( false ),
@@ -84,21 +82,19 @@ void ModuleDefinition::initPersistFields()
     Parent::initPersistFields();
 
     /// Module configuration.
-    addProtectedField( "ModuleId", TypeString, Offset(mModuleId, ModuleDefinition), &setModuleId, &defaultProtectedGetFn, "A unique string Id for the module.  It can contain any characters except a comma." );
+    addProtectedField( "ModuleId", TypeString, Offset(mModuleId, ModuleDefinition), &setModuleId, &defaultProtectedGetFn, "A unique string Id for the module.  It can contain any characters except a comma or semi-colon (the asset scope character)." );
     addProtectedField( "VersionId", TypeS32, Offset(mVersionId, ModuleDefinition), &setVersionId, &defaultProtectedGetFn, "The version Id.  Breaking changes to a module should use a higher version Id." );
     addProtectedField( "BuildId", TypeS32, Offset(mBuildId, ModuleDefinition), &setBuildId, &defaultProtectedGetFn, &writeBuildId, "The build Id.  Non-breaking changes to a module should use a higher build Id.  Optional: If not specified then the build Id will be zero." );
     addProtectedField( "Enabled", TypeBool, Offset(mEnabled, ModuleDefinition), &setEnabled, &defaultProtectedGetFn, &writeEnabled, "Whether the module is enabled or not.  When disabled, it is effectively ignored.  Optional: If not specified then the module is enabled." );
-    addProtectedField( "Published", TypeBool, Offset(mPublished, ModuleDefinition), &setPublished, &defaultProtectedGetFn, &writePublished, "Whether the module should be published to the web-services or not.  Optional: If not specified then the module is published." );
-    addProtectedField( "Purchased", TypeBool, Offset(mPurchased, ModuleDefinition), &setPurchased, &defaultProtectedGetFn, &writePurchased, "Whether the module should be purchased via the web-services or not.  Optional: If not specified then the module is purchased." );
-    addProtectedField( "Synchronized", TypeBool, Offset(mSynchronized, ModuleDefinition), &setSynchronized, &defaultProtectedGetFn, &writeSynchronized, "Whether the module is should be synchronized or not.  Optional: If not specified then the module is not synchronized." );
+    addProtectedField( "Synchronized", TypeBool, Offset(mSynchronized, ModuleDefinition), &setSynchronized, &defaultProtectedGetFn, &writeSynchronized, "Whether the module should be synchronized or not.  Optional: If not specified then the module is not synchronized." );
     addProtectedField( "Deprecated", TypeBool, Offset(mDeprecated, ModuleDefinition), &setDeprecated, &defaultProtectedGetFn, &writeDeprecated, "Whether the module is deprecated or not.  Optional: If not specified then the module is not deprecated." );
     addProtectedField( "CriticalMerge", TypeBool, Offset(mCriticalMerge, ModuleDefinition), &setDeprecated, &defaultProtectedGetFn, &writeCriticalMerge, "Whether the merging of a module prior to a restart is critical or not.  Optional: If not specified then the module is not merge critical." );
-    addProtectedField( "Description", TypeString, Offset(mModuleDescription, ModuleDefinition), &setModuleDescription, &defaultProtectedGetFn, &writeModuleDescription, "The description displayed for debugging purposes." );
+    addProtectedField( "Description", TypeString, Offset(mModuleDescription, ModuleDefinition), &setModuleDescription, &defaultProtectedGetFn, &writeModuleDescription, "The description typically used for debugging purposes but can be used for anything." );
     addProtectedField( "Author", TypeString, Offset(mAuthor, ModuleDefinition), &setAuthor, &defaultProtectedGetFn, &writeAuthor, "The author of the module." );
     addProtectedField( "Group", TypeString, Offset(mModuleGroup, ModuleDefinition), &setModuleGroup, &defaultProtectedGetFn, "The module group used typically when loading modules as a group." );
     addProtectedField( "Type", TypeString, Offset(mModuleType, ModuleDefinition), &setModuleType, &defaultProtectedGetFn, &writeModuleType, "The module type typically used to distinguish modules during module enumeration.  Optional: If not specified then the type is empty although this can still be used as a pseudo 'global' type for instance." );
     addProtectedField( "Dependencies", TypeString, Offset(mDependencies, ModuleDefinition), &setDependencies, &getDependencies, &writeDependencies, "A comma-separated list of module Ids/VersionIds (<ModuleId>=<VersionId>,<ModuleId>=<VersionId>,etc) which this module depends upon. Optional: If not specified then no dependencies are assumed." );
-    addProtectedField( "ScriptFile", TypeString, Offset(mScriptFile, ModuleDefinition), &setScriptFile, &defaultProtectedGetFn, &writeScriptFile, "The name of the script file to execute when loading the module.  Optional." );
+    addProtectedField( "ScriptFile", TypeString, Offset(mScriptFile, ModuleDefinition), &setScriptFile, &defaultProtectedGetFn, &writeScriptFile, "The name of the script file to compile when loading the module.  Optional." );
     addProtectedField( "CreateFunction", TypeString, Offset(mCreateFunction, ModuleDefinition), &setCreateFunction, &defaultProtectedGetFn, &writeCreateFunction, "The name of the function used to create the module.  Optional: If not specified then no create function is called." );
     addProtectedField( "DestroyFunction", TypeString, Offset(mDestroyFunction, ModuleDefinition), &setDestroyFunction, &defaultProtectedGetFn, &writeDestroyFunction, "The name of the function used to destroy the module.  Optional: If not specified then no destroy function is called." );
     addProtectedField( "AssetTagsManifest", TypeString, Offset(mAssetTagsManifest, ModuleDefinition), &setAssetTagsManifest, &defaultProtectedGetFn, &writeAssetTagsManifest, "The name of tags asset manifest file if this module contains asset tags.  Optional: If not specified then no asset tags will be found for this module.  Currently, only a single asset tag manifest should exist." );

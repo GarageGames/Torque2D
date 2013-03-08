@@ -20,45 +20,60 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
-// Audio channel descriptions.
-//------------------------------------------------------------------------------
-$musicAudioType = 1;
-$effectsAudioType = 2;
+#ifndef PickingSceneController
+#include "2d/controllers/core/PickingSceneController.h"
+#endif
+
+// Script bindings.
+#include "2d/controllers/core/PickingSceneController_ScriptBinding.h"
 
 //------------------------------------------------------------------------------
-// initializeOpenAL
-// Starts up the OpenAL driver.
+
+IMPLEMENT_CONOBJECT(PickingSceneController);
+
 //------------------------------------------------------------------------------
-function initializeOpenAL()
+
+PickingSceneController::PickingSceneController() :
+        mControlGroupMask( MASK_ALL ),
+        mControlLayerMask( MASK_ALL )
 {
-    // Just in case it is already started.
-    shutdownOpenAL();
-
-    echo("OpenAL Driver Init");
-
-    if (!OpenALInitDriver())
-    {
-        echo("OpenALInitDriver() failed");
-        $Audio::initFailed = true;
-    }
-    else
-    {
-        // Set the master volume.
-        alxListenerf(AL_GAIN_LINEAR, $pref::Audio::masterVolume);
-
-        // Set the channel volumes.
-        for (%channel = 1; %channel <= 3; %channel++)
-            alxSetChannelVolume(%channel, $pref::Audio::channelVolume[%channel]);
-
-        echo("OpenAL Driver Init Success");
-    }
 }
 
 //------------------------------------------------------------------------------
-// shutdownOpenAL
-//------------------------------------------------------------------------------
-function shutdownOpenAL()
+
+PickingSceneController::~PickingSceneController()
 {
-    OpenALShutdownDriver();
 }
+
+//------------------------------------------------------------------------------
+
+void PickingSceneController::copyTo(SimObject* object)
+{
+    // Call to parent.
+    Parent::copyTo(object);
+
+    // Cast to controller.
+    PickingSceneController* pController = static_cast<PickingSceneController*>(object);
+
+    // Sanity!
+    AssertFatal(pController != NULL, "PickingSceneController::copyTo() - Object is not the correct type.");
+
+    // Set masks.
+    pController->setControlGroupMask( getControlGroupMask() );
+    pController->setControlLayerMask( getControlLayerMask() );
+}
+
+//------------------------------------------------------------------------------
+
+WorldQuery* PickingSceneController::prepareQueryFilter( Scene* pScene, const bool clearQuery )
+{
+    // Fetch world query and clear results.
+    WorldQuery* pWorldQuery = pScene->getWorldQuery( clearQuery );
+
+    // Set filter.
+    WorldQueryFilter queryFilter( mControlLayerMask, mControlGroupMask, true, false, true, true );
+    pWorldQuery->setQueryFilter( queryFilter );
+
+    return pWorldQuery;
+}
+

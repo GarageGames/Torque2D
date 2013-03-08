@@ -116,7 +116,7 @@ RectClipper::clipLine(const Point2I& in_rStart,
       x2  = x1 + (t * dx);
    }
 
-   if (flipped == true) 
+   if (flipped)
    {
       out_rEnd.x   = S32(x1 + 0.5f);
       out_rEnd.y   = S32(y1 + 0.5f);

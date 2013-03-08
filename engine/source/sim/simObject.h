@@ -321,10 +321,10 @@ protected:
     virtual void onTamlPreWrite( void ) {}
     virtual void onTamlPostWrite( void ) {}
     virtual void onTamlPreRead( void ) {}
-    virtual void onTamlPostRead( const TamlCustomProperties& customProperties ) {}
+    virtual void onTamlPostRead( const TamlCustomNodes& customNodes ) {}
     virtual void onTamlAddParent( SimObject* pParentObject ) {}
-    virtual void onTamlCustomWrite( TamlCustomProperties& customProperties ) {}
-    virtual void onTamlCustomRead( const TamlCustomProperties& customProperties ) {}
+    virtual void onTamlCustomWrite( TamlCustomNodes& customNodes ) {}
+    virtual void onTamlCustomRead( const TamlCustomNodes& customNodes ) {}
     
 protected:
     bool	mCanSaveFieldDictionary; ///< true if dynamic fields (added at runtime) should be saved, defaults to true
@@ -726,6 +726,8 @@ public:
     static void initPersistFields();
     SimObject* clone( const bool copyDynamicFields );
     virtual void copyTo(SimObject* object);
+
+    template<typename T> bool isType(void) { return dynamic_cast<T>(this) != NULL; }
 
     // Component Console Overrides
     virtual bool handlesConsoleMethod(const char * fname, S32 * routingId) { return false; }

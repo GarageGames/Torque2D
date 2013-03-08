@@ -43,6 +43,19 @@ void TextureDictionary::create()
         smTable[i] = NULL;
 }
 
+//-----------------------------------------------------------------------------
+
+TextureObject* TextureDictionary::find( StringTableEntry textureKey )
+{
+    U32 key = HashPointer(textureKey) % smHashTableSize;
+    TextureObject *walk = smTable[key];
+    for(; walk; walk = walk->hashNext)
+    {
+        if(walk->mTextureKey == textureKey)
+            break;
+    }
+    return walk;
+}
 
 //-----------------------------------------------------------------------------
 

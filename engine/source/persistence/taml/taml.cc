@@ -379,7 +379,7 @@ Taml::TamlFormatMode Taml::getFileAutoFormatMode( const char* pFilename )
 
 //-----------------------------------------------------------------------------
 
-TamlWriteNode* Taml::compileObject( SimObject* pSimObject )
+TamlWriteNode* Taml::compileObject( SimObject* pSimObject, const bool forceId )
 {
     // Debug Profiling.
     PROFILE_SCOPE(Taml_CompileObject);
@@ -426,6 +426,13 @@ TamlWriteNode* Taml::compileObject( SimObject* pSimObject )
     TamlWriteNode* pNewNode = new TamlWriteNode();
     pNewNode->set( pSimObject );
 
+    // Is an Id being forced for this object?
+    if ( forceId )
+    {
+        // Yes, so allocate one.
+        pNewNode->mRefId = ++mMasterNodeId;
+    }
+
     // Push new node.
     mCompiledNodes.push_back( pNewNode );
 
@@ -446,8 +453,8 @@ TamlWriteNode* Taml::compileObject( SimObject* pSimObject )
     // Compile children.
     compileChildren( pNewNode );
 
-    // Compile custom properties.
-    compileCustomProperties( pNewNode );
+    // Compile custom state.
+    compileCustomState( pNewNode );
 
     // Are there any Taml callbacks?
     if ( pNewNode->mpTamlCallbacks != NULL )
@@ -661,93 +668,83 @@ void Taml::compileChildren( TamlWriteNode* pTamlWriteNode )
 
 //-----------------------------------------------------------------------------
 
-void Taml::compileCustomProperties( TamlWriteNode* pTamlWriteNode )
+void Taml::compileCustomState( TamlWriteNode* pTamlWriteNode )
 {
     // Debug Profiling.
     PROFILE_SCOPE(Taml_CompileCustomProperties);
 
     // Sanity!
-    AssertFatal( pTamlWriteNode != NULL, "Cannot compile custom properties on a NULL node." );
-    AssertFatal( pTamlWriteNode->mpSimObject != NULL, "Cannot compile custom properties on a node with no object." );
+    AssertFatal( pTamlWriteNode != NULL, "Cannot compile custom state on a NULL node." );
+    AssertFatal( pTamlWriteNode->mpSimObject != NULL, "Cannot compile custom state on a node with no object." );
 
-    // Fetch the custom properties on the write node.
-    TamlCustomProperties& customProperties = pTamlWriteNode->mCustomProperties;
+    // Fetch the custom node on the write node.
+    TamlCustomNodes& customNodes = pTamlWriteNode->mCustomNodes;
 
     // Are there any Taml callbacks?
     if ( pTamlWriteNode->mpTamlCallbacks != NULL )
     {
         // Yes, so call it.
-        tamlCustomWrite( pTamlWriteNode->mpTamlCallbacks, customProperties );
+        tamlCustomWrite( pTamlWriteNode->mpTamlCallbacks, customNodes );
     }
 
-    // Finish if no custom properties to process.
-    if ( customProperties.size() == 0 )
+    // Fetch custom nodes.
+    const TamlCustomNodeVector& nodes = customNodes.getNodes();
+
+    // Finish if no custom nodes to process.
+    if ( nodes.size() == 0 )
+        return;
+    
+    // Iterate custom properties.
+    for( TamlCustomNodeVector::const_iterator customNodesItr = nodes.begin(); customNodesItr != nodes.end(); ++customNodesItr )
+    {
+        // Fetch the custom node.
+        TamlCustomNode* pCustomNode = *customNodesItr;
+
+        // Compile custom node state.
+        compileCustomNodeState( pCustomNode );
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void Taml::compileCustomNodeState( TamlCustomNode* pCustomNode )
+{
+    // Sanity!
+    AssertFatal( pCustomNode != NULL, "Taml: Cannot compile NULL custom node state." );
+
+    // Fetch children.
+    const TamlCustomNodeVector& children = pCustomNode->getChildren();
+
+    // Fetch proxy object.
+    SimObject* pProxyObject = pCustomNode->getProxyObject<SimObject>(false);
+
+    // Do we have a proxy object?
+    if ( pProxyObject != NULL )
+    {
+        // Yes, so sanity!
+        AssertFatal( children.size() == 0, "Taml: Cannot compile a proxy object on a custom node that has children." );
+
+        // Yes, so compile it.
+        // NOTE: We force an Id for custom compiled objects so we guarantee an Id.  The reason for this is fairly
+        // weak in that the XML parser currently has no way of distinguishing between a compiled object node
+        // and a custom node.  If the node has an Id or an Id-Ref then it's obviously an object and should be parsed as such.
+        pCustomNode->setWriteNode( compileObject( pProxyObject, true ) );
+        return;
+    }
+
+    // Finish if no children.
+    if ( children.size() == 0 )
         return;
 
-    // Iterate custom properties.
-    for( TamlCustomPropertyVector::iterator propertyItr = customProperties.begin(); propertyItr != customProperties.end(); ++propertyItr )
+    // Iterate children.
+    for( TamlCustomNodeVector::const_iterator childItr = children.begin(); childItr != children.end(); ++childItr )
     {
-        TamlCustomProperty* pCustomProperty = *propertyItr;
+        // Fetch shape node.
+        TamlCustomNode* pChildNode = *childItr;
 
-        // Iterate alias.
-        for( TamlPropertyAliasVector::iterator typeAliasItr = pCustomProperty->begin(); typeAliasItr != pCustomProperty->end(); ++typeAliasItr )
-        {
-            TamlPropertyAlias* pAlias = *typeAliasItr;
-
-            // Iterate the fields.
-            for( TamlPropertyFieldVector::iterator fieldItr = pAlias->begin(); fieldItr != pAlias->end(); ++fieldItr )
-            {
-                TamlPropertyField* pPropertyField = *fieldItr;
-
-                // Skip if not an object field.
-                if ( !pPropertyField->isObjectField() )
-                    continue;
-
-                // Compile the object.
-                TamlWriteNode* pCompiledWriteNode = compileObject( pPropertyField->getFieldObject() );
-
-                // Set reference field.
-                pCompiledWriteNode->mRefField = pPropertyField->getFieldName();
-
-                // Set the write node for the property field.
-                pPropertyField->setWriteNode( pCompiledWriteNode );
-            }
-        }
+        // Compile the child.
+        compileCustomNodeState( pChildNode );
     }
-
-#if 0
-    // Iterate the custom properties removing ignored items.
-    for( S32 customPropertyIndex = 0; customPropertyIndex < customProperties.size(); ++customPropertyIndex )
-    {
-        // Fetch the custom property.
-        TamlCustomProperty* pCustomProperty = customProperties.at( customPropertyIndex );
-
-        // Skip if we are not ignoring the custom property if empty.
-        if ( !pCustomProperty->mIgnoreEmpty )
-            continue;
-
-        // Iterate the alias.
-        for ( S32 typeAliasIndex = 0; typeAliasIndex < pCustomProperty->size(); ++typeAliasIndex )
-        {
-            // Fetch the alias.
-            TamlPropertyAlias* pAlias = pCustomProperty->at( typeAliasIndex );
-
-            // Skip If we're not ignoring the alias or the custom property is not empty.
-            if ( !pAlias->mIgnoreEmpty && pAlias->size() != 0 )
-                continue;
-
-            // Remove the alias.
-            pCustomProperty->removeAlias( typeAliasIndex-- );
-        }
-
-        // Skip if the custom property is not empty.
-        if ( pCustomProperty->size() != 0 )
-            continue;
-
-        // Remove the custom property.
-        customProperties.removeProperty( customPropertyIndex-- );
-    }
-#endif
 }
 
 //-----------------------------------------------------------------------------

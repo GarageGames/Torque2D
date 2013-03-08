@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+    <Type Name="AssetPtr&lt;*&gt;">
+		<DisplayString Condition="mpAsset.mObj==0">Empty Asset Reference</DisplayString>
+		<DisplayString>{{Module = {((AssetBase*)(mpAsset.mObj))-&gt;mpAssetDefinition-&gt;mpModuleDefinition-&gt;mModuleId} AssetName = {((AssetBase*)(mpAsset.mObj))-&gt;mpAssetDefinition-&gt;mAssetName} AssetType = {((AssetBase*)(mpAsset.mObj))-&gt;mpAssetDefinition-&gt;mAssetType}}}</DisplayString>
+		<Expand> 
+			<ExpandedItem Condition="mpAsset.mObj!=0">($T1*)(mpAsset.mObj)</ExpandedItem> 
+		</Expand> 		
+    </Type>
+</AutoVisualizer>

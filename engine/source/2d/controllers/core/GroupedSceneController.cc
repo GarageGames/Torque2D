@@ -20,32 +20,32 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-$iOS::constant::iPhone = 0;
-$iOS::constant::iPad = 1;
-$iOS::constant::iPhone5 = 2;
+#ifndef _GROUPED_SCENE_CONTROLLER_H_
+#include "2d/controllers/core/GroupedSceneController.h"
+#endif
 
-$iOS::constant::Landscape = 0;
-$iOS::constant::Portrait = 1;
-$iOS::constant::ResolutionFull = 0;
-$iOS::constant::ResolutionSmall = 1;
+// Script bindings.
+#include "2d/controllers/core/GroupedSceneController_ScriptBinding.h"
 
-$iOS::constant::iPhoneWidth = 480;
-$iOS::constant::iPhoneHeight = 320;
+//------------------------------------------------------------------------------
 
-$iOS::constant::iPhone4Width = 960;
-$iOS::constant::iPhone4Height = 640;
+IMPLEMENT_CONOBJECT(GroupedSceneController);
 
-$iOS::constant::iPadWidth = 1024;
-$iOS::constant::iPadHeight = 768;
+//------------------------------------------------------------------------------
 
-$iOS::constant::NewiPadWidth = 2048;
-$iOS::constant::NewiPadHeight = 1536;
+void GroupedSceneController::copyTo(SimObject* object)
+{
+    // Call to parent.
+    Parent::copyTo(object);
 
-$iOS::constant::iPhone5Width = 1136;
-$iOS::constant::iPhone5Height = 640;
+    // Cast to controller.
+    GroupedSceneController* pController = static_cast<GroupedSceneController*>(object);
 
-$iOS::constant::OrientationUnknown				= 0;
-$iOS::constant::OrientationLandscapeLeft		= 1;
-$iOS::constant::OrientationLandscapeRight		= 2;
-$iOS::constant::OrientationPortrait				= 3;
-$iOS::constant::OrientationPortraitUpsideDown	= 4;
+    // Sanity!
+    AssertFatal(pController != NULL, "GroupedSceneController::copyTo() - Object is not the correct type.");
+
+    // Add objects to the controller.
+    for( SceneObjectSet::iterator objectItr = begin(); objectItr != end(); ++objectItr )
+        pController->addObject( *objectItr );
+}
+

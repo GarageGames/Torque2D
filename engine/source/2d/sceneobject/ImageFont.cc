@@ -114,7 +114,7 @@ void ImageFont::initPersistFields()
     addProtectedField("image", TypeImageAssetPtr, Offset(mImageAsset, ImageFont), &setImage, &getImage, &writeImage, "");
     addProtectedField("text", TypeString, 0, setText, getText, &writeText, "The text to be displayed." );  
     addProtectedField("textAlignment", TypeEnum, Offset(mTextAlignment, ImageFont), &setTextAlignment, &defaultProtectedGetFn, &writeTextAlignment, 1, &gTextAlignmentTable, "");
-    addProtectedField("fontSize", TypeT2DVector, Offset(mFontSize, ImageFont), &setFontSize, &defaultProtectedGetFn,&writeFontSize, "" );
+    addProtectedField("fontSize", TypeVector2, Offset(mFontSize, ImageFont), &setFontSize, &defaultProtectedGetFn,&writeFontSize, "" );
     addProtectedField("fontPadding", TypeF32, Offset(mFontPadding, ImageFont), &setFontPadding, &defaultProtectedGetFn, &writeFontPadding, "" );
 }
 
