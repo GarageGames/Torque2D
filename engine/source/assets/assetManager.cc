@@ -273,10 +273,10 @@ StringTableEntry AssetManager::addPrivateAsset( AssetBase* pAssetBase )
     pAssetDefinition->mpAssetBase = pAssetBase;
     pAssetDefinition->mAssetDescription = pSourceAssetDefinition->mAssetDescription;
     pAssetDefinition->mAssetCategory = pSourceAssetDefinition->mAssetCategory;
-    pAssetDefinition->mAssetAutoUnload = false;
+    pAssetDefinition->mAssetAutoUnload = true;
     pAssetDefinition->mAssetRefreshEnable = false;
     pAssetDefinition->mAssetType = StringTable->insert( pAssetBase->getClassName() );
-    pAssetDefinition->mAssetLoadedCount = 1;
+    pAssetDefinition->mAssetLoadedCount = 0;
     pAssetDefinition->mAssetInternal = false;
     pAssetDefinition->mAssetPrivate = true;
 

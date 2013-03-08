@@ -278,13 +278,32 @@ ConsoleMethod( AssetManager, renameReferencedAsset, bool, 4, 4,     "(assetIdFro
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetManager, acquireAsset, const char*, 3, 3,   "(assetId) - Acquire the specified asset Id.\n"
+ConsoleMethod( AssetManager, acquireAsset, const char*, 3, 4,   "(assetId, [asPrivate?]) - Acquire the specified asset Id.\n"
                                                                 "You must release the asset once you're finish with it using 'releaseAsset'.\n"
                                                                 "@param assetId The selected asset Id.\n"
+                                                                "@param asPrivate Whether to acquire the asset Id as a private asset.\n"
                                                                 "@return The acquired asset or NULL if not acquired.")
 {
-    // Acquire asset.
-    AssetBase* pAssetBase = object->acquireAsset<AssetBase>( argv[2] );
+    // Fetch asset Id.
+    const char* pAssetId = argv[2];
+
+    // Fetch private asset flag.
+    const bool asPrivate = argc >= 4 ? dAtob(argv[3]) : false;
+
+    // Reset asset reference.
+    AssetBase* pAssetBase = NULL;
+
+    // Acquire private asset?
+    if ( asPrivate )
+    {
+        // Acquire private asset.
+        pAssetBase = object->acquireAsPrivateAsset<AssetBase>( pAssetId );
+    }
+    else
+    {
+        // Acquire public asset.
+        pAssetBase = object->acquireAsset<AssetBase>( pAssetId );
+    }
 
     return pAssetBase != NULL ? pAssetBase->getIdString() : StringTable->EmptyString;
 }
