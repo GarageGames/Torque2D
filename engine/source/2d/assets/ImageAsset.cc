@@ -264,6 +264,57 @@ void ImageAsset::setImageFile( const char* pImageFile )
 
 //------------------------------------------------------------------------------
 
+void ImageAsset::copyTo(SimObject* object)
+{
+    // Call to parent.
+    Parent::copyTo(object);
+
+    // Cast to asset.
+    ImageAsset* pAsset = static_cast<ImageAsset*>(object);
+
+    // Sanity!
+    AssertFatal(pAsset != NULL, "ImageAsset::copyTo() - Object is not the correct type.");
+
+    // Copy state.
+    pAsset->setImageFile( getImageFile() );
+    pAsset->setForce16Bit( getForce16Bit() );
+    pAsset->setFilterMode( getFilterMode() );
+    pAsset->setExplicitMode( getExplicitMode() );
+    pAsset->setCellRowOrder( getCellRowOrder() );
+    pAsset->setCellOffsetX( getCellCountX() );
+    pAsset->setCellOffsetY( getCellCountY() );
+    pAsset->setCellStrideX( getCellStrideX() );
+    pAsset->setCellStrideY( getCellStrideY() );
+    pAsset->setCellCountX( getCellCountX() );
+    pAsset->setCellCountY( getCellCountY() );
+    pAsset->setCellWidth( getCellWidth() );
+    pAsset->setCellHeight( getCellHeight() );
+
+    // Finish if not in explicit mode.
+    if ( !getExplicitMode() )
+        return;
+
+    // Fetch the explicit cell count.
+    const S32 explicitCellCount = getExplicitCellCount();
+
+    // Finish if no explicit cells exist.
+    if ( explicitCellCount == 0 )
+        return;
+
+    // Copy explicit cells.
+    pAsset->clearExplicitCells();
+    for( S32 index = 0; index < explicitCellCount; ++index )
+    {
+        // Fetch the cell pixel area.
+        const FrameArea::PixelArea& pixelArea = getImageFrameArea( index ).mPixelArea;
+
+        // Add the explicit cell.
+        pAsset->addExplicitCell( pixelArea.mPixelOffset.x, pixelArea.mPixelOffset.y, pixelArea.mPixelWidth, pixelArea.mPixelHeight );
+    }
+}
+
+//------------------------------------------------------------------------------
+
 void ImageAsset::setForce16Bit( const bool force16Bit )
 {
     // Ignore no change,
