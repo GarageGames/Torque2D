@@ -157,7 +157,7 @@ bool AssetManager::compileReferencedAssets( ModuleDefinition* pModuleDefinition 
 
 //-----------------------------------------------------------------------------
 
-bool AssetManager::addDeclaredAssets( ModuleDefinition* pModuleDefinition )
+bool AssetManager::addModuleDeclaredAssets( ModuleDefinition* pModuleDefinition )
 {
     // Debug Profiling.
     PROFILE_SCOPE(AssetManager_AddDeclaredAssets);
@@ -191,7 +191,7 @@ bool AssetManager::addDeclaredAssets( ModuleDefinition* pModuleDefinition )
         if ( !scanDeclaredAssets( filePathBuffer, pDeclaredAssets->getExtension(), pDeclaredAssets->getRecurse(), pModuleDefinition ) )
         {
             // Warn.
-            Con::warnf( "AssetManager::addDeclaredAssets() - Could not scan for declared assets at location '%s' with extension '%s'.", filePathBuffer, pDeclaredAssets->getExtension() );
+            Con::warnf( "AssetManager::addModuleDeclaredAssets() - Could not scan for declared assets at location '%s' with extension '%s'.", filePathBuffer, pDeclaredAssets->getExtension() );
         }
     }  
 
@@ -3117,8 +3117,8 @@ void AssetManager::onModulePreLoad( ModuleDefinition* pModuleDefinition )
     // Debug Profiling.
     PROFILE_SCOPE(AssetManager_OnModulePreLoad);
 
-    // Add declared assets.
-    addDeclaredAssets( pModuleDefinition );
+    // Add module declared assets.
+    addModuleDeclaredAssets( pModuleDefinition );
 
     // Is an asset tags manifest specified?
     if ( pModuleDefinition->getAssetTagsManifest() != StringTable->EmptyString )

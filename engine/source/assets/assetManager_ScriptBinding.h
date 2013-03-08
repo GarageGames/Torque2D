@@ -41,9 +41,9 @@ ConsoleMethod( AssetManager, compileReferencedAssets, bool, 3, 3,  "(moduleDefin
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetManager, addDeclaredAssets, bool, 3, 3,     "(moduleDefinition) - Add any the declared assets specified by the module definition.\n"
-                                                                "@param moduleDefinition The module definition specifies the asset manifest.\n"
-                                                                "@return Whether adding declared assets was successful or not." )
+ConsoleMethod( AssetManager, addModuleDeclaredAssets, bool, 3, 3,   "(moduleDefinition) - Add any the declared assets specified by the module definition.\n"
+                                                                    "@param moduleDefinition The module definition specifies the asset manifest.\n"
+                                                                    "@return Whether adding declared assets was successful or not." )
 {
     // Fetch module definition.
     ModuleDefinition* pModuleDefinition = Sim::findObject<ModuleDefinition>( argv[2] );
@@ -56,8 +56,8 @@ ConsoleMethod( AssetManager, addDeclaredAssets, bool, 3, 3,     "(moduleDefiniti
         return false;
     }
 
-    // Add declared assets.
-    return object->addDeclaredAssets( pModuleDefinition );
+    // Add module declared assets.
+    return object->addModuleDeclaredAssets( pModuleDefinition );
 }
 
 //-----------------------------------------------------------------------------
