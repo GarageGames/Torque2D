@@ -2664,6 +2664,9 @@
     <ClInclude Include="..\..\source\2d\core\SpriteBatchQueryResult.h">
       <Filter>2d\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectList.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet_ScriptBinding.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\math\mMath_ASM.asm">
