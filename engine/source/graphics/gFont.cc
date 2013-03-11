@@ -1362,40 +1362,40 @@ bool GFont::readBMFont(Stream& io_rStream)
     U32 numBytes = io_rStream.getStreamSize() - io_rStream.getPosition();
     while((io_rStream.getStatus() != Stream::EOS) && numBytes > 0)
     {
-        const char *Read;
+        char Read[256];
         char Token[256];
         char *buffer = Con::getReturnBuffer(256);
         io_rStream.readLine((U8 *)buffer, 256);
         
-        char temp[128];
+        char temp[256];
         U32 tokenCount = StringUnit::getUnitCount(buffer, "\"");
         
         if (tokenCount > 1)
         {
-            sprintf(Token, "%s", StringUnit::getUnit(buffer, 1, "\""));
-            sprintf(temp, "tok1");
-            sprintf(buffer, "%s", (char*)StringUnit::setUnit(buffer, 1, temp, "\""));
+            dSprintf(Token, 256, "%s", StringUnit::getUnit(buffer, 1, "\""));
+            dSprintf(temp, 256, "tok1");
+            dSprintf(buffer, 256, "%s", (char*)StringUnit::setUnit(buffer, 1, temp, "\""));
         }
         
         U32 wordCount = StringUnit::getUnitCount(buffer, " \t\n");
         
-        Read = StringUnit::getUnit(buffer, 0, " \t\n");
+        dSprintf(Read, 256, "%s", StringUnit::getUnit(buffer, 0, " \t\n"));
         if( dStrcmp( Read, "info") == 0 )
         {
             U32 currentWordCount = 1;
             while( currentWordCount < wordCount )
             {
-                Read = StringUnit::getUnit(buffer, currentWordCount, " \t\n");
+                dSprintf(Read, 256, StringUnit::getUnit(buffer, currentWordCount, " \t\n"));
                 char temp[256];
                 char Key[256];
                 char Value[256];
                 
-                sprintf(temp, "%s", Read);
-                sprintf(Key, "%s", StringUnit::getUnit(temp, 0, "="));
-                sprintf(Value, "%s", StringUnit::getUnit(temp, 1, "="));
+                dSprintf(temp, 256, "%s", Read);
+                dSprintf(Key, 256, "%s", StringUnit::getUnit(temp, 0, "="));
+                dSprintf(Value, 256, "%s", StringUnit::getUnit(temp, 1, "="));
                 
                 if (dStrcmp( Value, "\"tok1\"") == 0) {
-                    sprintf(Value, "%s", Token);
+                    dSprintf(Value, 256, "%s", Token);
                 }
                 
                 if( dStrcmp( Key, "size" ) == 0 )
@@ -1409,17 +1409,17 @@ bool GFont::readBMFont(Stream& io_rStream)
             //this holds common data
             while( currentWordCount < wordCount )
             {
-                Read = StringUnit::getUnit(buffer, currentWordCount, " \t\n");
+                dSprintf(Read, 256, "%s", StringUnit::getUnit(buffer, currentWordCount, " \t\n"));
                 char temp[256];
                 char Key[256];
                 char Value[256];
                 
-                sprintf(temp, "%s", Read);
-                sprintf(Key, "%s", StringUnit::getUnit(temp, 0, "="));
-                sprintf(Value, "%s", StringUnit::getUnit(temp, 1, "="));
+                dSprintf(temp, 256, "%s", Read);
+                dSprintf(Key, 256, "%s", StringUnit::getUnit(temp, 0, "="));
+                dSprintf(Value, 256, "%s", StringUnit::getUnit(temp, 1, "="));
                 
                 if (dStrcmp( Value, "\"tok1\"") == 0) {
-                    sprintf(Value, "%s", Token);
+                    dSprintf(Value, 256, "%s", Token);
                 }
                 
                 if( dStrcmp( Key, "lineHeight" ) == 0 )
@@ -1443,21 +1443,21 @@ bool GFont::readBMFont(Stream& io_rStream)
             U32 currentWordCount = 1;
             //this holds common data
             char lineLeft[256];
-            sprintf ( lineLeft, "%s", StringUnit::getUnit(buffer, 1, " \t\n"));
+            dSprintf ( lineLeft, 256, "%s", StringUnit::getUnit(buffer, 1, " \t\n"));
             
             while( currentWordCount < wordCount )
             {
-                Read = StringUnit::getUnit(buffer, currentWordCount, " \t\n");
+                dSprintf(Read, 256, "%s", StringUnit::getUnit(buffer, currentWordCount, " \t\n"));
                 char temp[256];
                 char Key[256];
                 char Value[256];
                 
-                sprintf(temp, "%s", Read);
-                sprintf(Key, "%s", StringUnit::getUnit(temp, 0, "="));
-                sprintf(Value, "%s", StringUnit::getUnit(temp, 1, "="));
+                dSprintf(temp, 256, "%s", Read);
+                dSprintf(Key, 256, "%s", StringUnit::getUnit(temp, 0, "="));
+                dSprintf(Value, 256, "%s", StringUnit::getUnit(temp, 1, "="));
                 
                 if (dStrcmp( Value, "\"tok1\"") == 0) {
-                    sprintf(Value, "%s", Token);
+                    dSprintf(Value, 256, "%s", Token);
                 }
                 
                 //assign the correct value
@@ -1481,18 +1481,18 @@ bool GFont::readBMFont(Stream& io_rStream)
             //this holds common data
             while( currentWordCount < wordCount )
             {
-                Read = StringUnit::getUnit(buffer, currentWordCount, " \t\n");
+                dSprintf(Read, 256, "%s", StringUnit::getUnit(buffer, currentWordCount, " \t\n"));
                 char temp[256];
                 char Key[256];
                 char Value[256];
                 
                 
-                sprintf(temp, "%s", Read);
-                sprintf(Key, "%s", StringUnit::getUnit(temp, 0, "="));
-                sprintf(Value, "%s", StringUnit::getUnit(temp, 1, "="));
+                dSprintf(temp, 256, "%s", Read);
+                dSprintf(Key, 256, "%s", StringUnit::getUnit(temp, 0, "="));
+                dSprintf(Value, 256, "%s", StringUnit::getUnit(temp, 1, "="));
                 
                 if (dStrcmp( Value, "\"tok1\"") == 0) {
-                    sprintf(Value, "%s", Token);
+                    dSprintf(Value, 256, "%s", Token);
                 }
                 
                 //assign the correct value

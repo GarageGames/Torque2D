@@ -27,20 +27,15 @@
 #include "math/mMath.h"
 #endif
 
-#ifdef TORQUE_OS_IOS
-#import <GLKit/GLKMath.h>
-#endif
-
-
 class MatrixF;
 class QuatF;
 
-inline F32 QuatIsEqual(F32 a,F32 b,F32 epsilon = POINT_EPSILON)
+inline F32 QuatIsEqual(F32 a,F32 b,F32 epsilon = 0.0001f)
 {
    return mFabs(a-b) < epsilon;
 }
 
-inline F32 QuatIsZero(F32 a,F32 epsilon = POINT_EPSILON)
+inline F32 QuatIsZero(F32 a,F32 epsilon = 0.0001f)
 {
    return mFabs(a) < epsilon;
 }
@@ -75,13 +70,7 @@ class AngAxisF
 class QuatF
 {
   public:
-    union
-    {
-        F32  x,y,z,w;
-#ifdef __GLK_MATH_TYPES_H
-        GLKQuaternion mGQ;
-#endif
-    };
+   F32  x,y,z,w;
 
    QuatF();
    QuatF( F32 _x, F32 _y, F32 _z, F32 w );
