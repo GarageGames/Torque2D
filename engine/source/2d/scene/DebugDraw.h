@@ -31,6 +31,10 @@
 #include "math/mMath.h"
 #endif
 
+#ifndef _COLOR_H_
+#include "graphics/color.h"
+#endif
+
 //-----------------------------------------------------------------------------
 
 class DebugDraw
@@ -39,22 +43,22 @@ public:
     DebugDraw() {}
     virtual ~DebugDraw() {}
 
-    void DrawAABB( const b2AABB& aabb );
-    void DrawOOBB( const b2Vec2* pOOBB );
-    void DrawAsleep( const b2Vec2* pOOBB );
+    void DrawAABB( const b2AABB& aabb, const ColorF& color );
+    void DrawOOBB( const b2Vec2* pOOBB, const ColorF& color );
+    void DrawAsleep( const b2Vec2* pOOBB, const ColorF& color );
     void DrawCollisionShapes( const b2Transform& xf, b2Body* pBody );
     void DrawSortPoint( const b2Vec2& worldPosition, const b2Vec2& size, const b2Vec2& localSortPoint );
 
     void DrawJoints( b2World* pWorld );
 
-    void DrawShape( b2Fixture* fixture, const b2Transform& xf, const b2Color& color );
-    void DrawPolygon( const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
-    void DrawSolidPolygon( const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
-    void DrawCircle( const b2Vec2& center, float32 radius, const b2Color& color);
-    void DrawSolidCircle( const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color);
-    void DrawSegment( const b2Vec2& p1, const b2Vec2& p2, const b2Color& color);
+    void DrawShape( b2Fixture* fixture, const b2Transform& xf, const ColorF& color );
+    void DrawPolygon( const b2Vec2* vertices, int32 vertexCount, const ColorF& color);
+    void DrawSolidPolygon( const b2Vec2* vertices, int32 vertexCount, const ColorF& color);
+    void DrawCircle( const b2Vec2& center, float32 radius, const ColorF& color);
+    void DrawSolidCircle( const b2Vec2& center, float32 radius, const b2Vec2& axis, const ColorF& color);
+    void DrawSegment( const b2Vec2& p1, const b2Vec2& p2, const ColorF& color);
     void DrawTransform(const b2Transform& xf);
-    void DrawPoint(const b2Vec2& p, float32 size, const b2Color& color);
+    void DrawPoint(const b2Vec2& p, float32 size, const ColorF& color);
 };
 
 #endif // _DEBUG_DRAW_H_

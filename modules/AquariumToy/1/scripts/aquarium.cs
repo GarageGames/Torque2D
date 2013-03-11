@@ -141,7 +141,7 @@ function buildAquarium()
 
 //-----------------------------------------------------------------------------
 
-function AquariumBoundary::handleCollision(%this, %object, %collisionDetails)
+function AquariumBoundary::onCollision(%this, %object, %collisionDetails)
 {
     if (%object.class $= "FishClass")
         %object.recycle(%this.side);

@@ -76,6 +76,8 @@ SceneWindow::SceneWindow() :    mpScene(NULL),
                                 mWindowDirty(true),
                                 mRenderLayerMask(MASK_ALL),
                                 mRenderGroupMask(MASK_ALL),
+                                mBackgroundColor( "Black" ),
+                                mUseBackgroundColor(false),   
                                 mCameraInterpolationMode(SIGMOID),
                                 mMaxQueueItems(64),
                                 mCameraTransitionTime(2.0f),
@@ -163,12 +165,16 @@ void SceneWindow::onRemove()
 void SceneWindow::initPersistFields()
 {
     // Call Parent.
-   Parent::initPersistFields();
+    Parent::initPersistFields();
 
-   // Add Fields.
-   addField( "lockMouse",               TypeBool, Offset(mLockMouse, SceneWindow) );
-   addField( "UseWindowInputEvents",    TypeBool, Offset(mUseWindowInputEvents, SceneWindow) );
-   addField( "UseObjectInputEvents",    TypeBool, Offset(mUseObjectInputEvents, SceneWindow) );
+    // Add Fields.
+    addField( "lockMouse",               TypeBool, Offset(mLockMouse, SceneWindow) );
+    addField( "UseWindowInputEvents",    TypeBool, Offset(mUseWindowInputEvents, SceneWindow) );
+    addField( "UseObjectInputEvents",    TypeBool, Offset(mUseObjectInputEvents, SceneWindow) );
+
+    // Background color.
+    addField("UseBackgroundColor", TypeBool, Offset(mUseBackgroundColor, SceneWindow), &writeUseBackgroundColor, "" );
+    addField("BackgroundColor", TypeColorF, Offset(mBackgroundColor, SceneWindow), &writeBackgroundColor, "" );
 }
 
 //-----------------------------------------------------------------------------
@@ -1612,7 +1618,24 @@ void SceneWindow::onRender( Point2I offset, const RectI& updateRect )
         mRenderLayerMask,
         mRenderGroupMask,
         Vector2( mCameraCurrent.mSceneWindowScale ),
-        &debugStats );
+        &debugStats,
+        this );
+
+    // Clear the background color if requested.
+    if ( mUseBackgroundColor )
+    {
+        // Enable the scissor.
+        const RectI& clipRect = dglGetClipRect();
+        glEnable(GL_SCISSOR_TEST );
+        glScissor( clipRect.point.x, Platform::getWindowSize().y - (clipRect.point.y + clipRect.extent.y), clipRect.len_x(), clipRect.len_y() );
+
+        // Clear the background.
+        glClearColor( mBackgroundColor.red, mBackgroundColor.green, mBackgroundColor.blue, mBackgroundColor.alpha );
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // Disable the scissor.
+        glDisable( GL_SCISSOR_TEST );
+    }
 
     // Render View.
     pScene->sceneRender( &sceneRenderState );

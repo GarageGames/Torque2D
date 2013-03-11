@@ -1,7 +1,7 @@
 <ModuleDefinition
-	ModuleId="ConstantForceControllerToy"
+	ModuleId="AmbientForceControllerToy"
 	VersionId="1"
-	Description="Demonstrates using a constant-force controller."
+	Description="Demonstrates using an ambient-force controller."
 	Dependencies="ToyAssets=1"
 	Type="toy"
 	ToyCategoryIndex="3"

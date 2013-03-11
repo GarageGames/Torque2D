@@ -20,41 +20,32 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _CONSTANT_FORCE_CONTROLLER_H_
-#define _CONSTANT_FORCE_CONTROLLER_H_
-
-#ifndef _SCENE_CONTROLLER_H_
-#include "2d/controllers/sceneController.h"
+#ifndef _GROUPED_SCENE_CONTROLLER_H_
+#include "2d/controllers/core/GroupedSceneController.h"
 #endif
 
-#ifndef _VECTOR2_H_
-#include "2d/core/vector2.h"
-#endif
+// Script bindings.
+#include "2d/controllers/core/GroupedSceneController_ScriptBinding.h"
 
 //------------------------------------------------------------------------------
 
-class ConstantForceController : public SceneController
+IMPLEMENT_CONOBJECT(GroupedSceneController);
+
+//------------------------------------------------------------------------------
+
+void GroupedSceneController::copyTo(SimObject* object)
 {
-private:
-    typedef SceneController Parent;
+    // Call to parent.
+    Parent::copyTo(object);
 
-    Vector2 mForce;
+    // Cast to controller.
+    GroupedSceneController* pController = static_cast<GroupedSceneController*>(object);
 
-public:
-    ConstantForceController();
-    virtual ~ConstantForceController();
+    // Sanity!
+    AssertFatal(pController != NULL, "GroupedSceneController::copyTo() - Object is not the correct type.");
 
-    static void initPersistFields();
-    virtual void copyTo(SimObject* object);
+    // Add objects to the controller.
+    for( SceneObjectSet::iterator objectItr = begin(); objectItr != end(); ++objectItr )
+        pController->addObject( *objectItr );
+}
 
-    /// Integration.
-    virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
-
-    inline void setForce( const Vector2& force ) { mForce = force; }
-    inline const Vector2& getForce( void ) const { return mForce; }
-
-    /// Declare Console Object.
-    DECLARE_CONOBJECT( ConstantForceController );
-};
-
-#endif // _CONSTANT_FORCE_CONTROLLER_H_

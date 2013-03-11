@@ -153,18 +153,3 @@ function setCustomScene( %scene )
     // Set the scene to the window.
     setSceneToWindow();
 }
-
-//-----------------------------------------------------------------------------
-
-function SandboxScene::onCollision(%this, %sceneObjectA, %sceneObjectB, %collisionDetails)
-{
-    if (%sceneObjectA.isMethod(handleCollision))
-        %sceneObjectA.handleCollision(%sceneObjectB, %collisionDetails);
-    else
-        %sceneObjectA.callOnBehaviors(handleCollision, %sceneObjectB, %collisionDetails);
-
-    if (%sceneObjectB.isMethod(handleCollision))
-        %sceneObjectB.handleCollision(%sceneObjectA, %collisionDetails);
-    else
-        %sceneObjectB.callOnBehaviors(handleCollision, %sceneObjectA, %collisionDetails);
-}

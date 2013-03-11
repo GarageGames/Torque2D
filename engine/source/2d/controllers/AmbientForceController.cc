@@ -20,20 +20,20 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _CONSTANT_FORCE_CONTROLLER_H_
-#include "2d/controllers/ConstantForceController.h"
+#ifndef _AMBIENT_FORCE_CONTROLLER_H_
+#include "2d/controllers/AmbientForceController.h"
 #endif
 
 // Script bindings.
-#include "ConstantForceController_ScriptBinding.h"
+#include "AmbientForceController_ScriptBinding.h"
 
 //------------------------------------------------------------------------------
 
-IMPLEMENT_CONOBJECT(ConstantForceController);
+IMPLEMENT_CONOBJECT(AmbientForceController);
 
 //------------------------------------------------------------------------------
 
-ConstantForceController::ConstantForceController()        
+AmbientForceController::AmbientForceController()        
 {
     // Reset the constant force.
     mForce.SetZero();
@@ -41,34 +41,34 @@ ConstantForceController::ConstantForceController()
 
 //------------------------------------------------------------------------------
 
-ConstantForceController::~ConstantForceController()
+AmbientForceController::~AmbientForceController()
 {
 }
 
 
 //------------------------------------------------------------------------------
 
-void ConstantForceController::initPersistFields()
+void AmbientForceController::initPersistFields()
 {
     // Call parent.
     Parent::initPersistFields();
 
     // Force.
-    addProtectedField("Force", TypeVector2, Offset( mForce, ConstantForceController), &defaultProtectedSetFn, &defaultProtectedGetFn, "The constant force to apply.");
+    addProtectedField("Force", TypeVector2, Offset( mForce, AmbientForceController), &defaultProtectedSetFn, &defaultProtectedGetFn, "The constant force to apply.");
 }
 
 //------------------------------------------------------------------------------
 
-void ConstantForceController::copyTo(SimObject* object)
+void AmbientForceController::copyTo(SimObject* object)
 {
     // Call to parent.
     Parent::copyTo(object);
 
     // Cast to controller.
-    ConstantForceController* pController = static_cast<ConstantForceController*>(object);
+    AmbientForceController* pController = static_cast<AmbientForceController*>(object);
 
     // Sanity!
-    AssertFatal(pController != NULL, "ConstantForceController::copyTo() - Object is not the correct type.");
+    AssertFatal(pController != NULL, "AmbientForceController::copyTo() - Object is not the correct type.");
 
     // Copy state.
     pController->setForce( getForce() );
@@ -76,7 +76,7 @@ void ConstantForceController::copyTo(SimObject* object)
 
 //------------------------------------------------------------------------------
 
-void ConstantForceController::integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats )
+void AmbientForceController::integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats )
 {
     // Process all the scene objects.
     for( SceneObjectSet::iterator itr = begin(); itr != end(); ++itr )

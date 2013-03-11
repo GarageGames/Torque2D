@@ -204,9 +204,6 @@ protected:
     GuiControl*             mpAttachedGui;
     SceneWindow*            mpAttachedGuiSceneWindow;
 
-    /// Pathing.
-    SimObjectPtr<SceneObject> mAttachedToPath;
-
     /// Safe deletion.
     bool                    mBeingSafeDeleted;
     bool                    mSafeDeleteReady;
@@ -360,11 +357,10 @@ public:
     inline F32              getInertia( void ) const                    { if ( mpScene ) return mpBody->GetInertia(); else return 0.0f; }
 
     /// Collision control.
-    void                    setCollisionMasks( const U32 groupMask, const U32 layerMask = MASK_ALL );
     void                    setCollisionAgainst( const SceneObject* pSceneObject, const bool clearMasks );
-    inline void             setCollisionLayers( const U32 layerMask )   { setCollisionMasks(getCollisionGroupMask(), layerMask); }
-    inline void             setCollisionGroups( const U32 groupMask )   { setCollisionMasks(groupMask, getCollisionLayerMask()); }
+    inline void             setCollisionGroupMask( const U32 groupMask ) { mCollisionGroupMask = groupMask; }
     inline U32              getCollisionGroupMask(void) const           { return mCollisionGroupMask; }
+    inline void             setCollisionLayerMask( const U32 layerMask ) { mCollisionLayerMask = layerMask; }
     inline U32              getCollisionLayerMask(void) const           { return mCollisionLayerMask; }
     void                    setDefaultDensity( const F32 density, const bool updateShapes = true );
     inline F32              getDefaultDensity( void ) const             { return mDefaultFixture.density; }
@@ -534,9 +530,9 @@ public:
     void                    detachGui( void );
     inline void             updateAttachedGui( void );
 
-    /// Pathing.
-    inline                  void setAttachedToPath(SceneObject* path){ mAttachedToPath = path; }
-    inline SceneObject*     getAttachedToPath() const                   { return mAttachedToPath; }
+    // Picking.
+    inline void             setPickingAllowed( const bool pickingAllowed ) { mPickingAllowed = pickingAllowed; }
+    inline bool             getPickingAllowed(void) const               { return mPickingAllowed; }
 
     /// Cloning.
     virtual void            copyFrom( SceneObject* pSceneObject, const bool copyDynamicFields );
@@ -561,11 +557,9 @@ public:
 
     /// Miscellaneous.
     inline const char*      scriptThis(void) const                      { return Con::getIntArg(getId()); }
-    inline bool             getIsPickingAllowed(void) const             { return mPickingAllowed; }
     inline bool             getIsAlwaysInScope(void) const              { return mAlwaysInScope; }
     inline void             setWorldQueryKey( const U32 key )           { mWorldQueryKey = key; }
     inline U32              getWorldQueryKey( void ) const              { return mWorldQueryKey; }
-    BehaviorInstance*       behavior(const char *name);
     static U32              getGlobalSceneObjectCount( void );
     inline U32              getSerialId( void ) const                   { return mSerialId; }
 
@@ -666,9 +660,9 @@ protected:
     static bool             writeDefaultFriction( void* obj, StringTableEntry pFieldName ) {return mNotEqual(static_cast<SceneObject*>(obj)->getDefaultFriction(), 0.2f); }
     static bool             setDefaultRestitution(void* obj, const char* data) { static_cast<SceneObject*>(obj)->setDefaultRestitution(dAtof(data)); return false; }
     static bool             writeDefaultRestitution( void* obj, StringTableEntry pFieldName ) { return mNotEqual(static_cast<SceneObject*>(obj)->getDefaultRestitution(), 0.0f); }
-    static bool             setCollisionGroups(void* obj, const char* data) { static_cast<SceneObject*>(obj)->setCollisionGroups(dAtoi(data)); return false; }
+    static bool             setCollisionGroups(void* obj, const char* data) { static_cast<SceneObject*>(obj)->setCollisionGroupMask(dAtoi(data)); return false; }
     static bool             writeCollisionGroups( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getCollisionGroupMask() != MASK_ALL; }
-    static bool             setCollisionLayers(void* obj, const char* data) { static_cast<SceneObject*>(obj)->setCollisionLayers(dAtoi(data)); return false; }
+    static bool             setCollisionLayers(void* obj, const char* data) { static_cast<SceneObject*>(obj)->setCollisionLayerMask(dAtoi(data)); return false; }
     static bool             writeCollisionLayers( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getCollisionLayerMask() != MASK_ALL; }
     static bool             writeCollisionSuppress( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getCollisionSuppress() == true; }
     static bool             setGatherContacts(void* obj, const char* data)  { static_cast<SceneObject*>(obj)->setGatherContacts(dAtoi(data)); return false; }
@@ -709,6 +703,9 @@ protected:
 
     /// Input events.
     static bool             writeUseInputEvents( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getUseInputEvents() == true; }
+
+    /// Picking.
+    static bool             writePickingAllowed( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getPickingAllowed() == true; }    
 
     /// Script callbacks.
     static bool             writeUpdateCallback( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getUpdateCallback() == true; }

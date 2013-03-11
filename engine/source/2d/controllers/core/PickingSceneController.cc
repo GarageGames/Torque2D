@@ -20,58 +20,60 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _SCENE_CONTROLLER_H_
-#include "2d/controllers/SceneController.h"
-#endif
-
-#ifndef _SCENE_OBJECT_SET_H_
-#include "2d/sceneObject/sceneObjectSet.h"
-#endif
-
-#ifndef _SCENE_H_
-#include "2d/scene/scene.h"
+#ifndef PickingSceneController
+#include "2d/controllers/core/PickingSceneController.h"
 #endif
 
 // Script bindings.
-#include "SceneController_ScriptBinding.h"
+#include "2d/controllers/core/PickingSceneController_ScriptBinding.h"
 
 //------------------------------------------------------------------------------
 
-IMPLEMENT_CONOBJECT(SceneController);
+IMPLEMENT_CONOBJECT(PickingSceneController);
 
 //------------------------------------------------------------------------------
 
-SceneController::SceneController()
+PickingSceneController::PickingSceneController() :
+        mControlGroupMask( MASK_ALL ),
+        mControlLayerMask( MASK_ALL )
 {
 }
 
 //------------------------------------------------------------------------------
 
-SceneController::~SceneController()
+PickingSceneController::~PickingSceneController()
 {
-}
-
-
-//------------------------------------------------------------------------------
-
-void SceneController::initPersistFields()
-{
-    // Call parent.
-    Parent::initPersistFields();
-
 }
 
 //------------------------------------------------------------------------------
 
-void SceneController::copyTo(SimObject* object)
+void PickingSceneController::copyTo(SimObject* object)
 {
     // Call to parent.
     Parent::copyTo(object);
 
     // Cast to controller.
-    SceneController* pController = static_cast<SceneController*>(object);
+    PickingSceneController* pController = static_cast<PickingSceneController*>(object);
 
     // Sanity!
-    AssertFatal(pController != NULL, "SceneController::copyTo() - Object is not the correct type.");
+    AssertFatal(pController != NULL, "PickingSceneController::copyTo() - Object is not the correct type.");
+
+    // Set masks.
+    pController->setControlGroupMask( getControlGroupMask() );
+    pController->setControlLayerMask( getControlLayerMask() );
+}
+
+//------------------------------------------------------------------------------
+
+WorldQuery* PickingSceneController::prepareQueryFilter( Scene* pScene, const bool clearQuery )
+{
+    // Fetch world query and clear results.
+    WorldQuery* pWorldQuery = pScene->getWorldQuery( clearQuery );
+
+    // Set filter.
+    WorldQueryFilter queryFilter( mControlLayerMask, mControlGroupMask, true, false, true, true );
+    pWorldQuery->setQueryFilter( queryFilter );
+
+    return pWorldQuery;
 }
 

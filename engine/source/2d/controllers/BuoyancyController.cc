@@ -34,14 +34,13 @@ IMPLEMENT_CONOBJECT(BuoyancyController);
 //------------------------------------------------------------------------------
 
 BuoyancyController::BuoyancyController() :
-    mSurfaceNormal( 0.0f, 1.0f ),
-    mSurfaceOffset( 0.0f ),
     mFlowVelocity( 0.0f, 0.0f ),
     mFluidDensity( 2.0f ),
     mLinearDrag( 0.0f ),
     mAngularDrag( 0.0f ),
     mFluidGravity( 0.0f, -9.8f ),
-    mUseShapeDensity( true )
+    mUseShapeDensity( true ),
+    mSurfaceNormal( 0.0f, 1.0f )
 {
 }
 
@@ -59,8 +58,7 @@ void BuoyancyController::initPersistFields()
     // Call parent.
     Parent::initPersistFields();
 
-    addField( "SurfaceNormal", TypeVector2, Offset(mSurfaceNormal, BuoyancyController), "The outer surface normal." );
-    addField( "SurfaceOffset", TypeF32, Offset(mSurfaceOffset, BuoyancyController), "The height of the fluid surface along the normal." );
+    addField( "FluidArea", Typeb2AABB, Offset(mFluidArea, BuoyancyController), "The fluid area." );
     addField( "FluidDensity", TypeF32, Offset(mFluidDensity, BuoyancyController), "The fluid density." );
     addField( "FlowVelocity", TypeVector2, Offset(mFlowVelocity, BuoyancyController), "The fluid flow velocity for drag calculations." );
     addField( "LinearDrag", TypeF32, Offset(mLinearDrag, BuoyancyController), "The linear drag co-efficient for the fluid." );
@@ -105,33 +103,49 @@ void BuoyancyController::copyTo(SimObject* object)
 
 void BuoyancyController::integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats )
 {
-    // Process all the scene objects.
-    for( SceneObjectSet::iterator itr = begin(); itr != end(); ++itr )
+    // Prepare query filter.
+    WorldQuery* pWorldQuery = prepareQueryFilter( pScene );
+
+    // Query for candidate objects.
+    pWorldQuery->anyQueryArea( mFluidArea ); 
+
+    // Fetch results.
+    typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
+
+    // Iterate the results.
+    for ( U32 n = 0; n < (U32)queryResults.size(); n++ )
     {
         // Fetch the scene object.
-        SceneObject* pSceneObject = *itr;
+        SceneObject* pSceneObject = queryResults[n].mpSceneObject;
 
-        // Ignore sleeping bodies.
+        // Skip if asleep.
         if ( !pSceneObject->getAwake() )
+            continue;
+
+        // Ignore if it's a static body.
+        if ( pSceneObject->getBodyType() == b2BodyType::b2_staticBody )
             continue;
 
         // Fetch the shape count.
         const U32 shapeCount = pSceneObject->getCollisionShapeCount();
+
+        // Skip if no collision shapes.
+        if ( shapeCount == 0 )
+            continue;
+
+        // Fetch the body transform.
+        const b2Transform& bodyTransform = pSceneObject->getBody()->GetTransform();;
 
 		Vector2 areaCenter(0.0f, 0.0f);
 		Vector2 massCenter(0.0f, 0.0f);
 		F32 area = 0.0f;
 		F32 mass = 0.0f;
 
-        // Skip if we have no collision shapes.
-        if ( shapeCount == 0 )
-            continue;
-
         // Yes, so iterate them.
         for( U32 i = 0; i < shapeCount; ++i )
         {
             // Fetch the fixture definition.
-            b2FixtureDef fixtureDef = pSceneObject->getCollisionShapeDefinition( i );
+            const b2FixtureDef fixtureDef = pSceneObject->getCollisionShapeDefinition( i );
 
             // Fetch the shape.
             const b2Shape* pShape = fixtureDef.shape;
@@ -140,19 +154,16 @@ void BuoyancyController::integrate( Scene* pScene, const F32 totalTime, const F3
             
 			F32 shapeArea = 0.0f;
 
+            // Calculate the area for the shape type.
             if ( pShape->GetType() == b2Shape::e_circle )
             {
-                shapeArea = ComputeCircleSubmergedArea( pSceneObject->getBody(), dynamic_cast<const b2CircleShape*>(pShape), shapeCenter );
+                shapeArea = ComputeCircleSubmergedArea( bodyTransform, dynamic_cast<const b2CircleShape*>(pShape), shapeCenter );
             }
             else if ( pShape->GetType() == b2Shape::e_polygon)
             {
-                shapeArea = ComputePolygonSubmergedArea( pSceneObject->getBody(), dynamic_cast<const b2PolygonShape*>(pShape), shapeCenter );
+                shapeArea = ComputePolygonSubmergedArea( bodyTransform, dynamic_cast<const b2PolygonShape*>(pShape), shapeCenter );
             }
-            else if ( pShape->GetType() == b2Shape::e_edge)
-            {
-                shapeArea = 0.0f;
-            }
-            else if ( pShape->GetType() == b2Shape::e_chain)
+            else if ( pShape->GetType() == b2Shape::e_edge || pShape->GetType() == b2Shape::e_chain )
             {
                 shapeArea = 0.0f;
             }
@@ -162,32 +173,34 @@ void BuoyancyController::integrate( Scene* pScene, const F32 totalTime, const F3
                 continue;
             }
 
+            // Calculate area.
 			area += shapeArea;
 			areaCenter.x += shapeArea * shapeCenter.x;
 			areaCenter.y += shapeArea * shapeCenter.y;
+
+            // Calculate mass.
 			const F32 shapeDensity = mUseShapeDensity ? fixtureDef.density : 1.0f;
 			mass += shapeArea*shapeDensity;
 			massCenter.x += shapeArea * shapeCenter.x * shapeDensity;
 			massCenter.y += shapeArea * shapeCenter.y * shapeDensity;
         }
 
-		areaCenter.x /= area;
-		areaCenter.y /= area;
-        //const b2Vec2 localCentroid = b2MulT(pSceneObject->getTransform(), areaCenter);
-		massCenter.x /= mass;
-		massCenter.y /= mass;
-
         // Skip not in water.
 		if( area < b2_epsilon )
 			continue;
 
+        // Calculate area/mass centers.
+		areaCenter.x /= area;
+		areaCenter.y /= area;
+		massCenter.x /= mass;
+		massCenter.y /= mass;
+
 		// Buoyancy
-		Vector2 buoyancyForce = -mFluidDensity * area * mFluidGravity;
+		const Vector2 buoyancyForce = -mFluidDensity * area * mFluidGravity;
         pSceneObject->applyForce(buoyancyForce, massCenter);
 
 		// Linear drag
-        Vector2 dragForce = pSceneObject->getLinearVelocityFromWorldPoint(areaCenter) - mFlowVelocity;
-		dragForce *= -mLinearDrag*area;
+        const Vector2 dragForce = (pSceneObject->getLinearVelocityFromWorldPoint(areaCenter) - mFlowVelocity) * (-mLinearDrag * area);
 		pSceneObject->applyForce(dragForce, areaCenter );
 
 		// Angular drag
@@ -197,27 +210,31 @@ void BuoyancyController::integrate( Scene* pScene, const F32 totalTime, const F3
 
 //------------------------------------------------------------------------------
 
-F32 BuoyancyController::ComputeCircleSubmergedArea( const b2Body* pBody, const b2CircleShape* pShape, Vector2& center )
+F32 BuoyancyController::ComputeCircleSubmergedArea( const b2Transform& bodyTransform, const b2CircleShape* pShape, Vector2& center )
 {
     // Sanity!
-    AssertFatal( pBody != NULL, "BuoyancyController::ComputeCircleSubmergedArea() - Invalid body." );
     AssertFatal( pShape != NULL, "BuoyancyController::ComputeCircleSubmergedArea() - Invalid shape." );
+
+    // Calculate the world shape center.
+    const b2Vec2 worldShapeCenter = b2Mul( bodyTransform, pShape->m_p );
+
+    const F32 l = -(b2Dot( mSurfaceNormal, worldShapeCenter ) - mFluidArea.upperBound.y);
 
     // Fetch the circle radius.
     const F32 radius = pShape->m_radius;
 
-    const b2Vec2 p = b2Mul( pBody->GetTransform(), pShape->m_p );
-    const F32 l = -(b2Dot( mSurfaceNormal, p ) - mSurfaceOffset);
-		
+    // Submerged?
     if (l < - radius + FLT_MIN)
 	{
-		// Completely dry
+        // No, so return zero area submerged.
 		return 0.0f;
 	}
+
+	// Completely wet?
 	if (l > pShape->m_radius)
 	{
-		// Completely wet
-		center = p;
+        // Yes!
+		center = worldShapeCenter;
 		return  b2_pi * radius * radius;
 	}
 		
@@ -227,23 +244,23 @@ F32 BuoyancyController::ComputeCircleSubmergedArea( const b2Body* pBody, const b
     const F32 area = r2 *( mAsin(l / radius) + b2_pi / 2.0f) + l * mSqrt( r2 - l2 );
     const F32 com = -2.0f / 3.0f * mPow(r2 - l2, 1.5f) / area;
 	
-	center.x = p.x + mSurfaceNormal.x * com;
-	center.y = p.y + mSurfaceNormal.y * com;
+    // Calculate center.
+	center.x = worldShapeCenter.x + mSurfaceNormal.x * com;
+	center.y = worldShapeCenter.y + mSurfaceNormal.y * com;
 		
 	return area;
 }
 
 //------------------------------------------------------------------------------
 
-F32 BuoyancyController::ComputePolygonSubmergedArea( const b2Body* pBody, const b2PolygonShape* pShape, Vector2& center )
+F32 BuoyancyController::ComputePolygonSubmergedArea( const b2Transform& bodyTransform, const b2PolygonShape* pShape, Vector2& center )
 {
     // Sanity!
-    AssertFatal( pBody != NULL, "BuoyancyController::ComputePolygonSubmergedArea() - Invalid body." );
     AssertFatal( pShape != NULL, "BuoyancyController::ComputePolygonSubmergedArea() - Invalid shape." );
 
-    //Transform plane into shape co-ordinates
-    b2Vec2 normalL = b2MulT( pBody->GetTransform().q, mSurfaceNormal);
-    F32 offsetL = mSurfaceOffset - b2Dot(mSurfaceNormal, pBody->GetTransform().p);
+    // Transform plane into shape co-ordinates
+    b2Vec2 normalL = b2MulT( bodyTransform.q, mSurfaceNormal);
+    F32 offsetL = mFluidArea.upperBound.y - b2Dot(mSurfaceNormal, bodyTransform.p);
         
     F32 depths[b2_maxPolygonVertices];
     S32 diveCount = 0;
@@ -289,7 +306,7 @@ F32 BuoyancyController::ComputePolygonSubmergedArea( const b2Body* pBody, const 
                 // Completely submerged
                 b2MassData md;
                 pShape->ComputeMass(&md, 1.0f);
-                center = b2Mul(pBody->GetTransform(), md.center);
+                center = b2Mul(bodyTransform, md.center);
                 return md.mass;
             }
             else
@@ -355,7 +372,19 @@ F32 BuoyancyController::ComputePolygonSubmergedArea( const b2Body* pBody, const 
         
     // Normalize and transform centroid
     center *= 1.0f / area;        
-    center = b2Mul(pBody->GetTransform(), center);
+    center = b2Mul(bodyTransform, center);
         
     return area;
+}
+
+
+//------------------------------------------------------------------------------
+
+void BuoyancyController::renderOverlay( Scene* pScene, const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer )
+{
+    // Call parent.
+    Parent::renderOverlay( pScene, pSceneRenderState, pBatchRenderer );
+
+    // Draw fluid area.
+    pScene->mDebugDraw.DrawAABB( mFluidArea, ColorF(0.7f, 0.7f, 0.9f) );
 }

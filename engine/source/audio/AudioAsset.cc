@@ -122,6 +122,27 @@ void AudioAsset::initPersistFields()
    //addField("environmentLevel",  TypeF32,     Offset(mDescription.mEnvironmentLevel, AudioAsset));
 }
 
+//------------------------------------------------------------------------------
+
+void AudioAsset::copyTo(SimObject* object)
+{
+    // Call to parent.
+    Parent::copyTo(object);
+
+    // Cast to asset.
+    AudioAsset* pAsset = static_cast<AudioAsset*>(object);
+
+    // Sanity!
+    AssertFatal(pAsset != NULL, "AudioAsset::copyTo() - Object is not the correct type.");
+
+    // Copy state.
+    pAsset->setAudioFile( getAudioFile() );
+    pAsset->setVolume( getVolume() );
+    pAsset->setVolumeChannel( getVolumeChannel() );
+    pAsset->setLooping( getLooping() );
+    pAsset->setStreaming( getStreaming() );
+}
+
 //--------------------------------------------------------------------------
 
 void AudioAsset::initializeAsset( void )

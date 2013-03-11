@@ -170,11 +170,6 @@ void TamlXmlWriter::compileCustomElements( TiXmlElement* pXmlElement, const Taml
         dSprintf( extendedElementNameBuffer, sizeof(extendedElementNameBuffer), "%s.%s", pXmlElement->Value(), pCustomNode->getNodeName() );
         StringTableEntry extendedElementName = StringTable->insert( extendedElementNameBuffer );
 
-        if ( dStricmp(pCustomNode->getNodeName(), "controllers") == 0 )
-        {
-            S32 a = 0;
-        }
-
         // Create element.
         TiXmlElement* pExtendedPropertyElement = new TiXmlElement( extendedElementName );
 

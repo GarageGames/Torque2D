@@ -20,44 +20,35 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _SCENE_CONTROLLER_H_
-#define _SCENE_CONTROLLER_H_
+#ifndef _GROUPED_SCENE_CONTROLLER_H_
+#define _GROUPED_SCENE_CONTROLLER_H_
+
+#ifndef _CONSOLETYPES_H_
+#include "console/consoleTypes.h"
+#endif
 
 #ifndef _SCENE_OBJECT_SET_H_
 #include "2d/sceneObject/sceneObjectSet.h"
-#endif
-
-#ifndef _SCENE_RENDER_STATE_H_
-#include "2d/scene/sceneRenderState.h"
-#endif
-
-#ifndef _BATCH_RENDER_H_
-#include "2d/core/batchRender.h"
 #endif
 
 #ifndef _SCENE_OBJECT_H_
 #include "2d/sceneObject/sceneObject.h"
 #endif
 
-#ifndef _DEBUG_STATS_H_
-#include "2d/scene/DebugStats.h"
+#ifndef _SCENE_CONTROLLER_H_
+#include "2d/controllers/core/sceneController.h"
 #endif
 
 //------------------------------------------------------------------------------
 
-class Scene;
-
-//------------------------------------------------------------------------------
-
-class SceneController : public SceneObjectSet
+class GroupedSceneController : public SceneObjectSet, public SceneController
 {
     typedef SceneObjectSet Parent;
 
 public:
-    SceneController();
-    virtual ~SceneController();
+    GroupedSceneController() {}
+    virtual ~GroupedSceneController() {}
 
-    static void initPersistFields();
     virtual void copyTo(SimObject* object);
 
     /// Integration.
@@ -67,7 +58,7 @@ public:
     virtual void renderOverlay( Scene* pScene, const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer ) {}
 
     /// Declare Console Object.
-    DECLARE_CONOBJECT( SceneController );
+    DECLARE_CONOBJECT( GroupedSceneController );
 };
 
-#endif // _SCENE_CONTROLLER_H_
+#endif // _GROUPED_SCENE_CONTROLLER_H_

@@ -49,7 +49,7 @@
 #endif
 
 #ifndef _SCENE_CONTROLLER_H_
-#include "2d/controllers/SceneController.h"
+#include "2d/controllers/core/SceneController.h"
 #endif
 
 #ifndef _PARTICLE_SYSTEM_H_
@@ -167,10 +167,6 @@ Scene::Scene() :
     /// Window rendering.
     mpCurrentRenderWindow(NULL),
     
-    /// Background color.
-    mBackgroundColor( 0.0f, 0.0f, 0.0f, 0.0f ),
-    mUseBackgroundColor(false),   
-
     /// Miscellaneous.
     mIsEditorScene(0),
     mUpdateCallback(false),
@@ -389,13 +385,9 @@ void Scene::initPersistFields()
     Parent::initPersistFields();
 
     // Physics.
-    addProtectedField("Gravity", TypeT2DVector, Offset(mWorldGravity, Scene), &setGravity, &getGravity, &writeGravity, "" );
+    addProtectedField("Gravity", TypeVector2, Offset(mWorldGravity, Scene), &setGravity, &getGravity, &writeGravity, "" );
     addField("VelocityIterations", TypeS32, Offset(mVelocityIterations, Scene), &writeVelocityIterations, "" );
     addField("PositionIterations", TypeS32, Offset(mPositionIterations, Scene), &writePositionIterations, "" );
-
-    // Background color.
-    addField("UseBackgroundColor", TypeBool, Offset(mUseBackgroundColor, Scene), &writeUseBackgroundColor, "" );
-    addField("BackgroundColor", TypeColorF, Offset(mBackgroundColor, Scene), &writeBackgroundColor, "" );
 
     // Layer sort modes.
     char buffer[64];
@@ -551,11 +543,6 @@ void Scene::dispatchBeginContactCallbacks( void )
     if ( contactCount == 0 )
         return;
 
-    // Finish if no collision method exists on scene.
-    Namespace* pNamespace = getNamespace();
-    if ( pNamespace != NULL && pNamespace->lookup( StringTable->insert( "onCollision" ) ) == NULL )
-        return;
-
     // Iterate all contacts.
     for ( typeContactHash::iterator contactItr = mBeginContacts.begin(); contactItr != mBeginContacts.end(); ++contactItr )
     {
@@ -570,8 +557,12 @@ void Scene::dispatchBeginContactCallbacks( void )
         if ( pSceneObjectA->isBeingDeleted() || pSceneObjectB->isBeingDeleted() )
             continue;
 
-        // Skip if either object does not have collision callback active.
-        if ( !pSceneObjectA->getCollisionCallback() || !pSceneObjectB->getCollisionCallback() )
+        // Fetch collision callback status.
+        const bool sceneObjectACallback = pSceneObjectA->getCollisionCallback();
+        const bool sceneObjectBCallback = pSceneObjectB->getCollisionCallback();
+
+        // Skip if both objects don't have collision callback active.
+        if ( !sceneObjectACallback && !sceneObjectBCallback )
             continue;
 
         // Fetch normal and contact points.
@@ -594,9 +585,9 @@ void Scene::dispatchBeginContactCallbacks( void )
 
         // Format objects.
         char* pSceneObjectABuffer = Con::getArgBuffer( 8 );
-        char* pSceneObjectBuffer = Con::getArgBuffer( 8 );
+        char* pSceneObjectBBuffer = Con::getArgBuffer( 8 );
         dSprintf( pSceneObjectABuffer, 8, "%d", pSceneObjectA->getId() );
-        dSprintf( pSceneObjectBuffer, 8, "%d", pSceneObjectB->getId() );
+        dSprintf( pSceneObjectBBuffer, 8, "%d", pSceneObjectB->getId() );
 
         // Format miscellaneous information.
         char* pMiscInfoBuffer = Con::getArgBuffer(128);
@@ -630,11 +621,64 @@ void Scene::dispatchBeginContactCallbacks( void )
                 shapeIndexA, shapeIndexB );
 		}
 
-        // Script callback.
-        Con::executef( this, 4, "onCollision",
-            pSceneObjectABuffer,
-            pSceneObjectBuffer,
-            pMiscInfoBuffer );
+        // Do both objects have collision callback active?
+        if ( sceneObjectACallback && sceneObjectBCallback )
+        {
+            // Yes, so does the scene handle the collision callback?
+            Namespace* pNamespace = getNamespace();
+            if ( pNamespace != NULL && pNamespace->lookup( StringTable->insert( "onSceneCollision" ) ) != NULL )
+            {
+                // Yes, so perform script callback on the Scene.
+                Con::executef( this, 4, "onSceneCollision",
+                    pSceneObjectABuffer,
+                    pSceneObjectBBuffer,
+                    pMiscInfoBuffer );
+            }
+            else
+            {
+                // No, so call it on its behaviors.
+                const char* args[5] = { "onSceneCollision", this->getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
+                callOnBehaviors( 5, args );
+            }
+        }
+
+        // Does object A have collision callback active?
+        if ( sceneObjectACallback )
+        {
+            // Yes, so does it handle the collision callback?
+            if ( pSceneObjectA->isMethod("onCollision") )            
+            {
+                // Yes, so perform the script callback on it.
+                Con::executef( pSceneObjectA, 3, "onCollision",
+                    pSceneObjectBBuffer,
+                    pMiscInfoBuffer );
+            }
+            else
+            {
+                // No, so call it on its behaviors.
+                const char* args[4] = { "onCollision", pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
+                pSceneObjectA->callOnBehaviors( 4, args );
+            }
+        }
+
+        // Does object B have collision callback active?
+        if ( sceneObjectBCallback )
+        {
+            // Yes, so does it handle the collision callback?
+            if ( pSceneObjectB->isMethod("onCollision") )            
+            {
+                // Yes, so perform the script callback on it.
+                Con::executef( pSceneObjectB, 3, "onCollision",
+                    pSceneObjectABuffer,
+                    pMiscInfoBuffer );
+            }
+            else
+            {
+                // No, so call it on its behaviors.
+                const char* args[4] = { "onCollision", pSceneObjectBBuffer, pSceneObjectABuffer, pMiscInfoBuffer };
+                pSceneObjectB->callOnBehaviors( 4, args );
+            }
+        }
     }
 }
 
@@ -655,11 +699,6 @@ void Scene::dispatchEndContactCallbacks( void )
     if ( contactCount == 0 )
         return;
 
-    // Finish if no collision method exists on scene.
-    Namespace* pNamespace = getNamespace();
-    if ( pNamespace != NULL && pNamespace->lookup( StringTable->insert( "onEndCollision" ) ) == NULL )
-        return;
-
     // Iterate all contacts.
     for ( typeContactVector::iterator contactItr = mEndContacts.begin(); contactItr != mEndContacts.end(); ++contactItr )
     {
@@ -674,8 +713,12 @@ void Scene::dispatchEndContactCallbacks( void )
         if ( pSceneObjectA->isBeingDeleted() || pSceneObjectB->isBeingDeleted() )
             continue;
 
-        // Skip if either object does not have collision callback active.
-        if ( !pSceneObjectA->getCollisionCallback() || !pSceneObjectB->getCollisionCallback() )
+        // Fetch collision callback status.
+        const bool sceneObjectACallback = pSceneObjectA->getCollisionCallback();
+        const bool sceneObjectBCallback = pSceneObjectB->getCollisionCallback();
+
+        // Skip if both objects don't have collision callback active.
+        if ( !sceneObjectACallback && !sceneObjectBCallback )
             continue;
 
         // Fetch shape index.
@@ -696,11 +739,64 @@ void Scene::dispatchEndContactCallbacks( void )
         char* pMiscInfoBuffer = Con::getArgBuffer(32);
         dSprintf(pMiscInfoBuffer, 32, "%d %d", shapeIndexA, shapeIndexB );
 
-        // Script callback.
-        Con::executef( this, 4, "onEndCollision",
-            pSceneObjectABuffer,
-            pSceneObjectBBuffer,
-            pMiscInfoBuffer );
+        // Do both objects have collision callback active?
+        if ( sceneObjectACallback && sceneObjectBCallback )
+        {
+            // Yes, so does the scene handle the collision callback?
+            Namespace* pNamespace = getNamespace();
+            if ( pNamespace != NULL && pNamespace->lookup( StringTable->insert( "onSceneEndCollision" ) ) != NULL )
+            {
+                // Yes, so does the scene handle the collision callback?
+                Con::executef( this, 4, "onSceneEndCollision",
+                    pSceneObjectABuffer,
+                    pSceneObjectBBuffer,
+                    pMiscInfoBuffer );
+            }
+            else
+            {
+                // No, so call it on its behaviors.
+                const char* args[5] = { "onSceneEndCollision", this->getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
+                callOnBehaviors( 5, args );
+            }
+        }
+
+        // Does object A have collision callback active?
+        if ( sceneObjectACallback )
+        {
+            // Yes, so does it handle the collision callback?
+            if ( pSceneObjectA->isMethod("onEndCollision") )            
+            {
+                // Yes, so perform the script callback on it.
+                Con::executef( pSceneObjectA, 3, "onEndCollision",
+                    pSceneObjectBBuffer,
+                    pMiscInfoBuffer );
+            }
+            else
+            {
+                // No, so call it on its behaviors.
+                const char* args[3] = { "onEndCollision", pSceneObjectBBuffer, pMiscInfoBuffer };
+                pSceneObjectA->callOnBehaviors( 3, args );
+            }
+        }
+
+        // Does object B have collision callback active?
+        if ( sceneObjectBCallback )
+        {
+            // Yes, so does it handle the collision callback?
+            if ( pSceneObjectB->isMethod("onEndCollision") )            
+            {
+                // Yes, so perform the script callback on it.
+                Con::executef( pSceneObjectB, 3, "onEndCollision",
+                    pSceneObjectABuffer,
+                    pMiscInfoBuffer );
+            }
+            else
+            {
+                // No, so call it on its behaviors.
+                const char* args[3] = { "onEndCollision", pSceneObjectABuffer, pMiscInfoBuffer };
+                pSceneObjectB->callOnBehaviors( 3, args );
+            }
+        }
     }
 }
 
@@ -968,13 +1064,6 @@ void Scene::sceneRender( const SceneRenderState* pSceneRenderState )
 
     // Set batch renderer wireframe mode.
     mBatchRenderer.setWireframeMode( getDebugMask() & SCENE_DEBUG_WIREFRAME_RENDER );
-
-    // Clear the background color if requested.
-    if ( mUseBackgroundColor )
-    {
-        glClearColor( mBackgroundColor.red, mBackgroundColor.green, mBackgroundColor.blue, mBackgroundColor.alpha );
-        glClear(GL_COLOR_BUFFER_BIT);	
-    }
 
     // Debug Profiling.
     PROFILE_START(Scene_RenderSceneVisibleQuery);
@@ -1301,30 +1390,9 @@ void Scene::clearScene( bool deleteObjects )
     if ( pControllerSet == NULL )
         return;
 
-	// Fetch scene controller count.
-	const S32 sceneControllerCount = (S32)pControllerSet->size();
-
-	// Iterate scene controllers.
-	for( S32 i = 0; i < sceneControllerCount; i++ )
-	{
-		// Fetch the scene controller.
-		SceneController* pController = dynamic_cast<SceneController*>((*pControllerSet)[i]);
-
-        // Clear objects from the controller.
-        pController->clear();
-	}
-
-    // Are we deleting objects?
-    if ( deleteObjects )
-    {
-        // Yes, so delete the controllers.
-        pControllerSet->deleteObjects();
-    }
-    else
-    {
-        // No, so just clear the controllers.
-        pControllerSet->clear();
-    }
+    // Delete all the scene controllers.
+    while( pControllerSet->size() > 0 )
+        pControllerSet->at(0)->deleteObject();
 }
 
 //-----------------------------------------------------------------------------
@@ -4868,15 +4936,15 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
 		// Iterate scene controllers.
 		for( S32 i = 0; i < sceneControllerCount; i++ )
 		{
-			// Fetch the scene controller.
-			SceneController* pController = dynamic_cast<SceneController*>((*pControllerSet)[i]);
+            // Fetch the set object.
+            SimObject* pSetObject = pControllerSet->at(i);
 
 			// Skip if not a controller.
-			if ( pController == NULL )
+            if ( !pSetObject->isType<SceneController*>() )
 				continue;
 
             // Add controller node.
-            pControllerCustomNode->addNode( pController );
+            pControllerCustomNode->addNode( pSetObject );
 		}
 	}
 }

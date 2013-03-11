@@ -24,8 +24,8 @@
 #include "2d/sceneobject/CompositeSprite.h"
 #endif
 
-#ifndef _SPRITE_BATCH_ITEM_H_
-#include "2d/core/SpriteBatchItem.h"
+#ifndef _SPRITE_BATCH_QUERY_H_
+#include "2d/core/spriteBatchQuery.h"
 #endif
 
 #ifndef _RENDER_PROXY_H_

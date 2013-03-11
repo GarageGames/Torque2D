@@ -36,56 +36,6 @@
 //////////////////////////////////////////////////////////////////////////
 // TypeString
 //////////////////////////////////////////////////////////////////////////
-ConsoleType( Vector2, TypeT2DVector, sizeof(Vector2), "" )
-
-ConsoleGetType( TypeT2DVector )
-{
-    Vector2* pVector = (Vector2*)dptr;  
-    return pVector->scriptThis();
-}
-
-ConsoleSetType( TypeT2DVector )
-{
-    Vector2* pVector = (Vector2*)dptr;  
-    F32 x;
-    F32 y;
-    if( argc == 1 )
-    {
-        S32 args = dSscanf(argv[0], "%g %g", &x, &y);
-        if ( args == 2 )
-        {
-            pVector->Set( x, y );
-            return;
-        }
-        else if ( args == 1 )
-        {
-            pVector->Set( x, x );
-            return;
-        }
-        else
-        {
-            // Warn.
-            Con::warnf("Vector2 must be set as { x [,y] }");
-            return;
-        }
-
-    }
-    else if ( argc == 2 )
-    {
-        pVector->Set( dAtof(argv[0]), dAtof(argv[1]) );
-        return;
-    }
-    else
-    {
-        // Warn.
-        Con::warnf("Vector2 must be set as { x [,y] }");
-        return;
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////
-// TypeString
-//////////////////////////////////////////////////////////////////////////
 ConsoleType( string, TypeString, sizeof(const char*), "" )
 
 ConsoleGetType( TypeString )

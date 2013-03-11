@@ -254,6 +254,8 @@ public:
       FrameAllocator::setWaterMark( mWaterMark );
    }
 
+   U32 getObjectCount( void ) const { return mNumObjectsInMemory; }
+
    /// NOTE: This will return the memory, NOT perform a ones-complement
    T* operator ~() { return mMemory; };
    /// NOTE: This will return the memory, NOT perform a ones-complement
@@ -278,6 +280,7 @@ public:
 
    operator T() { return *mMemory; }
    operator const T() const { return *mMemory; }
+
 
    // This ifdef is to satisfy the ever so pedantic GCC compiler
    //  Which seems to upset visual studio.

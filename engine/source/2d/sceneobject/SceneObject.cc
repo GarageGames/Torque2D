@@ -179,9 +179,6 @@ SceneObject::SceneObject() :
     mpAttachedGui(NULL),
     mpAttachedGuiSceneWindow(NULL),
 
-    /// Pathing.
-    mAttachedToPath(NULL),
-
     /// Safe deletion.
     mBeingSafeDeleted(false),
     mSafeDeleteReady(true),
@@ -348,6 +345,8 @@ void SceneObject::initPersistFields()
 
     /// Input events.
     addField("UseInputEvents", TypeBool, Offset(mUseInputEvents, SceneObject), &writeUseInputEvents, "");
+
+    addField("PickingAllowed", TypeBool, Offset(mPickingAllowed, SceneObject), &writePickingAllowed, "");
 
     // Script callbacks.
     addField("UpdateCallback", TypeBool, Offset(mUpdateCallback, SceneObject), &writeUpdateCallback, "");
@@ -806,19 +805,19 @@ void SceneObject::sceneRenderOverlay( const SceneRenderState* sceneRenderState )
     // AABB debug draw.
     if ( debugMask & Scene::SCENE_DEBUG_AABB )
     {
-        pScene->mDebugDraw.DrawAABB( mCurrentAABB );
+        pScene->mDebugDraw.DrawAABB( mCurrentAABB, ColorF(0.7f, 0.7f, 0.9f) );
     }
 
     // OOBB debug draw.
     if ( debugMask & Scene::SCENE_DEBUG_OOBB )
     {
-        pScene->mDebugDraw.DrawOOBB( mRenderOOBB );
+        pScene->mDebugDraw.DrawOOBB( mRenderOOBB, ColorF(0.9f, 0.9f, 1.0f) );
     }
 
     // Asleep debug draw.
     if ( !getAwake() && debugMask & Scene::SCENE_DEBUG_SLEEP )
     {
-        pScene->mDebugDraw.DrawAsleep( mRenderOOBB );
+        pScene->mDebugDraw.DrawAsleep( mRenderOOBB, ColorF( 0.0f, 1.0f, 0.0f ) );
     }
 
     // Collision Shapes.
@@ -832,8 +831,8 @@ void SceneObject::sceneRenderOverlay( const SceneRenderState* sceneRenderState )
     {
         const b2Vec2 renderPosition = getRenderPosition();
 
-        pScene->mDebugDraw.DrawPoint( renderPosition + getLocalCenter(), 6, b2Color( 0.0f, 1.0f, 0.4f ) );
-        pScene->mDebugDraw.DrawPoint( renderPosition, 4, b2Color( 0.0f, 0.4f, 1.0f ) );
+        pScene->mDebugDraw.DrawPoint( renderPosition + getLocalCenter(), 6, ColorF( 0.0f, 1.0f, 0.4f ) );
+        pScene->mDebugDraw.DrawPoint( renderPosition, 4, ColorF( 0.0f, 0.4f, 1.0f ) );
     }
 
     // Sort Points.
@@ -1437,27 +1436,20 @@ void SceneObject::applyAngularImpulse( const F32 impulse, const bool wake )
 
 //-----------------------------------------------------------------------------
 
-void SceneObject::setCollisionMasks( const U32 groupMask, const U32 layerMask )
-{
-    // Set Group/Layer Collision Masks.
-    mCollisionGroupMask = groupMask;
-    mCollisionLayerMask = layerMask;
-}
-
-//-----------------------------------------------------------------------------
-
 void SceneObject::setCollisionAgainst( const SceneObject* pSceneObject, const bool clearMasks )
 {
     // Do we need to clear existing masks?
     if ( clearMasks )
     {
         // Yes, so just set the masks to the referenced-objects' masks.
-        setCollisionMasks( pSceneObject->getSceneGroupMask(), pSceneObject->getSceneLayerMask() );
+        setCollisionGroupMask( pSceneObject->getCollisionGroupMask() );
+        setCollisionLayerMask( pSceneObject->getCollisionLayerMask() ); 
     }
     else
     {
         // No, so merge with existing masks.
-        setCollisionMasks( getCollisionGroupMask() | pSceneObject->getSceneGroupMask(), getCollisionLayerMask() | pSceneObject->getSceneLayerMask() );
+        setCollisionGroupMask( getCollisionGroupMask() | pSceneObject->getCollisionGroupMask() );
+        setCollisionLayerMask( getCollisionLayerMask() | pSceneObject->getCollisionLayerMask() ); 
     }
 }
 
@@ -2878,8 +2870,8 @@ void SceneObject::copyTo( SimObject* obj )
     pSceneObject->setSleepingAllowed( getSleepingAllowed() );
 
     /// Collision control.
-    pSceneObject->setCollisionGroups( getCollisionGroupMask() );
-    pSceneObject->setCollisionLayers( getCollisionLayerMask() );
+    pSceneObject->setCollisionGroupMask( getCollisionGroupMask() );
+    pSceneObject->setCollisionLayerMask( getCollisionLayerMask() );
     pSceneObject->setCollisionSuppress( getCollisionSuppress() );
     pSceneObject->setGatherContacts( getGatherContacts() );
     pSceneObject->setDefaultDensity( getDefaultDensity() );
@@ -3318,31 +3310,6 @@ void SceneObject::notifyComponentsUpdate( void )
             pComponent->onUpdate();
     }
     unlockComponentList();
-}
-
-//-----------------------------------------------------------------------------
-
-BehaviorInstance* SceneObject::behavior(const char *name)
-{
-    // Debug Profiling.
-    PROFILE_SCOPE(SceneObject_BehaviorName);
-
-    StringTableEntry stName = StringTable->insert(name);
-    VectorPtr<SimComponent *>&componentList = lockComponentList();
-
-    for( SimComponentIterator nItr = componentList.begin(); nItr != componentList.end(); nItr++ )
-    {
-        BehaviorInstance* pComponent = dynamic_cast<BehaviorInstance*>(*nItr);
-        if( pComponent && StringTable->insert(pComponent->getTemplateName()) == stName )
-        {
-            unlockComponentList();
-            return pComponent;
-        }
-    }
-
-    unlockComponentList();
-
-    return NULL;
 }
 
 //-----------------------------------------------------------------------------

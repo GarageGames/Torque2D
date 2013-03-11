@@ -34,6 +34,7 @@ class iOSStreamSource: public SimObject
 	bool isPlaying();
 	bool start( bool loop = false );
 	bool stop();
+    bool setVolume( F32 volume);
 };
 
 #endif // _AUDIOSTREAMSOURCE_H_

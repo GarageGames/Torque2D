@@ -1308,9 +1308,7 @@ const char *BehaviorComponent::callOnBehaviors( U32 argc, const char *argv[] )
 {   
     if( mBehaviors.empty() )   
         return Parent::callOnBehaviors( argc, argv );
-   
-    const char *cbName = StringTable->insert(argv[0]);
-   
+      
     // Copy the arguments to avoid weird clobbery situations.
     FrameTemp<char *> argPtrs (argc);
    
@@ -1336,6 +1334,7 @@ const char *BehaviorComponent::callOnBehaviors( U32 argc, const char *argv[] )
             continue;
 
         // Lookup the Callback Namespace entry and then splice callback
+        const char *cbName = StringTable->insert(argv[0]);
         Namespace::Entry *pNSEntry = pNamespace->lookup(cbName);
         if( pNSEntry )
         {
@@ -1373,9 +1372,7 @@ const char *BehaviorComponent::_callMethod( U32 argc, const char *argv[], bool c
 {   
     if( mBehaviors.empty() )   
         return Parent::_callMethod( argc, argv, callThis );
-   
-    const char *cbName = StringTable->insert(argv[0]);
-   
+     
     // Copy the arguments to avoid weird clobbery situations.
     FrameTemp<char *> argPtrs (argc);
    
@@ -1398,6 +1395,7 @@ const char *BehaviorComponent::_callMethod( U32 argc, const char *argv[], bool c
             continue;
 
         // Lookup the Callback Namespace entry and then splice callback
+        const char *cbName = StringTable->insert(argv[0]);
         Namespace::Entry *pNSEntry = pNamespace->lookup(cbName);
         if( pNSEntry )
         {

@@ -152,6 +152,9 @@ public:
     /// Module discovery.
     bool scanModules( const char* pPath, const bool rootOnly = false );
 
+    /// Module unregister.
+    bool unregisterModule( const char* pModuleId, const U32 versionId );
+
     /// Module (un)loading.
     bool loadModuleGroup( const char* pModuleGroup );
     bool unloadModuleGroup( const char* pModuleGroup );

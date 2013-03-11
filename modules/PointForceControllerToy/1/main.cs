@@ -22,23 +22,45 @@
 
 function PointForceControllerToy::create( %this )
 {
+    // Activate the package.
+    activatePackage( PointForceControllerToyPackage );    
+    
     // Set the sandbox drag mode availability.
-    Sandbox.allowManipulation( pan );
     Sandbox.allowManipulation( pull );
     
     // Set the manipulation mode.
     Sandbox.useManipulation( pull );
     
-    // Configure settings.
-    PointForceControllerToy.ForceRadius = 20;
-    PointForceControllerToy.ForceMagnitude = 50;
-    PointForceControllerToy.DebrisCount = 100;
-
-    // Add options.    
-    addNumericOption("Force Radius", 1, 200, 1, "setForceRadius", PointForceControllerToy.ForceRadius, false, "The radius of the point force.");   
-    addNumericOption("Force Magnitude", -1000, 1000, 10, "setForceMagnitude", PointForceControllerToy.ForceMagnitude, false, "The magnitude of the point force.");   
-    addNumericOption("Debris Count", 10, 1000, 10, "setDebrisCount", PointForceControllerToy.DebrisCount, true, "The amount of debris to use.");
+    // Initialize the toys settings.
+    PointForceControllerToy.autoSpawnAsteroids = false;
+    PointForceControllerToy.showPlanetoid = true;
+    PointForceControllerToy.showExplosions = true;    
+    PointForceControllerToy.nonLinearController = true;
+    PointForceControllerToy.controllerForce = 35;
+    PointForceControllerToy.controllerRadius = 36;
+    PointForceControllerToy.controllerLinearDrag = 0.1;
+    PointForceControllerToy.controllerAngularDrag = 0;
+    PointForceControllerToy.planetoidSize = 26;
+    PointForceControllerToy.asteroidSize = 4;
+    PointForceControllerToy.asteroidDensity = 0.2;
+    PointForceControllerToy.asteroidLifetime = 10;
+    PointForceControllerToy.asteroidSpeed = 30;
     
+    // Add the custom controls.
+    addFlagOption("Auto Spawn Asteroids", "setAutoSpawnAsteroids", PointForceControllerToy.autoSpawnAsteroids, true, "Whether to auto-spawn asteroids or not." );
+    addFlagOption("Show Planetoid", "setShowPlanetoid", PointForceControllerToy.showPlanetoid, true, "Whether to show the planetoid or not or not." );
+    addFlagOption("Show Explosions", "setShowExplosions", PointForceControllerToy.showExplosions, false, "Whether to show the explosions or not or not." );
+    addFlagOption("Controller Non-Linear", "setNonLinearController", PointForceControllerToy.nonLinearController, true, " Whether to apply the controller force non-linearly (using the inverse square law) or linearly" );
+    addNumericOption("Controller Force", -1000, 1000, 10, "setControllerForce", PointForceControllerToy.controllerForce, true, "Sets the controller force.");
+    addNumericOption("Controller Radius", 1, 30, 1, "setControllerRadius", PointForceControllerToy.controllerRadius, true, "Sets the controller radius.");
+    addNumericOption("Controller Linear Drag", 0, 1, 0.1, "setControllerLinearDrag", PointForceControllerToy.controllerLinearDrag, true, "Sets the controller linear drag.");
+    addNumericOption("Controller Angular Drag", 0, 1, 0.1, "setControllerAngularDrag", PointForceControllerToy.controllerAngularDrag, true, "Sets the controller angular drag.");
+    addNumericOption("Planetoid Size", 1, 30, 1, "setPlanetoidSize", PointForceControllerToy.planetoidSize, true, "Sets the planetoid size.");
+    addNumericOption("Asteroid Size", 1, 10, 1, "setAsteroidSize", PointForceControllerToy.asteroidSize, true, "Sets the asteroid size.");
+    addNumericOption("Asteroid Density", 0.1, 10, 0.1, "setAsteroidDensity", PointForceControllerToy.asteroidDensity, true, "Sets the asteroid density.");
+    addNumericOption("Asteroid Lifetime", 1, 10, 1, "setAsteroidLifetime", PointForceControllerToy.asteroidLifetime, true, "Sets the asteroid lifetime.");
+    addNumericOption("Asteroid Speed", 1, 100, 1, "setAsteroidSpeed", PointForceControllerToy.asteroidSpeed, true, "Sets the asteroid speed.");
+      
     // Reset the toy.
     PointForceControllerToy.reset();
 }
@@ -48,6 +70,8 @@ function PointForceControllerToy::create( %this )
 
 function PointForceControllerToy::destroy( %this )
 {
+    // Deactivate the package.
+    deactivatePackage( PointForceControllerToyPackage );    
 }
 
 //-----------------------------------------------------------------------------
@@ -60,8 +84,14 @@ function PointForceControllerToy::reset( %this )
     // Create background.
     %this.createBackground();
     
-    // Create point force controller.
-    %this.createPointForceController();
+    // Create the planetoid.
+    %this.createPlanetoid();
+    
+    // Start a timer throwing asteroids.
+    if ( PointForceControllerToy.autoSpawnAsteroids )
+        %this.startTimer( "createAsteroid", 1000 );
+    else
+        %this.stopTimer();        
 }
 
 //-----------------------------------------------------------------------------
@@ -69,136 +99,235 @@ function PointForceControllerToy::reset( %this )
 function PointForceControllerToy::createBackground( %this )
 {    
     // Create the sprite.
-    %object = new Sprite();
-    
-    // Set the sprite as "static" so it is not affected by gravity.
-    %object.setBodyType( static );
-       
-    // Always try to configure a scene-object prior to adding it to a scene for best performance.
-
-    // Set the position.
-    %object.Position = "0 0";
-
-    // Set the size.        
-    %object.Size = "100 75";
-    
-    // Set to the furthest background layer.
+    %object = new Scroller();
+    %object.BodyType = static;
+    %object.Size = "200 150";
     %object.SceneLayer = 31;
-    
-    // Set the scroller to use an animation!
-    %object.Image = "ToyAssets:highlightBackground";
-    
-    // Set the blend color.
-    %object.BlendColor = LightBlue;
-    
-    // Create border collisions.
-    %object.createEdgeCollisionShape( -50, -37.5, -50, 37.5 );
-    %object.createEdgeCollisionShape( 50, -37.5, 50, 37.5 );
-    %object.createEdgeCollisionShape( -50, 37.5, 50, 37.5 );
-    %object.createEdgeCollisionShape( -50, -34.5, 50, -34.5 );
-           
-    // Add the sprite to the scene.
+    %object.Image = "ToyAssets:SkyBackground";  
+    %object.ScrollX = 2;
     SandboxScene.add( %object );    
 }
 
 //-----------------------------------------------------------------------------
 
-function PointForceControllerToy::createSprite( %this, %asset, %position, %size, %angle, %blendColor )
-{    
-    // Create the sprite.
-    %object = new Sprite();
+function PointForceControllerToy::createPlanetoid( %this )
+{
+    if ( PointForceControllerToy.showPlanetoid )
+    {
+        // Create the planetoid.
+        %object = new Sprite()
+        {
+            class = "Planetoid";
+        };
+        //%object.BodyType = static;
+        %object.Size = PointForceControllerToy.planetoidSize;
+        %object.Image = "ToyAssets:Planetoid";
+        %object.AngularVelocity = -5;
+        %object.setDefaultDensity( 10000 );
+        %object.createCircleCollisionShape( PointForceControllerToy.planetoidSize * 0.48 );
+        %object.CollisionCallback = true;
+        SandboxScene.add( %object );
+    }
     
-    // Set the position.
-    %object.Position = %position;
+    // Create planetoid bubble.
+    %player = new ParticlePlayer();
+    %player.BodyType = static;
+    %player.Particle = "ToyAssets:ForceBubble";
+    %player.SceneLayer = 0;
+    SandboxScene.add( %player );
+        
+    // Create a new controller.
+    %controller = new PointForceController();
+    %controller.setControlLayers( 10 ); // Only affect asteroids.
+    %controller.Radius = PointForceControllerToy.controllerRadius;
+    %controller.Force = PointForceControllerToy.ControllerForce;
+    %controller.NonLinear = PointForceControllerToy.nonLinearController;
+    %controller.LinearDrag = PointForceControllerToy.controllerLinearDrag;
+    %controller.AngularDrag = PointForceControllerToy.controllerAngularDrag;
+    SandboxScene.Controllers.add( %controller );
+    
+    // This is so we can reference it in the toy, no other reason.
+    PointForceControllerToy.Controller = %controller;
+}
 
-    // Set the size.        
-    %object.Size = %size;
+//-----------------------------------------------------------------------------
+
+function Planetoid::onCollision( %this, %object, %collisionDetails )
+{
+    // Are we showing explosions?
+    if ( PointForceControllerToy.showExplosions )
+    {
+        // Yes, so calculate position angle.
+        %positionDelta = Vector2Sub( %object.Position, %this.Position );
+        %angle = -mRadToDeg( mAtan( %positionDelta._0, %positionDelta._1 ) );
+        
+        // Fetch contact position.
+        %contactPosition = %collisionDetails._4 SPC %collisionDetails._5;
+        
+        // Calculate total impact force.
+        %impactForce = mAbs(%collisionDetails._6 / 100) + mAbs(%collisionDetails._7 / 20);
+        
+        // Create explosion.
+        %player = new ParticlePlayer();
+        %player.BodyType = static;
+        %player.Particle = "ToyAssets:impactExplosion";
+        %player.Position = %contactPosition;
+        %player.Angle = %angle;
+        %player.SizeScale = mClamp( %impactForce, 0.1, 10 );
+        %player.SceneLayer = 0;
+        SandboxScene.add( %player );            
+    }
     
-    // Set the angle.
-    %object.Angle = %angle;
-       
-    // Set the scroller to use an animation!
-    %object.Image = %asset;
+    // Delete the asteroid.
+    %object.Trail.LinearVelocity = 0;
+    %object.Trail.AngularVelocity = 0;
+    %object.Trail.safeDelete();
+    %object.safeDelete();  
+}
+
+//-----------------------------------------------------------------------------
+
+function PointForceControllerToy::createAsteroid( %this, %position )
+{
+    // Create an asteroid.
+    %object = new Sprite();
+    %object.Position = %position !$= "" ? %position : -40 SPC getRandom(-35,35);
+    %object.Size = PointForceControllerToy.asteroidSize;
+    %object.Image = "ToyAssets:Asteroids";
+    %object.ImageFrame = getRandom(0,3);
+    %object.SceneLayer = 10;
+    %object.setDefaultDensity( PointForceControllerToy.asteroidDensity );
+    %object.createCircleCollisionShape( PointForceControllerToy.asteroidSize * 0.4 );
+    %object.setLinearVelocity( PointForceControllerToy.asteroidSpeed, 0 );
+    %object.setAngularVelocity( getRandom(-90,90) );
+    %object.setLifetime( PointForceControllerToy.asteroidLifetime );  
+    SandboxScene.add( %object ); 
     
-    // Set the blend color.
-    %object.BlendColor = %blendColor $= "" ? White : %blendColor;
+    // Create fire trail.
+    %player = new ParticlePlayer();
+    %player.Particle = "ToyAssets:bonfire";
+    %player.Position = %object.Position;
+    %player.EmissionRateScale = 3;
+    %player.SizeScale = 2;
+    %player.SceneLayer = 11;
+    %player.setLifetime( PointForceControllerToy.asteroidLifetime );  
+    SandboxScene.add( %player );
+    %jointId = SandboxScene.createRevoluteJoint( %object, %player );
+    SandboxScene.setRevoluteJointLimit( %jointId, 0, 0 );    
+
+    %object.Trail = %player;
             
-    // Add the sprite to the scene.
-    SandboxScene.add( %object );    
-    
     return %object;
 }
 
 //-----------------------------------------------------------------------------
 
-function PointForceControllerToy::createPointForceController( %this )
+function PointForceControllerToy::setAutoSpawnAsteroids( %this, %value )
 {
-    // Create a new controller.
-    %controller = new PointForceController();
-    
-    // Set scene controller.
-    PointForceControllerToy.SceneController = %controller;
-
-    // Update the point force controller.
-    %this.updatePointForceController();
-    
-    // Add the controller.
-    SandboxScene.Controllers.add( %controller );
-   
-    // Create some sprites used by the controller.
-    for( %n = 0; %n < PointForceControllerToy.DebrisCount; %n++ )
-    {    
-        %sizeX = getRandom(1,4);
-        %sizeY = getRandom(1,4);
-        %size = %sizeX SPC %sizeY;
-        
-        // Create some sprites.
-        %sprite = %this.createSprite( "ToyAssets:blocks", getRandom(-40,40) SPC getRandom(-30,30), %size, getRandom(0,360), White );
-        %sprite.Frame = getRandom( 0, 55 );
-        %sprite.createPolygonBoxCollisionShape( %sizeX, %sizeY );
-        %sprite.setAngularVelocity(getRandom(-180,180));
-        
-        // Add to the controller.
-        %controller.add( %sprite );
-    }   
-    
+    %this.autoSpawnAsteroids = %value;
 }
 
 //-----------------------------------------------------------------------------
 
-function PointForceControllerToy::updatePointForceController( %this )
+function PointForceControllerToy::setShowPlanetoid( %this, %value )
 {
-    // Fetch the controller.
-    %controller = PointForceControllerToy.SceneController;
-    
-    // Update the controller.
-    %controller.Radius = %this.ForceRadius;
-    %controller.Force = %this.ForceMagnitude;
+    %this.showPlanetoid = %value;
 }
 
 //-----------------------------------------------------------------------------
 
-function PointForceControllerToy::setForceRadius(%this, %value)
+function AngryBirdsSpaceToy::setShowExplosions( %this, %value )
 {
-    %this.ForceRadius = %value;
-    
-    // Update the controller.
-    %this.updatePointForceController();   
+    %this.showExplosions = %value;
 }
 
 //-----------------------------------------------------------------------------
 
-function PointForceControllerToy::setForceMagnitude(%this, %value)
+function PointForceControllerToy::setNonLinearController( %this, %value )
 {
-    %this.ForceMagnitude = %value;
-    
-    // Update the controller.
-    %this.updatePointForceController();   
+    %this.nonLinearController = %value;
 }
 
 //-----------------------------------------------------------------------------
 
-function PointForceControllerToy::setDebrisCount(%this, %value)
+function PointForceControllerToy::setControllerForce( %this, %value )
 {
-    %this.DebrisCount = %value;
+    %this.controllerForce = %value;
 }
+
+//-----------------------------------------------------------------------------
+
+function PointForceControllerToy::setControllerRadius( %this, %value )
+{
+    %this.controllerRadius = %value;
+}
+
+//-----------------------------------------------------------------------------
+
+function PointForceControllerToy::setControllerLinearDrag( %this, %value )
+{
+    %this.controllerLinearDrag = %value;
+}
+
+//-----------------------------------------------------------------------------
+
+function PointForceControllerToy::setControllerAngularDrag( %this, %value )
+{
+    %this.controllerAngularDrag = %value;
+}
+
+//-----------------------------------------------------------------------------
+
+function PointForceControllerToy::setPlanetoidSize( %this, %value )
+{
+    %this.planetoidSize = %value;
+}
+
+//-----------------------------------------------------------------------------
+
+function PointForceControllerToy::setAsteroidSize( %this, %value )
+{
+    %this.asteroidSize = %value;
+}
+
+//-----------------------------------------------------------------------------
+
+function PointForceControllerToy::setAsteroidDensity( %this, %value )
+{
+    %this.asteroidDensity = %value;
+}
+
+//-----------------------------------------------------------------------------
+
+function PointForceControllerToy::setAsteroidLifetime( %this, %value )
+{
+    %this.asteroidLifetime = %value;
+}
+
+//-----------------------------------------------------------------------------
+
+function PointForceControllerToy::setAsteroidSpeed( %this, %value )
+{
+    %this.asteroidSpeed = %value;
+}
+
+//-----------------------------------------------------------------------------
+
+package PointForceControllerToyPackage
+{
+
+function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
+{
+    // Call parent.
+    Parent::onTouchDown(%this, %touchID, %worldPosition );
+
+    // Create an asteroid.
+    %object = PointForceControllerToy.createAsteroid( %worldPosition );
+    
+    if ( %worldPosition.x < PointForceControllerToy.Controller.Position.x )
+        %object.setLinearVelocity( PointForceControllerToy.asteroidSpeed, 0 );
+    else
+        %object.setLinearVelocity( -PointForceControllerToy.asteroidSpeed, 0 );    
+}
+    
+};

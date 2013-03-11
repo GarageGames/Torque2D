@@ -852,3 +852,345 @@ ConsoleMethod(CompositeSprite, getSpriteName, const char*, 2, 2,    "() - Gets t
     return object->getSpriteName();
 }
 
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(CompositeSprite, pickPoint, const char*, 3, 4,    "(x / y ) Picks sprites intersecting the specified point with optional group/layer masks.\n"
+                                                                "@param x/y The coordinate of the point as either (\"x y\") or (x,y)\n"
+                                                                "@return Returns list of sprite Ids.")
+{
+    // Fetch sprite batch query and clear results.
+    SpriteBatchQuery* pSpriteBatchQuery = object->getSpriteBatchQuery( true );
+
+    // Is the sprite batch query available?
+    if ( pSpriteBatchQuery == NULL )
+    {
+        // No, so warn.
+        Con::warnf( "CompositeSprite::pickPoint() - Cannot pick sprites if clipping mode is off." );
+
+        // Return nothing.
+        return NULL;
+    }
+
+    // The point.
+    Vector2 point;
+
+    // The index of the first optional parameter.
+    U32 firstArg;
+
+    // Grab the number of elements in the first parameter.
+    U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+
+    // ("x y")
+    if ((elementCount == 2) && (argc < 8))
+    {
+        point = Utility::mGetStringElementVector(argv[2]);
+        firstArg = 3;
+    }
+   
+    // (x, y)
+    else if ((elementCount == 1) && (argc > 3))
+    {
+        point = Vector2(dAtof(argv[2]), dAtof(argv[3]));
+        firstArg = 4;
+    }
+   
+    // Invalid
+    else
+    {
+        Con::warnf("CompositeSprite::pickPoint() - Invalid number of parameters!");
+        return NULL;
+    }
+
+    // Fetch the render transform.
+    const b2Transform& renderTransform = object->getRenderTransform();
+
+    // Transform into local space.
+    point = b2MulT( renderTransform, point );
+
+    // Perform query.
+    pSpriteBatchQuery->renderQueryPoint( point );
+
+    // Fetch result count.
+    const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
+
+    // Finish if no results.
+    if (resultCount == 0 )
+        return NULL;
+
+    // Fetch results.
+    typeSpriteBatchQueryResultVector& queryResults = pSpriteBatchQuery->getQueryResults();
+
+    // Set Max Buffer Size.
+    const U32 maxBufferSize = 4096;
+
+    // Create Returnable Buffer.
+    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
+
+    // Set Buffer Counter.
+    U32 bufferCount = 0;
+
+    // Add picked sprites.
+    for ( U32 n = 0; n < resultCount; n++ )
+    {
+        // Output Object ID.
+        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSpriteBatchItem->getBatchId() );
+
+        // Finish early if we run out of buffer space.
+        if ( bufferCount >= maxBufferSize )
+        {
+            // Warn.
+            Con::warnf("CompositeSprite::pickPoint() - Too many items picked to return to scripts!");
+            break;
+        }
+    }
+
+    // Clear sprite batch query.
+    pSpriteBatchQuery->clearQuery();
+
+    // Return buffer.
+    return pBuffer;
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y ) Picks sprites intersecting the specified area with optional group/layer masks.\n"
+                                                            "@param startx/y The coordinates of the start point as either (\"x y\") or (x,y)\n"
+                                                            "@param endx/y The coordinates of the end point as either (\"x y\") or (x,y)\n"
+                                                            "@return Returns list of sprite Ids.")
+{
+    // Fetch sprite batch query and clear results.
+    SpriteBatchQuery* pSpriteBatchQuery = object->getSpriteBatchQuery( true );
+
+    // Is the sprite batch query available?
+    if ( pSpriteBatchQuery == NULL )
+    {
+        // No, so warn.
+        Con::warnf( "CompositeSprite::pickArea() - Cannot pick sprites if clipping mode is off." );
+
+        // Return nothing.
+        return NULL;
+    }
+
+    // Upper left and lower right bound.
+    Vector2 v1, v2;
+
+    // The index of the first optional parameter.
+    U32 firstArg;
+
+    // Grab the number of elements in the first two parameters.
+    U32 elementCount1 = Utility::mGetStringElementCount(argv[2]);
+    U32 elementCount2 = 1;
+    if (argc > 3)
+        elementCount2 = Utility::mGetStringElementCount(argv[3]);
+
+    // ("x1 y1 x2 y2")
+    if ((elementCount1 == 4) && (argc < 9))
+    {
+        v1 = Utility::mGetStringElementVector(argv[2]);
+        v2 = Utility::mGetStringElementVector(argv[2], 2);
+        firstArg = 3;
+    }
+   
+    // ("x1 y1", "x2 y2")
+    else if ((elementCount1 == 2) && (elementCount2 == 2) && (argc > 3) && (argc < 10))
+    {
+        v1 = Utility::mGetStringElementVector(argv[2]);
+        v2 = Utility::mGetStringElementVector(argv[3]);
+        firstArg = 4;
+    }
+   
+    // (x1, y1, x2, y2)
+    else if (argc > 5)
+    {
+        v1 = Vector2(dAtof(argv[2]), dAtof(argv[3]));
+        v2 = Vector2(dAtof(argv[4]), dAtof(argv[5]));
+        firstArg = 6;
+    }
+   
+    // Invalid
+    else
+    {
+        Con::warnf("CompositeSprite::pickArea() - Invalid number of parameters!");
+        return NULL;
+    }
+
+    // Fetch the render transform.
+    const b2Transform& renderTransform = object->getRenderTransform();
+    
+    // Translate into local space.
+    v1 -= renderTransform.p;
+    v2 -= renderTransform.p;
+
+    // Calculate normalized AABB.
+    b2AABB aabb;
+    aabb.lowerBound.x = getMin( v1.x, v2.x );
+    aabb.lowerBound.y = getMin( v1.y, v2.y );
+    aabb.upperBound.x = getMax( v1.x, v2.x );
+    aabb.upperBound.y = getMax( v1.y, v2.y );
+
+    // Rotate the AABB into local space.
+    CoreMath::mRotateAABB( aabb, -renderTransform.q.GetAngle(), aabb );
+
+    // Perform query.
+    pSpriteBatchQuery->renderQueryArea( aabb );
+
+    // Fetch result count.
+    const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
+
+    // Finish if no results.
+    if (resultCount == 0 )
+        return NULL;
+
+    // Fetch results.
+    typeSpriteBatchQueryResultVector& queryResults = pSpriteBatchQuery->getQueryResults();
+
+    // Set Max Buffer Size.
+    const U32 maxBufferSize = 4096;
+
+    // Create Returnable Buffer.
+    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
+
+    // Set Buffer Counter.
+    U32 bufferCount = 0;
+
+    // Add picked objects.
+    for ( U32 n = 0; n < resultCount; n++ )
+    {
+        // Output Object ID.
+        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSpriteBatchItem->getBatchId() );
+
+        // Finish early if we run out of buffer space.
+        if ( bufferCount >= maxBufferSize )
+        {
+            // Warn.
+            Con::warnf("CompositeSprite::pickArea() - Too many items picked to return to scripts!");
+            break;
+        }
+    }
+
+    // Clear sprite batch query.
+    pSpriteBatchQuery->clearQuery();
+
+    // Return buffer.
+    return pBuffer;
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(CompositeSprite, pickRay, const char*, 4, 6,  "(startx/y, endx/y) Picks sprites intersecting the specified ray with optional group/layer masks.\n"
+                                                            "@param startx/y The coordinates of the start point as either (\"x y\") or (x,y)\n"
+                                                            "@param endx/y The coordinates of the end point as either (\"x y\") or (x,y)\n"
+                                                            "@return Returns list of sprite Ids")
+{
+    // Fetch sprite batch query and clear results.
+    SpriteBatchQuery* pSpriteBatchQuery = object->getSpriteBatchQuery( true );
+
+    // Is the sprite batch query available?
+    if ( pSpriteBatchQuery == NULL )
+    {
+        // No, so warn.
+        Con::warnf( "CompositeSprite::pickRay() - Cannot pick sprites if clipping mode is off." );
+
+        // Return nothing.
+        return NULL;
+    }
+
+    // Upper left and lower right bound.
+    Vector2 v1, v2;
+
+    // The index of the first optional parameter.
+    U32 firstArg;
+
+    // Grab the number of elements in the first two parameters.
+    U32 elementCount1 = Utility::mGetStringElementCount(argv[2]);
+    U32 elementCount2 = 1;
+    if (argc > 3)
+        elementCount2 = Utility::mGetStringElementCount(argv[3]);
+
+    // ("x1 y1 x2 y2")
+    if ((elementCount1 == 4) && (argc < 9))
+    {
+        v1 = Utility::mGetStringElementVector(argv[2]);
+        v2 = Utility::mGetStringElementVector(argv[2], 2);
+        firstArg = 3;
+    }
+   
+    // ("x1 y1", "x2 y2")
+    else if ((elementCount1 == 2) && (elementCount2 == 2) && (argc > 3) && (argc < 10))
+    {
+        v1 = Utility::mGetStringElementVector(argv[2]);
+        v2 = Utility::mGetStringElementVector(argv[3]);
+        firstArg = 4;
+    }
+   
+    // (x1, y1, x2, y2)
+    else if (argc > 5)
+    {
+        v1 = Vector2(dAtof(argv[2]), dAtof(argv[3]));
+        v2 = Vector2(dAtof(argv[4]), dAtof(argv[5]));
+        firstArg = 6;
+    }
+   
+    // Invalid
+    else
+    {
+        Con::warnf("CompositeSprite::pickRay() - Invalid number of parameters!");
+        return NULL;
+    }
+
+    // Fetch the render transform.
+    const b2Transform& renderTransform = object->getRenderTransform();
+
+    // Transform into local space.
+    v1 = b2MulT( renderTransform, v1 );
+    v2 = b2MulT( renderTransform, v2 );
+
+    // Perform query.
+    pSpriteBatchQuery->renderQueryRay( v1, v2 );
+
+    // Sanity!
+    AssertFatal( pSpriteBatchQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );
+
+    // Fetch result count.
+    const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
+
+    // Finish if no results.
+    if (resultCount == 0 )
+        return NULL;
+
+    // Sort ray-cast result.
+    pSpriteBatchQuery->sortRaycastQueryResult();
+
+    // Fetch results.
+    typeSpriteBatchQueryResultVector& queryResults = pSpriteBatchQuery->getQueryResults();
+
+    // Set Max Buffer Size.
+    const U32 maxBufferSize = 4096;
+
+    // Create Returnable Buffer.
+    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
+
+    // Set Buffer Counter.
+    U32 bufferCount = 0;
+
+    // Add Picked Objects to List.
+    for ( U32 n = 0; n < resultCount; n++ )
+    {
+        // Output Object ID.
+        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSpriteBatchItem->getBatchId() );
+
+        // Finish early if we run out of buffer space.
+        if ( bufferCount >= maxBufferSize )
+        {
+            // Warn.
+            Con::warnf("CompositeSprite::pickRay() - Too many items picked to return to scripts!");
+            break;
+        }
+    }
+
+    // Clear sprite batch query.
+    pSpriteBatchQuery->clearQuery();
+
+    // Return buffer.
+    return pBuffer;
+}

@@ -87,7 +87,7 @@ function MoveToToy::createBackground( %this )
     %object.Image = "ToyAssets:highlightBackground";
     
     // Set the blend color.
-    %object.BlendColor = Bisque;
+    %object.BlendColor = SlateGray;
             
     // Add the sprite to the scene.
     SandboxScene.add( %object );    
@@ -169,6 +169,9 @@ package MoveToToyPackage
 
 function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
 {
+    // Call parent.
+    Parent::onTouchDown(%this, %touchID, %worldPosition );
+    
     // Set the target to the touched position.
     MoveToToy.TargetObject.Position = %worldPosition;
     
@@ -180,6 +183,9 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
 
 function SandboxWindow::onTouchMoved(%this, %touchID, %worldPosition)
 {
+    // Call parent.
+    Parent::onTouchMoved(%this, %touchID, %worldPosition );
+    
     // Finish if not tracking the mouse.
     if ( !MoveToToy.trackMouse )
         return;

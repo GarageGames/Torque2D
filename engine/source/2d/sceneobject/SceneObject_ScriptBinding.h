@@ -514,24 +514,6 @@ ConsoleMethod(SceneObject, getPosition, const char*, 2, 2, "() Gets the object's
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getPositionX, F32, 2, 2, "() Gets the object's x position.\n"
-                                                       "@return (float x) The horizontal position of the object")
-{
-    // Get Position X-Component.
-    return object->getPosition().x;
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(SceneObject, getPositionY, F32, 2, 2, "() Gets the object's y position.\n"
-                                                       "@return (float y) The vertical position of the object")
-{
-    // Get Position Y-Component.
-    return object->getPosition().y;
-}
-
-//-----------------------------------------------------------------------------
-
 ConsoleMethod(SceneObject, getRenderPosition, const char*, 2, 2, "() Gets the current render position.\n"
                                                                     "@return (float x/float y) The x and y (horizontal and vertical) render position of the object.")
 {
@@ -1080,7 +1062,8 @@ ConsoleMethod(SceneObject, setCollisionMasks, void, 3, 4,    "(groupMask, [layer
     const U32 layerMask = (argc > 3) ? dAtoi(argv[3]) : MASK_ALL;
 
     // Set Collision Masks.
-    object->setCollisionMasks( groupMask, layerMask );
+    object->setCollisionGroupMask( groupMask );
+    object->setCollisionLayerMask( layerMask );
 }
 
 //-----------------------------------------------------------------------------
@@ -1125,121 +1108,121 @@ ConsoleMethod(SceneObject, setCollisionAgainst, void, 3, 4, "(SceneObject object
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(SceneObject, setCollisionLayers, void, 3, 2 + MASK_BITCOUNT, "(layers$) - Sets the collision layers(s).\n"
-                                                                                  "@param layers A list of layers numbers to collide with.\n"
+                                                                                  "@param layers A list of layers to collide with.\n"
                                                       "@return No return value.")
 {
-   // The mask.
-   U32 mask = 0;
+    // The mask.
+    U32 mask = 0;
 
-   // Grab the element count of the first parameter.
-   const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+    // Grab the element count of the first parameter.
+    const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
 
-   // Make sure we get at least one number.
-   if (elementCount < 1)
-   {
-      object->setCollisionLayers(0);
-      return;
-   }
+    // Make sure we get at least one number.
+    if (elementCount < 1)
+    {
+        object->setCollisionLayerMask(MASK_ALL);
+        return;
+    }
 
-   // Space separated list.
-   if (argc == 3)
-   {
-      // Convert the string to a mask.
-      for (U32 i = 0; i < elementCount; i++)
-      {
-         S32 bit = dAtoi(Utility::mGetStringElement(argv[2], i));
+    // Space separated list.
+    if (argc == 3)
+    {
+        // Convert the string to a mask.
+        for (U32 i = 0; i < elementCount; i++)
+        {
+            S32 bit = dAtoi(Utility::mGetStringElement(argv[2], i));
          
-         // Make sure the group is valid.
-         if ((bit < 0) || (bit >= MASK_BITCOUNT))
-         {
+            // Make sure the group is valid.
+            if ((bit < 0) || (bit >= MASK_BITCOUNT))
+            {
             Con::warnf("SceneObject::setCollisionLayers() - Invalid layer specified (%d); skipped!", bit);
             continue;
-         }
+            }
          
-         mask |= (1 << bit);
-      }
-   }
+            mask |= (1 << bit);
+        }
+    }
 
-   // Comma separated list.
-   else
-   {
-      // Convert the list to a mask.
-      for (U32 i = 2; i < (U32)argc; i++)
-      {
-         S32 bit = dAtoi(argv[i]);
+    // Comma separated list.
+    else
+    {
+        // Convert the list to a mask.
+        for (U32 i = 2; i < (U32)argc; i++)
+        {
+            S32 bit = dAtoi(argv[i]);
          
-         // Make sure the group is valid.
-         if ((bit < 0) || (bit >= MASK_BITCOUNT))
-         {
+            // Make sure the group is valid.
+            if ((bit < 0) || (bit >= MASK_BITCOUNT))
+            {
             Con::warnf("SceneObject::setCollisionLayers() - Invalid layer specified (%d); skipped!", bit);
             continue;
-         }
+            }
 
-         mask |= (1 << bit);
-      }
-   }
-   // Set Collision Groups.
-   object->setCollisionLayers(mask);
+            mask |= (1 << bit);
+        }
+    }
+    // Set Collision Layers
+    object->setCollisionLayerMask(mask);
 }
 
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(SceneObject, setCollisionGroups, void, 3, 2 + MASK_BITCOUNT, "(groups$) - Sets the collision group(s).\n"
-                                                                                  "@param groups A list of collision group numbers to collide with.\n"
+                                                                                  "@param groups A list of collision groups to collide with.\n"
                                                                                 "@return No return value.")
 {
-   // The mask.
-   U32 mask = 0;
+    // The mask.
+    U32 mask = 0;
 
-   // Grab the element count of the first parameter.
-   const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+    // Grab the element count of the first parameter.
+    const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
 
-   // Make sure we get at least one number.
-   if (elementCount < 1)
-   {
-      object->setCollisionGroups(0);
-      return;
-   }
+    // Make sure we get at least one number.
+    if (elementCount < 1)
+    {
+        object->setCollisionGroupMask(MASK_ALL);
+        return;
+    }
 
-   // Space separated list.
-   if (argc == 3)
-   {
-      // Convert the string to a mask.
-      for (U32 i = 0; i < elementCount; i++)
-      {
-         S32 bit = dAtoi(Utility::mGetStringElement(argv[2], i));
+    // Space separated list.
+    if (argc == 3)
+    {
+        // Convert the string to a mask.
+        for (U32 i = 0; i < elementCount; i++)
+        {
+            S32 bit = dAtoi(Utility::mGetStringElement(argv[2], i));
          
-         // Make sure the group is valid.
-         if ((bit < 0) || (bit >= MASK_BITCOUNT))
-         {
+            // Make sure the group is valid.
+            if ((bit < 0) || (bit >= MASK_BITCOUNT))
+            {
             Con::warnf("SceneObject::setCollisionGroups() - Invalid group specified (%d); skipped!", bit);
             continue;
-         }
+            }
          
-         mask |= (1 << bit);
-      }
-   }
+            mask |= (1 << bit);
+        }
+    }
 
-   // Comma separated list.
-   else
-   {
-      // Convert the list to a mask.
-      for (U32 i = 2; i < (U32)argc; i++)
-      {
-         S32 bit = dAtoi(argv[i]);
+    // Comma separated list.
+    else
+    {
+        // Convert the list to a mask.
+        for (U32 i = 2; i < (U32)argc; i++)
+        {
+            S32 bit = dAtoi(argv[i]);
          
-         // Make sure the group is valid.
-         if ((bit < 0) || (bit >= MASK_BITCOUNT))
-         {
+            // Make sure the group is valid.
+            if ((bit < 0) || (bit >= MASK_BITCOUNT))
+            {
             Con::warnf("SceneObject::setCollisionGroups() - Invalid group specified (%d); skipped!", bit);
             continue;
-         }
+            }
 
-         mask |= (1 << bit);
-      }
-   }
-   // Set Collision Groups.
-   object->setCollisionGroups(mask);
+            mask |= (1 << bit);
+        }
+    }
+    // Set Collision Groups.
+    object->setCollisionGroupMask(mask);
 }
 
 //-----------------------------------------------------------------------------
@@ -1247,23 +1230,23 @@ ConsoleMethod(SceneObject, setCollisionGroups, void, 3, 2 + MASK_BITCOUNT, "(gro
 ConsoleMethod(SceneObject, getCollisionLayers, const char*, 2, 2, "() - Gets the collision layers.\n"
                                                                      "@return (collisionLayers) A list of collision layers.")
 {
-   U32 mask = object->getCollisionLayerMask();
+    U32 mask = object->getCollisionLayerMask();
 
-   bool first = true;
-   char* bits = Con::getReturnBuffer(128);
-   bits[0] = '\0';
-   for (S32 i = 0; i < MASK_BITCOUNT; i++)
-   {
-      if (mask & BIT(i))
-      {
-         char bit[4];
-         dSprintf(bit, 4, "%s%d", first ? "" : " ", i);
-         first = false;
-         dStrcat(bits, bit);
-      }
-   }
+    bool first = true;
+    char* bits = Con::getReturnBuffer(128);
+    bits[0] = '\0';
+    for (S32 i = 0; i < MASK_BITCOUNT; i++)
+    {
+        if (mask & BIT(i))
+        {
+            char bit[4];
+            dSprintf(bit, 4, "%s%d", first ? "" : " ", i);
+            first = false;
+            dStrcat(bits, bit);
+        }
+    }
 
-   return bits;
+    return bits;
 }
 
 //-----------------------------------------------------------------------------
@@ -1271,23 +1254,23 @@ ConsoleMethod(SceneObject, getCollisionLayers, const char*, 2, 2, "() - Gets the
 ConsoleMethod(SceneObject, getCollisionGroups, const char*, 2, 2, "() - Gets the collision groups.\n"
                                                                      "@return (collisionGroups) A list of collision groups.")
 {
-   U32 mask = object->getCollisionGroupMask();
+    U32 mask = object->getCollisionGroupMask();
 
-   bool first = true;
-   char* bits = Con::getReturnBuffer(128);
-   bits[0] = '\0';
-   for (S32 i = 0; i < MASK_BITCOUNT; i++)
-   {
-      if (mask & BIT(i))
-      {
-         char bit[4];
-         dSprintf(bit, 4, "%s%d", first ? "" : " ", i);
-         first = false;
-         dStrcat(bits, bit);
-      }
-   }
+    bool first = true;
+    char* bits = Con::getReturnBuffer(128);
+    bits[0] = '\0';
+    for (S32 i = 0; i < MASK_BITCOUNT; i++)
+    {
+        if (mask & BIT(i))
+        {
+            char bit[4];
+            dSprintf(bit, 4, "%s%d", first ? "" : " ", i);
+            first = false;
+            dStrcat(bits, bit);
+        }
+    }
 
-   return bits;
+    return bits;
 }
 
 //-----------------------------------------------------------------------------
@@ -2380,13 +2363,23 @@ ConsoleMethod( SceneObject, createPolygonCollisionShape, S32, 3, 3,  "(localPoin
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, createPolygonBoxCollisionShape, S32, 3, 7,  "(width, height, [localCentroidX, localCentroidY], [angle]) Creates a polygon box collision shape.\n"
+ConsoleMethod( SceneObject, createPolygonBoxCollisionShape, S32, 2, 7,  "(width, height, [localCentroidX, localCentroidY], [angle]) Creates a polygon box collision shape.\n"
                                                                             "@param width The width of the box."
                                                                             "@param height The height of the box."
                                                                             "@param localCentroidX/Y The local position of the box centroid."
                                                                             "@param angle The angle of the box."
                                                                             "@return (int shapeIndex) The index of the collision shape or (-1) if not created.")
 {
+    // Were any dimensions specified?
+    if( argc == 2 )
+    {
+        // No, so fetch the objects size.
+        const Vector2& size = object->getSize();
+
+        // Create a box surrounding the object.
+        return object->createPolygonBoxCollisionShape( size.x, size.y );
+    }
+
     // Width and height.
     const U32 widthHeightElementCount = Utility::mGetStringElementCount(argv[2]);
 
@@ -3678,18 +3671,6 @@ ConsoleMethod(SceneObject, detachGui, void, 2, 2, "() - Detach any GUI Control.\
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getAttachedToPath, S32, 2, 2, "() - Gets the Path that this object is attached to.\n"
-                                                            "@return (Path path) The path that this object is attached to, or 0 if it is not attached to a path.")
-{
-   SceneObject* path = object->getAttachedToPath();
-   if (path)
-      return path->getId();
-   
-   return NULL;
-}
-
-//-----------------------------------------------------------------------------
-
 ConsoleMethod(SceneObject, copyFrom, bool, 3, 4, "(SceneObject object, [copyDynamicFields? = false]) - Copies one scene object from another scene object.\n"
                                                     "The object being copied to needs to be of the same class as the object being copied from.\n"
                                                     "@param object The SceneObject to copy this object to.\n"
@@ -3718,6 +3699,26 @@ ConsoleMethod(SceneObject, copyFrom, bool, 3, 4, "(SceneObject object, [copyDyna
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(SceneObject, setPickingAllowed, void, 3, 3,   "(bool pickingAllowed) - Sets whether picking is allowed or not.\n"
+                                                            "@param pickingAllowed Whether picking is allowed or not.\n"
+                                                            "@return No return Value.")
+{
+    // Fetch flag.
+    const bool pickingAllowed = dAtob(argv[2]);
+
+    object->setPickingAllowed( pickingAllowed );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SceneObject, getPickingAllowed, bool, 2, 2,   "() - Gets whether picking is allowed or not.\n"
+                                                            "@return Whether picking is allowed or not.")
+{
+    return object->getPickingAllowed();
+}
+
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(SceneObject, safeDelete, void, 2, 2, "() - Safely deletes object.\n"
                                                                  "@return No return Value.")
 {
@@ -3725,12 +3726,3 @@ ConsoleMethod(SceneObject, safeDelete, void, 2, 2, "() - Safely deletes object.\
     object->safeDelete();
 }
 
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(SceneObject, behavior, S32, 3, 3, "(string behaviorName) - Gets the behavior instance ID off of the object based on the behavior name passed.\n"
-                                                   "@param behaviorName The name of the behavior you want to get the instance ID of.\n"
-                                                   "@return (integer behaviorID) The id of the behavior instance.")
-{
-   BehaviorInstance *inst = object->behavior(argv[2]);
-   return inst ? inst->getId() : 0;
-}

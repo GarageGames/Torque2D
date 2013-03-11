@@ -50,8 +50,10 @@ $pref::Audio::musicVolume = 1.0;
 $pref::T2D::ParticlePlayerEmissionRateScale = 1.0;
 $pref::T2D::ParticlePlayerSizeScale = 1.0;
 $pref::T2D::ParticlePlayerForceScale = 1.0;
+$pref::T2D::ParticlePlayerTimeScale = 1.0;
 $pref::T2D::warnFileDeprecated = 1;
 $pref::T2D::warnSceneOccupancy = 1;
+$pref::T2D::imageAssetGlobalFilterMode = Bilinear;
 
 /// Video
 $pref::Video::appliedPref = 0;
