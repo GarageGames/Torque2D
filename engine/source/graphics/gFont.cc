@@ -413,7 +413,7 @@ Resource<GFont> GFont::create(const char *faceName, U32 size, const char *cacheD
    char buf[256];
    Resource<GFont> ret;
     
-    dSprintf(buf, sizeof(buf), "%s/%s %d.fnt", cacheDirectory, faceName, size, getFontCharSetName(charset));
+    dSprintf(buf, sizeof(buf), "%s/%s %d (%s).fnt", cacheDirectory, faceName, size, getFontCharSetName(charset));
     
     ret = ResourceManager->load(buf);
     if(bool(ret))
