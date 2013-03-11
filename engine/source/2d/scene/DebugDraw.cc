@@ -28,7 +28,7 @@
 
 //-----------------------------------------------------------------------------
 
-void DebugDraw::DrawAABB( const b2AABB& aabb )
+void DebugDraw::DrawAABB( const b2AABB& aabb, const ColorF& color )
 {
     // Debug Profiling.
     PROFILE_SCOPE(DebugDraw_DrawAABB);
@@ -40,28 +40,28 @@ void DebugDraw::DrawAABB( const b2AABB& aabb )
     aabbVertex[2].Set(aabb.upperBound.x, aabb.upperBound.y);
     aabbVertex[3].Set(aabb.lowerBound.x, aabb.upperBound.y);
 
-    DrawPolygon( aabbVertex, 4, b2Color(0.7f, 0.7f, 0.9f) );
+    DrawPolygon( aabbVertex, 4, color );
 }
 
 //-----------------------------------------------------------------------------
 
-void DebugDraw::DrawOOBB( const b2Vec2* pOOBB )
+void DebugDraw::DrawOOBB( const b2Vec2* pOOBB, const ColorF& color )
 {
     // Debug Profiling.
     PROFILE_SCOPE(DebugDraw_DrawOOBB);
 
-    DrawPolygon( pOOBB, 4, b2Color(0.9f, 0.9f, 1.0f) );
+    DrawPolygon( pOOBB, 4, color );
 }
 
 //-----------------------------------------------------------------------------
 
-void DebugDraw::DrawAsleep( const b2Vec2* pOOBB )
+void DebugDraw::DrawAsleep( const b2Vec2* pOOBB, const ColorF& color )
 {
     // Debug Profiling.
     PROFILE_SCOPE(DebugDraw_DrawAsleep);
 
-    DrawSegment( pOOBB[0], pOOBB[2], b2Color( 0.0f, 1.0f, 0.0f ) );
-    DrawSegment( pOOBB[1], pOOBB[3], b2Color( 0.0f, 1.0f, 0.0f ) );
+    DrawSegment( pOOBB[0], pOOBB[2], color );
+    DrawSegment( pOOBB[1], pOOBB[3], color );
 }
 
 //-----------------------------------------------------------------------------
@@ -77,27 +77,27 @@ void DebugDraw::DrawCollisionShapes( const b2Transform& xf, b2Body* pBody )
         // Inactive fixture.
         if ( pBody->IsActive() == false )
         {
-            DrawShape(pFixture, xf, b2Color(0.5f, 0.5f, 0.5f));
+            DrawShape(pFixture, xf, ColorF(0.5f, 0.5f, 0.5f));
         }
         // Active static fixture.
         else if ( pBody->GetType() == b2_staticBody )
         {
-            DrawShape(pFixture, xf, b2Color(0.5f, 0.9f, 0.5f));
+            DrawShape(pFixture, xf, ColorF(0.5f, 0.9f, 0.5f));
         }
         // Active kinematic fixture.
         else if ( pBody->GetType() == b2_kinematicBody )
         {
-            DrawShape(pFixture, xf, b2Color(0.5f, 0.5f, 0.9f));
+            DrawShape(pFixture, xf, ColorF(0.5f, 0.5f, 0.9f));
         }
         // Active, asleep dynamic fixture.
         else if ( pBody->IsAwake() == false )
         {
-            DrawShape(pFixture, xf, b2Color(0.6f, 0.6f, 0.2f));
+            DrawShape(pFixture, xf, ColorF(0.6f, 0.6f, 0.2f));
         }
         // Active, awake dynamic fixture.
         else
         {
-            DrawShape(pFixture, xf, b2Color(0.9f, 0.9f, 0.2f));
+            DrawShape(pFixture, xf, ColorF(0.9f, 0.9f, 0.2f));
         }
     }
 }
@@ -124,13 +124,13 @@ void DebugDraw::DrawSortPoint( const b2Vec2& worldPosition, const b2Vec2& size, 
     worldSortPoint[2].Set( worldPoint.x - markerSize, worldPoint.y + markerSize );
     worldSortPoint[3].Set( worldPoint.x + markerSize, worldPoint.y - markerSize );
 
-    DrawSegment( worldSortPoint[0], worldSortPoint[1], b2Color( 0.0f, 1.0f, 0.8f ) );
-    DrawSegment( worldSortPoint[2], worldSortPoint[3], b2Color( 0.0f, 1.0f, 0.8f ) );
+    DrawSegment( worldSortPoint[0], worldSortPoint[1], ColorF( 0.0f, 1.0f, 0.8f ) );
+    DrawSegment( worldSortPoint[2], worldSortPoint[3], ColorF( 0.0f, 1.0f, 0.8f ) );
 }
 
 //-----------------------------------------------------------------------------
 
-void DebugDraw::DrawShape( b2Fixture* fixture, const b2Transform& xf, const b2Color& color )
+void DebugDraw::DrawShape( b2Fixture* fixture, const b2Transform& xf, const ColorF& color )
 {
     // Debug Profiling.
     PROFILE_SCOPE(DebugDraw_DrawShape);
@@ -216,7 +216,7 @@ void DebugDraw::DrawJoints( b2World* pWorld )
         b2Vec2 p1 = pJoint->GetAnchorA();
         b2Vec2 p2 = pJoint->GetAnchorB();
 
-        b2Color color( 0.5f, 0.8f, 0.8f );
+        ColorF color( 0.5f, 0.8f, 0.8f );
 
         switch ( pJoint->GetType() )
         {
@@ -259,12 +259,12 @@ void DebugDraw::DrawJoints( b2World* pWorld )
 
 //-----------------------------------------------------------------------------
 
-void DebugDraw::DrawPolygon( const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
+void DebugDraw::DrawPolygon( const b2Vec2* vertices, int32 vertexCount, const ColorF& color )
 {
     // Debug Profiling.
     PROFILE_SCOPE(DebugDraw_DrawPolygon);
 
-    glColor3f(color.r, color.g, color.b);
+    glColor3f(color.red, color.green, color.blue);
     glBegin(GL_LINE_LOOP);
     for (int32 i = 0; i < vertexCount; ++i)
     {
@@ -275,14 +275,14 @@ void DebugDraw::DrawPolygon( const b2Vec2* vertices, int32 vertexCount, const b2
 
 //-----------------------------------------------------------------------------
 
-void DebugDraw::DrawSolidPolygon( const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
+void DebugDraw::DrawSolidPolygon( const b2Vec2* vertices, int32 vertexCount, const ColorF& color )
 {
     // Debug Profiling.
     PROFILE_SCOPE(DebugDraw_DrawSolidPolygon);
 
     glEnable(GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glColor4f(0.5f * color.r, 0.5f * color.g, 0.5f * color.b, 0.15f);
+    glColor4f(0.5f * color.red, 0.5f * color.green, 0.5f * color.blue, 0.15f);
     glBegin(GL_TRIANGLE_FAN);
     for (int32 i = 0; i < vertexCount; ++i)
     {
@@ -291,7 +291,7 @@ void DebugDraw::DrawSolidPolygon( const b2Vec2* vertices, int32 vertexCount, con
     glEnd();
     glDisable(GL_BLEND);
 
-    glColor4f(color.r, color.g, color.b, 1.0f);
+    glColor4f(color.red, color.green, color.blue, 1.0f);
     glBegin(GL_LINE_LOOP);
     for (int32 i = 0; i < vertexCount; ++i)
     {
@@ -302,7 +302,7 @@ void DebugDraw::DrawSolidPolygon( const b2Vec2* vertices, int32 vertexCount, con
 
 //-----------------------------------------------------------------------------
 
-void DebugDraw::DrawCircle( const b2Vec2& center, float32 radius, const b2Color& color)
+void DebugDraw::DrawCircle( const b2Vec2& center, float32 radius, const ColorF& color )
 {
     // Debug Profiling.
     PROFILE_SCOPE(DebugDraw_DrawCircle);
@@ -310,7 +310,7 @@ void DebugDraw::DrawCircle( const b2Vec2& center, float32 radius, const b2Color&
     const float32 k_segments = 16.0f;
     const float32 k_increment = 2.0f * b2_pi / k_segments;
     float32 theta = 0.0f;
-    glColor3f(color.r, color.g, color.b);
+    glColor3f(color.red, color.green, color.blue);
     glBegin(GL_LINE_LOOP);
     for (int32 i = 0; i < k_segments; ++i)
     {
@@ -323,7 +323,7 @@ void DebugDraw::DrawCircle( const b2Vec2& center, float32 radius, const b2Color&
     
 //-----------------------------------------------------------------------------
 
-void DebugDraw::DrawSolidCircle( const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color)
+void DebugDraw::DrawSolidCircle( const b2Vec2& center, float32 radius, const b2Vec2& axis, const ColorF& color )
 {
     // Debug Profiling.
     PROFILE_SCOPE(DebugDraw_DrawSolidCircle);
@@ -333,7 +333,7 @@ void DebugDraw::DrawSolidCircle( const b2Vec2& center, float32 radius, const b2V
     float32 theta = 0.0f;
     glEnable(GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glColor4f(0.5f * color.r, 0.5f * color.g, 0.5f * color.b, 0.15f);
+    glColor4f(0.5f * color.red, 0.5f * color.green, 0.5f * color.blue, 0.15f);
     glBegin(GL_TRIANGLE_FAN);
     for (int32 i = 0; i < k_segments; ++i)
     {
@@ -345,7 +345,7 @@ void DebugDraw::DrawSolidCircle( const b2Vec2& center, float32 radius, const b2V
     glDisable(GL_BLEND);
 
     theta = 0.0f;
-    glColor4f(color.r, color.g, color.b, 1.0f);
+    glColor4f(color.red, color.green, color.blue, 1.0f);
     glBegin(GL_LINE_LOOP);
     for (int32 i = 0; i < k_segments; ++i)
     {
@@ -364,9 +364,9 @@ void DebugDraw::DrawSolidCircle( const b2Vec2& center, float32 radius, const b2V
     
 //-----------------------------------------------------------------------------
 
-void DebugDraw::DrawSegment( const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
+void DebugDraw::DrawSegment( const b2Vec2& p1, const b2Vec2& p2, const ColorF& color )
 {
-    glColor3f(color.r, color.g, color.b);
+    glColor3f(color.red, color.green, color.blue);
     glBegin(GL_LINES);
     glVertex2f(p1.x, p1.y);
     glVertex2f(p2.x, p2.y);
@@ -375,7 +375,7 @@ void DebugDraw::DrawSegment( const b2Vec2& p1, const b2Vec2& p2, const b2Color& 
 
 //-----------------------------------------------------------------------------
 
-void DebugDraw::DrawTransform(const b2Transform& xf)
+void DebugDraw::DrawTransform( const b2Transform& xf )
 {
     b2Vec2 p1 = xf.p, p2;
     const float32 k_axisScale = 0.4f;
@@ -396,11 +396,11 @@ void DebugDraw::DrawTransform(const b2Transform& xf)
 
 //-----------------------------------------------------------------------------
 
-void DebugDraw::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
+void DebugDraw::DrawPoint( const b2Vec2& p, float32 size, const ColorF& color )
 {
     glPointSize(size);
     glBegin(GL_POINTS);
-    glColor3f(color.r, color.g, color.b);
+    glColor3f(color.red, color.green, color.blue);
     glVertex2f(p.x, p.y);
     glEnd();
     glPointSize(1.0f);

@@ -97,7 +97,8 @@ ParticlePlayer::ParticlePlayer() :
     mEmissionRateScale = Con::getFloatVariable( PARTICLE_PLAYER_EMISSION_RATE_SCALE, 1.0f );
     mSizeScale         = Con::getFloatVariable( PARTICLE_PLAYER_SIZE_SCALE, 1.0f );
     mForceScale        = Con::getFloatVariable( PARTICLE_PLAYER_FORCE_SCALE, 1.0f );
-
+    mTimeScale         = Con::getFloatVariable( PARTICLE_PLAYER_TIME_SCALE, 1.0f );
+     
     // Register for refresh notifications.
     mParticleAsset.registerRefreshNotify( this );
 }
@@ -123,6 +124,7 @@ void ParticlePlayer::initPersistFields()
     addProtectedField( "EmissionRateScale", TypeF32, Offset(mEmissionRateScale, ParticlePlayer), &defaultProtectedSetFn, &defaultProtectedGetFn, &writeEmissionRateScale, "" );
     addProtectedField( "SizeScale", TypeF32, Offset(mSizeScale, ParticlePlayer), &defaultProtectedSetFn, &defaultProtectedGetFn, &writeSizeScale, "" );
     addProtectedField( "ForceScale", TypeF32, Offset(mForceScale, ParticlePlayer), &defaultProtectedSetFn, &defaultProtectedGetFn, &writeForceScale, "" );
+    addProtectedField( "TimeScale", TypeF32, Offset(mTimeScale, ParticlePlayer), &defaultProtectedSetFn, &defaultProtectedGetFn, &writeTimeScale, "" );
 }
 
 //------------------------------------------------------------------------------
@@ -145,6 +147,7 @@ void ParticlePlayer::copyTo(SimObject* object)
    pParticlePlayer->setEmissionRateScale( getEmissionRateScale() );
    pParticlePlayer->setSizeScale( getSizeScale() );
    pParticlePlayer->setForceScale( getForceScale() );
+   pParticlePlayer->setTimeScale( getTimeScale() );
 }
 
 //------------------------------------------------------------------------------
@@ -265,6 +268,9 @@ void ParticlePlayer::integrateObject( const F32 totalTime, const F32 elapsedTime
             mEmitters.size() == 0 )
         return;
 
+    // Calculate scaled time.
+    const F32 scaledTime = elapsedTime * mTimeScale;
+
     // Fetch particle asset.
     ParticleAsset* pParticleAsset = mParticleAsset;
 
@@ -279,7 +285,7 @@ void ParticlePlayer::integrateObject( const F32 totalTime, const F32 elapsedTime
     if ( !mCameraIdle )
     {
         // No, so update the particle player age.
-        mAge += elapsedTime;
+        mAge += scaledTime;
 
         // Iterate the emitters.
         for( typeEmitterVector::iterator emitterItr = mEmitters.begin(); emitterItr != mEmitters.end(); ++emitterItr )
@@ -300,7 +306,7 @@ void ParticlePlayer::integrateObject( const F32 totalTime, const F32 elapsedTime
             while ( pParticleNode != pParticleNodeHead )
             {
                 // Update the particle age.
-                pParticleNode->mParticleAge += elapsedTime;
+                pParticleNode->mParticleAge += scaledTime;
 
                 // Has the particle expired?
                 // NOTE:-   If we're in single-particle mode then the particle lives as long as the particle player does.
@@ -317,7 +323,7 @@ void ParticlePlayer::integrateObject( const F32 totalTime, const F32 elapsedTime
                 else
                 {
                     // No, so integrate the particle.
-                    integrateParticle( pEmitterNode, pParticleNode, pParticleNode->mParticleAge / pParticleNode->mParticleLifetime, elapsedTime );
+                    integrateParticle( pEmitterNode, pParticleNode, pParticleNode->mParticleAge / pParticleNode->mParticleLifetime, scaledTime );
 
                     // Move to the next particle node.
                     pParticleNode = pParticleNode->mNextNode;
@@ -347,7 +353,7 @@ void ParticlePlayer::integrateObject( const F32 totalTime, const F32 elapsedTime
                 //
                 // NOTE:    We need to do this if there's an emission target but the time-integration is so small
                 //          that rounding results in no emission.  Downside to good FPS!
-                pEmitterNode->setTimeSinceLastGeneration( pEmitterNode->getTimeSinceLastGeneration() + elapsedTime );
+                pEmitterNode->setTimeSinceLastGeneration( pEmitterNode->getTimeSinceLastGeneration() + scaledTime );
 
                 // Fetch the particle player age.
                 const F32 particlePlayerAge = mAge;
@@ -705,7 +711,7 @@ void ParticlePlayer::sceneRenderOverlay( const SceneRenderState* sceneRenderStat
         return;
 
     // Draw camera pause distance.
-    pScene->mDebugDraw.DrawCircle( getRenderPosition(), mCameraIdleDistance, b2Color(1.0f, 1.0f, 0.0f ) );
+    pScene->mDebugDraw.DrawCircle( getRenderPosition(), mCameraIdleDistance, ColorF(1.0f, 1.0f, 0.0f ) );
 }
 
 //-----------------------------------------------------------------------------

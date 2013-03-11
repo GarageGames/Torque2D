@@ -223,6 +223,8 @@ protected:
     Vector2             mRenderPosition;
     U32                 mLastBatchTransformId;
 
+    U32                 mSpriteBatchQueryKey;
+
 public:
     SpriteBatchItem();
     virtual ~SpriteBatchItem();
@@ -282,6 +284,9 @@ public:
     inline void setDataObject( SimObject* pDataObject ) { mDataObject = pDataObject; }
     inline SimObject* getDataObject( void ) const { return mDataObject; }
 
+    inline void setSpriteBatchQueryKey( const U32 key ) { mSpriteBatchQueryKey = key; }
+    inline U32  getSpriteBatchQueryKey( void ) const { return mSpriteBatchQueryKey; }
+
     virtual void copyTo( SpriteBatchItem* pSpriteBatchItem ) const;
 
     void prepareRender( SceneRenderRequest* pSceneRenderRequest, const U32 batchTransformId );
@@ -294,8 +299,8 @@ protected:
     void updateLocalTransform( void );
     void updateWorldTransform( const U32 batchTransformId );
 
-    void onTamlCustomWrite( TamlPropertyAlias* pSpriteAlias );
-    void onTamlCustomRead( const TamlPropertyAlias* pSpriteAlias );
+    void onTamlCustomWrite( TamlCustomNode* pSpriteNode );
+    void onTamlCustomRead( const TamlCustomNode* pSpriteNode );
 };
 
 //------------------------------------------------------------------------------  

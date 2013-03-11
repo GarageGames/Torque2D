@@ -112,7 +112,7 @@ public:
         mAssetNameFrom = StringTable->EmptyString;
 
         // Is asset Id the correct format?
-        if ( StringUnit::getUnitCount( pAssetIdFrom, ASSET_SCOPE_SEPARATOR ) != 2 )
+        if ( StringUnit::getUnitCount( pAssetIdFrom, ASSET_SCOPE_TOKEN ) != 2 )
         {
             // No, so warn.
             Con::warnf( "TamlAssetDeclaredUpdateVisitor::setAssetIdFrom() - Cannot use asset Id '%s' as it is not the correct format.", pAssetIdFrom );
@@ -121,7 +121,7 @@ public:
 
         // Set asset Id.
         mAssetIdFrom = StringTable->insert( pAssetIdFrom );
-        mAssetNameFrom = StringTable->insert( StringUnit::getUnit( pAssetIdFrom, 1, ASSET_SCOPE_SEPARATOR ) );
+        mAssetNameFrom = StringTable->insert( StringUnit::getUnit( pAssetIdFrom, 1, ASSET_SCOPE_TOKEN ) );
     }
     StringTableEntry getAssetIdFrom( void ) const { return mAssetIdFrom; }
 
@@ -135,7 +135,7 @@ public:
         mAssetNameTo = StringTable->EmptyString;
 
         // Is asset Id the correct format?
-        if ( StringUnit::getUnitCount( pAssetIdTo, ASSET_SCOPE_SEPARATOR ) != 2 )
+        if ( StringUnit::getUnitCount( pAssetIdTo, ASSET_SCOPE_TOKEN ) != 2 )
         {
             // No, so warn.
             Con::warnf( "TamlAssetDeclaredUpdateVisitor::setAssetIdTo() - Cannot use asset Id '%s' as it is not the correct format.", pAssetIdTo );
@@ -144,7 +144,7 @@ public:
 
         // Set asset Id.
         mAssetIdTo = StringTable->insert( pAssetIdTo );
-        mAssetNameTo = StringTable->insert( StringUnit::getUnit( pAssetIdTo, 1, ASSET_SCOPE_SEPARATOR ) );
+        mAssetNameTo = StringTable->insert( StringUnit::getUnit( pAssetIdTo, 1, ASSET_SCOPE_TOKEN ) );
     }
     const char* getAssetIdTo( void ) const { return mAssetIdTo; }
 

@@ -84,8 +84,6 @@ private:
     U32                             mVersionId;
     U32                             mBuildId;
     bool                            mEnabled;
-    bool                            mPublished;
-    bool                            mPurchased;
     bool                            mSynchronized;
     bool                            mDeprecated;
     bool                            mCriticalMerge;
@@ -137,10 +135,6 @@ public:
     inline bool             getEnabled( void ) const                            { return mEnabled; }
     inline void             setSynchronized( const bool synchronized )          { if ( checkUnlocked() ) { mSynchronized = synchronized; } }
     inline bool             getSynchronized( void ) const                       { return mSynchronized; }
-    inline void             setPublished( const bool published )                { if ( checkUnlocked() ) { mPublished = published; } }
-    inline bool             getPublished( void ) const                          { return mPublished; }
-    inline void             setPurchased( const bool purchased )                { if ( checkUnlocked() ) { mPurchased = purchased; } }
-    inline bool             getPurchased( void ) const                          { return mPurchased; }
     inline void             setDeprecated( const bool deprecated )              { if ( checkUnlocked() ) { mDeprecated = deprecated; } }
     inline bool             getDeprecated( void ) const                         { return mDeprecated; }
     inline void             setCriticalMerge( const bool mergeCritical )        { if ( checkUnlocked() ) { mCriticalMerge = mergeCritical; } }
@@ -205,10 +199,6 @@ protected:
     static bool             writeBuildId( void* obj, StringTableEntry pFieldName )      { return static_cast<ModuleDefinition*>(obj)->getBuildId() != 0; }
     static bool             setEnabled(void* obj, const char* data)                     { static_cast<ModuleDefinition*>(obj)->setEnabled( dAtob(data) ); return false; }
     static bool             writeEnabled( void* obj, StringTableEntry pFieldName )      { return static_cast<ModuleDefinition*>(obj)->getEnabled() == false; }
-    static bool             setPublished(void* obj, const char* data)                   { static_cast<ModuleDefinition*>(obj)->setPublished( dAtob(data) ); return false; }
-    static bool             writePublished( void* obj, StringTableEntry pFieldName )    { return static_cast<ModuleDefinition*>(obj)->getPublished() == false; }
-    static bool             setPurchased(void* obj, const char* data)                   { static_cast<ModuleDefinition*>(obj)->setPurchased( dAtob(data) ); return false; }
-    static bool             writePurchased( void* obj, StringTableEntry pFieldName )    { return static_cast<ModuleDefinition*>(obj)->getPurchased() == true; }
     static bool             setSynchronized(void* obj, const char* data)                { static_cast<ModuleDefinition*>(obj)->setSynchronized( dAtob(data) ); return false; }
     static bool             writeSynchronized( void* obj, StringTableEntry pFieldName ) { return static_cast<ModuleDefinition*>(obj)->getSynchronized() == true; }
     static bool             setDeprecated(void* obj, const char* data)                  { static_cast<ModuleDefinition*>(obj)->setDeprecated( dAtob(data) ); return false; }

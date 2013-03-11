@@ -458,6 +458,9 @@ package DeathBallToyPackage
 
 function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
 {
+    // Call parent.
+    Parent::onTouchDown(%this, %touchID, %worldPosition );
+    
     %origin = Deathball.getPosition();
     %angle = -mRadToDeg( mAtan( getWord(%worldPosition,0)-getWord(%origin,0), getWord(%worldPosition,1)-getWord(%origin,1) ) );
 
@@ -476,6 +479,9 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
 
 function SandboxWindow::onTouchUp(%this, %touchID, %worldPosition)
 {
+    // Call parent.
+    Parent::onTouchUp(%this, %touchID, %worldPosition );
+    
     %origin = Deathball.getPosition();
     %angle = -mRadToDeg( mAtan( getWord(%worldPosition,0)-getWord(%origin,0), getWord(%worldPosition,1)-getWord(%origin,1) ) );
 
@@ -490,6 +496,9 @@ function SandboxWindow::onTouchUp(%this, %touchID, %worldPosition)
 
 function SandboxWindow::onTouchDragged(%this, %touchID, %worldPosition)
 {
+    // Call parent.
+    Parent::onTouchDragged(%this, %touchID, %worldPosition );
+    
     %origin = Deathball.getPosition();
     %angle = -mRadToDeg( mAtan( getWord(%worldPosition,0)-getWord(%origin,0), getWord(%worldPosition,1)-getWord(%origin,1) ) );
 

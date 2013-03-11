@@ -886,10 +886,10 @@ const BehaviorComponent::typePortConnectionVector* BehaviorComponent::getBehavio
 
 //-----------------------------------------------------------------------------
 
-void BehaviorComponent::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void BehaviorComponent::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Call parent.
-    Parent::onTamlCustomWrite( customProperties );
+    Parent::onTamlCustomWrite( customNodes );
 
     // Fetch behavior count.
     const U32 behaviorCount = (U32)mBehaviors.size();
@@ -901,8 +901,8 @@ void BehaviorComponent::onTamlCustomWrite( TamlCustomProperties& customPropertie
     // Fetch behavior template asset field type.
     StringTableEntry behaviorTemplateAssetFieldType = StringTable->insert( BEHAVIORTEMPLATE_ASSET_FIELDTYPE );
 
-    // Add behavior property.
-    TamlCustomProperty* pBehaviorProperty = customProperties.addProperty( BEHAVIOR_CUSTOMPROPERTY_NAME );
+    // Add custom behaviors node.
+    TamlCustomNode* pCustomBehaviorNode = customNodes.addNode( BEHAVIOR_NODE_NAME );
 
     // Iterate behaviors.
     for( SimSet::iterator behaviorItr = mBehaviors.begin(); behaviorItr != mBehaviors.end(); ++behaviorItr )
@@ -913,11 +913,11 @@ void BehaviorComponent::onTamlCustomWrite( TamlCustomProperties& customPropertie
         // Fetch template.
         BehaviorTemplate* pBehaviorTemplate = pBehaviorInstance->getTemplate();
 
-        // Add behavior alias.
-        TamlPropertyAlias* pBehaviorAlias = pBehaviorProperty->addAlias( pBehaviorInstance->getTemplateName() );
+        // Add behavior node.
+        TamlCustomNode* pBehaviorNode = pCustomBehaviorNode->addNode( pBehaviorInstance->getTemplateName() );
 
         // Add behavior Id field.
-        pBehaviorAlias->addField( BEHAVIOR_ID_FIELD_NAME, pBehaviorInstance->getBehaviorId() );
+        pBehaviorNode->addField( BEHAVIOR_ID_FIELD_NAME, pBehaviorInstance->getBehaviorId() );
 
         // Fetch field count,
         const U32 behaviorFieldCount = pBehaviorTemplate->getBehaviorFieldCount();
@@ -942,7 +942,7 @@ void BehaviorComponent::onTamlCustomWrite( TamlCustomProperties& customPropertie
             const char* pFieldValue = pBehaviorInstance->getPrefixedDynamicDataField( pBehaviorField->mName, NULL, fieldType );
 
             // Add behavior field.
-            pBehaviorAlias->addField( pBehaviorField->mName, pFieldValue );
+            pBehaviorNode->addField( pBehaviorField->mName, pFieldValue );
         }
     }
 
@@ -953,8 +953,8 @@ void BehaviorComponent::onTamlCustomWrite( TamlCustomProperties& customPropertie
     if ( behaviorConnectionCount == 0 )
         return;
 
-    // Add behavior connection property.
-    TamlCustomProperty* pConnectionProperty = customProperties.addProperty( BEHAVIOR_CONNECTION_CUSTOMPROPERTY_NAME );
+    // Add custom behavior connection property.
+    TamlCustomNode* pCustomConnection = customNodes.addNode( BEHAVIOR_CONNECTION_NODE_NAME );
     
     // Iterate instance connections.
     for( typeInstanceConnectionHash::iterator instanceItr = mBehaviorConnections.begin(); instanceItr != mBehaviorConnections.end(); ++instanceItr )
@@ -974,12 +974,12 @@ void BehaviorComponent::onTamlCustomWrite( TamlCustomProperties& customPropertie
                 // Fetch connection.
                 BehaviorPortConnection* pConnection = connectionItr;
 
-                // Add connection alias.
-                TamlPropertyAlias* pConnectionAlias = pConnectionProperty->addAlias( BEHAVIOR_CONNECTION_TYPE_NAME );
+                // Add connectionnode.
+                TamlCustomNode* pConnectionNode = pCustomConnection->addNode( BEHAVIOR_CONNECTION_TYPE_NAME );
 
                 // Add behavior field.
-                pConnectionAlias->addField( pConnection->mOutputName, pConnection->mOutputInstance->getBehaviorId() );
-                pConnectionAlias->addField( pConnection->mInputName, pConnection->mInputInstance->getBehaviorId() );
+                pConnectionNode->addField( pConnection->mOutputName, pConnection->mOutputInstance->getBehaviorId() );
+                pConnectionNode->addField( pConnection->mInputName, pConnection->mInputInstance->getBehaviorId() );
             }
         }
     }
@@ -987,16 +987,16 @@ void BehaviorComponent::onTamlCustomWrite( TamlCustomProperties& customPropertie
 
 //-----------------------------------------------------------------------------
 
-void BehaviorComponent::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Call parent.
-    Parent::onTamlCustomRead( customProperties );
+    Parent::onTamlCustomRead( customNodes );
 
-    // Find behavior custom property name.
-    const TamlCustomProperty* pCustomProperty = customProperties.findProperty( BEHAVIOR_CUSTOMPROPERTY_NAME );
+    // Find custom behaviors node.
+    const TamlCustomNode* pCustomBehaviorNode = customNodes.findNode( BEHAVIOR_NODE_NAME );
 
     // Do we have the property?
-    if ( pCustomProperty != NULL )
+    if ( pCustomBehaviorNode != NULL )
     {
         // Yes, so reset maximum behavior Id.
         S32 maximumBehaviorId = 0;
@@ -1007,23 +1007,26 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomProperties& customProp
         // Fetch behavior template asset field type.
         StringTableEntry behaviorTemplateAssetFieldType = StringTable->insert( BEHAVIORTEMPLATE_ASSET_FIELDTYPE );
 
-        // Iterate property alias.
-        for( TamlCustomProperty::const_iterator propertyAliasItr = pCustomProperty->begin(); propertyAliasItr != pCustomProperty->end(); ++propertyAliasItr )
+        // Fetch children behavior nodes.
+        const TamlCustomNodeVector& behaviorNodes = pCustomBehaviorNode->getChildren();
+
+        // Iterate behavior nodes.
+        for( TamlCustomNodeVector::const_iterator behaviorNodeItr = behaviorNodes.begin(); behaviorNodeItr != behaviorNodes.end(); ++behaviorNodeItr )
         {
-            // Fetch property alias.
-            TamlPropertyAlias* pPropertyAlias = *propertyAliasItr;
+            // Fetch behavior node.
+            TamlCustomNode* pBehaviorNode = *behaviorNodeItr;
 
             // Fetch template.
-            BehaviorTemplate* pTemplate = dynamic_cast<BehaviorTemplate *>( Sim::findObject( pPropertyAlias->mAliasName ) );
+            BehaviorTemplate* pTemplate = dynamic_cast<BehaviorTemplate *>( Sim::findObject( pBehaviorNode->getNodeName() ) );
 
             // Find template?
             if( pTemplate == NULL )
             {
                 // No, so warn appropriately.
-                Con::warnf( "BehaviorComponent::onTamlCustomRead() - Missing Behavior '%s'", pPropertyAlias->mAliasName );
+                Con::warnf( "BehaviorComponent::onTamlCustomRead() - Missing Behavior '%s'", pBehaviorNode->getNodeName() );
 
                 if( isMethod( "onBehaviorMissing" ) )
-                    Con::executef( this, 2, "onBehaviorMissing", pPropertyAlias->mAliasName );
+                    Con::executef( this, 2, "onBehaviorMissing", pBehaviorNode->getNodeName() );
 
                 // Skip it.
                 continue;
@@ -1036,10 +1039,10 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomProperties& customProp
             if ( pBehaviorInstance == NULL )
             {
                 // No, so warn appropriately.
-                Con::warnf( "BehaviorComponent::onTamlCustomRead() - Found behavior could not create an instance '%s'", pPropertyAlias->mAliasName );
+                Con::warnf( "BehaviorComponent::onTamlCustomRead() - Found behavior could not create an instance '%s'", pBehaviorNode->getNodeName() );
 
                 if( isMethod( "onBehaviorMissing" ) )
-                    Con::executef( this, 2, "onBehaviorMissing", pPropertyAlias->mAliasName );
+                    Con::executef( this, 2, "onBehaviorMissing", pBehaviorNode->getNodeName() );
 
                 // Skip it.
                 continue;
@@ -1047,17 +1050,20 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomProperties& customProp
 
             S32 behaviorId = 0;
 
-            // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
+            // Fetch field nodes.
+            const TamlCustomFieldVector& fields = pBehaviorNode->getFields();
+
+            // Iterate fields.
+            for ( TamlCustomFieldVector::const_iterator nodeFieldItr = fields.begin(); nodeFieldItr != fields.end(); ++nodeFieldItr )
             {
-                // Fetch property field.
-                TamlPropertyField* pPropertyField = *propertyFieldItr;
+                // Fetch field.
+                TamlCustomField* pField = *nodeFieldItr;
 
                 // Fetch field name.
-                const char* pFieldName = pPropertyField->getFieldName();
+                const char* pFieldName = pField->getFieldName();
 
                 // Fetch field value.
-                const char* pFieldValue = pPropertyField->getFieldValue();
+                const char* pFieldValue = pField->getFieldValue();
 
                 // Is this the behavior field Id name?
                 if ( pFieldName == behaviorFieldIdName )
@@ -1071,7 +1077,7 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomProperties& customProp
                         // No, so warn.
                         Con::warnf( "BehaviorComponent::onTamlCustomRead() - Encountered an invalid behavior Id of '%d' on behavior '%s'.",
                             behaviorId,
-                            pPropertyAlias->mAliasName );
+                            pBehaviorNode->getNodeName() );
                     }
 
                     // Update maximum behavior Id found.
@@ -1096,7 +1102,7 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomProperties& customProp
                 }
 
                 // Set field.
-                pBehaviorInstance->setPrefixedDynamicDataField( pPropertyField->getFieldName(), NULL, pPropertyField->getFieldValue(), fieldType );
+                pBehaviorInstance->setPrefixedDynamicDataField( pField->getFieldName(), NULL, pField->getFieldValue(), fieldType );
             }
 
             // Add behavior.
@@ -1111,27 +1117,33 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomProperties& customProp
         mMasterBehaviorId = (U32)maximumBehaviorId+1;
     }
 
-    // Find behavior connections custom property name.
-    const TamlCustomProperty* pConnectionProperty = customProperties.findProperty( BEHAVIOR_CONNECTION_CUSTOMPROPERTY_NAME );
+    // Find behavior connections custom node.
+    const TamlCustomNode* pCustomConnectionNode = customNodes.findNode( BEHAVIOR_CONNECTION_NODE_NAME );
 
-    // Do we have the property?
-    if ( pConnectionProperty != NULL )
+    // Do we have the custom connection node?
+    if ( pCustomConnectionNode != NULL )
     {
-        // Yes, so insert connection alias.
-        StringTableEntry connectionAlias = StringTable->insert( BEHAVIOR_CONNECTION_TYPE_NAME );
+        // Yes, so fetch the connection node name..
+        StringTableEntry connectionNodeName = StringTable->insert( BEHAVIOR_CONNECTION_TYPE_NAME );
+
+        // Fetch children connection nodes.
+        const TamlCustomNodeVector& connectionNodes = pCustomConnectionNode->getChildren();
 
         // Iterate property alias.
-        for( TamlCustomProperty::const_iterator propertyAliasItr = pConnectionProperty->begin(); propertyAliasItr != pConnectionProperty->end(); ++propertyAliasItr )
+        for( TamlCustomNodeVector::const_iterator connectionNodeItr = connectionNodes.begin(); connectionNodeItr != connectionNodes.end(); ++connectionNodeItr )
         {
-            // Fetch property alias.
-            TamlPropertyAlias* pPropertyAlias = *propertyAliasItr;
+            // Fetch connection node.
+            TamlCustomNode* pConnectionNode = *connectionNodeItr;
 
             // Skip if the alias isn't a connection.
-            if ( pPropertyAlias->mAliasName != connectionAlias )
+            if ( pConnectionNode->getNodeName() != connectionNodeName )
                 continue;
 
+            // Fetch field nodes.
+            const TamlCustomFieldVector& connectionFieldNodes = pConnectionNode->getFields();
+
             // Are there two properties?
-            if ( pPropertyAlias->size() != 2 )
+            if ( connectionFieldNodes.size() != 2 )
             {
                 // No, so warn.
                 Con::warnf( "BehaviorComponent::onTamlCustomRead() - Encountered a behavior connection with more than two connection fields." );
@@ -1139,8 +1151,8 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomProperties& customProp
             }
 
             // Fetch property field #1.
-            TamlPropertyField* pPropertyField1 = *pPropertyAlias->begin();
-            TamlPropertyField* pPropertyField2 = *(pPropertyAlias->begin()+1);
+            TamlCustomField* pPropertyField1 = *connectionFieldNodes.begin();
+            TamlCustomField* pPropertyField2 = *(connectionFieldNodes.begin()+1);
            
             // Fetch behavior instances #1.
             BehaviorInstance* pBehaviorInstance1 = getBehaviorByInstanceId( dAtoi( pPropertyField1->getFieldValue() ) );
@@ -1296,9 +1308,7 @@ const char *BehaviorComponent::callOnBehaviors( U32 argc, const char *argv[] )
 {   
     if( mBehaviors.empty() )   
         return Parent::callOnBehaviors( argc, argv );
-   
-    const char *cbName = StringTable->insert(argv[0]);
-   
+      
     // Copy the arguments to avoid weird clobbery situations.
     FrameTemp<char *> argPtrs (argc);
    
@@ -1324,6 +1334,7 @@ const char *BehaviorComponent::callOnBehaviors( U32 argc, const char *argv[] )
             continue;
 
         // Lookup the Callback Namespace entry and then splice callback
+        const char *cbName = StringTable->insert(argv[0]);
         Namespace::Entry *pNSEntry = pNamespace->lookup(cbName);
         if( pNSEntry )
         {
@@ -1361,9 +1372,7 @@ const char *BehaviorComponent::_callMethod( U32 argc, const char *argv[], bool c
 {   
     if( mBehaviors.empty() )   
         return Parent::_callMethod( argc, argv, callThis );
-   
-    const char *cbName = StringTable->insert(argv[0]);
-   
+     
     // Copy the arguments to avoid weird clobbery situations.
     FrameTemp<char *> argPtrs (argc);
    
@@ -1386,6 +1395,7 @@ const char *BehaviorComponent::_callMethod( U32 argc, const char *argv[], bool c
             continue;
 
         // Lookup the Callback Namespace entry and then splice callback
+        const char *cbName = StringTable->insert(argv[0]);
         Namespace::Entry *pNSEntry = pNamespace->lookup(cbName);
         if( pNSEntry )
         {

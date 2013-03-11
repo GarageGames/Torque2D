@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+    <Type Name="Vector&lt;*&gt;">
+		<DisplayString Condition="mElementCount==0">Empty Vector</DisplayString>
+		<DisplayString>{{ Size = {mElementCount}, Capacity = {mArraySize}, Memory = {mArraySize*sizeof($T1)} bytes }}</DisplayString>
+		<Expand> 
+			<ArrayItems> 
+				<Size>mElementCount</Size> 
+				<ValuePointer>mArray</ValuePointer> 
+			</ArrayItems> 
+		</Expand> 		
+    </Type>
+</AutoVisualizer>

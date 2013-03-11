@@ -7,6 +7,8 @@
         EmitterType="BOX"
         EmitterAngle="90"
         EmitterSize="2 1"
+		AttachPositionToEmitter="1"
+		AttachRotationToEmitter="1"
         FixedForceAngle="-90"
         OldestInFront="1"
         Image="@asset=ToyAssets:Asteroids"
@@ -44,6 +46,8 @@
         EmitterName="flames"
         EmitterType="LINE"
         EmitterSize="1 0"
+		AttachPositionToEmitter="1"
+		AttachRotationToEmitter="1"		
         IntenseParticles="1"
         OldestInFront="1"
         Animation="@asset=ToyAssets:Impact_ExplosionAnimation">

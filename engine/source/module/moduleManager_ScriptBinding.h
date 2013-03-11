@@ -54,6 +54,23 @@ ConsoleMethod(ModuleManager, scanModules, bool, 3, 4,   "(moduleRootPath, [rootO
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(ModuleManager, unregisterModule, bool, 4, 4,  "(moduleId, versionId) - Unregister the specified module.\n"
+                                                            "@param moduleId The module Id to unregister.\n"
+                                                            "@param versionId The version Id to unregister.\n"
+                                                            "@return Whether the module was unregister or not.")
+{
+    // Fetch the module Id.
+    const char* pModuleId = argv[2];
+
+    // Fetch the version Id.
+    const U32 versionId = (U32)dAtoi(argv[3]);
+
+    // Unregister the module.
+    return object->unregisterModule( pModuleId, versionId );
+}
+
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(ModuleManager, loadGroup, bool, 3, 3,     "(moduleGroup) - Load the specified module group.\n"
                                                         "@param moduleGroup The module group to load.\n"
                                                         "@return Whether the module group was loaded or not.")
@@ -118,25 +135,6 @@ ConsoleMethod(ModuleManager, findModule, const char*, 4, 4,     "(moduleId, vers
 
     // Find module definition.
     ModuleDefinition* pModuleDefinition = object->findModule( pModuleId, versionId );
-
-    // Return nothing if not found.
-    if ( pModuleDefinition == NULL )
-        return StringTable->EmptyString;
-
-    return pModuleDefinition->getIdString();
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(ModuleManager, findLoadedModule, const char*, 3, 3,   "(moduleId) - Find the specific loaded module Id.\n"
-                                                                    "@param moduleId The module Id to find.\n"
-                                                                    "@return The module definition object or NULL if the module was not found or loaded.")
-{
-    // Fetch module Id.
-    const char* pModuleId = argv[2];
-
-    // Find loaded module definition.
-    ModuleDefinition* pModuleDefinition = object->findLoadedModule( pModuleId );
 
     // Return nothing if not found.
     if ( pModuleDefinition == NULL )

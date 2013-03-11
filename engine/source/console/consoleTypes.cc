@@ -36,56 +36,6 @@
 //////////////////////////////////////////////////////////////////////////
 // TypeString
 //////////////////////////////////////////////////////////////////////////
-ConsoleType( Vector2, TypeT2DVector, sizeof(Vector2), "" )
-
-ConsoleGetType( TypeT2DVector )
-{
-    Vector2* pVector = (Vector2*)dptr;  
-    return pVector->scriptThis();
-}
-
-ConsoleSetType( TypeT2DVector )
-{
-    Vector2* pVector = (Vector2*)dptr;  
-    F32 x;
-    F32 y;
-    if( argc == 1 )
-    {
-        S32 args = dSscanf(argv[0], "%g %g", &x, &y);
-        if ( args == 2 )
-        {
-            pVector->Set( x, y );
-            return;
-        }
-        else if ( args == 1 )
-        {
-            pVector->Set( x, x );
-            return;
-        }
-        else
-        {
-            // Warn.
-            Con::warnf("Vector2 must be set as { x [,y] }");
-            return;
-        }
-
-    }
-    else if ( argc == 2 )
-    {
-        pVector->Set( dAtof(argv[0]), dAtof(argv[1]) );
-        return;
-    }
-    else
-    {
-        // Warn.
-        Con::warnf("Vector2 must be set as { x [,y] }");
-        return;
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////
-// TypeString
-//////////////////////////////////////////////////////////////////////////
 ConsoleType( string, TypeString, sizeof(const char*), "" )
 
 ConsoleGetType( TypeString )
@@ -537,14 +487,15 @@ ConsoleGetType( TypeSimObjectPtr )
 {
    SimObject **obj = (SimObject**)dptr;
    char* returnBuffer = Con::getReturnBuffer(256);
-   dSprintf(returnBuffer, 256, "%s", *obj ? (*obj)->getName() ? (*obj)->getName() : (*obj)->getIdString() : "");
+   const char* Id =  *obj ? (*obj)->getName() ? (*obj)->getName() : (*obj)->getIdString() : StringTable->EmptyString;
+   dSprintf(returnBuffer, 256, "%s", Id);
    return returnBuffer;
 }
 
 //////////////////////////////////////////////////////////////////////////
 // TypeSimObjectName
 //////////////////////////////////////////////////////////////////////////
-ConsoleType( SimObjectPtr, TypeSimObjectName, sizeof(SimObject*), "" )
+ConsoleType( SimObjectName, TypeSimObjectName, sizeof(SimObject*), "" )
 
 ConsoleSetType( TypeSimObjectName )
 {
@@ -564,3 +515,30 @@ ConsoleGetType( TypeSimObjectName )
    dSprintf(returnBuffer, 128, "%s", *obj && (*obj)->getName() ? (*obj)->getName() : "");
    return returnBuffer;
 }
+
+
+//////////////////////////////////////////////////////////////////////////
+// TypeSimObjectId
+//////////////////////////////////////////////////////////////////////////
+ConsoleType( SimObjectId, TypeSimObjectId, sizeof(SimObject*), "" )
+
+ConsoleSetType( TypeSimObjectId )
+{
+   if(argc == 1)
+   {
+      SimObject **obj = (SimObject **)dptr;
+      *obj = Sim::findObject(argv[0]);
+   }
+   else
+      Con::printf("(TypeSimObjectId) Cannot set multiple args to a single S32.");
+}
+
+ConsoleGetType( TypeSimObjectId )
+{
+   SimObject **obj = (SimObject**)dptr;
+   char* returnBuffer = Con::getReturnBuffer(128);
+   dSprintf(returnBuffer, 128, "%s", *obj ? (*obj)->getIdString() : StringTable->EmptyString );
+   return returnBuffer;
+}
+
+

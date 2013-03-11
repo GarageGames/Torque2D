@@ -165,6 +165,7 @@ public:
     static void initPersistFields();
     virtual bool onAdd();
     virtual void onRemove();
+    virtual void copyTo(SimObject* object);
 
     void                    setImageFile( const char* pImageFile );
     inline StringTableEntry getImageFile( void ) const                      { return mImageFile; };
@@ -243,8 +244,8 @@ protected:
     /// Taml callbacks.
     virtual void onTamlPreWrite( void );
     virtual void onTamlPostWrite( void );
-    virtual void onTamlCustomWrite( TamlCustomProperties& customProperties );
-    virtual void onTamlCustomRead( const TamlCustomProperties& customProperties );
+    virtual void onTamlCustomWrite( TamlCustomNodes& customNodes );
+    virtual void onTamlCustomRead( const TamlCustomNodes& customNodes );
 
 
 protected:
