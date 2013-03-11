@@ -58,7 +58,6 @@
 #include "platform/nativeDialogs/msgBox.h"
 #include "platform/nativeDialogs/fileDialog.h"
 #include "memory/safeDelete.h"
-#include "graphics/bmFont.h"
 
 #include <stdio.h>
 
