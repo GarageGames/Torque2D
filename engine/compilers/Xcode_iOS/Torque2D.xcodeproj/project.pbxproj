@@ -478,8 +478,6 @@
 		86A9A3FE16AEC836003F01E6 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86A9A3E416AEC817003F01E6 /* OpenAL.framework */; };
 		86A9A3FF16AEC836003F01E6 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86A9A3E516AEC817003F01E6 /* OpenGLES.framework */; };
 		86A9A40016AEC836003F01E6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86A9A3E616AEC817003F01E6 /* QuartzCore.framework */; };
-		DADBEB9716D31EAA00E1549B /* BMFontAsset.cc in Sources */ = {isa = PBXBuildFile; fileRef = DADBEB9516D31EAA00E1549B /* BMFontAsset.cc */; };
-		DADBEBFB16D35E5100E1549B /* bmFont.cc in Sources */ = {isa = PBXBuildFile; fileRef = DADBEBF916D35E5000E1549B /* bmFont.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1417,10 +1415,6 @@
 		86A9A3E416AEC817003F01E6 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		86A9A3E516AEC817003F01E6 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		86A9A3E616AEC817003F01E6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		DADBEB9516D31EAA00E1549B /* BMFontAsset.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BMFontAsset.cc; sourceTree = "<group>"; };
-		DADBEB9616D31EAA00E1549B /* BMFontAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMFontAsset.h; sourceTree = "<group>"; };
-		DADBEBF916D35E5000E1549B /* bmFont.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bmFont.cc; sourceTree = "<group>"; };
-		DADBEBFA16D35E5000E1549B /* bmFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bmFont.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1576,8 +1570,6 @@
 		867BACF916AEC9050033868F /* assets */ = {
 			isa = PBXGroup;
 			children = (
-				DADBEB9516D31EAA00E1549B /* BMFontAsset.cc */,
-				DADBEB9616D31EAA00E1549B /* BMFontAsset.h */,
 				867BACFA16AEC9050033868F /* AnimationAsset.cc */,
 				867BACFB16AEC9050033868F /* AnimationAsset.h */,
 				867BACFC16AEC9050033868F /* AnimationAsset_ScriptBinding.h */,
@@ -1955,8 +1947,6 @@
 		867BAE1B16AEC9050033868F /* graphics */ = {
 			isa = PBXGroup;
 			children = (
-				DADBEBF916D35E5000E1549B /* bmFont.cc */,
-				DADBEBFA16D35E5000E1549B /* bmFont.h */,
 				867BAE1C16AEC9050033868F /* bitmapBmp.cc */,
 				867BAE1D16AEC9050033868F /* bitmapJpeg.cc */,
 				867BAE1E16AEC9050033868F /* bitmapPng.cc */,
@@ -3424,8 +3414,6 @@
 				2AB4C1B016DE9F6700B02479 /* GroupedSceneController.cc in Sources */,
 				2AB4C1B116DE9F6700B02479 /* PickingSceneController.cc in Sources */,
 				2ACF5A2C16E52D6A00F838D9 /* SpriteBatchQuery.cc in Sources */,
-				DADBEB9716D31EAA00E1549B /* BMFontAsset.cc in Sources */,
-				DADBEBFB16D35E5100E1549B /* bmFont.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
