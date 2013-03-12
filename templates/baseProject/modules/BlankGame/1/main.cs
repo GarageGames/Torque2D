@@ -44,9 +44,9 @@ function BlankGame::create( %this )
     // load some scripts and variables
     // exec("./scripts/someScript.cs");
 
-echo("going to draw words");
-
-    BlankGame.sayHello();
+    // let's do a little something to make sure we are up and running.
+    // write "hello world!"  :)
+    %this.sayHello();
 }
 
 //-----------------------------------------------------------------------------

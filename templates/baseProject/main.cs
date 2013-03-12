@@ -20,6 +20,9 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
+// debug amounts of log output
+setLogMode(6);
+// run game from the script files.  don't compile them first
 $Scripts::ignoreDSOs = true;
 
 ModuleDatabase.scanModules( "modules" );
