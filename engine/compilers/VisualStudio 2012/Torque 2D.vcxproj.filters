@@ -172,6 +172,12 @@
     <Filter Include="2d\controllers\core">
       <UniqueIdentifier>{e11e344e-6418-4ed0-980a-77d66cd64d65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="2d\experimental">
+      <UniqueIdentifier>{1eb9e730-583b-4aa4-ac25-b83960799ba4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2d\experimental\composites">
+      <UniqueIdentifier>{30e1ec13-118b-4d50-8e04-76e76fcfdc01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\audio\audio.cc">
@@ -1298,6 +1304,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\2d\core\SpriteBatchQuery.cc">
       <Filter>2d\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\experimental\composites\WaveComposite.cc">
+      <Filter>2d\experimental\composites</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2663,6 +2672,12 @@
     </ClInclude>
     <ClInclude Include="..\..\source\2d\core\SpriteBatchQueryResult.h">
       <Filter>2d\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\experimental\composites\WaveComposite.h">
+      <Filter>2d\experimental\composites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\experimental\composites\WaveComposite_ScriptBinding.h">
+      <Filter>2d\experimental\composites</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

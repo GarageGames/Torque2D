@@ -16,6 +16,7 @@
 		2AB97A2116B66BE50080F940 /* tamlCustom.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AB97A1F16B66BE50080F940 /* tamlCustom.cc */; };
 		2AC4404E16B0144500FC4091 /* ImageFont.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AC4404C16B0144500FC4091 /* ImageFont.cc */; };
 		2ACF5A2C16E52D6A00F838D9 /* SpriteBatchQuery.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ACF5A2916E52D6A00F838D9 /* SpriteBatchQuery.cc */; };
+		2AE2938B16EF4C480015E200 /* WaveComposite.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AE2938916EF4C480015E200 /* WaveComposite.cc */; };
 		2AE2F55916D6B07200B6A058 /* BuoyancyController.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AE2F55716D6B07200B6A058 /* BuoyancyController.cc */; };
 		2AED7D9316B70102003482CF /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AED7D9216B70102003482CF /* CoreText.framework */; };
 		2AF1C54B16B439D900C1CF3A /* declaredAssets.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AF1C54716B439D900C1CF3A /* declaredAssets.cc */; };
@@ -508,6 +509,9 @@
 		2ACF5A2A16E52D6A00F838D9 /* SpriteBatchQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteBatchQuery.h; sourceTree = "<group>"; };
 		2ACF5A2B16E52D6A00F838D9 /* SpriteBatchQueryResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteBatchQueryResult.h; sourceTree = "<group>"; };
 		2AD07B2716D15F8E0070DC79 /* simObjectTimerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simObjectTimerEvent.h; sourceTree = "<group>"; };
+		2AE2938816EF4C480015E200 /* WaveComposite_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveComposite_ScriptBinding.h; path = experimental/composites/WaveComposite_ScriptBinding.h; sourceTree = "<group>"; };
+		2AE2938916EF4C480015E200 /* WaveComposite.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WaveComposite.cc; path = experimental/composites/WaveComposite.cc; sourceTree = "<group>"; };
+		2AE2938A16EF4C480015E200 /* WaveComposite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveComposite.h; path = experimental/composites/WaveComposite.h; sourceTree = "<group>"; };
 		2AE2F55616D6B07200B6A058 /* BuoyancyController_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BuoyancyController_ScriptBinding.h; path = controllers/BuoyancyController_ScriptBinding.h; sourceTree = "<group>"; };
 		2AE2F55716D6B07200B6A058 /* BuoyancyController.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BuoyancyController.cc; path = controllers/BuoyancyController.cc; sourceTree = "<group>"; };
 		2AE2F55816D6B07200B6A058 /* BuoyancyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BuoyancyController.h; path = controllers/BuoyancyController.h; sourceTree = "<group>"; };
@@ -1477,6 +1481,24 @@
 			name = controllers;
 			sourceTree = "<group>";
 		};
+		2AE2938616EF4C310015E200 /* experimental */ = {
+			isa = PBXGroup;
+			children = (
+				2AE2938716EF4C3B0015E200 /* composites */,
+			);
+			name = experimental;
+			sourceTree = "<group>";
+		};
+		2AE2938716EF4C3B0015E200 /* composites */ = {
+			isa = PBXGroup;
+			children = (
+				2AE2938816EF4C480015E200 /* WaveComposite_ScriptBinding.h */,
+				2AE2938916EF4C480015E200 /* WaveComposite.cc */,
+				2AE2938A16EF4C480015E200 /* WaveComposite.h */,
+			);
+			name = composites;
+			sourceTree = "<group>";
+		};
 		867BAC9116AEC8BB0033868F /* platformiOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -1556,6 +1578,7 @@
 		867BACF816AEC9050033868F /* 2d */ = {
 			isa = PBXGroup;
 			children = (
+				2AE2938616EF4C310015E200 /* experimental */,
 				2AB4F1D416D55B9F00C9A27B /* controllers */,
 				867BACF916AEC9050033868F /* assets */,
 				867BAD0C16AEC9050033868F /* core */,
@@ -3414,6 +3437,7 @@
 				2AB4C1B016DE9F6700B02479 /* GroupedSceneController.cc in Sources */,
 				2AB4C1B116DE9F6700B02479 /* PickingSceneController.cc in Sources */,
 				2ACF5A2C16E52D6A00F838D9 /* SpriteBatchQuery.cc in Sources */,
+				2AE2938B16EF4C480015E200 /* WaveComposite.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
