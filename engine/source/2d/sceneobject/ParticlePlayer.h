@@ -44,6 +44,7 @@
 #define PARTICLE_PLAYER_EMISSION_RATE_SCALE     "$pref::T2D::ParticlePlayerEmissionRateScale"
 #define PARTICLE_PLAYER_SIZE_SCALE              "$pref::T2D::ParticlePlayerSizeScale"
 #define PARTICLE_PLAYER_FORCE_SCALE             "$pref::T2D::ParticlePlayerForceScale"
+#define PARTICLE_PLAYER_TIME_SCALE              "$pref::T2D::ParticlePlayerTimeScale"
 
 //-----------------------------------------------------------------------------
 
@@ -134,7 +135,7 @@ private:
     F32                         mEmissionRateScale;
     F32                         mSizeScale;
     F32                         mForceScale;
-
+    F32                         mTimeScale;
 
     bool                        mWaitingForParticles;
     bool                        mWaitingForDelete;
@@ -174,6 +175,9 @@ public:
     inline void setForceScale( const F32 scale ) { mForceScale = scale; }
     inline F32 getForceScale( void  ) const { return mForceScale; }
 
+    inline void setTimeScale( const F32 scale ) { mTimeScale = scale; }
+    inline F32 getTimeScale( void  ) const { return mTimeScale; }
+
     inline const U32 getEmitterCount( void ) const { return (U32)mEmitters.size(); }
 
     void setEmitterPaused( const bool paused, const U32 emitterIndex );
@@ -207,6 +211,7 @@ protected:
     static bool     writeEmissionRateScale( void* obj, StringTableEntry pFieldName )        { return !mIsOne( static_cast<ParticlePlayer*>( obj )->getEmissionRateScale() ); }
     static bool     writeSizeScale( void* obj, StringTableEntry pFieldName )                { return !mIsOne( static_cast<ParticlePlayer*>( obj )->getSizeScale() ); }
     static bool     writeForceScale( void* obj, StringTableEntry pFieldName )               { return !mIsOne( static_cast<ParticlePlayer*>( obj )->getForceScale() ); }
+    static bool     writeTimeScale( void* obj, StringTableEntry pFieldName )                { return !mIsOne( static_cast<ParticlePlayer*>( obj )->getTimeScale() ); }
 
 private:
     virtual void onAssetRefreshed( AssetPtrBase* pAssetPtrBase );

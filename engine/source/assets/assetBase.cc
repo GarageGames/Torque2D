@@ -79,6 +79,27 @@ void AssetBase::initPersistFields()
     addProtectedField( ASSET_BASE_ASSETPRIVATE_FIELD, TypeBool, 0, &defaultProtectedNotSetFn, &getAssetPrivate, &defaultProtectedNotWriteFn, "Whether the asset is private or not." );
 }
 
+//------------------------------------------------------------------------------
+
+void AssetBase::copyTo(SimObject* object)
+{
+    // Call to parent.
+    Parent::copyTo(object);
+
+    // Cast to asset.
+    AssetBase* pAsset = static_cast<AssetBase*>(object);
+
+    // Sanity!
+    AssertFatal(pAsset != NULL, "AssetBase::copyTo() - Object is not the correct type.");
+
+    // Copy state.
+    pAsset->setAssetName( getAssetName() );
+    pAsset->setAssetDescription( getAssetDescription() );
+    pAsset->setAssetCategory( getAssetCategory() );
+    pAsset->setAssetAutoUnload( getAssetAutoUnload() );
+    pAsset->setAssetInternal( getAssetInternal() );
+}
+
 //-----------------------------------------------------------------------------
 
 void AssetBase::setAssetDescription( const char* pAssetDescription )

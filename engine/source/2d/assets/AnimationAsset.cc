@@ -143,6 +143,27 @@ void AnimationAsset::onAssetRefresh( void )
 
 //------------------------------------------------------------------------------
 
+void AnimationAsset::copyTo(SimObject* object)
+{
+    // Call to parent.
+    Parent::copyTo(object);
+
+    // Cast to asset.
+    AnimationAsset* pAsset = static_cast<AnimationAsset*>(object);
+
+    // Sanity!
+    AssertFatal(pAsset != NULL, "AnimationAsset::copyTo() - Object is not the correct type.");
+
+    // Copy state.
+    pAsset->setImage( getImage().getAssetId() );
+    pAsset->setAnimationFrames( Con::getData( TypeS32Vector, (void*)&getSpecifiedAnimationFrames(), 0 ) );
+    pAsset->setAnimationTime( getAnimationTime() );
+    pAsset->setAnimationCycle( getAnimationCycle() );
+    pAsset->setRandomStart( getRandomStart() );
+}
+
+//------------------------------------------------------------------------------
+
 void AnimationAsset::setImage( const char* pAssetId )
 {
     // Ignore no change.

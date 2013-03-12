@@ -157,7 +157,7 @@ bool AssetManager::compileReferencedAssets( ModuleDefinition* pModuleDefinition 
 
 //-----------------------------------------------------------------------------
 
-bool AssetManager::addDeclaredAssets( ModuleDefinition* pModuleDefinition )
+bool AssetManager::addModuleDeclaredAssets( ModuleDefinition* pModuleDefinition )
 {
     // Debug Profiling.
     PROFILE_SCOPE(AssetManager_AddDeclaredAssets);
@@ -191,7 +191,7 @@ bool AssetManager::addDeclaredAssets( ModuleDefinition* pModuleDefinition )
         if ( !scanDeclaredAssets( filePathBuffer, pDeclaredAssets->getExtension(), pDeclaredAssets->getRecurse(), pModuleDefinition ) )
         {
             // Warn.
-            Con::warnf( "AssetManager::addDeclaredAssets() - Could not scan for declared assets at location '%s' with extension '%s'.", filePathBuffer, pDeclaredAssets->getExtension() );
+            Con::warnf( "AssetManager::addModuleDeclaredAssets() - Could not scan for declared assets at location '%s' with extension '%s'.", filePathBuffer, pDeclaredAssets->getExtension() );
         }
     }  
 
@@ -200,7 +200,7 @@ bool AssetManager::addDeclaredAssets( ModuleDefinition* pModuleDefinition )
 
 //-----------------------------------------------------------------------------
 
-bool AssetManager::addSingleDeclaredAsset( ModuleDefinition* pModuleDefinition, const char* pAssetFilePath )
+bool AssetManager::addDeclaredAsset( ModuleDefinition* pModuleDefinition, const char* pAssetFilePath )
 {
     // Debug Profiling.
     PROFILE_SCOPE(AssetManager_AddSingleDeclaredAsset);
@@ -220,7 +220,7 @@ bool AssetManager::addSingleDeclaredAsset( ModuleDefinition* pModuleDefinition, 
     if ( pFileStart == NULL )
     {
         // No, so warn.
-        Con::warnf( "AssetManager::addSingleDeclaredAsset() - Could not add single declared asset file '%s' as file-path '%s' is not valid.",
+        Con::warnf( "AssetManager::addDeclaredAsset() - Could not add single declared asset file '%s' as file-path '%s' is not valid.",
             assetFilePathBuffer,
             pModuleDefinition->getModulePath() );
         return false;
@@ -236,7 +236,7 @@ bool AssetManager::addSingleDeclaredAsset( ModuleDefinition* pModuleDefinition, 
     if ( !scanDeclaredAssets( assetFilePathBuffer, pFileStart, false, pModuleDefinition ) )
     {
         // Warn.
-        Con::warnf( "AssetManager::addSingleDeclaredAsset() - Could not scan declared assets at location '%s' with extension '%s'.", assetFilePathBuffer, pFileStart );
+        Con::warnf( "AssetManager::addDeclaredAsset() - Could not scan declared assets at location '%s' with extension '%s'.", assetFilePathBuffer, pFileStart );
         return false;
     }
 
@@ -273,10 +273,10 @@ StringTableEntry AssetManager::addPrivateAsset( AssetBase* pAssetBase )
     pAssetDefinition->mpAssetBase = pAssetBase;
     pAssetDefinition->mAssetDescription = pSourceAssetDefinition->mAssetDescription;
     pAssetDefinition->mAssetCategory = pSourceAssetDefinition->mAssetCategory;
-    pAssetDefinition->mAssetAutoUnload = false;
+    pAssetDefinition->mAssetAutoUnload = true;
     pAssetDefinition->mAssetRefreshEnable = false;
     pAssetDefinition->mAssetType = StringTable->insert( pAssetBase->getClassName() );
-    pAssetDefinition->mAssetLoadedCount = 1;
+    pAssetDefinition->mAssetLoadedCount = 0;
     pAssetDefinition->mAssetInternal = false;
     pAssetDefinition->mAssetPrivate = true;
 
@@ -326,7 +326,7 @@ bool AssetManager::removeDeclaredAssets( ModuleDefinition* pModuleDefinition )
         AssetDefinition* pAssetDefinition = *moduleAssets.begin();
 
         // Remove this asset.
-        removeSingleDeclaredAsset( pAssetDefinition->mAssetId );
+        removeDeclaredAsset( pAssetDefinition->mAssetId );
     }
 
     // Info.
@@ -338,7 +338,7 @@ bool AssetManager::removeDeclaredAssets( ModuleDefinition* pModuleDefinition )
 
 //-----------------------------------------------------------------------------
 
-bool AssetManager::removeSingleDeclaredAsset( const char* pAssetId )
+bool AssetManager::removeDeclaredAsset( const char* pAssetId )
 {
     // Debug Profiling.
     PROFILE_SCOPE(AssetManager_RemoveSingleDeclaredAsset);
@@ -1250,7 +1250,7 @@ bool AssetManager::deleteAsset( const char* pAssetId, const bool deleteLooseFile
     pAssetDefinition = NULL;
 
     // Remove asset.
-    removeSingleDeclaredAsset( pAssetId );
+    removeDeclaredAsset( pAssetId );
 
     // Delete the asset definition file.
     if ( !Platform::fileDelete( assetDefinitionFile ) )
@@ -3106,7 +3106,7 @@ void AssetManager::unloadAsset( AssetDefinition* pAssetDefinition )
         mLoadedPrivateAssetsCount--;
 
         // Remove it completely.
-        removeSingleDeclaredAsset( pAssetDefinition->mAssetId );
+        removeDeclaredAsset( pAssetDefinition->mAssetId );
     }
 }
 
@@ -3117,8 +3117,8 @@ void AssetManager::onModulePreLoad( ModuleDefinition* pModuleDefinition )
     // Debug Profiling.
     PROFILE_SCOPE(AssetManager_OnModulePreLoad);
 
-    // Add declared assets.
-    addDeclaredAssets( pModuleDefinition );
+    // Add module declared assets.
+    addModuleDeclaredAssets( pModuleDefinition );
 
     // Is an asset tags manifest specified?
     if ( pModuleDefinition->getAssetTagsManifest() != StringTable->EmptyString )
