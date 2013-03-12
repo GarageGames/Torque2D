@@ -372,6 +372,9 @@ void SpriteBatch::setBatchCulling( const bool batchCulling )
     if ( mBatchCulling == batchCulling )
         return;
 
+    // Set batch culling.
+    mBatchCulling = batchCulling;
+
     // Create/destroy sprite batch query appropriately.
     if ( mBatchCulling )
         createSpriteBatchQuery();
