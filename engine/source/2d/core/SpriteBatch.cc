@@ -942,6 +942,30 @@ SimObject* SpriteBatch::getSpriteDataObject( void ) const
 
 //------------------------------------------------------------------------------
 
+void SpriteBatch::setUserData( void* pUserData )
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return;
+
+    // Set user data.
+    mSelectedSprite->setUserData( pUserData );
+}
+
+//------------------------------------------------------------------------------
+
+void* SpriteBatch::getUserData( void ) const
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return NULL;
+
+    // Get user data.
+    return mSelectedSprite->getUserData();
+}
+
+//------------------------------------------------------------------------------
+
 void SpriteBatch::setSpriteName( const char* pName )
 {
     // Finish if a sprite is not selected.

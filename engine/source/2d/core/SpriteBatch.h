@@ -173,6 +173,9 @@ public:
     void setSpriteDataObject( SimObject* pDataObject );
     SimObject* getSpriteDataObject( void ) const;
 
+    void setUserData( void* pUserData );
+    void* getUserData( void ) const;
+
     void setSpriteName( const char* pName );
     StringTableEntry getSpriteName( void ) const;
 

@@ -159,6 +159,8 @@ void SpriteBatchItem::resetState( void )
 
     mSpriteBatchQueryKey = 0;
 
+    mUserData = NULL;
+
     // Require self ticking.
     mSelfTick = true;
 }
