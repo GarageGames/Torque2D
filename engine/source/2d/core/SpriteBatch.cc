@@ -52,14 +52,28 @@ SpriteBatch::SpriteBatch() :
     // Reset local extents.
     mLocalExtents.SetZero();
     mLocalExtentsDirty = true;
-
-    // Create the sprite batch query if sprite clipping is on.
-    createSpriteBatchQuery();
 }
 
 //------------------------------------------------------------------------------
 
 SpriteBatch::~SpriteBatch()
+{
+}
+
+//-----------------------------------------------------------------------------
+
+bool SpriteBatch::onAdd()
+{
+    // Create the sprite batch query if required.
+    if ( mBatchCulling )
+        createSpriteBatchQuery();
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
+void SpriteBatch::onRemove()
 {
     // Clear the sprites.
     clearSprites();
