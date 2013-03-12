@@ -112,6 +112,9 @@ function PointForceControllerToy::createBackground( %this )
 
 function PointForceControllerToy::createPlanetoid( %this )
 {
+    // Choose a position for the planetoid.
+    %position = 0;
+    
     if ( PointForceControllerToy.showPlanetoid )
     {
         // Create the planetoid.
@@ -119,7 +122,7 @@ function PointForceControllerToy::createPlanetoid( %this )
         {
             class = "Planetoid";
         };
-        //%object.BodyType = static;
+        %object.Position = %position;
         %object.Size = PointForceControllerToy.planetoidSize;
         %object.Image = "ToyAssets:Planetoid";
         %object.AngularVelocity = -5;
@@ -132,6 +135,7 @@ function PointForceControllerToy::createPlanetoid( %this )
     // Create planetoid bubble.
     %player = new ParticlePlayer();
     %player.BodyType = static;
+    %player.Position = %position;
     %player.Particle = "ToyAssets:ForceBubble";
     %player.SceneLayer = 0;
     SandboxScene.add( %player );
@@ -145,6 +149,11 @@ function PointForceControllerToy::createPlanetoid( %this )
     %controller.LinearDrag = PointForceControllerToy.controllerLinearDrag;
     %controller.AngularDrag = PointForceControllerToy.controllerAngularDrag;
     SandboxScene.Controllers.add( %controller );
+
+    if ( isObject(%object) )
+        %controller.setTrackedObject( %object );
+    else
+        %controller.Position = %position;
     
     // This is so we can reference it in the toy, no other reason.
     PointForceControllerToy.Controller = %controller;
