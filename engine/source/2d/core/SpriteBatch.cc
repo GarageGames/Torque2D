@@ -52,14 +52,28 @@ SpriteBatch::SpriteBatch() :
     // Reset local extents.
     mLocalExtents.SetZero();
     mLocalExtentsDirty = true;
-
-    // Create the sprite batch query if sprite clipping is on.
-    createSpriteBatchQuery();
 }
 
 //------------------------------------------------------------------------------
 
 SpriteBatch::~SpriteBatch()
+{
+}
+
+//-----------------------------------------------------------------------------
+
+bool SpriteBatch::onAdd()
+{
+    // Create the sprite batch query if required.
+    if ( mBatchCulling )
+        createSpriteBatchQuery();
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
+void SpriteBatch::onRemove()
 {
     // Clear the sprites.
     clearSprites();
@@ -371,6 +385,9 @@ void SpriteBatch::setBatchCulling( const bool batchCulling )
     // Finish if no change.
     if ( mBatchCulling == batchCulling )
         return;
+
+    // Set batch culling.
+    mBatchCulling = batchCulling;
 
     // Create/destroy sprite batch query appropriately.
     if ( mBatchCulling )
@@ -921,6 +938,30 @@ SimObject* SpriteBatch::getSpriteDataObject( void ) const
 
     // Get data object.
     return mSelectedSprite->getDataObject();
+}
+
+//------------------------------------------------------------------------------
+
+void SpriteBatch::setUserData( void* pUserData )
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return;
+
+    // Set user data.
+    mSelectedSprite->setUserData( pUserData );
+}
+
+//------------------------------------------------------------------------------
+
+void* SpriteBatch::getUserData( void ) const
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return NULL;
+
+    // Get user data.
+    return mSelectedSprite->getUserData();
 }
 
 //------------------------------------------------------------------------------

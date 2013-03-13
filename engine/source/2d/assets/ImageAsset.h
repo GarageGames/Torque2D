@@ -165,6 +165,7 @@ public:
     static void initPersistFields();
     virtual bool onAdd();
     virtual void onRemove();
+    virtual void copyTo(SimObject* object);
 
     void                    setImageFile( const char* pImageFile );
     inline StringTableEntry getImageFile( void ) const                      { return mImageFile; };

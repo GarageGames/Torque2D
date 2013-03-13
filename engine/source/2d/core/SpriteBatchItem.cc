@@ -159,6 +159,8 @@ void SpriteBatchItem::resetState( void )
 
     mSpriteBatchQueryKey = 0;
 
+    mUserData = NULL;
+
     // Require self ticking.
     mSelfTick = true;
 }
@@ -310,10 +312,11 @@ void SpriteBatchItem::updateWorldTransform( const U32 batchTransformId )
 
     // Update the local transform if needed.
     if ( mLocalTransformDirty )
+    {
         updateLocalTransform();
-
+    }
     // Finish if the batch transform is up-to-date.
-    if ( batchTransformId == mLastBatchTransformId )
+    else if ( batchTransformId == mLastBatchTransformId )
         return;
 
     // Fetch world transform.
