@@ -557,12 +557,8 @@ void Scene::dispatchBeginContactCallbacks( void )
         if ( pSceneObjectA->isBeingDeleted() || pSceneObjectB->isBeingDeleted() )
             continue;
 
-        // Fetch collision callback status.
-        const bool sceneObjectACallback = pSceneObjectA->getCollisionCallback();
-        const bool sceneObjectBCallback = pSceneObjectB->getCollisionCallback();
-
         // Skip if both objects don't have collision callback active.
-        if ( !sceneObjectACallback && !sceneObjectBCallback )
+        if ( !pSceneObjectA->getCollisionCallback() && !pSceneObjectB->getCollisionCallback() )
             continue;
 
         // Fetch normal and contact points.
@@ -621,29 +617,26 @@ void Scene::dispatchBeginContactCallbacks( void )
                 shapeIndexA, shapeIndexB );
 		}
 
-        // Do both objects have collision callback active?
-        if ( sceneObjectACallback && sceneObjectBCallback )
+        // Does the scene handle the collision callback?
+        Namespace* pNamespace = getNamespace();
+        if ( pNamespace != NULL && pNamespace->lookup( StringTable->insert( "onSceneCollision" ) ) != NULL )
         {
-            // Yes, so does the scene handle the collision callback?
-            Namespace* pNamespace = getNamespace();
-            if ( pNamespace != NULL && pNamespace->lookup( StringTable->insert( "onSceneCollision" ) ) != NULL )
-            {
-                // Yes, so perform script callback on the Scene.
-                Con::executef( this, 4, "onSceneCollision",
-                    pSceneObjectABuffer,
-                    pSceneObjectBBuffer,
-                    pMiscInfoBuffer );
-            }
-            else
-            {
-                // No, so call it on its behaviors.
-                const char* args[5] = { "onSceneCollision", this->getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
-                callOnBehaviors( 5, args );
-            }
+            // Yes, so perform script callback on the Scene.
+            Con::executef( this, 4, "onSceneCollision",
+                pSceneObjectABuffer,
+                pSceneObjectBBuffer,
+                pMiscInfoBuffer );
+        }
+        else
+        {
+            // No, so call it on its behaviors.
+            const char* args[5] = { "onSceneCollision", this->getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
+            callOnBehaviors( 5, args );
         }
 
-        // Does object A have collision callback active?
-        if ( sceneObjectACallback )
+        // Is object A allowed to collide with object B?
+        if (    (pSceneObjectA->mCollisionGroupMask & pSceneObjectB->mSceneGroupMask) != 0 &&
+                (pSceneObjectA->mCollisionLayerMask & pSceneObjectB->mSceneLayerMask) != 0 )
         {
             // Yes, so does it handle the collision callback?
             if ( pSceneObjectA->isMethod("onCollision") )            
@@ -661,8 +654,9 @@ void Scene::dispatchBeginContactCallbacks( void )
             }
         }
 
-        // Does object B have collision callback active?
-        if ( sceneObjectBCallback )
+        // Is object B allowed to collide with object A?
+        if (    (pSceneObjectB->mCollisionGroupMask & pSceneObjectA->mSceneGroupMask) != 0 &&
+                (pSceneObjectB->mCollisionLayerMask & pSceneObjectA->mSceneLayerMask) != 0 )
         {
             // Yes, so does it handle the collision callback?
             if ( pSceneObjectB->isMethod("onCollision") )            
@@ -713,12 +707,8 @@ void Scene::dispatchEndContactCallbacks( void )
         if ( pSceneObjectA->isBeingDeleted() || pSceneObjectB->isBeingDeleted() )
             continue;
 
-        // Fetch collision callback status.
-        const bool sceneObjectACallback = pSceneObjectA->getCollisionCallback();
-        const bool sceneObjectBCallback = pSceneObjectB->getCollisionCallback();
-
         // Skip if both objects don't have collision callback active.
-        if ( !sceneObjectACallback && !sceneObjectBCallback )
+        if ( !pSceneObjectA->getCollisionCallback() && !pSceneObjectB->getCollisionCallback() )
             continue;
 
         // Fetch shape index.
@@ -739,29 +729,26 @@ void Scene::dispatchEndContactCallbacks( void )
         char* pMiscInfoBuffer = Con::getArgBuffer(32);
         dSprintf(pMiscInfoBuffer, 32, "%d %d", shapeIndexA, shapeIndexB );
 
-        // Do both objects have collision callback active?
-        if ( sceneObjectACallback && sceneObjectBCallback )
+        // Does the scene handle the collision callback?
+        Namespace* pNamespace = getNamespace();
+        if ( pNamespace != NULL && pNamespace->lookup( StringTable->insert( "onSceneEndCollision" ) ) != NULL )
         {
             // Yes, so does the scene handle the collision callback?
-            Namespace* pNamespace = getNamespace();
-            if ( pNamespace != NULL && pNamespace->lookup( StringTable->insert( "onSceneEndCollision" ) ) != NULL )
-            {
-                // Yes, so does the scene handle the collision callback?
-                Con::executef( this, 4, "onSceneEndCollision",
-                    pSceneObjectABuffer,
-                    pSceneObjectBBuffer,
-                    pMiscInfoBuffer );
-            }
-            else
-            {
-                // No, so call it on its behaviors.
-                const char* args[5] = { "onSceneEndCollision", this->getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
-                callOnBehaviors( 5, args );
-            }
+            Con::executef( this, 4, "onSceneEndCollision",
+                pSceneObjectABuffer,
+                pSceneObjectBBuffer,
+                pMiscInfoBuffer );
+        }
+        else
+        {
+            // No, so call it on its behaviors.
+            const char* args[5] = { "onSceneEndCollision", this->getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
+            callOnBehaviors( 5, args );
         }
 
-        // Does object A have collision callback active?
-        if ( sceneObjectACallback )
+        // Is object A allowed to collide with object B?
+        if (    (pSceneObjectA->mCollisionGroupMask & pSceneObjectB->mSceneGroupMask) != 0 &&
+                (pSceneObjectA->mCollisionLayerMask & pSceneObjectB->mSceneLayerMask) != 0 )
         {
             // Yes, so does it handle the collision callback?
             if ( pSceneObjectA->isMethod("onEndCollision") )            
@@ -779,8 +766,9 @@ void Scene::dispatchEndContactCallbacks( void )
             }
         }
 
-        // Does object B have collision callback active?
-        if ( sceneObjectBCallback )
+        // Is object B allowed to collide with object A?
+        if (    (pSceneObjectB->mCollisionGroupMask & pSceneObjectA->mSceneGroupMask) != 0 &&
+                (pSceneObjectB->mCollisionLayerMask & pSceneObjectA->mSceneLayerMask) != 0 )
         {
             // Yes, so does it handle the collision callback?
             if ( pSceneObjectB->isMethod("onEndCollision") )            
