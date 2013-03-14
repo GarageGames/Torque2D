@@ -55,7 +55,7 @@ AbstractClassRep* AbstractClassRep::findClassRep(const char* in_pClassName)
       "AbstractClassRep::findClassRep() - Tried to find an AbstractClassRep before AbstractClassRep::initialize().");
 
    for (AbstractClassRep *walk = classLinkList; walk; walk = walk->nextClass)
-      if (!dStrcmp(walk->getClassName(), in_pClassName))
+      if (dStricmp(walk->getClassName(), in_pClassName) == 0)
          return walk;
 
    return NULL;
@@ -69,7 +69,7 @@ void AbstractClassRep::registerClassRep(AbstractClassRep* in_pRep)
 #ifdef TORQUE_DEBUG  // assert if this class is already registered.
    for(AbstractClassRep *walk = classLinkList; walk; walk = walk->nextClass)
    {
-      AssertFatal(dStrcmp(in_pRep->mClassName, walk->mClassName),
+      AssertFatal(dStricmp(in_pRep->mClassName, walk->mClassName) != 0,
          "Duplicate class name registered in AbstractClassRep::registerClassRep()");
    }
 #endif
@@ -119,7 +119,7 @@ static S32 QSORT_CALLBACK ACRCompare(const void *aptr, const void *bptr)
 
    if(a->mClassType != b->mClassType)
       return a->mClassType - b->mClassType;
-   return dStrcmp(a->getClassName(), b->getClassName());
+   return dStricmp(a->getClassName(), b->getClassName());
 }
 
 void AbstractClassRep::initialize()
