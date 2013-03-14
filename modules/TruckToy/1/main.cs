@@ -522,7 +522,7 @@ function TruckToy::createBrick( %this, %brickNumber, %posX, %posY, %static )
     %obj.setSize( 1, 0.5 );
     %obj.setSceneLayer( TruckToy.ObstacleDomain );
     %obj.setSceneGroup( TruckToy.ObstacleDomain );
-    %obj.setCollisionGroups( none );
+    %obj.setCollisionGroups( TruckToy.GroundDomain, TruckToy.ObstacleDomain );
     %obj.setDefaultFriction( TruckToy.ObstacleFriction );
     %obj.createPolygonBoxCollisionShape( 1, 0.5 );
     %obj.setAwake( false );
@@ -569,7 +569,7 @@ function TruckToy::createPlank( %this, %plankNumber, %posX, %posY, %angle, %stat
     %obj.setSceneLayer( TruckToy.ObstacleDomain );
     %obj.setSceneGroup( TruckToy.ObstacleDomain );
     %obj.setDefaultFriction( TruckToy.ObstacleFriction );
-    %obj.setCollisionGroups( none );
+    %obj.setCollisionGroups( TruckToy.GroundDomain, TruckToy.ObstacleDomain );
     %obj.setAwake( false );
     %obj.setDefaultFriction( 1.0 );
 
@@ -608,7 +608,7 @@ function TruckToy::createWreckedCar( %this, %carNumber, %posX, %posY, %angle, %s
     %obj.setSize( 4, 1.5 );   
     %obj.setSceneLayer( TruckToy.ObstacleDomain );
     %obj.setSceneGroup( TruckToy.ObstacleDomain );
-    %obj.setCollisionGroups( none );
+    %obj.setCollisionGroups( TruckToy.GroundDomain, TruckToy.ObstacleDomain );
     %obj.setAwake( false );
     %obj.setDefaultFriction( TruckToy.ObstacleFriction );
 
