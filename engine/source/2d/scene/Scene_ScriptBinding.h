@@ -269,7 +269,7 @@ ConsoleMethod(Scene, mergeScene, void, 3, 3,    "(scene) Merges the specified sc
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(Scene, getControllers, const char*, 2, 2,	"() Gets the Scene Controllers.\n"
-														"@return Gets the scene controllers.")
+                                                        "@return Gets the scene controllers.")
 {
     // Fetch the scene controllers.
     SimSet* pControllerSet = object->getControllers();
@@ -369,9 +369,9 @@ ConsoleMethod(Scene, createDistanceJoint, S32, 4, 12,   "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -583,9 +583,9 @@ ConsoleMethod(Scene, createRopeJoint, S32, 4, 10,       "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -720,9 +720,9 @@ ConsoleMethod(Scene, createRevoluteJoint, S32, 4, 9,    "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -915,9 +915,9 @@ ConsoleMethod(Scene, createWeldJoint, S32, 4, 11,       "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -1091,9 +1091,9 @@ ConsoleMethod(Scene, createWheelJoint, S32, 7, 11,      "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -1310,9 +1310,9 @@ ConsoleMethod(Scene, createFrictionJoint, S32, 4, 11,   "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -1481,9 +1481,9 @@ ConsoleMethod(Scene, createPrismaticJoint, S32, 7, 11,  "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -1688,9 +1688,9 @@ ConsoleMethod(Scene, createPulleyJoint, S32, 9, 16,     "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -1824,7 +1824,7 @@ ConsoleMethod(Scene, createTargetJoint, S32, 5, 10,     "(sceneObject, worldTarg
                                                         "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                         "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object.
+    // Fetch scene object.
     SceneObject* pSceneObject = Sim::findObject<SceneObject>(argv[2]);
 
     // Check scene object.
@@ -2015,9 +2015,9 @@ ConsoleMethod(Scene, createMotorJoint, S32, 4, 11,      "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;

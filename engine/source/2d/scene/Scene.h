@@ -221,8 +221,8 @@ private:
     typeReverseJointHash        mReverseJoints;
     U32                         mJointMasterId;
 
-	/// Scene controllers.
-	SimObjectPtr<SimSet>	    mControllers;
+    /// Scene controllers.
+    SimObjectPtr<SimSet>	    mControllers;
 
     /// Scene time.
     F32                         mSceneTime;
@@ -343,7 +343,7 @@ public:
 
     void                    mergeScene( const Scene* pScene );
 
-	inline SimSet*			getControllers( void )						{ return mControllers; }
+    inline SimSet*			getControllers( void )						{ return mControllers; }
 
     /// Scene time.
     inline F32              getSceneTime( void ) const                  { return mSceneTime; };
