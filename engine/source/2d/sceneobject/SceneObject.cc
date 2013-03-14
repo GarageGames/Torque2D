@@ -373,9 +373,6 @@ bool SceneObject::onAdd()
 
         mpTargetScene = NULL;
     }
-
-    // Perform the callback.
-    Con::executef(this, 1, "onAdd");
    
     // Return Okay.
     return true;
@@ -385,9 +382,6 @@ bool SceneObject::onAdd()
 
 void SceneObject::onRemove()
 {
-    // Perform the callback.
-    Con::executef(this, 1, "onRemove");
-
     // Detach Any GUI Control.
     detachGui();
 

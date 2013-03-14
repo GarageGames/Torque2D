@@ -80,8 +80,6 @@ GuiControl::GuiControl()
    mTipHoverTime        = 1000;
    mTooltipWidth		= 250;
    mIsContainer         = false;
-
-   mNSLinkMask = LinkSuperClassName | LinkClassName;
 }
 
 GuiControl::~GuiControl()
@@ -108,10 +106,6 @@ bool GuiControl::onAdd()
 
    // Add to root group.
    Sim::getGuiGroup()->addObject(this);
-
-   // Notify Script.
-   if( isMethod("onAdd") )
-      Con::executef(this, 1, "onAdd");
 
    // Return Success.
    return true;
@@ -1125,10 +1119,6 @@ ConsoleMethod( GuiControl, getMinExtent, const char*, 2, 2, "() Get the minimum 
 
 void GuiControl::onRemove()
 {
-   // Only invoke script callbacks if they can be received
-   if( isMethod("onRemove") )
-      Con::executef(this, 1, "onRemove");
-
    clearFirstResponder();
 
    Parent::onRemove();

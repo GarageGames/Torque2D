@@ -263,8 +263,6 @@ Scene::Scene() :
     // Assign scene index.    
     mSceneIndex = ++sSceneMasterIndex;
     sSceneCount++;
-
-    mNSLinkMask = LinkSuperClassName | LinkClassName;
 }
 
 //-----------------------------------------------------------------------------
@@ -285,9 +283,6 @@ bool Scene::onAdd()
     // Call Parent.
     if(!Parent::onAdd())
         return false;
-
-    // Synchronize Namespace's
-    linkNamespaces();
 
     // Create physics world.
     mpWorld = new b2World( mWorldGravity );
@@ -313,9 +308,6 @@ bool Scene::onAdd()
     // Set loading scene.
     Scene::LoadingScene = this;
 
-    // Tell the scripts
-    Con::executef(this, 1, "onAdd");
-
     // Turn-on tick processing.
     setProcessTicks( true );
 
@@ -329,9 +321,6 @@ void Scene::onRemove()
 {
     // Turn-off tick processing.
     setProcessTicks( false );
-
-    // tell the scripts
-    Con::executef(this, 1, "onRemove");
 
     // Clear Scene.
     clearScene();
@@ -355,9 +344,6 @@ void Scene::onRemove()
     // Call Parent. Clear scene handles all the object removal, so we can skip
     // that part and just do the sim-object stuff.
     SimObject::onRemove();
-
-    // Restore NameSpace's
-    unlinkNamespaces();
 }
 
 //-----------------------------------------------------------------------------
