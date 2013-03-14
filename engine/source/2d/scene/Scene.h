@@ -629,7 +629,9 @@ public:
 
     /// Destruction listeners.
     virtual                 void SayGoodbye( b2Joint* pJoint );
-    virtual                 void SayGoodbye( b2Fixture* pFixture );
+    virtual                 void SayGoodbye( b2Fixture* pFixture )      {}
+
+    virtual SceneObject*    create( const char* pType );
 
     /// Miscellaneous.
     inline void             setBatchingEnabled( const bool enabled )    { mBatchRenderer.setBatchEnabled( enabled ); }

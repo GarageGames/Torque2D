@@ -3069,8 +3069,20 @@ ConsoleMethod(Scene, getBatchingEnabled, bool, 2, 2,    "() Gets whether render 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Scene, setIsEditorScene, void, 3, 3, "() Sets whether this is an editor scene\n"
+ConsoleMethod(Scene, setIsEditorScene, void, 3, 3, "() Sets whether this is an editor scene.\n"
                                                             "@return No return value.")
 {
    object->setIsEditorScene(dAtob(argv[2]));
 }
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, create, const char*, 3, 3, "(type) Creates the specified scene-object derived type and adds it to the scene.\n"
+                                                "@return The scene-object or NULL if not created.")
+{
+    // Create the scene object.
+    SceneObject* pSceneObject = object->create( argv[2] );
+
+    return pSceneObject == NULL ? NULL : pSceneObject->getIdString();
+}
+

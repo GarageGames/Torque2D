@@ -3639,10 +3639,55 @@ void Scene::SayGoodbye( b2Joint* pJoint )
 
 //-----------------------------------------------------------------------------
 
-void Scene::SayGoodbye( b2Fixture* pFixture )
+SceneObject* Scene::create( const char* pType )
 {
-    // The scene is not currently interested in tracking fixtures
-    // so we do nothing here for now.
+    // Sanity!
+    AssertFatal( pType != NULL, "Scene::create() - Cannot create a NULL type." );
+
+    // Find the class rep.
+    AbstractClassRep* pClassRep = AbstractClassRep::findClassRep( pType ); 
+
+    // Did we find the type?
+    if ( pClassRep == NULL )
+    {
+        // No, so warn.
+        Con::warnf( "Scene::create() - Could not find type '%s' to create.", pType );
+        return NULL;
+    }
+
+    // Find the scene object rep.
+    AbstractClassRep* pSceneObjectRep = AbstractClassRep::findClassRep( "SceneObject" ); 
+
+    // Sanity!
+    AssertFatal( pSceneObjectRep != NULL,  "Scene::create() - Could not find SceneObject class rep." );
+
+    // Is the type derived from scene object?
+    if ( !pClassRep->isClass( pSceneObjectRep ) )
+    {
+        // No, so warn.
+        Con::warnf( "Scene::create() - Type '%s' is not derived from SceneObject.", pType );
+        return NULL;
+    }
+    
+    // Create the type.
+    SceneObject* pSceneObject = dynamic_cast<SceneObject*>( pClassRep->create() );
+
+    // Sanity!
+    AssertFatal( pSceneObject != NULL, "Scene::create() - Failed to create type via class rep." );
+
+    // Attemp to register the object.
+    if ( !pSceneObject->registerObject() )
+    {
+        // No, so warn.
+        Con::warnf( "Scene::create() - Failed to register type '%s'.", pType );
+        delete pSceneObject;
+        return NULL;
+    }
+
+    // Add to the scene.
+    addToScene( pSceneObject );
+
+    return pSceneObject;
 }
 
 //-----------------------------------------------------------------------------
