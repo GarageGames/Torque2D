@@ -1267,7 +1267,6 @@ breakContinue:
             {
                // The field is not being retrieved from an object. Maybe it's
                // a special accessor?
-                Con::warnf("OC=%d", valBuffer.getObjectCount() );
                getFieldComponent( prevObject, prevField, prevFieldArray, curField, valBuffer, VAL_BUFFER_SIZE );
                STR.setStringValue( valBuffer );
             }
