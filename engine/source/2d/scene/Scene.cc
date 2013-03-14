@@ -1542,7 +1542,7 @@ void Scene::mergeScene( const Scene* pScene )
 
 //-----------------------------------------------------------------------------
 
-b2Joint* Scene::findJoint( const U32 jointId )
+b2Joint* Scene::findJoint( const S32 jointId )
 {
     // Find joint.
     typeJointHash::iterator itr = mJoints.find( jointId );
@@ -1552,7 +1552,7 @@ b2Joint* Scene::findJoint( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-b2JointType Scene::getJointType( const U32 jointId )
+b2JointType Scene::getJointType( const S32 jointId )
 {
     // Sanity!
     if ( jointId >= mJointMasterId )
@@ -1566,7 +1566,7 @@ b2JointType Scene::getJointType( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-U32 Scene::findJointId( b2Joint* pJoint )
+S32 Scene::findJointId( b2Joint* pJoint )
 {
     // Sanity!
     AssertFatal( pJoint != NULL, "Joint cannot be NULL." );
@@ -1585,7 +1585,7 @@ U32 Scene::findJointId( b2Joint* pJoint )
 
 //-----------------------------------------------------------------------------
 
-U32 Scene::createJoint( b2JointDef* pJointDef )
+S32 Scene::createJoint( b2JointDef* pJointDef )
 {
     // Sanity!
     AssertFatal( pJointDef != NULL, "Joint definition cannot be NULL." );
@@ -1594,7 +1594,7 @@ U32 Scene::createJoint( b2JointDef* pJointDef )
     b2Joint* pJoint = mpWorld->CreateJoint( pJointDef );
 
     // Allocate joint Id.
-    const U32 jointId = mJointMasterId++;
+    const S32 jointId = mJointMasterId++;
 
     // Insert joint.
     typeJointHash::iterator itr = mJoints.insert( jointId, pJoint );
@@ -1650,7 +1650,7 @@ bool Scene::hasJoints( SceneObject* pSceneObject )
 
 //-----------------------------------------------------------------------------
 
-U32 Scene::createDistanceJoint(
+S32 Scene::createDistanceJoint(
     const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
     const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
     const F32 length,
@@ -1664,6 +1664,13 @@ U32 Scene::createDistanceJoint(
     {
         // Warn.
         Con::printf( "Cannot add a joint to a scene object that is not in a scene." );
+        return -1;
+    }
+
+    // Check for two invalid objects.
+    if ( pSceneObjectA == NULL && pSceneObjectB == NULL )
+    {
+        Con::warnf("Scene::createDistanceJoint() - Cannot create joint without at least a single scene object." );
         return -1;
     }
 
@@ -1857,7 +1864,7 @@ F32 Scene::getDistanceJointDampingRatio( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-U32 Scene::createRopeJoint(
+S32 Scene::createRopeJoint(
         const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
         const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
         const F32 maxLength,
@@ -1869,6 +1876,13 @@ U32 Scene::createRopeJoint(
     {
         // Warn.
         Con::printf( "Cannot add a joint to a scene object that is not in a scene." );
+        return -1;
+    }
+
+    // Check for two invalid objects.
+    if ( pSceneObjectA == NULL && pSceneObjectB == NULL )
+    {
+        Con::warnf("Scene::createRopeJoint() - Cannot create joint without at least a single scene object." );
         return -1;
     }
 
@@ -1948,7 +1962,7 @@ F32 Scene::getRopeJointMaxLength( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-U32 Scene::createRevoluteJoint(
+S32 Scene::createRevoluteJoint(
         const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
         const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
         const bool collideConnected )
@@ -1959,6 +1973,13 @@ U32 Scene::createRevoluteJoint(
     {
         // Warn.
         Con::printf( "Cannot add a joint to a scene object that is not in a scene." );
+        return -1;
+    }
+
+    // Check for two invalid objects.
+    if ( pSceneObjectA == NULL && pSceneObjectB == NULL )
+    {
+        Con::warnf("Scene::createRevoluteJoint() - Cannot create joint without at least a single scene object." );
         return -1;
     }
 
@@ -2115,7 +2136,7 @@ bool Scene::getRevoluteJointMotor(
 
 //-----------------------------------------------------------------------------
 
-U32 Scene::createWeldJoint(
+S32 Scene::createWeldJoint(
         const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
         const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
         const F32 frequency,
@@ -2128,6 +2149,13 @@ U32 Scene::createWeldJoint(
     {
         // Warn.
         Con::printf( "Cannot add a joint to a scene object that is not in a scene." );
+        return -1;
+    }
+
+    // Check for two invalid objects.
+    if ( pSceneObjectA == NULL && pSceneObjectB == NULL )
+    {
+        Con::warnf("Scene::createWeldJoint() - Cannot create joint without at least a single scene object." );
         return -1;
     }
 
@@ -2266,7 +2294,7 @@ F32 Scene::getWeldJointDampingRatio( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-U32 Scene::createWheelJoint(
+S32 Scene::createWheelJoint(
         const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
         const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
         const b2Vec2& worldAxis,
@@ -2278,6 +2306,13 @@ U32 Scene::createWheelJoint(
     {
         // Warn.
         Con::printf( "Cannot add a joint to a scene object that is not in a scene." );
+        return -1;
+    }
+
+    // Check for two invalid objects.
+    if ( pSceneObjectA == NULL && pSceneObjectB == NULL )
+    {
+        Con::warnf("Scene::createWheelJoint() - Cannot create joint without at least a single scene object." );
         return -1;
     }
 
@@ -2481,7 +2516,7 @@ F32 Scene::getWheelJointDampingRatio( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-U32 Scene::createFrictionJoint(
+S32 Scene::createFrictionJoint(
         const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
         const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
         const F32 maxForce,
@@ -2494,6 +2529,13 @@ U32 Scene::createFrictionJoint(
     {
         // Warn.
         Con::printf( "Cannot add a joint to a scene object that is not in a scene." );
+        return -1;
+    }
+
+    // Check for two invalid objects.
+    if ( pSceneObjectA == NULL && pSceneObjectB == NULL )
+    {
+        Con::warnf("Scene::createFrictionJoint() - Cannot create joint without at least a single scene object." );
         return -1;
     }
 
@@ -2631,7 +2673,7 @@ F32 Scene::getFrictionJointMaxTorque( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-U32 Scene::createPrismaticJoint(
+S32 Scene::createPrismaticJoint(
         const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
         const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
         const b2Vec2& worldAxis,
@@ -2643,6 +2685,13 @@ U32 Scene::createPrismaticJoint(
     {
         // Warn.
         Con::printf( "Cannot add a joint to a scene object that is not in a scene." );
+        return -1;
+    }
+
+    // Check for two invalid objects.
+    if ( pSceneObjectA == NULL && pSceneObjectB == NULL )
+    {
+        Con::warnf("Scene::createPrismaticJoint() - Cannot create joint without at least a single scene object." );
         return -1;
     }
 
@@ -2800,7 +2849,7 @@ bool Scene::getPrismaticJointMotor(
 
 //-----------------------------------------------------------------------------
 
-U32 Scene::createPulleyJoint(
+S32 Scene::createPulleyJoint(
         const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
         const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
         const b2Vec2& worldGroundAnchorA, const b2Vec2& worldGroundAnchorB,
@@ -2814,6 +2863,13 @@ U32 Scene::createPulleyJoint(
     {
         // Warn.
         Con::printf( "Cannot add a joint to a scene object that is not in a scene." );
+        return -1;
+    }
+
+    // Check for two invalid objects.
+    if ( pSceneObjectA == NULL && pSceneObjectB == NULL )
+    {
+        Con::warnf("Scene::createPulleyJoint() - Cannot create joint without at least a single scene object." );
         return -1;
     }
 
@@ -2841,7 +2897,7 @@ U32 Scene::createPulleyJoint(
 
 //-----------------------------------------------------------------------------
 
-U32 Scene::createTargetJoint(
+S32 Scene::createTargetJoint(
         const SceneObject* pSceneObject,
         const b2Vec2& worldTarget,
         const F32 maxForce,
@@ -2858,8 +2914,12 @@ U32 Scene::createTargetJoint(
         return -1;
     }
 
-    // Sanity!
-    AssertFatal( pSceneObject != NULL, "Invalid scene object." );
+    // Check for invalid object.
+    if ( pSceneObject == NULL )
+    {
+        Con::warnf("Scene::createPulleyJoint() - Cannot create joint without a scene object." );
+        return -1;
+    }
 
     // Fetch bodies.
     b2Body* pBody = pSceneObject->getBody();
@@ -3118,7 +3178,7 @@ F32 Scene::getTargetJointDampingRatio( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-U32 Scene::createMotorJoint(
+S32 Scene::createMotorJoint(
             const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
             const b2Vec2 linearOffset,
             const F32 angularOffset,
@@ -3133,6 +3193,13 @@ U32 Scene::createMotorJoint(
     {
         // Warn.
         Con::printf( "Cannot add a joint to a scene object that is not in a scene." );
+        return -1;
+    }
+
+    // Check for two invalid objects.
+    if ( pSceneObjectA == NULL && pSceneObjectB == NULL )
+    {
+        Con::warnf("Scene::createMotorJoint() - Cannot create joint without at least a single scene object." );
         return -1;
     }
 
