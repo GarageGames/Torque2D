@@ -95,10 +95,9 @@ function AquariumToy::spawnFish(%this)
         CollisionCallback = true;
     };
 
+    %fish.setCollisionGroups( none );
     %fish.createPolygonBoxCollisionShape( 15, 15);
-    %fish.setCollisionGroups( 15 );
     %fish.setDefaultDensity( 1 );
-    %fish.setDefaultFriction( 1.0 );
     SandboxScene.add( %fish );
 
     %this.currentFish++;

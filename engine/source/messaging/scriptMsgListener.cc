@@ -43,30 +43,9 @@
 
 ScriptMsgListener::ScriptMsgListener()
 {
-   mNSLinkMask = LinkSuperClassName | LinkClassName;
 }
 
 IMPLEMENT_CONOBJECT(ScriptMsgListener);
-
-//////////////////////////////////////////////////////////////////////////
-
-bool ScriptMsgListener::onAdd()
-{
-   if(! Parent::onAdd())
-      return false;
-
-   linkNamespaces();
-   Con::executef(this, 1, "onAdd");
-   return true;
-}
-
-void ScriptMsgListener::onRemove()
-{
-   Con::executef(this, 1, "onRemove");
-   unlinkNamespaces();
-   
-   Parent::onRemove();
-}
 
 //////////////////////////////////////////////////////////////////////////
 // Public Methods

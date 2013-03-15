@@ -35,6 +35,7 @@ function TruckToy::create( %this )
     TruckToy.BackdropDomain = 31;
     TruckToy.BackgroundDomain = 25;
     TruckToy.TruckDomain = 20;
+    TruckToy.GroundDomain = 18;
     TruckToy.ObstacleDomain = 15;
     TruckToy.ProjectileDomain = 16;
     TruckToy.ForegroundDomain = 10;    
@@ -226,9 +227,9 @@ function TruckToy::createFloor(%this)
     %obj.setPosition( 0, TruckToy.FloorLevel - (%obj.getSizeY()/2) );
     %obj.setRepeatX( TruckToy.WorldWidth / 12 );   
     %obj.setSceneLayer( TruckToy.ObstacleDomain );
-    %obj.setSceneGroup( TruckToy.ObstacleDomain );
+    %obj.setSceneGroup( TruckToy.GroundDomain );
     %obj.setDefaultFriction( TruckToy.ObstacleFriction );
-    %obj.setCollisionGroups( TruckToy.ObstacleDomain SPC TruckToy.ProjectileDomain );
+    %obj.setCollisionGroups( none );
     %obj.createEdgeCollisionShape( TruckToy.WorldWidth/-2, 1.5, TruckToy.WorldWidth/2, 1.5 );
     %obj.createEdgeCollisionShape( TruckToy.WorldWidth/-2, 3, TruckToy.WorldWidth/-2, 50 );
     %obj.createEdgeCollisionShape( TruckToy.WorldWidth/2, 3, TruckToy.WorldWidth/2, 50 );
@@ -345,7 +346,7 @@ function TruckToy::createBridge( %this, %posX, %posY, %linkCount )
       }
       else
       {      
-         %obj.setCollisionGroups( TruckToy.ObstacleDomain );   
+         %obj.setCollisionGroups( none );
          %obj.setDefaultDensity( 1 );
          %obj.setDefaultFriction( TruckToy.ObstacleFriction );
          %obj.createPolygonBoxCollisionShape( %linkWidth, %linkHeight );
@@ -406,7 +407,7 @@ function TruckToy::createChain( %this, %posX, %posY, %linkCount )
         
         %obj.setSceneLayer( TruckToy.BackgroundDomain-1 );
         %obj.setSceneGroup( TruckToy.ObstacleDomain );
-        %obj.setCollisionGroups( TruckToy.ObstacleDomain );
+        %obj.setCollisionGroups( none );
         %obj.setDefaultDensity( 1 );
         %obj.setDefaultFriction( 0.2 );
         %obj.createPolygonBoxCollisionShape( %linkWidth, %linkHeight );
@@ -521,7 +522,7 @@ function TruckToy::createBrick( %this, %brickNumber, %posX, %posY, %static )
     %obj.setSize( 1, 0.5 );
     %obj.setSceneLayer( TruckToy.ObstacleDomain );
     %obj.setSceneGroup( TruckToy.ObstacleDomain );
-    %obj.setCollisionGroups( TruckToy.ObstacleDomain );
+    %obj.setCollisionGroups( TruckToy.GroundDomain, TruckToy.ObstacleDomain );
     %obj.setDefaultFriction( TruckToy.ObstacleFriction );
     %obj.createPolygonBoxCollisionShape( 1, 0.5 );
     %obj.setAwake( false );
@@ -568,7 +569,7 @@ function TruckToy::createPlank( %this, %plankNumber, %posX, %posY, %angle, %stat
     %obj.setSceneLayer( TruckToy.ObstacleDomain );
     %obj.setSceneGroup( TruckToy.ObstacleDomain );
     %obj.setDefaultFriction( TruckToy.ObstacleFriction );
-    %obj.setCollisionGroups( TruckToy.ObstacleDomain );
+    %obj.setCollisionGroups( TruckToy.GroundDomain, TruckToy.ObstacleDomain );
     %obj.setAwake( false );
     %obj.setDefaultFriction( 1.0 );
 
@@ -607,7 +608,7 @@ function TruckToy::createWreckedCar( %this, %carNumber, %posX, %posY, %angle, %s
     %obj.setSize( 4, 1.5 );   
     %obj.setSceneLayer( TruckToy.ObstacleDomain );
     %obj.setSceneGroup( TruckToy.ObstacleDomain );
-    %obj.setCollisionGroups( TruckToy.ObstacleDomain );
+    %obj.setCollisionGroups( TruckToy.GroundDomain, TruckToy.ObstacleDomain );
     %obj.setAwake( false );
     %obj.setDefaultFriction( TruckToy.ObstacleFriction );
 
@@ -660,7 +661,7 @@ function TruckToy::createProjectile(%this)
     %projectile.Size = getRandom(0.5, 2);
     %projectile.Lifetime = 2.5;
     %projectile.createCircleCollisionShape( 0.2 ); 
-    %projectile.setCollisionGroups( TruckToy.ObstacleDomain );
+    %projectile.setCollisionGroups( TruckToy.GroundDomain );
     %projectile.CollisionCallback = true;
     SandboxScene.add( %projectile ); 
 }
@@ -708,8 +709,8 @@ function TruckToy::createTruck( %this, %posX, %posY )
     TruckToy.TruckBody.setImage( "TruckToy:truckBody" );
     TruckToy.TruckBody.setSize( 5, 2.5 );
     TruckToy.TruckBody.setSceneLayer( TruckToy.TruckDomain );
-    TruckToy.TruckBody.setSceneGroup( TruckToy.ObstacleDomain );
-    TruckToy.TruckBody.setCollisionGroups( TruckToy.ObstacleDomain SPC TruckToy.ObstacleDomain-1 );
+    TruckToy.TruckBody.setSceneGroup( TruckToy.ObstacleDomain);
+    TruckToy.TruckBody.setCollisionGroups( TruckToy.ObstacleDomain, TruckToy.ObstacleDomain-1, TruckToy.GroundDomain );
     TruckToy.TruckBody.createPolygonCollisionShape( "-2 0.2 -2 -0.5 0 -.95 2 -0.5 2 0.0 0 0.7 -1.5 0.7" ); 
     //TruckToy.TruckBody.setDebugOn( 5 );
     SandboxScene.add( TruckToy.TruckBody );
@@ -732,7 +733,7 @@ function TruckToy::createTruck( %this, %posX, %posY )
     %tireRear.setSize( 1.7, 1.7 );
     %tireRear.setSceneLayer( TruckToy.TruckDomain-1 );
     %tireRear.setSceneGroup( TruckToy.ObstacleDomain );
-    %tireRear.setCollisionGroups( TruckToy.ObstacleDomain );
+    %tireRear.setCollisionGroups( TruckToy.ObstacleDomain, TruckToy.GroundDomain );
     %tireRear.setDefaultFriction( TruckToy.WheelFriction );
     %tireRear.setDefaultDensity( TruckToy.RearWheelDensity );
     %tireRear.createCircleCollisionShape( 0.8 ); 
@@ -746,7 +747,7 @@ function TruckToy::createTruck( %this, %posX, %posY )
     %tireFront.setSize( 1.7, 1.7 );
     %tireFront.setSceneLayer( TruckToy.TruckDomain-1 );
     %tireFront.setSceneGroup( TruckToy.ObstacleDomain );
-    %tireFront.setCollisionGroups( TruckToy.ObstacleDomain );
+    %tireFront.setCollisionGroups( TruckToy.ObstacleDomain, TruckToy.GroundDomain );
     %tireFront.setDefaultFriction( TruckToy.WheelFriction );
     %tireFront.setDefaultDensity( TruckToy.FrontWheelDensity );
     %tireFront.createCircleCollisionShape( 0.8 ); 

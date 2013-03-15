@@ -373,9 +373,6 @@ bool SceneObject::onAdd()
 
         mpTargetScene = NULL;
     }
-
-    // Perform the callback.
-    Con::executef(this, 1, "onAdd");
    
     // Return Okay.
     return true;
@@ -385,9 +382,6 @@ bool SceneObject::onAdd()
 
 void SceneObject::onRemove()
 {
-    // Perform the callback.
-    Con::executef(this, 1, "onRemove");
-
     // Detach Any GUI Control.
     detachGui();
 
@@ -1442,14 +1436,14 @@ void SceneObject::setCollisionAgainst( const SceneObject* pSceneObject, const bo
     if ( clearMasks )
     {
         // Yes, so just set the masks to the referenced-objects' masks.
-        setCollisionGroupMask( pSceneObject->getCollisionGroupMask() );
-        setCollisionLayerMask( pSceneObject->getCollisionLayerMask() ); 
+        setCollisionGroupMask( pSceneObject->getSceneGroupMask() );
+        setCollisionLayerMask( pSceneObject->getSceneLayerMask() ); 
     }
     else
     {
         // No, so merge with existing masks.
-        setCollisionGroupMask( getCollisionGroupMask() | pSceneObject->getCollisionGroupMask() );
-        setCollisionLayerMask( getCollisionLayerMask() | pSceneObject->getCollisionLayerMask() ); 
+        setCollisionGroupMask( getCollisionGroupMask() | pSceneObject->getSceneGroupMask() );
+        setCollisionLayerMask( getCollisionLayerMask() | pSceneObject->getSceneLayerMask() ); 
     }
 }
 

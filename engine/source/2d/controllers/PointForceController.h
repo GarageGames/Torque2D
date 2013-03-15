@@ -50,11 +50,11 @@ private:
     /// Whether to apply the force non-linearly (using the inverse square law) or linearly.
     bool mNonLinear;
 
-	/// Linear drag co-efficient.
-	F32 mLinearDrag;
+    /// Linear drag co-efficient.
+    F32 mLinearDrag;
 
-	/// Linear drag co-efficient.
-	F32 mAngularDrag;
+    /// Linear drag co-efficient.
+    F32 mAngularDrag;
 
     /// Tracked object.
     SimObjectPtr<SceneObject> mTrackedObject;

@@ -453,7 +453,7 @@ public:
     //from the console or C++.
     virtual void			dumpClassHierarchy();
     ///
-    SimObject( const U8 namespaceLinkMask = 0 );
+    SimObject( const U8 namespaceLinkMask = LinkSuperClassName | LinkClassName );
     virtual ~SimObject();
 
     virtual bool processArguments(S32 argc, const char **argv);  ///< Process constructor options. (ie, new SimObject(1,2,3))

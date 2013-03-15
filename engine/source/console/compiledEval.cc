@@ -355,7 +355,7 @@ static const StringTableEntry _count = StringTable->insert( "count" );
 //-----------------------------------------------------------------------------
 
 // Gets a component of an object's field value or a variable and returns it in val.
-static void getFieldComponent( SimObject* object, StringTableEntry field, const char* array, StringTableEntry subField, FrameTemp<char>& val )
+static void getFieldComponent( SimObject* object, StringTableEntry field, const char* array, StringTableEntry subField, char* val, const U32 bufferSize )
 {
     const char* prevVal = NULL;
    
@@ -364,7 +364,7 @@ static void getFieldComponent( SimObject* object, StringTableEntry field, const 
         prevVal = object->getDataField( field, array );
    
     // Otherwise, grab from the string stack. The value coming in will always
-    // be a string because that is how multicomponent variables are handled.
+    // be a string because that is how multi-component variables are handled.
     else
         prevVal = STR.getStringValue();
 
@@ -372,22 +372,22 @@ static void getFieldComponent( SimObject* object, StringTableEntry field, const 
     if ( prevVal && *prevVal )
     {
         if ( subField == _count )
-            dSprintf( val, val.getObjectCount(), "%d", StringUnit::getUnitCount( prevVal, " \t\n" ) );
+            dSprintf( val, bufferSize, "%d", StringUnit::getUnitCount( prevVal, " \t\n" ) );
 
         else if ( subField == _xyzw[0] || subField == _rgba[0] || subField == _size[0] )
-            dStrcpy( val, StringUnit::getUnit( prevVal, 0, " \t\n") );
+            dStrncpy( val, StringUnit::getUnit( prevVal, 0, " \t\n"), bufferSize );
 
         else if ( subField == _xyzw[1] || subField == _rgba[1] || subField == _size[1] )
-            dStrcpy( val, StringUnit::getUnit( prevVal, 1, " \t\n") );
+            dStrncpy( val, StringUnit::getUnit( prevVal, 1, " \t\n"), bufferSize );
 
         else if ( subField == _xyzw[2] || subField == _rgba[2] )
-            dStrcpy( val, StringUnit::getUnit( prevVal, 2, " \t\n") );
+            dStrncpy( val, StringUnit::getUnit( prevVal, 2, " \t\n"), bufferSize );
 
         else if ( subField == _xyzw[3] || subField == _rgba[3] )
-            dStrcpy( val, StringUnit::getUnit( prevVal, 3, " \t\n") );
+            dStrncpy( val, StringUnit::getUnit( prevVal, 3, " \t\n"), bufferSize );
 
         else if ( *subField == '_' && isDigitsOnly(subField+1) )
-            dStrcpy( val, StringUnit::getUnit( prevVal, dAtoi(subField+1), " \t\n") );
+            dStrncpy( val, StringUnit::getUnit( prevVal, dAtoi(subField+1), " \t\n"), bufferSize );
 
         else
             val[0] = 0;
@@ -404,9 +404,10 @@ static void setFieldComponent( SimObject* object, StringTableEntry field, const 
 {
     // Copy the current string value
     char strValue[1024];
-    dStrncpy( strValue, STR.getStringValue(), 1024 );
+    dStrncpy( strValue, STR.getStringValue(), sizeof(strValue) );
 
     char val[1024] = "";
+    const U32 bufferSize = sizeof(val);
     const char* prevVal = NULL;
 
     // Set the value on an object field.
@@ -419,22 +420,22 @@ static void setFieldComponent( SimObject* object, StringTableEntry field, const 
 
     // Ensure that the variable has a value
     if (!prevVal)
-	    return;
+        return;
 
     if ( subField == _xyzw[0] || subField == _rgba[0] || subField == _size[0] )
-	    dStrcpy( val, StringUnit::setUnit( prevVal, 0, strValue, " \t\n") );
+        dStrncpy( val, StringUnit::setUnit( prevVal, 0, strValue, " \t\n"), bufferSize );
 
     else if ( subField == _xyzw[1] || subField == _rgba[1] || subField == _size[1] )
-        dStrcpy( val, StringUnit::setUnit( prevVal, 1, strValue, " \t\n") );
+        dStrncpy( val, StringUnit::setUnit( prevVal, 1, strValue, " \t\n"), bufferSize );
 
     else if ( subField == _xyzw[2] || subField == _rgba[2] )
-        dStrcpy( val, StringUnit::setUnit( prevVal, 2, strValue, " \t\n") );
+        dStrncpy( val, StringUnit::setUnit( prevVal, 2, strValue, " \t\n"), bufferSize );
 
     else if ( subField == _xyzw[3] || subField == _rgba[3] )
-        dStrcpy( val, StringUnit::setUnit( prevVal, 3, strValue, " \t\n") );
+        dStrncpy( val, StringUnit::setUnit( prevVal, 3, strValue, " \t\n"), bufferSize );
 
     else if ( *subField == '_' && isDigitsOnly(subField+1) )
-        dStrcpy( val, StringUnit::setUnit( prevVal, dAtoi(subField+1), strValue, " \t\n") );
+        dStrncpy( val, StringUnit::setUnit( prevVal, dAtoi(subField+1), strValue, " \t\n"), bufferSize );
 
     if ( val[0] != 0 )
     {
@@ -1236,7 +1237,8 @@ breakContinue:
             {
                // The field is not being retrieved from an object. Maybe it's
                // a special accessor?
-               getFieldComponent( prevObject, prevField, prevFieldArray, curField, valBuffer );
+
+               getFieldComponent( prevObject, prevField, prevFieldArray, curField, valBuffer, VAL_BUFFER_SIZE );
                intStack[UINT+1] = dAtoi( valBuffer );
             }
             UINT++;
@@ -1249,7 +1251,7 @@ breakContinue:
             {
                // The field is not being retrieved from an object. Maybe it's
                // a special accessor?
-               getFieldComponent( prevObject, prevField, prevFieldArray, curField, valBuffer );
+               getFieldComponent( prevObject, prevField, prevFieldArray, curField, valBuffer, VAL_BUFFER_SIZE );
                floatStack[FLT+1] = dAtof( valBuffer );
             }
             FLT++;
@@ -1265,7 +1267,7 @@ breakContinue:
             {
                // The field is not being retrieved from an object. Maybe it's
                // a special accessor?
-               getFieldComponent( prevObject, prevField, prevFieldArray, curField, valBuffer );
+               getFieldComponent( prevObject, prevField, prevFieldArray, curField, valBuffer, VAL_BUFFER_SIZE );
                STR.setStringValue( valBuffer );
             }
 
