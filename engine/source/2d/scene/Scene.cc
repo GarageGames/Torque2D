@@ -616,7 +616,7 @@ void Scene::dispatchBeginContactCallbacks( void )
         else
         {
             // No, so call it on its behaviors.
-            const char* args[5] = { "onSceneCollision", this->getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
+            const char* args[5] = { "onSceneCollision", getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
             callOnBehaviors( 5, args );
         }
 
@@ -728,7 +728,7 @@ void Scene::dispatchEndContactCallbacks( void )
         else
         {
             // No, so call it on its behaviors.
-            const char* args[5] = { "onSceneEndCollision", this->getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
+            const char* args[5] = { "onSceneEndCollision", getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
             callOnBehaviors( 5, args );
         }
 
@@ -747,8 +747,8 @@ void Scene::dispatchEndContactCallbacks( void )
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[3] = { "onEndCollision", pSceneObjectBBuffer, pMiscInfoBuffer };
-                pSceneObjectA->callOnBehaviors( 3, args );
+                const char* args[4] = { "onEndCollision", pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
+                pSceneObjectA->callOnBehaviors( 4, args );
             }
         }
 
@@ -767,8 +767,8 @@ void Scene::dispatchEndContactCallbacks( void )
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[3] = { "onEndCollision", pSceneObjectABuffer, pMiscInfoBuffer };
-                pSceneObjectB->callOnBehaviors( 3, args );
+                const char* args[4] = { "onEndCollision", pSceneObjectBBuffer, pSceneObjectABuffer, pMiscInfoBuffer };
+                pSceneObjectB->callOnBehaviors( 4, args );
             }
         }
     }
