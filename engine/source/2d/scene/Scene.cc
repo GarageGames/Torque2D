@@ -3742,7 +3742,7 @@ SceneObject* Scene::create( const char* pType )
     // Sanity!
     AssertFatal( pSceneObject != NULL, "Scene::create() - Failed to create type via class rep." );
 
-    // Attemp to register the object.
+    // Attempt to register the object.
     if ( !pSceneObject->registerObject() )
     {
         // No, so warn.
