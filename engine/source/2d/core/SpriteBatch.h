@@ -125,7 +125,7 @@ public:
     StringTableEntry getSpriteImage( void ) const;
     void setSpriteImageFrame( const U32 imageFrame );
     U32 getSpriteImageFrame( void ) const;
-    void setSpriteAnimation( const char* pAssetId, const bool autoRestore = false );
+    void setSpriteAnimation( const char* pAssetId );
     StringTableEntry getSpriteAnimation( void ) const;
     void clearSpriteAsset( void );
 

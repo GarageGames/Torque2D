@@ -23,16 +23,8 @@
 #ifndef _SPRITE_BATCH_ITEM_H_
 #define _SPRITE_BATCH_ITEM_H_
 
-#ifndef _SPRITE_PROXY_BASE_H_
-#include "2d/core/SpriteProxyBase.h"
-#endif
-
-#ifndef _SIM_OBJECT_PTR_H_
-#include "sim/simObjectPtr.h"
-#endif
-
-#ifndef _FACTORY_CACHE_H_
-#include "memory/factoryCache.h"
+#ifndef _IMAGE_FRAME_PROVIDER_H
+#include "2d/core/imageFrameProvider.h"
 #endif
 
 //------------------------------------------------------------------------------  
@@ -42,11 +34,11 @@ class SceneRenderRequest;
 
 //------------------------------------------------------------------------------  
 
-class SpriteBatchItem : public SpriteProxyBase
+class SpriteBatchItem : public ImageFrameProvider
 {
     friend class SpriteBatch;
 
-    typedef SpriteProxyBase Parent;
+    typedef ImageFrameProvider Parent;
 
 public:
     // Represents a logical position.

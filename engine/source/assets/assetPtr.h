@@ -33,7 +33,7 @@ class AssetPtrCallback
 {
     friend class AssetManager;
 
-private:
+protected:
     virtual void onAssetRefreshed( AssetPtrBase* pAssetPtrBase ) = 0;    
 };
 
@@ -61,7 +61,7 @@ public:
     virtual bool notNull( void ) const = 0;
 
     /// Notification.
-    void registerRefreshNotify( AssetPtrCallback* pCallback )
+    inline void registerRefreshNotify( AssetPtrCallback* pCallback )
     {
         // Sanity!
         AssertFatal( AssetDatabase.isProperlyAdded(), "AssetPtrBase::registerRefreshNotify() - Cannot register an asset pointer with the asset system." );

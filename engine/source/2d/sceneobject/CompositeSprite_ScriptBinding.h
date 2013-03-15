@@ -355,15 +355,11 @@ ConsoleMethod(CompositeSprite, getSpriteImageFrame, S32, 2, 2,  "() - Gets the s
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(CompositeSprite, setSpriteAnimation, void, 3, 4,  "(animationAssetId, [bool autoRestore]) - Sets the sprite animation.\n"
+ConsoleMethod(CompositeSprite, setSpriteAnimation, void, 3, 4,  "(animationAssetId) - Sets the sprite animation.\n"
                                                                 "@param imageAssetId The animation to set the sprite to.\n"
-                                                                "@param autoRestore Whether to restore any previously playing animation or not.\n"
                                                                 "@return No return value." )
 {
-    // Fetch Auto-Restore Flag.
-    const bool autoRestore = (argc >= 4) ? dAtob(argv[3]) : false;
-
-    object->setSpriteAnimation( argv[2], autoRestore );
+    object->setSpriteAnimation( argv[2] );
 }
 
 //-----------------------------------------------------------------------------

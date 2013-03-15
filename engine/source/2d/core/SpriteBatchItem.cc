@@ -28,10 +28,6 @@
 #include "2d/core/SpriteBatch.h"
 #endif
 
-#ifndef _SCENE_RENDER_REQUEST_H_
-#include "2d/scene/SceneRenderRequest.h"
-#endif
-
 #ifndef _SCENE_OBJECT_H_
 #include "2d/sceneobject/SceneObject.h"
 #endif
@@ -343,8 +339,8 @@ void SpriteBatchItem::onTamlCustomWrite( TamlCustomNode* pSpriteNode )
     if ( getName() != StringTable->EmptyString )
         pSpriteNode->addField( spriteNameName, getName() );
 
-    // Write asset.
-    if ( isStaticMode() )
+    // Static frame provider?
+    if ( isStaticFrameProvider() )
     {
         // Fetch image asset Id.
         StringTableEntry assetId = getImage();

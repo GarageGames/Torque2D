@@ -187,4 +187,8 @@ private:
 
 };
 
+//-----------------------------------------------------------------------------
+
+extern TextureHandle BadTextureHandle;
+
 #endif // _TEXTURE_HANDLE_H_

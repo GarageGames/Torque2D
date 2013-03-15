@@ -1128,9 +1128,6 @@
     <ClCompile Include="..\..\source\2d\assets\AnimationAsset.cc">
       <Filter>2d\assets</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\2d\assets\AnimationController.cc">
-      <Filter>2d\assets</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\2d\assets\ImageAsset.cc">
       <Filter>2d\assets</Filter>
     </ClCompile>
@@ -1165,9 +1162,6 @@
       <Filter>2d\core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\2d\core\SpriteBatchItem.cc">
-      <Filter>2d\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\2d\core\SpriteProxyBase.cc">
       <Filter>2d\core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\2d\core\Utility.cc">
@@ -1307,6 +1301,12 @@
     </ClCompile>
     <ClCompile Include="..\..\source\2d\experimental\composites\WaveComposite.cc">
       <Filter>2d\experimental\composites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\core\ImageFrameProvider.cc">
+      <Filter>2d\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\core\ImageFrameProviderCore.cc">
+      <Filter>2d\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2360,9 +2360,6 @@
     <ClInclude Include="..\..\source\2d\assets\AnimationAsset_ScriptBinding.h">
       <Filter>2d\assets</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\2d\assets\AnimationController.h">
-      <Filter>2d\assets</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\2d\assets\ImageAsset.h">
       <Filter>2d\assets</Filter>
     </ClInclude>
@@ -2430,9 +2427,6 @@
       <Filter>2d\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\2d\core\SpriteBatchItem.h">
-      <Filter>2d\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\2d\core\SpriteProxyBase.h">
       <Filter>2d\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\2d\core\Utility.h">
@@ -2678,6 +2672,12 @@
     </ClInclude>
     <ClInclude Include="..\..\source\2d\experimental\composites\WaveComposite_ScriptBinding.h">
       <Filter>2d\experimental\composites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\core\ImageFrameProvider.h">
+      <Filter>2d\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\core\ImageFrameProviderCore.h">
+      <Filter>2d\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

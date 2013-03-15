@@ -20,10 +20,10 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SpriteBase, isStaticMode, bool, 2, 2,     "() - Gets whether the sprite is in static or dynamic (animated)mode.\n"
+ConsoleMethod(SpriteBase, isStaticFrameProvider, bool, 2, 2,     "() - Gets whether the sprite is in static or dynamic (animated)mode.\n"
                                                     "@return Returns whether the sprite is in static or dynamic (animated)mode.")
 {
-    return object->isStaticMode();
+    return object->isStaticFrameProvider();
 }
 
 //------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ ConsoleMethod(SpriteBase, setImage, bool, 3, 4, "(string imageAssetId, [int fram
     U32 frame = argc >= 4 ? dAtoi(argv[3]) : 0;
 
     // Set image.
-    return static_cast<SpriteProxyBase*>(object)->setImage( argv[2], frame );
+    return static_cast<ImageFrameProvider*>(object)->setImage( argv[2], frame );
 }
 
 //------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ ConsoleMethod(SpriteBase, getImage, const char*, 2, 2,  "() - Gets current image
                                                         "@return (string imageAssetId) The image being displayed")
 {
     // Are we in static mode?
-    if ( !object->isStaticMode() )
+    if ( !object->isStaticFrameProvider() )
     {
         // No, so warn.
         Con::warnf( "SpriteBase::getImage() - Method invalid, not in static mode." );
@@ -54,7 +54,7 @@ ConsoleMethod(SpriteBase, getImage, const char*, 2, 2,  "() - Gets current image
     }
 
     // Get image.
-    return static_cast<SpriteProxyBase*>(object)->getImage();
+    return static_cast<ImageFrameProvider*>(object)->getImage();
 }   
 
 //------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ ConsoleMethod(SpriteBase, setImageFrame, bool, 3, 3,    "(frame) - Sets the imag
                                                         "@return Returns true on success.")
 {
     // Are we in static mode?
-    if ( !object->isStaticMode() )
+    if ( !object->isStaticFrameProvider() )
     {
         // No, so warn.
         Con::warnf( "SpriteBase::setImageFrame() - Method invalid, not in static mode." );
@@ -72,7 +72,7 @@ ConsoleMethod(SpriteBase, setImageFrame, bool, 3, 3,    "(frame) - Sets the imag
     }
 
     // Set image Frame.
-    return static_cast<SpriteProxyBase*>(object)->setImageFrame( dAtoi(argv[2]) );
+    return static_cast<ImageFrameProvider*>(object)->setImageFrame( dAtoi(argv[2]) );
 }
 
 //------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ ConsoleMethod(SpriteBase, getImageFrame, S32, 2, 2, "() - Gets the current image
                                                     "@return The current image frame.")
 {
     // Are we in static mode?
-    if ( !object->isStaticMode() )
+    if ( !object->isStaticFrameProvider() )
     {
         // No, so warn.
         Con::warnf( "SpriteBase::getImageFrame() - Method invalid, not in static mode." );
@@ -89,21 +89,17 @@ ConsoleMethod(SpriteBase, getImageFrame, S32, 2, 2, "() - Gets the current image
     }
 
     // Get image Frame.
-    return static_cast<SpriteProxyBase*>(object)->getImageFrame();
+    return static_cast<ImageFrameProvider*>(object)->getImageFrame();
 }
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(SpriteBase, playAnimation, bool, 3, 4,    "(string animationAssetId, [bool autoRestore]) - Plays an animation.\n"
-                                                    "@param animationAssetId The animation asset Id to play.\n"
-                                                    "@param autoRestore If true, the previous animation will be played when this new animation finishes.\n"
-                                                    "@return Returns true on success.")
+ConsoleMethod(SpriteBase, playAnimation, bool, 3, 3,    "(string animationAssetId) - Plays an animation.\n"
+                                                        "@param animationAssetId The animation asset Id to play.\n"
+                                                        "@return Returns true on success.")
 {    
-    // Fetch Auto-Restore Flag.
-    const bool autoRestore = (argc >= 4) ? dAtob(argv[3]) : false;
-
     // Play Animation.
-    return static_cast<SpriteProxyBase*>(object)->setAnimation( argv[2], autoRestore );
+    return static_cast<ImageFrameProvider*>(object)->setAnimation( argv[2] );
 }   
 
 //-----------------------------------------------------------------------------
@@ -112,14 +108,14 @@ ConsoleMethod(SpriteBase, pauseAnimation, void, 3, 3, "(bool enable) - Pause the
                                                              "@param enable If true, pause the animation. If false, continue animating\n")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "SpriteBase::pauseAnimation() - Method invalid, not in dynamic (animated) mode." );
         return;
     }
 
-    return static_cast<SpriteProxyBase*>(object)->pauseAnimation(dAtob(argv[2]));
+    return static_cast<ImageFrameProvider*>(object)->pauseAnimation(dAtob(argv[2]));
 }
 
 
@@ -129,14 +125,14 @@ ConsoleMethod(SpriteBase, stopAnimation, void, 2, 2,   "() - Stop the current an
                                                         "@return No return value.")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "SpriteBase::stopAnimation() - Method invalid, not in dynamic (animated) mode." );
         return;
     }
 
-    object->getAnimationController()->stopAnimation();
+    object->stopAnimation();
 }
 
 //-----------------------------------------------------------------------------
@@ -146,7 +142,7 @@ ConsoleMethod(SpriteBase, setAnimationFrame, void, 3, 3, "(int frame) - Sets the
                                                                 "@return No return value.")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "SpriteBase::setAnimationFrame() - Method invalid, not in dynamic (animated) mode." );
@@ -154,7 +150,7 @@ ConsoleMethod(SpriteBase, setAnimationFrame, void, 3, 3, "(int frame) - Sets the
     }
 
     // Set Animation Frame
-    object->getAnimationController()->setAnimationFrame( dAtoi(argv[2]) );
+    object->setAnimationFrame( dAtoi(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
@@ -163,7 +159,7 @@ ConsoleMethod(SpriteBase, getAnimationFrame, S32, 2, 2, "() - Gets current anima
                                                                "@return (int frame) The current animation frame")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "SpriteBase::getAnimationFrame() - Method invalid, not in dynamic (animated) mode." );
@@ -171,7 +167,7 @@ ConsoleMethod(SpriteBase, getAnimationFrame, S32, 2, 2, "() - Gets current anima
     }
 
     // Get Animation Frame.
-    return object->getAnimationController()->getCurrentFrame();
+    return object->getCurrentAnimationFrame();
 }
 
 //-----------------------------------------------------------------------------
@@ -180,7 +176,7 @@ ConsoleMethod(SpriteBase, getAnimation, const char*, 2, 2,  "() - Gets current a
                                                         "@return (string AnimationAssetId) The current animation asset Id.")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "SpriteBase::getAnimation() - Method invalid, not in dynamic (animated) mode." );
@@ -189,7 +185,7 @@ ConsoleMethod(SpriteBase, getAnimation, const char*, 2, 2,  "() - Gets current a
 
 
     // Get Current Animation.
-    return object->getAnimationController()->getCurrentAnimationAssetId();
+    return object->getCurrentAnimationAssetId();
 }
 
 //-----------------------------------------------------------------------------
@@ -198,7 +194,7 @@ ConsoleMethod(SpriteBase, getAnimationTime, F32, 2, 2,  "() - Gets current anima
                                                     "@return (float time) The current animation time")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "SpriteBase::getAnimationTime() - Method invalid, not in dynamic (animated) mode." );
@@ -207,7 +203,7 @@ ConsoleMethod(SpriteBase, getAnimationTime, F32, 2, 2,  "() - Gets current anima
 
 
     // Get Animation Time.
-    return object->getAnimationController()->getCurrentTime();
+    return object->getCurrentAnimationTime();
 }
 
 //-----------------------------------------------------------------------------
@@ -216,7 +212,7 @@ ConsoleMethod(SpriteBase, getIsAnimationFinished, bool, 2, 2,   "() - Checks ani
                                                             "@return (bool finished) Whether or not the animation is finished")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "SpriteBase::getIsAnimationFinished() - Method invalid, not in dynamic (animated) mode." );
@@ -224,7 +220,7 @@ ConsoleMethod(SpriteBase, getIsAnimationFinished, bool, 2, 2,   "() - Checks ani
     }
 
     // Return Animation Finished Status.
-    return object->getAnimationController()->isAnimationFinished();
+    return object->isAnimationFinished();
 }
 
 //-----------------------------------------------------------------------------
@@ -233,14 +229,14 @@ ConsoleMethod(SpriteBase, setAnimationTimeScale, void, 3, 3,   "(float timeScale
                                                             "@param timeScale Value which will scale the frame animation speed. 1 by default.\n")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "SpriteBase::setAnimationTimeScale() - Method invalid, not in dynamic (animated) mode." );
         return;
     }
 
-    object->getAnimationController()->setAnimationTimeScale(dAtof(argv[2]));
+    object->setAnimationTimeScale(dAtof(argv[2]));
 }
 
 //-----------------------------------------------------------------------------
@@ -249,12 +245,12 @@ ConsoleMethod(SpriteBase, getAnimationTimeScale, F32, 2, 2,     "() - Get the an
                                                             "@return (float) Returns the animation time scale for this sprite.\n")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "SpriteBase::getSpeedFactor() - Method invalid, not in dynamic (animated) mode." );
         return 1.0f;
     }
 
-    return object->getAnimationController()->getAnimationTimeScale();
+    return object->getAnimationTimeScale();
 }
