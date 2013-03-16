@@ -250,6 +250,66 @@ ConsoleMethod(Scene, getSceneObjectList, const char*, 2, 2, "() Gets the Scene O
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(Scene, getAssetPreloadCount, S32, 2, 2,   "() Gets the number of assets set to preload for this scene.\n"
+                                                        "@return The number of assets set to preload for this scene.")
+{
+    return object->getAssetPreloadCount();
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, getAssetPreload, const char*, 3, 3,    "(index) Gets the asset to be preloaded at the specified index.\n"
+                                                            "@param index The index of the preloaded asset.\n"
+                                                            "@return The asset to be preloaded at the specified index.")
+{
+    // Fetch preload index.
+    const S32 index = dAtoi(argv[2]);
+
+    // Fetch the asset pointer.
+    const AssetPtr<AssetBase>* pAssetPtr = object->getAssetPreload( index );
+
+    return pAssetPtr == NULL ? NULL : pAssetPtr->getAssetId();
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, addAssetPreload, void, 3, 3,   "(assetId) Adds the asset Id so that it is preloaded when the scene is loaded.\n"
+                                                    "The asset loaded immediately by this operation.  Duplicate assets are ignored.\n"
+                                                    "@param assetId The asset Id to be added.\n"
+                                                    "@return No return value.")
+{
+    // Fetch asset Id.
+    const char* pAssetId = argv[2];
+
+    // Add asset preload.
+    object->addAssetPreload( pAssetId );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, removeAssetPreload, void, 3, 3,    "(assetId) Removes the asset Id from being preloaded when the scene is loaded.\n"
+                                                        "The asset may be unloaded immediately by this operation if it has no other references.\n"
+                                                        "@param assetId The asset Id to be removed.\n"
+                                                        "@return No return value.")
+{
+    // Fetch asset Id.
+    const char* pAssetId = argv[2];
+
+    // Remove asset preload.
+    object->removeAssetPreload( pAssetId );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, clearAssetPreloads, void, 2, 2,    "() Clears all assets added as a preload.\n"
+                                                        "@return No return value.")
+{
+    // Clear asset preloads.
+    object->clearAssetPreloads();
+}
+
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(Scene, mergeScene, void, 3, 3,    "(scene) Merges the specified scene into this scene by cloning the scenes contents.")
 {
     // Find the specified scene.

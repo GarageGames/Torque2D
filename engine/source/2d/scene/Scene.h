@@ -71,6 +71,10 @@
 #include "component/behaviors/behaviorComponent.h"
 #endif
 
+#ifndef _ASSET_PTR_H_
+#include "assets/assetPtr.h"
+#endif
+
 //-----------------------------------------------------------------------------
 
 extern EnumTable jointTypeTable;
@@ -167,6 +171,7 @@ public:
     typedef Vector<tDeleteRequest>              typeDeleteVector;
     typedef Vector<TickContact>                 typeContactVector;
     typedef HashMap<b2Contact*, TickContact>    typeContactHash;
+    typedef Vector<AssetPtr<AssetBase>*>        typeAssetPtrVector;
 
     /// Scene Debug Options.
     enum DebugOption
@@ -223,6 +228,9 @@ private:
 
     /// Scene controllers.
     SimObjectPtr<SimSet>	    mControllers;
+
+    /// Asset pre-loads.
+    typeAssetPtrVector          mAssetPreloads;
 
     /// Scene time.
     F32                         mSceneTime;
@@ -344,6 +352,12 @@ public:
     void                    mergeScene( const Scene* pScene );
 
     inline SimSet*			getControllers( void )						{ return mControllers; }
+
+    inline S32              getAssetPreloadCount( void ) const          { return mAssetPreloads.size(); }
+    const AssetPtr<AssetBase>* getAssetPreload( const S32 index ) const;
+    void                    addAssetPreload( const char* pAssetId );
+    void                    removeAssetPreload( const char* pAssetId );
+    void                    clearAssetPreloads( void );
 
     /// Scene time.
     inline F32              getSceneTime( void ) const                  { return mSceneTime; };
