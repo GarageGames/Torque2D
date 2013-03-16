@@ -52,14 +52,28 @@ SpriteBatch::SpriteBatch() :
     // Reset local extents.
     mLocalExtents.SetZero();
     mLocalExtentsDirty = true;
-
-    // Create the sprite batch query if sprite clipping is on.
-    createSpriteBatchQuery();
 }
 
 //------------------------------------------------------------------------------
 
 SpriteBatch::~SpriteBatch()
+{
+}
+
+//-----------------------------------------------------------------------------
+
+bool SpriteBatch::onAdd()
+{
+    // Create the sprite batch query if required.
+    if ( mBatchCulling )
+        createSpriteBatchQuery();
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
+void SpriteBatch::onRemove()
 {
     // Clear the sprites.
     clearSprites();
@@ -372,6 +386,9 @@ void SpriteBatch::setBatchCulling( const bool batchCulling )
     if ( mBatchCulling == batchCulling )
         return;
 
+    // Set batch culling.
+    mBatchCulling = batchCulling;
+
     // Create/destroy sprite batch query appropriately.
     if ( mBatchCulling )
         createSpriteBatchQuery();
@@ -490,7 +507,7 @@ U32 SpriteBatch::getSpriteImageFrame( void ) const
 
 //------------------------------------------------------------------------------
 
-void SpriteBatch::setSpriteAnimation( const char* pAssetId, const bool autoRestore )
+void SpriteBatch::setSpriteAnimation( const char* pAssetId )
 {
     // Debug Profiling.
     PROFILE_SCOPE(SpriteBatch_SetSpriteAnimation);
@@ -503,7 +520,7 @@ void SpriteBatch::setSpriteAnimation( const char* pAssetId, const bool autoResto
         return;
 
     // Set animation.
-    mSelectedSprite->setAnimation( pAssetId, autoRestore );
+    mSelectedSprite->setAnimation( pAssetId );
 }
 
 //------------------------------------------------------------------------------
@@ -527,7 +544,7 @@ void SpriteBatch::clearSpriteAsset( void )
         return;
 
     // Clear the asset.
-    mSelectedSprite->clearAsset();
+    mSelectedSprite->clearAssets();
 }
 
 //------------------------------------------------------------------------------
@@ -921,6 +938,30 @@ SimObject* SpriteBatch::getSpriteDataObject( void ) const
 
     // Get data object.
     return mSelectedSprite->getDataObject();
+}
+
+//------------------------------------------------------------------------------
+
+void SpriteBatch::setUserData( void* pUserData )
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return;
+
+    // Set user data.
+    mSelectedSprite->setUserData( pUserData );
+}
+
+//------------------------------------------------------------------------------
+
+void* SpriteBatch::getUserData( void ) const
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return NULL;
+
+    // Get user data.
+    return mSelectedSprite->getUserData();
 }
 
 //------------------------------------------------------------------------------

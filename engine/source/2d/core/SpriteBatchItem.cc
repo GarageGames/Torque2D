@@ -28,10 +28,6 @@
 #include "2d/core/SpriteBatch.h"
 #endif
 
-#ifndef _SCENE_RENDER_REQUEST_H_
-#include "2d/scene/SceneRenderRequest.h"
-#endif
-
 #ifndef _SCENE_OBJECT_H_
 #include "2d/sceneobject/SceneObject.h"
 #endif
@@ -158,6 +154,8 @@ void SpriteBatchItem::resetState( void )
     mLastBatchTransformId = 0;
 
     mSpriteBatchQueryKey = 0;
+
+    mUserData = NULL;
 
     // Require self ticking.
     mSelfTick = true;
@@ -310,10 +308,11 @@ void SpriteBatchItem::updateWorldTransform( const U32 batchTransformId )
 
     // Update the local transform if needed.
     if ( mLocalTransformDirty )
+    {
         updateLocalTransform();
-
+    }
     // Finish if the batch transform is up-to-date.
-    if ( batchTransformId == mLastBatchTransformId )
+    else if ( batchTransformId == mLastBatchTransformId )
         return;
 
     // Fetch world transform.
@@ -340,8 +339,8 @@ void SpriteBatchItem::onTamlCustomWrite( TamlCustomNode* pSpriteNode )
     if ( getName() != StringTable->EmptyString )
         pSpriteNode->addField( spriteNameName, getName() );
 
-    // Write asset.
-    if ( isStaticMode() )
+    // Static frame provider?
+    if ( isStaticFrameProvider() )
     {
         // Fetch image asset Id.
         StringTableEntry assetId = getImage();

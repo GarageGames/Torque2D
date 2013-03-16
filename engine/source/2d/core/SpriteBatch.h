@@ -72,6 +72,9 @@ public:
     SpriteBatch();
     virtual ~SpriteBatch();
 
+    virtual bool onAdd();
+    virtual void onRemove();
+
     void prepareRender( SceneRenderObject* pSceneRenderObject, const SceneRenderState* pSceneRenderState, SceneRenderQueue* pSceneRenderQueue );
     void render( const SceneRenderState* pSceneRenderState, const SceneRenderRequest* pSceneRenderRequest, BatchRender* pBatchRenderer );
 
@@ -88,7 +91,6 @@ public:
     void destroyQueryProxy( SpriteBatchItem* pSpriteBatchItem );
     void moveQueryProxy( SpriteBatchItem* pSpriteBatchItem, const b2AABB& localAABB );    
     SpriteBatchQuery* getSpriteBatchQuery( const bool clearQuery = false );
-
 
     virtual void copyTo( SpriteBatch* pSpriteBatch ) const;
 
@@ -123,7 +125,7 @@ public:
     StringTableEntry getSpriteImage( void ) const;
     void setSpriteImageFrame( const U32 imageFrame );
     U32 getSpriteImageFrame( void ) const;
-    void setSpriteAnimation( const char* pAssetId, const bool autoRestore = false );
+    void setSpriteAnimation( const char* pAssetId );
     StringTableEntry getSpriteAnimation( void ) const;
     void clearSpriteAsset( void );
 
@@ -170,6 +172,9 @@ public:
 
     void setSpriteDataObject( SimObject* pDataObject );
     SimObject* getSpriteDataObject( void ) const;
+
+    void setUserData( void* pUserData );
+    void* getUserData( void ) const;
 
     void setSpriteName( const char* pName );
     StringTableEntry getSpriteName( void ) const;

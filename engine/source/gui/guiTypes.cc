@@ -362,15 +362,16 @@ void GuiControlProfile::incRefCount()
       if (mFont.isNull())
          Con::errorf("Failed to load/create profile font (%s/%d)", mFontType, mFontSize);
        
-      //verify the bitmap
-      mTextureHandle = TextureHandle(mBitmapName, TextureHandle::BitmapKeepTexture);
-      if (!(bool)mTextureHandle)
-         Con::errorf("Failed to load profile bitmap (%s)",mBitmapName);
+      if ( mBitmapName != NULL && mBitmapName != StringTable->EmptyString )
+      {
+          mTextureHandle = TextureHandle(mBitmapName, TextureHandle::BitmapKeepTexture);
+          if (!(bool)mTextureHandle)
+             Con::errorf("Failed to load profile bitmap (%s)",mBitmapName);
 
-      // If we've got a special border, make sure it's usable.
-      if( mBorder == -1 || mBorder == -2 )
-         constructBitmapArray();
-
+          // If we've got a special border, make sure it's usable.
+          if( mBorder == -1 || mBorder == -2 )
+             constructBitmapArray();
+      }
    }
 }
 

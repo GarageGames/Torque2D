@@ -65,7 +65,8 @@ function ToyCategorySelectList::initialize(%this)
      %this.toyCategories[$toyAllCategoryIndex+3] = "Stress Testing";
      %this.toyCategories[$toyAllCategoryIndex+4] = "Fun and Games";
      %this.toyCategories[$toyAllCategoryIndex+5] = "Custom";
-     %this.maxToyCategories = $toyAllCategoryIndex + 6;
+     %this.toyCategories[$toyAllCategoryIndex+6] = "Experiments";
+     %this.maxToyCategories = $toyAllCategoryIndex + 7;
 
      // Set the "All" category as the default.
      // NOTE:    This is important to use so that the user-configurable default toy

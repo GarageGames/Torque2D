@@ -20,10 +20,10 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(RenderProxy, isStaticMode, bool, 2, 2,    "() - Gets whether the render-proxy is in static or dynamic (animated)mode.\n"
+ConsoleMethod(RenderProxy, isStaticFrameProvider, bool, 2, 2,    "() - Gets whether the render-proxy is in static or dynamic (animated)mode.\n"
                                                         "@return Returns whether the render-proxy is in static or dynamic (animated)mode.")
 {
-    return object->isStaticMode();
+    return object->isStaticFrameProvider();
 }
 
 //------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ ConsoleMethod(RenderProxy, setImage, bool, 3, 4,    "(string imageAssetId, [int 
     const U32 frame = argc >= 4 ? dAtoi(argv[3]) : 0;
 
     // Set Image.
-    return static_cast<SpriteProxyBase*>(object)->setImage(pImageAssetId, frame );
+    return static_cast<ImageFrameProvider*>(object)->setImage(pImageAssetId, frame );
 }   
 
 //------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ ConsoleMethod(RenderProxy, getImage, const char*, 2, 2, "() - Gets current image
                                                         "@return (string imageAssetId) The image being displayed")
 {
     // Are we in static mode?
-    if ( !object->isStaticMode() )
+    if ( !object->isStaticFrameProvider() )
     {
         // No, so warn.
         Con::warnf( "RenderProxy::getImage() - Method invalid, not in static mode." );
@@ -57,7 +57,7 @@ ConsoleMethod(RenderProxy, getImage, const char*, 2, 2, "() - Gets current image
     }
 
     // Get Image.
-    return static_cast<SpriteProxyBase*>(object)->getImage();
+    return static_cast<ImageFrameProvider*>(object)->getImage();
 }   
 
 //------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ ConsoleMethod(RenderProxy, setImageFrame, bool, 3, 3,   "(int frame) - Sets imag
                                                         "@return Returns true on success.")
 {
     // Are we in static mode?
-    if ( !object->isStaticMode() )
+    if ( !object->isStaticFrameProvider() )
     {
         // No, so warn.
         Con::warnf( "RenderProxy::setImageFrame() - Method invalid, not in static mode." );
@@ -75,7 +75,7 @@ ConsoleMethod(RenderProxy, setImageFrame, bool, 3, 3,   "(int frame) - Sets imag
     }
 
     // Set Image Frame.
-    return static_cast<SpriteProxyBase*>(object)->setImageFrame( dAtoi(argv[2]) );
+    return static_cast<ImageFrameProvider*>(object)->setImageFrame( dAtoi(argv[2]) );
 }
 
 //------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ ConsoleMethod(RenderProxy, getImageFrame, S32, 2, 2,    "() - Gets current image
                                                         "@return (int frame) The frame currently being displayed")
 {
     // Are we in static mode?
-    if ( !object->isStaticMode() )
+    if ( !object->isStaticFrameProvider() )
     {
         // No, so warn.
         Con::warnf( "RenderProxy::getImageFrame() - Method invalid, not in static mode." );
@@ -97,16 +97,12 @@ ConsoleMethod(RenderProxy, getImageFrame, S32, 2, 2,    "() - Gets current image
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(RenderProxy, playAnimation, bool, 3, 4,   "(string animationAssetId, [bool autoRestore]) - Plays an animation.\n"
+ConsoleMethod(RenderProxy, playAnimation, bool, 3, 3,   "(string animationAssetId) - Plays an animation.\n"
                                                         "@param animationAssetId The animation asset Id to play\n"
-                                                        "@param autoRestore If true, the previous animation will be played when this new animation finishes.\n"
                                                         "@return Returns true on success.")
 {    
-    // Fetch Auto-Restore Flag.
-    const bool autoRestore = (argc >= 4) ? dAtob(argv[3]) : false;
-
     // Play Animation.
-    return static_cast<SpriteProxyBase*>(object)->setAnimation( argv[2], autoRestore );
+    return static_cast<ImageFrameProvider*>(object)->setAnimation( argv[2] );
 }   
 
 //-----------------------------------------------------------------------------
@@ -115,14 +111,14 @@ ConsoleMethod(RenderProxy, pauseAnimation, void, 3, 3,  "(bool enable) - Pause t
                                                         "@param enable If true, pause the animation. If false, continue animating\n")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "RenderProxy::pauseAnimation() - Method invalid, not in dynamic (animated) mode." );
         return;
     }
 
-    static_cast<SpriteProxyBase*>(object)->pauseAnimation(dAtob(argv[2]));
+    static_cast<ImageFrameProvider*>(object)->pauseAnimation(dAtob(argv[2]));
 }
 
 //-----------------------------------------------------------------------------
@@ -131,14 +127,14 @@ ConsoleMethod(RenderProxy, stopAnimation, void, 2, 2,   "() - Stop the current a
                                                         "@return No return value.")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "RenderProxy::stopAnimation() - Method invalid, not in dynamic (animated) mode." );
         return;
     }
 
-    object->getAnimationController()->stopAnimation();
+    object->stopAnimation();
 }
 
 //-----------------------------------------------------------------------------
@@ -148,7 +144,7 @@ ConsoleMethod(RenderProxy, setAnimationFrame, void, 3, 3, "(int frame) - Sets th
                                                                 "@return No return value.")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "RenderProxy::setAnimationFrame() - Method invalid, not in dynamic (animated) mode." );
@@ -156,7 +152,7 @@ ConsoleMethod(RenderProxy, setAnimationFrame, void, 3, 3, "(int frame) - Sets th
     }
 
     // Set Animation Frame
-    object->getAnimationController()->setAnimationFrame( dAtoi(argv[2]) );
+    object->setAnimationFrame( dAtoi(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
@@ -165,7 +161,7 @@ ConsoleMethod(RenderProxy, getAnimationFrame, S32, 2, 2,    "() - Gets current a
                                                             "@return (int frame) The current animation frame")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "RenderProxy::getAnimationFrame() - Method invalid, not in dynamic (animated) mode." );
@@ -173,7 +169,7 @@ ConsoleMethod(RenderProxy, getAnimationFrame, S32, 2, 2,    "() - Gets current a
     }
 
     // Get Animation Frame.
-    return object->getAnimationController()->getCurrentFrame();
+    return object->getCurrentAnimationFrame();
 }
 
 //-----------------------------------------------------------------------------
@@ -182,7 +178,7 @@ ConsoleMethod(RenderProxy, getAnimation, const char*, 2, 2, "() - Gets current a
                                                             "@return (string AnimationAssetId) The current animation asset Id.")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "RenderProxy::getAnimation() - Method invalid, not in dynamic (animated) mode." );
@@ -191,7 +187,7 @@ ConsoleMethod(RenderProxy, getAnimation, const char*, 2, 2, "() - Gets current a
 
 
     // Get Current Animation.
-    return object->getAnimationController()->getCurrentAnimationAssetId();
+    return object->getCurrentAnimationAssetId();
 }
 
 //-----------------------------------------------------------------------------
@@ -200,7 +196,7 @@ ConsoleMethod(RenderProxy, getAnimationTime, F32, 2, 2, "() - Gets current anima
                                                         "@return (float time) The current animation time")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "RenderProxy::getAnimationTime() - Method invalid, not in dynamic (animated) mode." );
@@ -209,7 +205,7 @@ ConsoleMethod(RenderProxy, getAnimationTime, F32, 2, 2, "() - Gets current anima
 
 
     // Get Animation Time.
-    return object->getAnimationController()->getCurrentTime();
+    return object->getCurrentAnimationTime();
 }
 
 //-----------------------------------------------------------------------------
@@ -218,7 +214,7 @@ ConsoleMethod(RenderProxy, getIsAnimationFinished, bool, 2, 2,  "() - Checks ani
                                                                 "@return (bool finished) Whether or not the animation is finished")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "RenderProxy::getIsAnimationFinished() - Method invalid, not in dynamic (animated) mode." );
@@ -226,7 +222,7 @@ ConsoleMethod(RenderProxy, getIsAnimationFinished, bool, 2, 2,  "() - Checks ani
     }
 
     // Return Animation Finished Status.
-    return object->getAnimationController()->isAnimationFinished();
+    return object->isAnimationFinished();
 }
 
 //-----------------------------------------------------------------------------
@@ -235,14 +231,14 @@ ConsoleMethod(RenderProxy, setAnimationTimeScale, void, 3, 3,   "(float timeScal
                                                                 "@param timeScale Value which will scale the frame animation speed. 1 by default.\n")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "RenderProxy::setAnimationTimeScale() - Method invalid, not in dynamic (animated) mode." );
         return;
     }
 
-    object->getAnimationController()->setAnimationTimeScale(dAtof(argv[2]));
+    object->setAnimationTimeScale(dAtof(argv[2]));
 }
 
 //-----------------------------------------------------------------------------
@@ -251,13 +247,13 @@ ConsoleMethod(RenderProxy, getAnimationTimeScale, F32, 2, 2,    "() - Get the an
                                                                 "@return (float) Returns the animation time scale for this render-proxy.\n")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "RenderProxy::getSpeedFactor() - Method invalid, not in dynamic (animated) mode." );
         return 1.0f;
     }
 
-    return object->getAnimationController()->getAnimationTimeScale();
+    return object->getAnimationTimeScale();
 }
 

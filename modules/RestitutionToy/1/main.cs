@@ -112,7 +112,7 @@ function RestitutionToy::createGround( %this )
     %ground.setSize(RestitutionToy.GroundWidth, 6);
     %ground.setRepeatX(RestitutionToy.GroundWidth / 60);   
     %ground.setSceneGroup( 1 );
-    %ground.setCollisionGroups( 2 );
+    %ground.setCollisionGroups( none );
     %ground.createEdgeCollisionShape(RestitutionToy.GroundWidth/-2, 3, RestitutionToy.GroundWidth/2, 3);
     SandboxScene.add(%ground);  
     

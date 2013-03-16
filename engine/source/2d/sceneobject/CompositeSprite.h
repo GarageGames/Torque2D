@@ -59,6 +59,9 @@ public:
 
     static void initPersistFields();
 
+    virtual bool onAdd();
+    virtual void onRemove();
+
     virtual void preIntegrate( const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
     virtual void integrateObject( const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
     virtual void interpolateObject( const F32 timeDelta );
