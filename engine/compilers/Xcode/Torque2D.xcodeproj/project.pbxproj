@@ -206,7 +206,6 @@
 		86D76F9C165686D80046D71F /* assetFieldTypes.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7EEC16518D4600D96ADF /* assetFieldTypes.cc */; };
 		86D76F9D165686D80046D71F /* assetManager.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7EEE16518D4600D96ADF /* assetManager.cc */; };
 		86D76F9F165686D80046D71F /* assetQuery.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7EF416518D4600D96ADF /* assetQuery.cc */; };
-		86D76FA0165686D80046D71F /* assetSnapshot.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7EF716518D4600D96ADF /* assetSnapshot.cc */; };
 		86D76FA1165686D80046D71F /* assetTagsManifest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7EF916518D4600D96ADF /* assetTagsManifest.cc */; };
 		86D76FA2165686D80046D71F /* audio.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7F0116518D4600D96ADF /* audio.cc */; };
 		86D76FA3165686D80046D71F /* AudioAsset.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7F0316518D4600D96ADF /* AudioAsset.cc */; };
@@ -814,8 +813,6 @@
 		86BC7EF416518D4600D96ADF /* assetQuery.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = assetQuery.cc; sourceTree = "<group>"; };
 		86BC7EF516518D4600D96ADF /* assetQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assetQuery.h; sourceTree = "<group>"; };
 		86BC7EF616518D4600D96ADF /* assetQuery_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assetQuery_ScriptBinding.h; sourceTree = "<group>"; };
-		86BC7EF716518D4600D96ADF /* assetSnapshot.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = assetSnapshot.cc; sourceTree = "<group>"; };
-		86BC7EF816518D4600D96ADF /* assetSnapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assetSnapshot.h; sourceTree = "<group>"; };
 		86BC7EF916518D4600D96ADF /* assetTagsManifest.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = assetTagsManifest.cc; sourceTree = "<group>"; };
 		86BC7EFA16518D4600D96ADF /* assetTagsManifest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assetTagsManifest.h; sourceTree = "<group>"; };
 		86BC7EFB16518D4600D96ADF /* assetTagsManifest_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assetTagsManifest_ScriptBinding.h; sourceTree = "<group>"; };
@@ -2013,8 +2010,6 @@
 				86BC7EF416518D4600D96ADF /* assetQuery.cc */,
 				86BC7EF516518D4600D96ADF /* assetQuery.h */,
 				86BC7EF616518D4600D96ADF /* assetQuery_ScriptBinding.h */,
-				86BC7EF716518D4600D96ADF /* assetSnapshot.cc */,
-				86BC7EF816518D4600D96ADF /* assetSnapshot.h */,
 				86BC7EF916518D4600D96ADF /* assetTagsManifest.cc */,
 				86BC7EFA16518D4600D96ADF /* assetTagsManifest.h */,
 				86BC7EFB16518D4600D96ADF /* assetTagsManifest_ScriptBinding.h */,
@@ -3101,7 +3096,6 @@
 				86D76F9C165686D80046D71F /* assetFieldTypes.cc in Sources */,
 				86D76F9D165686D80046D71F /* assetManager.cc in Sources */,
 				86D76F9F165686D80046D71F /* assetQuery.cc in Sources */,
-				86D76FA0165686D80046D71F /* assetSnapshot.cc in Sources */,
 				86D76FA1165686D80046D71F /* assetTagsManifest.cc in Sources */,
 				86D76FA2165686D80046D71F /* audio.cc in Sources */,
 				86D76FA3165686D80046D71F /* AudioAsset.cc in Sources */,

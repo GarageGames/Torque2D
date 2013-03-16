@@ -282,7 +282,6 @@
     <ClCompile Include="..\..\source\assets\assetFieldTypes.cc" />
     <ClCompile Include="..\..\source\assets\assetManager.cc" />
     <ClCompile Include="..\..\source\assets\assetQuery.cc" />
-    <ClCompile Include="..\..\source\assets\assetSnapshot.cc" />
     <ClCompile Include="..\..\source\assets\assetTagsManifest.cc" />
     <ClCompile Include="..\..\source\assets\declaredAssets.cc" />
     <ClCompile Include="..\..\source\assets\referencedAssets.cc" />
@@ -705,7 +704,6 @@
     <ClInclude Include="..\..\source\assets\assetPtr.h" />
     <ClInclude Include="..\..\source\assets\assetQuery.h" />
     <ClInclude Include="..\..\source\assets\assetQuery_ScriptBinding.h" />
-    <ClInclude Include="..\..\source\assets\assetSnapshot.h" />
     <ClInclude Include="..\..\source\assets\assetTagsManifest.h" />
     <ClInclude Include="..\..\source\assets\assetTagsManifest_ScriptBinding.h" />
     <ClInclude Include="..\..\source\assets\declaredAssets.h" />

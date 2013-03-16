@@ -106,7 +106,6 @@
 		867BB00816AEC9050033868F /* assetFieldTypes.cc in Sources */ = {isa = PBXBuildFile; fileRef = 867BAD7516AEC9050033868F /* assetFieldTypes.cc */; };
 		867BB00916AEC9050033868F /* assetManager.cc in Sources */ = {isa = PBXBuildFile; fileRef = 867BAD7716AEC9050033868F /* assetManager.cc */; };
 		867BB00B16AEC9050033868F /* assetQuery.cc in Sources */ = {isa = PBXBuildFile; fileRef = 867BAD7D16AEC9050033868F /* assetQuery.cc */; };
-		867BB00C16AEC9050033868F /* assetSnapshot.cc in Sources */ = {isa = PBXBuildFile; fileRef = 867BAD8016AEC9050033868F /* assetSnapshot.cc */; };
 		867BB00D16AEC9050033868F /* assetTagsManifest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 867BAD8216AEC9050033868F /* assetTagsManifest.cc */; };
 		867BB00E16AEC9050033868F /* audio.cc in Sources */ = {isa = PBXBuildFile; fileRef = 867BAD8A16AEC9050033868F /* audio.cc */; };
 		867BB00F16AEC9050033868F /* AudioAsset.cc in Sources */ = {isa = PBXBuildFile; fileRef = 867BAD8C16AEC9050033868F /* AudioAsset.cc */; };
@@ -702,8 +701,6 @@
 		867BAD7D16AEC9050033868F /* assetQuery.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = assetQuery.cc; sourceTree = "<group>"; };
 		867BAD7E16AEC9050033868F /* assetQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assetQuery.h; sourceTree = "<group>"; };
 		867BAD7F16AEC9050033868F /* assetQuery_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assetQuery_ScriptBinding.h; sourceTree = "<group>"; };
-		867BAD8016AEC9050033868F /* assetSnapshot.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = assetSnapshot.cc; sourceTree = "<group>"; };
-		867BAD8116AEC9050033868F /* assetSnapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assetSnapshot.h; sourceTree = "<group>"; };
 		867BAD8216AEC9050033868F /* assetTagsManifest.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = assetTagsManifest.cc; sourceTree = "<group>"; };
 		867BAD8316AEC9050033868F /* assetTagsManifest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assetTagsManifest.h; sourceTree = "<group>"; };
 		867BAD8416AEC9050033868F /* assetTagsManifest_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assetTagsManifest_ScriptBinding.h; sourceTree = "<group>"; };
@@ -1765,8 +1762,6 @@
 				867BAD7D16AEC9050033868F /* assetQuery.cc */,
 				867BAD7E16AEC9050033868F /* assetQuery.h */,
 				867BAD7F16AEC9050033868F /* assetQuery_ScriptBinding.h */,
-				867BAD8016AEC9050033868F /* assetSnapshot.cc */,
-				867BAD8116AEC9050033868F /* assetSnapshot.h */,
 				867BAD8216AEC9050033868F /* assetTagsManifest.cc */,
 				867BAD8316AEC9050033868F /* assetTagsManifest.h */,
 				867BAD8416AEC9050033868F /* assetTagsManifest_ScriptBinding.h */,
@@ -3071,7 +3066,6 @@
 				867BB00816AEC9050033868F /* assetFieldTypes.cc in Sources */,
 				867BB00916AEC9050033868F /* assetManager.cc in Sources */,
 				867BB00B16AEC9050033868F /* assetQuery.cc in Sources */,
-				867BB00C16AEC9050033868F /* assetSnapshot.cc in Sources */,
 				867BB00D16AEC9050033868F /* assetTagsManifest.cc in Sources */,
 				867BB00E16AEC9050033868F /* audio.cc in Sources */,
 				867BB00F16AEC9050033868F /* AudioAsset.cc in Sources */,

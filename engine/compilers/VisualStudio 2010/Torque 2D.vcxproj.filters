@@ -717,9 +717,6 @@
     <ClCompile Include="..\..\source\assets\assetTagsManifest.cc">
       <Filter>assets</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\assets\assetSnapshot.cc">
-      <Filter>assets</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\assets\assetBase.cc">
       <Filter>assets</Filter>
     </ClCompile>
@@ -1918,9 +1915,6 @@
     </ClInclude>
     <ClInclude Include="..\..\source\module\moduleCallbacks.h">
       <Filter>module</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\assets\assetSnapshot.h">
-      <Filter>assets</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\assets\assetBase.h">
       <Filter>assets</Filter>
