@@ -2991,12 +2991,33 @@ ConsoleMethod(Scene, setDebugOff, void, 3, 2 + DEBUG_MODE_COUNT,    "(debugOptio
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Scene, getDebugOn, bool, 3, 3, "(debugMode) Gets the state of the debug mode.\n"
-              "@param The specific debug mode to check active state of.\n"
-              "@return Returns true if active, false if not.")
+ConsoleMethod(Scene, getDebugOn, const char*, 2, 2, "() Gets the state of the debug modes.\n"
+                                                    "@return Returns a space separated list of debug modes that are active.")
 {
-   const U32 mask = 1 << dAtoi(argv[2]);
-   return object->getDebugMask() & mask;
+    // Fetch debug mask,.
+    const U32 debugMask = object->getDebugMask();
+
+    // Fetch a return buffer.
+    S32 bufferSize = 1024;
+    char* pReturnBuffer = Con::getReturnBuffer(bufferSize);
+    *pReturnBuffer = 0;
+    char* pWriteCursor = pReturnBuffer;
+
+    // Iterate debug mask.
+    for( U32 bit = 0; bit < 32; ++bit )
+    {
+        // Calculate debug mask bit.
+        const S32 debugBit = 1 << bit;
+        if ( (debugMask & debugBit) == 0 )
+            continue;
+
+        // Format option.
+        const S32 size = dSprintf( pWriteCursor, bufferSize, "%s ", object->getDebugOptionDescription( (Scene::DebugOption)debugBit ) );
+        bufferSize -= size;
+        pWriteCursor += size;
+    }
+
+    return pReturnBuffer;
 }
 
 //-----------------------------------------------------------------------------
