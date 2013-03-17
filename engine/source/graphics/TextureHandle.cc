@@ -26,6 +26,10 @@
 
 //-----------------------------------------------------------------------------
 
+TextureHandle BadTextureHandle;
+
+//-----------------------------------------------------------------------------
+
 TextureHandle::TextureHandle( const char* pTextureKey, TextureHandleType type, bool clampToEdge, bool force16Bit )
 {
     // Sanity!

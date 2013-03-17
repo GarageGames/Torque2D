@@ -144,6 +144,9 @@ static StringTableEntry jointMotorCorrectionFactorName;
 
 static StringTableEntry controllerCustomNodeName;
 
+static StringTableEntry assetPreloadNodeName;
+static StringTableEntry assetNodeName;
+
 //-----------------------------------------------------------------------------
 
 Scene::Scene() :
@@ -176,7 +179,7 @@ Scene::Scene() :
     // Initialize Taml property names.
     if ( !tamlPropertiesInitialized )
     {
-        jointCustomNodeName           = StringTable->insert( "Joints" );
+        jointCustomNodeName               = StringTable->insert( "Joints" );
         jointCollideConnectedName         = StringTable->insert( "CollideConnected" );
         jointLocalAnchorAName             = StringTable->insert( "LocalAnchorA" );
         jointLocalAnchorBName             = StringTable->insert( "LocalAnchorB" );
@@ -239,6 +242,9 @@ Scene::Scene() :
 
         controllerCustomNodeName	      = StringTable->insert( "Controllers" );
 
+        assetPreloadNodeName              = StringTable->insert( "AssetPreloads" );
+        assetNodeName                     = StringTable->insert( "Asset" );
+
         // Flag as initialized.
         tamlPropertiesInitialized = true;
     }
@@ -248,7 +254,8 @@ Scene::Scene() :
     VECTOR_SET_ASSOCIATION( mDeleteRequests );
     VECTOR_SET_ASSOCIATION( mDeleteRequestsTemp );
     VECTOR_SET_ASSOCIATION( mEndContacts );
-      
+    VECTOR_SET_ASSOCIATION( mAssetPreloads );
+     
     // Initialize layer sort mode.
     for ( U32 n = 0; n < MAX_LAYERS_SUPPORTED; ++n )
        mLayerSortModes[n] = SceneRenderQueue::RENDER_SORT_NEWEST;
@@ -270,7 +277,8 @@ Scene::Scene() :
 Scene::~Scene()
 {
     // Unregister the scene controllers set.
-    mControllers->deleteObject();
+    if ( mControllers.notNull() )
+        mControllers->deleteObject();
 
     // Decrease scene count.
     --sSceneCount;
@@ -616,7 +624,7 @@ void Scene::dispatchBeginContactCallbacks( void )
         else
         {
             // No, so call it on its behaviors.
-            const char* args[5] = { "onSceneCollision", this->getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
+            const char* args[5] = { "onSceneCollision", getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
             callOnBehaviors( 5, args );
         }
 
@@ -728,7 +736,7 @@ void Scene::dispatchEndContactCallbacks( void )
         else
         {
             // No, so call it on its behaviors.
-            const char* args[5] = { "onSceneEndCollision", this->getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
+            const char* args[5] = { "onSceneEndCollision", getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
             callOnBehaviors( 5, args );
         }
 
@@ -747,8 +755,8 @@ void Scene::dispatchEndContactCallbacks( void )
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[3] = { "onEndCollision", pSceneObjectBBuffer, pMiscInfoBuffer };
-                pSceneObjectA->callOnBehaviors( 3, args );
+                const char* args[4] = { "onEndCollision", pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
+                pSceneObjectA->callOnBehaviors( 4, args );
             }
         }
 
@@ -767,8 +775,8 @@ void Scene::dispatchEndContactCallbacks( void )
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[3] = { "onEndCollision", pSceneObjectABuffer, pMiscInfoBuffer };
-                pSceneObjectB->callOnBehaviors( 3, args );
+                const char* args[4] = { "onEndCollision", pSceneObjectBBuffer, pSceneObjectABuffer, pMiscInfoBuffer };
+                pSceneObjectB->callOnBehaviors( 4, args );
             }
         }
     }
@@ -1361,12 +1369,15 @@ void Scene::clearScene( bool deleteObjects )
     SimSet* pControllerSet = getControllers();
 
     // Do we have any scene controllers?
-    if ( pControllerSet == NULL )
-        return;
+    if ( pControllerSet != NULL )
+    {
+        // Yes, so delete them all.
+        while( pControllerSet->size() > 0 )
+            pControllerSet->at(0)->deleteObject();
+    }
 
-    // Delete all the scene controllers.
-    while( pControllerSet->size() > 0 )
-        pControllerSet->at(0)->deleteObject();
+    // Clear asset preloads.
+    clearAssetPreloads();
 }
 
 //-----------------------------------------------------------------------------
@@ -1516,6 +1527,92 @@ U32 Scene::getSceneObjects( typeSceneObjectVector& objects, const U32 sceneLayer
     }
 
     return count;
+}
+
+//-----------------------------------------------------------------------------
+
+const AssetPtr<AssetBase>* Scene::getAssetPreload( const S32 index ) const
+{
+    // Is the index valid?
+    if ( index < 0 || index >= mAssetPreloads.size() )
+    {
+        // Yes, so warn.
+        Con::warnf( "Scene::getAssetPreload() - Out of range index '%d'.  There are only '%d' asset preloads.", index, mAssetPreloads.size() );
+        return NULL;
+    }
+
+    return mAssetPreloads[index];
+}
+
+//-----------------------------------------------------------------------------
+
+void Scene::addAssetPreload( const char* pAssetId )
+{
+    // Sanity!
+    AssertFatal( pAssetId != NULL, "Scene::addAssetPreload() - Cannot add a NULL asset preload." );
+
+    // Fetch asset Id.
+    StringTableEntry assetId = StringTable->insert( pAssetId );
+
+    // Ignore if asset already added.
+    const S32 assetPreloadCount = mAssetPreloads.size();
+    for( S32 index = 0; index < assetPreloadCount; ++index )
+    {
+        if ( mAssetPreloads[index]->getAssetId() == assetId )
+            return;
+    }
+
+    // Create asset pointer.
+    AssetPtr<AssetBase>* pAssetPtr = new AssetPtr<AssetBase>( pAssetId );
+
+    // Was the asset acquired?
+    if ( pAssetPtr->isNull() )
+    {
+        // No, so warn.
+        Con::warnf( "Scene::addAssetPreload() - Failed to acquire asset '%s' so not added as a preload.", pAssetId );
+
+        // No, so delete the asset pointer.
+        delete pAssetPtr;
+        return;
+    }
+
+    // Add asset.
+    mAssetPreloads.push_back( pAssetPtr );
+}
+
+//-----------------------------------------------------------------------------
+
+void Scene::removeAssetPreload( const char* pAssetId )
+{
+    // Sanity!
+    AssertFatal( pAssetId != NULL, "Scene::removeAssetPreload() - Cannot remove a NULL asset preload." );
+
+    // Fetch asset Id.
+    StringTableEntry assetId = StringTable->insert( pAssetId );
+
+    // Remove asset Id.
+    const S32 assetPreloadCount = mAssetPreloads.size();
+    for( S32 index = 0; index < assetPreloadCount; ++index )
+    {
+        if ( mAssetPreloads[index]->getAssetId() == assetId )
+        {
+            delete mAssetPreloads[index];
+            mAssetPreloads.erase_fast( index );
+            return;
+        }
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void Scene::clearAssetPreloads( void )
+{
+    // Delete all the asset preloads.
+    while( mAssetPreloads.size() > 0 )
+    {
+        delete mAssetPreloads.back();
+        mAssetPreloads.pop_back();
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -3742,7 +3839,7 @@ SceneObject* Scene::create( const char* pType )
     // Sanity!
     AssertFatal( pSceneObject != NULL, "Scene::create() - Failed to create type via class rep." );
 
-    // Attemp to register the object.
+    // Attempt to register the object.
     if ( !pSceneObject->registerObject() )
     {
         // No, so warn.
@@ -4583,6 +4680,56 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
             pControllerSet->addObject( pProxyObject );
         }
     }
+
+    // Find asset preload custom node.
+    const TamlCustomNode* pAssetPreloadNode = customNodes.findNode( assetPreloadNodeName );
+
+    // Do we have any asset preloads?
+    if ( pAssetPreloadNode != NULL )
+    {
+        // Yes, so clear any existing asset preloads.
+        clearAssetPreloads();
+
+        // Yes, so fetch asset Id type prefix.
+        StringTableEntry assetIdTypePrefix = ConsoleBaseType::getType( TypeAssetId )->getTypePrefix();
+
+        // Fetch the prefix length.
+        const S32 assetIdPrefixLength = dStrlen( assetIdTypePrefix );
+
+        // Fetch the preload children nodes.
+        const TamlCustomNodeVector& preloadChildren = pAssetPreloadNode->getChildren();
+
+        // Iterate asset preloads.
+        for( TamlCustomNodeVector::const_iterator assetPreloadNodeItr = preloadChildren.begin(); assetPreloadNodeItr != preloadChildren.end(); ++assetPreloadNodeItr )
+        {
+            // Fetch asset node.
+            const TamlCustomNode* pAssetNode = *assetPreloadNodeItr;
+
+            // Ignore non-asset nodes.
+            if ( pAssetNode->getNodeName() != assetNodeName )
+                continue;
+
+            // Find the asset Id field.
+            const TamlCustomField* pAssetIdField = pAssetNode->findField( "Id" );
+
+            // Did we find the field?
+            if ( pAssetIdField == NULL )
+            {
+                // No, so warn.
+                Con::warnf("Scene::onTamlPostRead() - Found asset preload but failed to find asset Id field." );
+                continue;
+            }
+
+            // Fetch field value.
+            const char* pFieldValue = pAssetIdField->getFieldValue();
+
+            // Calculate the field value start (skip any type prefix).
+            const S32 prefixOffset = dStrnicmp( pFieldValue, assetIdTypePrefix, assetIdPrefixLength ) == 0 ? assetIdPrefixLength : 0;
+
+            // Add asset preload.
+            addAssetPreload( pFieldValue + prefixOffset );
+        }
+    }   
 }
 
 //-----------------------------------------------------------------------------
@@ -5033,6 +5180,32 @@ void Scene::onTamlCustomWrite( TamlCustomNodes& customNodes )
             pControllerCustomNode->addNode( pSetObject );
         }
     }
+
+    // Fetch asset preload count.
+    const S32 assetPreloadCount = getAssetPreloadCount();
+
+    // Do we have any asset preloads?
+    if ( assetPreloadCount > 0 )
+    {
+        // Yes, so fetch asset Id type prefix.
+        StringTableEntry assetIdTypePrefix = ConsoleBaseType::getType( TypeAssetId )->getTypePrefix();
+
+        // Add asset preload node.
+        TamlCustomNode* pAssetPreloadCustomNode = customNodes.addNode( assetPreloadNodeName );
+
+        // Iterate asset preloads.
+        for( typeAssetPtrVector::const_iterator assetItr = mAssetPreloads.begin(); assetItr != mAssetPreloads.end(); ++assetItr )
+        {
+            // Add node.
+            TamlCustomNode* pAssetNode = pAssetPreloadCustomNode->addNode( assetNodeName );
+
+            char valueBuffer[1024];
+            dSprintf( valueBuffer, sizeof(valueBuffer), "%s%s", assetIdTypePrefix, (*assetItr)->getAssetId() );
+
+            // Add asset Id.
+            pAssetNode->addField( "Id", valueBuffer );
+        }        
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -5251,3 +5424,4 @@ const char* Scene::getPickModeDescription( Scene::PickMode pickMode )
 
     return StringTable->EmptyString;
 }
+

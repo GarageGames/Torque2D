@@ -1000,9 +1000,6 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
         // Fetch behavior Id field name.
         StringTableEntry behaviorFieldIdName = StringTable->insert( BEHAVIOR_ID_FIELD_NAME );
 
-        // Yes, so fetch the connection node name..
-        StringTableEntry connectionNodeName = StringTable->insert( BEHAVIOR_CONNECTION_TYPE_NAME );
-
         // Fetch behavior template asset field type.
         StringTableEntry behaviorTemplateAssetFieldType = StringTable->insert( BEHAVIORTEMPLATE_ASSET_FIELDTYPE );
 

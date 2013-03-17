@@ -82,7 +82,7 @@ protected:
 
 protected:
     static bool setImage(void* obj, const char* data) { static_cast<WaveComposite*>(obj)->setImage( data ); return false; }
-    static const char* getImage(void* obj, const char* data) { return DYNAMIC_VOID_CAST_TO(WaveComposite, SpriteProxyBase, obj)->getImage(); }
+    static const char* getImage(void* obj, const char* data) { return DYNAMIC_VOID_CAST_TO(WaveComposite, ImageFrameProvider, obj)->getImage(); }
     static bool writeImage( void* obj, StringTableEntry pFieldName ) { return static_cast<WaveComposite*>(obj)->mImageAsset.notNull(); }
     static bool setImageFrame(void* obj, const char* data) { static_cast<WaveComposite*>(obj)->setImageFrame( dAtoi(data) ); return false; }
     static bool writeImageFrame( void* obj, StringTableEntry pFieldName ) { return static_cast<WaveComposite*>(obj)->getImageFrame() > 0; }

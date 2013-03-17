@@ -82,12 +82,12 @@ bool GuiSpriteCtrl::onWake()
     if ( mImageAssetId != StringTable->EmptyString )
     {
         // Set image asset.
-		SpriteProxyBase::setImage( mImageAssetId );
+		ImageFrameProvider::setImage( mImageAssetId );
     }
     else if ( mAnimationAssetId != StringTable->EmptyString )
     {
         // Play animation asset.
-		SpriteProxyBase::setAnimation( mAnimationAssetId, false );
+		ImageFrameProvider::setAnimation( mAnimationAssetId );
     }
 
     return true;
@@ -98,7 +98,7 @@ bool GuiSpriteCtrl::onWake()
 void GuiSpriteCtrl::onSleep()
 {
     // Clear assets.
-	SpriteProxyBase::clearAsset();
+	ImageFrameProvider::clearAssets();
 
     // Call parent.
     Parent::onSleep();
@@ -125,7 +125,7 @@ bool GuiSpriteCtrl::setImage( const char* pImageAssetId )
 		return true;
 
 	// Call parent.
-	if ( !SpriteProxyBase::setImage( pImageAssetId, 0 ) )
+	if ( !ImageFrameProvider::setImage( pImageAssetId, 0 ) )
 		return false;
 
     // Update control.
@@ -139,7 +139,7 @@ bool GuiSpriteCtrl::setImage( const char* pImageAssetId )
 bool GuiSpriteCtrl::setImageFrame( const U32 frame )
 {
 	// Call parent.
-	if ( !SpriteProxyBase::setImageFrame( frame ) )
+	if ( !ImageFrameProvider::setImageFrame( frame ) )
 		return false;
 
     // Update control.
@@ -167,7 +167,7 @@ bool GuiSpriteCtrl::setAnimation( const char* pAnimationAssetId )
 
     // Play animation asset if it's valid.
     if ( mAnimationAssetId != StringTable->EmptyString )
-		SpriteProxyBase::setAnimation( mAnimationAssetId, false );
+		ImageFrameProvider::setAnimation( mAnimationAssetId );
 
 	return true;
 }
@@ -177,7 +177,7 @@ bool GuiSpriteCtrl::setAnimation( const char* pAnimationAssetId )
 void GuiSpriteCtrl::onRender( Point2I offset, const RectI &updateRect)
 {
 	// Call parent.
-	SpriteProxyBase::renderGui( *this, offset, updateRect );
+	ImageFrameProvider::renderGui( *this, offset, updateRect );
 }
 
 //------------------------------------------------------------------------------
@@ -185,5 +185,5 @@ void GuiSpriteCtrl::onRender( Point2I offset, const RectI &updateRect)
 void GuiSpriteCtrl::onAnimationEnd( void )
 {
     // Clear assets.
-	SpriteProxyBase::clearAsset();
+	ImageFrameProvider::clearAssets();
 }

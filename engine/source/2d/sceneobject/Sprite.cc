@@ -87,7 +87,7 @@ void Sprite::initPersistFields()
 void Sprite::sceneRender( const SceneRenderState* pSceneRenderState, const SceneRenderRequest* pSceneRenderRequest, BatchRender* pBatchRenderer )
 {
     // Let the parent render.
-    SpriteProxyBase::render(
+    ImageFrameProvider::render(
         getFlipX(), getFlipY(),
         mRenderOOBB[0],
         mRenderOOBB[1],

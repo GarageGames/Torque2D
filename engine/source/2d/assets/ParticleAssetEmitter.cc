@@ -295,7 +295,7 @@ void ParticleAssetEmitter::copyTo(SimObject* object)
    pParticleAssetEmitter->setAlphaTest( getAlphaTest() );
 
    pParticleAssetEmitter->setRandomImageFrame( getRandomImageFrame() );
-   if ( pParticleAssetEmitter->isStaticMode() )
+   if ( pParticleAssetEmitter->isStaticFrameProvider() )
    {
        pParticleAssetEmitter->setImage( getImage() );
        pParticleAssetEmitter->setImageFrame( getImageFrame() );

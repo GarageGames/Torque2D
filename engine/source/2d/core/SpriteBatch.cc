@@ -507,7 +507,7 @@ U32 SpriteBatch::getSpriteImageFrame( void ) const
 
 //------------------------------------------------------------------------------
 
-void SpriteBatch::setSpriteAnimation( const char* pAssetId, const bool autoRestore )
+void SpriteBatch::setSpriteAnimation( const char* pAssetId )
 {
     // Debug Profiling.
     PROFILE_SCOPE(SpriteBatch_SetSpriteAnimation);
@@ -520,7 +520,7 @@ void SpriteBatch::setSpriteAnimation( const char* pAssetId, const bool autoResto
         return;
 
     // Set animation.
-    mSelectedSprite->setAnimation( pAssetId, autoRestore );
+    mSelectedSprite->setAnimation( pAssetId );
 }
 
 //------------------------------------------------------------------------------
@@ -544,7 +544,7 @@ void SpriteBatch::clearSpriteAsset( void )
         return;
 
     // Clear the asset.
-    mSelectedSprite->clearAsset();
+    mSelectedSprite->clearAssets();
 }
 
 //------------------------------------------------------------------------------
