@@ -94,6 +94,9 @@ static ALenum getEnum(const char * name, U32 flags)
       { "AL_LOOPING",                     AL_LOOPING,                      (Source|Get|Set|Int) },
       //{ "AL_STREAMING",                   AL_STREAMING,                    (Source|Get|Set|Int) },
       //{ "AL_BUFFER",                      AL_BUFFER,                       (Source|Get|Set|Int) },
+      { "AL_SAMPLE_OFFSET",				  AL_SAMPLE_OFFSET,					(Source|Get|Set|Int) },
+      { "AL_SEC_OFFSET",				  AL_SEC_OFFSET,					(Source|Get|Set|Int) },
+      { "AL_BYTE_OFFSET",				  AL_BYTE_OFFSET,					(Source|Get|Set|Int) },
 
       { "AL_VENDOR",                      AL_VENDOR,                       (Context|Get) },
       { "AL_VERSION",                     AL_VERSION,                      (Context|Get) },
@@ -275,7 +278,7 @@ ConsoleFunction(alxCreateSource, S32, 2, 2, "(audio-assetId) - Create a source f
 
 //-----------------------------------------------
 ConsoleFunction(alxSourcef, void, 4, 4, "( handle , ALEnum , value ) Use the alxSource* function to set a source parameter(s) as specified by the OpenAL enumerated type ALEnum.\n"
-                                                                "@param handle The ID (a non-negative integer) corresponding to a previously set up sound source.\n"
+                                                                "@param handle The ID (an integer) corresponding to a previously set up sound source.\n"
                                                                 "@param ALEnum A string containing an OpenAL enumerated type name. See (above) table of ALEnum values for legal values.\n"
                                                                 "@param value An ALEnum type specific value corresponding to the new value for this enumerated parameters.\n"
                                                                 "@return No return value.\n"
@@ -294,7 +297,7 @@ ConsoleFunction(alxSourcef, void, 4, 4, "( handle , ALEnum , value ) Use the alx
 
 //-----------------------------------------------
 ConsoleFunction(alxSource3f, void, 3, 6, "( handle , ALEnum , x , y , z ) Use the alxSource* function to set a source parameter(s) as specified by the OpenAL enumerated type ALEnum.\n"
-                                                                "@param handle The ID (a non-negative integer) corresponding to a previously set up sound source.\n"
+                                                                "@param handle The ID (an integer) corresponding to a previously set up sound source.\n"
                                                                 "@param ALEnum A string containing an OpenAL enumerated type name. See (above) table of ALEnum values for legal values.\n"
                                                                 "@param x,y,z XYZ floating-point coordinates.\n"
                                                                 "@return No return value.\n"
@@ -329,27 +332,27 @@ ConsoleFunction(alxSource3f, void, 3, 6, "( handle , ALEnum , x , y , z ) Use th
 
 //-----------------------------------------------
 ConsoleFunction(alxSourcei, void, 4, 4, "( handle , ALEnum , value ) Use the alxSource* function to set a source parameter(s) as specified by the OpenAL enumerated type ALEnum.\n"
-                                                                "@param handle The ID (a non-negative integer) corresponding to a previously set up sound source.\n"
+                                                                "@param handle The ID (an integer) corresponding to a previously set up sound source.\n"
                                                                 "@param ALEnum A string containing an OpenAL enumerated type name. See (above) table of ALEnum values for legal values.\n"
                                                                 "@param value An ALEnum type specific value corresponding to the new value for this enumerated parameters.\n"
                                                                 "@return No return value.\n"
                                                                 "@sa alxGetSource*, al*Listener*")
 {
-   ALenum e = getEnum(argv[2], (Source|Set|Int));
-   if(e == AL_INVALID)
-   {
-      Con::errorf(ConsoleLogEntry::General, "cAudio_alxSourcei: invalid enum name '%s'", argv[2]);
-      return;
-   }
+	ALenum e = getEnum(argv[2], (Source|Set|Int));
+	if(e == AL_INVALID)
+	{
+		Con::errorf(ConsoleLogEntry::General, "cAudio_alxSourcei: invalid enum name '%s'", argv[2]);
+		return;
+	}
 
-   alxSourcei(dAtoi(argv[1]), e, dAtoi(argv[3]));
+	alxSourcei(dAtoi(argv[1]), e, static_cast<ALint>(dAtoi(argv[3])));
 }
 
 
 //-----------------------------------------------
 ConsoleFunction(alxGetSourcef, F32, 3, 3, "( handle , ALEnum ) Use the alxGetSource* function to get the current value of a source parameter, as specified by ALEnum.\n"
                                                                 "Depending on the ALEnum you need to acquire, be sure to use the correct version (i.e. correct return type) of alxGetSource*.\n"
-                                                                "@param handle The ID (a non-negative integer) corresponding to a previously set up sound source.\n"
+                                                                "@param handle The ID (an integer) corresponding to a previously set up sound source.\n"
                                                                 "@param ALEnum A string containing an OpenAL enumerated type name. See (above) table of ALEnum values for legal values.\n"
                                                                 "@return Returns current value of parameter specified by ALEnum for source identified by handle.\n"
                                                                 "@sa alxSource*, al*GetListener*")
@@ -370,7 +373,7 @@ ConsoleFunction(alxGetSourcef, F32, 3, 3, "( handle , ALEnum ) Use the alxGetSou
 //-----------------------------------------------
 ConsoleFunction(alxGetSource3f, const char *, 3, 3, "( handle , ALEnum ) Use the alxGetSource* function to get the current value of a source parameter, as specified by ALEnum.\n"
                                                                 "Depending on the ALEnum you need to acquire, be sure to use the correct version (i.e. correct return type) of alxGetSource*.\n"
-                                                                "@param handle The ID (a non-negative integer) corresponding to a previously set up sound source.\n"
+                                                                "@param handle The ID (an integer) corresponding to a previously set up sound source.\n"
                                                                 "@param ALEnum A string containing an OpenAL enumerated type name.\n"
                                                                 "@return Returns current value of parameter specified by ALEnum for source identified by handle.\n"
                                                                 "@sa alxSource*, al*GetListener*")
@@ -394,7 +397,7 @@ ConsoleFunction(alxGetSource3f, const char *, 3, 3, "( handle , ALEnum ) Use the
 //-----------------------------------------------
 ConsoleFunction(alxGetSourcei, S32, 3, 3, "( handle , ALEnum ) Use the alxGetSource* function to get the current value of a source parameter, as specified by ALEnum.\n"
                                                                 "Depending on the ALEnum you need to acquire, be sure to use the correct version (i.e. correct return type) of alxGetSource*.\n"
-                                                                "@param handle The ID (a non-negative integer) corresponding to a previously set up sound source.\n"
+                                                                "@param handle The ID (an integer) corresponding to a previously set up sound source.\n"
                                                                 "@param ALEnum A string containing an OpenAL enumerated type name. See (above) table of ALEnum values for legal values.\n"
                                                                 "@return Returns current value of parameter specified by ALEnum for source identified by handle.\n"
                                                                 "@sa alxSource*, al*GetListener*")
@@ -406,9 +409,9 @@ ConsoleFunction(alxGetSourcei, S32, 3, 3, "( handle , ALEnum ) Use the alxGetSou
       return(0);
    }
 
-   S32 value;
+   ALint value;
    alxGetSourcei(dAtoi(argv[1]), e, &value);
-   return(value);
+   return (static_cast<S32>(value));
 }
 
 
@@ -441,7 +444,7 @@ ConsoleFunction(alxPlay, S32, 2, 2, "(audio-assetId) - Play the audio asset Id.\
 }
 
 ConsoleFunction(alxPause, bool, 2, 2, "( handle ) Use the alxPause function to pause a currently playing sound as specified by handle.\n"
-                                                                "@param handle The ID (a non-negative integer) corresponding to a previously set up sound source.\n"
+                                                                "@param handle The ID (an integer) corresponding to a previously set up sound source.\n"
                                                                 "@return No return value.\n"
                                                                 "@sa alxIsPlaying, alxPlay, alxStopAll")
 {
@@ -452,7 +455,7 @@ ConsoleFunction(alxPause, bool, 2, 2, "( handle ) Use the alxPause function to p
 }
 
 ConsoleFunction(alxUnpause, void, 2, 2, "( handle ) Use the alxUnpause function to resume playing a currently paused sound as specified by handle.\n"
-                                                                "@param handle The ID (a non-negative integer) corresponding to a previously set up sound source.\n"
+                                                                "@param handle The ID (an integer) corresponding to a previously set up sound source.\n"
                                                                 "@return No return value.\n"
                                                                 "@sa alxIsPlaying, alxPlay, alxStopAll")
 {
@@ -464,7 +467,7 @@ ConsoleFunction(alxUnpause, void, 2, 2, "( handle ) Use the alxUnpause function 
 
 //-----------------------------------------------
 ConsoleFunction(alxStop, void, 2, 2, "( handle ) Use the alxStop function to stop a currently playing sound as specified by handle.\n"
-                                                                "@param handle The ID (a non-negative integer) corresponding to a previously set up sound source.\n"
+                                                                "@param handle The ID (an integer) corresponding to a previously set up sound source.\n"
                                                                 "@return No return value.\n"
                                                                 "@sa alxIsPlaying, alxPlay, alxStopAll")
 {
@@ -484,7 +487,7 @@ ConsoleFunction(alxStopAll, void, 1, 1, "() Use the alxStopAll function to stop 
 
 //-----------------------------------------------
 ConsoleFunction(alxIsPlaying, bool, 2, 5, "( handle ) Use the alxIsPlaying function to determine if the sound associated with a previously set-up sound handle is playing or not.\n"
-                                                                "@param handle The ID (a non-negative integer) corresponding to a previously set up sound source.\n"
+                                                                "@param handle The ID (an integer) corresponding to a previously set up sound source.\n"
                                                                 "@return Returns 1 if specified handle is being played, 0 otherwise.\n"
                                                                 "@sa alxPlay, alxStop, alxStopAll")
 {
@@ -653,7 +656,7 @@ ConsoleFunction(alxSetChannelVolume, bool, 3, 3, "( channelD , volume ) Use the 
 
 //-----------------------------------------------
 ConsoleFunction(alxGetStreamPosition, F32, 2, 2, "( handle ) Use the alxGetStreamPosition function to get the current play position for a playing sound. Note, this value is a percentage equivalent to the percent of the sound that as already played.\n"
-                                                                "@param handle The ID (a non-negative integer) corresponding to a previously set up sound source.\n"
+                                                                "@param handle The ID (an integer) corresponding to a previously set up sound source.\n"
                                                                 "@return Returns -1 for invalid handle, and 0.0 to 1.0 for valid handle indicating what percentage of the sound file has been played.\n"
                                                                 "@sa alxGetStreamDuration")
 {
@@ -667,7 +670,7 @@ ConsoleFunction(alxGetStreamPosition, F32, 2, 2, "( handle ) Use the alxGetStrea
 
 //-----------------------------------------------
 ConsoleFunction(alxGetStreamDuration, F32, 2, 2, "( handle ) Use the alxGetStreamDuration function to determine the length of a previously set up sound in seconds.\n"
-                                                                "@param handle The ID (a non-negative integer) corresponding to a previously set up sound source.\n"
+                                                                "@param handle The ID (an integer) corresponding to a previously set up sound source.\n"
                                                                 "@return Returns -1 for invalid handle, and 0.0 to N.M for valid handle indicating length of scheduled sound in seconds.\n"
                                                                 "@sa alxGetStreamPosition")
 {
