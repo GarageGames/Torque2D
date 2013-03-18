@@ -952,7 +952,7 @@ ConsoleMethod(Scene, getRevoluteJointMotor, const char*, 3, 3,  "(jointId) Gets 
     F32 maxMotorTorque;
 
     // Access joint.
-    if ( !object->getRevoluteJointLimit( jointId, enableMotor, motorSpeed, maxMotorTorque ) )
+    if ( !object->getRevoluteJointMotor( jointId, enableMotor, motorSpeed, maxMotorTorque ) )
     {
         return NULL;
     }
