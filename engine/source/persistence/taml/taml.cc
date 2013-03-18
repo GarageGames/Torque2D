@@ -887,26 +887,6 @@ bool Taml::generateTamlSchema( const char* pFilename )
         pComplexTypeElement->SetAttribute( "mixed", "true" );
         pSchemaElement->LinkEndChild( pComplexTypeElement );
 
-        // Set content parent element.
-        TiXmlElement* pContentParentElement = pComplexTypeElement;
-
-        // Do we have a base type?
-        if ( pType->getParentClass() != NULL )
-        {
-            // Yes, so add complex content.
-            TiXmlElement* pComplexContentElement = new TiXmlElement( "xs:complexContent" );
-            pComplexTypeElement->LinkEndChild( pComplexContentElement );
-
-            // Add extension.
-            TiXmlElement* pExtensionElement = new TiXmlElement( "xs:extension" );
-            dSprintf( buffer, sizeof(buffer), "%s_Type", pType->getParentClass()->getClassName() );
-            pExtensionElement->SetAttribute( "base", buffer );
-            pComplexContentElement->LinkEndChild( pExtensionElement );
-
-            // Set as content parent element.
-            pContentParentElement = pExtensionElement;
-        }
-
         // Fetch container child class.
         AbstractClassRep* pContainerChildClass = pType->getContainerChildClass( false );
 
@@ -933,17 +913,13 @@ bool Taml::generateTamlSchema( const char* pFilename )
             pGroupReferenceElement->SetAttribute( "ref", buffer );
             pGroupReferenceElement->SetAttribute( "minOccurs", "0" );
             pGroupReferenceElement->SetAttribute( "maxOccurs", "unbounded" );
-            pContentParentElement->LinkEndChild( pGroupReferenceElement );
+            pComplexTypeElement->LinkEndChild( pGroupReferenceElement );
 
             // Add group members.
             for ( AbstractClassRep* pGroupType = pRootType; pGroupType != NULL; pGroupType = pGroupType->getNextClass() )
             {
                 // Skip if not derived from the container child class.
                 if ( !pGroupType->isClass( pContainerChildClass ) )
-                    continue;
-
-                // Skip if a parent contains the child class already.
-                if ( pType->findContainerChildRoot( pGroupType ) != pType )
                     continue;
 
                 // Add group member.
@@ -968,16 +944,12 @@ bool Taml::generateTamlSchema( const char* pFilename )
                 field.type == AbstractClassRep::EndGroupFieldType )
             continue;
 
-            // Skip if we're not the field root i.e. it's not defined on this type but a parent type.
-            if ( pType->findFieldRoot( StringTable->insert( field.pFieldname ) ) != pType )
-                continue;
-
             // Add attribute element.
             TiXmlElement* pAttributeElement = new TiXmlElement( "xs:attribute" );
             pAttributeElement->SetAttribute( "name", field.pFieldname );
             pAttributeElement->SetAttribute( "type", "xs:string" );
             pAttributeElement->SetAttribute( "use", "optional" );
-            pContentParentElement->LinkEndChild( pAttributeElement );
+            pComplexTypeElement->LinkEndChild( pAttributeElement );
         }
     }
 
