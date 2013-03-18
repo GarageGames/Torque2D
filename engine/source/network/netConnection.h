@@ -287,36 +287,42 @@ public:
    AbstractClassRep* className::getClassRep() const { return &className::dynClassRep; } \
    AbstractClassRep* className::getStaticClassRep() { return &dynClassRep; } \
    AbstractClassRep* className::getParentStaticClassRep() { return Parent::getStaticClassRep(); } \
+   AbstractClassRep* className::getContainerChildStaticClassRep() { return NULL; } \
    ConcreteClassRep<className> className::dynClassRep(#className,NetClassGroupGameMask, NetClassTypeEvent, NetEventDirAny, className::getParentStaticClassRep())
 
 #define IMPLEMENT_CO_CLIENTEVENT_V1(className)                    \
    AbstractClassRep* className::getClassRep() const { return &className::dynClassRep; } \
    AbstractClassRep* className::getStaticClassRep() { return &dynClassRep; } \
    AbstractClassRep* className::getParentStaticClassRep() { return Parent::getStaticClassRep(); } \
+   AbstractClassRep* className::getContainerChildStaticClassRep() { return NULL; } \
    ConcreteClassRep<className> className::dynClassRep(#className,NetClassGroupGameMask, NetClassTypeEvent, NetEventDirServerToClient, className::getParentStaticClassRep())
 
 #define IMPLEMENT_CO_SERVEREVENT_V1(className)                    \
    AbstractClassRep* className::getClassRep() const { return &className::dynClassRep; } \
    AbstractClassRep* className::getStaticClassRep() { return &dynClassRep; } \
    AbstractClassRep* className::getParentStaticClassRep() { return Parent::getStaticClassRep(); } \
+   AbstractClassRep* className::getContainerChildStaticClassRep() { return NULL; } \
    ConcreteClassRep<className> className::dynClassRep(#className,NetClassGroupGameMask, NetClassTypeEvent, NetEventDirClientToServer, className::getParentStaticClassRep())
 
 #define IMPLEMENT_CO_NETEVENT(className,groupMask)                    \
    AbstractClassRep* className::getClassRep() const { return &className::dynClassRep; } \
    AbstractClassRep* className::getStaticClassRep() { return &dynClassRep; } \
    AbstractClassRep* className::getParentStaticClassRep() { return Parent::getStaticClassRep(); } \
+   AbstractClassRep* className::getContainerChildStaticClassRep() { return NULL; } \
    ConcreteClassRep<className> className::dynClassRep(#className,groupMask, NetClassTypeEvent, NetEventDirAny, className::getParentStaticClassRep())
 
 #define IMPLEMENT_CO_CLIENTEVENT(className,groupMask)                    \
    AbstractClassRep* className::getClassRep() const { return &className::dynClassRep; } \
    AbstractClassRep* className::getStaticClassRep() { return &dynClassRep; } \
    AbstractClassRep* className::getParentStaticClassRep() { return Parent::getStaticClassRep(); } \
+   AbstractClassRep* className::getContainerChildStaticClassRep() { return NULL; } \
    ConcreteClassRep<className> className::dynClassRep(#className,groupMask, NetClassTypeEvent, NetEventDirServerToClient, className::getParentStaticClassRep())
 
 #define IMPLEMENT_CO_SERVEREVENT(className,groupMask)                    \
    AbstractClassRep* className::getClassRep() const { return &className::dynClassRep; } \
    AbstractClassRep* className::getStaticClassRep() { return &dynClassRep; } \
    AbstractClassRep* className::getParentStaticClassRep() { return Parent::getStaticClassRep(); } \
+   AbstractClassRep* className::getContainerChildStaticClassRep() { return NULL; } \
    ConcreteClassRep<className> className::dynClassRep(#className,groupMask, NetClassTypeEvent, NetEventDirClientToServer, className::getParentStaticClassRep())
 
 

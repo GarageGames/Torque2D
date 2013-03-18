@@ -197,6 +197,7 @@ public:
    Namespace*                 getNameSpace();
    AbstractClassRep*          getNextClass();
    AbstractClassRep*          getParentClass();
+   virtual AbstractClassRep*  getContainerChildClass() = 0;
 
    /// Helper class to see if we are a given class, or a subclass thereof.
    bool                       isClass(AbstractClassRep  *acr)
@@ -347,7 +348,7 @@ template <class T>
 class ConcreteClassRep : public AbstractClassRep
 {
 public:
-   ConcreteClassRep(const char *name, S32 netClassGroupMask, S32 netClassType, S32 netEventDir, AbstractClassRep *parent)
+   ConcreteClassRep(const char *name, S32 netClassGroupMask, S32 netClassType, S32 netEventDir, AbstractClassRep *parent )
    {
       // name is a static compiler string so no need to worry about copying or deleting
       mClassName = name;
@@ -366,14 +367,30 @@ public:
       registerClassRep(this);
    };
 
+    virtual AbstractClassRep* getContainerChildClass()
+    {
+        // Fetch container children type.
+        AbstractClassRep* pChildren = T::getContainerChildStaticClassRep();
+        if ( pChildren != NULL )
+            return pChildren;
+
+        // Fetch parent type.
+        AbstractClassRep* pParent = T::getParentStaticClassRep();
+        if ( pParent == NULL )
+            return NULL;
+
+        // Get parent container children.
+        return pParent->getContainerChildClass();
+    }
+
    /// Perform class specific initialization tasks.
    ///
    /// Link namespaces, call initPersistFields() and consoleInit().
    void init() const
    {
       // Get handle to our parent class, if any, and ourselves (we are our parent's child).
-      AbstractClassRep *parent = T::getParentStaticClassRep();
-      AbstractClassRep *child  = T::getStaticClassRep      ();
+      AbstractClassRep *parent      = T::getParentStaticClassRep();
+      AbstractClassRep *child       = T::getStaticClassRep();
 
       // If we got reps, then link those namespaces! (To get proper inheritance.)
       if(parent && child)
@@ -788,25 +805,36 @@ inline bool& ConsoleObject::getDynamicGroupExpand()
 #define DECLARE_CONOBJECT(className)                    \
    static ConcreteClassRep<className> dynClassRep;      \
    static AbstractClassRep* getParentStaticClassRep();  \
+   static AbstractClassRep* getContainerChildStaticClassRep();      \
    static AbstractClassRep* getStaticClassRep();        \
    virtual AbstractClassRep* getClassRep() const
 
-#define IMPLEMENT_CONOBJECT(className)                                                            \
-   AbstractClassRep* className::getClassRep() const { return &className::dynClassRep; }           \
-   AbstractClassRep* className::getStaticClassRep() { return &dynClassRep; }                      \
-   AbstractClassRep* className::getParentStaticClassRep() { return Parent::getStaticClassRep(); } \
+#define IMPLEMENT_CONOBJECT(className)                                                              \
+   AbstractClassRep* className::getClassRep() const { return &className::dynClassRep; }             \
+   AbstractClassRep* className::getStaticClassRep() { return &dynClassRep; }                        \
+   AbstractClassRep* className::getParentStaticClassRep() { return Parent::getStaticClassRep(); }   \
+   AbstractClassRep* className::getContainerChildStaticClassRep() { return NULL; }                  \
+   ConcreteClassRep<className> className::dynClassRep(#className, 0, -1, 0, className::getParentStaticClassRep())
+
+#define IMPLEMENT_CONOBJECT_CHILDREN(className)                                                                     \
+   AbstractClassRep* className::getClassRep() const { return &className::dynClassRep; }                             \
+   AbstractClassRep* className::getStaticClassRep() { return &dynClassRep; }                                        \
+   AbstractClassRep* className::getParentStaticClassRep() { return Parent::getStaticClassRep(); }                   \
+   AbstractClassRep* className::getContainerChildStaticClassRep() { return Children::getStaticClassRep(); }         \
    ConcreteClassRep<className> className::dynClassRep(#className, 0, -1, 0, className::getParentStaticClassRep())
 
 #define IMPLEMENT_CO_NETOBJECT_V1(className)                    \
    AbstractClassRep* className::getClassRep() const { return &className::dynClassRep; }                 \
    AbstractClassRep* className::getStaticClassRep() { return &dynClassRep; }                            \
    AbstractClassRep* className::getParentStaticClassRep() { return Parent::getStaticClassRep(); }       \
+   AbstractClassRep* className::getContainerChildStaticClassRep() { return NULL; }                      \
    ConcreteClassRep<className> className::dynClassRep(#className, NetClassGroupGameMask, NetClassTypeObject, 0, className::getParentStaticClassRep())
 
 #define IMPLEMENT_CO_DATABLOCK_V1(className)                                                            \
    AbstractClassRep* className::getClassRep() const { return &className::dynClassRep; }                 \
    AbstractClassRep* className::getStaticClassRep() { return &dynClassRep; }                            \
    AbstractClassRep* className::getParentStaticClassRep() { return Parent::getStaticClassRep(); }       \
+   AbstractClassRep* className::getContainerChildStaticClassRep() {return NULL; }                       \
    ConcreteClassRep<className> className::dynClassRep(#className, NetClassGroupGameMask, NetClassTypeDataBlock, 0, className::getParentStaticClassRep())
 
 /// @}

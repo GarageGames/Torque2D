@@ -207,6 +207,7 @@ public:
 
 private:
     typedef BehaviorComponent   Parent;
+    typedef SceneObject         Children;
 
     /// World.
     b2World*                    mpWorld;

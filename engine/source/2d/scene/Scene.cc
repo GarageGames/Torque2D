@@ -68,7 +68,7 @@ SimObjectPtr<Scene> Scene::LoadingScene = NULL;
 
 //------------------------------------------------------------------------------
 
-IMPLEMENT_CONOBJECT(Scene);
+IMPLEMENT_CONOBJECT_CHILDREN(Scene);
 
 //------------------------------------------------------------------------------
 
