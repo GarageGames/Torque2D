@@ -197,7 +197,7 @@ public:
    Namespace*                 getNameSpace();
    AbstractClassRep*          getNextClass();
    AbstractClassRep*          getParentClass();
-   virtual AbstractClassRep*  getContainerChildClass() = 0;
+   virtual AbstractClassRep*  getContainerChildClass( const bool recurse ) = 0;
 
    /// Helper class to see if we are a given class, or a subclass thereof.
    bool                       isClass(AbstractClassRep  *acr)
@@ -274,6 +274,8 @@ public:
    const Field *findField(StringTableEntry fieldName) const;
 
    AbstractClassRep* findFieldRoot( StringTableEntry fieldName );
+
+   AbstractClassRep* findContainerChildRoot( AbstractClassRep* pChild );
    
    /// @}
 
@@ -369,11 +371,11 @@ public:
       registerClassRep(this);
    };
 
-    virtual AbstractClassRep* getContainerChildClass()
+    virtual AbstractClassRep* getContainerChildClass( const bool recurse )
     {
         // Fetch container children type.
         AbstractClassRep* pChildren = T::getContainerChildStaticClassRep();
-        if ( pChildren != NULL )
+        if ( !recurse || pChildren != NULL )
             return pChildren;
 
         // Fetch parent type.
@@ -382,7 +384,7 @@ public:
             return NULL;
 
         // Get parent container children.
-        return pParent->getContainerChildClass();
+        return pParent->getContainerChildClass( recurse );
     }
 
    /// Perform class specific initialization tasks.

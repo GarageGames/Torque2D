@@ -175,7 +175,7 @@ SimObject* TamlXmlReader::parseElement( TiXmlElement* pXmlElement )
         TamlChildren* pChildren = dynamic_cast<TamlChildren*>( pSimObject );
 
         // Fetch any container child class specifier.
-        AbstractClassRep* pContainerChildClass = pSimObject->getClassRep()->getContainerChildClass();
+        AbstractClassRep* pContainerChildClass = pSimObject->getClassRep()->getContainerChildClass( true );
 
         // Iterate siblings.
         do

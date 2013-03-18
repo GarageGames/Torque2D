@@ -41,7 +41,7 @@
 
 //------------------------------------------------------------------------------
 
-IMPLEMENT_CONOBJECT(GuiControl);
+IMPLEMENT_CONOBJECT_CHILDREN(GuiControl);
 
 //used to locate the next/prev responder when tab is pressed
 S32 GuiControl::smCursorChanged           = -1;

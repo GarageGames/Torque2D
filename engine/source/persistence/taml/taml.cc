@@ -858,7 +858,6 @@ bool Taml::generateTamlSchema( const char* pFilename )
 
     // Reset scratch state.
     char buffer[1024];
-    HashMap<AbstractClassRep*, StringTableEntry> containerGroups;
 
     // Generate the type elements.
     TiXmlComment* pComment = new TiXmlComment( "Type Elements" );
@@ -909,55 +908,51 @@ bool Taml::generateTamlSchema( const char* pFilename )
         }
 
         // Fetch container child class.
-        AbstractClassRep* pContainerChildClass = pType->getContainerChildClass();
+        AbstractClassRep* pContainerChildClass = pType->getContainerChildClass( false );
 
         // Is the type allowed children?
         if ( pContainerChildClass != NULL )
         {
-            //  Yes, so do we already have a group for this?
-            HashMap<AbstractClassRep*, StringTableEntry>::iterator groupItr = containerGroups.find( pContainerChildClass );
-            if ( groupItr == containerGroups.end() )
-            {
-                // No, so add group comment.
-                dSprintf( buffer, sizeof(buffer), " %s Child Group ", pContainerChildClass->getClassName() );
-                TiXmlComment* pComment = new TiXmlComment( buffer );
-                pSchemaElement->LinkEndChild( pComment );
+            // Yes, so add group comment.
+            dSprintf( buffer, sizeof(buffer), " %s Children Group ", pType->getClassName() );
+            TiXmlComment* pComment = new TiXmlComment( buffer );
+            pSchemaElement->LinkEndChild( pComment );
 
-                // Format the group name.
-                dSprintf( buffer, sizeof(buffer), "%s_ChildGroup", pContainerChildClass->getClassName() );
+            // Format the group name.
+            dSprintf( buffer, sizeof(buffer), "%s_ChildGroup", pType->getClassName() );
                 
-                // Insert into groups.
-                groupItr = containerGroups.insert( pContainerChildClass, StringTable->insert( buffer ) );
-
-                // Add group.
-                TiXmlElement* pGroupElement = new TiXmlElement( "xs:group" );
-                pGroupElement->SetAttribute( "name", buffer );
-                pSchemaElement->LinkEndChild( pGroupElement );
-                TiXmlElement* pGroupChoiceElement = new TiXmlElement( "xs:choice" );
-                pGroupElement->LinkEndChild( pGroupChoiceElement );
-
-                // Add group members.
-                for ( AbstractClassRep* pGroupType = pRootType; pGroupType != NULL; pGroupType = pGroupType->getNextClass() )
-                {
-                    // Skip if not derived from the container child class.
-                    if ( !pGroupType->isClass( pContainerChildClass ) )
-                        continue;
-
-                    // Add group member.
-                    TiXmlElement* pGroupMemberElement = new TiXmlElement( "xs:element" );
-                    pGroupMemberElement->SetAttribute( "name", pGroupType->getClassName() );
-                    dSprintf( buffer, sizeof(buffer), "%s_Type", pGroupType->getClassName() );
-                    pGroupMemberElement->SetAttribute( "type", buffer );
-                    pGroupChoiceElement->LinkEndChild( pGroupMemberElement );
-                }
-            }
+            // Add group.
+            TiXmlElement* pGroupElement = new TiXmlElement( "xs:group" );
+            pGroupElement->SetAttribute( "name", buffer );
+            pSchemaElement->LinkEndChild( pGroupElement );
+            TiXmlElement* pGroupChoiceElement = new TiXmlElement( "xs:choice" );
+            pGroupElement->LinkEndChild( pGroupChoiceElement );
 
             // Add group reference.
-            TiXmlElement* pGroupElement = new TiXmlElement( "xs:group" );
-            pGroupElement->SetAttribute( "ref", groupItr->value );
-            pGroupElement->SetAttribute( "minOccurs", "0" );
-            pGroupElement->SetAttribute( "maxOccurs", "unbounded" );
-            pContentParentElement->LinkEndChild( pGroupElement );
+            TiXmlElement* pGroupReferenceElement = new TiXmlElement( "xs:group" );
+            pGroupReferenceElement->SetAttribute( "ref", buffer );
+            pGroupReferenceElement->SetAttribute( "minOccurs", "0" );
+            pGroupReferenceElement->SetAttribute( "maxOccurs", "unbounded" );
+            pContentParentElement->LinkEndChild( pGroupReferenceElement );
+
+            // Add group members.
+            for ( AbstractClassRep* pGroupType = pRootType; pGroupType != NULL; pGroupType = pGroupType->getNextClass() )
+            {
+                // Skip if not derived from the container child class.
+                if ( !pGroupType->isClass( pContainerChildClass ) )
+                    continue;
+
+                // Skip if a parent contains the child class already.
+                if ( pType->findContainerChildRoot( pGroupType ) != pType )
+                    continue;
+
+                // Add group member.
+                TiXmlElement* pGroupMemberElement = new TiXmlElement( "xs:element" );
+                pGroupMemberElement->SetAttribute( "name", pGroupType->getClassName() );
+                dSprintf( buffer, sizeof(buffer), "%s_Type", pGroupType->getClassName() );
+                pGroupMemberElement->SetAttribute( "type", buffer );
+                pGroupChoiceElement->LinkEndChild( pGroupMemberElement );
+            }
         }
 
         // Iterate static fields.

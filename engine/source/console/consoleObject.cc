@@ -73,6 +73,28 @@ AbstractClassRep* AbstractClassRep::findFieldRoot( StringTableEntry fieldName )
 
 //-----------------------------------------------------------------------------
 
+AbstractClassRep* AbstractClassRep::findContainerChildRoot( AbstractClassRep* pChild )
+{
+    // Fetch container child.
+    AbstractClassRep* pContainerChildClass = getContainerChildClass( true );
+
+    // Finish if not found.
+    if ( pContainerChildClass == NULL )
+        return NULL;
+
+    // We're the root for the child if we have no parent.
+    if ( getParentClass() == NULL )
+        return this;
+
+    // Find child in parent.
+    AbstractClassRep* pParentContainerChildClass = getParentClass()->findContainerChildRoot( pChild );
+
+    // We;re the root if the parent does not contain the child else return the container root.
+    return pParentContainerChildClass == NULL ? this : pParentContainerChildClass;
+}
+
+//-----------------------------------------------------------------------------
+
 AbstractClassRep* AbstractClassRep::findClassRep(const char* in_pClassName)
 {
    AssertFatal(initialized,

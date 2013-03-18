@@ -272,7 +272,7 @@ void TamlBinaryReader::parseChildren( Stream& stream, TamlCallbacks* pCallbacks,
     }
 
     // Fetch any container child class specifier.
-    AbstractClassRep* pContainerChildClass = pSimObject->getClassRep()->getContainerChildClass();
+    AbstractClassRep* pContainerChildClass = pSimObject->getClassRep()->getContainerChildClass( true );
 
     // Iterate children.
     for ( U32 index = 0; index < childrenCount; ++ index )
