@@ -49,6 +49,30 @@ const AbstractClassRep::Field *AbstractClassRep::findField(StringTableEntry name
    return NULL;
 }
 
+//-----------------------------------------------------------------------------
+
+AbstractClassRep* AbstractClassRep::findFieldRoot( StringTableEntry fieldName )
+{
+    // Find the field.
+    const Field* pField = findField( fieldName );
+
+    // Finish if not found.
+    if ( pField == NULL )
+        return NULL;
+
+    // We're the root if we have no parent.
+    if ( getParentClass() == NULL )
+        return this;
+
+    // Find the field root via the parent.
+    AbstractClassRep* pFieldRoot = getParentClass()->findFieldRoot( fieldName );
+
+    // We're the root if the parent does not have it else return the field root.
+    return pFieldRoot == NULL ? this : pFieldRoot;
+}
+
+//-----------------------------------------------------------------------------
+
 AbstractClassRep* AbstractClassRep::findClassRep(const char* in_pClassName)
 {
    AssertFatal(initialized,

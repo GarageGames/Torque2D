@@ -272,6 +272,8 @@ public:
    bool mDynamicGroupExpand;
 
    const Field *findField(StringTableEntry fieldName) const;
+
+   AbstractClassRep* findFieldRoot( StringTableEntry fieldName );
    
    /// @}
 

@@ -833,3 +833,177 @@ SimObject* Taml::createType( StringTableEntry typeName, const Taml* pTaml, const
 
     return pSimObject;
 }
+
+//-----------------------------------------------------------------------------
+
+bool Taml::generateTamlSchema( const char* pFilename )
+{
+    // Sanity!
+    AssertFatal( pFilename != NULL, "Taml::generateTamlSchema() - Cannot write a NULL filename." );
+
+    // Create document.
+    TiXmlDocument schemaDocument;
+
+    // Add declaration.
+    TiXmlDeclaration schemaDeclaration( "1.0", "iso-8859-1", "no" );
+    schemaDocument.InsertEndChild( schemaDeclaration );
+
+    // Add schema element.
+    TiXmlElement* pSchemaElement = new TiXmlElement( "xs:schema" );
+    pSchemaElement->SetAttribute( "xmlns:xs", "http://www.w3.org/2001/XMLSchema" );
+    schemaDocument.LinkEndChild( pSchemaElement );
+
+    // Fetch class-rep root.
+    AbstractClassRep* pRootType = AbstractClassRep::getClassList();
+
+    // Reset scratch state.
+    char buffer[1024];
+    HashMap<AbstractClassRep*, StringTableEntry> containerGroups;
+
+    // Generate the type elements.
+    TiXmlComment* pComment = new TiXmlComment( "Type Elements" );
+    pSchemaElement->LinkEndChild( pComment );
+    for ( AbstractClassRep* pType = pRootType; pType != NULL; pType = pType->getNextClass() )
+    {
+        // Add type.
+        TiXmlElement* pTypeElement = new TiXmlElement( "xs:element" );
+        pTypeElement->SetAttribute( "name", pType->getClassName() );
+        dSprintf( buffer, sizeof(buffer), "%s_Type", pType->getClassName() );
+        pTypeElement->SetAttribute( "type", buffer );
+        pSchemaElement->LinkEndChild( pTypeElement );
+    }
+
+    // Generate the complex types.
+    for ( AbstractClassRep* pType = pRootType; pType != NULL; pType = pType->getNextClass() )
+    {
+        // Add complex type comment.
+        dSprintf( buffer, sizeof(buffer), " %s Type ", pType->getClassName() );
+        TiXmlComment* pComment = new TiXmlComment( buffer );
+        pSchemaElement->LinkEndChild( pComment );
+
+        // Add complex type.
+        TiXmlElement* pComplexTypeElement = new TiXmlElement( "xs:complexType" );
+        dSprintf( buffer, sizeof(buffer), "%s_Type", pType->getClassName() );
+        pComplexTypeElement->SetAttribute( "name", buffer );
+        pComplexTypeElement->SetAttribute( "mixed", "true" );
+        pSchemaElement->LinkEndChild( pComplexTypeElement );
+
+        // Set content parent element.
+        TiXmlElement* pContentParentElement = pComplexTypeElement;
+
+        // Do we have a base type?
+        if ( pType->getParentClass() != NULL )
+        {
+            // Yes, so add complex content.
+            TiXmlElement* pComplexContentElement = new TiXmlElement( "xs:complexContent" );
+            pComplexTypeElement->LinkEndChild( pComplexContentElement );
+
+            // Add extension.
+            TiXmlElement* pExtensionElement = new TiXmlElement( "xs:extension" );
+            dSprintf( buffer, sizeof(buffer), "%s_Type", pType->getParentClass()->getClassName() );
+            pExtensionElement->SetAttribute( "base", buffer );
+            pComplexContentElement->LinkEndChild( pExtensionElement );
+
+            // Set as content parent element.
+            pContentParentElement = pExtensionElement;
+        }
+
+        // Fetch container child class.
+        AbstractClassRep* pContainerChildClass = pType->getContainerChildClass();
+
+        // Is the type allowed children?
+        if ( pContainerChildClass != NULL )
+        {
+            //  Yes, so do we already have a group for this?
+            HashMap<AbstractClassRep*, StringTableEntry>::iterator groupItr = containerGroups.find( pContainerChildClass );
+            if ( groupItr == containerGroups.end() )
+            {
+                // No, so add group comment.
+                dSprintf( buffer, sizeof(buffer), " %s Child Group ", pContainerChildClass->getClassName() );
+                TiXmlComment* pComment = new TiXmlComment( buffer );
+                pSchemaElement->LinkEndChild( pComment );
+
+                // Format the group name.
+                dSprintf( buffer, sizeof(buffer), "%s_ChildGroup", pContainerChildClass->getClassName() );
+                
+                // Insert into groups.
+                groupItr = containerGroups.insert( pContainerChildClass, StringTable->insert( buffer ) );
+
+                // Add group.
+                TiXmlElement* pGroupElement = new TiXmlElement( "xs:group" );
+                pGroupElement->SetAttribute( "name", buffer );
+                pSchemaElement->LinkEndChild( pGroupElement );
+                TiXmlElement* pGroupChoiceElement = new TiXmlElement( "xs:choice" );
+                pGroupElement->LinkEndChild( pGroupChoiceElement );
+
+                // Add group members.
+                for ( AbstractClassRep* pGroupType = pRootType; pGroupType != NULL; pGroupType = pGroupType->getNextClass() )
+                {
+                    // Skip if not derived from the container child class.
+                    if ( !pGroupType->isClass( pContainerChildClass ) )
+                        continue;
+
+                    // Add group member.
+                    TiXmlElement* pGroupMemberElement = new TiXmlElement( "xs:element" );
+                    pGroupMemberElement->SetAttribute( "name", pGroupType->getClassName() );
+                    dSprintf( buffer, sizeof(buffer), "%s_Type", pGroupType->getClassName() );
+                    pGroupMemberElement->SetAttribute( "type", buffer );
+                    pGroupChoiceElement->LinkEndChild( pGroupMemberElement );
+                }
+            }
+
+            // Add group reference.
+            TiXmlElement* pGroupElement = new TiXmlElement( "xs:group" );
+            pGroupElement->SetAttribute( "ref", groupItr->value );
+            pGroupElement->SetAttribute( "minOccurs", "0" );
+            pGroupElement->SetAttribute( "maxOccurs", "unbounded" );
+            pContentParentElement->LinkEndChild( pGroupElement );
+        }
+
+        // Iterate static fields.
+        const AbstractClassRep::FieldList& fields = pType->mFieldList;
+        for( AbstractClassRep::FieldList::const_iterator fieldItr = fields.begin(); fieldItr != fields.end(); ++fieldItr )
+        {
+            // Fetch field.
+            const AbstractClassRep::Field& field = *fieldItr;
+
+            // Skip if not a data field.
+            if( field.type == AbstractClassRep::DepricatedFieldType ||
+                field.type == AbstractClassRep::StartGroupFieldType ||
+                field.type == AbstractClassRep::EndGroupFieldType )
+            continue;
+
+            // Skip if we're not the field root i.e. it's not defined on this type but a parent type.
+            if ( pType->findFieldRoot( StringTable->insert( field.pFieldname ) ) != pType )
+                continue;
+
+            // Add attribute element.
+            TiXmlElement* pAttributeElement = new TiXmlElement( "xs:attribute" );
+            pAttributeElement->SetAttribute( "name", field.pFieldname );
+            pAttributeElement->SetAttribute( "type", "xs:string" );
+            pAttributeElement->SetAttribute( "use", "optional" );
+            pContentParentElement->LinkEndChild( pAttributeElement );
+        }
+    }
+
+    // Expand the file-name into the file-path buffer.
+    char filePathBuffer[1024];
+    Con::expandPath( filePathBuffer, sizeof(filePathBuffer), pFilename );
+
+    FileStream stream;
+
+    // File opened?
+    if ( !stream.open( filePathBuffer, FileStream::Write ) )
+    {
+        // No, so warn.
+        Con::warnf("Taml::GenerateTamlSchema() - Could not open filename '%s' for write.", filePathBuffer );
+        return false;
+    }
+    // Write the schema document.
+    schemaDocument.SaveFile( stream );
+
+    // Close file.
+    stream.close();
+
+    return true;
+}
