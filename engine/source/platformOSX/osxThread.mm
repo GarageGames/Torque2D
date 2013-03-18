@@ -39,7 +39,7 @@ struct PlatformThreadData
     void*                   mRunArg;
     Thread*                 mThread;
     Semaphore               mGateway; // default count is 1
-    U64                     mThreadID;
+    ThreadIdent             mThreadID;
 };
 
 //-----------------------------------------------------------------------------
