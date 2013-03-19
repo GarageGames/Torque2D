@@ -54,6 +54,14 @@
 #include "assets/assetFieldTypes.h"
 #endif
 
+#ifndef _MATHTYPES_H_
+#include "math/mathTypes.h"
+#endif
+
+#ifndef _VECTOR2_H_
+#include "2d/core/vector2.h"
+#endif
+
 // Script bindings.
 #include "taml_ScriptBinding.h"
 
@@ -876,6 +884,33 @@ bool Taml::generateTamlSchema( const char* pFilename )
     pVector2ElementB->SetAttribute( "value", "([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b ([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b" );   
     pVector2ElementA->LinkEndChild( pVector2ElementB );
 
+    // Point2F.
+    TiXmlComment* pPoint2FComment = new TiXmlComment( "Point2F Console Type" );
+    pSchemaElement->LinkEndChild( pPoint2FComment );
+    TiXmlElement* pPoint2FTypeElement = new TiXmlElement( "xs:simpleType" );
+    pPoint2FTypeElement->SetAttribute( "name", "Point2F_ConsoleType" );
+    pSchemaElement->LinkEndChild( pPoint2FTypeElement );
+    TiXmlElement* pPoint2FElementA = new TiXmlElement( "xs:restriction" );
+    pPoint2FElementA->SetAttribute( "base", "xs:string" );
+    pPoint2FTypeElement->LinkEndChild( pPoint2FElementA );
+    TiXmlElement* pPoint2FElementB = new TiXmlElement( "xs:pattern" );
+    pPoint2FElementB->SetAttribute( "value", "([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b ([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b" );   
+    pPoint2FElementA->LinkEndChild( pPoint2FElementB );
+
+    // Point2I.
+    TiXmlComment* pPoint2IComment = new TiXmlComment( "Point2I Console Type" );
+    pSchemaElement->LinkEndChild( pPoint2IComment );
+    TiXmlElement* pPoint2ITypeElement = new TiXmlElement( "xs:simpleType" );
+    pPoint2ITypeElement->SetAttribute( "name", "Point2I_ConsoleType" );
+    pSchemaElement->LinkEndChild( pPoint2ITypeElement );
+    TiXmlElement* pPoint2IElementA = new TiXmlElement( "xs:restriction" );
+    pPoint2IElementA->SetAttribute( "base", "xs:string" );
+    pPoint2ITypeElement->LinkEndChild( pPoint2IElementA );
+    TiXmlElement* pPoint2IElementB = new TiXmlElement( "xs:pattern" );
+    pPoint2IElementB->SetAttribute( "value", "[-]?[0-9]* [-]?[0-9]*" );   
+    pPoint2IElementA->LinkEndChild( pPoint2IElementB );
+
+
     // *************************************************************
     // Generate engine type elements.
     // *************************************************************
@@ -913,6 +948,10 @@ bool Taml::generateTamlSchema( const char* pFilename )
         TiXmlElement* pSequenceElement = new TiXmlElement( "xs:sequence" );
         pComplexTypeElement->LinkEndChild( pSequenceElement );
 
+        if ( dStricmp( pType->getClassName(), "GuiBitmapCtrl" ) == 0 )
+        {
+            S32 a = 0;
+        }
         // Fetch container child class.
         AbstractClassRep* pContainerChildClass = pType->getContainerChildClass( false );
 
@@ -986,6 +1025,18 @@ bool Taml::generateTamlSchema( const char* pFilename )
             else if( fieldType == TypeBool || fieldType == TypeFlag )
             {
                 pFieldTypeDescription = "xs:boolean";
+            }
+            else if( fieldType == TypeVector2 )
+            {
+                pFieldTypeDescription = "Vector2_ConsoleType";
+            }
+            else if( fieldType == TypePoint2F )
+            {
+                pFieldTypeDescription = "Point2F_ConsoleType";
+            }
+            else if( fieldType == TypePoint2I )
+            {
+                pFieldTypeDescription = "Point2I_ConsoleType";
             }
             pAttributeElement->SetAttribute( "type", pFieldTypeDescription );
 
