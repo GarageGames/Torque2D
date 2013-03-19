@@ -1009,32 +1009,63 @@ bool Taml::generateTamlSchema( const char* pFilename )
 
             // Handle the console type appropriately.
             const S32 fieldType = (S32)field.type;
-            char* pFieldTypeDescription = "xs:string";
-            if( fieldType == TypeF32 )
+
+            // Is the field an enumeration?
+            if ( fieldType == TypeEnum )
             {
-                pFieldTypeDescription = "xs:float";
+                // Yes, so add attribute type.
+                TiXmlElement* pAttributeSimpleTypeElement = new TiXmlElement( "xs:simpleType" );
+                pAttributeElement->LinkEndChild( pAttributeSimpleTypeElement );
+
+                // Add restriction element.
+                TiXmlElement* pAttributeRestrictionElement = new TiXmlElement( "xs:restriction" );
+                pAttributeRestrictionElement->SetAttribute( "base", "xs:string" );
+                pAttributeSimpleTypeElement->LinkEndChild( pAttributeRestrictionElement );
+
+                // Yes, so fetch enumeration count.
+                const S32 enumCount = field.table->size;
+
+                // Iterate enumeration.
+                for( S32 index = 0; index < enumCount; ++index )
+                {
+                    // Add enumeration element.
+                    TiXmlElement* pAttributeEnumerationElement = new TiXmlElement( "xs:enumeration" );
+                    pAttributeEnumerationElement->SetAttribute( "value", field.table->table[index].label );
+                    pAttributeRestrictionElement->LinkEndChild( pAttributeEnumerationElement );
+                }
             }
-            else if( fieldType == TypeS8 || fieldType == TypeS32 )
+            else
             {
-                pFieldTypeDescription = "xs:int";
+                // No, so assume it's a string type initially.
+                char* pFieldTypeDescription = "xs:string";
+
+                // Handle known types.
+                if( fieldType == TypeF32 )
+                {
+                    pFieldTypeDescription = "xs:float";
+                }
+                else if( fieldType == TypeS8 || fieldType == TypeS32 )
+                {
+                    pFieldTypeDescription = "xs:int";
+                }
+                else if( fieldType == TypeBool || fieldType == TypeFlag )
+                {
+                    pFieldTypeDescription = "xs:boolean";
+                }
+                else if( fieldType == TypeVector2 )
+                {
+                    pFieldTypeDescription = "Vector2_ConsoleType";
+                }
+                else if( fieldType == TypePoint2F )
+                {
+                    pFieldTypeDescription = "Point2F_ConsoleType";
+                }
+                else if( fieldType == TypePoint2I )
+                {
+                    pFieldTypeDescription = "Point2I_ConsoleType";
+                }
+                pAttributeElement->SetAttribute( "type", pFieldTypeDescription );
             }
-            else if( fieldType == TypeBool || fieldType == TypeFlag )
-            {
-                pFieldTypeDescription = "xs:boolean";
-            }
-            else if( fieldType == TypeVector2 )
-            {
-                pFieldTypeDescription = "Vector2_ConsoleType";
-            }
-            else if( fieldType == TypePoint2F )
-            {
-                pFieldTypeDescription = "Point2F_ConsoleType";
-            }
-            else if( fieldType == TypePoint2I )
-            {
-                pFieldTypeDescription = "Point2I_ConsoleType";
-            }
-            pAttributeElement->SetAttribute( "type", pFieldTypeDescription );
 
             pAttributeElement->SetAttribute( "use", "optional" );
             pComplexTypeElement->LinkEndChild( pAttributeElement );
