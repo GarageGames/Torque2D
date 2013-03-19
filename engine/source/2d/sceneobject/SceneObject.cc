@@ -4152,6 +4152,110 @@ static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlEleme
     pCircleElementA->SetAttribute( "name", circleOffsetName );
     pCircleElementA->SetAttribute( "type", "Vector2_ConsoleType" );
     pCircleComplexTypeElement->LinkEndChild( pCircleElementA );
+
+    // Create "IsSensor" attribute.
+    pCircleElementA = new TiXmlElement( "xs:attribute" );
+    pCircleElementA->SetAttribute( "name", shapeSensorName );
+    pCircleElementA->SetAttribute( "type", "xs:boolean" );
+    pCircleComplexTypeElement->LinkEndChild( pCircleElementA );
+
+    // Create "Density" attribute.
+    pCircleElementA = new TiXmlElement( "xs:attribute" );
+    pCircleElementA->SetAttribute( "name", shapeDensityName );
+    pCircleComplexTypeElement->LinkEndChild( pCircleElementA );
+    pCircleElementB = new TiXmlElement( "xs:simpleType" );
+    pCircleElementA->LinkEndChild( pCircleElementB );
+    pCircleElementC = new TiXmlElement( "xs:restriction" );
+    pCircleElementC->SetAttribute( "base", "xs:float" );
+    pCircleElementB->LinkEndChild( pCircleElementC );
+    pCircleElementD = new TiXmlElement( "xs:minInclusive" );
+    pCircleElementD->SetAttribute( "value", "0" );
+    pCircleElementC->LinkEndChild( pCircleElementD );
+
+    // Create "Friction" attribute.
+    pCircleElementA = new TiXmlElement( "xs:attribute" );
+    pCircleElementA->SetAttribute( "name", shapeFrictionName );
+    pCircleComplexTypeElement->LinkEndChild( pCircleElementA );
+    pCircleElementB = new TiXmlElement( "xs:simpleType" );
+    pCircleElementA->LinkEndChild( pCircleElementB );
+    pCircleElementC = new TiXmlElement( "xs:restriction" );
+    pCircleElementC->SetAttribute( "base", "xs:float" );
+    pCircleElementB->LinkEndChild( pCircleElementC );
+    pCircleElementD = new TiXmlElement( "xs:minInclusive" );
+    pCircleElementD->SetAttribute( "value", "0" );
+    pCircleElementC->LinkEndChild( pCircleElementD );
+
+    // Create "Restitution" attribute.
+    pCircleElementA = new TiXmlElement( "xs:attribute" );
+    pCircleElementA->SetAttribute( "name", shapeRestitutionName );
+    pCircleComplexTypeElement->LinkEndChild( pCircleElementA );
+    pCircleElementB = new TiXmlElement( "xs:simpleType" );
+    pCircleElementA->LinkEndChild( pCircleElementB );
+    pCircleElementC = new TiXmlElement( "xs:restriction" );
+    pCircleElementC->SetAttribute( "base", "xs:float" );
+    pCircleElementB->LinkEndChild( pCircleElementC );
+    pCircleElementD = new TiXmlElement( "xs:minInclusive" );
+    pCircleElementD->SetAttribute( "value", "0" );
+    pCircleElementC->LinkEndChild( pCircleElementD );
+
+    // ********************************************************************************
+    // Create Polygon
+    // ********************************************************************************
+    TiXmlElement* pPolygonElement = new TiXmlElement( "xs:element" );
+    pPolygonElement->SetAttribute( "name", polygonTypeName );
+    pPolygonElement->SetAttribute( "minOccurs", 0 );
+    pPolygonElement->SetAttribute( "maxOccurs", 1 );
+    pShapesNodeChoiceElement->LinkEndChild( pPolygonElement );
+
+    // Create complex type Element.
+    TiXmlElement* pPolygonComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pPolygonElement->LinkEndChild( pPolygonComplexTypeElement );
+
+    // Create "IsSensor" attribute.
+    TiXmlElement* pPolygonElementA = new TiXmlElement( "xs:attribute" );
+    pPolygonElementA->SetAttribute( "name", shapeSensorName );
+    pPolygonElementA->SetAttribute( "type", "xs:boolean" );
+    pPolygonComplexTypeElement->LinkEndChild( pPolygonElementA );
+
+    // Create "Density" attribute.
+    pPolygonElementA = new TiXmlElement( "xs:attribute" );
+    pPolygonElementA->SetAttribute( "name", shapeDensityName );
+    pPolygonComplexTypeElement->LinkEndChild( pPolygonElementA );
+    TiXmlElement* pPolygonElementB = new TiXmlElement( "xs:simpleType" );
+    pPolygonElementA->LinkEndChild( pPolygonElementB );
+    TiXmlElement* pPolygonElementC = new TiXmlElement( "xs:restriction" );
+    pPolygonElementC->SetAttribute( "base", "xs:float" );
+    pPolygonElementB->LinkEndChild( pPolygonElementC );
+    TiXmlElement* pPolygonElementD = new TiXmlElement( "xs:minInclusive" );
+    pPolygonElementD->SetAttribute( "value", "0" );
+    pPolygonElementC->LinkEndChild( pPolygonElementD );
+
+    // Create "Friction" attribute.
+    pPolygonElementA = new TiXmlElement( "xs:attribute" );
+    pPolygonElementA->SetAttribute( "name", shapeFrictionName );
+    pPolygonComplexTypeElement->LinkEndChild( pPolygonElementA );
+    pPolygonElementB = new TiXmlElement( "xs:simpleType" );
+    pPolygonElementA->LinkEndChild( pPolygonElementB );
+    pPolygonElementC = new TiXmlElement( "xs:restriction" );
+    pPolygonElementC->SetAttribute( "base", "xs:float" );
+    pPolygonElementB->LinkEndChild( pPolygonElementC );
+    pPolygonElementD = new TiXmlElement( "xs:minInclusive" );
+    pPolygonElementD->SetAttribute( "value", "0" );
+    pPolygonElementC->LinkEndChild( pPolygonElementD );
+
+    // Create "Restitution" attribute.
+    pPolygonElementA = new TiXmlElement( "xs:attribute" );
+    pPolygonElementA->SetAttribute( "name", shapeRestitutionName );
+    pPolygonComplexTypeElement->LinkEndChild( pPolygonElementA );
+    pPolygonElementB = new TiXmlElement( "xs:simpleType" );
+    pPolygonElementA->LinkEndChild( pPolygonElementB );
+    pPolygonElementC = new TiXmlElement( "xs:restriction" );
+    pPolygonElementC->SetAttribute( "base", "xs:float" );
+    pPolygonElementB->LinkEndChild( pPolygonElementC );
+    pPolygonElementD = new TiXmlElement( "xs:minInclusive" );
+    pPolygonElementD->SetAttribute( "value", "0" );
+    pPolygonElementC->LinkEndChild( pPolygonElementD );
+
 }
 
 //-----------------------------------------------------------------------------
