@@ -22,12 +22,12 @@
 
 function AquariumToy::create( %this )
 {
-    exec("./scripts/aquarium.cs");
+    exec("./scripts/fish.cs");
 
     // Configure settings.
     AquariumToy.maxFish = 10;
     AquariumToy.currentFish = 0;
-    AquariumToy.selectedAnimation = "AquariumToy:angelfish1Anim";
+    AquariumToy.selectedAnimation = "TropicalAssets:angelfish1Anim";
     
     // Set all the fish scene-layers to sort in "batch" mode
     // so that all the fish will be sorted into a batchable order to reduce draw calls.
@@ -62,8 +62,8 @@ function AquariumToy::reset(%this)
     // Set the gravity.
     SandboxScene.setGravity(0, 0);
 
-    buildAquarium();
-    createAquariumEffects();
+    buildAquarium(SandboxScene);
+    createAquariumEffects(SandboxScene);
 
     // Reset the ball count.
     %this.currentFish = 0;
@@ -88,7 +88,7 @@ function AquariumToy::spawnFish(%this)
         class = "FishClass";
         position = %position;
         size = %fishInfo;
-        SceneLayer = "2";
+        SceneLayer = "15";
         SceneGroup = "14";
         minSpeed = "5";
         maxSpeed = "15";
