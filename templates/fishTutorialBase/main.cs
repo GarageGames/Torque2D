@@ -24,12 +24,12 @@ setLogMode(6);
 $Scripts::ignoreDSOs = true;
 
 ModuleDatabase.scanModules( "modules" );
-ModuleDatabase.LoadExplicit( "TropicalAssets" );
+ModuleDatabase.LoadGroup( "game" );
 
 //-----------------------------------------------------------------------------
 
 function onExit()
 {
-    ModuleDatabase.unloadExplicit( "TropicalAssets" );
+    ModuleDatabase.unloadGroup( "game" );
 }
 

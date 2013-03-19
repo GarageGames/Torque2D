@@ -20,7 +20,7 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-function TropicalAssets::create( %this )
+function DeadlyReef::create( %this )
 {
     // We need a main "Scene" we can use as our game world.  The place where sceneObjects play.
     // Give it a global name "mainScene" since we may want to access it directly in our scripts.
@@ -44,48 +44,39 @@ function TropicalAssets::create( %this )
     // load some scripts and variables
     // exec("./scripts/someScript.cs");
 
-
-    exec("./scripts/aquarium.cs");
-
-    buildAquarium();
-    createAquariumEffects();
-    TropicalAssets.spawnFish(10);
+    buildAquarium(mainScene);
+    createAquariumEffects(mainScene);
+    DeadlyReef.spawnPlayerFish();
 }
 
 //-----------------------------------------------------------------------------
 
-function TropicalAssets::destroy( %this )
+function DeadlyReef::destroy( %this )
 {
 }
 
 //-----------------------------------------------------------------------------
 
-function TropicalAssets::spawnFish(%this, %amount)
+function DeadlyReef::spawnPlayerFish(%this)
 {
-    for (%i = 0; %i < %amount; %i++) {
-        %position = getRandom(-55, 55) SPC getRandom(-20, 20);
-        %index = getRandom(0, 5);
-        %anim = getUnit(getFishAnimationList(), %index, ",");
-        
-        %fishInfo = getFishSize(%anim);
-        
-        %fish = new Sprite()
-        {
-            Animation = %anim;
-            class = "FishClass";
-            position = %position;
-            size = %fishInfo;
-            SceneLayer = "2";
-            SceneGroup = "14";
-            minSpeed = "5";
-            maxSpeed = "15";
-            CollisionCallback = true;
-        };
-        
-        %fish.createPolygonBoxCollisionShape( 15, 15);
-        %fish.setCollisionGroups( 15 );
-        mainScene.add( %fish );        
-    }
-}
+    %anim = "TropicalAssets:seahorseAnim";    
+    %size = getFishSize(%anim);
 
-//-----------------------------------------------------------------------------
+    %fish = new Sprite()
+    {
+        Animation = %anim;
+        // class = "FishClass";
+        position = "0 0";
+        size = %size;
+        SceneLayer = "15";
+        SceneGroup = "14";
+        minSpeed = "5";
+        maxSpeed = "15";
+        CollisionCallback = true;
+    };
+
+    %fish.createPolygonBoxCollisionShape(%size);
+    %fish.setCollisionGroups( "15" );
+    %fish.FixedAngle = true;
+    mainScene.add( %fish ); 
+}
