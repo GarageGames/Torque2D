@@ -4217,7 +4217,7 @@ static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlEleme
     pPolygonElementA->SetAttribute( "maxOccurs", "unbounded" );
     pPolygonComplexTypeElement->LinkEndChild( pPolygonElementA );
     TiXmlElement* pPolygonElementB = new TiXmlElement( "xs:element" );
-    pPolygonElementB->SetAttribute( "name", "Point" );
+    pPolygonElementB->SetAttribute( "name", shapePointName );
     pPolygonElementB->SetAttribute( "type", "Vector2_ConsoleType" );
     pPolygonElementA->LinkEndChild( pPolygonElementB );
 
@@ -4265,6 +4265,168 @@ static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlEleme
     pPolygonElementD = new TiXmlElement( "xs:minInclusive" );
     pPolygonElementD->SetAttribute( "value", "0" );
     pPolygonElementC->LinkEndChild( pPolygonElementD );
+
+    // ********************************************************************************
+    // Create Chain
+    // ********************************************************************************
+    TiXmlElement* pChainElement = new TiXmlElement( "xs:element" );
+    pChainElement->SetAttribute( "name", chainTypeName );
+    pChainElement->SetAttribute( "minOccurs", 0 );
+    pChainElement->SetAttribute( "maxOccurs", 1 );
+    pShapesNodeChoiceElement->LinkEndChild( pChainElement );
+
+    // Create complex type Element.
+    TiXmlElement* pChainComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pChainElement->LinkEndChild( pChainComplexTypeElement );
+
+    // Create "Chain" child.
+    TiXmlElement* pChainElementA = new TiXmlElement( "xs:sequence" );
+    pChainComplexTypeElement->LinkEndChild( pChainElementA );
+    TiXmlElement* pChainElementB = new TiXmlElement( "xs:choice" );
+    pChainElementB->SetAttribute( "minOccurs", 0 );
+    pChainElementB->SetAttribute( "maxOccurs", "unbounded" );
+    pChainElementA->LinkEndChild( pChainElementB );
+    TiXmlElement* pChainElementC = new TiXmlElement( "xs:element" );
+    pChainElementC->SetAttribute( "name", shapePointName );
+    pChainElementC->SetAttribute( "type", "Vector2_ConsoleType" );
+    pChainElementB->LinkEndChild( pChainElementC );
+    TiXmlElement* pChainElementD = new TiXmlElement( "xs:element" );
+    pChainElementD->SetAttribute( "name", shapePrevPointName );
+    pChainElementD->SetAttribute( "type", "Vector2_ConsoleType" );
+    pChainElementD->SetAttribute( "minOccurs", 0 );
+    pChainElementD->SetAttribute( "maxOccurs", 1 );
+    pChainElementA->LinkEndChild( pChainElementD );
+    TiXmlElement* pChainElementE = new TiXmlElement( "xs:element" );
+    pChainElementE->SetAttribute( "name", shapeNextPointName );
+    pChainElementE->SetAttribute( "type", "Vector2_ConsoleType" );
+    pChainElementE->SetAttribute( "minOccurs", 0 );
+    pChainElementE->SetAttribute( "maxOccurs", 1 );
+    pChainElementA->LinkEndChild( pChainElementE );
+
+    // Create "IsSensor" attribute.
+    pChainElementA = new TiXmlElement( "xs:attribute" );
+    pChainElementA->SetAttribute( "name", shapeSensorName );
+    pChainElementA->SetAttribute( "type", "xs:boolean" );
+    pChainComplexTypeElement->LinkEndChild( pChainElementA );
+
+    // Create "Density" attribute.
+    pChainElementA = new TiXmlElement( "xs:attribute" );
+    pChainElementA->SetAttribute( "name", shapeDensityName );
+    pChainComplexTypeElement->LinkEndChild( pChainElementA );
+    pChainElementB = new TiXmlElement( "xs:simpleType" );
+    pChainElementA->LinkEndChild( pChainElementB );
+    pChainElementC = new TiXmlElement( "xs:restriction" );
+    pChainElementC->SetAttribute( "base", "xs:float" );
+    pChainElementB->LinkEndChild( pChainElementC );
+    pChainElementD = new TiXmlElement( "xs:minInclusive" );
+    pChainElementD->SetAttribute( "value", "0" );
+    pChainElementC->LinkEndChild( pChainElementD );
+
+    // Create "Friction" attribute.
+    pChainElementA = new TiXmlElement( "xs:attribute" );
+    pChainElementA->SetAttribute( "name", shapeFrictionName );
+    pChainComplexTypeElement->LinkEndChild( pChainElementA );
+    pChainElementB = new TiXmlElement( "xs:simpleType" );
+    pChainElementA->LinkEndChild( pChainElementB );
+    pChainElementC = new TiXmlElement( "xs:restriction" );
+    pChainElementC->SetAttribute( "base", "xs:float" );
+    pChainElementB->LinkEndChild( pChainElementC );
+    pChainElementD = new TiXmlElement( "xs:minInclusive" );
+    pChainElementD->SetAttribute( "value", "0" );
+    pChainElementC->LinkEndChild( pChainElementD );
+
+    // Create "Restitution" attribute.
+    pChainElementA = new TiXmlElement( "xs:attribute" );
+    pChainElementA->SetAttribute( "name", shapeRestitutionName );
+    pChainComplexTypeElement->LinkEndChild( pChainElementA );
+    pChainElementB = new TiXmlElement( "xs:simpleType" );
+    pChainElementA->LinkEndChild( pChainElementB );
+    pChainElementC = new TiXmlElement( "xs:restriction" );
+    pChainElementC->SetAttribute( "base", "xs:float" );
+    pChainElementB->LinkEndChild( pChainElementC );
+    pChainElementD = new TiXmlElement( "xs:minInclusive" );
+    pChainElementD->SetAttribute( "value", "0" );
+    pChainElementC->LinkEndChild( pChainElementD );
+
+    // ********************************************************************************
+    // Create Edge
+    // ********************************************************************************
+    TiXmlElement* pEdgeElement = new TiXmlElement( "xs:element" );
+    pEdgeElement->SetAttribute( "name", edgeTypeName );
+    pEdgeElement->SetAttribute( "minOccurs", 0 );
+    pEdgeElement->SetAttribute( "maxOccurs", 1 );
+    pShapesNodeChoiceElement->LinkEndChild( pEdgeElement );
+
+    // Create complex type Element.
+    TiXmlElement* pEdgeComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pEdgeElement->LinkEndChild( pEdgeComplexTypeElement );
+
+    // Create "Edge" child.
+    TiXmlElement* pEdgeElementA = new TiXmlElement( "xs:sequence" );
+    pEdgeComplexTypeElement->LinkEndChild( pEdgeElementA );
+    TiXmlElement* pEdgeElementB = new TiXmlElement( "xs:element" );
+    pEdgeElementB->SetAttribute( "name", shapePointName );
+    pEdgeElementB->SetAttribute( "type", "Vector2_ConsoleType" );
+    pEdgeElementB->SetAttribute( "minOccurs", 0 );
+    pEdgeElementB->SetAttribute( "maxOccurs", 2 );
+    pEdgeElementA->LinkEndChild( pEdgeElementB );
+    TiXmlElement* pEdgeElementC = new TiXmlElement( "xs:element" );
+    pEdgeElementC->SetAttribute( "name", shapePrevPointName );
+    pEdgeElementC->SetAttribute( "type", "Vector2_ConsoleType" );
+    pEdgeElementC->SetAttribute( "minOccurs", 0 );
+    pEdgeElementC->SetAttribute( "maxOccurs", 1 );
+    pEdgeElementA->LinkEndChild( pEdgeElementC );
+    TiXmlElement* pEdgeElementD = new TiXmlElement( "xs:element" );
+    pEdgeElementD->SetAttribute( "name", shapeNextPointName );
+    pEdgeElementD->SetAttribute( "type", "Vector2_ConsoleType" );
+    pEdgeElementD->SetAttribute( "minOccurs", 0 );
+    pEdgeElementD->SetAttribute( "maxOccurs", 1 );
+    pEdgeElementA->LinkEndChild( pEdgeElementD );
+
+    // Create "IsSensor" attribute.
+    pEdgeElementA = new TiXmlElement( "xs:attribute" );
+    pEdgeElementA->SetAttribute( "name", shapeSensorName );
+    pEdgeElementA->SetAttribute( "type", "xs:boolean" );
+    pEdgeComplexTypeElement->LinkEndChild( pEdgeElementA );
+
+    // Create "Density" attribute.
+    pEdgeElementA = new TiXmlElement( "xs:attribute" );
+    pEdgeElementA->SetAttribute( "name", shapeDensityName );
+    pEdgeComplexTypeElement->LinkEndChild( pEdgeElementA );
+    pEdgeElementB = new TiXmlElement( "xs:simpleType" );
+    pEdgeElementA->LinkEndChild( pEdgeElementB );
+    pEdgeElementC = new TiXmlElement( "xs:restriction" );
+    pEdgeElementC->SetAttribute( "base", "xs:float" );
+    pEdgeElementB->LinkEndChild( pEdgeElementC );
+    pEdgeElementD = new TiXmlElement( "xs:minInclusive" );
+    pEdgeElementD->SetAttribute( "value", "0" );
+    pEdgeElementC->LinkEndChild( pEdgeElementD );
+
+    // Create "Friction" attribute.
+    pEdgeElementA = new TiXmlElement( "xs:attribute" );
+    pEdgeElementA->SetAttribute( "name", shapeFrictionName );
+    pEdgeComplexTypeElement->LinkEndChild( pEdgeElementA );
+    pEdgeElementB = new TiXmlElement( "xs:simpleType" );
+    pEdgeElementA->LinkEndChild( pEdgeElementB );
+    pEdgeElementC = new TiXmlElement( "xs:restriction" );
+    pEdgeElementC->SetAttribute( "base", "xs:float" );
+    pEdgeElementB->LinkEndChild( pEdgeElementC );
+    pEdgeElementD = new TiXmlElement( "xs:minInclusive" );
+    pEdgeElementD->SetAttribute( "value", "0" );
+    pEdgeElementC->LinkEndChild( pEdgeElementD );
+
+    // Create "Restitution" attribute.
+    pEdgeElementA = new TiXmlElement( "xs:attribute" );
+    pEdgeElementA->SetAttribute( "name", shapeRestitutionName );
+    pEdgeComplexTypeElement->LinkEndChild( pEdgeElementA );
+    pEdgeElementB = new TiXmlElement( "xs:simpleType" );
+    pEdgeElementA->LinkEndChild( pEdgeElementB );
+    pEdgeElementC = new TiXmlElement( "xs:restriction" );
+    pEdgeElementC->SetAttribute( "base", "xs:float" );
+    pEdgeElementB->LinkEndChild( pEdgeElementC );
+    pEdgeElementD = new TiXmlElement( "xs:minInclusive" );
+    pEdgeElementD->SetAttribute( "value", "0" );
+    pEdgeElementC->LinkEndChild( pEdgeElementD );
 }
 
 //-----------------------------------------------------------------------------
