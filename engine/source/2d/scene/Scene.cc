@@ -68,84 +68,80 @@ SimObjectPtr<Scene> Scene::LoadingScene = NULL;
 
 //------------------------------------------------------------------------------
 
-IMPLEMENT_CONOBJECT_CHILDREN(Scene);
-
-//------------------------------------------------------------------------------
-
 static ContactFilter mContactFilter;
 
 // Scene counter.
 static U32 sSceneCount = 0;
 static U32 sSceneMasterIndex = 0;
 
-static bool tamlPropertiesInitialized = false;
+// Joint custom node names.
+static StringTableEntry jointCustomNodeName               = StringTable->insert( "Joints" );
+static StringTableEntry jointCollideConnectedName         = StringTable->insert( "CollideConnected" );
+static StringTableEntry jointLocalAnchorAName             = StringTable->insert( "LocalAnchorA" );
+static StringTableEntry jointLocalAnchorBName             = StringTable->insert( "LocalAnchorB" );
 
-// Joint property names.
-static StringTableEntry jointCustomNodeName;
-static StringTableEntry jointCollideConnectedName;
-static StringTableEntry jointLocalAnchorAName;
-static StringTableEntry jointLocalAnchorBName;
+static StringTableEntry jointDistanceNodeName             = StringTable->insert( "Distance" );
+static StringTableEntry jointDistanceLengthName           = StringTable->insert( "Length" );
+static StringTableEntry jointDistanceFrequencyName        = StringTable->insert( "Frequency" );
+static StringTableEntry jointDistanceDampingRatioName     = StringTable->insert( "DampingRatio" );
 
-static StringTableEntry jointDistanceNodeName;
-static StringTableEntry jointDistanceLengthName;
-static StringTableEntry jointDistanceFrequencyName;
-static StringTableEntry jointDistanceDampingRatioName;
+static StringTableEntry jointRopeNodeName                 = StringTable->insert( "Rope" );
+static StringTableEntry jointRopeMaxLengthName            = StringTable->insert( "MaxLength" );
 
-static StringTableEntry jointRopeNodeName;
-static StringTableEntry jointRopeMaxLengthName;
+static StringTableEntry jointRevoluteNodeName             = StringTable->insert( "Revolute" );
+static StringTableEntry jointRevoluteLimitLowerAngleName  = StringTable->insert( "LowerAngle" );
+static StringTableEntry jointRevoluteLimitUpperAngleName  = StringTable->insert( "UpperAngle" );
+static StringTableEntry jointRevoluteMotorSpeedName       = StringTable->insert( "MotorSpeed" );
+static StringTableEntry jointRevoluteMotorMaxTorqueName   = StringTable->insert( "MaxTorque" );
 
-static StringTableEntry jointRevoluteNodeName;
-static StringTableEntry jointRevoluteLimitLowerAngleName;
-static StringTableEntry jointRevoluteLimitUpperAngleName;
-static StringTableEntry jointRevoluteMotorSpeedName;
-static StringTableEntry jointRevoluteMotorMaxTorqueName;
+static StringTableEntry jointWeldNodeName                 = StringTable->insert( "Weld" );
+static StringTableEntry jointWeldFrequencyName            = jointDistanceFrequencyName;
+static StringTableEntry jointWeldDampingRatioName         = jointDistanceDampingRatioName;
 
-static StringTableEntry jointWeldNodeName;
-static StringTableEntry jointWeldFrequencyName;
-static StringTableEntry jointWeldDampingRatioName;
+static StringTableEntry jointWheelNodeName                = StringTable->insert( "Wheel" );
+static StringTableEntry jointWheelWorldAxisName           = StringTable->insert( "WorldAxis" );
+static StringTableEntry jointWheelMotorSpeedName          = StringTable->insert( "MotorSpeed" );
+static StringTableEntry jointWheelMotorMaxTorqueName      = jointRevoluteMotorMaxTorqueName;
+static StringTableEntry jointWheelFrequencyName           = jointDistanceFrequencyName;
+static StringTableEntry jointWheelDampingRatioName        = jointDistanceDampingRatioName;
 
-static StringTableEntry jointWheelNodeName;
-static StringTableEntry jointWheelWorldAxisName;
-static StringTableEntry jointWheelMotorSpeedName;
-static StringTableEntry jointWheelMotorMaxTorqueName;
-static StringTableEntry jointWheelFrequencyName;
-static StringTableEntry jointWheelDampingRatioName;
+static StringTableEntry jointFrictionNodeName             = StringTable->insert( "Friction" );
+static StringTableEntry jointFrictionMaxForceName         = StringTable->insert( "MaxForce" );
+static StringTableEntry jointFrictionMaxTorqueName        = jointRevoluteMotorMaxTorqueName;
 
-static StringTableEntry jointFrictionNodeName;
-static StringTableEntry jointFrictionMaxForceName;
-static StringTableEntry jointFrictionMaxTorqueName;
+static StringTableEntry jointPrismaticNodeName            = StringTable->insert( "Prismatic" );
+static StringTableEntry jointPrismaticWorldAxisName       = jointWheelWorldAxisName;
+static StringTableEntry jointPrismaticLimitLowerTransName = StringTable->insert( "LowerTranslation" );
+static StringTableEntry jointPrismaticLimitUpperTransName = StringTable->insert( "UpperTranslation" );
+static StringTableEntry jointPrismaticMotorSpeedName      = jointRevoluteMotorSpeedName;
+static StringTableEntry jointPrismaticMotorMaxForceName   = jointFrictionMaxForceName;
 
-static StringTableEntry jointPrismaticNodeName;
-static StringTableEntry jointPrismaticWorldAxisName;
-static StringTableEntry jointPrismaticLimitLowerTransName;
-static StringTableEntry jointPrismaticLimitUpperTransName;
-static StringTableEntry jointPrismaticMotorSpeedName;
-static StringTableEntry jointPrismaticMotorMaxForceName;
+static StringTableEntry jointPulleyNodeName               = StringTable->insert( "Pulley" );
+static StringTableEntry jointPulleyGroundAnchorAName      = StringTable->insert( "GroundAnchorA" );
+static StringTableEntry jointPulleyGroundAnchorBName      = StringTable->insert( "GroundAnchorB" );
+static StringTableEntry jointPulleyLengthAName            = StringTable->insert( "LengthA" );
+static StringTableEntry jointPulleyLengthBName            = StringTable->insert( "LengthB" );
+static StringTableEntry jointPulleyRatioName              = StringTable->insert( "Ratio" );
 
-static StringTableEntry jointPulleyNodeName;
-static StringTableEntry jointPulleyGroundAnchorAName;
-static StringTableEntry jointPulleyGroundAnchorBName;
-static StringTableEntry jointPulleyLengthAName;
-static StringTableEntry jointPulleyLengthBName;
-static StringTableEntry jointPulleyRatioName;
+static StringTableEntry jointTargetNodeName               = StringTable->insert( "Target" );
+static StringTableEntry jointTargetWorldTargetName        = StringTable->insert( "WorldTarget" );
+static StringTableEntry jointTargetMaxForceName           = StringTable->insert( jointFrictionMaxForceName );
+static StringTableEntry jointTargetFrequencyName          = jointDistanceFrequencyName;
+static StringTableEntry jointTargetDampingRatioName       = jointDistanceDampingRatioName;
 
-static StringTableEntry jointTargetNodeName;
-static StringTableEntry jointTargetWorldTargetName;
-static StringTableEntry jointTargetMaxForceName;
-static StringTableEntry jointTargetFrequencyName;
-static StringTableEntry jointTargetDampingRatioName;
+static StringTableEntry jointMotorNodeName                = StringTable->insert( "Motor" );
+static StringTableEntry jointMotorLinearOffsetName        = StringTable->insert( "LinearOffset" );
+static StringTableEntry jointMotorAngularOffsetName       = StringTable->insert( "AngularOffset" );
+static StringTableEntry jointMotorMaxForceName            = jointFrictionMaxForceName;
+static StringTableEntry jointMotorMaxTorqueName           = jointRevoluteMotorMaxTorqueName;
+static StringTableEntry jointMotorCorrectionFactorName    = StringTable->insert( "CorrectionFactor" );
 
-static StringTableEntry jointMotorNodeName;
-static StringTableEntry jointMotorLinearOffsetName;
-static StringTableEntry jointMotorAngularOffsetName;
-static StringTableEntry jointMotorMaxForceName;
-static StringTableEntry jointMotorMaxTorqueName;
-static StringTableEntry jointMotorCorrectionFactorName;
+// Controller custom node names.
+static StringTableEntry controllerCustomNodeName	      = StringTable->insert( "Controllers" );
 
-static StringTableEntry controllerCustomNodeName;
-
-static StringTableEntry assetPreloadNodeName;
-static StringTableEntry assetNodeName;
+// Asset preload custom node names.
+static StringTableEntry assetPreloadNodeName              = StringTable->insert( "AssetPreloads" );
+static StringTableEntry assetNodeName                     = StringTable->insert( "Asset" );
 
 //-----------------------------------------------------------------------------
 
@@ -176,79 +172,6 @@ Scene::Scene() :
     mRenderCallback(false),
     mSceneIndex(0)
 {
-    // Initialize Taml property names.
-    if ( !tamlPropertiesInitialized )
-    {
-        jointCustomNodeName               = StringTable->insert( "Joints" );
-        jointCollideConnectedName         = StringTable->insert( "CollideConnected" );
-        jointLocalAnchorAName             = StringTable->insert( "LocalAnchorA" );
-        jointLocalAnchorBName             = StringTable->insert( "LocalAnchorB" );
-
-        jointDistanceNodeName             = StringTable->insert( "Distance" );
-        jointDistanceLengthName           = StringTable->insert( "Length" );
-        jointDistanceFrequencyName        = StringTable->insert( "Frequency" );
-        jointDistanceDampingRatioName     = StringTable->insert( "DampingRatio" );
-
-        jointRopeNodeName                 = StringTable->insert( "Rope" );
-        jointRopeMaxLengthName            = StringTable->insert( "MaxLength" );
-
-        jointRevoluteNodeName             = StringTable->insert( "Revolute" );
-        jointRevoluteLimitLowerAngleName  = StringTable->insert( "LowerAngle" );
-        jointRevoluteLimitUpperAngleName  = StringTable->insert( "UpperAngle" );
-        jointRevoluteMotorSpeedName       = StringTable->insert( "MotorSpeed" );
-        jointRevoluteMotorMaxTorqueName   = StringTable->insert( "MaxTorque" );
-
-        jointWeldNodeName                 = StringTable->insert( "Weld" );
-        jointWeldFrequencyName            = jointDistanceFrequencyName;
-        jointWeldDampingRatioName         = jointDistanceDampingRatioName;
-
-        jointWheelNodeName                = StringTable->insert( "Wheel" );
-        jointWheelWorldAxisName           = StringTable->insert( "WorldAxis" );
-        jointWheelMotorSpeedName          = StringTable->insert( "MotorSpeed" );
-        jointWheelMotorMaxTorqueName      = jointRevoluteMotorMaxTorqueName;
-        jointWheelFrequencyName           = jointDistanceFrequencyName;
-        jointWheelDampingRatioName        = jointDistanceDampingRatioName;
-
-        jointFrictionNodeName             = StringTable->insert( "Friction" );
-        jointFrictionMaxForceName         = StringTable->insert( "MaxForce" );
-        jointFrictionMaxTorqueName        = jointRevoluteMotorMaxTorqueName;
-
-        jointPrismaticNodeName            = StringTable->insert( "Prismatic" );
-        jointPrismaticWorldAxisName       = jointWheelWorldAxisName;
-        jointPrismaticLimitLowerTransName = StringTable->insert( "LowerTranslation" );
-        jointPrismaticLimitUpperTransName = StringTable->insert( "UpperTranslation" );
-        jointPrismaticMotorSpeedName      = jointRevoluteMotorSpeedName;
-        jointPrismaticMotorMaxForceName   = jointFrictionMaxForceName;
-
-        jointPulleyNodeName               = StringTable->insert( "Pulley" );
-        jointPulleyGroundAnchorAName      = StringTable->insert( "GroundAnchorA" );
-        jointPulleyGroundAnchorBName      = StringTable->insert( "GroundAnchorB" );
-        jointPulleyLengthAName            = StringTable->insert( "LengthA" );
-        jointPulleyLengthBName            = StringTable->insert( "LengthB" );
-        jointPulleyRatioName              = StringTable->insert( "Ratio" );
-
-        jointTargetNodeName               = StringTable->insert( "Target" );
-        jointTargetWorldTargetName        = StringTable->insert( "WorldTarget" );
-        jointTargetMaxForceName           = StringTable->insert( jointFrictionMaxForceName );
-        jointTargetFrequencyName          = jointDistanceFrequencyName;
-        jointTargetDampingRatioName       = jointDistanceDampingRatioName;
-
-        jointMotorNodeName                = StringTable->insert( "Motor" );
-        jointMotorLinearOffsetName        = StringTable->insert( "LinearOffset" );
-        jointMotorAngularOffsetName       = StringTable->insert( "AngularOffset" );
-        jointMotorMaxForceName            = jointFrictionMaxForceName;
-        jointMotorMaxTorqueName           = jointRevoluteMotorMaxTorqueName;
-        jointMotorCorrectionFactorName    = StringTable->insert( "CorrectionFactor" );
-
-        controllerCustomNodeName	      = StringTable->insert( "Controllers" );
-
-        assetPreloadNodeName              = StringTable->insert( "AssetPreloads" );
-        assetNodeName                     = StringTable->insert( "Asset" );
-
-        // Flag as initialized.
-        tamlPropertiesInitialized = true;
-    }
-
     // Set Vector Associations.
     VECTOR_SET_ASSOCIATION( mSceneObjects );
     VECTOR_SET_ASSOCIATION( mDeleteRequests );
@@ -5425,3 +5348,83 @@ const char* Scene::getPickModeDescription( Scene::PickMode pickMode )
     return StringTable->EmptyString;
 }
 
+//-----------------------------------------------------------------------------
+
+static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    char buffer[1024];
+
+    // Create joints node element.
+    TiXmlElement* pJointsNodeElement = new TiXmlElement( "xs:element" );
+    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), jointCustomNodeName );
+    pJointsNodeElement->SetAttribute( "name", buffer );
+    pJointsNodeElement->SetAttribute( "minOccurs", 0 );
+    pJointsNodeElement->SetAttribute( "maxOccurs", 1 );
+    pParentElement->LinkEndChild( pJointsNodeElement );
+    
+    // Create complex type.
+    TiXmlElement* pJointsNodeComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pJointsNodeElement->LinkEndChild( pJointsNodeComplexTypeElement );
+    
+    // Create choice element.
+    TiXmlElement* pJointsNodeChoiceElement = new TiXmlElement( "xs:choice" );
+    pJointsNodeChoiceElement->SetAttribute( "minOccurs", 0 );
+    pJointsNodeChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
+    pJointsNodeComplexTypeElement->LinkEndChild( pJointsNodeChoiceElement );
+
+    // ********************************************************************************
+    // Create Distance Joint Element.
+    // ********************************************************************************
+    TiXmlElement* pDistanceJointElement = new TiXmlElement( "xs:element" );
+    pDistanceJointElement->SetAttribute( "name", jointDistanceNodeName );
+    pDistanceJointElement->SetAttribute( "minOccurs", 0 );
+    pDistanceJointElement->SetAttribute( "maxOccurs", 1 );
+    pJointsNodeChoiceElement->LinkEndChild( pDistanceJointElement );
+
+    // Create complex type Element.
+    TiXmlElement* pDistanceJointComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pDistanceJointElement->LinkEndChild( pDistanceJointComplexTypeElement );
+
+    // Create "Length" attribute.
+    TiXmlElement* pDistanceJointElementA = new TiXmlElement( "xs:attribute" );
+    pDistanceJointElementA->SetAttribute( "name", jointDistanceLengthName );
+    pDistanceJointComplexTypeElement->LinkEndChild( pDistanceJointElementA );
+    TiXmlElement* pDistanceJointElementB = new TiXmlElement( "xs:simpleType" );
+    pDistanceJointElementA->LinkEndChild( pDistanceJointElementB );
+    TiXmlElement* pDistanceJointElementC = new TiXmlElement( "xs:restriction" );
+    pDistanceJointElementC->SetAttribute( "base", "xs:float" );
+    pDistanceJointElementB->LinkEndChild( pDistanceJointElementC );
+    TiXmlElement* pDistanceJointElementD = new TiXmlElement( "xs:minInclusive" );
+    pDistanceJointElementD->SetAttribute( "value", "0" );
+    pDistanceJointElementC->LinkEndChild( pDistanceJointElementD );
+
+    // Create "Frequency" attribute.
+    pDistanceJointElementA = new TiXmlElement( "xs:attribute" );
+    pDistanceJointElementA->SetAttribute( "name", jointDistanceFrequencyName );
+    pDistanceJointComplexTypeElement->LinkEndChild( pDistanceJointElementA );
+    pDistanceJointElementB = new TiXmlElement( "xs:simpleType" );
+    pDistanceJointElementA->LinkEndChild( pDistanceJointElementB );
+    pDistanceJointElementC = new TiXmlElement( "xs:restriction" );
+    pDistanceJointElementC->SetAttribute( "base", "xs:float" );
+    pDistanceJointElementB->LinkEndChild( pDistanceJointElementC );
+    pDistanceJointElementD = new TiXmlElement( "xs:minInclusive" );
+    pDistanceJointElementD->SetAttribute( "value", "0" );
+    pDistanceJointElementC->LinkEndChild( pDistanceJointElementD );
+
+    // Create "Damping Ratio" attribute.
+    pDistanceJointElementA = new TiXmlElement( "xs:attribute" );
+    pDistanceJointElementA->SetAttribute( "name", jointDistanceDampingRatioName );
+    pDistanceJointComplexTypeElement->LinkEndChild( pDistanceJointElementA );
+    pDistanceJointElementB = new TiXmlElement( "xs:simpleType" );
+    pDistanceJointElementA->LinkEndChild( pDistanceJointElementB );
+    pDistanceJointElementC = new TiXmlElement( "xs:restriction" );
+    pDistanceJointElementC->SetAttribute( "base", "xs:float" );
+    pDistanceJointElementB->LinkEndChild( pDistanceJointElementC );
+    pDistanceJointElementD = new TiXmlElement( "xs:minInclusive" );
+    pDistanceJointElementD->SetAttribute( "value", "0" );
+    pDistanceJointElementC->LinkEndChild( pDistanceJointElementD );
+}
+
+//------------------------------------------------------------------------------
+
+IMPLEMENT_CONOBJECT_CHILDREN_SCHEMA(Scene, WriteCustomTamlSchema);

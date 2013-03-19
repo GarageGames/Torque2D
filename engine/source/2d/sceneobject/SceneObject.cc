@@ -76,33 +76,26 @@
 
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_CONOBJECT(SceneObject);
-
-//-----------------------------------------------------------------------------
-
 // Scene-Object counter.
 static U32 sGlobalSceneObjectCount = 0;
 static U32 sSceneObjectMasterSerialId = 0;
 
-// Collision shape property names.
-static bool collisionShapePropertiesInitialized = false;
+// Collision shapes custom node names.
+static StringTableEntry shapeCustomNodeName     = StringTable->insert( "CollisionShapes" );
 
-static StringTableEntry shapeCustomNodeName;
-
-static StringTableEntry shapeDensityName;
-static StringTableEntry shapeFrictionName;
-static StringTableEntry shapeRestitutionName;
-static StringTableEntry shapeSensorName;
-static StringTableEntry shapePointName;
-static StringTableEntry shapePrevPointName;
-static StringTableEntry shapeNextPointName;
-
-static StringTableEntry circleTypeName;
-static StringTableEntry circleRadiusName;
-static StringTableEntry circleOffsetName;
-static StringTableEntry polygonTypeName;
-static StringTableEntry chainTypeName;
-static StringTableEntry edgeTypeName;
+static StringTableEntry shapeDensityName        = StringTable->insert( "Density" );
+static StringTableEntry shapeFrictionName       = StringTable->insert( "Friction" );
+static StringTableEntry shapeRestitutionName    = StringTable->insert( "Restitution" );
+static StringTableEntry shapeSensorName         = StringTable->insert( "Sensor" );
+static StringTableEntry shapePointName          = StringTable->insert( "Point" );
+static StringTableEntry shapePrevPointName      = StringTable->insert( "PreviousPoint" );
+static StringTableEntry shapeNextPointName      = StringTable->insert( "NextPoint" );
+static StringTableEntry circleTypeName          = StringTable->insert( "Circle" );
+static StringTableEntry circleRadiusName        = StringTable->insert( "Radius" );
+static StringTableEntry circleOffsetName        = StringTable->insert( "Offset" );
+static StringTableEntry polygonTypeName         = StringTable->insert( "Polygon" );
+static StringTableEntry chainTypeName           = StringTable->insert( "Chain" );
+static StringTableEntry edgeTypeName            = StringTable->insert( "Edge" );
 
 //------------------------------------------------------------------------------
 
@@ -194,29 +187,6 @@ SceneObject::SceneObject() :
     mSerialId(0),
     mRenderGroup( StringTable->EmptyString )
 {
-    // Initialize collision shape field names.
-    if ( !collisionShapePropertiesInitialized )
-    {
-        shapeCustomNodeName     = StringTable->insert( "CollisionShapes" );
-
-        shapeDensityName        = StringTable->insert( "Density" );
-        shapeFrictionName       = StringTable->insert( "Friction" );
-        shapeRestitutionName    = StringTable->insert( "Restitution" );
-        shapeSensorName         = StringTable->insert( "Sensor" );
-        shapePointName          = StringTable->insert( "Point" );
-        shapePrevPointName      = StringTable->insert( "PreviousPoint" );
-        shapeNextPointName      = StringTable->insert( "NextPoint" );
-        circleTypeName          = StringTable->insert( "Circle" );
-        circleRadiusName        = StringTable->insert( "Radius" );
-        circleOffsetName        = StringTable->insert( "Offset" );
-        polygonTypeName         = StringTable->insert( "Polygon" );
-        chainTypeName           = StringTable->insert( "Chain" );
-        edgeTypeName            = StringTable->insert( "Edge" );
-
-        // Flag as initialized.
-        collisionShapePropertiesInitialized = true;
-    }
-
     // Set Vector Associations.
     VECTOR_SET_ASSOCIATION( mDestroyNotifyList );
     VECTOR_SET_ASSOCIATION( mCollisionFixtureDefs );
@@ -4126,3 +4096,64 @@ const char* SceneObject::getDstBlendFactorDescription(const GLenum factor)
 
     return StringTable->EmptyString;
 }
+
+//-----------------------------------------------------------------------------
+
+static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    char buffer[1024];
+
+    // Create shapes node element.
+    TiXmlElement* pShapesNodeElement = new TiXmlElement( "xs:element" );
+    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), shapeCustomNodeName );
+    pShapesNodeElement->SetAttribute( "name", buffer );
+    pShapesNodeElement->SetAttribute( "minOccurs", 0 );
+    pShapesNodeElement->SetAttribute( "maxOccurs", 1 );
+    pParentElement->LinkEndChild( pShapesNodeElement );
+    
+    // Create complex type.
+    TiXmlElement* pShapesNodeComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pShapesNodeElement->LinkEndChild( pShapesNodeComplexTypeElement );
+    
+    // Create choice element.
+    TiXmlElement* pShapesNodeChoiceElement = new TiXmlElement( "xs:choice" );
+    pShapesNodeChoiceElement->SetAttribute( "minOccurs", 0 );
+    pShapesNodeChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
+    pShapesNodeComplexTypeElement->LinkEndChild( pShapesNodeChoiceElement );
+
+    // ********************************************************************************
+    // Create Circle
+    // ********************************************************************************
+    TiXmlElement* pCircleElement = new TiXmlElement( "xs:element" );
+    pCircleElement->SetAttribute( "name", circleTypeName );
+    pCircleElement->SetAttribute( "minOccurs", 0 );
+    pCircleElement->SetAttribute( "maxOccurs", 1 );
+    pShapesNodeChoiceElement->LinkEndChild( pCircleElement );
+
+    // Create complex type Element.
+    TiXmlElement* pCircleComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pCircleElement->LinkEndChild( pCircleComplexTypeElement );
+
+    // Create "Radius" attribute.
+    TiXmlElement* pCircleElementA = new TiXmlElement( "xs:attribute" );
+    pCircleElementA->SetAttribute( "name", circleRadiusName );
+    pCircleComplexTypeElement->LinkEndChild( pCircleElementA );
+    TiXmlElement* pCircleElementB = new TiXmlElement( "xs:simpleType" );
+    pCircleElementA->LinkEndChild( pCircleElementB );
+    TiXmlElement* pCircleElementC = new TiXmlElement( "xs:restriction" );
+    pCircleElementC->SetAttribute( "base", "xs:float" );
+    pCircleElementB->LinkEndChild( pCircleElementC );
+    TiXmlElement* pCircleElementD = new TiXmlElement( "xs:minExclusive" );
+    pCircleElementD->SetAttribute( "value", "0" );
+    pCircleElementC->LinkEndChild( pCircleElementD );
+
+    // Create "Offset" attribute.
+    pCircleElementA = new TiXmlElement( "xs:attribute" );
+    pCircleElementA->SetAttribute( "name", circleOffsetName );
+    pCircleElementA->SetAttribute( "type", "Vector2_ConsoleType" );
+    pCircleComplexTypeElement->LinkEndChild( pCircleElementA );
+}
+
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_CONOBJECT_SCHEMA(SceneObject, WriteCustomTamlSchema);

@@ -859,7 +859,28 @@ bool Taml::generateTamlSchema( const char* pFilename )
     // Reset scratch state.
     char buffer[1024];
 
-    // Generate the type elements.
+    // *************************************************************
+    // Generate console type elements.
+    // *************************************************************
+
+    // Vector2.
+    TiXmlComment* pVector2Comment = new TiXmlComment( "Vector2 Console Type" );
+    pSchemaElement->LinkEndChild( pVector2Comment );
+    TiXmlElement* pVector2TypeElement = new TiXmlElement( "xs:simpleType" );
+    pVector2TypeElement->SetAttribute( "name", "Vector2_ConsoleType" );
+    pSchemaElement->LinkEndChild( pVector2TypeElement );
+    TiXmlElement* pVector2ElementA = new TiXmlElement( "xs:restriction" );
+    pVector2ElementA->SetAttribute( "base", "xs:string" );
+    pVector2TypeElement->LinkEndChild( pVector2ElementA );
+    TiXmlElement* pVector2ElementB = new TiXmlElement( "xs:pattern" );
+    pVector2ElementB->SetAttribute( "value", "([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b ([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b" );   
+    pVector2ElementA->LinkEndChild( pVector2ElementB );
+
+    // *************************************************************
+    // Generate engine type elements.
+    // *************************************************************
+
+    // Generate the engine type elements.
     TiXmlComment* pComment = new TiXmlComment( "Type Elements" );
     pSchemaElement->LinkEndChild( pComment );
     for ( AbstractClassRep* pType = pRootType; pType != NULL; pType = pType->getNextClass() )
@@ -872,7 +893,9 @@ bool Taml::generateTamlSchema( const char* pFilename )
         pSchemaElement->LinkEndChild( pTypeElement );
     }
 
-    // Generate the complex types.
+    // *************************************************************
+    // Generate the engine complex types.
+    // *************************************************************
     for ( AbstractClassRep* pType = pRootType; pType != NULL; pType = pType->getNextClass() )
     {
         // Add complex type comment.
@@ -884,8 +907,11 @@ bool Taml::generateTamlSchema( const char* pFilename )
         TiXmlElement* pComplexTypeElement = new TiXmlElement( "xs:complexType" );
         dSprintf( buffer, sizeof(buffer), "%s_Type", pType->getClassName() );
         pComplexTypeElement->SetAttribute( "name", buffer );
-        pComplexTypeElement->SetAttribute( "mixed", "true" );
         pSchemaElement->LinkEndChild( pComplexTypeElement );
+
+        // Add sequence.
+        TiXmlElement* pSequenceElement = new TiXmlElement( "xs:sequence" );
+        pComplexTypeElement->LinkEndChild( pSequenceElement );
 
         // Fetch container child class.
         AbstractClassRep* pContainerChildClass = pType->getContainerChildClass( false );
@@ -893,42 +919,40 @@ bool Taml::generateTamlSchema( const char* pFilename )
         // Is the type allowed children?
         if ( pContainerChildClass != NULL )
         {
-            // Yes, so add group comment.
-            dSprintf( buffer, sizeof(buffer), " %s Children Group ", pType->getClassName() );
-            TiXmlComment* pComment = new TiXmlComment( buffer );
-            pSchemaElement->LinkEndChild( pComment );
+            // Yes, so add choice element.
+            TiXmlElement* pChoiceElement = new TiXmlElement( "xs:choice" );
+            pChoiceElement->SetAttribute( "minOccurs", 0 );
+            pChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
+            pSequenceElement->LinkEndChild( pChoiceElement );
 
-            // Format the group name.
-            dSprintf( buffer, sizeof(buffer), "%s_ChildGroup", pType->getClassName() );
-                
-            // Add group.
-            TiXmlElement* pGroupElement = new TiXmlElement( "xs:group" );
-            pGroupElement->SetAttribute( "name", buffer );
-            pSchemaElement->LinkEndChild( pGroupElement );
-            TiXmlElement* pGroupChoiceElement = new TiXmlElement( "xs:choice" );
-            pGroupElement->LinkEndChild( pGroupChoiceElement );
-
-            // Add group reference.
-            TiXmlElement* pGroupReferenceElement = new TiXmlElement( "xs:group" );
-            pGroupReferenceElement->SetAttribute( "ref", buffer );
-            pGroupReferenceElement->SetAttribute( "minOccurs", "0" );
-            pGroupReferenceElement->SetAttribute( "maxOccurs", "unbounded" );
-            pComplexTypeElement->LinkEndChild( pGroupReferenceElement );
-
-            // Add group members.
-            for ( AbstractClassRep* pGroupType = pRootType; pGroupType != NULL; pGroupType = pGroupType->getNextClass() )
+            // Add choice members.
+            for ( AbstractClassRep* pChoiceType = pRootType; pChoiceType != NULL; pChoiceType = pChoiceType->getNextClass() )
             {
                 // Skip if not derived from the container child class.
-                if ( !pGroupType->isClass( pContainerChildClass ) )
+                if ( !pChoiceType->isClass( pContainerChildClass ) )
                     continue;
 
-                // Add group member.
-                TiXmlElement* pGroupMemberElement = new TiXmlElement( "xs:element" );
-                pGroupMemberElement->SetAttribute( "name", pGroupType->getClassName() );
-                dSprintf( buffer, sizeof(buffer), "%s_Type", pGroupType->getClassName() );
-                pGroupMemberElement->SetAttribute( "type", buffer );
-                pGroupChoiceElement->LinkEndChild( pGroupMemberElement );
+                // Add choice member.
+                TiXmlElement* pChoiceMemberElement = new TiXmlElement( "xs:element" );
+                pChoiceMemberElement->SetAttribute( "name", pChoiceType->getClassName() );
+                dSprintf( buffer, sizeof(buffer), "%s_Type", pChoiceType->getClassName() );
+                pChoiceMemberElement->SetAttribute( "type", buffer );
+                pChoiceElement->LinkEndChild( pChoiceMemberElement );
             }
+        }
+
+        // Generate the custom Taml schema.
+        for ( AbstractClassRep* pCustomSchemaType = pType; pCustomSchemaType != NULL; pCustomSchemaType = pCustomSchemaType->getParentClass() )
+        {
+            // Fetch the types custom TAML schema function.
+            AbstractClassRep::WriteCustomTamlSchema customSchemaFn = pCustomSchemaType->getCustomTamlSchema();
+
+            // Skip if no function avilable.
+            if ( customSchemaFn == NULL )
+                continue;
+
+            // Call schema generation function.
+            customSchemaFn( pType, pSequenceElement );
         }
 
         // Iterate static fields.
@@ -947,7 +971,24 @@ bool Taml::generateTamlSchema( const char* pFilename )
             // Add attribute element.
             TiXmlElement* pAttributeElement = new TiXmlElement( "xs:attribute" );
             pAttributeElement->SetAttribute( "name", field.pFieldname );
-            pAttributeElement->SetAttribute( "type", "xs:string" );
+
+            // Handle the console type appropriately.
+            const S32 fieldType = (S32)field.type;
+            char* pFieldTypeDescription = "xs:string";
+            if( fieldType == TypeF32 )
+            {
+                pFieldTypeDescription = "xs:float";
+            }
+            else if( fieldType == TypeS8 || fieldType == TypeS32 )
+            {
+                pFieldTypeDescription = "xs:int";
+            }
+            else if( fieldType == TypeBool || fieldType == TypeFlag )
+            {
+                pFieldTypeDescription = "xs:boolean";
+            }
+            pAttributeElement->SetAttribute( "type", pFieldTypeDescription );
+
             pAttributeElement->SetAttribute( "use", "optional" );
             pComplexTypeElement->LinkEndChild( pAttributeElement );
         }
