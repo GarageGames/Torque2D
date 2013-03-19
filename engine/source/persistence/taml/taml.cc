@@ -992,6 +992,11 @@ bool Taml::generateTamlSchema( const char* pFilename )
             pAttributeElement->SetAttribute( "use", "optional" );
             pComplexTypeElement->LinkEndChild( pAttributeElement );
         }
+
+        // Add "any" attribute element (dynamic fields).
+        TiXmlElement* pAnyAttributeElement = new TiXmlElement( "xs:anyAttribute" );
+        pAnyAttributeElement->SetAttribute( "processContents", "skip" );
+        pComplexTypeElement->LinkEndChild( pAnyAttributeElement );
     }
 
     // Expand the file-name into the file-path buffer.
