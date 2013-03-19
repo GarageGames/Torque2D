@@ -4211,8 +4211,18 @@ static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlEleme
     TiXmlElement* pPolygonComplexTypeElement = new TiXmlElement( "xs:complexType" );
     pPolygonElement->LinkEndChild( pPolygonComplexTypeElement );
 
+    // Create "polygon" child.
+    TiXmlElement* pPolygonElementA = new TiXmlElement( "xs:choice" );
+    pPolygonElementA->SetAttribute( "minOccurs", 0 );
+    pPolygonElementA->SetAttribute( "maxOccurs", "unbounded" );
+    pPolygonComplexTypeElement->LinkEndChild( pPolygonElementA );
+    TiXmlElement* pPolygonElementB = new TiXmlElement( "xs:element" );
+    pPolygonElementB->SetAttribute( "name", "Point" );
+    pPolygonElementB->SetAttribute( "type", "Vector2_ConsoleType" );
+    pPolygonElementA->LinkEndChild( pPolygonElementB );
+
     // Create "IsSensor" attribute.
-    TiXmlElement* pPolygonElementA = new TiXmlElement( "xs:attribute" );
+    pPolygonElementA = new TiXmlElement( "xs:attribute" );
     pPolygonElementA->SetAttribute( "name", shapeSensorName );
     pPolygonElementA->SetAttribute( "type", "xs:boolean" );
     pPolygonComplexTypeElement->LinkEndChild( pPolygonElementA );
@@ -4221,7 +4231,7 @@ static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlEleme
     pPolygonElementA = new TiXmlElement( "xs:attribute" );
     pPolygonElementA->SetAttribute( "name", shapeDensityName );
     pPolygonComplexTypeElement->LinkEndChild( pPolygonElementA );
-    TiXmlElement* pPolygonElementB = new TiXmlElement( "xs:simpleType" );
+    pPolygonElementB = new TiXmlElement( "xs:simpleType" );
     pPolygonElementA->LinkEndChild( pPolygonElementB );
     TiXmlElement* pPolygonElementC = new TiXmlElement( "xs:restriction" );
     pPolygonElementC->SetAttribute( "base", "xs:float" );
@@ -4255,7 +4265,6 @@ static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlEleme
     pPolygonElementD = new TiXmlElement( "xs:minInclusive" );
     pPolygonElementD->SetAttribute( "value", "0" );
     pPolygonElementC->LinkEndChild( pPolygonElementD );
-
 }
 
 //-----------------------------------------------------------------------------
