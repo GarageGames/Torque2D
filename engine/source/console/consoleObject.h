@@ -839,7 +839,7 @@ inline bool& ConsoleObject::getDynamicGroupExpand()
     static AbstractClassRep* getParentStaticClassRep();                                                             \
     static AbstractClassRep* getContainerChildStaticClassRep();                                                     \
     static AbstractClassRep* getStaticClassRep();                                                                   \
-    static AbstractClassRep::WriteCustomTamlSchema className::getStaticWriteCustomTamlSchema();                     \
+    static AbstractClassRep::WriteCustomTamlSchema getStaticWriteCustomTamlSchema();                                \
     virtual AbstractClassRep* getClassRep() const
 
 #define IMPLEMENT_CONOBJECT(className)                                                                              \
