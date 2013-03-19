@@ -948,12 +948,8 @@ bool Taml::generateTamlSchema( const char* pFilename )
         TiXmlElement* pSequenceElement = new TiXmlElement( "xs:sequence" );
         pComplexTypeElement->LinkEndChild( pSequenceElement );
 
-        if ( dStricmp( pType->getClassName(), "GuiBitmapCtrl" ) == 0 )
-        {
-            S32 a = 0;
-        }
         // Fetch container child class.
-        AbstractClassRep* pContainerChildClass = pType->getContainerChildClass( false );
+        AbstractClassRep* pContainerChildClass = pType->getContainerChildClass( true );
 
         // Is the type allowed children?
         if ( pContainerChildClass != NULL )
