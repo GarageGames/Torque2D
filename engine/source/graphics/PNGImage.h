@@ -58,12 +58,6 @@ public:
     PNGImage();
     ~PNGImage();
 
-    /// Called when the object is instantiated and registered 
-    bool onAdd();
-
-    /// Called when the object is destroyed and removed from script memory
-    void onRemove();
-
     DECLARE_CONOBJECT(PNGImage);
 
     /// Construct the png information from the .png file path provided.

@@ -24,15 +24,14 @@
 
 //-----------------------------------------------------------------------------
 
-static StringTableEntry particleAssetFieldNodeName;
+    // Set custom property name.
+static StringTableEntry particleAssetFieldNodeName = StringTable->insert("Fields");
 
 //-----------------------------------------------------------------------------
 
 ParticleAssetFieldCollection::ParticleAssetFieldCollection() :
                                     mpSelectedField( NULL )
 {
-    // Set custom property name.
-    particleAssetFieldNodeName = StringTable->insert("Fields");
 }
 
 //-----------------------------------------------------------------------------

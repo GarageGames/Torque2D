@@ -183,7 +183,7 @@ bool ModuleManager::scanModules( const char* pPath, const bool rootOnly )
     Vector<StringTableEntry> directories;
 
     // Find directories.
-    if ( !Platform::dumpDirectories( pathBuffer, directories, 1 ) )
+    if ( !Platform::dumpDirectories( pathBuffer, directories, rootOnly ? 1 : -1 ) )
     {
         // Failed so warn.
         Con::warnf( "Module Manager: Failed to scan module directories in path '%s'.", pathBuffer );

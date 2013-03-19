@@ -27,21 +27,13 @@
 #include "2d/sceneobject/SceneObject.h"
 #endif
 
-#ifndef _SPRITE_PROXY_BASE_H_
-#include "2d/core/SpriteProxyBase.h"
-#endif
-
-#ifndef _IMAGE_ASSET_H_
-#include "2d/assets/ImageAsset.h"
-#endif
-
-#ifndef _ASSET_PTR_H_
-#include "assets/assetPtr.h"
+#ifndef _IMAGE_FRAME_PROVIDER_H
+#include "2d/core/imageFrameProvider.h"
 #endif
 
 //------------------------------------------------------------------------------
 
-class SpriteBase : public SceneObject, public SpriteProxyBase
+class SpriteBase : public SceneObject, public ImageFrameProvider
 {
     typedef SceneObject Parent;
 
@@ -65,14 +57,14 @@ protected:
     virtual void onAnimationEnd( void );
 
 protected:
-    static bool setImage(void* obj, const char* data)                       { DYNAMIC_VOID_CAST_TO(SpriteBase, SpriteProxyBase, obj)->setImage(data); return false; };
-    static const char* getImage(void* obj, const char* data)                { return DYNAMIC_VOID_CAST_TO(SpriteBase, SpriteProxyBase, obj)->getImage(); }
-    static bool writeImage( void* obj, StringTableEntry pFieldName )        { SpriteBase* pCastObject = static_cast<SpriteBase*>(obj); if ( !pCastObject->isStaticMode() ) return false; return pCastObject->mImageAsset.notNull(); }
-    static bool setImageFrame(void* obj, const char* data)                  { DYNAMIC_VOID_CAST_TO(SpriteBase, SpriteProxyBase, obj)->setImageFrame(dAtoi(data)); return false; };
-    static bool writeImageFrame( void* obj, StringTableEntry pFieldName )   { SpriteBase* pCastObject = static_cast<SpriteBase*>(obj); if ( !pCastObject->isStaticMode() ) return false; return pCastObject->mImageAsset.notNull(); }
-    static bool setAnimation(void* obj, const char* data)                   { DYNAMIC_VOID_CAST_TO(SpriteBase, SpriteProxyBase, obj)->setAnimation(data, false); return false; };
-    static const char* getAnimation(void* obj, const char* data)            { return DYNAMIC_VOID_CAST_TO(SpriteBase, SpriteProxyBase, obj)->getAnimation(); }
-    static bool writeAnimation( void* obj, StringTableEntry pFieldName )    { SpriteBase* pCastObject = static_cast<SpriteBase*>(obj); if ( pCastObject->isStaticMode() ) return false; return pCastObject->mAnimationAsset.notNull(); }
+    static bool setImage(void* obj, const char* data)                       { DYNAMIC_VOID_CAST_TO(SpriteBase, ImageFrameProvider, obj)->setImage(data); return false; };
+    static const char* getImage(void* obj, const char* data)                { return DYNAMIC_VOID_CAST_TO(SpriteBase, ImageFrameProvider, obj)->getImage(); }
+    static bool writeImage( void* obj, StringTableEntry pFieldName )        { SpriteBase* pCastObject = static_cast<SpriteBase*>(obj); if ( !pCastObject->isStaticFrameProvider() ) return false; return pCastObject->mImageAsset.notNull(); }
+    static bool setImageFrame(void* obj, const char* data)                  { DYNAMIC_VOID_CAST_TO(SpriteBase, ImageFrameProvider, obj)->setImageFrame(dAtoi(data)); return false; };
+    static bool writeImageFrame( void* obj, StringTableEntry pFieldName )   { SpriteBase* pCastObject = static_cast<SpriteBase*>(obj); if ( !pCastObject->isStaticFrameProvider() ) return false; return pCastObject->mImageAsset.notNull(); }
+    static bool setAnimation(void* obj, const char* data)                   { DYNAMIC_VOID_CAST_TO(SpriteBase, ImageFrameProvider, obj)->setAnimation(data); return false; };
+    static const char* getAnimation(void* obj, const char* data)            { return DYNAMIC_VOID_CAST_TO(SpriteBase, ImageFrameProvider, obj)->getAnimation(); }
+    static bool writeAnimation( void* obj, StringTableEntry pFieldName )    { SpriteBase* pCastObject = static_cast<SpriteBase*>(obj); if ( pCastObject->isStaticFrameProvider() ) return false; return pCastObject->mAnimationAsset.notNull(); }
 };
 
 #endif // _SPRITE_BASE_H_

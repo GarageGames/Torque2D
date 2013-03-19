@@ -192,6 +192,9 @@ public:
     static TamlFormatMode getFormatModeEnum( const char* label );
     static const char* getFormatModeDescription( const TamlFormatMode formatMode );
 
+    /// Schema generation.
+    static bool generateTamlSchema( const char* pFilename );
+
     /// Declare Console Object.
     DECLARE_CONOBJECT( Taml );
 };

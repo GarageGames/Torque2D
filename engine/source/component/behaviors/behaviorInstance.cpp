@@ -84,7 +84,6 @@ void BehaviorInstance::initPersistFields()
    addGroup("Behavior");
       addField("template", TypeSimObjectName, Offset(mTemplate, BehaviorInstance), "Template this instance was created from.");
       addProtectedField( "Owner", TypeSimObjectPtr, Offset(mBehaviorOwner, BehaviorInstance), &setOwner, &defaultProtectedGetFn, "Behavior component owner." );
-      addProtectedField( "Template", TypeSimObjectPtr,0, &defaultProtectedNotSetFn, &getTemplate, "The behavior instances template." );
    endGroup("Behavior");
 
    Parent::initPersistFields();

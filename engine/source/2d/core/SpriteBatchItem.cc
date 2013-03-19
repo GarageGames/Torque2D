@@ -28,73 +28,37 @@
 #include "2d/core/SpriteBatch.h"
 #endif
 
-#ifndef _SCENE_RENDER_REQUEST_H_
-#include "2d/scene/SceneRenderRequest.h"
-#endif
-
 #ifndef _SCENE_OBJECT_H_
 #include "2d/sceneobject/SceneObject.h"
 #endif
 
 //-----------------------------------------------------------------------------
 
-static bool spriteBatchItemPropertiesInitialized = false;
-
-static StringTableEntry spriteLogicalPositionName;
-static StringTableEntry spriteVisibleName;
-static StringTableEntry spriteLocalPositionName;
-static StringTableEntry spriteLocalAngleName;
-static StringTableEntry spriteDepthName;
-static StringTableEntry spriteSizeName;
-static StringTableEntry spriteFlipXName;
-static StringTableEntry spriteFlipYName;
-static StringTableEntry spriteSortPointName;
-static StringTableEntry spriteRenderGroupName;
-static StringTableEntry spriteBlendModeName;
-static StringTableEntry spriteSrcBlendFactorName;
-static StringTableEntry spriteDstBlendFactorName;
-static StringTableEntry spriteBlendColorName;
-static StringTableEntry spriteAlphaTestName;
-static StringTableEntry spriteImageName;
-static StringTableEntry spriteImageFrameName;
-static StringTableEntry spriteAnimationName;
-static StringTableEntry spriteDataObjectName;
-static StringTableEntry spriteNameName;
+static StringTableEntry spriteNameName              = StringTable->insert("Name");
+static StringTableEntry spriteLogicalPositionName   = StringTable->insert("LogicalPosition");
+static StringTableEntry spriteVisibleName           = StringTable->insert("Visible");
+static StringTableEntry spriteLocalPositionName     = StringTable->insert("Position");
+static StringTableEntry spriteLocalAngleName        = StringTable->insert("Angle");
+static StringTableEntry spriteSizeName              = StringTable->insert("Size");
+static StringTableEntry spriteDepthName             = StringTable->insert("Depth");
+static StringTableEntry spriteFlipXName             = StringTable->insert("FlipX");
+static StringTableEntry spriteFlipYName             = StringTable->insert("FlipY");
+static StringTableEntry spriteSortPointName         = StringTable->insert("SortPoint");
+static StringTableEntry spriteRenderGroupName       = StringTable->insert("RenderGroup");
+static StringTableEntry spriteBlendModeName         = StringTable->insert("BlendMode");
+static StringTableEntry spriteSrcBlendFactorName    = StringTable->insert("SrcBlendFactor");
+static StringTableEntry spriteDstBlendFactorName    = StringTable->insert("DstBlendFactor");
+static StringTableEntry spriteBlendColorName        = StringTable->insert("BlendColor");
+static StringTableEntry spriteAlphaTestName         = StringTable->insert("AlphaTest");
+static StringTableEntry spriteImageName             = StringTable->insert("Image");
+static StringTableEntry spriteImageFrameName        = StringTable->insert("Frame");
+static StringTableEntry spriteAnimationName         = StringTable->insert("Animation");
+static StringTableEntry spriteDataObjectName        = StringTable->insert("DataObject");
 
 //------------------------------------------------------------------------------
 
 SpriteBatchItem::SpriteBatchItem() : mProxyId( SpriteBatch::INVALID_SPRITE_PROXY )
 {
-    // Are the sprite batch item properties initialized?
-    if ( !spriteBatchItemPropertiesInitialized )
-    {
-        // No, so initialize...
-
-        spriteNameName              = StringTable->insert("Name");
-        spriteLogicalPositionName   = StringTable->insert("LogicalPosition");
-        spriteVisibleName           = StringTable->insert("Visible");
-        spriteLocalPositionName     = StringTable->insert("Position");
-        spriteLocalAngleName        = StringTable->insert("Angle");
-        spriteSizeName              = StringTable->insert("Size");
-        spriteDepthName             = StringTable->insert("Depth");
-        spriteFlipXName             = StringTable->insert("FlipX");
-        spriteFlipYName             = StringTable->insert("FlipY");
-        spriteSortPointName         = StringTable->insert("SortPoint");
-        spriteRenderGroupName       = StringTable->insert("RenderGroup");
-        spriteBlendModeName         = StringTable->insert("BlendMode");
-        spriteSrcBlendFactorName    = StringTable->insert("SrcBlendFactor");
-        spriteDstBlendFactorName    = StringTable->insert("DstBlendFactor");
-        spriteBlendColorName        = StringTable->insert("BlendColor");
-        spriteAlphaTestName         = StringTable->insert("AlphaTest");
-        spriteImageName             = StringTable->insert("Image");
-        spriteImageFrameName        = StringTable->insert("Frame");
-        spriteAnimationName         = StringTable->insert("Animation");
-        spriteDataObjectName        = StringTable->insert("DataObject");
-
-        // Flag as initialized.
-        spriteBatchItemPropertiesInitialized = true;
-    }
-
     resetState();
 }
 
@@ -158,6 +122,8 @@ void SpriteBatchItem::resetState( void )
     mLastBatchTransformId = 0;
 
     mSpriteBatchQueryKey = 0;
+
+    mUserData = NULL;
 
     // Require self ticking.
     mSelfTick = true;
@@ -310,10 +276,11 @@ void SpriteBatchItem::updateWorldTransform( const U32 batchTransformId )
 
     // Update the local transform if needed.
     if ( mLocalTransformDirty )
+    {
         updateLocalTransform();
-
+    }
     // Finish if the batch transform is up-to-date.
-    if ( batchTransformId == mLastBatchTransformId )
+    else if ( batchTransformId == mLastBatchTransformId )
         return;
 
     // Fetch world transform.
@@ -340,8 +307,8 @@ void SpriteBatchItem::onTamlCustomWrite( TamlCustomNode* pSpriteNode )
     if ( getName() != StringTable->EmptyString )
         pSpriteNode->addField( spriteNameName, getName() );
 
-    // Write asset.
-    if ( isStaticMode() )
+    // Static frame provider?
+    if ( isStaticFrameProvider() )
     {
         // Fetch image asset Id.
         StringTableEntry assetId = getImage();

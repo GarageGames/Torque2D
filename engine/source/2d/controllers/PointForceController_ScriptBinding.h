@@ -144,3 +144,26 @@ ConsoleMethod(PointForceController, getNonLinear, bool, 2, 2,  "() Gets whether 
     return object->getNonLinear();
 }
 
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(PointForceController, setTrackedObject, void, 3, 3,   "(sceneObject) - Sets a scene object from which the position will be tracked.\n"
+                                                                    "@param sceneObject The scene object from which the position will be tracked.  An empty string will stop tracking.\n"
+                                                                    "@return No return value.")
+{
+    // Find the scene object.
+    SceneObject* pSceneObject = Sim::findObject<SceneObject>( argv[2] );
+
+    object->setTrackedObject( pSceneObject );
+} 
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(PointForceController, getTrackedObject, const char*, 2, 2,    "() - Gets the scene object from which the position will be tracked.\n"
+                                                                            "@return The scene object from which the position will be tracked or an empty string if nothing is being tracked.")
+{
+    // Fetch the scene object.
+    SceneObject* pSceneObject = object->getTrackedObject();
+
+    return pSceneObject == NULL ? NULL : pSceneObject->getIdString();
+} 
+

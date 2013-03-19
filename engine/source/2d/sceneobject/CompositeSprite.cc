@@ -119,6 +119,29 @@ void CompositeSprite::initPersistFields()
 
 //-----------------------------------------------------------------------------
 
+bool CompositeSprite::onAdd()
+{
+    // Call parent.
+    if ( !Parent::onAdd() )
+        return false;
+
+    // Call sprite batch.
+    return SpriteBatch::onAdd();
+}
+
+//-----------------------------------------------------------------------------
+
+void CompositeSprite::onRemove()
+{
+    // Call sprite batch.
+    SpriteBatch::onRemove();
+
+    // Call parent.
+    Parent::onRemove();
+}
+
+//-----------------------------------------------------------------------------
+
 void CompositeSprite::preIntegrate( const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats )
 {
     // Are the spatials dirty?

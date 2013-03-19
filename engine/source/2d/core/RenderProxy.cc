@@ -32,10 +32,6 @@
 #include "graphics/dgl.h"
 #endif
 
-#ifndef _STRINGBUFFER_H_
-#include "string/stringBuffer.h"
-#endif
-
 // Script bindings.
 #include "RenderProxy_ScriptBinding.h"
 
@@ -81,6 +77,6 @@ void RenderProxy::copyTo(SimObject* object)
     // Sanity!
     AssertFatal(pRenderProxy != NULL, "RenderProxy::copyTo() - Object is not the correct type.");
 
-    // Call render proxy base.
-    SpriteProxyBase::copyTo( pRenderProxy );
+    // Call image frame provider.
+    ImageFrameProvider::copyTo( pRenderProxy );
 }

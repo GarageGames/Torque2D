@@ -40,19 +40,17 @@
 
 //-----------------------------------------------------------------------------
 
-static bool particleAssetFieldPropertiesInitialized = false;
+static StringTableEntry particleAssetFieldRepeatTimeName   = StringTable->insert( "RepeatTime" );
+static StringTableEntry particleAssetFieldMaxTimeName      = StringTable->insert( "MaxTime" );
+static StringTableEntry particleAssetFieldMinValueName     = StringTable->insert( "MinValue" );
+static StringTableEntry particleAssetFieldMaxValueName     = StringTable->insert( "MaxValue" );
+static StringTableEntry particleAssetFieldDefaultValueName = StringTable->insert( "DefaultValue" );
+static StringTableEntry particleAssetFieldValueScaleName   = StringTable->insert( "ValueScale" );
+static StringTableEntry particleAssetFieldDataKeysName     = StringTable->insert( "Keys" );
 
-static StringTableEntry particleAssetFieldRepeatTimeName;
-static StringTableEntry particleAssetFieldMaxTimeName;
-static StringTableEntry particleAssetFieldMinValueName;
-static StringTableEntry particleAssetFieldMaxValueName;
-static StringTableEntry particleAssetFieldDefaultValueName;
-static StringTableEntry particleAssetFieldValueScaleName;
-static StringTableEntry particleAssetFieldDataKeysName;
-
-static StringTableEntry particleAssetFieldDataKeyName;
-static StringTableEntry particleAssetFieldDataKeyTimeName;
-static StringTableEntry particleAssetFieldDataKeyValueName;
+static StringTableEntry particleAssetFieldDataKeyName      = StringTable->insert( "Key" );
+static StringTableEntry particleAssetFieldDataKeyTimeName  = StringTable->insert( "Time" );
+static StringTableEntry particleAssetFieldDataKeyValueName = StringTable->insert( "Value" );
 
 ParticleAssetField::DataKey ParticleAssetField::BadDataKey( -1.0f, 0.0f );
 
@@ -70,25 +68,6 @@ ParticleAssetField::ParticleAssetField() :
 {
     // Set Vector Associations.
     VECTOR_SET_ASSOCIATION( mDataKeys );
-
-    // Initialize names.
-    if ( !particleAssetFieldPropertiesInitialized )
-    {
-        particleAssetFieldRepeatTimeName   = StringTable->insert( "RepeatTime" );
-        particleAssetFieldMaxTimeName      = StringTable->insert( "MaxTime" );
-        particleAssetFieldMinValueName     = StringTable->insert( "MinValue" );
-        particleAssetFieldMaxValueName     = StringTable->insert( "MaxValue" );
-        particleAssetFieldDefaultValueName = StringTable->insert( "DefaultValue" );
-        particleAssetFieldValueScaleName   = StringTable->insert( "ValueScale" );
-        particleAssetFieldDataKeysName     = StringTable->insert( "Keys" );
-
-        particleAssetFieldDataKeyName      = StringTable->insert( "Key" );
-        particleAssetFieldDataKeyTimeName  = StringTable->insert( "Time" );
-        particleAssetFieldDataKeyValueName = StringTable->insert( "Value" );
-
-        // Flag as initialized.
-        particleAssetFieldPropertiesInitialized = true;
-    }
 }
 
 //-----------------------------------------------------------------------------
