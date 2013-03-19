@@ -62,6 +62,18 @@
 #include "2d/core/vector2.h"
 #endif
 
+#ifndef _IMAGE_ASSET_H_
+#include "2d/assets/imageAsset.h"
+#endif
+
+#ifndef _ANIMATION_ASSET_H_
+#include "2d/assets/animationAsset.h"
+#endif
+
+#ifndef _AUDIO_ASSET_H_
+#include "audio/audioAsset.h"
+#endif
+
 // Script bindings.
 #include "taml_ScriptBinding.h"
 
@@ -910,6 +922,19 @@ bool Taml::generateTamlSchema( const char* pFilename )
     pPoint2IElementB->SetAttribute( "value", "[-]?[0-9]* [-]?[0-9]*" );   
     pPoint2IElementA->LinkEndChild( pPoint2IElementB );
 
+    // AssetId.
+    TiXmlComment* pAssetIdComment = new TiXmlComment( "AssetId Console Type" );
+    pSchemaElement->LinkEndChild( pAssetIdComment );
+    TiXmlElement* pAssetIdTypeElement = new TiXmlElement( "xs:simpleType" );
+    pAssetIdTypeElement->SetAttribute( "name", "AssetId_ConsoleType" );
+    pSchemaElement->LinkEndChild( pAssetIdTypeElement );
+    TiXmlElement* pAssetIdElementA = new TiXmlElement( "xs:restriction" );
+    pAssetIdElementA->SetAttribute( "base", "xs:string" );
+    pAssetIdTypeElement->LinkEndChild( pAssetIdElementA );
+    TiXmlElement* pAssetIdElementB = new TiXmlElement( "xs:pattern" );
+    dSprintf( buffer, sizeof(buffer), "(%s)?\\b[a-zA-Z0-9]+\\b%s\\b[a-zA-Z0-9]+\\b", ASSET_ID_FIELD_PREFIX, ASSET_SCOPE_TOKEN );
+    pAssetIdElementB->SetAttribute( "value", buffer );
+    pAssetIdElementA->LinkEndChild( pAssetIdElementB );
 
     // *************************************************************
     // Generate engine type elements.
@@ -1064,6 +1089,15 @@ bool Taml::generateTamlSchema( const char* pFilename )
                 {
                     pFieldTypeDescription = "Point2I_ConsoleType";
                 }
+                else if(    fieldType == TypeAssetId ||
+                            fieldType == TypeImageAssetPtr ||
+                            fieldType == TypeAnimationAssetPtr ||
+                            fieldType == TypeAudioAssetPtr )
+                {
+                    pFieldTypeDescription = "AssetId_ConsoleType";
+                }
+
+                // Set attribute type.
                 pAttributeElement->SetAttribute( "type", pFieldTypeDescription );
             }
 
