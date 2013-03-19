@@ -1062,7 +1062,7 @@ bool Taml::generateTamlSchema( const char* pFilename )
             else
             {
                 // No, so assume it's a string type initially.
-                char* pFieldTypeDescription = "xs:string";
+                const char* pFieldTypeDescription = "xs:string";
 
                 // Handle known types.
                 if( fieldType == TypeF32 )
