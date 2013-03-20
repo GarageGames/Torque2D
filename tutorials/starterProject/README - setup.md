@@ -1,6 +1,6 @@
-## What Is This `BaseProject` Directory
+## What Is This `StarterProject` Directory
 
-`baseProject` is a template project for starting a Torque2D game from scratch.  You don't have to start here, but it should be easy to do so.
+`starterProject` is a template project for starting a Torque2D game from scratch.  You don't have to start here, but it should be easy to do so.
 
 ## What Does a Torque2D Game Project Consist Of?
 
@@ -11,10 +11,10 @@ In its simplest form, a project consists of a top-level directory with the follo
 * almost certainly a `modules` directory containing one or more modules of game assets and scripts
 * almost certainly a bootstrap module, such as `AppCore`, to setup common variables and other required bits for the engine.
 
-## How To Start With This `baseProject`
+## How To Start With This `starterProject`
 
 1. If you do not have a copy of the Torque2D binary, obtain or compile one.
-2. Copy this "baseProject" directory to wherever you want to create the project.  This becomes the main project directory.
+2. Copy this "startProject" directory to wherever you want to create the project.  This becomes the main project directory.
 3. If you are running Windows, copy the following files from your Torque2D original to this directory:
   * Torque2D.app
   * OpenAL32.dll
