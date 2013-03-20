@@ -5477,6 +5477,41 @@ static void WriteControllersCustomTamlScehema( const AbstractClassRep* pClassRep
 
 static void WritePreloadsCustomTamlScehema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
 {
+    char buffer[1024];
+
+    // Create preloads node element.
+    TiXmlElement* pPreloadsNodeElement = new TiXmlElement( "xs:element" );
+    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), assetPreloadNodeName );
+    pPreloadsNodeElement->SetAttribute( "name", buffer );
+    pPreloadsNodeElement->SetAttribute( "minOccurs", 0 );
+    pPreloadsNodeElement->SetAttribute( "maxOccurs", 1 );
+    pParentElement->LinkEndChild( pPreloadsNodeElement );
+    
+    // Create complex type.
+    TiXmlElement* pPreloadsNodeComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pPreloadsNodeElement->LinkEndChild( pPreloadsNodeComplexTypeElement );
+    
+    // Create choice element.
+    TiXmlElement* pPreloadsNodeChoiceElement = new TiXmlElement( "xs:choice" );
+    pPreloadsNodeChoiceElement->SetAttribute( "minOccurs", 0 );
+    pPreloadsNodeChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
+    pPreloadsNodeComplexTypeElement->LinkEndChild( pPreloadsNodeChoiceElement );
+
+    // Add choice member element.
+    TiXmlElement* pChoiceMemberElement = new TiXmlElement( "xs:element" );
+    pChoiceMemberElement->SetAttribute( "name", assetNodeName );
+    pPreloadsNodeChoiceElement->LinkEndChild( pChoiceMemberElement );
+
+    // Add choice member complex type element.
+    TiXmlElement* pChoiceMemberComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pChoiceMemberElement->LinkEndChild( pChoiceMemberComplexTypeElement );
+
+    // Add choice member attribute element.
+    TiXmlElement* pChoiceAttributeElement = new TiXmlElement( "xs:attribute" );
+    pChoiceAttributeElement->SetAttribute( "name", "Id" );
+    dSprintf( buffer, sizeof(buffer), "%s", "AssetId_ConsoleType" );
+    pChoiceAttributeElement->SetAttribute( "type", buffer );
+    pChoiceMemberComplexTypeElement->LinkEndChild( pChoiceAttributeElement );
 }
 
 //-----------------------------------------------------------------------------
