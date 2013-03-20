@@ -52,11 +52,6 @@ public:
 
    ///////////////////////////////////////////////////////////////////////
 
-   virtual bool onAdd();
-   virtual void onRemove();
-
-   ///////////////////////////////////////////////////////////////////////
-
    virtual bool onMessageReceived(StringTableEntry queue, const char* event, const char* data);
    virtual bool onMessageObjectReceived(StringTableEntry queue, Message *msg);
 

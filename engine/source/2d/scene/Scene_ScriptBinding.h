@@ -250,6 +250,66 @@ ConsoleMethod(Scene, getSceneObjectList, const char*, 2, 2, "() Gets the Scene O
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(Scene, getAssetPreloadCount, S32, 2, 2,   "() Gets the number of assets set to preload for this scene.\n"
+                                                        "@return The number of assets set to preload for this scene.")
+{
+    return object->getAssetPreloadCount();
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, getAssetPreload, const char*, 3, 3,    "(index) Gets the asset to be preloaded at the specified index.\n"
+                                                            "@param index The index of the preloaded asset.\n"
+                                                            "@return The asset to be preloaded at the specified index.")
+{
+    // Fetch preload index.
+    const S32 index = dAtoi(argv[2]);
+
+    // Fetch the asset pointer.
+    const AssetPtr<AssetBase>* pAssetPtr = object->getAssetPreload( index );
+
+    return pAssetPtr == NULL ? NULL : pAssetPtr->getAssetId();
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, addAssetPreload, void, 3, 3,   "(assetId) Adds the asset Id so that it is preloaded when the scene is loaded.\n"
+                                                    "The asset loaded immediately by this operation.  Duplicate assets are ignored.\n"
+                                                    "@param assetId The asset Id to be added.\n"
+                                                    "@return No return value.")
+{
+    // Fetch asset Id.
+    const char* pAssetId = argv[2];
+
+    // Add asset preload.
+    object->addAssetPreload( pAssetId );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, removeAssetPreload, void, 3, 3,    "(assetId) Removes the asset Id from being preloaded when the scene is loaded.\n"
+                                                        "The asset may be unloaded immediately by this operation if it has no other references.\n"
+                                                        "@param assetId The asset Id to be removed.\n"
+                                                        "@return No return value.")
+{
+    // Fetch asset Id.
+    const char* pAssetId = argv[2];
+
+    // Remove asset preload.
+    object->removeAssetPreload( pAssetId );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, clearAssetPreloads, void, 2, 2,    "() Clears all assets added as a preload.\n"
+                                                        "@return No return value.")
+{
+    // Clear asset preloads.
+    object->clearAssetPreloads();
+}
+
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(Scene, mergeScene, void, 3, 3,    "(scene) Merges the specified scene into this scene by cloning the scenes contents.")
 {
     // Find the specified scene.
@@ -269,7 +329,7 @@ ConsoleMethod(Scene, mergeScene, void, 3, 3,    "(scene) Merges the specified sc
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(Scene, getControllers, const char*, 2, 2,	"() Gets the Scene Controllers.\n"
-														"@return Gets the scene controllers.")
+                                                        "@return Gets the scene controllers.")
 {
     // Fetch the scene controllers.
     SimSet* pControllerSet = object->getControllers();
@@ -319,7 +379,7 @@ ConsoleMethod(Scene, isJoint, bool, 3, 3,   "(int jointId) Gets whether the join
                                             "@return whether the joint Id is valid or not." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi( argv[2] );
+    const S32 jointId = dAtoi( argv[2] );
 
     return object->findJoint( jointId ) != NULL;
 }                                                                  
@@ -332,7 +392,7 @@ ConsoleMethod(Scene, getJointType, const char*, 3, 3,   "(int jointId) Gets the 
                                                                 "@return The type of joint of the specified joint Id." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi( argv[2] );
+    const S32 jointId = dAtoi( argv[2] );
 
     // Fetch joint type.
     const b2JointType jointType = object->getJointType( jointId );
@@ -351,7 +411,7 @@ ConsoleMethod(Scene, deleteJoint, bool, 3, 3,           "(int jointId) Deletes t
                                                                 "@return Whether the joint was successfully deleted or not." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi( argv[2] );
+    const S32 jointId = dAtoi( argv[2] );
 
     return object->deleteJoint( jointId );
 }
@@ -369,9 +429,9 @@ ConsoleMethod(Scene, createDistanceJoint, S32, 4, 12,   "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -490,7 +550,7 @@ ConsoleMethod(Scene, setDistanceJointLength, void, 4, 4,    "(jointId, length) S
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 length = dAtof(argv[3]);
@@ -506,7 +566,7 @@ ConsoleMethod(Scene, getDistanceJointLength, F32, 3, 3,     "(jointId) Gets the 
                                                                     "@return Returns the distance the joint should maintain between scene objects (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getDistanceJointLength( jointId );
@@ -520,7 +580,7 @@ ConsoleMethod(Scene, setDistanceJointFrequency, void, 4, 4, "(jointId, frequency
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 frequency = dAtof(argv[3]);
@@ -536,7 +596,7 @@ ConsoleMethod(Scene, getDistanceJointFrequency, F32, 3, 3,  "(jointId) Gets the 
                                                                     "@return Returns the mass-spring-damper frequency in Hertz (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getDistanceJointFrequency( jointId );
@@ -550,7 +610,7 @@ ConsoleMethod(Scene, setDistanceJointDampingRatio, void, 4, 4,  "(jointId, dampi
                                                                         "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 dampingRatio = dAtof(argv[3]);
@@ -566,7 +626,7 @@ ConsoleMethod(Scene, getDistanceJointDampingRatio, F32, 3, 3,   "(jointId) Gets 
                                                                         "@return Returns the damping ratio (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getDistanceJointDampingRatio( jointId );
@@ -583,9 +643,9 @@ ConsoleMethod(Scene, createRopeJoint, S32, 4, 10,       "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -688,7 +748,7 @@ ConsoleMethod(Scene, setRopeJointMaxLength, void, 4, 4,     "(jointId, maxLength
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 maxLength = dAtof(argv[3]);
@@ -704,7 +764,7 @@ ConsoleMethod(Scene, getRopeJointMaxLength, F32, 3, 3,     "(jointId) Gets the m
                                                                     "@return Returns the maximum rigid length of the rope (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getRopeJointMaxLength( jointId );
@@ -720,9 +780,9 @@ ConsoleMethod(Scene, createRevoluteJoint, S32, 4, 9,    "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -819,7 +879,7 @@ ConsoleMethod(Scene, setRevoluteJointLimit, void, 4, 6,     "(jointId, enableLim
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const bool enableLimit = dAtob(argv[3]);
@@ -837,7 +897,7 @@ ConsoleMethod(Scene, getRevoluteJointLimit, const char*, 3, 3,  "(jointId) Gets 
                                                                         "@return Returns whether the joint has angular limits or not and the limits themselves (empty string indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Args.
     bool enableLimit;
@@ -866,7 +926,7 @@ ConsoleMethod(Scene, setRevoluteJointMotor, void, 4, 6,     "(jointId, enableMot
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const bool enableMotor = dAtob(argv[3]);
@@ -884,7 +944,7 @@ ConsoleMethod(Scene, getRevoluteJointMotor, const char*, 3, 3,  "(jointId) Gets 
                                                                         "@return Returns whether the joint has a motor or not and the motor settings (empty string indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Args.
     bool enableMotor;
@@ -892,7 +952,7 @@ ConsoleMethod(Scene, getRevoluteJointMotor, const char*, 3, 3,  "(jointId) Gets 
     F32 maxMotorTorque;
 
     // Access joint.
-    if ( !object->getRevoluteJointLimit( jointId, enableMotor, motorSpeed, maxMotorTorque ) )
+    if ( !object->getRevoluteJointMotor( jointId, enableMotor, motorSpeed, maxMotorTorque ) )
     {
         return NULL;
     }
@@ -915,9 +975,9 @@ ConsoleMethod(Scene, createWeldJoint, S32, 4, 11,       "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -1028,7 +1088,7 @@ ConsoleMethod(Scene, setWeldJointFrequency, void, 4, 4,     "(jointId, frequency
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 frequency = dAtof(argv[3]);
@@ -1044,7 +1104,7 @@ ConsoleMethod(Scene, getWeldJointFrequency, F32, 3, 3,     "(jointId) Gets the m
                                                                     "@return Returns the mass-spring-damper frequency in Hertz (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getWeldJointFrequency( jointId );
@@ -1058,7 +1118,7 @@ ConsoleMethod(Scene, setWeldJointDampingRatio, void, 4, 4,      "(jointId, dampi
                                                                         "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 dampingRatio = dAtof(argv[3]);
@@ -1074,7 +1134,7 @@ ConsoleMethod(Scene, getWeldJointDampingRatio, F32, 3, 3,       "(jointId) Gets 
                                                                         "@return Returns the damping ratio (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getWeldJointDampingRatio( jointId );
@@ -1091,9 +1151,9 @@ ConsoleMethod(Scene, createWheelJoint, S32, 7, 11,      "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -1201,7 +1261,7 @@ ConsoleMethod(Scene, setWheelJointMotor, void, 4, 6,        "(jointId, enableMot
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const bool enableMotor = dAtob(argv[3]);
@@ -1219,7 +1279,7 @@ ConsoleMethod(Scene, getWheelJointMotor, const char*, 3, 3, "(jointId) Gets whet
                                                                     "@return Returns whether the joint has a motor or not and the motor settings (empty string indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Args.
     bool enableMotor;
@@ -1246,7 +1306,7 @@ ConsoleMethod(Scene, setWheelJointFrequency, void, 4, 4,    "(jointId, frequency
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 frequency = dAtof(argv[3]);
@@ -1262,7 +1322,7 @@ ConsoleMethod(Scene, getWheelJointFrequency, F32, 3, 3,     "(jointId) Gets the 
                                                                     "@return Returns the mass-spring-damper frequency in Hertz (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getWheelJointFrequency( jointId );
@@ -1276,7 +1336,7 @@ ConsoleMethod(Scene, setWheelJointDampingRatio, void, 4, 4,     "(jointId, dampi
                                                                         "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 dampingRatio = dAtof(argv[3]);
@@ -1292,7 +1352,7 @@ ConsoleMethod(Scene, getWheelJointDampingRatio, F32, 3, 3,      "(jointId) Gets 
                                                                         "@return Returns the damping ratio (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getWheelJointDampingRatio( jointId );
@@ -1310,9 +1370,9 @@ ConsoleMethod(Scene, createFrictionJoint, S32, 4, 11,   "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -1418,7 +1478,7 @@ ConsoleMethod(Scene, setFrictionJointMaxForce, void, 4, 4,  "(jointId, maxForce)
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 maxForce = dAtof(argv[3]);
@@ -1434,7 +1494,7 @@ ConsoleMethod(Scene, getFrictionJointMaxForce, F32, 3, 3,   "(jointId) Sets the 
                                                                     "@return Returns the maximum friction force (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getFrictionJointMaxForce( jointId );
@@ -1448,7 +1508,7 @@ ConsoleMethod(Scene, setFrictionJointMaxTorque, void, 4, 4, "(jointId, maxTorque
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 maxTorque = dAtof(argv[3]);
@@ -1464,7 +1524,7 @@ ConsoleMethod(Scene, getFrictionJointMaxTorque, F32, 3, 3,  "(jointId) Gets the 
                                                                     "@return Returns the maximum torque force (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getFrictionJointMaxTorque( jointId );
@@ -1481,9 +1541,9 @@ ConsoleMethod(Scene, createPrismaticJoint, S32, 7, 11,  "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -1591,7 +1651,7 @@ ConsoleMethod(Scene, setPrismaticJointLimit, void, 4, 6,    "(jointId, enableLim
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const bool enableLimit = dAtob(argv[3]);
@@ -1608,7 +1668,7 @@ ConsoleMethod(Scene, getPrismaticJointLimit, const char*, 3, 3, "(jointId) Gets 
                                                                         "@return Returns whether the joint has translational limits or not and the limits themselves (empty string indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Args.
     bool enableLimit;
@@ -1637,7 +1697,7 @@ ConsoleMethod(Scene, setPrismaticJointMotor, void, 4, 6,    "(jointId, enableMot
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const bool enableMotor = dAtob(argv[3]);
@@ -1654,7 +1714,7 @@ ConsoleMethod(Scene, getPrismaticJointMotor, const char*, 3, 3,    "(jointId) Ge
                                                                             "@return Returns whether the joint has a motor or not and the motor settings (empty string indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Args.
     bool enableMotor;
@@ -1688,9 +1748,9 @@ ConsoleMethod(Scene, createPulleyJoint, S32, 9, 16,     "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -1824,7 +1884,7 @@ ConsoleMethod(Scene, createTargetJoint, S32, 5, 10,     "(sceneObject, worldTarg
                                                         "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                         "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object.
+    // Fetch scene object.
     SceneObject* pSceneObject = Sim::findObject<SceneObject>(argv[2]);
 
     // Check scene object.
@@ -1902,7 +1962,7 @@ ConsoleMethod(Scene, setTargetJointTarget, void, 4, 5,      "(jointId, worldTarg
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // World target.
     const U32 worldTargetElementCount = Utility::mGetStringElementCount(argv[3]);
@@ -1934,7 +1994,7 @@ ConsoleMethod(Scene, getTargetJointTarget, const char*, 3, 3,   "(jointId) Gets 
                                                                         "@return Returns the target world point for the scene object (always 0,0 if error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     const Vector2 worldTarget = object->getTargetJointTarget( jointId );
@@ -1950,7 +2010,7 @@ ConsoleMethod(Scene, setTargetJointFrequency, void, 4, 4,   "(jointId, frequency
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 frequency = dAtof(argv[3]);
@@ -1966,7 +2026,7 @@ ConsoleMethod(Scene, getTargetJointFrequency, F32, 3, 3,   "(jointId) Gets the m
                                                                     "@return Returns the mass-spring-damper frequency in Hertz (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getTargetJointFrequency( jointId );
@@ -1980,7 +2040,7 @@ ConsoleMethod(Scene, setTargetJointDampingRatio, void, 4, 4,    "(jointId, dampi
                                                                         "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 dampingRatio = dAtof(argv[3]);
@@ -1996,7 +2056,7 @@ ConsoleMethod(Scene, getTargetJointDampingRatio, F32, 3, 3,    "(jointId) Sets t
                                                                         "@return Returns the damping ratio (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getTargetJointDampingRatio( jointId );
@@ -2015,9 +2075,9 @@ ConsoleMethod(Scene, createMotorJoint, S32, 4, 11,      "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -2110,7 +2170,7 @@ ConsoleMethod(Scene, setMotorJointLinearOffset, void, 4, 5,     "(jointId, linea
                                                                         "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Linear offset.
     const U32 linearOffsetElementCount = Utility::mGetStringElementCount(argv[3]);
@@ -2142,7 +2202,7 @@ ConsoleMethod(Scene, getMotorJointLinearOffset, const char*, 3, 3,  "(jointId) G
                                                                             "@return Returns the linear offset in sceneObjectA space (always 0,0 if error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     const Vector2 linearOffset = object->getMotorJointLinearOffset( jointId );
@@ -2158,7 +2218,7 @@ ConsoleMethod(Scene, setMotorJointAngularOffset, void, 4, 4,    "(jointId, angul
                                                                         "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 angularOffset = mDegToRad(dAtof(argv[3]));
@@ -2174,7 +2234,7 @@ ConsoleMethod(Scene, getMotorJointAngularOffset, F32, 3, 3,     "(jointId) Gets 
                                                                         "@return Returns the angularOffset between the bodies (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return mRadToDeg( object->getMotorJointAngularOffset( jointId ) );
@@ -2188,7 +2248,7 @@ ConsoleMethod(Scene, setMotorJointMaxForce, void, 4, 4,     "(jointId, maxForce)
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 maxForce = dAtof(argv[3]);
@@ -2204,7 +2264,7 @@ ConsoleMethod(Scene, getMotorJointMaxForce, F32, 3, 3,   "(jointId) Sets the max
                                                                     "@return Returns the maximum motor force (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getMotorJointMaxForce( jointId );
@@ -2218,7 +2278,7 @@ ConsoleMethod(Scene, setMotorJointMaxTorque, void, 4, 4, "(jointId, maxTorque) S
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 maxTorque = dAtof(argv[3]);
@@ -2234,7 +2294,7 @@ ConsoleMethod(Scene, getMotorJointMaxTorque, F32, 3, 3,  "(jointId) Gets the max
                                                                     "@return Returns the maximum motor torque force (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getMotorJointMaxTorque( jointId );
@@ -2931,12 +2991,33 @@ ConsoleMethod(Scene, setDebugOff, void, 3, 2 + DEBUG_MODE_COUNT,    "(debugOptio
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Scene, getDebugOn, bool, 3, 3, "(debugMode) Gets the state of the debug mode.\n"
-              "@param The specific debug mode to check active state of.\n"
-              "@return Returns true if active, false if not.")
+ConsoleMethod(Scene, getDebugOn, const char*, 2, 2, "() Gets the state of the debug modes.\n"
+                                                    "@return Returns a space separated list of debug modes that are active.")
 {
-   const U32 mask = 1 << dAtoi(argv[2]);
-   return object->getDebugMask() & mask;
+    // Fetch debug mask,.
+    const U32 debugMask = object->getDebugMask();
+
+    // Fetch a return buffer.
+    S32 bufferSize = 1024;
+    char* pReturnBuffer = Con::getReturnBuffer(bufferSize);
+    *pReturnBuffer = 0;
+    char* pWriteCursor = pReturnBuffer;
+
+    // Iterate debug mask.
+    for( U32 bit = 0; bit < 32; ++bit )
+    {
+        // Calculate debug mask bit.
+        const S32 debugBit = 1 << bit;
+        if ( (debugMask & debugBit) == 0 )
+            continue;
+
+        // Format option.
+        const S32 size = dSprintf( pWriteCursor, bufferSize, "%s ", object->getDebugOptionDescription( (Scene::DebugOption)debugBit ) );
+        bufferSize -= size;
+        pWriteCursor += size;
+    }
+
+    return pReturnBuffer;
 }
 
 //-----------------------------------------------------------------------------
@@ -3069,8 +3150,20 @@ ConsoleMethod(Scene, getBatchingEnabled, bool, 2, 2,    "() Gets whether render 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Scene, setIsEditorScene, void, 3, 3, "() Sets whether this is an editor scene\n"
+ConsoleMethod(Scene, setIsEditorScene, void, 3, 3, "() Sets whether this is an editor scene.\n"
                                                             "@return No return value.")
 {
    object->setIsEditorScene(dAtob(argv[2]));
 }
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, create, const char*, 3, 3, "(type) Creates the specified scene-object derived type and adds it to the scene.\n"
+                                                "@return The scene-object or NULL if not created.")
+{
+    // Create the scene object.
+    SceneObject* pSceneObject = object->create( argv[2] );
+
+    return pSceneObject == NULL ? NULL : pSceneObject->getIdString();
+}
+

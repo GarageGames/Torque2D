@@ -174,6 +174,9 @@ SimObject* TamlXmlReader::parseElement( TiXmlElement* pXmlElement )
         // Fetch the Taml children.
         TamlChildren* pChildren = dynamic_cast<TamlChildren*>( pSimObject );
 
+        // Fetch any container child class specifier.
+        AbstractClassRep* pContainerChildClass = pSimObject->getClassRep()->getContainerChildClass( true );
+
         // Iterate siblings.
         do
         {
@@ -208,6 +211,26 @@ SimObject* TamlXmlReader::parseElement( TiXmlElement* pXmlElement )
                 // Skip if the child was not created.
                 if ( pChildSimObject == NULL )
                     continue;
+
+                // Do we have a container child class?
+                if ( pContainerChildClass != NULL )
+                {
+                    // Yes, so is the child object the correctly derived type?
+                    if ( !pChildSimObject->getClassRep()->isClass( pContainerChildClass ) )
+                    {
+                        // No, so warn.
+                        Con::warnf("Taml: Child element '%s' found under parent '%s' but object is restricted to children of type '%s'.",
+                            pChildSimObject->getClassName(),
+                            pSimObject->getClassName(),
+                            pContainerChildClass->getClassName() );
+
+                        // NOTE: We can't delete the object as it may be referenced elsewhere!
+                        pChildSimObject = NULL;
+
+                        // Skip.
+                        continue;
+                    }
+                }
 
                 // Add child.
                 pChildren->addTamlChild( pChildSimObject );
@@ -263,10 +286,10 @@ void TamlXmlReader::parseAttributes( TiXmlElement* pXmlElement, SimObject* pSimO
 
         // Ignore if this is a Taml attribute.
         if (    attributeName == mTamlRefId ||
-                attributeName == mTamlRefToId ||
-                attributeName == mTamlObjectName ||
-                attributeName == mTamlRefField )
-                continue;
+            attributeName == mTamlRefToId ||
+            attributeName == mTamlObjectName ||
+            attributeName == mTamlRefField )
+            continue;
 
         // We can assume this is a field for now.
         pSimObject->setPrefixedDataField( attributeName, NULL, pAttribute->Value() );

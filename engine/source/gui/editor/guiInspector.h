@@ -152,9 +152,6 @@ public:
    ~GuiInspectorGroup();
    DECLARE_CONOBJECT(GuiInspectorGroup);
 
-   // Persistence ( Inspector Exposed Fields )
-   static void initPersistFields();
-
    virtual GuiInspectorField* constructField( S32 fieldType );
    virtual GuiInspectorField* findField( StringTableEntry fieldName );
 

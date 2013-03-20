@@ -60,6 +60,10 @@
 
 //------------------------------------------------------------------------------
 
+ImageAsset::FrameArea BadFrameArea(0, 0, 0, 0, 0.0f, 0.0f);
+
+//------------------------------------------------------------------------------
+
 ConsoleType( imageAssetPtr, TypeImageAssetPtr, sizeof(AssetPtr<ImageAsset>), ASSET_ID_FIELD_PREFIX )
 
 //-----------------------------------------------------------------------------
@@ -107,13 +111,11 @@ IMPLEMENT_CONOBJECT(ImageAsset);
 
 //------------------------------------------------------------------------------
 
-static bool explicitCellPropertiesInitialized = false;
-
-static StringTableEntry cellCustomNodeName;
-static StringTableEntry cellNodeName;
-static StringTableEntry cellOffsetName;
-static StringTableEntry cellWidthName;
-static StringTableEntry cellHeightName;
+static StringTableEntry cellCustomNodeName          = StringTable->insert( "Cells" );
+static StringTableEntry cellNodeName                = StringTable->insert( "Cell" );
+static StringTableEntry cellOffsetName              = StringTable->insert( "Offset" );
+static StringTableEntry cellWidthName               = StringTable->insert( "Width" );
+static StringTableEntry cellHeightName              = StringTable->insert( "Height" );
 
 //------------------------------------------------------------------------------
 
@@ -177,19 +179,6 @@ ImageAsset::ImageAsset() :  mImageFile(StringTable->EmptyString),
     // Set Vector Associations.
     VECTOR_SET_ASSOCIATION( mFrames );
     VECTOR_SET_ASSOCIATION( mExplicitFrames );
-
-    // Initialize explicit cell field names.
-    if ( !explicitCellPropertiesInitialized )
-    {
-        cellCustomNodeName          = StringTable->insert( "Cells" );
-        cellNodeName                = StringTable->insert( "Cell" );
-        cellOffsetName              = StringTable->insert( "Offset" );
-        cellWidthName               = StringTable->insert( "Width" );
-        cellHeightName              = StringTable->insert( "Height" );
-
-        // Flag as initialized.
-        explicitCellPropertiesInitialized = true;
-    }
 }
 
 //------------------------------------------------------------------------------

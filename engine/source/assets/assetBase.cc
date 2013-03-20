@@ -188,7 +188,7 @@ StringTableEntry AssetBase::expandAssetFilePath( const char* pAssetFilePath ) co
 
     // Fetch the asset base-path hint.
     StringTableEntry assetBasePathHint;
-    if ( getOwned() )
+    if ( getOwned() && !getAssetPrivate() )
     {
         assetBasePathHint = mpOwningAssetManager->getAssetPath( getAssetId() );
     }
@@ -225,10 +225,10 @@ StringTableEntry AssetBase::collapseAssetFilePath( const char* pAssetFilePath ) 
 
     char assetFilePathBuffer[1024];
 
-    // Is the asset owned
-    if ( !mpOwningAssetManager )
+    // Is the asset not owned or private?
+    if ( !getOwned() || getAssetPrivate() )
     {
-        // No, so we can only collapse the path using the platform layer.
+        // Yes, so we can only collapse the path using the platform layer.
         Con::collapsePath( assetFilePathBuffer, sizeof(assetFilePathBuffer), pAssetFilePath );
         return StringTable->insert( assetFilePathBuffer );
     }

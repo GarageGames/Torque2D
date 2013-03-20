@@ -233,7 +233,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\2d\assets\AnimationAsset.cc" />
-    <ClCompile Include="..\..\source\2d\assets\AnimationController.cc" />
     <ClCompile Include="..\..\source\2d\assets\ImageAsset.cc" />
     <ClCompile Include="..\..\source\2d\assets\ParticleAsset.cc" />
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetEmitter.cc" />
@@ -246,15 +245,17 @@
     <ClCompile Include="..\..\source\2d\controllers\PointForceController.cc" />
     <ClCompile Include="..\..\source\2d\core\BatchRender.cc" />
     <ClCompile Include="..\..\source\2d\core\CoreMath.cc" />
+    <ClCompile Include="..\..\source\2d\core\ImageFrameProvider.cc" />
+    <ClCompile Include="..\..\source\2d\core\ImageFrameProviderCore.cc" />
     <ClCompile Include="..\..\source\2d\core\ParticleSystem.cc" />
     <ClCompile Include="..\..\source\2d\core\RenderProxy.cc" />
     <ClCompile Include="..\..\source\2d\core\SpriteBase.cc" />
     <ClCompile Include="..\..\source\2d\core\SpriteBatch.cc" />
     <ClCompile Include="..\..\source\2d\core\SpriteBatchItem.cc" />
     <ClCompile Include="..\..\source\2d\core\SpriteBatchQuery.cc" />
-    <ClCompile Include="..\..\source\2d\core\SpriteProxyBase.cc" />
     <ClCompile Include="..\..\source\2d\core\Utility.cc" />
     <ClCompile Include="..\..\source\2d\core\Vector2.cc" />
+    <ClCompile Include="..\..\source\2d\experimental\composites\WaveComposite.cc" />
     <ClCompile Include="..\..\source\2d\gui\guiImageButtonCtrl.cc" />
     <ClCompile Include="..\..\source\2d\gui\guiSceneObjectCtrl.cc" />
     <ClCompile Include="..\..\source\2d\gui\guiSpriteCtrl.cc" />
@@ -281,7 +282,6 @@
     <ClCompile Include="..\..\source\assets\assetFieldTypes.cc" />
     <ClCompile Include="..\..\source\assets\assetManager.cc" />
     <ClCompile Include="..\..\source\assets\assetQuery.cc" />
-    <ClCompile Include="..\..\source\assets\assetSnapshot.cc" />
     <ClCompile Include="..\..\source\assets\assetTagsManifest.cc" />
     <ClCompile Include="..\..\source\assets\declaredAssets.cc" />
     <ClCompile Include="..\..\source\assets\referencedAssets.cc" />
@@ -611,7 +611,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\source\2d\assets\AnimationAsset.h" />
     <ClInclude Include="..\..\source\2d\assets\AnimationAsset_ScriptBinding.h" />
-    <ClInclude Include="..\..\source\2d\assets\AnimationController.h" />
     <ClInclude Include="..\..\source\2d\assets\ImageAsset.h" />
     <ClInclude Include="..\..\source\2d\assets\ImageAsset_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\assets\ParticleAsset.h" />
@@ -633,6 +632,8 @@
     <ClInclude Include="..\..\source\2d\controllers\PointForceController_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\core\BatchRender.h" />
     <ClInclude Include="..\..\source\2d\core\CoreMath.h" />
+    <ClInclude Include="..\..\source\2d\core\ImageFrameProvider.h" />
+    <ClInclude Include="..\..\source\2d\core\ImageFrameProviderCore.h" />
     <ClInclude Include="..\..\source\2d\core\ParticleSystem.h" />
     <ClInclude Include="..\..\source\2d\core\RenderProxy.h" />
     <ClInclude Include="..\..\source\2d\core\RenderProxy_ScriptBinding.h" />
@@ -642,10 +643,11 @@
     <ClInclude Include="..\..\source\2d\core\SpriteBatchItem.h" />
     <ClInclude Include="..\..\source\2d\core\SpriteBatchQuery.h" />
     <ClInclude Include="..\..\source\2d\core\SpriteBatchQueryResult.h" />
-    <ClInclude Include="..\..\source\2d\core\SpriteProxyBase.h" />
     <ClInclude Include="..\..\source\2d\core\Utility.h" />
     <ClInclude Include="..\..\source\2d\core\Vector2.h" />
     <ClInclude Include="..\..\source\2d\core\Vector2_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\experimental\composites\WaveComposite.h" />
+    <ClInclude Include="..\..\source\2d\experimental\composites\WaveComposite_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\gui\guiImageButtonCtrl.h" />
     <ClInclude Include="..\..\source\2d\gui\guiImageButtonCtrl_ScriptBindings.h" />
     <ClInclude Include="..\..\source\2d\gui\guiSceneObjectCtrl.h" />
@@ -702,7 +704,6 @@
     <ClInclude Include="..\..\source\assets\assetPtr.h" />
     <ClInclude Include="..\..\source\assets\assetQuery.h" />
     <ClInclude Include="..\..\source\assets\assetQuery_ScriptBinding.h" />
-    <ClInclude Include="..\..\source\assets\assetSnapshot.h" />
     <ClInclude Include="..\..\source\assets\assetTagsManifest.h" />
     <ClInclude Include="..\..\source\assets\assetTagsManifest_ScriptBinding.h" />
     <ClInclude Include="..\..\source\assets\declaredAssets.h" />

@@ -20,10 +20,10 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( GuiSpriteCtrl, isStaticMode, bool, 2, 2, "() - Gets whether the control is in static or dynamic (animated)mode.\n"
+ConsoleMethod( GuiSpriteCtrl, isStaticFrameProvider, bool, 2, 2, "() - Gets whether the control is in static or dynamic (animated)mode.\n"
                                                         "@return Returns whether the control is in static or dynamic (animated)mode.")
 {
-    return object->isStaticMode();
+    return object->isStaticFrameProvider();
 }
 
 //-----------------------------------------------------------------------------
@@ -41,7 +41,7 @@ ConsoleMethod( GuiSpriteCtrl, getImage, const char*, 2, 2,  "() - Gets current i
                                                             "@return (string imageAssetId) The image being displayed.")
 {
     // Are we in static mode?
-    if ( !object->isStaticMode() )
+    if ( !object->isStaticFrameProvider() )
     {
         // No, so warn.
         Con::warnf( "GuiSpriteCtrl::getImage() - Method invalid, not in static mode." );
@@ -49,7 +49,7 @@ ConsoleMethod( GuiSpriteCtrl, getImage, const char*, 2, 2,  "() - Gets current i
     }
 
     // Get image.
-    return DYNAMIC_VOID_CAST_TO(GuiSpriteCtrl, SpriteProxyBase, object)->getImage();
+    return DYNAMIC_VOID_CAST_TO(GuiSpriteCtrl, ImageFrameProvider, object)->getImage();
 }
 
 //-----------------------------------------------------------------------------
@@ -67,7 +67,7 @@ ConsoleMethod( GuiSpriteCtrl, getImageFrame, S32, 2, 2, "() - Gets current image
                                                         "@return (int frame) The frame currently being displayed.")
 {
     // Are we in static mode?
-    if ( !object->isStaticMode() )
+    if ( !object->isStaticFrameProvider() )
     {
         // No, so warn.
         Con::warnf( "GuiSpriteCtrl::getFrame() - Method invalid, not in static mode." );
@@ -94,7 +94,7 @@ ConsoleMethod( GuiSpriteCtrl, getAnimation, const char*, 2, 2,  "() - Gets the c
                                                                 "@return (string ianimationAssetId) The animation being displayed.")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "GuiSpriteCtrl::getAnimation() - Method invalid, in static mode." );
@@ -102,5 +102,5 @@ ConsoleMethod( GuiSpriteCtrl, getAnimation, const char*, 2, 2,  "() - Gets the c
     }
 
     // Get animation.
-    return DYNAMIC_VOID_CAST_TO(GuiSpriteCtrl, SpriteProxyBase, object)->getAnimation();
+    return DYNAMIC_VOID_CAST_TO(GuiSpriteCtrl, ImageFrameProvider, object)->getAnimation();
 }

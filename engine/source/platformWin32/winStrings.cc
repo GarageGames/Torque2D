@@ -317,12 +317,7 @@ S32 dSprintf(char *buffer, U32 bufferSize, const char *format, ...)
    va_list args;
    va_start(args, format);
 
-#if defined(TORQUE_COMPILER_CODEWARRIOR)
    S32 len = vsnprintf(buffer, bufferSize, format, args);
-#else
-   bufferSize;
-   S32 len = vsprintf(buffer, format, args);
-#endif
 
    AssertFatal( (U32)len < bufferSize, "dSprintf wrote to more memory than the specified buffer size - Stack Corruption Possible" ); //Added
 
@@ -332,15 +327,10 @@ S32 dSprintf(char *buffer, U32 bufferSize, const char *format, ...)
 
 S32 dVsprintf(char *buffer, U32 bufferSize, const char *format, void *arglist)
 {
-#if defined(TORQUE_COMPILER_CODEWARRIOR)
    S32 len = vsnprintf(buffer, bufferSize, format, (char*)arglist);
-#else
-   bufferSize;
-   S32 len = vsprintf(buffer, format, (char*)arglist);
-#endif
     
    AssertFatal( (U32)len < bufferSize, "dVsprintf wrote to more memory than the specified buffer size - Stack Corruption Possible" );
-//   S32 len = vsnprintf(buffer, bufferSize, format, (char*)arglist);
+
    return (len);
 }
 
