@@ -80,14 +80,14 @@ function AquariumToy::spawnFish(%this)
     %index = getRandom(0, 5);
     %anim = getUnit(getFishAnimationList(), %index, ",");
 
-    %fishInfo = getFishSize(%anim);
+    %fishSize = getFishSize(%anim);
 
     %fish = new Sprite()
     {
         Animation = %anim;
         class = "FishClass";
         position = %position;
-        size = %fishInfo;
+        size = %fishSize;
         SceneLayer = "15";
         SceneGroup = "14";
         minSpeed = "5";
@@ -95,8 +95,9 @@ function AquariumToy::spawnFish(%this)
         CollisionCallback = true;
     };
 
-    %fish.setCollisionGroups( none );
-    %fish.createPolygonBoxCollisionShape( 15, 15);
+    // aquarium boundary triggers are in group 15.  See TropicalAssets/scripts/aquarium.cs
+    %fish.setCollisionGroups( 15 );
+    %fish.createPolygonBoxCollisionShape(%fishSize);
     %fish.setDefaultDensity( 1 );
     SandboxScene.add( %fish );
 
