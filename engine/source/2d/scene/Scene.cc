@@ -5350,7 +5350,7 @@ const char* Scene::getPickModeDescription( Scene::PickMode pickMode )
 
 //-----------------------------------------------------------------------------
 
-static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+static void WriteJointsCustomTamlScehema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
 {
     char buffer[1024];
 
@@ -5423,6 +5423,69 @@ static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlEleme
     pDistanceJointElementD = new TiXmlElement( "xs:minInclusive" );
     pDistanceJointElementD->SetAttribute( "value", "0" );
     pDistanceJointElementC->LinkEndChild( pDistanceJointElementD );
+}
+
+//-----------------------------------------------------------------------------
+
+static void WriteControllersCustomTamlScehema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    char buffer[1024];
+
+    // Create controllers node element.
+    TiXmlElement* pControllersNodeElement = new TiXmlElement( "xs:element" );
+    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), controllerCustomNodeName );
+    pControllersNodeElement->SetAttribute( "name", buffer );
+    pControllersNodeElement->SetAttribute( "minOccurs", 0 );
+    pControllersNodeElement->SetAttribute( "maxOccurs", 1 );
+    pParentElement->LinkEndChild( pControllersNodeElement );
+    
+    // Create complex type.
+    TiXmlElement* pControllersNodeComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pControllersNodeElement->LinkEndChild( pControllersNodeComplexTypeElement );
+    
+    // Create choice element.
+    TiXmlElement* pControllersNodeChoiceElement = new TiXmlElement( "xs:choice" );
+    pControllersNodeChoiceElement->SetAttribute( "minOccurs", 0 );
+    pControllersNodeChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
+    pControllersNodeComplexTypeElement->LinkEndChild( pControllersNodeChoiceElement );
+
+    // Fetch the scene controller type.
+    AbstractClassRep* pPickingSceneControllerType = AbstractClassRep::findClassRep( "PickingSceneController" );
+    AbstractClassRep* pGroupedSceneControllerType = AbstractClassRep::findClassRep( "GroupedSceneController" );
+
+    // Sanity!
+    AssertFatal( pPickingSceneControllerType != NULL, "Scene::WriteControllersCustomTamlScehema() - Cannot find the PickingSceneController type." );
+    AssertFatal( pGroupedSceneControllerType != NULL, "Scene::WriteControllersCustomTamlScehema() - Cannot find the GroupedSceneController type." );
+
+    // Add choice members.
+    for ( AbstractClassRep* pChoiceType = AbstractClassRep::getClassList(); pChoiceType != NULL; pChoiceType = pChoiceType->getNextClass() )
+    {
+        // Skip if not derived from either of the scene controllers.
+        if ( !pChoiceType->isClass( pPickingSceneControllerType ) && !pChoiceType->isClass( pGroupedSceneControllerType ) )
+            continue;
+
+        // Add choice member.
+        TiXmlElement* pChoiceMemberElement = new TiXmlElement( "xs:element" );
+        pChoiceMemberElement->SetAttribute( "name", pChoiceType->getClassName() );
+        dSprintf( buffer, sizeof(buffer), "%s_Type", pChoiceType->getClassName() );
+        pChoiceMemberElement->SetAttribute( "type", buffer );
+        pControllersNodeChoiceElement->LinkEndChild( pChoiceMemberElement );
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+static void WritePreloadsCustomTamlScehema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+}
+
+//-----------------------------------------------------------------------------
+
+static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    WriteJointsCustomTamlScehema( pClassRep, pParentElement );
+    WriteControllersCustomTamlScehema( pClassRep, pParentElement );
+    WritePreloadsCustomTamlScehema( pClassRep, pParentElement );
 }
 
 //------------------------------------------------------------------------------

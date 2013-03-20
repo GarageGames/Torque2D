@@ -922,6 +922,45 @@ bool Taml::generateTamlSchema( const char* pFilename )
     pPoint2IElementB->SetAttribute( "value", "[-]?[0-9]* [-]?[0-9]*" );   
     pPoint2IElementA->LinkEndChild( pPoint2IElementB );
 
+    // b2AABB.
+    TiXmlComment* pb2AABBComment = new TiXmlComment( "b2AABB Console Type" );
+    pSchemaElement->LinkEndChild( pb2AABBComment );
+    TiXmlElement* pb2AABBTypeElement = new TiXmlElement( "xs:simpleType" );
+    pb2AABBTypeElement->SetAttribute( "name", "b2AABB_ConsoleType" );
+    pSchemaElement->LinkEndChild( pb2AABBTypeElement );
+    TiXmlElement* pb2AABBElementA = new TiXmlElement( "xs:restriction" );
+    pb2AABBElementA->SetAttribute( "base", "xs:string" );
+    pb2AABBTypeElement->LinkEndChild( pb2AABBElementA );
+    TiXmlElement* pb2AABBElementB = new TiXmlElement( "xs:pattern" );
+    pb2AABBElementB->SetAttribute( "value", "([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b ([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b ([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b ([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b" );   
+    pb2AABBElementA->LinkEndChild( pb2AABBElementB );   
+
+    // RectI.
+    TiXmlComment* pRectIComment = new TiXmlComment( "RectI Console Type" );
+    pSchemaElement->LinkEndChild( pRectIComment );
+    TiXmlElement* pRectITypeElement = new TiXmlElement( "xs:simpleType" );
+    pRectITypeElement->SetAttribute( "name", "RectI_ConsoleType" );
+    pSchemaElement->LinkEndChild( pRectITypeElement );
+    TiXmlElement* pRectIElementA = new TiXmlElement( "xs:restriction" );
+    pRectIElementA->SetAttribute( "base", "xs:string" );
+    pRectITypeElement->LinkEndChild( pRectIElementA );
+    TiXmlElement* pRectIElementB = new TiXmlElement( "xs:pattern" );
+    pRectIElementB->SetAttribute( "value", "[-]?[0-9]* [-]?[0-9]* [-]?[0-9]* [-]?[0-9]*" );   
+    pRectIElementA->LinkEndChild( pRectIElementB );
+
+    // RectF.
+    TiXmlComment* pRectFComment = new TiXmlComment( "RectF Console Type" );
+    pSchemaElement->LinkEndChild( pRectFComment );
+    TiXmlElement* pRectFTypeElement = new TiXmlElement( "xs:simpleType" );
+    pRectFTypeElement->SetAttribute( "name", "RectF_ConsoleType" );
+    pSchemaElement->LinkEndChild( pRectFTypeElement );
+    TiXmlElement* pRectFElementA = new TiXmlElement( "xs:restriction" );
+    pRectFElementA->SetAttribute( "base", "xs:string" );
+    pRectFTypeElement->LinkEndChild( pRectFElementA );
+    TiXmlElement* pRectFElementB = new TiXmlElement( "xs:pattern" );
+    pRectFElementB->SetAttribute( "value", "([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b ([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b" );   
+    pRectFElementA->LinkEndChild( pRectFElementB );
+
     // AssetId.
     TiXmlComment* pAssetIdComment = new TiXmlComment( "AssetId Console Type" );
     pSchemaElement->LinkEndChild( pAssetIdComment );
@@ -1015,12 +1054,17 @@ bool Taml::generateTamlSchema( const char* pFilename )
             customSchemaFn( pType, pSequenceElement );
         }
 
-        // Iterate static fields.
+        // Fetch field list.
         const AbstractClassRep::FieldList& fields = pType->mFieldList;
-        for( AbstractClassRep::FieldList::const_iterator fieldItr = fields.begin(); fieldItr != fields.end(); ++fieldItr )
+
+        // Fetcj field count.
+        const S32 fieldCount = fields.size();
+
+        // Iterate static fields (in reverse as most types are organized from the root-fields up).
+        for( S32 index = fieldCount-1; index > 0; --index )
         {
             // Fetch field.
-            const AbstractClassRep::Field& field = *fieldItr;
+            const AbstractClassRep::Field& field = fields[index];
 
             // Skip if not a data field.
             if( field.type == AbstractClassRep::DepricatedFieldType ||
@@ -1081,6 +1125,7 @@ bool Taml::generateTamlSchema( const char* pFilename )
                 {
                     pFieldTypeDescription = "Vector2_ConsoleType";
                 }
+
                 else if( fieldType == TypePoint2F )
                 {
                     pFieldTypeDescription = "Point2F_ConsoleType";
@@ -1088,6 +1133,18 @@ bool Taml::generateTamlSchema( const char* pFilename )
                 else if( fieldType == TypePoint2I )
                 {
                     pFieldTypeDescription = "Point2I_ConsoleType";
+                }
+                else if( fieldType == Typeb2AABB )
+                {
+                    pFieldTypeDescription = "b2AABB_ConsoleType";
+                }
+                else if( fieldType == TypeRectI )
+                {
+                    pFieldTypeDescription = "RectI_ConsoleType";
+                }
+                else if( fieldType == TypeRectF )
+                {
+                    pFieldTypeDescription = "RectF_ConsoleType";
                 }
                 else if(    fieldType == TypeAssetId ||
                             fieldType == TypeImageAssetPtr ||
