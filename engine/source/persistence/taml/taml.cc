@@ -1146,6 +1146,12 @@ bool Taml::generateTamlSchema( const char* pFilename )
             customSchemaFn( pType, pSequenceElement );
         }
 
+        // Generate field attribute group.
+        TiXmlElement* pFieldAttributeGroupElement = new TiXmlElement( "xs:attributeGroup" );
+        dSprintf( buffer, sizeof(buffer), "%s_Fields", pType->getClassName() );
+        pFieldAttributeGroupElement->SetAttribute( "name", buffer );
+        pSchemaElement->LinkEndChild( pFieldAttributeGroupElement );
+
         // Fetch field list.
         const AbstractClassRep::FieldList& fields = pType->mFieldList;
 
@@ -1163,6 +1169,10 @@ bool Taml::generateTamlSchema( const char* pFilename )
                 field.type == AbstractClassRep::StartGroupFieldType ||
                 field.type == AbstractClassRep::EndGroupFieldType )
             continue;
+
+            // Skip if the field root is not this type.
+            if ( pType->findFieldRoot( field.pFieldname ) != pType )
+                continue;
 
             // Add attribute element.
             TiXmlElement* pAttributeElement = new TiXmlElement( "xs:attribute" );
@@ -1259,7 +1269,16 @@ bool Taml::generateTamlSchema( const char* pFilename )
             }
 
             pAttributeElement->SetAttribute( "use", "optional" );
-            pComplexTypeElement->LinkEndChild( pAttributeElement );
+            pFieldAttributeGroupElement->LinkEndChild( pAttributeElement );
+        }
+
+        // Add attribute group types.
+        for ( AbstractClassRep* pAttributeGroupsType = pType; pAttributeGroupsType != NULL; pAttributeGroupsType = pAttributeGroupsType->getParentClass() )
+        {
+            TiXmlElement* pFieldAttributeGroupRefElement = new TiXmlElement( "xs:attributeGroup" );
+            dSprintf( buffer, sizeof(buffer), "%s_Fields", pAttributeGroupsType->getClassName() );
+            pFieldAttributeGroupRefElement->SetAttribute( "ref", buffer );
+            pComplexTypeElement->LinkEndChild( pFieldAttributeGroupRefElement );
         }
 
         // Add "any" attribute element (dynamic fields).
