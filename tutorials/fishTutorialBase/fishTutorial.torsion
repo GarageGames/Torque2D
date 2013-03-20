@@ -1,0 +1,34 @@
+<TorsionProject>
+<Name>fishTutorial</Name>
+<WorkingDir/>
+<EntryScript>main.cs</EntryScript>
+<DebugHook>dbgSetParameters( #port#, "#password#", true );</DebugHook>
+<Mods>
+<Folder>modules</Folder>
+</Mods>
+<ScannerExts>cs; gui</ScannerExts>
+<Configs>
+<Config>
+<Name>Release</Name>
+<Executable>Torque2D.exe</Executable>
+<Arguments/>
+<HasExports>true</HasExports>
+<Precompile>false</Precompile>
+<InjectDebugger>true</InjectDebugger>
+<UseSetModPaths>false</UseSetModPaths>
+</Config>
+<Config>
+<Name>Debug</Name>
+<Executable>Torque2D_DEBUG.exe</Executable>
+<Arguments/>
+<HasExports>false</HasExports>
+<Precompile>false</Precompile>
+<InjectDebugger>true</InjectDebugger>
+<UseSetModPaths>false</UseSetModPaths>
+</Config>
+</Configs>
+<SearchURL/>
+<SearchProduct>fishTutorial</SearchProduct>
+<SearchVersion>HEAD</SearchVersion>
+<ExecModifiedScripts>true</ExecModifiedScripts>
+</TorsionProject>

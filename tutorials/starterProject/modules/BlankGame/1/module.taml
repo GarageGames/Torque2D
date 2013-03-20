@@ -1,10 +1,8 @@
 <ModuleDefinition
-	ModuleId="AquariumToy"
+	ModuleId="blankGame"
 	VersionId="1"
-	Description="A fun demonstration of an aquarium."
-	Dependencies="ToyAssets=1,TropicalAssets=1"
-	Type="toy"
-	ToyCategoryIndex="5"
+	Description="Blank Project as a Template.  You should probably rename this module!"
+	Dependencies="AppCore=1"
 	ScriptFile="main.cs"
 	CreateFunction="create"
 	DestroyFunction="destroy">
@@ -13,4 +11,3 @@
 			Extension="asset.taml"
 			Recurse="true"/>
 </ModuleDefinition>
-
