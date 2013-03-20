@@ -878,6 +878,7 @@ bool Taml::generateTamlSchema( const char* pFilename )
 
     // Reset scratch state.
     char buffer[1024];
+    HashMap<AbstractClassRep*, StringTableEntry> childGroups;
 
     // *************************************************************
     // Generate console type elements.
@@ -1024,20 +1025,49 @@ bool Taml::generateTamlSchema( const char* pFilename )
             pChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
             pSequenceElement->LinkEndChild( pChoiceElement );
 
-            // Add choice members.
-            for ( AbstractClassRep* pChoiceType = pRootType; pChoiceType != NULL; pChoiceType = pChoiceType->getNextClass() )
-            {
-                // Skip if not derived from the container child class.
-                if ( !pChoiceType->isClass( pContainerChildClass ) )
-                    continue;
+            // Find child group.
+            HashMap<AbstractClassRep*, StringTableEntry>::iterator childGroupItr = childGroups.find( pContainerChildClass );
 
-                // Add choice member.
-                TiXmlElement* pChoiceMemberElement = new TiXmlElement( "xs:element" );
-                pChoiceMemberElement->SetAttribute( "name", pChoiceType->getClassName() );
-                dSprintf( buffer, sizeof(buffer), "%s_Type", pChoiceType->getClassName() );
-                pChoiceMemberElement->SetAttribute( "type", buffer );
-                pChoiceElement->LinkEndChild( pChoiceMemberElement );
+            // Does the group exist?
+            if ( childGroupItr == childGroups.end() )
+            {
+                // No, so format group name.
+                dSprintf( buffer, sizeof(buffer), "%s_ChildrenTypes", pContainerChildClass->getClassName() );
+
+                // Insert into child group hash.
+                childGroupItr = childGroups.insert( pContainerChildClass, StringTable->insert( buffer ) );
+
+                // Add the group.
+                TiXmlElement* pChildrenGroupElement = new TiXmlElement( "xs:group" );
+                pChildrenGroupElement->SetAttribute( "name", buffer );
+                pSchemaElement->LinkEndChild( pChildrenGroupElement );
+
+                // Add choice element.
+                TiXmlElement* pChildreGroupChoiceElement = new TiXmlElement( "xs:choice" );
+                pChildrenGroupElement->LinkEndChild( pChildreGroupChoiceElement );
+
+                // Add choice members.
+                for ( AbstractClassRep* pChoiceType = pRootType; pChoiceType != NULL; pChoiceType = pChoiceType->getNextClass() )
+                {
+                    // Skip if not derived from the container child class.
+                    if ( !pChoiceType->isClass( pContainerChildClass ) )
+                        continue;
+
+                    // Add choice member.
+                    TiXmlElement* pChildrenMemberElement = new TiXmlElement( "xs:element" );
+                    pChildrenMemberElement->SetAttribute( "name", pChoiceType->getClassName() );
+                    dSprintf( buffer, sizeof(buffer), "%s_Type", pChoiceType->getClassName() );
+                    pChildrenMemberElement->SetAttribute( "type", buffer );
+                    pChildreGroupChoiceElement->LinkEndChild( pChildrenMemberElement );
+                }
+
             }
+
+            // Reference the child group.
+            TiXmlElement* pChoiceGroupReferenceElement = new TiXmlElement( "xs:group" );
+            pChoiceGroupReferenceElement->SetAttribute( "ref", childGroupItr->value );
+            pChoiceGroupReferenceElement->SetAttribute( "minOccurs", 0 );
+            pChoiceElement->LinkEndChild( pChoiceGroupReferenceElement );
         }
 
         // Generate the custom Taml schema.
