@@ -36,6 +36,7 @@
 DefineConsoleType( TypeColorI )
 DefineConsoleType( TypeColorF )
 
+
 //-----------------------------------------------------------------------------
 
 class ColorI;
@@ -176,6 +177,36 @@ class ColorI
    U16 get4444() const;
 };
 
+
+//-----------------------------------------------------------------------------
+
+class StockColorItem
+{
+private:
+    StockColorItem() {}
+
+public:
+    StockColorItem( const char* pName, const U8 red, const U8 green, const U8 blue, const U8 alpha = 255 )
+    {
+        // Sanity!
+        AssertFatal( pName != NULL, "Stock color name cannot be NULL." );
+
+        // Set stock color.
+        // NOTE:-   We'll use the char pointer here.  We can yet use the string-table unfortunately.
+        mColorName = pName;
+        mColorI.set( red, green, blue, alpha );
+        mColorF = mColorI;
+    }
+
+    inline const char*      getColorName( void ) const { return mColorName; }
+    inline const ColorF&    getColorF( void ) const { return mColorF; }
+    inline const ColorI&    getColorI( void ) const { return mColorI; }
+
+    const char*         mColorName;
+    ColorF              mColorF;
+    ColorI              mColorI;
+};
+
 //-----------------------------------------------------------------------------
 
 class StockColor
@@ -186,6 +217,9 @@ public:
     static const ColorI& colorI( const char* pStockColorName );
     static StringTableEntry name( const ColorF& color );
     static StringTableEntry name( const ColorI& color );
+
+    static S32 getCount( void );
+    static const StockColorItem* getColorItem( const S32 index );
 
     static void create( void );
     static void destroy( void );

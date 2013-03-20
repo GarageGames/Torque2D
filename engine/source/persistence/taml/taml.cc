@@ -959,7 +959,7 @@ bool Taml::generateTamlSchema( const char* pFilename )
     pRectFElementA->SetAttribute( "base", "xs:string" );
     pRectFTypeElement->LinkEndChild( pRectFElementA );
     TiXmlElement* pRectFElementB = new TiXmlElement( "xs:pattern" );
-    pRectFElementB->SetAttribute( "value", "([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b ([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b" );   
+    pRectFElementB->SetAttribute( "value", "(\\b[-]?(b[0-9]+)?\\.)?[0-9]+\\b" );   
     pRectFElementA->LinkEndChild( pRectFElementB );
 
     // AssetId.
@@ -975,6 +975,68 @@ bool Taml::generateTamlSchema( const char* pFilename )
     dSprintf( buffer, sizeof(buffer), "(%s)?\\b[a-zA-Z0-9]+\\b%s\\b[a-zA-Z0-9]+\\b", ASSET_ID_FIELD_PREFIX, ASSET_SCOPE_TOKEN );
     pAssetIdElementB->SetAttribute( "value", buffer );
     pAssetIdElementA->LinkEndChild( pAssetIdElementB );
+
+    // Color Enums.
+    TiXmlComment* pColorEnumsComment = new TiXmlComment( "Color Enums" );
+    pSchemaElement->LinkEndChild( pColorEnumsComment );
+    TiXmlElement* pColorEnumsTypeElement = new TiXmlElement( "xs:simpleType" );
+    pColorEnumsTypeElement->SetAttribute( "name", "Color_Enums" );
+    pSchemaElement->LinkEndChild( pColorEnumsTypeElement );
+    TiXmlElement* pColorEnumsRestrictionElement = new TiXmlElement( "xs:restriction" );
+    pColorEnumsRestrictionElement->SetAttribute( "base", "xs:string" );
+    pColorEnumsTypeElement->LinkEndChild( pColorEnumsRestrictionElement );
+    const S32 ColorEnumsCount = StockColor::getCount();
+    for( S32 index = 0; index < ColorEnumsCount; ++index )
+    {
+        // Add enumeration element.
+        TiXmlElement* pColorEnumsAttributeEnumerationElement = new TiXmlElement( "xs:enumeration" );
+        pColorEnumsAttributeEnumerationElement->SetAttribute( "value", StockColor::getColorItem(index)->getColorName() );
+        pColorEnumsRestrictionElement->LinkEndChild( pColorEnumsAttributeEnumerationElement );
+    }
+
+    // ColorF.
+    TiXmlComment* pColorFValuesComment = new TiXmlComment( "ColorF Values" );
+    pSchemaElement->LinkEndChild( pColorFValuesComment );
+    TiXmlElement* pColorFValuesTypeElement = new TiXmlElement( "xs:simpleType" );
+    pColorFValuesTypeElement->SetAttribute( "name", "ColorF_Values" );
+    pSchemaElement->LinkEndChild( pColorFValuesTypeElement );
+    TiXmlElement* pColorFValuesElementA = new TiXmlElement( "xs:restriction" );
+    pColorFValuesElementA->SetAttribute( "base", "xs:string" );
+    pColorFValuesTypeElement->LinkEndChild( pColorFValuesElementA );
+    TiXmlElement* pColorFValuesElementB = new TiXmlElement( "xs:pattern" );
+    pColorFValuesElementB->SetAttribute( "value", "([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b ([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b ([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b ([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b" );
+    pColorFValuesElementA->LinkEndChild( pColorFValuesElementB );
+
+    TiXmlComment* pColorFComment = new TiXmlComment( "ColorF Console Type" );
+    pSchemaElement->LinkEndChild( pColorFComment );
+    TiXmlElement* pColorFTypeElement = new TiXmlElement( "xs:simpleType" );
+    pColorFTypeElement->SetAttribute( "name", "ColorF_ConsoleType" );
+    pSchemaElement->LinkEndChild( pColorFTypeElement );
+    TiXmlElement* pColorFUnionElement = new TiXmlElement( "xs:union" );
+    pColorFUnionElement->SetAttribute( "memberTypes", "ColorF_Values Color_Enums" );
+    pColorFTypeElement->LinkEndChild( pColorFUnionElement );
+
+    // ColorI.
+    TiXmlComment* pColorIValuesComment = new TiXmlComment( "ColorI Values" );
+    pSchemaElement->LinkEndChild( pColorIValuesComment );
+    TiXmlElement* pColorIValuesTypeElement = new TiXmlElement( "xs:simpleType" );
+    pColorIValuesTypeElement->SetAttribute( "name", "ColorI_Values" );
+    pSchemaElement->LinkEndChild( pColorIValuesTypeElement );
+    TiXmlElement* pColorIValuesElementA = new TiXmlElement( "xs:restriction" );
+    pColorIValuesElementA->SetAttribute( "base", "xs:string" );
+    pColorIValuesTypeElement->LinkEndChild( pColorIValuesElementA );
+    TiXmlElement* pColorIValuesElementB = new TiXmlElement( "xs:pattern" );
+    pColorIValuesElementB->SetAttribute( "value", "[-]?[0-9]* [-]?[0-9]* [-]?[0-9]* [-]?[0-9]*" );
+    pColorIValuesElementA->LinkEndChild( pColorIValuesElementB );
+
+    TiXmlComment* pColorIComment = new TiXmlComment( "ColorI Console Type" );
+    pSchemaElement->LinkEndChild( pColorIComment );
+    TiXmlElement* pColorITypeElement = new TiXmlElement( "xs:simpleType" );
+    pColorITypeElement->SetAttribute( "name", "ColorI_ConsoleType" );
+    pSchemaElement->LinkEndChild( pColorITypeElement );
+    TiXmlElement* pColorIUnionElement = new TiXmlElement( "xs:union" );
+    pColorIUnionElement->SetAttribute( "memberTypes", "ColorI_Values Color_Enums" );
+    pColorITypeElement->LinkEndChild( pColorIUnionElement );
 
     // *************************************************************
     // Generate engine type elements.
@@ -1175,6 +1237,14 @@ bool Taml::generateTamlSchema( const char* pFilename )
                 else if( fieldType == TypeRectF )
                 {
                     pFieldTypeDescription = "RectF_ConsoleType";
+                }
+                else if( fieldType == TypeColorF )
+                {
+                    pFieldTypeDescription = "ColorF_ConsoleType";
+                }
+                else if( fieldType == TypeColorI )
+                {
+                    pFieldTypeDescription = "ColorI_ConsoleType";
                 }
                 else if(    fieldType == TypeAssetId ||
                             fieldType == TypeImageAssetPtr ||
