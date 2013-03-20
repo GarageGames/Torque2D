@@ -1,0 +1,10 @@
+<ModuleDefinition
+	ModuleId="DeadlyReef"
+	VersionId="1"
+	Description="Feeding fish in a post-apocalyptic world (wouldn't that be cool?!)"
+	Dependencies="TropicalAssets,AppCore"
+	Group="game"
+	ScriptFile="main.cs"
+	CreateFunction="create"
+	DestroyFunction="destroy">
+</ModuleDefinition>
