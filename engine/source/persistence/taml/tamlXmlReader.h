@@ -45,7 +45,6 @@ public:
     {
         mTamlRefId      = StringTable->insert( TAML_ID_ATTRIBUTE_NAME );
         mTamlRefToId    = StringTable->insert( TAML_REFID_ATTRIBUTE_NAME );
-        mTamlRefField   = StringTable->insert( TAML_REF_FIELD_NAME );
         mTamlObjectName = StringTable->insert( TAML_OBJECTNAME_ATTRIBUTE_NAME );
     }
 

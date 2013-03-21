@@ -34,6 +34,10 @@
 
 //------------------------------------------------------------------------------
 
+static StringTableEntry spritesNodeName = StringTable->insert( "Sprites" );
+
+//------------------------------------------------------------------------------
+
 SpriteBatch::SpriteBatch() :
     mMasterBatchId( 0 ),
     mSelectedSprite( NULL ),
@@ -1232,34 +1236,39 @@ void SpriteBatch::destroySpriteBatchQuery( void )
 
 //------------------------------------------------------------------------------
 
-void SpriteBatch::onTamlCustomWrite( TamlCustomNode* pSpritesNode )
+void SpriteBatch::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(SpriteBatch_TamlCustomWrite);
 
-    // Fetch property names.
-    StringTableEntry spriteItemTypeName = StringTable->insert( "Sprite" );
+    // Finish if no sprites.
+    if ( getSpriteCount() == 0 )
+        return;
+
+    // Add sprites node.
+    TamlCustomNode* pSpritesNode = customNodes.addNode( spritesNodeName );
 
     // Write all sprites.
     for( typeSpriteBatchHash::iterator spriteItr = mSprites.begin(); spriteItr != mSprites.end(); ++spriteItr )
-    {
-        // Add sprite node.
-        TamlCustomNode* pNode = pSpritesNode->addNode( spriteItemTypeName );
-        
+    {      
         // Write type with sprite item.
-        spriteItr->value->onTamlCustomWrite( pNode );
+        spriteItr->value->onTamlCustomWrite( pSpritesNode );
     }
 }
 
 //------------------------------------------------------------------------------
 
-void SpriteBatch::onTamlCustomRead( const TamlCustomNode* pSpritesNode )
+void SpriteBatch::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(SpriteBatch_TamlCustomRead);
 
-    // Fetch node name.
-    StringTableEntry spriteItemNodeName = StringTable->insert( "Sprite" );
+    // Find sprites custom node.
+    const TamlCustomNode* pSpritesNode = customNodes.findNode( spritesNodeName );
+
+    // Finish if we don't have the node.
+    if ( pSpritesNode == NULL )
+        return;
 
     // Fetch children nodes.
     const TamlCustomNodeVector& spriteNodes = pSpritesNode->getChildren();
@@ -1274,7 +1283,7 @@ void SpriteBatch::onTamlCustomRead( const TamlCustomNode* pSpritesNode )
         StringTableEntry nodeName = pNode->getNodeName();
 
         // Is this a known node name?
-        if ( nodeName != spriteItemNodeName )
+        if ( nodeName != spritesItemTypeName )
         {
             // No, so warn.
             Con::warnf( "SpriteBatch - Unknown custom type '%s'.", nodeName );

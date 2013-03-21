@@ -34,6 +34,10 @@ class SceneRenderRequest;
 
 //------------------------------------------------------------------------------  
 
+extern StringTableEntry spritesItemTypeName;
+
+//------------------------------------------------------------------------------  
+
 class SpriteBatchItem : public ImageFrameProvider
 {
     friend class SpriteBatch;
@@ -297,7 +301,7 @@ protected:
     void updateLocalTransform( void );
     void updateWorldTransform( const U32 batchTransformId );
 
-    void onTamlCustomWrite( TamlCustomNode* pSpriteNode );
+    void onTamlCustomWrite( TamlCustomNode* pParentNode );
     void onTamlCustomRead( const TamlCustomNode* pSpriteNode );
 };
 

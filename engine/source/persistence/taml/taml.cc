@@ -856,10 +856,32 @@ SimObject* Taml::createType( StringTableEntry typeName, const Taml* pTaml, const
 
 //-----------------------------------------------------------------------------
 
-bool Taml::generateTamlSchema( const char* pFilename )
+bool Taml::generateTamlSchema()
 {
-    // Sanity!
-    AssertFatal( pFilename != NULL, "Taml::generateTamlSchema() - Cannot write a NULL filename." );
+    // Fetch any TAML Schema file reference.
+    const char* pTamlSchemaFile = Con::getVariable( TAML_SCHEMA_VARIABLE );
+
+    // Do we have a schema file reference?
+    if ( pTamlSchemaFile == NULL || *pTamlSchemaFile == 0 )
+    {
+        // No, so warn.
+        Con::warnf( "Taml::generateTamlSchema() - Cannot write a TAML schema as no schema variable is set ('%s').", TAML_SCHEMA_VARIABLE );
+        return false;
+    }
+
+    // Expand the file-name into the file-path buffer.
+    char filePathBuffer[1024];
+    Con::expandPath( filePathBuffer, sizeof(filePathBuffer), pTamlSchemaFile );
+
+    FileStream stream;
+
+    // File opened?
+    if ( !stream.open( filePathBuffer, FileStream::Write ) )
+    {
+        // No, so warn.
+        Con::warnf("Taml::GenerateTamlSchema() - Could not open filename '%s' for write.", filePathBuffer );
+        return false;
+    }
 
     // Create document.
     TiXmlDocument schemaDocument;
@@ -875,6 +897,11 @@ bool Taml::generateTamlSchema( const char* pFilename )
 
     // Fetch class-rep root.
     AbstractClassRep* pRootType = AbstractClassRep::getClassList();
+
+    // Fetch SimObject class rep.
+    AbstractClassRep* pSimObjectType = AbstractClassRep::findClassRep( "SimObject" );
+    // Sanity!
+    AssertFatal( pSimObjectType != NULL, "Taml::GenerateTamlSchema() - Could not find SimObject class rep." );
 
     // Reset scratch state.
     char buffer[1024];
@@ -959,7 +986,7 @@ bool Taml::generateTamlSchema( const char* pFilename )
     pRectFElementA->SetAttribute( "base", "xs:string" );
     pRectFTypeElement->LinkEndChild( pRectFElementA );
     TiXmlElement* pRectFElementB = new TiXmlElement( "xs:pattern" );
-    pRectFElementB->SetAttribute( "value", "([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b ([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b" );   
+    pRectFElementB->SetAttribute( "value", "(\\b[-]?(b[0-9]+)?\\.)?[0-9]+\\b" );   
     pRectFElementA->LinkEndChild( pRectFElementB );
 
     // AssetId.
@@ -975,6 +1002,68 @@ bool Taml::generateTamlSchema( const char* pFilename )
     dSprintf( buffer, sizeof(buffer), "(%s)?\\b[a-zA-Z0-9]+\\b%s\\b[a-zA-Z0-9]+\\b", ASSET_ID_FIELD_PREFIX, ASSET_SCOPE_TOKEN );
     pAssetIdElementB->SetAttribute( "value", buffer );
     pAssetIdElementA->LinkEndChild( pAssetIdElementB );
+
+    // Color Enums.
+    TiXmlComment* pColorEnumsComment = new TiXmlComment( "Color Enums" );
+    pSchemaElement->LinkEndChild( pColorEnumsComment );
+    TiXmlElement* pColorEnumsTypeElement = new TiXmlElement( "xs:simpleType" );
+    pColorEnumsTypeElement->SetAttribute( "name", "Color_Enums" );
+    pSchemaElement->LinkEndChild( pColorEnumsTypeElement );
+    TiXmlElement* pColorEnumsRestrictionElement = new TiXmlElement( "xs:restriction" );
+    pColorEnumsRestrictionElement->SetAttribute( "base", "xs:string" );
+    pColorEnumsTypeElement->LinkEndChild( pColorEnumsRestrictionElement );
+    const S32 ColorEnumsCount = StockColor::getCount();
+    for( S32 index = 0; index < ColorEnumsCount; ++index )
+    {
+        // Add enumeration element.
+        TiXmlElement* pColorEnumsAttributeEnumerationElement = new TiXmlElement( "xs:enumeration" );
+        pColorEnumsAttributeEnumerationElement->SetAttribute( "value", StockColor::getColorItem(index)->getColorName() );
+        pColorEnumsRestrictionElement->LinkEndChild( pColorEnumsAttributeEnumerationElement );
+    }
+
+    // ColorF.
+    TiXmlComment* pColorFValuesComment = new TiXmlComment( "ColorF Values" );
+    pSchemaElement->LinkEndChild( pColorFValuesComment );
+    TiXmlElement* pColorFValuesTypeElement = new TiXmlElement( "xs:simpleType" );
+    pColorFValuesTypeElement->SetAttribute( "name", "ColorF_Values" );
+    pSchemaElement->LinkEndChild( pColorFValuesTypeElement );
+    TiXmlElement* pColorFValuesElementA = new TiXmlElement( "xs:restriction" );
+    pColorFValuesElementA->SetAttribute( "base", "xs:string" );
+    pColorFValuesTypeElement->LinkEndChild( pColorFValuesElementA );
+    TiXmlElement* pColorFValuesElementB = new TiXmlElement( "xs:pattern" );
+    pColorFValuesElementB->SetAttribute( "value", "([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b ([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b ([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b ([-]?(\\b[0-9]+)?\\.)?[0-9]+\\b" );
+    pColorFValuesElementA->LinkEndChild( pColorFValuesElementB );
+
+    TiXmlComment* pColorFComment = new TiXmlComment( "ColorF Console Type" );
+    pSchemaElement->LinkEndChild( pColorFComment );
+    TiXmlElement* pColorFTypeElement = new TiXmlElement( "xs:simpleType" );
+    pColorFTypeElement->SetAttribute( "name", "ColorF_ConsoleType" );
+    pSchemaElement->LinkEndChild( pColorFTypeElement );
+    TiXmlElement* pColorFUnionElement = new TiXmlElement( "xs:union" );
+    pColorFUnionElement->SetAttribute( "memberTypes", "ColorF_Values Color_Enums" );
+    pColorFTypeElement->LinkEndChild( pColorFUnionElement );
+
+    // ColorI.
+    TiXmlComment* pColorIValuesComment = new TiXmlComment( "ColorI Values" );
+    pSchemaElement->LinkEndChild( pColorIValuesComment );
+    TiXmlElement* pColorIValuesTypeElement = new TiXmlElement( "xs:simpleType" );
+    pColorIValuesTypeElement->SetAttribute( "name", "ColorI_Values" );
+    pSchemaElement->LinkEndChild( pColorIValuesTypeElement );
+    TiXmlElement* pColorIValuesElementA = new TiXmlElement( "xs:restriction" );
+    pColorIValuesElementA->SetAttribute( "base", "xs:string" );
+    pColorIValuesTypeElement->LinkEndChild( pColorIValuesElementA );
+    TiXmlElement* pColorIValuesElementB = new TiXmlElement( "xs:pattern" );
+    pColorIValuesElementB->SetAttribute( "value", "[-]?[0-9]* [-]?[0-9]* [-]?[0-9]* [-]?[0-9]*" );
+    pColorIValuesElementA->LinkEndChild( pColorIValuesElementB );
+
+    TiXmlComment* pColorIComment = new TiXmlComment( "ColorI Console Type" );
+    pSchemaElement->LinkEndChild( pColorIComment );
+    TiXmlElement* pColorITypeElement = new TiXmlElement( "xs:simpleType" );
+    pColorITypeElement->SetAttribute( "name", "ColorI_ConsoleType" );
+    pSchemaElement->LinkEndChild( pColorITypeElement );
+    TiXmlElement* pColorIUnionElement = new TiXmlElement( "xs:union" );
+    pColorIUnionElement->SetAttribute( "memberTypes", "ColorI_Values Color_Enums" );
+    pColorITypeElement->LinkEndChild( pColorIUnionElement );
 
     // *************************************************************
     // Generate engine type elements.
@@ -1084,6 +1173,12 @@ bool Taml::generateTamlSchema( const char* pFilename )
             customSchemaFn( pType, pSequenceElement );
         }
 
+        // Generate field attribute group.
+        TiXmlElement* pFieldAttributeGroupElement = new TiXmlElement( "xs:attributeGroup" );
+        dSprintf( buffer, sizeof(buffer), "%s_Fields", pType->getClassName() );
+        pFieldAttributeGroupElement->SetAttribute( "name", buffer );
+        pSchemaElement->LinkEndChild( pFieldAttributeGroupElement );
+
         // Fetch field list.
         const AbstractClassRep::FieldList& fields = pType->mFieldList;
 
@@ -1101,6 +1196,10 @@ bool Taml::generateTamlSchema( const char* pFilename )
                 field.type == AbstractClassRep::StartGroupFieldType ||
                 field.type == AbstractClassRep::EndGroupFieldType )
             continue;
+
+            // Skip if the field root is not this type.
+            if ( pType->findFieldRoot( field.pFieldname ) != pType )
+                continue;
 
             // Add attribute element.
             TiXmlElement* pAttributeElement = new TiXmlElement( "xs:attribute" );
@@ -1176,6 +1275,14 @@ bool Taml::generateTamlSchema( const char* pFilename )
                 {
                     pFieldTypeDescription = "RectF_ConsoleType";
                 }
+                else if( fieldType == TypeColorF )
+                {
+                    pFieldTypeDescription = "ColorF_ConsoleType";
+                }
+                else if( fieldType == TypeColorI )
+                {
+                    pFieldTypeDescription = "ColorI_ConsoleType";
+                }
                 else if(    fieldType == TypeAssetId ||
                             fieldType == TypeImageAssetPtr ||
                             fieldType == TypeAnimationAssetPtr ||
@@ -1189,7 +1296,40 @@ bool Taml::generateTamlSchema( const char* pFilename )
             }
 
             pAttributeElement->SetAttribute( "use", "optional" );
-            pComplexTypeElement->LinkEndChild( pAttributeElement );
+            pFieldAttributeGroupElement->LinkEndChild( pAttributeElement );
+        }
+
+        // Is this the SimObject Type?
+        if ( pType == pSimObjectType )
+        {
+            // Yes, so add reserved Taml field attributes here...
+
+            // Add Taml "Name" attribute element.
+            TiXmlElement* pNameAttributeElement = new TiXmlElement( "xs:attribute" );
+            pNameAttributeElement->SetAttribute( "name", TAML_OBJECTNAME_ATTRIBUTE_NAME );
+            pNameAttributeElement->SetAttribute( "type", "xs:normalizedString" );
+            pFieldAttributeGroupElement->LinkEndChild( pNameAttributeElement );
+
+            // Add Taml "TamlId" attribute element.
+            TiXmlElement* pTamlIdAttributeElement = new TiXmlElement( "xs:attribute" );
+            pTamlIdAttributeElement->SetAttribute( "name", TAML_ID_ATTRIBUTE_NAME );
+            pTamlIdAttributeElement->SetAttribute( "type", "xs:nonNegativeInteger" );
+            pFieldAttributeGroupElement->LinkEndChild( pTamlIdAttributeElement );
+
+            // Add Taml "TamlRefId" attribute element.
+            TiXmlElement* pTamlRefIdAttributeElement = new TiXmlElement( "xs:attribute" );
+            pTamlRefIdAttributeElement->SetAttribute( "name", TAML_REFID_ATTRIBUTE_NAME );
+            pTamlRefIdAttributeElement->SetAttribute( "type", "xs:nonNegativeInteger" );
+            pFieldAttributeGroupElement->LinkEndChild( pTamlRefIdAttributeElement );
+        }
+
+        // Add attribute group types.
+        for ( AbstractClassRep* pAttributeGroupsType = pType; pAttributeGroupsType != NULL; pAttributeGroupsType = pAttributeGroupsType->getParentClass() )
+        {
+            TiXmlElement* pFieldAttributeGroupRefElement = new TiXmlElement( "xs:attributeGroup" );
+            dSprintf( buffer, sizeof(buffer), "%s_Fields", pAttributeGroupsType->getClassName() );
+            pFieldAttributeGroupRefElement->SetAttribute( "ref", buffer );
+            pComplexTypeElement->LinkEndChild( pFieldAttributeGroupRefElement );
         }
 
         // Add "any" attribute element (dynamic fields).
@@ -1198,19 +1338,6 @@ bool Taml::generateTamlSchema( const char* pFilename )
         pComplexTypeElement->LinkEndChild( pAnyAttributeElement );
     }
 
-    // Expand the file-name into the file-path buffer.
-    char filePathBuffer[1024];
-    Con::expandPath( filePathBuffer, sizeof(filePathBuffer), pFilename );
-
-    FileStream stream;
-
-    // File opened?
-    if ( !stream.open( filePathBuffer, FileStream::Write ) )
-    {
-        // No, so warn.
-        Con::warnf("Taml::GenerateTamlSchema() - Could not open filename '%s' for write.", filePathBuffer );
-        return false;
-    }
     // Write the schema document.
     schemaDocument.SaveFile( stream );
 
@@ -1218,4 +1345,43 @@ bool Taml::generateTamlSchema( const char* pFilename )
     stream.close();
 
     return true;
+}
+
+//-----------------------------------------------------------------------------
+
+void Taml::WriteUnrestrictedCustomTamlSchema( const char* pCustomNodeName, const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pCustomNodeName != NULL, "Taml::WriteDefaultCustomTamlSchema() - Node name cannot be NULL." );
+    AssertFatal( pClassRep != NULL,  "Taml::WriteDefaultCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "Taml::WriteDefaultCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    char buffer[1024];
+
+    // Add custom type element.
+    TiXmlElement* pCustomElement = new TiXmlElement( "xs:element" );
+    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), pCustomNodeName  );
+    pCustomElement->SetAttribute( "name", buffer );
+    pCustomElement->SetAttribute( "minOccurs", 0 );
+    pCustomElement->SetAttribute( "maxOccurs", 1 );
+    pParentElement->LinkEndChild( pCustomElement );
+
+    // Add complex type element.
+    TiXmlElement* pComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pCustomElement->LinkEndChild( pComplexTypeElement );
+
+    // Add choice element.
+    TiXmlElement* pChoiceElement = new TiXmlElement( "xs:choice" );
+    pChoiceElement->SetAttribute( "minOccurs", 0 );
+    pChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
+    pComplexTypeElement->LinkEndChild( pChoiceElement );
+
+    // Add sequence element.
+    TiXmlElement* pSequenceElement = new TiXmlElement( "xs:sequence" );
+    pChoiceElement->LinkEndChild( pSequenceElement );
+
+    // Add "any" element.
+    TiXmlElement* pAnyElement = new TiXmlElement( "xs:any" );
+    pAnyElement->SetAttribute( "processContents", "skip" );
+    pSequenceElement->LinkEndChild( pAnyElement );
 }

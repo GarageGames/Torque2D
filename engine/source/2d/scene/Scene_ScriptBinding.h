@@ -3167,3 +3167,40 @@ ConsoleMethod(Scene, create, const char*, 3, 3, "(type) Creates the specified sc
     return pSceneObject == NULL ? NULL : pSceneObject->getIdString();
 }
 
+ConsoleMethod(Scene, getRevoluteJointAngle, const char*, 3, 3,  "(jointId) Gets the current angle of a revolute joint.\n"
+                                                                        "@param jointId The Id of the joint to use.\n"
+                                                                    "@return Returns the joint angle in degrees (not Rad" )
+{
+    // Fetch joint Id.
+    const S32 jointId = dAtoi(argv[2]);
+
+    // Args.
+    F32 currentAngle;
+
+    // Access joint.
+	currentAngle = object->getRevoluteJointAngle( jointId);
+    
+    // Format output.
+    char* pBuffer = Con::getReturnBuffer(64);
+    dSprintf( pBuffer, 64, "%g", mRadToDeg(currentAngle) );
+    return pBuffer;
+}
+
+ConsoleMethod(Scene, getRevoluteJointSpeed, const char*, 3, 3,  "(jointId) Gets the current speed of a revolute joint.\n"
+                                                                        "@param jointId The Id of the joint to use.\n"
+                                                                    "@return Returns the joint speed as Angular Velocity" )
+{
+    // Fetch joint Id.
+    const S32 jointId = dAtoi(argv[2]);
+
+    // Args.
+    F32 angularVel;
+
+    // Access joint.
+	angularVel = object->getRevoluteJointSpeed( jointId);
+    
+    // Format output.
+    char* pBuffer = Con::getReturnBuffer(64);
+    dSprintf( pBuffer, 64, "%g", angularVel);
+    return pBuffer;
+}
