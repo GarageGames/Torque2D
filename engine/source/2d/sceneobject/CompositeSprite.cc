@@ -409,18 +409,8 @@ void CompositeSprite::onTamlCustomWrite( TamlCustomNodes& customNodes )
     // Call parent.
     Parent::onTamlCustomWrite( customNodes );
 
-    // Fetch sprite count.
-    const U32 spriteCount = getSpriteCount();
-
-    // Finish if no sprites.
-    if ( spriteCount == 0 )
-        return;
-
-    // Add sprites node.
-    TamlCustomNode* pSpritesNode = customNodes.addNode( StringTable->insert("Sprites") );
-
     // Write node with sprite batch.
-    SpriteBatch::onTamlCustomWrite( pSpritesNode );
+    SpriteBatch::onTamlCustomWrite( customNodes );
 }
 
 //-----------------------------------------------------------------------------
@@ -430,13 +420,6 @@ void CompositeSprite::onTamlCustomRead( const TamlCustomNodes& customNodes )
     // Call parent.
     Parent::onTamlCustomRead( customNodes );
 
-    // Find sprites custom node.
-    const TamlCustomNode* pSpritesNode = customNodes.findNode( StringTable->insert("Sprites") );
-
-    // Finish if we don't have the node.
-    if ( pSpritesNode == NULL )
-        return;
-
     // Read node with sprite batch.
-    SpriteBatch::onTamlCustomRead( pSpritesNode );
+    SpriteBatch::onTamlCustomRead( customNodes );
 }

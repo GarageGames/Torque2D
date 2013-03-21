@@ -193,8 +193,8 @@ protected:
     void createSpriteBatchQuery( void );
     void destroySpriteBatchQuery( void );
 
-    void onTamlCustomWrite( TamlCustomNode* pSpritesNode );
-    void onTamlCustomRead( const TamlCustomNode* pSpritesNode );
+    void onTamlCustomWrite( TamlCustomNodes& customNodes  );
+    void onTamlCustomRead( const TamlCustomNodes& customNodes );
 
 private:
     bool destroySprite( const U32 batchId );

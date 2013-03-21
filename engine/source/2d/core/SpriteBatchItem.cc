@@ -34,6 +34,8 @@
 
 //-----------------------------------------------------------------------------
 
+StringTableEntry spritesItemTypeName                = StringTable->insert( "Sprite" );
+
 static StringTableEntry spriteNameName              = StringTable->insert("Name");
 static StringTableEntry spriteLogicalPositionName   = StringTable->insert("LogicalPosition");
 static StringTableEntry spriteVisibleName           = StringTable->insert("Visible");
@@ -301,8 +303,11 @@ void SpriteBatchItem::updateWorldTransform( const U32 batchTransformId )
 
 //------------------------------------------------------------------------------
 
-void SpriteBatchItem::onTamlCustomWrite( TamlCustomNode* pSpriteNode )
+void SpriteBatchItem::onTamlCustomWrite( TamlCustomNode* pParentNode )
 {
+    // Add sprite node.
+    TamlCustomNode* pSpriteNode = pParentNode->addNode( spritesItemTypeName );
+
     // Write name.
     if ( getName() != StringTable->EmptyString )
         pSpriteNode->addField( spriteNameName, getName() );
