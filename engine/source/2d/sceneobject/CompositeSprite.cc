@@ -81,10 +81,6 @@ const char* CompositeSprite::getBatchLayoutTypeDescription(const CompositeSprite
     return StringTable->EmptyString;
 }
 
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_CONOBJECT(CompositeSprite);
-
 //------------------------------------------------------------------------------
 
 CompositeSprite::CompositeSprite() :
@@ -423,3 +419,19 @@ void CompositeSprite::onTamlCustomRead( const TamlCustomNodes& customNodes )
     // Read node with sprite batch.
     SpriteBatch::onTamlCustomRead( customNodes );
 }
+
+//-----------------------------------------------------------------------------
+
+static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "CompositeSprite::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "CompositeSprite::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    // Write sprite batch.
+    SpriteBatch::WriteCustomTamlSchema( pClassRep, pParentElement );
+}
+
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_CONOBJECT_SCHEMA(CompositeSprite, WriteCustomTamlSchema);

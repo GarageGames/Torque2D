@@ -91,8 +91,6 @@ const S32 INVALID_COLLISION_SHAPE_INDEX = -1;
 extern EnumTable bodyTypeTable;
 extern EnumTable srcBlendFactorTable;
 extern EnumTable dstBlendFactorTable;
-extern EnumTable srcBlendFactorTable;
-extern EnumTable dstBlendFactorTable;
 
 //-----------------------------------------------------------------------------
 

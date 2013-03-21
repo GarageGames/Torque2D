@@ -179,6 +179,8 @@ public:
     void setSpriteName( const char* pName );
     StringTableEntry getSpriteName( void ) const;
 
+    static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement );
+
 protected:
     SpriteBatchItem* createSprite( void );
     SpriteBatchItem* findSpritePosition( const SpriteBatchItem::LogicalPosition& logicalPosition );

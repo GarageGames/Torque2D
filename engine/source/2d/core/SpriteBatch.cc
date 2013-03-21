@@ -1236,6 +1236,68 @@ void SpriteBatch::destroySpriteBatchQuery( void )
 
 //------------------------------------------------------------------------------
 
+bool SpriteBatch::destroySprite( const U32 batchId )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(SpriteBatch_DestroySprite);
+
+    // Find sprite.
+    typeSpriteBatchHash::iterator spriteItr = mSprites.find( batchId );
+
+    // Finish if sprite not found.
+    if ( spriteItr == mSprites.end() )
+        return false;
+
+    // Find sprite.    
+    SpriteBatchItem* pSpriteBatchItem = spriteItr->value;
+
+    // Sanity!
+    AssertFatal( pSpriteBatchItem != NULL, "SpriteBatch::destroySprite() - Found sprite but it was NULL." );
+
+    // Cache sprite.
+    SpriteBatchItemFactory.cacheObject( pSpriteBatchItem );
+
+    // Remove from sprites.
+    mSprites.erase( batchId );
+
+    return true;
+}
+
+//------------------------------------------------------------------------------
+
+bool SpriteBatch::checkSpriteSelected( void ) const
+{
+    // Finish if a sprite is selected.
+    if ( mSelectedSprite != NULL )
+        return true;
+
+    // No, so warn,
+    Con::warnf( "Cannot perform sprite operation no sprite is selected." );
+
+    return false;
+}
+
+//------------------------------------------------------------------------------
+
+b2AABB SpriteBatch::calculateLocalAABB( const b2AABB& renderAABB )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(SpriteBatch_CalculateLocalAABB);
+
+    // Calculate local OOBB.
+    b2Vec2 localOOBB[4];
+    CoreMath::mAABBtoOOBB( renderAABB, localOOBB );
+    CoreMath::mCalculateInverseOOBB( localOOBB, mBatchTransform, localOOBB );
+
+    // Calculate local AABB.
+    b2AABB localAABB;
+    CoreMath::mOOBBtoAABB( localOOBB, localAABB );
+    
+    return localAABB;
+}
+
+//------------------------------------------------------------------------------
+
 void SpriteBatch::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
@@ -1321,62 +1383,32 @@ void SpriteBatch::onTamlCustomRead( const TamlCustomNodes& customNodes )
 
 //------------------------------------------------------------------------------
 
-bool SpriteBatch::destroySprite( const U32 batchId )
+void SpriteBatch::WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
 {
-    // Debug Profiling.
-    PROFILE_SCOPE(SpriteBatch_DestroySprite);
-
-    // Find sprite.
-    typeSpriteBatchHash::iterator spriteItr = mSprites.find( batchId );
-
-    // Finish if sprite not found.
-    if ( spriteItr == mSprites.end() )
-        return false;
-
-    // Find sprite.    
-    SpriteBatchItem* pSpriteBatchItem = spriteItr->value;
-
     // Sanity!
-    AssertFatal( pSpriteBatchItem != NULL, "SpriteBatch::destroySprite() - Found sprite but it was NULL." );
+    AssertFatal( pClassRep != NULL,  "SpriteBatch::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "SpriteBatch::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
 
-    // Cache sprite.
-    SpriteBatchItemFactory.cacheObject( pSpriteBatchItem );
+    char buffer[1024];
 
-    // Remove from sprites.
-    mSprites.erase( batchId );
+    // Create sprite batch node element.
+    TiXmlElement* pBatchNodeElement = new TiXmlElement( "xs:element" );
+    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), spritesNodeName );
+    pBatchNodeElement->SetAttribute( "name", buffer );
+    pBatchNodeElement->SetAttribute( "minOccurs", 0 );
+    pBatchNodeElement->SetAttribute( "maxOccurs", 1 );
+    pParentElement->LinkEndChild( pBatchNodeElement );
 
-    return true;
-}
-
-//------------------------------------------------------------------------------
-
-bool SpriteBatch::checkSpriteSelected( void ) const
-{
-    // Finish if a sprite is selected.
-    if ( mSelectedSprite != NULL )
-        return true;
-
-    // No, so warn,
-    Con::warnf( "Cannot perform sprite operation no sprite is selected." );
-
-    return false;
-}
-
-//------------------------------------------------------------------------------
-
-b2AABB SpriteBatch::calculateLocalAABB( const b2AABB& renderAABB )
-{
-    // Debug Profiling.
-    PROFILE_SCOPE(SpriteBatch_CalculateLocalAABB);
-
-    // Calculate local OOBB.
-    b2Vec2 localOOBB[4];
-    CoreMath::mAABBtoOOBB( renderAABB, localOOBB );
-    CoreMath::mCalculateInverseOOBB( localOOBB, mBatchTransform, localOOBB );
-
-    // Calculate local AABB.
-    b2AABB localAABB;
-    CoreMath::mOOBBtoAABB( localOOBB, localAABB );
+    // Create complex type.
+    TiXmlElement* pBatchNodeComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pBatchNodeElement->LinkEndChild( pBatchNodeComplexTypeElement );
     
-    return localAABB;
+    // Create choice element.
+    TiXmlElement* pBatchNodeChoiceElement = new TiXmlElement( "xs:choice" );
+    pBatchNodeChoiceElement->SetAttribute( "minOccurs", 0 );
+    pBatchNodeChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
+    pBatchNodeComplexTypeElement->LinkEndChild( pBatchNodeChoiceElement );
+
+    // Write sprite batch item.
+    SpriteBatchItem::WriteCustomTamlSchema( pClassRep, pBatchNodeChoiceElement );
 }
