@@ -81,10 +81,6 @@ const char* CompositeSprite::getBatchLayoutTypeDescription(const CompositeSprite
     return StringTable->EmptyString;
 }
 
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_CONOBJECT(CompositeSprite);
-
 //------------------------------------------------------------------------------
 
 CompositeSprite::CompositeSprite() :
@@ -108,8 +104,8 @@ void CompositeSprite::initPersistFields()
     Parent::initPersistFields();
 
     /// Defaults.
-    addProtectedField( "DefaultSpriteStride", TypeVector2, Offset(mDefaultSpriteStride, CompositeSprite), &defaultProtectedSetFn, &defaultProtectedGetFn, &defaultProtectedWriteFn, "");
-    addProtectedField( "DefaultSpriteSize", TypeVector2, Offset(mDefaultSpriteSize, CompositeSprite), &defaultProtectedSetFn, &defaultProtectedGetFn, &defaultProtectedWriteFn, "");
+    addProtectedField( "DefaultSpriteStride", TypeVector2, Offset(mDefaultSpriteStride, CompositeSprite), &defaultProtectedSetFn, &defaultProtectedGetFn, &writeDefaultSpriteStride, "");
+    addProtectedField( "DefaultSpriteSize", TypeVector2, Offset(mDefaultSpriteSize, CompositeSprite), &defaultProtectedSetFn, &defaultProtectedGetFn, &writeDefaultSpriteSize, "");
     addProtectedField( "DefaultSpriteAngle", TypeF32, Offset(mDefaultSpriteSize, CompositeSprite), &setDefaultSpriteAngle, &getDefaultSpriteAngle, &writeDefaultSpriteAngle, "");
     addProtectedField( "BatchLayout", TypeEnum, Offset(mBatchLayoutType, CompositeSprite), &setBatchLayout, &defaultProtectedGetFn, &writeBatchLayout, 1, &batchLayoutTypeTable, "");
     addProtectedField( "BatchCulling", TypeBool, Offset(mBatchCulling, CompositeSprite), &setBatchCulling, &defaultProtectedGetFn, &writeBatchCulling, "");
@@ -423,3 +419,19 @@ void CompositeSprite::onTamlCustomRead( const TamlCustomNodes& customNodes )
     // Read node with sprite batch.
     SpriteBatch::onTamlCustomRead( customNodes );
 }
+
+//-----------------------------------------------------------------------------
+
+static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "CompositeSprite::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "CompositeSprite::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    // Write sprite batch.
+    SpriteBatch::WriteCustomTamlSchema( pClassRep, pParentElement );
+}
+
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_CONOBJECT_SCHEMA(CompositeSprite, WriteCustomTamlSchema);

@@ -294,6 +294,8 @@ public:
     void prepareRender( SceneRenderRequest* pSceneRenderRequest, const U32 batchTransformId );
     void render( BatchRender* pBatchRenderer, const SceneRenderRequest* pSceneRenderRequest, const U32 batchTransformId );
 
+    static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement );
+
 protected:
     void setBatchParent( SpriteBatch* pSpriteBatch, const U32 batchId );
     inline void setProxyId( const S32 proxyId ) { mProxyId = proxyId; }
