@@ -61,6 +61,10 @@
 
 //-----------------------------------------------------------------------------
 
+#define TAML_SCHEMA_VARIABLE            "$pref::T2D::TAMLSchema"
+
+//-----------------------------------------------------------------------------
+
 class TamlXmlWriter;
 class TamlXmlReader;
 class TamlBinaryWriter;
@@ -193,7 +197,7 @@ public:
     static const char* getFormatModeDescription( const TamlFormatMode formatMode );
 
     /// Schema generation.
-    static bool generateTamlSchema( const char* pFilename );
+    static bool generateTamlSchema();
 
     /// Write a unrestricted custom Taml schema.
     static void WriteUnrestrictedCustomTamlSchema( const char* pCustomNodeName, const AbstractClassRep* pClassRep, TiXmlElement* pParentElement );

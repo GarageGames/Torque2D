@@ -856,10 +856,32 @@ SimObject* Taml::createType( StringTableEntry typeName, const Taml* pTaml, const
 
 //-----------------------------------------------------------------------------
 
-bool Taml::generateTamlSchema( const char* pFilename )
+bool Taml::generateTamlSchema()
 {
-    // Sanity!
-    AssertFatal( pFilename != NULL, "Taml::generateTamlSchema() - Cannot write a NULL filename." );
+    // Fetch any TAML Schema file reference.
+    const char* pTamlSchemaFile = Con::getVariable( TAML_SCHEMA_VARIABLE );
+
+    // Do we have a schema file reference?
+    if ( pTamlSchemaFile == NULL || *pTamlSchemaFile == 0 )
+    {
+        // No, so warn.
+        Con::warnf( "Taml::generateTamlSchema() - Cannot write a TAML schema as no schema variable is set ('%s').", TAML_SCHEMA_VARIABLE );
+        return false;
+    }
+
+    // Expand the file-name into the file-path buffer.
+    char filePathBuffer[1024];
+    Con::expandPath( filePathBuffer, sizeof(filePathBuffer), pTamlSchemaFile );
+
+    FileStream stream;
+
+    // File opened?
+    if ( !stream.open( filePathBuffer, FileStream::Write ) )
+    {
+        // No, so warn.
+        Con::warnf("Taml::GenerateTamlSchema() - Could not open filename '%s' for write.", filePathBuffer );
+        return false;
+    }
 
     // Create document.
     TiXmlDocument schemaDocument;
@@ -1287,19 +1309,6 @@ bool Taml::generateTamlSchema( const char* pFilename )
         pComplexTypeElement->LinkEndChild( pAnyAttributeElement );
     }
 
-    // Expand the file-name into the file-path buffer.
-    char filePathBuffer[1024];
-    Con::expandPath( filePathBuffer, sizeof(filePathBuffer), pFilename );
-
-    FileStream stream;
-
-    // File opened?
-    if ( !stream.open( filePathBuffer, FileStream::Write ) )
-    {
-        // No, so warn.
-        Con::warnf("Taml::GenerateTamlSchema() - Could not open filename '%s' for write.", filePathBuffer );
-        return false;
-    }
     // Write the schema document.
     schemaDocument.SaveFile( stream );
 
