@@ -682,3 +682,95 @@ void ParticleAssetField::onTamlCustomRead( const TamlCustomNode* pCustomNode )
     // Set the data keys.
     mDataKeys = keys;
 }
+
+//-----------------------------------------------------------------------------
+
+void ParticleAssetField::WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "ParticleAssetField::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "ParticleAssetField::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    // Create Field element.
+    TiXmlElement* pFieldElement = new TiXmlElement( "xs:element" );
+    pFieldElement->SetAttribute( "name", getFieldName() );
+    pFieldElement->SetAttribute( "minOccurs", 0 );
+    pFieldElement->SetAttribute( "maxOccurs", 1 );
+    pParentElement->LinkEndChild( pFieldElement );
+
+    // Create complex type Element.
+    TiXmlElement* pFieldComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pFieldElement->LinkEndChild( pFieldComplexTypeElement );
+
+    // Create choice element.
+    TiXmlElement* pFieldChoiceElement = new TiXmlElement( "xs:choice" );
+    pFieldChoiceElement->SetAttribute( "minOccurs", 0 );
+    pFieldChoiceElement->SetAttribute( "maxOccurs", 1 );
+    pFieldComplexTypeElement->LinkEndChild( pFieldChoiceElement );
+
+    // Create key element.
+    TiXmlElement* pKeyElement = new TiXmlElement( "xs:element" );
+    pKeyElement->SetAttribute( "name", particleAssetFieldDataKeyName );
+    pKeyElement->SetAttribute( "minOccurs", 0 );
+    pKeyElement->SetAttribute( "maxOccurs", "unbounded" );
+    pFieldChoiceElement->LinkEndChild( pKeyElement );
+
+    // Create complex type Element.
+    TiXmlElement* pKeyComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pKeyElement->LinkEndChild( pKeyComplexTypeElement );
+
+    // Create "Time" attribute.
+    TiXmlElement* pKeyTimeAttribute = new TiXmlElement( "xs:attribute" );
+    pKeyTimeAttribute->SetAttribute( "name", particleAssetFieldDataKeyTimeName );
+    pKeyComplexTypeElement->LinkEndChild( pKeyTimeAttribute );
+    TiXmlElement* pKeyTimeSimpleType = new TiXmlElement( "xs:simpleType" );
+    pKeyTimeAttribute->LinkEndChild( pKeyTimeSimpleType );
+    TiXmlElement* pKeyTimeRestriction = new TiXmlElement( "xs:restriction" );
+    pKeyTimeRestriction->SetAttribute( "base", "xs:float" );
+    pKeyTimeSimpleType->LinkEndChild( pKeyTimeRestriction );
+    TiXmlElement* pKeyTimeMinRestriction = new TiXmlElement( "xs:minInclusive" );
+    pKeyTimeMinRestriction->SetAttribute( "value", "0" );
+    pKeyTimeRestriction->LinkEndChild( pKeyTimeMinRestriction );
+
+    // Create "Value" attribute.
+    TiXmlElement* pKeyValueAttribute = new TiXmlElement( "xs:attribute" );
+    pKeyValueAttribute->SetAttribute( "name", particleAssetFieldDataKeyValueName );
+    pKeyValueAttribute->SetAttribute( "type", "xs:float" );
+    pKeyComplexTypeElement->LinkEndChild( pKeyValueAttribute );
+
+    // Create "Min Value" attribute.
+    TiXmlElement* pFieldMinValue = new TiXmlElement( "xs:attribute" );
+    pFieldMinValue->SetAttribute( "name", particleAssetFieldMinValueName );
+    pFieldMinValue->SetAttribute( "type", "xs:float" );
+    pFieldComplexTypeElement->LinkEndChild( pFieldMinValue );
+
+    // Create "Max Value" attribute.
+    TiXmlElement* pFieldMaxValue = new TiXmlElement( "xs:attribute" );
+    pFieldMaxValue->SetAttribute( "name", particleAssetFieldMaxValueName );
+    pFieldMaxValue->SetAttribute( "type", "xs:float" );
+    pFieldComplexTypeElement->LinkEndChild( pFieldMaxValue );
+
+    // Create "Max Time" attribute.
+    TiXmlElement* pFieldMaxTime = new TiXmlElement( "xs:attribute" );
+    pFieldMaxTime->SetAttribute( "name", particleAssetFieldMaxTimeName );
+    pFieldMaxTime->SetAttribute( "type", "xs:float" );
+    pFieldComplexTypeElement->LinkEndChild( pFieldMaxTime );
+
+    // Create "Default Value" attribute.
+    TiXmlElement* pFieldDefaultValue = new TiXmlElement( "xs:attribute" );
+    pFieldDefaultValue->SetAttribute( "name", particleAssetFieldDefaultValueName );
+    pFieldDefaultValue->SetAttribute( "type", "xs:float" );
+    pFieldComplexTypeElement->LinkEndChild( pFieldDefaultValue );
+
+    // Create "Value Scale" attribute.
+    TiXmlElement* pFieldValueScale = new TiXmlElement( "xs:attribute" );
+    pFieldValueScale->SetAttribute( "name", particleAssetFieldValueScaleName );
+    pFieldValueScale->SetAttribute( "type", "xs:float" );
+    pFieldComplexTypeElement->LinkEndChild( pFieldValueScale );
+
+    // Create "Repeat Time" attribute.
+    TiXmlElement* pFieldRepeatTime = new TiXmlElement( "xs:attribute" );
+    pFieldRepeatTime->SetAttribute( "name", particleAssetFieldRepeatTimeName );
+    pFieldRepeatTime->SetAttribute( "type", "xs:float" );
+    pFieldComplexTypeElement->LinkEndChild( pFieldRepeatTime );
+}
