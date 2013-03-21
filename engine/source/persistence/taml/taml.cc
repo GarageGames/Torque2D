@@ -898,6 +898,11 @@ bool Taml::generateTamlSchema()
     // Fetch class-rep root.
     AbstractClassRep* pRootType = AbstractClassRep::getClassList();
 
+    // Fetch SimObject class rep.
+    AbstractClassRep* pSimObjectType = AbstractClassRep::findClassRep( "SimObject" );
+    // Sanity!
+    AssertFatal( pSimObjectType != NULL, "Taml::GenerateTamlSchema() - Could not find SimObject class rep." );
+
     // Reset scratch state.
     char buffer[1024];
     HashMap<AbstractClassRep*, StringTableEntry> childGroups;
@@ -1292,6 +1297,30 @@ bool Taml::generateTamlSchema()
 
             pAttributeElement->SetAttribute( "use", "optional" );
             pFieldAttributeGroupElement->LinkEndChild( pAttributeElement );
+        }
+
+        // Is this the SimObject Type?
+        if ( pType == pSimObjectType )
+        {
+            // Yes, so add reserved Taml field attributes here...
+
+            // Add Taml "Name" attribute element.
+            TiXmlElement* pNameAttributeElement = new TiXmlElement( "xs:attribute" );
+            pNameAttributeElement->SetAttribute( "name", TAML_OBJECTNAME_ATTRIBUTE_NAME );
+            pNameAttributeElement->SetAttribute( "type", "xs:normalizedString" );
+            pFieldAttributeGroupElement->LinkEndChild( pNameAttributeElement );
+
+            // Add Taml "TamlId" attribute element.
+            TiXmlElement* pTamlIdAttributeElement = new TiXmlElement( "xs:attribute" );
+            pTamlIdAttributeElement->SetAttribute( "name", TAML_ID_ATTRIBUTE_NAME );
+            pTamlIdAttributeElement->SetAttribute( "type", "xs:nonNegativeInteger" );
+            pFieldAttributeGroupElement->LinkEndChild( pTamlIdAttributeElement );
+
+            // Add Taml "TamlRefId" attribute element.
+            TiXmlElement* pTamlRefIdAttributeElement = new TiXmlElement( "xs:attribute" );
+            pTamlRefIdAttributeElement->SetAttribute( "name", TAML_REFID_ATTRIBUTE_NAME );
+            pTamlRefIdAttributeElement->SetAttribute( "type", "xs:nonNegativeInteger" );
+            pFieldAttributeGroupElement->LinkEndChild( pTamlRefIdAttributeElement );
         }
 
         // Add attribute group types.
