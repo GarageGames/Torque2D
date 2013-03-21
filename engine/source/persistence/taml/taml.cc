@@ -1308,3 +1308,42 @@ bool Taml::generateTamlSchema( const char* pFilename )
 
     return true;
 }
+
+//-----------------------------------------------------------------------------
+
+void Taml::WriteUnrestrictedCustomTamlSchema( const char* pCustomNodeName, const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pCustomNodeName != NULL, "Taml::WriteDefaultCustomTamlSchema() - Node name cannot be NULL." );
+    AssertFatal( pClassRep != NULL,  "Taml::WriteDefaultCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "Taml::WriteDefaultCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    char buffer[1024];
+
+    // Add custom type element.
+    TiXmlElement* pCustomElement = new TiXmlElement( "xs:element" );
+    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), pCustomNodeName  );
+    pCustomElement->SetAttribute( "name", buffer );
+    pCustomElement->SetAttribute( "minOccurs", 0 );
+    pCustomElement->SetAttribute( "maxOccurs", 1 );
+    pParentElement->LinkEndChild( pCustomElement );
+
+    // Add complex type element.
+    TiXmlElement* pComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pCustomElement->LinkEndChild( pComplexTypeElement );
+
+    // Add choice element.
+    TiXmlElement* pChoiceElement = new TiXmlElement( "xs:choice" );
+    pChoiceElement->SetAttribute( "minOccurs", 0 );
+    pChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
+    pComplexTypeElement->LinkEndChild( pChoiceElement );
+
+    // Add sequence element.
+    TiXmlElement* pSequenceElement = new TiXmlElement( "xs:sequence" );
+    pChoiceElement->LinkEndChild( pSequenceElement );
+
+    // Add "any" element.
+    TiXmlElement* pAnyElement = new TiXmlElement( "xs:any" );
+    pAnyElement->SetAttribute( "processContents", "skip" );
+    pSequenceElement->LinkEndChild( pAnyElement );
+}

@@ -4101,6 +4101,10 @@ const char* SceneObject::getDstBlendFactorDescription(const GLenum factor)
 
 static void WriteCircleCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
 {
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "SceneObject::WriteCircleCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "SceneObject::WriteCircleCustomTamlSchema() - Parent Element cannot be NULL." );
+
     // Create circle element.
     TiXmlElement* pCircleElement = new TiXmlElement( "xs:element" );
     pCircleElement->SetAttribute( "name", circleTypeName );
@@ -4181,6 +4185,10 @@ static void WriteCircleCustomTamlSchema( const AbstractClassRep* pClassRep, TiXm
 
 static void WritePolygonCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
 {
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "SceneObject::WritePolygonCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "SceneObject::WritePolygonCustomTamlSchema() - Parent Element cannot be NULL." );
+
     // Create polygon element.
     TiXmlElement* pPolygonElement = new TiXmlElement( "xs:element" );
     pPolygonElement->SetAttribute( "name", polygonTypeName );
@@ -4252,6 +4260,10 @@ static void WritePolygonCustomTamlSchema( const AbstractClassRep* pClassRep, TiX
 
 static void WriteChainCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
 {
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "SceneObject::WriteChainCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "SceneObject::WriteChainCustomTamlSchema() - Parent Element cannot be NULL." );
+
     // Create chain element.
     TiXmlElement* pChainElement = new TiXmlElement( "xs:element" );
     pChainElement->SetAttribute( "name", chainTypeName );
@@ -4337,6 +4349,10 @@ static void WriteChainCustomTamlSchema( const AbstractClassRep* pClassRep, TiXml
 
 static void WriteEdgeCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
 {
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "SceneObject::WriteEdgeCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "SceneObject::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
     // Create edge element.
     TiXmlElement* pEdgeElement = new TiXmlElement( "xs:element" );
     pEdgeElement->SetAttribute( "name", edgeTypeName );
@@ -4420,6 +4436,10 @@ static void WriteEdgeCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlE
 
 static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
 {
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "SceneObject::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "SceneObject::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
     char buffer[1024];
 
     // Create shapes node element.

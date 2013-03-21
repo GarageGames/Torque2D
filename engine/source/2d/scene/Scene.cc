@@ -5352,6 +5352,10 @@ const char* Scene::getPickModeDescription( Scene::PickMode pickMode )
 
 static void WriteJointsCustomTamlScehema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
 {
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "Taml::WriteJointsCustomTamlScehema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "Taml::WriteJointsCustomTamlScehema() - Parent Element cannot be NULL." );
+
     char buffer[1024];
 
     // Create joints node element.
@@ -5429,6 +5433,10 @@ static void WriteJointsCustomTamlScehema( const AbstractClassRep* pClassRep, TiX
 
 static void WriteControllersCustomTamlScehema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
 {
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "Taml::WriteControllersCustomTamlScehema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "Taml::WriteControllersCustomTamlScehema() - Parent Element cannot be NULL." );
+
     char buffer[1024];
 
     // Create controllers node element.
@@ -5477,6 +5485,10 @@ static void WriteControllersCustomTamlScehema( const AbstractClassRep* pClassRep
 
 static void WritePreloadsCustomTamlScehema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
 {
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "Taml::WritePreloadsCustomTamlScehema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "Taml::WritePreloadsCustomTamlScehema() - Parent Element cannot be NULL." );
+
     char buffer[1024];
 
     // Create preloads node element.
@@ -5518,6 +5530,10 @@ static void WritePreloadsCustomTamlScehema( const AbstractClassRep* pClassRep, T
 
 static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
 {
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "Taml::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "Taml::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
     WriteJointsCustomTamlScehema( pClassRep, pParentElement );
     WriteControllersCustomTamlScehema( pClassRep, pParentElement );
     WritePreloadsCustomTamlScehema( pClassRep, pParentElement );

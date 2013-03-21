@@ -195,6 +195,9 @@ public:
     /// Schema generation.
     static bool generateTamlSchema( const char* pFilename );
 
+    /// Write a unrestricted custom Taml schema.
+    static void WriteUnrestrictedCustomTamlSchema( const char* pCustomNodeName, const AbstractClassRep* pClassRep, TiXmlElement* pParentElement );
+
     /// Declare Console Object.
     DECLARE_CONOBJECT( Taml );
 };
