@@ -35,16 +35,18 @@
 #include "persistence/taml/tamlCustom.h"
 #endif
 
+#ifndef _TAML_H_
+#include "persistence/Taml/taml.h"
+#endif
+
 // Script bindings.
 #include "behaviorComponent_ScriptBinding.h"
 
 //-----------------------------------------------------------------------------
 
-#define BEHAVIOR_FIELDNAME              "Behavior"
-
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_CONOBJECT( BehaviorComponent );
+#define BEHAVIOR_ID_FIELD_NAME                  "Id"
+#define BEHAVIOR_NODE_NAME                      "Behaviors"
+#define BEHAVIOR_CONNECTION_TYPE_NAME           "Connection"
 
 //-----------------------------------------------------------------------------
 
@@ -885,6 +887,183 @@ const BehaviorComponent::typePortConnectionVector* BehaviorComponent::getBehavio
 
 //-----------------------------------------------------------------------------
 
+void BehaviorComponent::write( Stream &stream, U32 tabStop, U32 flags /* = 0 */ )
+{
+    // Export selected only?
+    if( ( flags & SelectedOnly ) && !isSelected() )
+    {
+        return;
+    }
+
+    if( mBehaviors.size() == 0 )
+    {
+        Parent::write( stream, tabStop, flags );
+        return;
+    }
+
+    // The work we want to perform here is in the Taml callback.
+    onTamlPreWrite();
+
+    // Write object.
+    Parent::write( stream, tabStop, flags );
+
+    // The work we want to perform here is in the Taml callback.
+    onTamlPostWrite();
+}
+
+//-----------------------------------------------------------------------------
+
+bool BehaviorComponent::handlesConsoleMethod( const char *fname, S32 *routingId )
+{
+
+   // CodeReview [6/25/2007 justind]
+   // If we're deleting the BehaviorComponent, don't forward the call to the
+   // behaviors, the parent onRemove will handle freeing them
+   // This should really be handled better, and is in the Parent implementation
+   // but behaviors are a special case because they always want to be called BEFORE
+   // the parent to act.
+   if( dStricmp( fname, "delete" ) == 0 )
+      return Parent::handlesConsoleMethod( fname, routingId );
+
+   for( SimSet::iterator nItr = mBehaviors.begin(); nItr != mBehaviors.end(); nItr++ )
+   {
+      SimObject *pComponent = dynamic_cast<SimObject *>(*nItr);
+      if( pComponent != NULL && pComponent->isMethod( fname ) )
+      {
+         *routingId = -2; // -2 denotes method on component
+         return true;
+      }
+   }
+
+   // Let parent handle it
+   return Parent::handlesConsoleMethod( fname, routingId );
+}
+
+//-----------------------------------------------------------------------------
+
+// Needed to be able to directly call execute on a Namespace::Entry
+extern ExprEvalState gEvalState;
+
+const char *BehaviorComponent::callOnBehaviors( U32 argc, const char *argv[] )
+{   
+    if( mBehaviors.empty() )   
+        return Parent::callOnBehaviors( argc, argv );
+      
+    // Copy the arguments to avoid weird clobbery situations.
+    FrameTemp<char *> argPtrs (argc);
+   
+    U32 strdupWatermark = FrameAllocator::getWaterMark();
+    for( U32 i = 0; i < argc; i++ )
+    {
+        argPtrs[i] = reinterpret_cast<char *>( FrameAllocator::alloc( dStrlen( argv[i] ) + 1 ) );
+        dStrcpy( argPtrs[i], argv[i] );
+    }
+
+    // Walk backwards through the list just as with components
+    const char* result = "";
+    bool handled = false;
+    for( SimSet::iterator i = (mBehaviors.end()-1); i >= mBehaviors.begin(); i-- )
+    {
+        BehaviorInstance *pBehavior = dynamic_cast<BehaviorInstance *>( *i );
+        AssertFatal( pBehavior, "BehaviorComponent::callOnBehaviors - Bad behavior instance in list." );
+        AssertFatal( pBehavior->getId() > 0, "Invalid id for behavior component" );
+
+        // Use the BehaviorInstance's namespace
+        Namespace *pNamespace = pBehavior->getNamespace();
+        if(!pNamespace)
+            continue;
+
+        // Lookup the Callback Namespace entry and then splice callback
+        const char *cbName = StringTable->insert(argv[0]);
+        Namespace::Entry *pNSEntry = pNamespace->lookup(cbName);
+        if( pNSEntry )
+        {
+            // Set %this to our BehaviorInstance's Object ID
+            argPtrs[1] = const_cast<char *>( pBehavior->getIdString() );
+
+            // Change the Current Console object, execute, restore Object
+            SimObject *save = gEvalState.thisObject;
+            gEvalState.thisObject = pBehavior;
+
+            result = pNSEntry->execute(argc, const_cast<const char **>( ~argPtrs ), &gEvalState);
+
+            gEvalState.thisObject = save;
+            handled = true;
+            break;
+        }
+    }
+
+    // If this wasn't handled by a behavior above then pass along to the parent DynamicConsoleMethodComponent
+    // to deal with it.  If the parent cannot handle the message it will return an error string.
+    if (!handled)
+    {
+        result = Parent::callOnBehaviors( argc, argv );
+    }
+
+    // Clean up.
+    FrameAllocator::setWaterMark( strdupWatermark );
+
+    return result;
+}
+
+//-----------------------------------------------------------------------------
+
+const char *BehaviorComponent::_callMethod( U32 argc, const char *argv[], bool callThis /* = true  */ )
+{   
+    if( mBehaviors.empty() )   
+        return Parent::_callMethod( argc, argv, callThis );
+     
+    // Copy the arguments to avoid weird clobbery situations.
+    FrameTemp<char *> argPtrs (argc);
+   
+    U32 strdupWatermark = FrameAllocator::getWaterMark();
+    for( U32 i = 0; i < argc; i++ )
+    {
+        argPtrs[i] = reinterpret_cast<char *>( FrameAllocator::alloc( dStrlen( argv[i] ) + 1 ) );
+        dStrcpy( argPtrs[i], argv[i] );
+    }
+
+    for( SimSet::iterator i = mBehaviors.begin(); i != mBehaviors.end(); i++ )
+    {
+        BehaviorInstance *pBehavior = dynamic_cast<BehaviorInstance *>( *i );
+        AssertFatal( pBehavior, "BehaviorComponent::_callMethod - Bad behavior instance in list." );
+        AssertFatal( pBehavior->getId() > 0, "Invalid id for behavior component" );
+
+        // Use the BehaviorInstance's namespace
+        Namespace *pNamespace = pBehavior->getNamespace();
+        if(!pNamespace)
+            continue;
+
+        // Lookup the Callback Namespace entry and then splice callback
+        const char *cbName = StringTable->insert(argv[0]);
+        Namespace::Entry *pNSEntry = pNamespace->lookup(cbName);
+        if( pNSEntry )
+        {
+            // Set %this to our BehaviorInstance's Object ID
+            argPtrs[1] = const_cast<char *>( pBehavior->getIdString() );
+
+            // Change the Current Console object, execute, restore Object
+            SimObject *save = gEvalState.thisObject;
+            gEvalState.thisObject = pBehavior;
+
+            pNSEntry->execute(argc, const_cast<const char **>( ~argPtrs ), &gEvalState);
+
+            gEvalState.thisObject = save;
+        }
+    }
+
+    // Pass this up to the parent since a BehaviorComponent is still a DynamicConsoleMethodComponent
+    // it needs to be able to contain other components and behave properly
+    const char* fnRet = Parent::_callMethod( argc, argv, callThis );
+
+    // Clean up.
+    FrameAllocator::setWaterMark( strdupWatermark );
+
+    return fnRet;
+}
+
+//-----------------------------------------------------------------------------
+
 void BehaviorComponent::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Call parent.
@@ -1224,177 +1403,16 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
 
 //-----------------------------------------------------------------------------
 
-void BehaviorComponent::write( Stream &stream, U32 tabStop, U32 flags /* = 0 */ )
+static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
 {
-    // Export selected only?
-    if( ( flags & SelectedOnly ) && !isSelected() )
-    {
-        return;
-    }
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "BehaviorComponent::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "BehaviorComponent::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
 
-    if( mBehaviors.size() == 0 )
-    {
-        Parent::write( stream, tabStop, flags );
-        return;
-    }
-
-    // The work we want to perform here is in the Taml callback.
-    onTamlPreWrite();
-
-    // Write object.
-    Parent::write( stream, tabStop, flags );
-
-    // The work we want to perform here is in the Taml callback.
-    onTamlPostWrite();
+    // Write an unrestricted custom Taml schema.
+    Taml::WriteUnrestrictedCustomTamlSchema( BEHAVIOR_NODE_NAME, pClassRep, pParentElement );
 }
 
 //-----------------------------------------------------------------------------
 
-bool BehaviorComponent::handlesConsoleMethod( const char *fname, S32 *routingId )
-{
-
-   // CodeReview [6/25/2007 justind]
-   // If we're deleting the BehaviorComponent, don't forward the call to the
-   // behaviors, the parent onRemove will handle freeing them
-   // This should really be handled better, and is in the Parent implementation
-   // but behaviors are a special case because they always want to be called BEFORE
-   // the parent to act.
-   if( dStricmp( fname, "delete" ) == 0 )
-      return Parent::handlesConsoleMethod( fname, routingId );
-
-   for( SimSet::iterator nItr = mBehaviors.begin(); nItr != mBehaviors.end(); nItr++ )
-   {
-      SimObject *pComponent = dynamic_cast<SimObject *>(*nItr);
-      if( pComponent != NULL && pComponent->isMethod( fname ) )
-      {
-         *routingId = -2; // -2 denotes method on component
-         return true;
-      }
-   }
-
-   // Let parent handle it
-   return Parent::handlesConsoleMethod( fname, routingId );
-}
-
-//-----------------------------------------------------------------------------
-
-// Needed to be able to directly call execute on a Namespace::Entry
-extern ExprEvalState gEvalState;
-
-const char *BehaviorComponent::callOnBehaviors( U32 argc, const char *argv[] )
-{   
-    if( mBehaviors.empty() )   
-        return Parent::callOnBehaviors( argc, argv );
-      
-    // Copy the arguments to avoid weird clobbery situations.
-    FrameTemp<char *> argPtrs (argc);
-   
-    U32 strdupWatermark = FrameAllocator::getWaterMark();
-    for( U32 i = 0; i < argc; i++ )
-    {
-        argPtrs[i] = reinterpret_cast<char *>( FrameAllocator::alloc( dStrlen( argv[i] ) + 1 ) );
-        dStrcpy( argPtrs[i], argv[i] );
-    }
-
-    // Walk backwards through the list just as with components
-    const char* result = "";
-    bool handled = false;
-    for( SimSet::iterator i = (mBehaviors.end()-1); i >= mBehaviors.begin(); i-- )
-    {
-        BehaviorInstance *pBehavior = dynamic_cast<BehaviorInstance *>( *i );
-        AssertFatal( pBehavior, "BehaviorComponent::callOnBehaviors - Bad behavior instance in list." );
-        AssertFatal( pBehavior->getId() > 0, "Invalid id for behavior component" );
-
-        // Use the BehaviorInstance's namespace
-        Namespace *pNamespace = pBehavior->getNamespace();
-        if(!pNamespace)
-            continue;
-
-        // Lookup the Callback Namespace entry and then splice callback
-        const char *cbName = StringTable->insert(argv[0]);
-        Namespace::Entry *pNSEntry = pNamespace->lookup(cbName);
-        if( pNSEntry )
-        {
-            // Set %this to our BehaviorInstance's Object ID
-            argPtrs[1] = const_cast<char *>( pBehavior->getIdString() );
-
-            // Change the Current Console object, execute, restore Object
-            SimObject *save = gEvalState.thisObject;
-            gEvalState.thisObject = pBehavior;
-
-            result = pNSEntry->execute(argc, const_cast<const char **>( ~argPtrs ), &gEvalState);
-
-            gEvalState.thisObject = save;
-            handled = true;
-            break;
-        }
-    }
-
-    // If this wasn't handled by a behavior above then pass along to the parent DynamicConsoleMethodComponent
-    // to deal with it.  If the parent cannot handle the message it will return an error string.
-    if (!handled)
-    {
-        result = Parent::callOnBehaviors( argc, argv );
-    }
-
-    // Clean up.
-    FrameAllocator::setWaterMark( strdupWatermark );
-
-    return result;
-}
-
-//-----------------------------------------------------------------------------
-
-const char *BehaviorComponent::_callMethod( U32 argc, const char *argv[], bool callThis /* = true  */ )
-{   
-    if( mBehaviors.empty() )   
-        return Parent::_callMethod( argc, argv, callThis );
-     
-    // Copy the arguments to avoid weird clobbery situations.
-    FrameTemp<char *> argPtrs (argc);
-   
-    U32 strdupWatermark = FrameAllocator::getWaterMark();
-    for( U32 i = 0; i < argc; i++ )
-    {
-        argPtrs[i] = reinterpret_cast<char *>( FrameAllocator::alloc( dStrlen( argv[i] ) + 1 ) );
-        dStrcpy( argPtrs[i], argv[i] );
-    }
-
-    for( SimSet::iterator i = mBehaviors.begin(); i != mBehaviors.end(); i++ )
-    {
-        BehaviorInstance *pBehavior = dynamic_cast<BehaviorInstance *>( *i );
-        AssertFatal( pBehavior, "BehaviorComponent::_callMethod - Bad behavior instance in list." );
-        AssertFatal( pBehavior->getId() > 0, "Invalid id for behavior component" );
-
-        // Use the BehaviorInstance's namespace
-        Namespace *pNamespace = pBehavior->getNamespace();
-        if(!pNamespace)
-            continue;
-
-        // Lookup the Callback Namespace entry and then splice callback
-        const char *cbName = StringTable->insert(argv[0]);
-        Namespace::Entry *pNSEntry = pNamespace->lookup(cbName);
-        if( pNSEntry )
-        {
-            // Set %this to our BehaviorInstance's Object ID
-            argPtrs[1] = const_cast<char *>( pBehavior->getIdString() );
-
-            // Change the Current Console object, execute, restore Object
-            SimObject *save = gEvalState.thisObject;
-            gEvalState.thisObject = pBehavior;
-
-            pNSEntry->execute(argc, const_cast<const char **>( ~argPtrs ), &gEvalState);
-
-            gEvalState.thisObject = save;
-        }
-    }
-
-    // Pass this up to the parent since a BehaviorComponent is still a DynamicConsoleMethodComponent
-    // it needs to be able to contain other components and behave properly
-    const char* fnRet = Parent::_callMethod( argc, argv, callThis );
-
-    // Clean up.
-    FrameAllocator::setWaterMark( strdupWatermark );
-
-    return fnRet;
-}
+IMPLEMENT_CONOBJECT_SCHEMA( BehaviorComponent, WriteCustomTamlSchema );

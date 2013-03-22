@@ -48,35 +48,6 @@ static typeColorIToNameHash    mColorIToName;
 
 //-----------------------------------------------------------------------------
 
-class StockColorItem
-{
-private:
-    StockColorItem() {}
-
-public:
-    StockColorItem( const char* pName, const U8 red, const U8 green, const U8 blue, const U8 alpha = 255 )
-    {
-        // Sanity!
-        AssertFatal( pName != NULL, "Stock color name cannot be NULL." );
-
-        // Set stock color.
-        // NOTE:-   We'll use the char pointer here.  We can yet use the string-table unfortunately.
-        mColorName = pName;
-        mColorI.set( red, green, blue, alpha );
-        mColorF = mColorI;
-    }
-
-    inline const char*      getColorName( void ) const { return mColorName; }
-    inline const ColorF&    getColorF( void ) const { return mColorF; }
-    inline const ColorI&    getColorI( void ) const { return mColorI; }
-
-    const char*         mColorName;
-    ColorF              mColorF;
-    ColorI              mColorI;
-};
-
-//-----------------------------------------------------------------------------
-
 StockColorItem StockColorTable[] =
 {
     StockColorItem( "InvisibleBlack", 0, 0, 0, 0 ),
@@ -368,6 +339,32 @@ StringTableEntry StockColor::name( const ColorI& color )
 
 //-----------------------------------------------------------------------------
 
+S32 StockColor::getCount( void )
+{
+    return sizeof(StockColorTable) / sizeof(StockColorItem);
+}
+
+//-----------------------------------------------------------------------------
+
+const StockColorItem* StockColor::getColorItem( const S32 index )
+{
+    // Fetch stock color count.
+    const S32 stockColorCount = StockColor::getCount();
+
+    // Is the stock color index in range?
+    if ( index < 0 || index >= stockColorCount )
+    {
+        // No, so warn.
+        Con::warnf("StockColor::getName() - Specified color index '%d' is out of range.  Range is 0 to %d.", index, stockColorCount-1 );
+        return NULL;
+    }
+
+    // Return color name.
+    return &(StockColorTable[index]);
+}
+
+//-----------------------------------------------------------------------------
+
 ColorF::ColorF( const char* pStockColorName )
 {
     // Set stock color.
@@ -582,7 +579,7 @@ ConsoleSetType( TypeColorI )
 ConsoleFunction( getStockColorCount, S32, 1, 1, "() - Gets a count of available stock colors.\n"
                                                 "@return A count of available stock colors." )
 {
-    return sizeof(StockColorTable) / sizeof(StockColorItem);
+    return StockColor::getCount();
 }
 
 //-----------------------------------------------------------------------------
@@ -594,19 +591,10 @@ ConsoleFunction( getStockColorName, const char*, 2, 2,  "(stockColorIndex) - Get
     // Fetch stock color index.
     const S32 stockColorIndex = dAtoi(argv[1]);
 
-    // Fetch stock color count.
-    const S32 stockColorCount = sizeof(StockColorTable) / sizeof(StockColorItem);
+    // Fetch the color item.
+    const StockColorItem* pColorItem = StockColor::getColorItem( stockColorIndex );
 
-    // Is the stock color index in range?
-    if ( stockColorIndex < 0 || stockColorIndex >= stockColorCount )
-    {
-        // No, so warn.
-        Con::warnf("getStockColorName() - Specified color index '%d' is out of range.  Range is 0 to %d.", stockColorIndex, stockColorCount-1 );
-        return StringTable->EmptyString;
-    }
-
-    // Return color name.
-    return StockColorTable[stockColorIndex].getColorName();
+    return pColorItem == NULL ? NULL : pColorItem->getColorName();
 }
 
 //-----------------------------------------------------------------------------

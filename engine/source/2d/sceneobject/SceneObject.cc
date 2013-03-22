@@ -4099,36 +4099,18 @@ const char* SceneObject::getDstBlendFactorDescription(const GLenum factor)
 
 //-----------------------------------------------------------------------------
 
-static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+static void WriteCircleCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
 {
-    char buffer[1024];
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "SceneObject::WriteCircleCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "SceneObject::WriteCircleCustomTamlSchema() - Parent Element cannot be NULL." );
 
-    // Create shapes node element.
-    TiXmlElement* pShapesNodeElement = new TiXmlElement( "xs:element" );
-    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), shapeCustomNodeName );
-    pShapesNodeElement->SetAttribute( "name", buffer );
-    pShapesNodeElement->SetAttribute( "minOccurs", 0 );
-    pShapesNodeElement->SetAttribute( "maxOccurs", 1 );
-    pParentElement->LinkEndChild( pShapesNodeElement );
-    
-    // Create complex type.
-    TiXmlElement* pShapesNodeComplexTypeElement = new TiXmlElement( "xs:complexType" );
-    pShapesNodeElement->LinkEndChild( pShapesNodeComplexTypeElement );
-    
-    // Create choice element.
-    TiXmlElement* pShapesNodeChoiceElement = new TiXmlElement( "xs:choice" );
-    pShapesNodeChoiceElement->SetAttribute( "minOccurs", 0 );
-    pShapesNodeChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
-    pShapesNodeComplexTypeElement->LinkEndChild( pShapesNodeChoiceElement );
-
-    // ********************************************************************************
-    // Create Circle
-    // ********************************************************************************
+    // Create circle element.
     TiXmlElement* pCircleElement = new TiXmlElement( "xs:element" );
     pCircleElement->SetAttribute( "name", circleTypeName );
     pCircleElement->SetAttribute( "minOccurs", 0 );
     pCircleElement->SetAttribute( "maxOccurs", 1 );
-    pShapesNodeChoiceElement->LinkEndChild( pCircleElement );
+    pParentElement->LinkEndChild( pCircleElement );
 
     // Create complex type Element.
     TiXmlElement* pCircleComplexTypeElement = new TiXmlElement( "xs:complexType" );
@@ -4197,15 +4179,22 @@ static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlEleme
     pCircleElementD = new TiXmlElement( "xs:minInclusive" );
     pCircleElementD->SetAttribute( "value", "0" );
     pCircleElementC->LinkEndChild( pCircleElementD );
+}
 
-    // ********************************************************************************
-    // Create Polygon
-    // ********************************************************************************
+//-----------------------------------------------------------------------------
+
+static void WritePolygonCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "SceneObject::WritePolygonCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "SceneObject::WritePolygonCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    // Create polygon element.
     TiXmlElement* pPolygonElement = new TiXmlElement( "xs:element" );
     pPolygonElement->SetAttribute( "name", polygonTypeName );
     pPolygonElement->SetAttribute( "minOccurs", 0 );
     pPolygonElement->SetAttribute( "maxOccurs", 1 );
-    pShapesNodeChoiceElement->LinkEndChild( pPolygonElement );
+    pParentElement->LinkEndChild( pPolygonElement );
 
     // Create complex type Element.
     TiXmlElement* pPolygonComplexTypeElement = new TiXmlElement( "xs:complexType" );
@@ -4265,15 +4254,22 @@ static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlEleme
     pPolygonElementD = new TiXmlElement( "xs:minInclusive" );
     pPolygonElementD->SetAttribute( "value", "0" );
     pPolygonElementC->LinkEndChild( pPolygonElementD );
+}
 
-    // ********************************************************************************
-    // Create Chain
-    // ********************************************************************************
+//-----------------------------------------------------------------------------
+
+static void WriteChainCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "SceneObject::WriteChainCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "SceneObject::WriteChainCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    // Create chain element.
     TiXmlElement* pChainElement = new TiXmlElement( "xs:element" );
     pChainElement->SetAttribute( "name", chainTypeName );
     pChainElement->SetAttribute( "minOccurs", 0 );
     pChainElement->SetAttribute( "maxOccurs", 1 );
-    pShapesNodeChoiceElement->LinkEndChild( pChainElement );
+    pParentElement->LinkEndChild( pChainElement );
 
     // Create complex type Element.
     TiXmlElement* pChainComplexTypeElement = new TiXmlElement( "xs:complexType" );
@@ -4347,15 +4343,22 @@ static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlEleme
     pChainElementD = new TiXmlElement( "xs:minInclusive" );
     pChainElementD->SetAttribute( "value", "0" );
     pChainElementC->LinkEndChild( pChainElementD );
+}
 
-    // ********************************************************************************
-    // Create Edge
-    // ********************************************************************************
+//-----------------------------------------------------------------------------
+
+static void WriteEdgeCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "SceneObject::WriteEdgeCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "SceneObject::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    // Create edge element.
     TiXmlElement* pEdgeElement = new TiXmlElement( "xs:element" );
     pEdgeElement->SetAttribute( "name", edgeTypeName );
     pEdgeElement->SetAttribute( "minOccurs", 0 );
     pEdgeElement->SetAttribute( "maxOccurs", 1 );
-    pShapesNodeChoiceElement->LinkEndChild( pEdgeElement );
+    pParentElement->LinkEndChild( pEdgeElement );
 
     // Create complex type Element.
     TiXmlElement* pEdgeComplexTypeElement = new TiXmlElement( "xs:complexType" );
@@ -4427,6 +4430,41 @@ static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlEleme
     pEdgeElementD = new TiXmlElement( "xs:minInclusive" );
     pEdgeElementD->SetAttribute( "value", "0" );
     pEdgeElementC->LinkEndChild( pEdgeElementD );
+}
+
+//-----------------------------------------------------------------------------
+
+static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "SceneObject::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "SceneObject::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    char buffer[1024];
+
+    // Create shapes node element.
+    TiXmlElement* pShapesNodeElement = new TiXmlElement( "xs:element" );
+    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), shapeCustomNodeName );
+    pShapesNodeElement->SetAttribute( "name", buffer );
+    pShapesNodeElement->SetAttribute( "minOccurs", 0 );
+    pShapesNodeElement->SetAttribute( "maxOccurs", 1 );
+    pParentElement->LinkEndChild( pShapesNodeElement );
+    
+    // Create complex type.
+    TiXmlElement* pShapesNodeComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pShapesNodeElement->LinkEndChild( pShapesNodeComplexTypeElement );
+    
+    // Create choice element.
+    TiXmlElement* pShapesNodeChoiceElement = new TiXmlElement( "xs:choice" );
+    pShapesNodeChoiceElement->SetAttribute( "minOccurs", 0 );
+    pShapesNodeChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
+    pShapesNodeComplexTypeElement->LinkEndChild( pShapesNodeChoiceElement );
+
+    // Write collision shapes.
+    WriteCircleCustomTamlSchema( pClassRep, pShapesNodeChoiceElement );
+    WritePolygonCustomTamlSchema( pClassRep, pShapesNodeChoiceElement );
+    WriteChainCustomTamlSchema( pClassRep, pShapesNodeChoiceElement );
+    WriteEdgeCustomTamlSchema( pClassRep, pShapesNodeChoiceElement );
 }
 
 //-----------------------------------------------------------------------------

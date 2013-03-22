@@ -34,6 +34,8 @@
 
 //-----------------------------------------------------------------------------
 
+StringTableEntry spritesItemTypeName                = StringTable->insert( "Sprite" );
+
 static StringTableEntry spriteNameName              = StringTable->insert("Name");
 static StringTableEntry spriteLogicalPositionName   = StringTable->insert("LogicalPosition");
 static StringTableEntry spriteVisibleName           = StringTable->insert("Visible");
@@ -301,8 +303,11 @@ void SpriteBatchItem::updateWorldTransform( const U32 batchTransformId )
 
 //------------------------------------------------------------------------------
 
-void SpriteBatchItem::onTamlCustomWrite( TamlCustomNode* pSpriteNode )
+void SpriteBatchItem::onTamlCustomWrite( TamlCustomNode* pParentNode )
 {
+    // Add sprite node.
+    TamlCustomNode* pSpriteNode = pParentNode->addNode( spritesItemTypeName );
+
     // Write name.
     if ( getName() != StringTable->EmptyString )
         pSpriteNode->addField( spriteNameName, getName() );
@@ -377,7 +382,7 @@ void SpriteBatchItem::onTamlCustomWrite( TamlCustomNode* pSpriteNode )
 
     // Write source blend factor.
     if ( mBlendMode && mSrcBlendFactor != GL_SRC_ALPHA )
-        pSpriteNode->addField( spriteBlendModeName, SceneObject::getSrcBlendFactorDescription(mSrcBlendFactor) );
+        pSpriteNode->addField( spriteSrcBlendFactorName, SceneObject::getSrcBlendFactorDescription(mSrcBlendFactor) );
         
     // Write destination blend factor.
     if ( mBlendMode && mDstBlendFactor != GL_ONE_MINUS_SRC_ALPHA )
@@ -550,4 +555,162 @@ void SpriteBatchItem::onTamlCustomRead( const TamlCustomNode* pSpriteNode )
     // Set the data object if a single child exists.
     if ( spriteChildren.size() == 1 )
         setDataObject( spriteChildren[0]->getProxyObject<SimObject>(true) );
+}
+
+//------------------------------------------------------------------------------
+
+void SpriteBatchItem::WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "SpriteBatchItem::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "SpriteBatchItem::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    // Create batch item element.
+    TiXmlElement* pBatchItemElement = new TiXmlElement( "xs:element" );
+    pBatchItemElement->SetAttribute( "name", spritesItemTypeName );
+    pBatchItemElement->SetAttribute( "minOccurs", 0 );
+    pBatchItemElement->SetAttribute( "maxOccurs", 1 );
+    pParentElement->LinkEndChild( pBatchItemElement );
+
+    // Create complex type Element.
+    TiXmlElement* pBatchItemComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pBatchItemElement->LinkEndChild( pBatchItemComplexTypeElement );
+
+    // Create "Name" attribute.
+    TiXmlElement* pBatchItemName = new TiXmlElement( "xs:attribute" );
+    pBatchItemName->SetAttribute( "name", spriteNameName );
+    pBatchItemName->SetAttribute( "type", "xs:string" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemName );
+
+    // "Create "Image" attribute.
+    TiXmlElement* pBatchItemImage = new TiXmlElement( "xs:attribute" );
+    pBatchItemImage->SetAttribute( "name", spriteImageName );
+    pBatchItemImage->SetAttribute( "type", "AssetId_ConsoleType" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemImage );
+
+    // "Create "Image Frame" attribute.
+    TiXmlElement* pBatchItemImageFrame = new TiXmlElement( "xs:attribute" );
+    pBatchItemImageFrame->SetAttribute( "name", spriteImageFrameName );
+    pBatchItemImageFrame->SetAttribute( "type", "xs:positiveInteger" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemImageFrame );
+
+    // "Create "Animation" attribute.
+    TiXmlElement* pBatchItemAnimation = new TiXmlElement( "xs:attribute" );
+    pBatchItemAnimation->SetAttribute( "name", spriteAnimationName );
+    pBatchItemAnimation->SetAttribute( "type", "AssetId_ConsoleType" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemAnimation );
+
+    // Create "Visible" attribute.
+    TiXmlElement* pBatchItemVisible = new TiXmlElement( "xs:attribute" );
+    pBatchItemVisible->SetAttribute( "name", spriteVisibleName );
+    pBatchItemVisible->SetAttribute( "type", "xs:boolean" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemVisible );
+
+    // Create "Local Position" attribute.
+    TiXmlElement* pBatchItemPosition = new TiXmlElement( "xs:attribute" );
+    pBatchItemPosition->SetAttribute( "name", spriteLocalPositionName );
+    pBatchItemPosition->SetAttribute( "type", "Vector2_ConsoleType" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemPosition );
+
+    // Create "Size" attribute.
+    TiXmlElement* pBatchItemSize = new TiXmlElement( "xs:attribute" );
+    pBatchItemSize->SetAttribute( "name", spriteSizeName );
+    pBatchItemSize->SetAttribute( "type", "Vector2_ConsoleType" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemSize );
+
+    // Create "Local Angle" attribute.
+    TiXmlElement* pBatchItemAngle = new TiXmlElement( "xs:attribute" );
+    pBatchItemAngle->SetAttribute( "name", spriteLocalAngleName );
+    pBatchItemAngle->SetAttribute( "type", "xs:float" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemAngle );
+
+    // Create "Depth" attribute.
+    TiXmlElement* pBatchItemDepth = new TiXmlElement( "xs:attribute" );
+    pBatchItemDepth->SetAttribute( "name", spriteDepthName );
+    pBatchItemDepth->SetAttribute( "type", "xs:float" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemDepth );
+
+    // Create "FlipX" attribute.
+    TiXmlElement* pBatchItemFlipX = new TiXmlElement( "xs:attribute" );
+    pBatchItemFlipX->SetAttribute( "name", spriteFlipXName );
+    pBatchItemFlipX->SetAttribute( "type", "xs:boolean" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemFlipX );
+
+    // Create "FlipY" attribute.
+    TiXmlElement* pBatchItemFlipY = new TiXmlElement( "xs:attribute" );
+    pBatchItemFlipY->SetAttribute( "name", spriteFlipYName );
+    pBatchItemFlipY->SetAttribute( "type", "xs:boolean" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemFlipY );
+
+    // Create "Sort Point" attribute.
+    TiXmlElement* pBatchItemSortPoint = new TiXmlElement( "xs:attribute" );
+    pBatchItemSortPoint->SetAttribute( "name", spriteSortPointName );
+    pBatchItemSortPoint->SetAttribute( "type", "Vector2_ConsoleType" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemSortPoint );
+
+    // Create "Render Group" attribute.
+    TiXmlElement* pBatchItemRenderGroup = new TiXmlElement( "xs:attribute" );
+    pBatchItemRenderGroup->SetAttribute( "name", spriteRenderGroupName );
+    pBatchItemRenderGroup->SetAttribute( "type", "xs:string" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemRenderGroup );
+
+    // Create "Blend Mode" attribute.
+    TiXmlElement* pBatchItemBlendMode = new TiXmlElement( "xs:attribute" );
+    pBatchItemBlendMode->SetAttribute( "name", spriteBlendModeName );
+    pBatchItemBlendMode->SetAttribute( "type", "xs:boolean" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemBlendMode );
+
+    // Create "Source Blend Factor" attribute.
+    TiXmlElement* pBatchItemSrcBlendFactor = new TiXmlElement( "xs:attribute" );
+    pBatchItemSrcBlendFactor->SetAttribute( "name", spriteSrcBlendFactorName );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemSrcBlendFactor );
+    TiXmlElement* pBatchItemSrcBlendFactorType = new TiXmlElement( "xs:simpleType" );
+    pBatchItemSrcBlendFactor->LinkEndChild( pBatchItemSrcBlendFactorType );
+    TiXmlElement* pBatchItemSrcBlendFactorTypeRestriction = new TiXmlElement( "xs:restriction" );
+    pBatchItemSrcBlendFactorTypeRestriction->SetAttribute( "base", "xs:string" );
+    pBatchItemSrcBlendFactorType->LinkEndChild( pBatchItemSrcBlendFactorTypeRestriction );
+    const S32 srcBlendFactorEnumsCount = srcBlendFactorTable.size;
+    for( S32 index = 0; index < srcBlendFactorEnumsCount; ++index )
+    {
+        // Add enumeration element.
+        TiXmlElement* pSrcBlendFactorEnumeration = new TiXmlElement( "xs:enumeration" );
+        pSrcBlendFactorEnumeration->SetAttribute( "value", srcBlendFactorTable.table[index].label );
+        pBatchItemSrcBlendFactorTypeRestriction->LinkEndChild( pSrcBlendFactorEnumeration );
+    }
+
+    // Create "Destination Blend Factor" attribute.
+    TiXmlElement* pBatchItemDstBlendFactor = new TiXmlElement( "xs:attribute" );
+    pBatchItemDstBlendFactor->SetAttribute( "name", spriteDstBlendFactorName );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemDstBlendFactor );
+    TiXmlElement* pBatchItemDstBlendFactorType = new TiXmlElement( "xs:simpleType" );
+    pBatchItemDstBlendFactor->LinkEndChild( pBatchItemDstBlendFactorType );
+    TiXmlElement* pBatchItemDstBlendFactorTypeRestriction = new TiXmlElement( "xs:restriction" );
+    pBatchItemDstBlendFactorTypeRestriction->SetAttribute( "base", "xs:string" );
+    pBatchItemDstBlendFactorType->LinkEndChild( pBatchItemDstBlendFactorTypeRestriction );
+    const S32 dstBlendFactorEnumsCount = dstBlendFactorTable.size;
+    for( S32 index = 0; index < dstBlendFactorEnumsCount; ++index )
+    {
+        // Add enumeration element.
+        TiXmlElement* pDstBlendFactorEnumeration = new TiXmlElement( "xs:enumeration" );
+        pDstBlendFactorEnumeration->SetAttribute( "value", dstBlendFactorTable.table[index].label );
+        pBatchItemDstBlendFactorTypeRestriction->LinkEndChild( pDstBlendFactorEnumeration );
+    }
+
+    // Create "Blend Color" attribute.
+    TiXmlElement* pBatchItemBlendColor = new TiXmlElement( "xs:attribute" );
+    pBatchItemBlendColor->SetAttribute( "name", spriteBlendColorName );
+    pBatchItemBlendColor->SetAttribute( "type", "Color_Enums" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemBlendColor );
+
+    // Create "Alpha Test" attribute.
+    TiXmlElement* pBatchItemAlphaTest = new TiXmlElement( "xs:attribute" );
+    pBatchItemAlphaTest->SetAttribute( "name", spriteAlphaTestName );
+    pBatchItemAlphaTest->SetAttribute( "type", "xs:float" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemAlphaTest );
+
+    // Create "Logical Position" attribute.
+    TiXmlElement* pBatchItemLogicalPosition = new TiXmlElement( "xs:attribute" );
+    pBatchItemLogicalPosition->SetAttribute( "name", spriteLogicalPositionName );
+    pBatchItemLogicalPosition->SetAttribute( "type", "xs:string" );
+    pBatchItemComplexTypeElement->LinkEndChild( pBatchItemLogicalPosition );
 }
