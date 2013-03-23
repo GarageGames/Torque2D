@@ -40,6 +40,7 @@ WorldQuery::WorldQuery( Scene* pScene ) :
         mIsRaycastQueryResult(false),
         mMasterQueryKey(0),
         mCheckFixturePoint(false),
+        mCheckFixtureArea(false),
         mFixturePoint(0.0f, 0.0f)
 {
     // Set debug associations.
@@ -141,7 +142,16 @@ U32 WorldQuery::fixtureQueryArea( const b2AABB& aabb )
     mIsRaycastQueryResult = false;
 
     // Query.
+    mCheckFixtureArea = true;
+    b2Vec2 verts[4];
+    verts[0].Set( aabb.lowerBound.x, aabb.lowerBound.y );
+    verts[1].Set( aabb.upperBound.x, aabb.lowerBound.y );
+    verts[2].Set( aabb.upperBound.x, aabb.upperBound.y );
+    verts[3].Set( aabb.lowerBound.x, aabb.upperBound.y );
+    mFixtureAreaShape.Set( verts, 4);
+    mFixtureAreaTransform.SetIdentity();
     mpScene->getWorld()->QueryAABB( this, aabb );
+    mCheckFixtureArea = false;
 
     // Inject always-in-scope.
     injectAlwaysInScope();
@@ -427,6 +437,11 @@ bool WorldQuery::ReportFixture( b2Fixture* fixture )
 
     // Check fixture point.
     if ( mCheckFixturePoint && !fixture->TestPoint( mFixturePoint ) )
+        return true;
+
+    // Check fixture area.
+    if ( mCheckFixtureArea )
+        if ( !b2TestOverlap( &mFixtureAreaShape, 0, fixture->GetShape(), 0, mFixtureAreaTransform, fixture->GetBody()->GetTransform() ) )
         return true;
 
     // Tag with world query key.

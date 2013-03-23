@@ -96,7 +96,10 @@ private:
 private:
     Scene*                      mpScene;
     WorldQueryFilter            mQueryFilter;
+    b2PolygonShape              mFixtureAreaShape;
+    b2Transform                 mFixtureAreaTransform;
     bool                        mCheckFixturePoint;
+    bool                        mCheckFixtureArea;
     b2Vec2                      mFixturePoint;
     typeWorldQueryResultVector  mLayeredQueryResults[MAX_LAYERS_SUPPORTED];
     typeWorldQueryResultVector  mQueryResults;
