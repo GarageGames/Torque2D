@@ -2305,8 +2305,8 @@ ConsoleMethod(Scene, getMotorJointMaxTorque, F32, 3, 3,  "(jointId) Gets the max
 ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGroupMask], [sceneLayerMask], [pickMode] ) Picks objects intersecting the specified area with optional group/layer masks.\n"
               "@param startx/y The coordinates of the start point as either (\"x y\") or (x,y)\n"
               "@param endx/y The coordinates of the end point as either (\"x y\") or (x,y)\n"
-              "@param sceneGroupMask Optional scene group mask.\n"
-              "@param sceneLayerMask Optional scene layer mask.\n"
+              "@param sceneGroupMask Optional scene group mask.  (-1) or empty string selects all groups.\n"
+              "@param sceneLayerMask Optional scene layer mask.  (-1) or empty string selects all layers.\n"
               "@param pickMode Optional mode 'any', 'size' or 'collision' (default is 'size').\n"
               "@return Returns list of object IDs.")
 {
@@ -2356,12 +2356,18 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
     // Calculate scene group mask.
     U32 sceneGroupMask = MASK_ALL;
     if ( (U32)argc > firstArg )
-        sceneGroupMask = dAtoi(argv[firstArg]);
+    {
+        if ( *argv[firstArg] != 0 )
+            sceneGroupMask = dAtoi(argv[firstArg]);
+    }
 
     // Calculate scene layer mask.
     U32 sceneLayerMask = MASK_ALL;
     if ( (U32)argc > (firstArg + 1) )
-        sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    {
+        if ( *argv[firstArg + 1] != 0 )
+            sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    }
 
     // Calculate pick mode.
     Scene::PickMode pickMode = Scene::PICK_SIZE;
@@ -2454,8 +2460,8 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
 ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroupMask], [sceneLayerMask], [pickMode] ) Picks objects intersecting the specified ray with optional group/layer masks.\n"
               "@param startx/y The coordinates of the start point as either (\"x y\") or (x,y)\n"
               "@param endx/y The coordinates of the end point as either (\"x y\") or (x,y)\n"
-              "@param sceneGroupMask Optional scene group mask.\n"
-              "@param sceneLayerMask Optional scene layer mask.\n"
+              "@param sceneGroupMask Optional scene group mask.  (-1) or empty string selects all groups.\n"
+              "@param sceneLayerMask Optional scene layer mask.  (-1) or empty string selects all layers.\n"
               "@param pickMode Optional mode 'any', 'size' or 'collision' (default is 'size').\n"
               "@return Returns list of object IDs.")
 {
@@ -2505,12 +2511,18 @@ ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroup
     // Calculate scene group mask.
     U32 sceneGroupMask = MASK_ALL;
     if ( (U32)argc > firstArg )
-        sceneGroupMask = dAtoi(argv[firstArg]);
+    {
+        if ( *argv[firstArg] != 0 )
+            sceneGroupMask = dAtoi(argv[firstArg]);
+    }
 
     // Calculate scene layer mask.
     U32 sceneLayerMask = MASK_ALL;
     if ( (U32)argc > (firstArg + 1) )
-        sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    {
+        if ( *argv[firstArg + 1] != 0 )
+            sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    }
 
     // Calculate pick mode.
     Scene::PickMode pickMode = Scene::PICK_SIZE;
@@ -2603,8 +2615,8 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
                 "Unlike other pick methods, this returns the complete detail for each object encountered, returning the collision point, normal and fraction of the ray intersection.\n"
                 "@param startx/y The coordinates of the start point as either (\"x y\") or (x,y)\n"
                 "@param endx/y The coordinates of the end point as either (\"x y\") or (x,y)\n"
-                "@param sceneGroupMask Optional scene group mask.\n"
-                "@param sceneLayerMask Optional scene layer mask.\n"
+                "@param sceneGroupMask Optional scene group mask.  (-1) or empty string selects all groups.\n"
+                "@param sceneLayerMask Optional scene layer mask.  (-1) or empty string selects all layers.\n"
                 "@return Returns a list of objects in blocks of detail items where each block represents a single object and its collision detail in the format:"
                 "<ObjectId PointX PointY NormalX NormalY RayFraction ShapeIndex> <ObjectId PointX PointY NormalX NormalY RayFraction ShapeIndex> <ObjectId PointX PointY NormalX NormalY RayFraction ShapeIndex> etc.\n")
 {
@@ -2654,12 +2666,18 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
     // Calculate scene group mask.
     U32 sceneGroupMask = MASK_ALL;
     if ( (U32)argc > firstArg )
-        sceneGroupMask = dAtoi(argv[firstArg]);
+    {
+        if ( *argv[firstArg] != 0 )
+            sceneGroupMask = dAtoi(argv[firstArg]);
+    }
 
     // Calculate scene layer mask.
     U32 sceneLayerMask = MASK_ALL;
     if ( (U32)argc > (firstArg + 1) )
-        sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    {
+        if ( *argv[firstArg + 1] != 0 )
+            sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    }
 
     // Fetch world query and clear results.
     WorldQuery* pWorldQuery = object->getWorldQuery( true );
@@ -2729,8 +2747,8 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
 
 ConsoleMethod(Scene, pickPoint, const char*, 3, 7, "(x / y, [sceneGroupMask], [sceneLayerMask], [pickMode] ) Picks objects intersecting the specified point with optional group/layer masks.\n"
               "@param x/y The coordinate of the point as either (\"x y\") or (x,y)\n"
-              "@param sceneGroupMask Optional scene group mask.\n"
-              "@param sceneLayerMask Optional scene layer mask.\n"
+              "@param sceneGroupMask Optional scene group mask.  (-1) or empty string selects all groups.\n"
+              "@param sceneLayerMask Optional scene layer mask.  (-1) or empty string selects all layers.\n"
               "@param pickMode Optional mode 'any', 'size' or 'collision' (default is 'size').\n"
               "@return Returns list of object IDs.")
 {
@@ -2767,12 +2785,18 @@ ConsoleMethod(Scene, pickPoint, const char*, 3, 7, "(x / y, [sceneGroupMask], [s
     // Calculate scene group mask.
     U32 sceneGroupMask = MASK_ALL;
     if ( (U32)argc > firstArg )
-        sceneGroupMask = dAtoi(argv[firstArg]);
+    {
+        if ( *argv[firstArg] != 0 )
+            sceneGroupMask = dAtoi(argv[firstArg]);
+    }
 
     // Calculate scene layer mask.
     U32 sceneLayerMask = MASK_ALL;
     if ( (U32)argc > (firstArg + 1) )
-        sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    {
+        if ( *argv[firstArg + 1] != 0 )
+            sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    }
 
     // Calculate pick mode.
     Scene::PickMode pickMode = Scene::PICK_SIZE;
