@@ -32,6 +32,11 @@ function PickingToy::create( %this )
     addSelectionOption( "Any,Size,Collision", "Pick Mode", 3, "setPickMode", false, "Selects the picking mode." );
     addSelectionOption( "Area,Point", "Pick Type", 2, "setPickType", true, "Selects the picking type." );
 
+    // Force-on debug options.
+    setAABBOption( true );
+    setOOBBOption( true );
+    setCollisionOption( true );
+    
     // Reset the toy.
     PickingToy.reset();
 }
@@ -41,6 +46,11 @@ function PickingToy::create( %this )
 
 function PickingToy::destroy( %this )
 {
+    // Force-off debug options.
+    setAABBOption( false );
+    setOOBBOption( false );
+    setCollisionOption( false );
+    
 }
 
 //-----------------------------------------------------------------------------
