@@ -23,11 +23,14 @@
 function PickingToy::create( %this )
 {
     // Configure the toy.
-    PickingToy.PickMode = "Any";
+    PickingToy.PickType = Area;
+    PickingToy.PickMode = Any;
     PickingToy.NotPickedAlpha = 0.25;
+    PickingToy.PickAreaSize = 4;
 
     // Add the configuration options.
     addSelectionOption( "Any,Size,Collision", "Pick Mode", 3, "setPickMode", false, "Selects the picking mode." );
+    addSelectionOption( "Area,Point", "Pick Type", 2, "setPickType", true, "Selects the picking type." );
 
     // Reset the toy.
     PickingToy.reset();
@@ -50,8 +53,11 @@ function PickingToy::reset( %this )
     // Create background.
     %this.createBackground();
        
-    // Create some sprites.
-    %this.createSprites();   
+    // Create target.
+    %this.createTarget();   
+    
+    // Create pick cursor.
+    %this.createPickCursor();    
 }
 
 //-----------------------------------------------------------------------------
@@ -70,7 +76,7 @@ function PickingToy::createBackground( %this )
 
 //-----------------------------------------------------------------------------
 
-function PickingToy::createSprites( %this )
+function PickingToy::createTarget( %this )
 {    
     // Create the sprite.
     %object = SandboxScene.create( Sprite );
@@ -79,22 +85,57 @@ function PickingToy::createSprites( %this )
     %object.Image = "ToyAssets:Tiles";
     %object.Frame = 0;
     %object.setBlendAlpha( PickingToy.NotPickedAlpha );
-    
-    // Set the target object.
-    PickingToy.TargetObject = %object;
-
     // Create some collision shapes.    
     %object.createCircleCollisionShape( 10, "-20 -20" );
     %object.createPolygonBoxCollisionShape( "20 20", "20 20" );
+    
+    // Set the target object.
+    PickingToy.TargetObject = %object;
+}
+
+//-----------------------------------------------------------------------------
+
+function PickingToy::createPickCursor( %this )
+{    
+    // Create the sprite.
+    %object = SandboxScene.create( Sprite );
+    %object.Size = PickingToy.PickAreaSize;
+    %object.BlendColor = Red;
+    %object.PickingAllowed = false;
+    
+    if ( PickingToy.PickType $= "point" )
+    {
+        %object.Image = "ToyAssets:CrossHair1";
+    }
+    else if ( PickingToy.PickType $= "area" )
+    {
+        %object.Image = "ToyAssets:Blank";
+    }
+    
+    // Set the cursor object.
+    PickingToy.CursorObject = %object;
 }
 
 //-----------------------------------------------------------------------------
 
 function PickingToy::onTouchMoved(%this, %touchID, %worldPosition)
 {
-    // Pick at position.
-    %picked = SandboxScene.pickPoint( %worldPosition, "", "", PickingToy.PickMode );
+    // Update cursor position.
+    PickingToy.CursorObject.Position = %worldPosition;
     
+    // Handle picking mode appropriately.
+    switch$( PickingToy.PickType )
+    {
+        case "point":
+            %picked = SandboxScene.pickPoint( %worldPosition, "", "", PickingToy.PickMode );
+        
+        case "area":
+            %halfSize = PickingToy.PickAreaSize * 0.5;
+            %lower = (%worldPosition._0 - %halfSize) SPC(%worldPosition._1 - %halfSize);    
+            %upper = (%worldPosition._0 + %halfSize) SPC(%worldPosition._1 + %halfSize);    
+            %picked = SandboxScene.pickArea( %lower, %upper, "", "", PickingToy.PickMode );
+    }
+        
     // Fetch pick count.
     %pickCount = %picked.Count;
     
@@ -118,4 +159,11 @@ function PickingToy::onTouchMoved(%this, %touchID, %worldPosition)
 function PickingToy::setPickMode( %this, %value )
 {
     PickingToy.PickMode = %value;
+}
+
+//-----------------------------------------------------------------------------
+
+function PickingToy::setPickType( %this, %value )
+{
+    PickingToy.PickType = %value;
 }
