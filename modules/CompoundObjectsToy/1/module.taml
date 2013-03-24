@@ -1,0 +1,10 @@
+<ModuleDefinition
+	ModuleId="CompoundObjectsToy"
+	VersionId="1"
+	Description="Demonstrates creating compound objects using the CompositeSprite."
+	Dependencies="ToyAssets=1"
+	Type="toy"
+	ToyCategoryIndex="3"
+	ScriptFile="main.cs"
+	CreateFunction="create"
+	DestroyFunction="destroy"/>
