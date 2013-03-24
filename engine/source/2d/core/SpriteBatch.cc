@@ -1232,6 +1232,7 @@ void SpriteBatch::destroySpriteBatchQuery( void )
 
     // Finish if sprite clipping 
     delete mpSpriteBatchQuery;
+    mpSpriteBatchQuery = NULL;
 }
 
 //------------------------------------------------------------------------------
