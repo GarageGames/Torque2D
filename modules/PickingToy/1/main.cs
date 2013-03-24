@@ -23,14 +23,14 @@
 function PickingToy::create( %this )
 {
     // Configure the toy.
-    PickingToy.PickType = Area;
+    PickingToy.PickType = Point;
     PickingToy.PickMode = Any;
-    PickingToy.NotPickedAlpha = 0.25;
-    PickingToy.PickAreaSize = 4;
+    PickingToy.NotPickedAlpha = 0.2;
+    PickingToy.PickAreaSize = 10;
 
     // Add the configuration options.
-    addSelectionOption( "Any,Size,Collision", "Pick Mode", 3, "setPickMode", false, "Selects the picking mode." );
-    addSelectionOption( "Area,Point", "Pick Type", 2, "setPickType", true, "Selects the picking type." );
+    addSelectionOption( "Any,AABB,OOBB,Collision", "Pick Mode", 4, "setPickMode", false, "Selects the picking mode." );
+    addSelectionOption( "Point,Area", "Pick Type", 2, "setPickType", true, "Selects the picking type." );
 
     // Force-on debug options.
     setAABBOption( true );
@@ -82,6 +82,7 @@ function PickingToy::createBackground( %this )
     %object.SceneLayer = 31;
     %object.Image = "ToyAssets:highlightBackground";
     %object.BlendColor = SlateGray;
+    %object.PickingAllowed = false;
 }
 
 //-----------------------------------------------------------------------------

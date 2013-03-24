@@ -904,7 +904,7 @@ ConsoleMethod(CompositeSprite, pickPoint, const char*, 3, 4,    "(x / y ) Picks 
     point = b2MulT( renderTransform, point );
 
     // Perform query.
-    pSpriteBatchQuery->renderQueryPoint( point );
+    pSpriteBatchQuery->queryPoint( point, true );
 
     // Fetch result count.
     const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
@@ -1028,7 +1028,7 @@ ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y )
     CoreMath::mRotateAABB( aabb, -renderTransform.q.GetAngle(), aabb );
 
     // Perform query.
-    pSpriteBatchQuery->renderQueryArea( aabb );
+    pSpriteBatchQuery->queryArea( aabb, true );
 
     // Fetch result count.
     const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
@@ -1142,7 +1142,7 @@ ConsoleMethod(CompositeSprite, pickRay, const char*, 4, 6,  "(startx/y, endx/y) 
     v2 = b2MulT( renderTransform, v2 );
 
     // Perform query.
-    pSpriteBatchQuery->renderQueryRay( v1, v2 );
+    pSpriteBatchQuery->queryRay( v1, v2, true );
 
     // Sanity!
     AssertFatal( pSpriteBatchQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );

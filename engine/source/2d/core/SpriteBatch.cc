@@ -109,7 +109,7 @@ void SpriteBatch::prepareRender( SceneRenderObject* pSceneRenderObject, const Sc
         SpriteBatchQuery* pSpriteBatchQuery = getSpriteBatchQuery( true );
 
         // Perform query.
-        pSpriteBatchQuery->renderQueryArea( localAABB );
+        pSpriteBatchQuery->queryArea( localAABB, false );
 
         // Debug Profiling.
         PROFILE_END(); // SpriteBatch_PrepareRenderQuery
