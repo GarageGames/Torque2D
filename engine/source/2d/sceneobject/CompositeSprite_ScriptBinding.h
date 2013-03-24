@@ -768,14 +768,25 @@ ConsoleMethod(CompositeSprite, setSpriteBlendColor, void, 3, 6, "(float red, flo
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(CompositeSprite, getSpriteBlendColor, const char*, 2, 2,  "Gets the sprite blend color\n"
+ConsoleMethod(CompositeSprite, getSpriteBlendColor, const char*, 2, 3,  "(allowColorNames) Gets the sprite blend color\n"
+                                                                        "@param allowColorNames Whether to allow stock color names to be returned or not.  Optional: Defaults to false.\n"
                                                                         "@return (float red / float green / float blue / float alpha) The sprite blend color.")
 {
     // Get Blend Colour.
     ColorF blendColor = object->getSpriteBlendColor();
 
-    // Fetch the field value.
-    return Con::getData( TypeColorF, &blendColor, 0 );
+    // Fetch allow color names flag.
+    const bool allowColorNames = (argc > 2) ? dAtob(argv[2] ) : false;
+
+    // Are color names allowed?
+    if ( allowColorNames )
+    {
+        // Yes, so fetch the field value.
+        return Con::getData( TypeColorF, &blendColor, 0 );
+    }
+
+    // No, so fetch the raw color values.
+    return blendColor.scriptThis();
 }
 
 //-----------------------------------------------------------------------------
