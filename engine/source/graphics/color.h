@@ -111,6 +111,9 @@ class ColorF
                                       (blue  >= 0.0f && blue  <= 1.0f) &&
                                       (alpha >= 0.0f && alpha <= 1.0f); }
    void clamp();
+
+   inline StringTableEntry stringThis(void) const   { char buffer[64]; dSprintf(buffer, 64, "%f %f %f %f", red, green, blue, alpha ); return StringTable->insert(buffer); }
+   inline const char* scriptThis(void) const        { char* pBuffer = Con::getReturnBuffer(64); dSprintf(pBuffer, 32, "%.5f %.5f %.5f %.5f", red, green, blue, alpha ); return pBuffer; }
 };
 
 //-----------------------------------------------------------------------------
@@ -175,6 +178,9 @@ class ColorI
 
    U16 get565()  const;
    U16 get4444() const;
+
+   inline StringTableEntry stringThis(void) const   { char buffer[64]; dSprintf(buffer, 64, "%d %d %d %d", red, green, blue, alpha ); return StringTable->insert(buffer); }
+   inline const char* scriptThis(void) const        { char* pBuffer = Con::getReturnBuffer(64); dSprintf(pBuffer, 32, "%d %d %d %d", red, green, blue, alpha ); return pBuffer; }
 };
 
 

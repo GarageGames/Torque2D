@@ -22,9 +22,6 @@
 
 function TruckToy::create( %this )
 {        
-    // Activate the package.
-    activatePackage( TruckToyPackage );
-
     TruckToy.ObstacleFriction = 1.5;
     TruckToy.CameraWidth = 20;
     TruckToy.CameraHeight = 15;
@@ -932,14 +929,8 @@ function TruckToy::setRotateCamera( %this, %value )
 
 //-----------------------------------------------------------------------------
 
-package TruckToyPackage
+function TruckToy::onTouchDown(%this, %touchID, %worldPosition)
 {
-
-function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
-{
-    // Call parent.
-    Parent::onTouchDown(%this, %touchID, %worldPosition );
-    
     // Finish if truck is already moving.
     if ( TruckToy.TruckMoving )
         return;
@@ -957,13 +948,9 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
 
 //-----------------------------------------------------------------------------
 
-function SandboxWindow::onTouchUp(%this, %touchID, %worldPosition)
+function TruckToy::onTouchUp(%this, %touchID, %worldPosition)
 {
-    // Call parent.
-    Parent::onTouchUp(%this, %touchID, %worldPosition );
-    
     // Stop the truck.
     TruckToy.truckStop();
 }
     
-};

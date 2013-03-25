@@ -22,9 +22,6 @@
 
 function RotateToToy::create( %this )
 {        
-    // Activate the package.
-    activatePackage( RotateToToyPackage );    
-    
     // Initialize the toys settings.
     RotateToToy.rotateSpeed = 360;
     RotateToToy.trackMouse = true;
@@ -42,8 +39,6 @@ function RotateToToy::create( %this )
 
 function RotateToToy::destroy( %this )
 {
-    // Deactivate the package.
-    deactivatePackage( RotateToToyPackage );
 }
 
 //-----------------------------------------------------------------------------
@@ -128,14 +123,8 @@ function RotateToToy::setTrackMouse( %this, %value )
 
 //-----------------------------------------------------------------------------
 
-package RotateToToyPackage
+function RotateToToy::onTouchDown(%this, %touchID, %worldPosition)
 {
-
-function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
-{
-    // Call parent.
-    Parent::onTouchDown(%this, %touchID, %worldPosition );
-    
     // Calculate the angle to the mouse.
     %origin = RotateToToy.TargetObject.getPosition();
     %angle = -mRadToDeg( mAtan( %worldPosition.x-%origin.x, %worldPosition.y-%origin.y ) );
@@ -146,11 +135,8 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
 
 //-----------------------------------------------------------------------------
 
-function SandboxWindow::onTouchMoved(%this, %touchID, %worldPosition)
+function RotateToToy::onTouchMoved(%this, %touchID, %worldPosition)
 {
-    // Call parent.
-    Parent::onTouchMoved(%this, %touchID, %worldPosition );
-    
     // Finish if not tracking the mouse.
     if ( !RotateToToy.trackMouse )
         return;
@@ -162,5 +148,3 @@ function SandboxWindow::onTouchMoved(%this, %touchID, %worldPosition)
     //Rotate to the touched angle.
     RotateToToy.TargetObject.RotateTo( %angle, RotateToToy.rotateSpeed );        
 }
-    
-};

@@ -991,7 +991,7 @@ void Scene::sceneRender( const SceneRenderState* pSceneRenderState )
     mpWorldQuery->setQueryFilter( queryFilter );
 
     // Query render AABB.
-    mpWorldQuery->renderQueryArea( cameraAABB );
+    mpWorldQuery->aabbQueryArea( cameraAABB );
 
     // Debug Profiling.
     PROFILE_END();  //Scene_RenderSceneVisibleQuery
@@ -5312,7 +5312,8 @@ b2JointType Scene::getJointTypeEnum(const char* label)
 static EnumTable::Enums pickModeLookup[] =
                 {
                 { Scene::PICK_ANY,          "Any" },
-                { Scene::PICK_SIZE,         "Size" },
+                { Scene::PICK_AABB,         "AABB" },
+                { Scene::PICK_OOBB,         "OOBB" },
                 { Scene::PICK_COLLISION,    "Collision" },
                 };
 

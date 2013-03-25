@@ -198,7 +198,8 @@ public:
         PICK_INVALID,
         ///---
         PICK_ANY,
-        PICK_SIZE,
+        PICK_AABB,
+        PICK_OOBB,
         PICK_COLLISION,
     };
 

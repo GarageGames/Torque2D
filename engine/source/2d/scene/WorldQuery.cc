@@ -39,8 +39,9 @@ WorldQuery::WorldQuery( Scene* pScene ) :
         mpScene(pScene),
         mIsRaycastQueryResult(false),
         mMasterQueryKey(0),
-        mCheckFixturePoint(false),
-        mFixturePoint(0.0f, 0.0f)
+        mCheckPoint(false),
+        mCheckArea(false),
+        mCheckOOBB(false)
 {
     // Set debug associations.
     for ( U32 n = 0; n < MAX_LAYERS_SUPPORTED; n++ )
@@ -130,10 +131,10 @@ void WorldQuery::removeAlwaysInScope( SceneObject* pSceneObject )
 
 //-----------------------------------------------------------------------------
 
-U32 WorldQuery::fixtureQueryArea( const b2AABB& aabb )
+U32 WorldQuery::collisionQueryArea( const b2AABB& aabb )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(WorldQuery_FixtureQueryArea);
+    PROFILE_SCOPE(WorldQuery_CollisionQueryArea);
 
     mMasterQueryKey++;
 
@@ -141,7 +142,16 @@ U32 WorldQuery::fixtureQueryArea( const b2AABB& aabb )
     mIsRaycastQueryResult = false;
 
     // Query.
+    b2Vec2 verts[4];
+    verts[0].Set( aabb.lowerBound.x, aabb.lowerBound.y );
+    verts[1].Set( aabb.upperBound.x, aabb.lowerBound.y );
+    verts[2].Set( aabb.upperBound.x, aabb.upperBound.y );
+    verts[3].Set( aabb.lowerBound.x, aabb.upperBound.y );
+    mCompareShape.Set( verts, 4 );
+    mCompareTransform.SetIdentity();
+    mCheckArea = true;
     mpScene->getWorld()->QueryAABB( this, aabb );
+    mCheckArea = false;
 
     // Inject always-in-scope.
     injectAlwaysInScope();
@@ -151,10 +161,10 @@ U32 WorldQuery::fixtureQueryArea( const b2AABB& aabb )
 
 //-----------------------------------------------------------------------------
 
-U32 WorldQuery::fixtureQueryRay( const Vector2& point1, const Vector2& point2 )
+U32 WorldQuery::collisionQueryRay( const Vector2& point1, const Vector2& point2 )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(WorldQuery_FixtureQueryRay);
+    PROFILE_SCOPE(WorldQuery_CollisionQueryRay);
 
     mMasterQueryKey++;
 
@@ -172,10 +182,10 @@ U32 WorldQuery::fixtureQueryRay( const Vector2& point1, const Vector2& point2 )
 
 //-----------------------------------------------------------------------------
 
-U32 WorldQuery::fixtureQueryPoint( const Vector2& point )
+U32 WorldQuery::collisionQueryPoint( const Vector2& point )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(WorldQuery_FixtureQueryPoint);
+    PROFILE_SCOPE(WorldQuery_CollisionQueryPoint);
 
     mMasterQueryKey++;
 
@@ -186,10 +196,10 @@ U32 WorldQuery::fixtureQueryPoint( const Vector2& point )
     b2AABB aabb;
     aabb.lowerBound = point;
     aabb.upperBound = point;
-    mCheckFixturePoint = true;
-    mFixturePoint = point;
+    mCheckPoint = true;
+    mComparePoint = point;
     mpScene->getWorld()->QueryAABB( this, aabb );
-    mCheckFixturePoint = false;
+    mCheckPoint = false;
 
     // Inject always-in-scope.
     injectAlwaysInScope();
@@ -199,10 +209,10 @@ U32 WorldQuery::fixtureQueryPoint( const Vector2& point )
 
 //-----------------------------------------------------------------------------
 
-U32 WorldQuery::renderQueryArea( const b2AABB& aabb )
+U32 WorldQuery::aabbQueryArea( const b2AABB& aabb )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(WorldQuery_RenderQueryArea);
+    PROFILE_SCOPE(WorldQuery_AABBQueryArea);
 
     mMasterQueryKey++;
 
@@ -220,10 +230,10 @@ U32 WorldQuery::renderQueryArea( const b2AABB& aabb )
 
 //-----------------------------------------------------------------------------
 
-U32 WorldQuery::renderQueryRay( const Vector2& point1, const Vector2& point2 )
+U32 WorldQuery::aabbQueryRay( const Vector2& point1, const Vector2& point2 )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(WorldQuery_RenderQueryRay);
+    PROFILE_SCOPE(WorldQuery_AABBQueryRay);
 
     mMasterQueryKey++;
 
@@ -231,13 +241,11 @@ U32 WorldQuery::renderQueryRay( const Vector2& point1, const Vector2& point2 )
     mIsRaycastQueryResult = true;
 
     // Query.
-    b2RayCastInput rayInput;
-    rayInput.p1 = point1;
-    rayInput.p2 = point2;
-
-    rayInput.maxFraction = 1.0f;
-
-    RayCast( this, rayInput );
+    mCompareRay.p1 = point1;
+    mCompareRay.p2 = point2;
+    mCompareRay.maxFraction = 1.0f;
+    mCompareTransform.SetIdentity();
+    RayCast( this, mCompareRay );
 
     // Inject always-in-scope.
     injectAlwaysInScope();
@@ -247,10 +255,10 @@ U32 WorldQuery::renderQueryRay( const Vector2& point1, const Vector2& point2 )
 
 //-----------------------------------------------------------------------------
 
-U32 WorldQuery::renderQueryPoint( const Vector2& point )
+U32 WorldQuery::aabbQueryPoint( const Vector2& point )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(WorldQuery_RenderQueryPoint);
+    PROFILE_SCOPE(WorldQuery_AABBQueryPoint);
 
     mMasterQueryKey++;
 
@@ -258,12 +266,97 @@ U32 WorldQuery::renderQueryPoint( const Vector2& point )
     mIsRaycastQueryResult = false;
 
     // Query.
-    b2RayCastInput rayInput;
-    rayInput.p1 = point;
-    rayInput.p2 = b2Vec2( point.x + b2_linearSlop, point.y + b2_linearSlop );
-    rayInput.maxFraction = 1.0f;
+    b2AABB aabb;
+    aabb.lowerBound = point;
+    aabb.upperBound = point;
+    Query( this, aabb );
 
-    RayCast( this, rayInput );
+    // Inject always-in-scope.
+    injectAlwaysInScope();
+
+    return getQueryResultsCount();
+}
+
+//-----------------------------------------------------------------------------
+
+U32 WorldQuery::oobbQueryArea( const b2AABB& aabb )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(WorldQuery_AABBQueryArea);
+
+    mMasterQueryKey++;
+
+    // Flag as not a ray-cast query result.
+    mIsRaycastQueryResult = false;
+
+    // Query.
+    b2Vec2 verts[4];
+    verts[0].Set( aabb.lowerBound.x, aabb.lowerBound.y );
+    verts[1].Set( aabb.upperBound.x, aabb.lowerBound.y );
+    verts[2].Set( aabb.upperBound.x, aabb.upperBound.y );
+    verts[3].Set( aabb.lowerBound.x, aabb.upperBound.y );
+    mCompareShape.Set( verts, 4 );
+    mCompareTransform.SetIdentity();
+    mCheckOOBB = true;
+    Query( this, aabb );
+    mCheckOOBB = false;
+
+    // Inject always-in-scope.
+    injectAlwaysInScope();
+
+    return getQueryResultsCount();
+}
+
+//-----------------------------------------------------------------------------
+
+U32 WorldQuery::oobbQueryRay( const Vector2& point1, const Vector2& point2 )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(WorldQuery_AABBQueryRay);
+
+    mMasterQueryKey++;
+
+    // Flag as a ray-cast query result.
+    mIsRaycastQueryResult = true;
+
+    // Query.
+    mCompareRay.p1 = point1;
+    mCompareRay.p2 = point2;
+    mCompareRay.maxFraction = 1.0f;
+    mCompareTransform.SetIdentity();
+    mCheckOOBB = true;
+    RayCast( this, mCompareRay );
+    mCheckOOBB = false;
+
+    // Inject always-in-scope.
+    injectAlwaysInScope();
+
+    return getQueryResultsCount();
+}
+
+//-----------------------------------------------------------------------------
+
+U32 WorldQuery::oobbQueryPoint( const Vector2& point )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(WorldQuery_AABBQueryPoint);
+
+    mMasterQueryKey++;
+
+    // Flag as not a ray-cast query result.
+    mIsRaycastQueryResult = false;
+
+    // Query.
+    b2AABB aabb;
+    aabb.lowerBound = point;
+    aabb.upperBound = point;
+    mComparePoint = point;
+    mCompareTransform.SetIdentity();
+    mCheckOOBB = true;
+    mCheckPoint = true;
+    Query( this, aabb );
+    mCheckPoint = false;
+    mCheckOOBB = false;
 
     // Inject always-in-scope.
     injectAlwaysInScope();
@@ -279,9 +372,11 @@ U32 WorldQuery::anyQueryArea( const b2AABB& aabb )
     PROFILE_SCOPE(WorldQuery_AnyQueryAreaAABB);
 
     // Query.
-    renderQueryArea( aabb );
+    aabbQueryArea( aabb );
     mMasterQueryKey--;
-    fixtureQueryArea( aabb );
+    oobbQueryArea( aabb );
+    mMasterQueryKey--;
+    collisionQueryArea( aabb );
 
     // Inject always-in-scope.
     injectAlwaysInScope();
@@ -313,9 +408,11 @@ U32 WorldQuery::anyQueryRay( const Vector2& point1, const Vector2& point2 )
     PROFILE_SCOPE(WorldQuery_AnyQueryRay);
 
     // Query.
-    renderQueryRay( point1, point2 );
+    aabbQueryRay( point1, point2 );
     mMasterQueryKey--;
-    fixtureQueryRay( point1, point2 );
+    oobbQueryRay( point1, point2 );
+    mMasterQueryKey--;
+    collisionQueryRay( point1, point2 );
 
     // Inject always-in-scope.
     injectAlwaysInScope();
@@ -331,9 +428,11 @@ U32 WorldQuery::anyQueryPoint( const Vector2& point )
     PROFILE_SCOPE(WorldQuery_AnyQueryPoint);
 
     // Query.
-    renderQueryPoint( point );
+    aabbQueryPoint( point );
     mMasterQueryKey--;
-    fixtureQueryPoint( point );
+    oobbQueryPoint( point );
+    mMasterQueryKey--;
+    collisionQueryPoint( point );
 
     // Inject always-in-scope.
     injectAlwaysInScope();
@@ -425,12 +524,14 @@ bool WorldQuery::ReportFixture( b2Fixture* fixture )
     if ( mQueryFilter.mPickingAllowedFilter && !pSceneObject->getPickingAllowed() )
         return true;
 
-    // Check fixture point.
-    if ( mCheckFixturePoint && !fixture->TestPoint( mFixturePoint ) )
+    // Check collision point.
+    if ( mCheckPoint && !fixture->TestPoint( mComparePoint ) )
         return true;
 
-    // Tag with world query key.
-    pSceneObject->setWorldQueryKey( mMasterQueryKey );
+    // Check collision area.
+    if ( mCheckArea )
+        if ( !b2TestOverlap( &mCompareShape, 0, fixture->GetShape(), 0, mCompareTransform, fixture->GetBody()->GetTransform() ) )
+        return true;
 
     // Fetch layer and group masks.
     const U32 sceneLayerMask = pSceneObject->getSceneLayerMask();
@@ -442,6 +543,9 @@ bool WorldQuery::ReportFixture( b2Fixture* fixture )
         WorldQueryResult queryResult( pSceneObject );
         mLayeredQueryResults[pSceneObject->getSceneLayer()].push_back( queryResult );
         mQueryResults.push_back( queryResult );
+
+        // Tag with world query key.
+        pSceneObject->setWorldQueryKey( mMasterQueryKey );
     }
 
     return true;
@@ -478,9 +582,6 @@ F32 WorldQuery::ReportFixture( b2Fixture* fixture, const b2Vec2& point, const b2
     if ( mQueryFilter.mPickingAllowedFilter && !pSceneObject->getPickingAllowed() )
         return 1.0f;
 
-    // Tag with world query key.
-    pSceneObject->setWorldQueryKey( mMasterQueryKey );
-
     // Fetch layer and group masks.
     const U32 sceneLayerMask = pSceneObject->getSceneLayerMask();
     const U32 sceneGroupMask = pSceneObject->getSceneGroupMask();
@@ -497,6 +598,9 @@ F32 WorldQuery::ReportFixture( b2Fixture* fixture, const b2Vec2& point, const b2
         WorldQueryResult queryResult( pSceneObject, point, normal, fraction, (U32)shapeIndex );
         mLayeredQueryResults[pSceneObject->getSceneLayer()].push_back( queryResult );
         mQueryResults.push_back( queryResult );
+
+        // Tag with world query key.
+        pSceneObject->setWorldQueryKey( mMasterQueryKey );
     }
 
     return 1.0f;
@@ -533,8 +637,24 @@ bool WorldQuery::QueryCallback( S32 proxyId )
     if ( mQueryFilter.mPickingAllowedFilter && !pSceneObject->getPickingAllowed() )
         return true;
 
-    // Tag with world query key.
-    pSceneObject->setWorldQueryKey( mMasterQueryKey );
+    // Check OOBB.
+    if ( mCheckOOBB )
+    {
+            // Fetch the shapes render OOBB.
+        b2PolygonShape oobb;
+        oobb.Set( pSceneObject->getRenderOOBB(), 4);
+
+        if ( mCheckPoint )
+        {
+            if ( !oobb.TestPoint( mCompareTransform, mComparePoint ) )
+                return true;
+        }
+        else
+        {
+            if ( !b2TestOverlap( &mCompareShape, 0, &oobb, 0, mCompareTransform, mCompareTransform ) )
+                return true;
+        }
+    }
 
     // Fetch layer and group masks.
     const U32 sceneLayerMask = pSceneObject->getSceneLayerMask();
@@ -546,6 +666,9 @@ bool WorldQuery::QueryCallback( S32 proxyId )
         WorldQueryResult queryResult( pSceneObject );
         mLayeredQueryResults[pSceneObject->getSceneLayer()].push_back( queryResult );
         mQueryResults.push_back( queryResult );
+
+        // Tag with world query key.
+        pSceneObject->setWorldQueryKey( mMasterQueryKey );
     }
 
     return true;
@@ -582,8 +705,16 @@ F32 WorldQuery::RayCastCallback( const b2RayCastInput& input, S32 proxyId )
     if ( mQueryFilter.mPickingAllowedFilter && !pSceneObject->getPickingAllowed() )
         return 1.0f;
 
-    // Tag with world query key.
-    pSceneObject->setWorldQueryKey( mMasterQueryKey );
+    // Check OOBB.
+    if ( mCheckOOBB )
+    {
+        // Fetch the shapes render OOBB.
+        b2PolygonShape oobb;
+        oobb.Set( pSceneObject->getRenderOOBB(), 4);
+        b2RayCastOutput rayOutput;
+        if ( !oobb.RayCast( &rayOutput, mCompareRay, mCompareTransform, 0 ) )
+            return true;
+    }
 
     // Fetch layer and group masks.
     const U32 sceneLayerMask = pSceneObject->getSceneLayerMask();
@@ -595,6 +726,9 @@ F32 WorldQuery::RayCastCallback( const b2RayCastInput& input, S32 proxyId )
         WorldQueryResult queryResult( pSceneObject );
         mLayeredQueryResults[pSceneObject->getSceneLayer()].push_back( queryResult );
         mQueryResults.push_back( queryResult );
+
+        // Tag with world query key.
+        pSceneObject->setWorldQueryKey( mMasterQueryKey );
     }
 
     return 1.0f;
@@ -621,9 +755,6 @@ void WorldQuery::injectAlwaysInScope( void )
         if ( pSceneObject->getWorldQueryKey() == mMasterQueryKey )
             continue;
 
-        // Tag with world query key.
-        pSceneObject->setWorldQueryKey( mMasterQueryKey );
-
         // Enabled filter.
         if ( mQueryFilter.mEnabledFilter && !pSceneObject->isEnabled() )
             continue;
@@ -646,6 +777,9 @@ void WorldQuery::injectAlwaysInScope( void )
             WorldQueryResult queryResult( pSceneObject );
             mLayeredQueryResults[pSceneObject->getSceneLayer()].push_back( queryResult );
             mQueryResults.push_back( queryResult );
+
+            // Tag with world query key.
+            pSceneObject->setWorldQueryKey( mMasterQueryKey );
         }
     }
 }

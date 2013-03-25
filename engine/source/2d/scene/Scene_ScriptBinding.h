@@ -2305,9 +2305,9 @@ ConsoleMethod(Scene, getMotorJointMaxTorque, F32, 3, 3,  "(jointId) Gets the max
 ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGroupMask], [sceneLayerMask], [pickMode] ) Picks objects intersecting the specified area with optional group/layer masks.\n"
               "@param startx/y The coordinates of the start point as either (\"x y\") or (x,y)\n"
               "@param endx/y The coordinates of the end point as either (\"x y\") or (x,y)\n"
-              "@param sceneGroupMask Optional scene group mask.\n"
-              "@param sceneLayerMask Optional scene layer mask.\n"
-              "@param pickMode Optional mode 'any', 'size' or 'collision' (default is 'size').\n"
+              "@param sceneGroupMask Optional scene group mask.  (-1) or empty string selects all groups.\n"
+              "@param sceneLayerMask Optional scene layer mask.  (-1) or empty string selects all layers.\n"
+              "@param pickMode Optional mode 'any', 'aabb', 'oobb' or 'collision' (default is 'oobb').\n"
               "@return Returns list of object IDs.")
 {
     // Upper left and lower right bound.
@@ -2356,15 +2356,21 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
     // Calculate scene group mask.
     U32 sceneGroupMask = MASK_ALL;
     if ( (U32)argc > firstArg )
-        sceneGroupMask = dAtoi(argv[firstArg]);
+    {
+        if ( *argv[firstArg] != 0 )
+            sceneGroupMask = dAtoi(argv[firstArg]);
+    }
 
     // Calculate scene layer mask.
     U32 sceneLayerMask = MASK_ALL;
     if ( (U32)argc > (firstArg + 1) )
-        sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    {
+        if ( *argv[firstArg + 1] != 0 )
+            sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    }
 
     // Calculate pick mode.
-    Scene::PickMode pickMode = Scene::PICK_SIZE;
+    Scene::PickMode pickMode = Scene::PICK_OOBB;
     if ( (U32)argc > (firstArg + 2))
     {
         pickMode = Scene::getPickModeEnum(argv[firstArg + 2]);
@@ -2372,7 +2378,7 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
     if ( pickMode == Scene::PICK_INVALID )
     {
         Con::warnf("Scene::pickArea() - Invalid pick mode of %s", argv[firstArg + 2]);
-        pickMode = Scene::PICK_SIZE;
+        pickMode = Scene::PICK_OOBB;
     }
 
 
@@ -2395,13 +2401,17 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
     {
         pWorldQuery->anyQueryArea( aabb );    
     }
-    else if ( pickMode == Scene::PICK_SIZE )
+    else if ( pickMode == Scene::PICK_AABB )
     {
-        pWorldQuery->renderQueryArea( aabb );    
+        pWorldQuery->aabbQueryArea( aabb );    
+    }
+    else if ( pickMode == Scene::PICK_OOBB )
+    {
+        pWorldQuery->oobbQueryArea( aabb );    
     }
     else if ( pickMode == Scene::PICK_COLLISION )
     {
-        pWorldQuery->fixtureQueryArea( aabb );    
+        pWorldQuery->collisionQueryArea( aabb );    
     }
     else
     {
@@ -2454,9 +2464,9 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
 ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroupMask], [sceneLayerMask], [pickMode] ) Picks objects intersecting the specified ray with optional group/layer masks.\n"
               "@param startx/y The coordinates of the start point as either (\"x y\") or (x,y)\n"
               "@param endx/y The coordinates of the end point as either (\"x y\") or (x,y)\n"
-              "@param sceneGroupMask Optional scene group mask.\n"
-              "@param sceneLayerMask Optional scene layer mask.\n"
-              "@param pickMode Optional mode 'any', 'size' or 'collision' (default is 'size').\n"
+              "@param sceneGroupMask Optional scene group mask.  (-1) or empty string selects all groups.\n"
+              "@param sceneLayerMask Optional scene layer mask.  (-1) or empty string selects all layers.\n"
+              "@param pickMode Optional mode 'any', 'aabb', 'oobb' or 'collision' (default is 'oobb').\n"
               "@return Returns list of object IDs.")
 {
     // Upper left and lower right bound.
@@ -2505,15 +2515,21 @@ ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroup
     // Calculate scene group mask.
     U32 sceneGroupMask = MASK_ALL;
     if ( (U32)argc > firstArg )
-        sceneGroupMask = dAtoi(argv[firstArg]);
+    {
+        if ( *argv[firstArg] != 0 )
+            sceneGroupMask = dAtoi(argv[firstArg]);
+    }
 
     // Calculate scene layer mask.
     U32 sceneLayerMask = MASK_ALL;
     if ( (U32)argc > (firstArg + 1) )
-        sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    {
+        if ( *argv[firstArg + 1] != 0 )
+            sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    }
 
     // Calculate pick mode.
-    Scene::PickMode pickMode = Scene::PICK_SIZE;
+    Scene::PickMode pickMode = Scene::PICK_OOBB;
     if ( (U32)argc > (firstArg + 2))
     {
         pickMode = Scene::getPickModeEnum(argv[firstArg + 2]);
@@ -2521,7 +2537,7 @@ ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroup
     if ( pickMode == Scene::PICK_INVALID )
     {
         Con::warnf("Scene::pickRay() - Invalid pick mode of %s", argv[firstArg + 2]);
-        pickMode = Scene::PICK_SIZE;
+        pickMode = Scene::PICK_OOBB;
     }
 
 
@@ -2537,13 +2553,17 @@ ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroup
     {
         pWorldQuery->anyQueryRay( v1, v2 );    
     }
-    else if ( pickMode == Scene::PICK_SIZE )
+    else if ( pickMode == Scene::PICK_AABB )
     {
-        pWorldQuery->renderQueryRay( v1, v2 );    
+        pWorldQuery->aabbQueryRay( v1, v2 );    
+    }
+    else if ( pickMode == Scene::PICK_OOBB )
+    {
+        pWorldQuery->oobbQueryRay( v1, v2 );    
     }
     else if ( pickMode == Scene::PICK_COLLISION )
     {
-        pWorldQuery->fixtureQueryRay( v1, v2 );    
+        pWorldQuery->collisionQueryRay( v1, v2 );    
     }
     else
     {
@@ -2599,12 +2619,151 @@ ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroup
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(Scene, pickPoint, const char*, 3, 7, "(x / y, [sceneGroupMask], [sceneLayerMask], [pickMode] ) Picks objects intersecting the specified point with optional group/layer masks.\n"
+              "@param x/y The coordinate of the point as either (\"x y\") or (x,y)\n"
+              "@param sceneGroupMask Optional scene group mask.  (-1) or empty string selects all groups.\n"
+              "@param sceneLayerMask Optional scene layer mask.  (-1) or empty string selects all layers.\n"
+              "@param pickMode Optional mode 'any', 'aabb', 'oobb' or 'collision' (default is 'ooabb').\n"
+              "@return Returns list of object IDs.")
+{
+    // The point.
+    Vector2 point;
+
+    // The index of the first optional parameter.
+    U32 firstArg;
+
+    // Grab the number of elements in the first parameter.
+    U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+
+    // ("x y")
+    if ((elementCount == 2) && (argc < 8))
+    {
+        point = Utility::mGetStringElementVector(argv[2]);
+        firstArg = 3;
+    }
+   
+    // (x, y)
+    else if ((elementCount == 1) && (argc > 3))
+    {
+        point = Vector2(dAtof(argv[2]), dAtof(argv[3]));
+        firstArg = 4;
+    }
+   
+    // Invalid
+    else
+    {
+        Con::warnf("Scene::pickPoint() - Invalid number of parameters!");
+        return NULL;
+    }
+
+    // Calculate scene group mask.
+    U32 sceneGroupMask = MASK_ALL;
+    if ( (U32)argc > firstArg )
+    {
+        if ( *argv[firstArg] != 0 )
+            sceneGroupMask = dAtoi(argv[firstArg]);
+    }
+
+    // Calculate scene layer mask.
+    U32 sceneLayerMask = MASK_ALL;
+    if ( (U32)argc > (firstArg + 1) )
+    {
+        if ( *argv[firstArg + 1] != 0 )
+            sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    }
+
+    // Calculate pick mode.
+    Scene::PickMode pickMode = Scene::PICK_OOBB;
+    if ( (U32)argc > (firstArg + 2 ))
+    {
+        pickMode = Scene::getPickModeEnum(argv[firstArg + 2]);
+    }
+    if ( pickMode == Scene::PICK_INVALID )
+    {
+        Con::warnf("Scene::pickPoint() - Invalid pick mode of %s", argv[firstArg + 2]);
+        pickMode = Scene::PICK_OOBB;
+    }
+
+
+    // Fetch world query and clear results.
+    WorldQuery* pWorldQuery = object->getWorldQuery( true );
+
+    // Set filter.
+    WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
+    pWorldQuery->setQueryFilter( queryFilter );
+
+    // Perform query.
+    if ( pickMode == Scene::PICK_ANY )
+    {
+        pWorldQuery->anyQueryPoint( point );    
+    }
+    else if ( pickMode == Scene::PICK_AABB )
+    {
+        pWorldQuery->aabbQueryPoint( point );    
+    }
+    else if ( pickMode == Scene::PICK_OOBB )
+    {
+        pWorldQuery->oobbQueryPoint( point );    
+    }
+    else if ( pickMode == Scene::PICK_COLLISION )
+    {
+        pWorldQuery->collisionQueryPoint( point );    
+    }
+    else
+    {
+        AssertFatal( false, "Unsupported pick mode." );
+    }
+
+    // Fetch result count.
+    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+
+    // Finish if no results.
+    if ( resultCount == 0 )
+        return NULL;
+
+    // Fetch results.
+    typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
+
+    // Set Max Buffer Size.
+    const U32 maxBufferSize = 4096;
+
+    // Create Returnable Buffer.
+    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
+
+    // Set Buffer Counter.
+    U32 bufferCount = 0;
+
+    // Add Picked Objects to List.
+    for ( U32 n = 0; n < resultCount; n++ )
+    {
+        // Output Object ID.
+        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
+
+        // Finish early if we run out of buffer space.
+        if ( bufferCount >= maxBufferSize )
+        {
+            // Warn.
+            Con::warnf("Scene::pickPoint() - Too many items picked to return to scripts!");
+            break;
+        }
+    }
+
+    // Clear world query.
+    pWorldQuery->clearQuery();
+
+    // Return buffer.
+    return pBuffer;
+}
+
+
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [sceneGroupMask], [sceneLayerMask] ) Picks objects with collision shapes intersecting the specified ray with optional group/layer masks.\n"
                 "Unlike other pick methods, this returns the complete detail for each object encountered, returning the collision point, normal and fraction of the ray intersection.\n"
                 "@param startx/y The coordinates of the start point as either (\"x y\") or (x,y)\n"
                 "@param endx/y The coordinates of the end point as either (\"x y\") or (x,y)\n"
-                "@param sceneGroupMask Optional scene group mask.\n"
-                "@param sceneLayerMask Optional scene layer mask.\n"
+                "@param sceneGroupMask Optional scene group mask.  (-1) or empty string selects all groups.\n"
+                "@param sceneLayerMask Optional scene layer mask.  (-1) or empty string selects all layers.\n"
                 "@return Returns a list of objects in blocks of detail items where each block represents a single object and its collision detail in the format:"
                 "<ObjectId PointX PointY NormalX NormalY RayFraction ShapeIndex> <ObjectId PointX PointY NormalX NormalY RayFraction ShapeIndex> <ObjectId PointX PointY NormalX NormalY RayFraction ShapeIndex> etc.\n")
 {
@@ -2654,12 +2813,18 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
     // Calculate scene group mask.
     U32 sceneGroupMask = MASK_ALL;
     if ( (U32)argc > firstArg )
-        sceneGroupMask = dAtoi(argv[firstArg]);
+    {
+        if ( *argv[firstArg] != 0 )
+            sceneGroupMask = dAtoi(argv[firstArg]);
+    }
 
     // Calculate scene layer mask.
     U32 sceneLayerMask = MASK_ALL;
     if ( (U32)argc > (firstArg + 1) )
-        sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    {
+        if ( *argv[firstArg + 1] != 0 )
+            sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    }
 
     // Fetch world query and clear results.
     WorldQuery* pWorldQuery = object->getWorldQuery( true );
@@ -2669,7 +2834,7 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
     pWorldQuery->setQueryFilter( queryFilter );
 
     // Perform query.
-    pWorldQuery->fixtureQueryRay( v1, v2 );    
+    pWorldQuery->collisionQueryRay( v1, v2 );    
 
     // Sanity!
     AssertFatal( pWorldQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );
@@ -2714,134 +2879,6 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
         {
             // Warn.
             Con::warnf("Scene::pickRayCollision() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
-
-    // Clear world query.
-    pWorldQuery->clearQuery();
-
-    // Return buffer.
-    return pBuffer;
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(Scene, pickPoint, const char*, 3, 7, "(x / y, [sceneGroupMask], [sceneLayerMask], [pickMode] ) Picks objects intersecting the specified point with optional group/layer masks.\n"
-              "@param x/y The coordinate of the point as either (\"x y\") or (x,y)\n"
-              "@param sceneGroupMask Optional scene group mask.\n"
-              "@param sceneLayerMask Optional scene layer mask.\n"
-              "@param pickMode Optional mode 'any', 'size' or 'collision' (default is 'size').\n"
-              "@return Returns list of object IDs.")
-{
-    // The point.
-    Vector2 point;
-
-    // The index of the first optional parameter.
-    U32 firstArg;
-
-    // Grab the number of elements in the first parameter.
-    U32 elementCount = Utility::mGetStringElementCount(argv[2]);
-
-    // ("x y")
-    if ((elementCount == 2) && (argc < 8))
-    {
-        point = Utility::mGetStringElementVector(argv[2]);
-        firstArg = 3;
-    }
-   
-    // (x, y)
-    else if ((elementCount == 1) && (argc > 3))
-    {
-        point = Vector2(dAtof(argv[2]), dAtof(argv[3]));
-        firstArg = 4;
-    }
-   
-    // Invalid
-    else
-    {
-        Con::warnf("Scene::pickPoint() - Invalid number of parameters!");
-        return NULL;
-    }
-
-    // Calculate scene group mask.
-    U32 sceneGroupMask = MASK_ALL;
-    if ( (U32)argc > firstArg )
-        sceneGroupMask = dAtoi(argv[firstArg]);
-
-    // Calculate scene layer mask.
-    U32 sceneLayerMask = MASK_ALL;
-    if ( (U32)argc > (firstArg + 1) )
-        sceneLayerMask = dAtoi(argv[firstArg + 1]);
-
-    // Calculate pick mode.
-    Scene::PickMode pickMode = Scene::PICK_SIZE;
-    if ( (U32)argc > (firstArg + 2 ))
-    {
-        pickMode = Scene::getPickModeEnum(argv[firstArg + 2]);
-    }
-    if ( pickMode == Scene::PICK_INVALID )
-    {
-        Con::warnf("Scene::pickPoint() - Invalid pick mode of %s", argv[firstArg + 2]);
-        pickMode = Scene::PICK_SIZE;
-    }
-
-
-    // Fetch world query and clear results.
-    WorldQuery* pWorldQuery = object->getWorldQuery( true );
-
-    // Set filter.
-    WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
-    pWorldQuery->setQueryFilter( queryFilter );
-
-    // Perform query.
-    if ( pickMode == Scene::PICK_ANY )
-    {
-        pWorldQuery->anyQueryPoint( point );    
-    }
-    else if ( pickMode == Scene::PICK_SIZE )
-    {
-        pWorldQuery->renderQueryPoint( point );    
-    }
-    else if ( pickMode == Scene::PICK_COLLISION )
-    {
-        pWorldQuery->fixtureQueryPoint( point );    
-    }
-    else
-    {
-        AssertFatal( false, "Unsupported pick mode." );
-    }
-
-    // Fetch result count.
-    const U32 resultCount = pWorldQuery->getQueryResultsCount();
-
-    // Finish if no results.
-    if ( resultCount == 0 )
-        return NULL;
-
-    // Fetch results.
-    typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
-
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
-
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
-
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
-
-    // Add Picked Objects to List.
-    for ( U32 n = 0; n < resultCount; n++ )
-    {
-        // Output Object ID.
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
-
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("Scene::pickPoint() - Too many items picked to return to scripts!");
             break;
         }
     }

@@ -22,9 +22,6 @@
 
 function MoveToToy::create( %this )
 {
-    // Activate the package.
-    activatePackage( MoveToToyPackage );    
-
     // Initialize the toys settings.
     MoveToToy.moveSpeed = 50;
     MoveToToy.trackMouse = true;
@@ -41,8 +38,6 @@ function MoveToToy::create( %this )
 
 function MoveToToy::destroy( %this )
 {
-    // Deactivate the package.
-    deactivatePackage( MoveToToyPackage );
 }
 
 //-----------------------------------------------------------------------------
@@ -164,14 +159,8 @@ function MoveToToy::setTrackMouse( %this, %value )
 
 //-----------------------------------------------------------------------------
 
-package MoveToToyPackage
+function MoveToToy::onTouchDown(%this, %touchID, %worldPosition)
 {
-
-function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
-{
-    // Call parent.
-    Parent::onTouchDown(%this, %touchID, %worldPosition );
-    
     // Set the target to the touched position.
     MoveToToy.TargetObject.Position = %worldPosition;
     
@@ -181,11 +170,8 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
 
 //-----------------------------------------------------------------------------
 
-function SandboxWindow::onTouchMoved(%this, %touchID, %worldPosition)
+function MoveToToy::onTouchMoved(%this, %touchID, %worldPosition)
 {
-    // Call parent.
-    Parent::onTouchMoved(%this, %touchID, %worldPosition );
-    
     // Finish if not tracking the mouse.
     if ( !MoveToToy.trackMouse )
         return;
@@ -196,5 +182,3 @@ function SandboxWindow::onTouchMoved(%this, %touchID, %worldPosition)
     // Move the sight to the touched position.
     MoveToToy.SightObject.MoveTo( %worldPosition, MoveToToy.moveSpeed );     
 }
-    
-};

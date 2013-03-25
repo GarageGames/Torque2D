@@ -56,17 +56,22 @@ public:
     void            addAlwaysInScope( SceneObject* pSceneObject );
     void            removeAlwaysInScope( SceneObject* pSceneObject );
 
-    //// World fixture queries.
-    U32             fixtureQueryArea( const b2AABB& aabb );
-    U32             fixtureQueryRay( const Vector2& point1, const Vector2& point2 );
-    U32             fixtureQueryPoint( const Vector2& point );
+    /// World collision-shape queries.
+    U32             collisionQueryArea( const b2AABB& aabb );
+    U32             collisionQueryRay( const Vector2& point1, const Vector2& point2 );
+    U32             collisionQueryPoint( const Vector2& point );
 
-    //// Render queries.
-    U32             renderQueryArea( const b2AABB& aabb );
-    U32             renderQueryRay( const Vector2& point1, const Vector2& point2 );
-    U32             renderQueryPoint( const Vector2& point );
+    /// AABB queries.
+    U32             aabbQueryArea( const b2AABB& aabb );
+    U32             aabbQueryRay( const Vector2& point1, const Vector2& point2 );
+    U32             aabbQueryPoint( const Vector2& point );
 
-    /// World fixture & render queries.
+    /// OOBB queries.
+    U32             oobbQueryArea( const b2AABB& aabb );
+    U32             oobbQueryRay( const Vector2& point1, const Vector2& point2 );
+    U32             oobbQueryPoint( const Vector2& point );
+
+    /// Any queries.
     U32             anyQueryArea( const b2AABB& aabb );
     U32             anyQueryArea( const Vector2& lowerBound, const Vector2& upperBound );
     U32             anyQueryRay( const Vector2& point1, const Vector2& point2 );
@@ -96,8 +101,13 @@ private:
 private:
     Scene*                      mpScene;
     WorldQueryFilter            mQueryFilter;
-    bool                        mCheckFixturePoint;
-    b2Vec2                      mFixturePoint;
+    b2PolygonShape              mCompareShape;
+    b2RayCastInput              mCompareRay;
+    b2Vec2                      mComparePoint;
+    b2Transform                 mCompareTransform;
+    bool                        mCheckPoint;
+    bool                        mCheckArea;
+    bool                        mCheckOOBB;
     typeWorldQueryResultVector  mLayeredQueryResults[MAX_LAYERS_SUPPORTED];
     typeWorldQueryResultVector  mQueryResults;
     bool                        mIsRaycastQueryResult;
