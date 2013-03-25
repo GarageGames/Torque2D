@@ -22,6 +22,7 @@
 
 function AquariumToy::create( %this )
 {
+    exec("./scripts/aquarium.cs");
     exec("./scripts/fish.cs");
 
     // Configure settings.
@@ -29,14 +30,9 @@ function AquariumToy::create( %this )
     AquariumToy.currentFish = 0;
     AquariumToy.selectedAnimation = "TropicalAssets:angelfish1Anim";
     
-    // Set all the fish scene-layers to sort in "batch" mode
+    // Set the fish scene-layer to sort in "batch" mode
     // so that all the fish will be sorted into a batchable order to reduce draw calls.
-    SandboxScene.setLayerSortMode( 0, batch );
-    SandboxScene.setLayerSortMode( 1, batch );
-    SandboxScene.setLayerSortMode( 2, batch );
-    SandboxScene.setLayerSortMode( 3, batch );
-    SandboxScene.setLayerSortMode( 4, batch );
-    SandboxScene.setLayerSortMode( 5, batch );
+    SandboxScene.setLayerSortMode( 15, batch );
     
     addNumericOption("Max Fish", 1, 50, 1, "setMaxFish", %this.maxFish, true, "Sets the maximum number of fish to be created.");
     addSelectionOption(getFishAnimationList(), "Fish Animation", 5, "setSelectedAnimation", false, "Selects the fish animation that can be spawned manually.");

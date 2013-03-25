@@ -2,9 +2,7 @@
 	ModuleId="TropicalAssets"
 	VersionId="1"
 	Description="Tropical Fish Assets.  Particularly useful for the AquariumToy"
-	ScriptFile="main.cs"
-	CreateFunction="create"
-	DestroyFunction="destroy">
+>
 		<DeclaredAssets
 			Path="assets"
 			Extension="asset.taml"
