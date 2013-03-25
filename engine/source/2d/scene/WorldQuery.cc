@@ -372,8 +372,6 @@ U32 WorldQuery::anyQueryArea( const b2AABB& aabb )
     PROFILE_SCOPE(WorldQuery_AnyQueryAreaAABB);
 
     // Query.
-    aabbQueryArea( aabb );
-    mMasterQueryKey--;
     oobbQueryArea( aabb );
     mMasterQueryKey--;
     collisionQueryArea( aabb );
@@ -408,8 +406,6 @@ U32 WorldQuery::anyQueryRay( const Vector2& point1, const Vector2& point2 )
     PROFILE_SCOPE(WorldQuery_AnyQueryRay);
 
     // Query.
-    aabbQueryRay( point1, point2 );
-    mMasterQueryKey--;
     oobbQueryRay( point1, point2 );
     mMasterQueryKey--;
     collisionQueryRay( point1, point2 );
@@ -428,8 +424,6 @@ U32 WorldQuery::anyQueryPoint( const Vector2& point )
     PROFILE_SCOPE(WorldQuery_AnyQueryPoint);
 
     // Query.
-    aabbQueryPoint( point );
-    mMasterQueryKey--;
     oobbQueryPoint( point );
     mMasterQueryKey--;
     collisionQueryPoint( point );
