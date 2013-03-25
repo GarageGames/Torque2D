@@ -355,7 +355,9 @@ U32 WorldQuery::oobbQueryAABB( const b2AABB& aabb )
     mComparePolygonShape.Set( verts, 4 );
     mCompareTransform.SetIdentity();
     mCheckOOBB = true;
+    mCheckAABB = true;
     Query( this, aabb );
+    mCheckAABB = false;
     mCheckOOBB = false;
 
     // Inject always-in-scope.
