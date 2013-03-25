@@ -63,11 +63,11 @@ ShapeVector::~ShapeVector()
 void ShapeVector::initPersistFields()
 {
    addProtectedField("PolyList", TypePoint2FVector, Offset(mPolygonBasisList, ShapeVector), &setPolyList, &defaultProtectedGetFn, &writePolyList, "");
-   addProtectedField("LineColor", TypeColorF, Offset(mLineColor, ShapeVector), &setLineColor, &defaultProtectedGetFn, &writeLineColor, "");
-   addProtectedField("FillColor", TypeColorF, Offset(mFillColor, ShapeVector), &setFillColor, &defaultProtectedGetFn, &writeFillColor, "");
-   addProtectedField("FillMode", TypeBool, Offset(mFillMode, ShapeVector), &setFillMode, &defaultProtectedGetFn, &writeFillMode, "");
-   addProtectedField("IsCircle", TypeBool, Offset(mIsCircle, ShapeVector), &setIsCircle, &defaultProtectedGetFn, &writeIsCircle, "");
-   addProtectedField("CircleRadius", TypeF32, Offset(mCircleRadius, ShapeVector), &setCircleRadius, &defaultProtectedGetFn, &writeCircleRadius, "");
+   addField("LineColor", TypeColorF, Offset(mLineColor, ShapeVector), &writeLineColor, "");
+   addField("FillColor", TypeColorF, Offset(mFillColor, ShapeVector), &writeFillColor, "");
+   addField("FillMode", TypeBool, Offset(mFillMode, ShapeVector), &writeFillMode, "");
+   addField("IsCircle", TypeBool, Offset(mIsCircle, ShapeVector), &writeIsCircle, "");
+   addField("CircleRadius", TypeF32, Offset(mCircleRadius, ShapeVector), &writeCircleRadius, "");
 
    Parent::initPersistFields();
 }
@@ -582,163 +582,6 @@ void ShapeVector::generateLocalPoly( void )
             mPolygonLocalList[n] = polyVertex;
         }
     }
-}
-
-//----------------------------------------------------------------------------
-
-void ShapeVector::setLineColorString( const char* lineColour )
-{
-    // Calculate Element Count.
-    const U32 elementCount = Utility::mGetStringElementCount( lineColour );
-
-    // Check we've got enough arguments.
-    if ( elementCount < 3 )
-    {
-        Con::warnf("ShapeVector::setLineColourString() - Invalid Number of Elements! (%s)", lineColour);
-        return;
-    }
-
-    // Calculate Red, Green and Blue.
-    const F32 red   = dAtof(Utility::mGetStringElement( lineColour, 0 ));
-    const F32 green = dAtof(Utility::mGetStringElement( lineColour, 1 ));
-    const F32 blue  = dAtof(Utility::mGetStringElement( lineColour, 2 ));
-
-    // Set Alpha (if specified).
-    F32 alpha;
-    if ( elementCount >= 4 )
-        alpha = dAtof(Utility::mGetStringElement( lineColour, 3 ));
-    else alpha = 1.0f;
-
-    // Set Line Colour.
-    setLineColor( ColorF(red, green, blue, alpha) );
-}
-
-//----------------------------------------------------------------------------
-
-void ShapeVector::setLineColor( const ColorF& lineColour )
-{
-    // Set Line Colour.
-    mLineColor = lineColour;
-}
-
-//----------------------------------------------------------------------------
-
-const char* ShapeVector::getLineColor()
-{
-    // Get Return Buffer.
-    char* pReturnBuffer = Con::getReturnBuffer( 64 );
-    dSprintf( pReturnBuffer, 64, "%0.5f %0.5f %0.5f %0.5f", mLineColor.red, mLineColor.green,
-                                                            mLineColor.blue, mLineColor.alpha);
-    return pReturnBuffer;
-}
-
-//----------------------------------------------------------------------------
-
-void ShapeVector::setLineAlpha( const F32 alpha )
-{
-    // Set Line Alpha.
-    mLineColor.alpha = alpha;
-}
-
-//----------------------------------------------------------------------------
-
-void ShapeVector::setFillColorString( const char* fillColour )
-{
-    // Calculate Element Count.
-    const U32 elementCount = Utility::mGetStringElementCount( fillColour );
-
-    // Check we've got enough arguments.
-    if ( elementCount < 3 )
-    {
-        Con::warnf("ShapeVector::setFillColourString() - Invalid Number of Elements! (%s)", fillColour);
-        return;
-    }
-
-    // Calculate Red, Green and Blue.
-    const F32 red   = dAtof(Utility::mGetStringElement( fillColour, 0 ));
-    const F32 green = dAtof(Utility::mGetStringElement( fillColour, 1 ));
-    const F32 blue  = dAtof(Utility::mGetStringElement( fillColour, 2 ));
-
-    // Set Alpha (if specified).
-    F32 alpha;
-    if ( elementCount >= 4 )
-        alpha = dAtof(Utility::mGetStringElement( fillColour, 3 ));
-    else alpha = 1.0f;
-
-    // Set Fill Colour.
-    setFillColor( ColorF(red, green, blue, alpha) );
-}
-
-//----------------------------------------------------------------------------
-
-void ShapeVector::setFillColor( const ColorF& fillColour )
-{
-    // Set Fill Colour.
-    mFillColor = fillColour;
-}
-
-//----------------------------------------------------------------------------
-
-const char* ShapeVector::getFillColor()
-{
-    // Get Return Buffer.
-    char* pReturnBuffer = Con::getReturnBuffer( 64 );
-    dSprintf( pReturnBuffer, 64, "%0.5f %0.5f %0.5f %0.5f", mFillColor.red, mFillColor.green,
-                                                            mFillColor.blue, mFillColor.alpha);
-    return pReturnBuffer;
-}
-
-//----------------------------------------------------------------------------
-
-void ShapeVector::setFillAlpha( const F32 alpha )
-{
-    // Set Fill Alpha.
-    mFillColor.alpha = alpha;
-}
-
-//----------------------------------------------------------------------------
-
-void ShapeVector::setFillMode( const bool fillMode )
-{
-    // Set Fill Mode.
-    mFillMode = fillMode;
-}
-
-//----------------------------------------------------------------------------
-
-bool ShapeVector::getFillMode()
-{
-    return mFillMode;
-}
-
-//----------------------------------------------------------------------------
-
-void ShapeVector::setIsCircle( const bool isCircle )
-{
-    // Set Fill Mode.
-    mIsCircle = isCircle;
-}
-
-//----------------------------------------------------------------------------
-
-bool ShapeVector::getIsCircle()
-{
-    return mIsCircle;
-}
-
-//----------------------------------------------------------------------------
-
-void ShapeVector::setCircleRadius( const F32 circleRadius )
-{
-    // Set Fill Mode.
-    mCircleRadius = circleRadius;
-}
-
-//----------------------------------------------------------------------------
-
-F32 ShapeVector::getCircleRadius()
-{
-    return mCircleRadius;
 }
 
 //----------------------------------------------------------------------------
