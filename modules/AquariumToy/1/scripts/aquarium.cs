@@ -66,8 +66,8 @@ function getFishSize(%anim)
 function buildAquarium(%scene)
 {
     // A pre-built aquarium of size 100x75, with blue water, some haze, and some nice rocks.
-    // Triggers will be provide around the edges, kind of like an electric fence,
-    // with a call to addAquariumBoundaries.
+    // Triggers will be provide around the edges to let the developer know when objects in the
+    // aquarium have reached the edges.
 
     // Background
     %background = new Sprite();
@@ -107,105 +107,44 @@ function buildAquarium(%scene)
     addAquariumBoundaries( %scene, 100, 75 );
 }
 
+//-----------------------------------------------------------------------------
+
 function addAquariumBoundaries(%scene, %width, %height)
 {
     // add boundaries on all sides of the aquarium a bit outside of the border of the tank.
-    // The triggers allow for onCollision to be sent to any fish or other object that touch the edges.
+    // The triggers allow for onCollision to be sent to any fish or other object that touches the edges.
     // The triggers are far enough outside the tank so that objects will most likely be just out of view
-    // before they are sent the onCollision callback.  This will they can adjust "off stage".
+    // before they are sent the onCollision callback.  This way will they can adjust "off stage".
 
     // Calculate a width and height to use for the bounds.
     // They should be bigger than the aquarium itself.
     %wrapWidth = %width * 1.5;
     %wrapHeight = %height * 1.5;
 
-    // Left trigger
-    %leftTrigger = new SceneObject() { class = "AquariumBoundary"; };
-    
-    %leftTrigger.side = "left";
-    // make the bound as tall as the tank
-    %leftTrigger.setSize( 5, %wrapHeight );
-    // put the bounds 50% further out than the edge of the tank
-    %leftTrigger.setPosition( -%wrapWidth/2, 0 );
-    %leftTrigger.setSceneLayer( 1 );
-    %leftTrigger.createPolygonBoxCollisionShape( 5, %wrapHeight );
-    %leftTrigger.setDefaultDensity( 1 );
-    %leftTrigger.setDefaultFriction( 1.0 );        
-    %leftTrigger.setAwake( true );
-    %leftTrigger.setActive( true );
-    // the objects that collide with us should handle any callbacks.
-    // remember to set those scene objects to collide with scene group 15 (which is our group)!
-    %leftTrigger.setSceneGroup( 15 );
-    %leftTrigger.setCollisionCallback(false);
-    %leftTrigger.setBodyType( "static" );
-    %leftTrigger.setCollisionShapeIsSensor(0, true);
-    %scene.add( %leftTrigger );
-    
-    // Right trigger
-    %rightTrigger = new SceneObject() { class = "AquariumBoundary"; };
-    
-    // make the bound as tall as the tank
-    %rightTrigger.setSize( 5, %wrapHeight );
-    %rightTrigger.side = "right";
-    // put the bounds 50% further out than the edge of the tank
-    %rightTrigger.setPosition( %wrapWidth/2, 0 );
-    %rightTrigger.setSceneLayer( 1 );
-    %rightTrigger.createPolygonBoxCollisionShape( 5, %wrapHeight );
-    %rightTrigger.setDefaultDensity( 1 );
-    %rightTrigger.setDefaultFriction( 1.0 );    
-    %rightTrigger.setAwake( true );
-    %rightTrigger.setActive( true );
-    // the objects that collide with us should handle any callbacks.
-    // remember to set those scene objects to collide with scene group 15 (which is our group)!
-    %rightTrigger.setSceneGroup( 15 );
-    %rightTrigger.setCollisionCallback(false);
-    %rightTrigger.setBodyType( "static" );
-    %rightTrigger.setCollisionShapeIsSensor(0, true);
-    %scene.add( %rightTrigger );    
+    %scene.add( createOneAquariumBoundary( "left",   -%wrapWidth/2 SPC 0,  5 SPC %wrapHeight) );
+    %scene.add( createOneAquariumBoundary( "right",  %wrapWidth/2 SPC 0,   5 SPC %wrapHeight) );
+    %scene.add( createOneAquariumBoundary( "top",    0 SPC -%wrapHeight/2, %wrapWidth SPC 5 ) );
+    %scene.add( createOneAquariumBoundary( "bottom", 0 SPC %wrapHeight/2,  %wrapWidth SPC 5 ) );
+}
 
-    // Left trigger
-    %topTrigger = new SceneObject() { class = "AquariumBoundary"; };
+//-----------------------------------------------------------------------------
+
+function createOneAquariumBoundary(%side, %position, %size)
+{
+    %boundary = new SceneObject() { class = "AquariumBoundary"; };
     
-    %topTrigger.side = "top";
-    // make the bound as wide as the tank
-    %topTrigger.setSize( %wrapWidth, 5 );
-    // put the bounds 50% further out than the edge of the tank
-    %topTrigger.setPosition( 0, -%wrapHeight/2 );
-    %topTrigger.setSceneLayer( 1 );
-    %topTrigger.createPolygonBoxCollisionShape( %wrapWidth, 5 );
-    %topTrigger.setDefaultDensity( 1 );
-    %topTrigger.setDefaultFriction( 1.0 );        
-    %topTrigger.setAwake( true );
-    %topTrigger.setActive( true );
+    %boundary.setSize( %size );
+    %boundary.side = %side;
+    %boundary.setPosition( %position );
+    %boundary.setSceneLayer( 1 );
+    %boundary.createPolygonBoxCollisionShape( %size );
     // the objects that collide with us should handle any callbacks.
     // remember to set those scene objects to collide with scene group 15 (which is our group)!
-    %topTrigger.setSceneGroup( 15 );
-    %topTrigger.setCollisionCallback(false);
-    %topTrigger.setBodyType( "static" );
-    %topTrigger.setCollisionShapeIsSensor(0, true);
-    %scene.add( %topTrigger );
-    
-    // Right trigger
-    %bottomTrigger = new SceneObject() { class = "AquariumBoundary"; };
-    
-    // make the bound as wide as the tank
-    %bottomTrigger.setSize( %wrapWidth, 5 );
-    %bottomTrigger.side = "bottom";
-    // put the bounds 50% further out than the edge of the tank
-    %bottomTrigger.setPosition( 0, %wrapHeight/2 );
-    %bottomTrigger.setSceneLayer( 1 );
-    %bottomTrigger.createPolygonBoxCollisionShape( %wrapWidth, 5 );
-    %bottomTrigger.setDefaultDensity( 1 );
-    %bottomTrigger.setDefaultFriction( 1.0 );    
-    %bottomTrigger.setAwake( true );
-    %bottomTrigger.setActive( true );
-    // the objects that collide with us should handle any callbacks.
-    // remember to set those scene objects to collide with scene group 15 (which is our group)!
-    %bottomTrigger.setSceneGroup( 15 );
-    %bottomTrigger.setCollisionCallback(false);
-    %bottomTrigger.setBodyType( "static" );
-    %bottomTrigger.setCollisionShapeIsSensor(0, true);
-    %scene.add( %bottomTrigger );
+    %boundary.setSceneGroup( 15 );
+    %boundary.setCollisionCallback(false);
+    %boundary.setBodyType( "static" );
+    %boundary.setCollisionShapeIsSensor(0, true);
+    return %boundary;
 }
 
 //-----------------------------------------------------------------------------
