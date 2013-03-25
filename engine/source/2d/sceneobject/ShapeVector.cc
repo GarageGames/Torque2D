@@ -151,7 +151,7 @@ void ShapeVector::sceneRender( const SceneRenderState* pSceneRenderState, const 
         renderPolygonShape(vertexCount);
     }
 
-    // Restore Colour.
+    // Restore color.
     glColor4f( 1,1,1,1 );
 
     // Restore Matrix.
@@ -220,7 +220,7 @@ void ShapeVector::renderPolygonShape(U32 vertexCount)
         // Yes, so set polygon mode to FILL.
         //glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
-        // Set Fill Colour.
+        // Set Fill color.
         glColor4f( (GLfloat)mFillColor.red, (GLfloat)mFillColor.green, (GLfloat)mFillColor.blue, (GLfloat)mFillColor.alpha );
 
         GLfloat vert1[] = {//get first vert and make triangles based off of this one
@@ -253,7 +253,7 @@ void ShapeVector::renderPolygonShape(U32 vertexCount)
  
     }
 
-    // Set Line Colour.
+    // Set Line color.
     glColor4f(mLineColor.red, mLineColor.green, mLineColor.blue, mLineColor.alpha );
     
         for ( U32 n = 1; n <= vertexCount; n++ )
@@ -276,7 +276,7 @@ void ShapeVector::renderPolygonShape(U32 vertexCount)
         // Yes, so set polygon mode to FILL.
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
-        // Set Fill Colour.
+        // Set Fill color.
         glColor4fv( (GLfloat*)&mFillColor );
 
         // Draw Object.
@@ -288,7 +288,7 @@ void ShapeVector::renderPolygonShape(U32 vertexCount)
         glEnd();
     }
 
-    // Set Line Colour.
+    // Set Line color.
     glColor4fv( (GLfloat*)&mLineColor );
 
     // Draw Object.

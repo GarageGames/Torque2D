@@ -23,7 +23,7 @@
 // Revision History:
 // December 31, 2003	David Wyand		Changed a bunch of stuff.  Search for DAW below
 //										and make better notes here and in the changes doc.
-// May 19, 2004			David Wyand		Made changes to allow for a coloured rectangle to be
+// May 19, 2004			David Wyand		Made changes to allow for a colored rectangle to be
 //										displayed to the left of the text in the popup.
 // May 27, 2004			David Wyand		Added a check for mReverseTextList to see if we should
 //										reverse the text list if we must render it above
@@ -193,14 +193,14 @@ void GuiPopupTextListCtrl::onRenderCell(Point2I offset, Point2I cell, bool selec
    getCellSize(size);
    if(mouseOver)
    {
-      // DAW: Render a background colour for the cell
+      // DAW: Render a background color for the cell
       RectI cellR(offset.x, offset.y, size.x, size.y);
       ColorI color(0,0,0);
       dglDrawRectFill(cellR, color);
 
    } else if(selected)
    {
-      // DAW: Render a background colour for the cell
+      // DAW: Render a background color for the cell
       RectI cellR(offset.x, offset.y, size.x, size.y);
       ColorI color(128,128,128);
       dglDrawRectFill(cellR, color);
@@ -209,7 +209,7 @@ void GuiPopupTextListCtrl::onRenderCell(Point2I offset, Point2I cell, bool selec
    // DAW: Define the default x offset for the text
    U32 textXOffset = offset.x + mProfile->mTextOffset.x;
 
-   // DAW: Do we also draw a coloured box beside the text?
+   // DAW: Do we also draw a colored box beside the text?
    ColorI boxColor;
    bool drawbox = mPopUpCtrl->getColoredBox( boxColor, mList[cell.y].id);
    if(drawbox)
@@ -647,7 +647,7 @@ void GuiPopUpMenuCtrl::addEntry(const char *buf, S32 id, U32 scheme)
    char * cp = dStrchr(e.buf, '~');
    e.ascii = cp ? cp[1] : 0;
 
-   // DAW: See if there is a colour box defined with the text
+   // DAW: See if there is a color box defined with the text
    char* cb = dStrchr(e.buf, '|');
    if(cb)
    {
@@ -1029,7 +1029,7 @@ void GuiPopUpMenuCtrl::onRender(Point2I offset, const RectI &updateRect)
          break;
       }
 
-      // DAW: Do we first draw a coloured box beside the text?
+      // DAW: Do we first draw a colored box beside the text?
       ColorI boxColor;
       bool drawbox = getColoredBox( boxColor, mSelIndex);
       if(drawbox)
@@ -1422,7 +1422,7 @@ bool GuiPopUpMenuCtrl::getFontColor( ColorI &fontColor, S32 id, bool selected, b
    }
 
    // Default color scheme...
-   fontColor = selected ? mProfile->mFontColorSEL : mouseOver ? mProfile->mFontColorHL : mProfile->mFontColorNA; // DAW: Modified the final colour choice from mProfile->mFontColor to mProfile->mFontColorNA
+   fontColor = selected ? mProfile->mFontColorSEL : mouseOver ? mProfile->mFontColorHL : mProfile->mFontColorNA; // DAW: Modified the final color choice from mProfile->mFontColor to mProfile->mFontColorNA
 
    return( true );
 }

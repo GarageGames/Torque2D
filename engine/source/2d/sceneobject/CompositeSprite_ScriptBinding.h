@@ -772,7 +772,7 @@ ConsoleMethod(CompositeSprite, getSpriteBlendColor, const char*, 2, 3,  "(allowC
                                                                         "@param allowColorNames Whether to allow stock color names to be returned or not.  Optional: Defaults to false.\n"
                                                                         "@return (float red / float green / float blue / float alpha) The sprite blend color.")
 {
-    // Get Blend Colour.
+    // Get Blend color.
     ColorF blendColor = object->getSpriteBlendColor();
 
     // Fetch allow color names flag.

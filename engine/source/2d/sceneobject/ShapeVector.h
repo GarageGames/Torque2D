@@ -60,10 +60,10 @@ public:
     const char* getPoly( void );
     const char* getWorldPoly( void );
 
-    inline void setLineColor( const ColorF& lineColour ) { mLineColor = lineColour; }
+    inline void setLineColor( const ColorF& linecolor ) { mLineColor = linecolor; }
     inline const ColorF& getLineColor( void ) const { return mLineColor; }
     inline void setLineAlpha( const F32 alpha ) { mLineColor.alpha = alpha; }
-    inline void setFillColor( const ColorF& fillColour ) { mFillColor = fillColour; }
+    inline void setFillColor( const ColorF& fillcolor ) { mFillColor = fillcolor; }
     inline const ColorF& getFillColor( void ) const { return mFillColor; }
     inline void setFillAlpha( const F32 alpha ) { mFillColor.alpha = alpha; }
     inline void setFillMode( const bool fillMode ) { mFillMode = fillMode; }
