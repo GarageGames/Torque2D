@@ -83,6 +83,8 @@ public:
 
     void onTamlCustomWrite( TamlCustomNodes& customNodes );
     void onTamlCustomRead( const TamlCustomNodes& customNodes );
+
+    void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement ) const;
 };
 
 #endif // ParticleAssetFieldCollection

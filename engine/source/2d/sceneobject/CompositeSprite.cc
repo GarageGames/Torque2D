@@ -267,8 +267,8 @@ SpriteBatchItem* CompositeSprite::createSprite( const SpriteBatchItem::LogicalPo
             return createCustomLayout( logicalPosition );
 
         default:
-            // Sanity!
-            AssertFatal( false, "CompositeSprite::createSprite() - Unknown layout type encountered." );
+            // Warn.
+            Con::warnf( "CompositeSprite::createSprite() - Unknown layout type encountered." );
             return SpriteBatch::createSprite( logicalPosition );
     }
 }

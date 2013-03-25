@@ -22,9 +22,6 @@
 
 function PointForceControllerToy::create( %this )
 {
-    // Activate the package.
-    activatePackage( PointForceControllerToyPackage );    
-    
     // Set the sandbox drag mode availability.
     Sandbox.allowManipulation( pull );
     
@@ -322,14 +319,8 @@ function PointForceControllerToy::setAsteroidSpeed( %this, %value )
 
 //-----------------------------------------------------------------------------
 
-package PointForceControllerToyPackage
+function PointForceControllerToy::onTouchDown(%this, %touchID, %worldPosition)
 {
-
-function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
-{
-    // Call parent.
-    Parent::onTouchDown(%this, %touchID, %worldPosition );
-
     // Create an asteroid.
     %object = PointForceControllerToy.createAsteroid( %worldPosition );
     
@@ -338,5 +329,3 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
     else
         %object.setLinearVelocity( -PointForceControllerToy.asteroidSpeed, 0 );    
 }
-    
-};

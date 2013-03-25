@@ -112,7 +112,7 @@ void PointForceController::integrate( Scene* pScene, const F32 totalTime, const 
     aabb.upperBound.Set( currentPosition.x + mRadius, currentPosition.y + mRadius );
 
     // Query for candidate objects.
-    pWorldQuery->anyQueryArea( aabb ); 
+    pWorldQuery->anyQueryAABB( aabb ); 
 
     // Fetch results.
     typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
