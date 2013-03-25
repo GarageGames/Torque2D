@@ -46,7 +46,7 @@ struct SceneRenderState
         U32 renderGroupMask,
         const Vector2& renderScale,
         DebugStats* pDebugStats,
-        GuiControl* pGuiControl )
+        SimObject* pRenderHost )
     {
         mRenderArea       = renderArea;
         mRenderAABB       = CoreMath::mRectFtoAABB( renderArea );
@@ -56,7 +56,7 @@ struct SceneRenderState
         mRenderLayerMask  = renderLayerMask;
         mRenderGroupMask  = renderGroupMask;
         mpDebugStats      = pDebugStats;
-        mpGuiControl      = pGuiControl;
+        mpRenderHost      = pRenderHost;
     }
 
     RectF           mRenderArea;
@@ -67,7 +67,7 @@ struct SceneRenderState
     U32             mRenderGroupMask;
     Vector2         mRenderScale;
     DebugStats*     mpDebugStats;
-    GuiControl*     mpGuiControl;
+    SimObject*      mpRenderHost;
 
 
 };
