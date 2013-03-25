@@ -152,7 +152,6 @@ void WaveComposite::copyTo(SimObject* object)
     pComposite->setAmplitude( getAmplitude() );
 }
 
-
 //-----------------------------------------------------------------------------
 
 void WaveComposite::scenePrepareRender( const SceneRenderState* pSceneRenderState, SceneRenderQueue* pSceneRenderQueue )
