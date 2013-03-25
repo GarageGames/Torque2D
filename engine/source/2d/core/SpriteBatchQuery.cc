@@ -97,7 +97,7 @@ U32 SpriteBatchQuery::queryArea( const b2AABB& aabb, const bool targetOOBB )
     verts[1].Set( aabb.upperBound.x, aabb.lowerBound.y );
     verts[2].Set( aabb.upperBound.x, aabb.upperBound.y );
     verts[3].Set( aabb.lowerBound.x, aabb.upperBound.y );
-    mCompareShape.Set( verts, 4 );
+    mComparePolygonShape.Set( verts, 4 );
     mCompareTransform.SetIdentity();
     mCheckOOBB = targetOOBB;
     Query( this, aabb );
@@ -204,7 +204,7 @@ bool SpriteBatchQuery::QueryCallback( S32 proxyId )
         }
         else
         {
-            if ( !b2TestOverlap( &mCompareShape, 0, &oobb, 0, mCompareTransform, mCompareTransform ) )
+            if ( !b2TestOverlap( &mComparePolygonShape, 0, &oobb, 0, mCompareTransform, mCompareTransform ) )
                 return true;
         }
     }

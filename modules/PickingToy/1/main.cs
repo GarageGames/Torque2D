@@ -30,8 +30,8 @@ function PickingToy::create( %this )
     PickingToy.RayStart = "0 30";
 
     // Add the configuration options.
-    addSelectionOption( "Any,AABB,OOBB,Collision", "Pick Mode", 4, "setPickMode", false, "Selects the picking mode." );
-    addSelectionOption( "Point,Area,Ray", "Pick Type", 3, "setPickType", true, "Selects the picking type." );
+    addSelectionOption( "Point,Area,Circle,Ray", "Pick Type", 4, "setPickType", true, "Selects the picking type." );
+    addSelectionOption( "Any,OOBB,AABB,Collision", "Pick Mode", 4, "setPickMode", false, "Selects the picking mode." );
 
     // Force-on debug options.
     setAABBOption( true );
@@ -50,8 +50,7 @@ function PickingToy::destroy( %this )
     // Force-off debug options.
     setAABBOption( false );
     setOOBBOption( false );
-    setCollisionOption( false );
-    
+    setCollisionOption( false );    
 }
 
 //-----------------------------------------------------------------------------
@@ -126,6 +125,10 @@ function PickingToy::createPickCursor( %this )
     {
         %object.Image = "ToyAssets:Blank";
     }
+    else if ( PickingToy.PickType $= "circle" )
+    {
+        %object.Image = "ToyAssets:BlankCircle";
+    }
     
     // Set the cursor.
     PickingToy.CursorObject = %object;
@@ -178,7 +181,11 @@ function PickingToy::onTouchMoved(%this, %touchID, %worldPosition)
             %picked = SandboxScene.pickArea( %lower, %upper, "", "", PickingToy.PickMode );
             
         case "ray":
-            %picked = SandboxScene.pickRay( PickingToy.RayStart, %worldPosition, "", "", PickingToy.PickMode );        
+            %picked = SandboxScene.pickRay( PickingToy.RayStart, %worldPosition, "", "", PickingToy.PickMode );
+            
+        case "circle":
+            %halfSize = PickingToy.PickAreaSize * 0.5;
+            %picked = SandboxScene.pickCircle( %worldPosition, %halfSize, "", "", PickingToy.PickMode );
     }
         
     // Fetch pick count.

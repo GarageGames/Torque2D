@@ -991,7 +991,7 @@ void Scene::sceneRender( const SceneRenderState* pSceneRenderState )
     mpWorldQuery->setQueryFilter( queryFilter );
 
     // Query render AABB.
-    mpWorldQuery->aabbQueryArea( cameraAABB );
+    mpWorldQuery->aabbQueryAABB( cameraAABB );
 
     // Debug Profiling.
     PROFILE_END();  //Scene_RenderSceneVisibleQuery
