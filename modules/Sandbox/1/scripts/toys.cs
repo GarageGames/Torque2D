@@ -85,7 +85,10 @@ function loadToy( %moduleDefinition )
     }
     
     // Add the scene so it's unloaded when the toy module is.
-    %moduleDefinition.ScopeSet.add( SandboxScene );        
+    %moduleDefinition.ScopeSet.add( SandboxScene );    
+    
+    // Add toy scope-set as a listener.
+    SandboxWindow.addInputListener( %moduleDefinition.ScopeSet );        
 }
 
 //-----------------------------------------------------------------------------

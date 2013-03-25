@@ -45,6 +45,7 @@ class ParticleAsset : public AssetBase, public TamlChildren
 {
 private:
     typedef AssetBase  Parent;
+    typedef ParticleAssetEmitter Children;
     typedef Vector<ParticleAssetEmitter*> typeEmitterVector;
 
 public:

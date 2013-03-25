@@ -29,9 +29,6 @@ function DeathBallToy::create( %this )
     exec("./scripts/moveTowardBehavior.cs");
     exec("./scripts/spawnAreaBehavior.cs");
 
-    // Activate the package.
-    activatePackage( DeathBallToyPackage );
-
     // Initialize the toys settings.
     DeathBallToy.WorldTop = 35;
     DeathBallToy.WorldBottom = -110;
@@ -68,9 +65,6 @@ function DeathBallToy::destroy( %this )
 {
     // Cancel any pending events.
     DeathBallToy::cancelPendingEvents();
-
-    // Deactivate the package.
-    deactivatePackage( DeathBallToyPackage );
 }
 
 //-----------------------------------------------------------------------------
@@ -453,14 +447,8 @@ function DeathBallToy::cancelPendingEvents()
 
 //-----------------------------------------------------------------------------
 
-package DeathBallToyPackage
+function DeathBallToy::onTouchDown(%this, %touchID, %worldPosition)
 {
-
-function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
-{
-    // Call parent.
-    Parent::onTouchDown(%this, %touchID, %worldPosition );
-    
     %origin = Deathball.getPosition();
     %angle = -mRadToDeg( mAtan( getWord(%worldPosition,0)-getWord(%origin,0), getWord(%worldPosition,1)-getWord(%origin,1) ) );
 
@@ -477,11 +465,8 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
 
 //-----------------------------------------------------------------------------
 
-function SandboxWindow::onTouchUp(%this, %touchID, %worldPosition)
+function DeathBallToy::onTouchUp(%this, %touchID, %worldPosition)
 {
-    // Call parent.
-    Parent::onTouchUp(%this, %touchID, %worldPosition );
-    
     %origin = Deathball.getPosition();
     %angle = -mRadToDeg( mAtan( getWord(%worldPosition,0)-getWord(%origin,0), getWord(%worldPosition,1)-getWord(%origin,1) ) );
 
@@ -494,11 +479,8 @@ function SandboxWindow::onTouchUp(%this, %touchID, %worldPosition)
 
 //-----------------------------------------------------------------------------
 
-function SandboxWindow::onTouchDragged(%this, %touchID, %worldPosition)
-{
-    // Call parent.
-    Parent::onTouchDragged(%this, %touchID, %worldPosition );
-    
+function DeathBallToy::onTouchDragged(%this, %touchID, %worldPosition)
+{    
     %origin = Deathball.getPosition();
     %angle = -mRadToDeg( mAtan( getWord(%worldPosition,0)-getWord(%origin,0), getWord(%worldPosition,1)-getWord(%origin,1) ) );
 
@@ -512,20 +494,3 @@ function SandboxWindow::onTouchDragged(%this, %touchID, %worldPosition)
 
     Deathball.setLinearVelocity( getWord(%scaledVelocity, 0), getWord(%scaledVelocity, 1) );
 }
-
-
-//-----------------------------------------------------------------------------
-
-/*function SandboxWindow::onMouseWheelUp(%this, %modifier, %mousePoint, %mouseClickCount)
-{
-    // Don't allow zooming
-}
-
-//-----------------------------------------------------------------------------
-
-function SandboxWindow::onMouseWheelDown(%this, %modifier, %mousePoint, %mouseClickCount)
-{
-    // Don't allow zooming
-}         */
-
-};

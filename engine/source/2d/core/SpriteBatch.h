@@ -179,6 +179,8 @@ public:
     void setSpriteName( const char* pName );
     StringTableEntry getSpriteName( void ) const;
 
+    static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement );
+
 protected:
     SpriteBatchItem* createSprite( void );
     SpriteBatchItem* findSpritePosition( const SpriteBatchItem::LogicalPosition& logicalPosition );
@@ -193,8 +195,8 @@ protected:
     void createSpriteBatchQuery( void );
     void destroySpriteBatchQuery( void );
 
-    void onTamlCustomWrite( TamlCustomNode* pSpritesNode );
-    void onTamlCustomRead( const TamlCustomNode* pSpritesNode );
+    void onTamlCustomWrite( TamlCustomNodes& customNodes  );
+    void onTamlCustomRead( const TamlCustomNodes& customNodes );
 
 private:
     bool destroySprite( const U32 batchId );

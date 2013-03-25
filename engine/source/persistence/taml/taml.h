@@ -56,8 +56,11 @@
 #define TAML_SIGNATURE                  "Taml"
 #define TAML_ID_ATTRIBUTE_NAME          "TamlId"
 #define TAML_REFID_ATTRIBUTE_NAME       "TamlRefId"
-#define TAML_REF_FIELD_NAME             "TamlRefField"
 #define TAML_OBJECTNAME_ATTRIBUTE_NAME  "Name"
+
+//-----------------------------------------------------------------------------
+
+#define TAML_SCHEMA_VARIABLE            "$pref::T2D::TAMLSchema"
 
 //-----------------------------------------------------------------------------
 
@@ -193,7 +196,10 @@ public:
     static const char* getFormatModeDescription( const TamlFormatMode formatMode );
 
     /// Schema generation.
-    static bool generateTamlSchema( const char* pFilename );
+    static bool generateTamlSchema();
+
+    /// Write a unrestricted custom Taml schema.
+    static void WriteUnrestrictedCustomTamlSchema( const char* pCustomNodeName, const AbstractClassRep* pClassRep, TiXmlElement* pParentElement );
 
     /// Declare Console Object.
     DECLARE_CONOBJECT( Taml );

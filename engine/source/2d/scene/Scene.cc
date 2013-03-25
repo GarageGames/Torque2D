@@ -497,16 +497,16 @@ void Scene::dispatchBeginContactCallbacks( void )
         const F32 tangentImpulse2 = tickContact.mTangentImpulses[1];
 
         // Format objects.
-        char* pSceneObjectABuffer = Con::getArgBuffer( 8 );
-        char* pSceneObjectBBuffer = Con::getArgBuffer( 8 );
-        dSprintf( pSceneObjectABuffer, 8, "%d", pSceneObjectA->getId() );
-        dSprintf( pSceneObjectBBuffer, 8, "%d", pSceneObjectB->getId() );
+        char sceneObjectABuffer[16];
+        char sceneObjectBBuffer[16];
+        dSprintf( sceneObjectABuffer, sizeof(sceneObjectABuffer), "%d", pSceneObjectA->getId() );
+        dSprintf( sceneObjectBBuffer, sizeof(sceneObjectBBuffer), "%d", pSceneObjectB->getId() );
 
         // Format miscellaneous information.
-        char* pMiscInfoBuffer = Con::getArgBuffer(128);
+        char miscInfoBuffer[128];
         if ( pointCount == 2 )
         {
-            dSprintf(pMiscInfoBuffer, 128,
+            dSprintf(miscInfoBuffer, sizeof(miscInfoBuffer),
                 "%d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
                 shapeIndexA, shapeIndexB,
                 normal.x, normal.y,
@@ -519,7 +519,7 @@ void Scene::dispatchBeginContactCallbacks( void )
         }
         else if ( pointCount == 1 )
         {
-            dSprintf(pMiscInfoBuffer, 128,
+            dSprintf(miscInfoBuffer, sizeof(miscInfoBuffer),
                 "%d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
                 shapeIndexA, shapeIndexB,
                 normal.x, normal.y,
@@ -529,7 +529,7 @@ void Scene::dispatchBeginContactCallbacks( void )
         }
         else
         {
-            dSprintf(pMiscInfoBuffer, 64,
+            dSprintf(miscInfoBuffer, sizeof(miscInfoBuffer),
                 "%d %d",
                 shapeIndexA, shapeIndexB );
         }
@@ -540,14 +540,14 @@ void Scene::dispatchBeginContactCallbacks( void )
         {
             // Yes, so perform script callback on the Scene.
             Con::executef( this, 4, "onSceneCollision",
-                pSceneObjectABuffer,
-                pSceneObjectBBuffer,
-                pMiscInfoBuffer );
+                sceneObjectABuffer,
+                sceneObjectBBuffer,
+                miscInfoBuffer );
         }
         else
         {
             // No, so call it on its behaviors.
-            const char* args[5] = { "onSceneCollision", getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
+            const char* args[5] = { "onSceneCollision", "", sceneObjectABuffer, sceneObjectBBuffer, miscInfoBuffer };
             callOnBehaviors( 5, args );
         }
 
@@ -560,14 +560,14 @@ void Scene::dispatchBeginContactCallbacks( void )
             {
                 // Yes, so perform the script callback on it.
                 Con::executef( pSceneObjectA, 3, "onCollision",
-                    pSceneObjectBBuffer,
-                    pMiscInfoBuffer );
+                    sceneObjectBBuffer,
+                    miscInfoBuffer );
             }
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[4] = { "onCollision", pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
-                pSceneObjectA->callOnBehaviors( 4, args );
+                const char* args[5] = { "onCollision", "", sceneObjectABuffer, sceneObjectBBuffer, miscInfoBuffer };
+                pSceneObjectA->callOnBehaviors( 5, args );
             }
         }
 
@@ -580,14 +580,14 @@ void Scene::dispatchBeginContactCallbacks( void )
             {
                 // Yes, so perform the script callback on it.
                 Con::executef( pSceneObjectB, 3, "onCollision",
-                    pSceneObjectABuffer,
-                    pMiscInfoBuffer );
+                    sceneObjectABuffer,
+                    miscInfoBuffer );
             }
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[4] = { "onCollision", pSceneObjectBBuffer, pSceneObjectABuffer, pMiscInfoBuffer };
-                pSceneObjectB->callOnBehaviors( 4, args );
+                const char* args[5] = { "onCollision", "", sceneObjectBBuffer, sceneObjectABuffer, miscInfoBuffer };
+                pSceneObjectB->callOnBehaviors( 5, args );
             }
         }
     }
@@ -637,14 +637,14 @@ void Scene::dispatchEndContactCallbacks( void )
         AssertFatal( shapeIndexB >= 0, "Scene::dispatchEndContactCallbacks() - Cannot find shape index reported on physics proxy of a fixture." );
 
         // Format objects.
-        char* pSceneObjectABuffer = Con::getArgBuffer( 8 );
-        char* pSceneObjectBBuffer = Con::getArgBuffer( 8 );
-        dSprintf( pSceneObjectABuffer, 8, "%d", pSceneObjectA->getId() );
-        dSprintf( pSceneObjectBBuffer, 8, "%d", pSceneObjectB->getId() );
+        char sceneObjectABuffer[16];
+        char sceneObjectBBuffer[16];
+        dSprintf( sceneObjectABuffer, sizeof(sceneObjectABuffer), "%d", pSceneObjectA->getId() );
+        dSprintf( sceneObjectBBuffer, sizeof(sceneObjectBBuffer), "%d", pSceneObjectB->getId() );
 
         // Format miscellaneous information.
-        char* pMiscInfoBuffer = Con::getArgBuffer(32);
-        dSprintf(pMiscInfoBuffer, 32, "%d %d", shapeIndexA, shapeIndexB );
+        char miscInfoBuffer[32];
+        dSprintf(miscInfoBuffer, sizeof(miscInfoBuffer), "%d %d", shapeIndexA, shapeIndexB );
 
         // Does the scene handle the collision callback?
         Namespace* pNamespace = getNamespace();
@@ -652,14 +652,14 @@ void Scene::dispatchEndContactCallbacks( void )
         {
             // Yes, so does the scene handle the collision callback?
             Con::executef( this, 4, "onSceneEndCollision",
-                pSceneObjectABuffer,
-                pSceneObjectBBuffer,
-                pMiscInfoBuffer );
+                sceneObjectABuffer,
+                sceneObjectBBuffer,
+                miscInfoBuffer );
         }
         else
         {
             // No, so call it on its behaviors.
-            const char* args[5] = { "onSceneEndCollision", getIdString(), pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
+            const char* args[5] = { "onSceneEndCollision", "", sceneObjectABuffer, sceneObjectBBuffer, miscInfoBuffer };
             callOnBehaviors( 5, args );
         }
 
@@ -672,14 +672,14 @@ void Scene::dispatchEndContactCallbacks( void )
             {
                 // Yes, so perform the script callback on it.
                 Con::executef( pSceneObjectA, 3, "onEndCollision",
-                    pSceneObjectBBuffer,
-                    pMiscInfoBuffer );
+                    sceneObjectBBuffer,
+                    miscInfoBuffer );
             }
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[4] = { "onEndCollision", pSceneObjectABuffer, pSceneObjectBBuffer, pMiscInfoBuffer };
-                pSceneObjectA->callOnBehaviors( 4, args );
+                const char* args[5] = { "onEndCollision", "", sceneObjectABuffer, sceneObjectBBuffer, miscInfoBuffer };
+                pSceneObjectA->callOnBehaviors( 5, args );
             }
         }
 
@@ -692,14 +692,14 @@ void Scene::dispatchEndContactCallbacks( void )
             {
                 // Yes, so perform the script callback on it.
                 Con::executef( pSceneObjectB, 3, "onEndCollision",
-                    pSceneObjectABuffer,
-                    pMiscInfoBuffer );
+                    sceneObjectABuffer,
+                    miscInfoBuffer );
             }
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[4] = { "onEndCollision", pSceneObjectBBuffer, pSceneObjectABuffer, pMiscInfoBuffer };
-                pSceneObjectB->callOnBehaviors( 4, args );
+                const char* args[5] = { "onEndCollision", "", sceneObjectBBuffer, sceneObjectABuffer, miscInfoBuffer };
+                pSceneObjectB->callOnBehaviors( 5, args );
             }
         }
     }
@@ -991,7 +991,7 @@ void Scene::sceneRender( const SceneRenderState* pSceneRenderState )
     mpWorldQuery->setQueryFilter( queryFilter );
 
     // Query render AABB.
-    mpWorldQuery->renderQueryArea( cameraAABB );
+    mpWorldQuery->aabbQueryAABB( cameraAABB );
 
     // Debug Profiling.
     PROFILE_END();  //Scene_RenderSceneVisibleQuery
@@ -5312,7 +5312,8 @@ b2JointType Scene::getJointTypeEnum(const char* label)
 static EnumTable::Enums pickModeLookup[] =
                 {
                 { Scene::PICK_ANY,          "Any" },
-                { Scene::PICK_SIZE,         "Size" },
+                { Scene::PICK_AABB,         "AABB" },
+                { Scene::PICK_OOBB,         "OOBB" },
                 { Scene::PICK_COLLISION,    "Collision" },
                 };
 
@@ -5350,8 +5351,12 @@ const char* Scene::getPickModeDescription( Scene::PickMode pickMode )
 
 //-----------------------------------------------------------------------------
 
-static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+static void WriteJointsCustomTamlScehema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
 {
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "Taml::WriteJointsCustomTamlScehema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "Taml::WriteJointsCustomTamlScehema() - Parent Element cannot be NULL." );
+
     char buffer[1024];
 
     // Create joints node element.
@@ -5423,6 +5428,116 @@ static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlEleme
     pDistanceJointElementD = new TiXmlElement( "xs:minInclusive" );
     pDistanceJointElementD->SetAttribute( "value", "0" );
     pDistanceJointElementC->LinkEndChild( pDistanceJointElementD );
+}
+
+//-----------------------------------------------------------------------------
+
+static void WriteControllersCustomTamlScehema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "Taml::WriteControllersCustomTamlScehema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "Taml::WriteControllersCustomTamlScehema() - Parent Element cannot be NULL." );
+
+    char buffer[1024];
+
+    // Create controllers node element.
+    TiXmlElement* pControllersNodeElement = new TiXmlElement( "xs:element" );
+    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), controllerCustomNodeName );
+    pControllersNodeElement->SetAttribute( "name", buffer );
+    pControllersNodeElement->SetAttribute( "minOccurs", 0 );
+    pControllersNodeElement->SetAttribute( "maxOccurs", 1 );
+    pParentElement->LinkEndChild( pControllersNodeElement );
+    
+    // Create complex type.
+    TiXmlElement* pControllersNodeComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pControllersNodeElement->LinkEndChild( pControllersNodeComplexTypeElement );
+    
+    // Create choice element.
+    TiXmlElement* pControllersNodeChoiceElement = new TiXmlElement( "xs:choice" );
+    pControllersNodeChoiceElement->SetAttribute( "minOccurs", 0 );
+    pControllersNodeChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
+    pControllersNodeComplexTypeElement->LinkEndChild( pControllersNodeChoiceElement );
+
+    // Fetch the scene controller type.
+    AbstractClassRep* pPickingSceneControllerType = AbstractClassRep::findClassRep( "PickingSceneController" );
+    AbstractClassRep* pGroupedSceneControllerType = AbstractClassRep::findClassRep( "GroupedSceneController" );
+
+    // Sanity!
+    AssertFatal( pPickingSceneControllerType != NULL, "Scene::WriteControllersCustomTamlScehema() - Cannot find the PickingSceneController type." );
+    AssertFatal( pGroupedSceneControllerType != NULL, "Scene::WriteControllersCustomTamlScehema() - Cannot find the GroupedSceneController type." );
+
+    // Add choice members.
+    for ( AbstractClassRep* pChoiceType = AbstractClassRep::getClassList(); pChoiceType != NULL; pChoiceType = pChoiceType->getNextClass() )
+    {
+        // Skip if not derived from either of the scene controllers.
+        if ( !pChoiceType->isClass( pPickingSceneControllerType ) && !pChoiceType->isClass( pGroupedSceneControllerType ) )
+            continue;
+
+        // Add choice member.
+        TiXmlElement* pChoiceMemberElement = new TiXmlElement( "xs:element" );
+        pChoiceMemberElement->SetAttribute( "name", pChoiceType->getClassName() );
+        dSprintf( buffer, sizeof(buffer), "%s_Type", pChoiceType->getClassName() );
+        pChoiceMemberElement->SetAttribute( "type", buffer );
+        pControllersNodeChoiceElement->LinkEndChild( pChoiceMemberElement );
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+static void WritePreloadsCustomTamlScehema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "Taml::WritePreloadsCustomTamlScehema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "Taml::WritePreloadsCustomTamlScehema() - Parent Element cannot be NULL." );
+
+    char buffer[1024];
+
+    // Create preloads node element.
+    TiXmlElement* pPreloadsNodeElement = new TiXmlElement( "xs:element" );
+    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), assetPreloadNodeName );
+    pPreloadsNodeElement->SetAttribute( "name", buffer );
+    pPreloadsNodeElement->SetAttribute( "minOccurs", 0 );
+    pPreloadsNodeElement->SetAttribute( "maxOccurs", 1 );
+    pParentElement->LinkEndChild( pPreloadsNodeElement );
+    
+    // Create complex type.
+    TiXmlElement* pPreloadsNodeComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pPreloadsNodeElement->LinkEndChild( pPreloadsNodeComplexTypeElement );
+    
+    // Create choice element.
+    TiXmlElement* pPreloadsNodeChoiceElement = new TiXmlElement( "xs:choice" );
+    pPreloadsNodeChoiceElement->SetAttribute( "minOccurs", 0 );
+    pPreloadsNodeChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
+    pPreloadsNodeComplexTypeElement->LinkEndChild( pPreloadsNodeChoiceElement );
+
+    // Add choice member element.
+    TiXmlElement* pChoiceMemberElement = new TiXmlElement( "xs:element" );
+    pChoiceMemberElement->SetAttribute( "name", assetNodeName );
+    pPreloadsNodeChoiceElement->LinkEndChild( pChoiceMemberElement );
+
+    // Add choice member complex type element.
+    TiXmlElement* pChoiceMemberComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pChoiceMemberElement->LinkEndChild( pChoiceMemberComplexTypeElement );
+
+    // Add choice member attribute element.
+    TiXmlElement* pChoiceAttributeElement = new TiXmlElement( "xs:attribute" );
+    pChoiceAttributeElement->SetAttribute( "name", "Id" );
+    dSprintf( buffer, sizeof(buffer), "%s", "AssetId_ConsoleType" );
+    pChoiceAttributeElement->SetAttribute( "type", buffer );
+    pChoiceMemberComplexTypeElement->LinkEndChild( pChoiceAttributeElement );
+}
+
+//-----------------------------------------------------------------------------
+
+static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "Taml::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "Taml::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    WriteJointsCustomTamlScehema( pClassRep, pParentElement );
+    WriteControllersCustomTamlScehema( pClassRep, pParentElement );
+    WritePreloadsCustomTamlScehema( pClassRep, pParentElement );
 }
 
 //------------------------------------------------------------------------------

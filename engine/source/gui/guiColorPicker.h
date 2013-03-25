@@ -32,7 +32,7 @@
 /// This control draws a box containing a color specified by mPickColor, 
 /// in a way according to one of the PickMode enum's, stored as mDisplayMode.
 /// 
-/// The color the box represents is stored as mBaseColour (for pPallete, pBlendColorRange), 
+/// The color the box represents is stored as mBasecolor (for pPallete, pBlendColorRange), 
 /// whilst the color chosen by the box is stored as mPickColor.
 ///
 /// Whenever the control is clicked, it will do one of many things :
@@ -43,7 +43,7 @@
 /// -# If its in pHorizAlphaRange or pVertAlphaRange mode, it will also function the same way as 3
 /// -# If its in pDropperBackground mode, nothing will happen
 ///
-/// Colours are drawn in different ways according to mDisplayMode:
+/// colors are drawn in different ways according to mDisplayMode:
 ///
 /// -# With pPallete, a box with a blank color, mBaseColor is drawn.
 /// -# With pHorizColorRange, a horizontal box with colors blending in the range, mColorRange.
@@ -89,7 +89,7 @@ class GuiColorPickerCtrl : public GuiControl
    /// @name Core Variables
    /// @{
    ColorF mPickColor;		///< Color that has been picked from control
-   ColorF mBaseColor;		///< Colour we display (in case of pallet and blend mode)
+   ColorF mBaseColor;		///< color we display (in case of pallet and blend mode)
    PickMode mDisplayMode;	///< Current color display mode of the selector
    
    Point2I mSelectorPos;	///< Current position of the selector
@@ -115,7 +115,7 @@ class GuiColorPickerCtrl : public GuiControl
    /// @{
    /// NOTE: setValue only sets baseColor, since setting pickColor wouldn't be useful
    void setValue(ColorF &value) {mBaseColor = value;}
-   /// NOTE: getValue() returns baseColor if pallet (since pallet controls can't "pick" colours themselves)
+   /// NOTE: getValue() returns baseColor if pallet (since pallet controls can't "pick" colors themselves)
    ColorF getValue() {return mDisplayMode == pPallet ? mBaseColor : mPickColor;}
    const char *getScriptValue();
    void setScriptValue(const char *value);
