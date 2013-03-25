@@ -23,7 +23,7 @@
 function PickingToy::create( %this )
 {
     // Configure the toy.
-    PickingToy.PickType = Ray;
+    PickingToy.PickType = Point;
     PickingToy.PickMode = Any;
     PickingToy.NotPickedAlpha = 0.2;
     PickingToy.PickAreaSize = 10;
@@ -31,7 +31,7 @@ function PickingToy::create( %this )
 
     // Add the configuration options.
     addSelectionOption( "Any,AABB,OOBB,Collision", "Pick Mode", 4, "setPickMode", false, "Selects the picking mode." );
-    addSelectionOption( "Ray,Point,Area", "Pick Type", 3, "setPickType", true, "Selects the picking type." );
+    addSelectionOption( "Point,Area,Ray", "Pick Type", 3, "setPickType", true, "Selects the picking type." );
 
     // Force-on debug options.
     setAABBOption( true );
