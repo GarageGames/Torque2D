@@ -1963,7 +1963,7 @@ ConsoleMethod(Scene, createTargetJoint, S32, 5, 10,     "(sceneObject, worldTarg
 
     if ( argc <= nextArg )
     {
-        return object->createTargetJoint( pSceneObject, worldTarget, maxForce, frequency );
+        return object->createTargetJoint( pSceneObject, worldTarget, maxForce, centerOfMass, frequency );
     }
 
     // Fetch damping ratio.
@@ -1971,13 +1971,13 @@ ConsoleMethod(Scene, createTargetJoint, S32, 5, 10,     "(sceneObject, worldTarg
 
     if ( argc <= nextArg )
     {
-        return object->createTargetJoint( pSceneObject, worldTarget, maxForce, frequency, dampingRatio );
+        return object->createTargetJoint( pSceneObject, worldTarget, maxForce, centerOfMass, frequency, dampingRatio );
     }
 
     // Fetch collide connected.
     const bool collideConnected = dAtob(argv[nextArg++]);
 
-    return object->createTargetJoint( pSceneObject, worldTarget, maxForce, frequency, dampingRatio, collideConnected );
+    return object->createTargetJoint( pSceneObject, worldTarget, maxForce, centerOfMass, frequency, dampingRatio, collideConnected );
 }
 
 //-----------------------------------------------------------------------------
