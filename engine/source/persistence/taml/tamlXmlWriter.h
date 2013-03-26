@@ -31,6 +31,11 @@
 #include "persistence/tinyXML/tinyxml.h"
 #endif
 
+//-----------------------------------------------------------------------------
+
+extern StringTableEntry tamlRefIdName;
+static StringTableEntry tamlRefToIdName;
+static StringTableEntry tamlNamedObjectName;
 
 //-----------------------------------------------------------------------------
 
@@ -39,8 +44,7 @@ class TamlXmlWriter
 public:
     TamlXmlWriter( Taml* pTaml ) :
         mpTaml( pTaml )
-    {
-    }
+    {}
     virtual ~TamlXmlWriter() {}
 
     /// Write.
