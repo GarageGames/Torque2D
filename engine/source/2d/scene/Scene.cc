@@ -2159,16 +2159,54 @@ bool Scene::getRevoluteJointMotor(
 
 F32 Scene::getRevoluteJointAngle( const U32 jointId )
 {
-    // MM: These are for Simon to fill-in!
-    return 0.0f;
+    // Fetch joint.
+    b2Joint* pJoint = findJoint( jointId );
+
+    // Ignore invalid joint.
+    if ( !pJoint )
+        return 0.0f;
+
+    // Fetch joint type.
+    const b2JointType jointType = pJoint->GetType();
+
+    if ( jointType != e_revoluteJoint )
+    {
+        Con::warnf( "Invalid joint type of %s.", getJointTypeDescription(jointType) );
+        return 0.0f;
+    }
+
+    // Cast joint.
+    b2RevoluteJoint* pRealJoint = static_cast<b2RevoluteJoint*>( pJoint );
+
+    // Access joint.
+    return pRealJoint->GetJointAngle();
 }
 
 //-----------------------------------------------------------------------------
 
-F32	Scene::getRevoluteJointSpeed( const U32 jointID )
+F32	Scene::getRevoluteJointSpeed( const U32 jointId )
 {
-    // MM: These are for Simon to fill-in!
-    return 0.0f;
+    // Fetch joint.
+    b2Joint* pJoint = findJoint( jointId );
+
+    // Ignore invalid joint.
+    if ( !pJoint )
+        return 0.0f;
+
+    // Fetch joint type.
+    const b2JointType jointType = pJoint->GetType();
+
+    if ( jointType != e_revoluteJoint )
+    {
+        Con::warnf( "Invalid joint type of %s.", getJointTypeDescription(jointType) );
+        return 0.0f;
+    }
+
+    // Cast joint.
+    b2RevoluteJoint* pRealJoint = static_cast<b2RevoluteJoint*>( pJoint );
+
+    // Access joint.
+    return pRealJoint->GetJointSpeed();
 }
 
 //-----------------------------------------------------------------------------
