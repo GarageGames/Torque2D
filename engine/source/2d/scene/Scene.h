@@ -442,6 +442,10 @@ public:
                                 bool& enableMotor,
                                 F32& motorSpeed,
                                 F32& maxMotorTorque );
+
+	F32                     getRevoluteJointAngle( const U32 jointId );
+	F32						getRevoluteJointSpeed( const U32 jointId );
+
     /// Weld joint.
     S32                     createWeldJoint(
                                 const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
@@ -618,11 +622,6 @@ public:
                                 const F32 maxTorque );
 
     F32                     getMotorJointMaxTorque( const U32 jointId );
-
-	/// Misc Joint Utilities - 19-03-13 - capnlove
-
-	F32                     getRevoluteJointAngle(const U32 jointID);
-	F32						getRevoluteJointSpeed(const U32 jointID);
 
     /// Debug and metrics.
     inline void             setDebugOn( const U32 debugMask )           { mDebugMask |= debugMask; }

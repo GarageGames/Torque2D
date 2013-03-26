@@ -97,7 +97,7 @@ TiXmlElement* TamlXmlWriter::compileElement( const TamlWriteNode* pTamlWriteNode
     if ( referenceId != 0 )
     {
         // Yes, so set reference Id attribute.
-        pElement->SetAttribute( TAML_ID_ATTRIBUTE_NAME, referenceId );
+        pElement->SetAttribute( tamlRefIdName, referenceId );
     }
 
     // Do we have a reference to node?
@@ -110,7 +110,7 @@ TiXmlElement* TamlXmlWriter::compileElement( const TamlWriteNode* pTamlWriteNode
         AssertFatal( referenceToId != 0, "Taml: Invalid reference to Id." );
 
         // Set reference to Id attribute.
-        pElement->SetAttribute( TAML_REFID_ATTRIBUTE_NAME, referenceToId );
+        pElement->SetAttribute( tamlRefToIdName, referenceToId );
 
         // Finish because we're a reference to another object.
         return pElement;
@@ -123,7 +123,7 @@ TiXmlElement* TamlXmlWriter::compileElement( const TamlWriteNode* pTamlWriteNode
     if ( pObjectName != NULL )
     {
         // Yes, so set name attribute.
-        pElement->SetAttribute( TAML_OBJECTNAME_ATTRIBUTE_NAME, pObjectName );
+        pElement->SetAttribute( tamlNamedObjectName, pObjectName );
     }
 
     // Compile attributes.

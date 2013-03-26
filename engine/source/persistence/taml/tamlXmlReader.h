@@ -42,11 +42,7 @@ class TamlXmlReader
 public:
     TamlXmlReader( Taml* pTaml ) :
         mpTaml( pTaml )
-    {
-        mTamlRefId      = StringTable->insert( TAML_ID_ATTRIBUTE_NAME );
-        mTamlRefToId    = StringTable->insert( TAML_REFID_ATTRIBUTE_NAME );
-        mTamlObjectName = StringTable->insert( TAML_OBJECTNAME_ATTRIBUTE_NAME );
-    }
+    {}
 
     virtual ~TamlXmlReader() {}
 
@@ -55,10 +51,6 @@ public:
 
 private:
     Taml*               mpTaml;
-    StringTableEntry    mTamlRefId;
-    StringTableEntry    mTamlRefToId;
-    StringTableEntry    mTamlObjectName;
-    StringTableEntry    mTamlRefField;
 
     typedef HashMap<SimObjectId, SimObject*> typeObjectReferenceHash;
 
@@ -75,7 +67,6 @@ private:
     U32 getTamlRefId( TiXmlElement* pXmlElement );
     U32 getTamlRefToId( TiXmlElement* pXmlElement );
     const char* getTamlObjectName( TiXmlElement* pXmlElement );   
-    const char* getTamlRefField( TiXmlElement* pXmlElement );
 };
 
 #endif // _TAML_XMLREADER_H_

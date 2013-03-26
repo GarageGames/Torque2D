@@ -53,13 +53,13 @@
 
 //-----------------------------------------------------------------------------
 
-#define TAML_SIGNATURE                  "Taml"
-#define TAML_ID_ATTRIBUTE_NAME          "TamlId"
-#define TAML_REFID_ATTRIBUTE_NAME       "TamlRefId"
-#define TAML_OBJECTNAME_ATTRIBUTE_NAME  "Name"
+extern StringTableEntry tamlRefIdName;
+extern StringTableEntry tamlRefToIdName;
+extern StringTableEntry tamlNamedObjectName;
 
 //-----------------------------------------------------------------------------
 
+#define TAML_SIGNATURE                  "Taml"
 #define TAML_SCHEMA_VARIABLE            "$pref::T2D::TAMLSchema"
 
 //-----------------------------------------------------------------------------

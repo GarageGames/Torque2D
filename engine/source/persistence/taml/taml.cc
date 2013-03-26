@@ -86,6 +86,12 @@ IMPLEMENT_CONOBJECT( Taml );
 
 //-----------------------------------------------------------------------------
 
+StringTableEntry tamlRefIdName          = StringTable->insert( "TamlId" );
+StringTableEntry tamlRefToIdName        = StringTable->insert( "TamlRefId" );
+StringTableEntry tamlNamedObjectName    = StringTable->insert( "Name" );
+
+//-----------------------------------------------------------------------------
+
 static EnumTable::Enums tamlFormatModeLookup[] =
                 {
                 { Taml::XmlFormat, "xml" },
@@ -1306,19 +1312,19 @@ bool Taml::generateTamlSchema()
 
             // Add Taml "Name" attribute element.
             TiXmlElement* pNameAttributeElement = new TiXmlElement( "xs:attribute" );
-            pNameAttributeElement->SetAttribute( "name", TAML_OBJECTNAME_ATTRIBUTE_NAME );
+            pNameAttributeElement->SetAttribute( "name", tamlNamedObjectName );
             pNameAttributeElement->SetAttribute( "type", "xs:normalizedString" );
             pFieldAttributeGroupElement->LinkEndChild( pNameAttributeElement );
 
             // Add Taml "TamlId" attribute element.
             TiXmlElement* pTamlIdAttributeElement = new TiXmlElement( "xs:attribute" );
-            pTamlIdAttributeElement->SetAttribute( "name", TAML_ID_ATTRIBUTE_NAME );
+            pTamlIdAttributeElement->SetAttribute( "name", tamlRefIdName );
             pTamlIdAttributeElement->SetAttribute( "type", "xs:nonNegativeInteger" );
             pFieldAttributeGroupElement->LinkEndChild( pTamlIdAttributeElement );
 
             // Add Taml "TamlRefId" attribute element.
             TiXmlElement* pTamlRefIdAttributeElement = new TiXmlElement( "xs:attribute" );
-            pTamlRefIdAttributeElement->SetAttribute( "name", TAML_REFID_ATTRIBUTE_NAME );
+            pTamlRefIdAttributeElement->SetAttribute( "name", tamlRefToIdName );
             pTamlRefIdAttributeElement->SetAttribute( "type", "xs:nonNegativeInteger" );
             pFieldAttributeGroupElement->LinkEndChild( pTamlRefIdAttributeElement );
         }

@@ -31,7 +31,6 @@
 #include "persistence/tinyXML/tinyxml.h"
 #endif
 
-
 //-----------------------------------------------------------------------------
 
 class TamlXmlWriter
@@ -39,8 +38,7 @@ class TamlXmlWriter
 public:
     TamlXmlWriter( Taml* pTaml ) :
         mpTaml( pTaml )
-    {
-    }
+    {}
     virtual ~TamlXmlWriter() {}
 
     /// Write.

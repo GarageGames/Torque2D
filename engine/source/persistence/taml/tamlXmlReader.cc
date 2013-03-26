@@ -285,10 +285,9 @@ void TamlXmlReader::parseAttributes( TiXmlElement* pXmlElement, SimObject* pSimO
         StringTableEntry attributeName = StringTable->insert( pAttribute->Name() );
 
         // Ignore if this is a Taml attribute.
-        if (    attributeName == mTamlRefId ||
-            attributeName == mTamlRefToId ||
-            attributeName == mTamlObjectName ||
-            attributeName == mTamlRefField )
+        if (    attributeName == tamlRefIdName ||
+                attributeName == tamlRefToIdName ||
+                attributeName == tamlNamedObjectName )
             continue;
 
         // We can assume this is a field for now.
@@ -363,7 +362,7 @@ void TamlXmlReader::parseCustomNode( TiXmlElement* pXmlElement, TamlCustomNode* 
         StringTableEntry attributeName = StringTable->insert( pAttribute->Name() );
 
         // Skip if a Taml reference attribute.
-        if ( attributeName == mTamlRefId || attributeName == mTamlRefToId )
+        if ( attributeName == tamlRefIdName || attributeName == tamlRefToIdName )
             continue;
 
         // Add node field.
@@ -419,7 +418,7 @@ U32 TamlXmlReader::getTamlRefId( TiXmlElement* pXmlElement )
         StringTableEntry attributeName = StringTable->insert( pAttribute->Name() );
 
         // Skip if not the correct attribute.
-        if ( attributeName != mTamlRefId )
+        if ( attributeName != tamlRefIdName )
             continue;
 
         // Return it.
@@ -444,7 +443,7 @@ U32 TamlXmlReader::getTamlRefToId( TiXmlElement* pXmlElement )
         StringTableEntry attributeName = StringTable->insert( pAttribute->Name() );
 
         // Skip if not the correct attribute.
-        if ( attributeName != mTamlRefToId )
+        if ( attributeName != tamlRefToIdName )
             continue;
 
         // Return it.
@@ -469,7 +468,7 @@ const char* TamlXmlReader::getTamlObjectName( TiXmlElement* pXmlElement )
         StringTableEntry attributeName = StringTable->insert( pAttribute->Name() );
 
         // Skip if not the correct attribute.
-        if ( attributeName != mTamlObjectName )
+        if ( attributeName != tamlNamedObjectName )
             continue;
 
         // Return it.
@@ -480,26 +479,5 @@ const char* TamlXmlReader::getTamlObjectName( TiXmlElement* pXmlElement )
     return NULL;
 }
 
-//-----------------------------------------------------------------------------
-
-const char* TamlXmlReader::getTamlRefField( TiXmlElement* pXmlElement )
-{
-    // Iterate attributes.
-    for ( TiXmlAttribute* pAttribute = pXmlElement->FirstAttribute(); pAttribute; pAttribute = pAttribute->Next() )
-    {
-        // Insert attribute name.
-        StringTableEntry attributeName = StringTable->insert( pAttribute->Name() );
-
-        // Skip if not the correct attribute.
-        if ( attributeName != mTamlRefField )
-            continue;
-
-        // Return it.
-        return pAttribute->Value();
-    }
-
-    // Not found.
-    return NULL;
-}
 
 
