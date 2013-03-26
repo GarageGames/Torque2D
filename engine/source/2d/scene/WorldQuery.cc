@@ -40,8 +40,9 @@ WorldQuery::WorldQuery( Scene* pScene ) :
         mIsRaycastQueryResult(false),
         mMasterQueryKey(0),
         mCheckPoint(false),
-        mCheckArea(false),
-        mCheckOOBB(false)
+        mCheckAABB(false),
+        mCheckOOBB(false),
+        mCheckCircle(false)
 {
     // Set debug associations.
     for ( U32 n = 0; n < MAX_LAYERS_SUPPORTED; n++ )
@@ -131,10 +132,10 @@ void WorldQuery::removeAlwaysInScope( SceneObject* pSceneObject )
 
 //-----------------------------------------------------------------------------
 
-U32 WorldQuery::collisionQueryArea( const b2AABB& aabb )
+U32 WorldQuery::collisionQueryAABB( const b2AABB& aabb )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(WorldQuery_CollisionQueryArea);
+    PROFILE_SCOPE(WorldQuery_collisionQueryAABB);
 
     mMasterQueryKey++;
 
@@ -147,11 +148,11 @@ U32 WorldQuery::collisionQueryArea( const b2AABB& aabb )
     verts[1].Set( aabb.upperBound.x, aabb.lowerBound.y );
     verts[2].Set( aabb.upperBound.x, aabb.upperBound.y );
     verts[3].Set( aabb.lowerBound.x, aabb.upperBound.y );
-    mCompareShape.Set( verts, 4 );
+    mComparePolygonShape.Set( verts, 4 );
     mCompareTransform.SetIdentity();
-    mCheckArea = true;
+    mCheckAABB = true;
     mpScene->getWorld()->QueryAABB( this, aabb );
-    mCheckArea = false;
+    mCheckAABB = false;
 
     // Inject always-in-scope.
     injectAlwaysInScope();
@@ -209,10 +210,38 @@ U32 WorldQuery::collisionQueryPoint( const Vector2& point )
 
 //-----------------------------------------------------------------------------
 
-U32 WorldQuery::aabbQueryArea( const b2AABB& aabb )
+U32 WorldQuery::collisionQueryCircle( const Vector2& centroid, const F32 radius )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(WorldQuery_AABBQueryArea);
+    PROFILE_SCOPE(WorldQuery_CollisionQueryCircle);
+
+    mMasterQueryKey++;
+
+    // Flag as not a ray-cast query result.
+    mIsRaycastQueryResult = false;
+
+    // Query.
+    b2AABB aabb;
+    mCompareTransform.SetIdentity();
+    mCompareCircleShape.m_p = centroid;
+    mCompareCircleShape.m_radius = radius;
+    mCompareCircleShape.ComputeAABB( &aabb, mCompareTransform, 0 );
+    mCheckCircle = true;
+    mpScene->getWorld()->QueryAABB( this, aabb );
+    mCheckCircle = false;
+
+    // Inject always-in-scope.
+    injectAlwaysInScope();
+
+    return getQueryResultsCount();
+}
+
+//-----------------------------------------------------------------------------
+
+U32 WorldQuery::aabbQueryAABB( const b2AABB& aabb )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(WorldQuery_aabbQueryAABB);
 
     mMasterQueryKey++;
 
@@ -279,10 +308,38 @@ U32 WorldQuery::aabbQueryPoint( const Vector2& point )
 
 //-----------------------------------------------------------------------------
 
-U32 WorldQuery::oobbQueryArea( const b2AABB& aabb )
+U32 WorldQuery::aabbQueryCircle( const Vector2& centroid, const F32 radius )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(WorldQuery_AABBQueryArea);
+    PROFILE_SCOPE(WorldQuery_AABBQueryCircle);
+
+    mMasterQueryKey++;
+
+    // Flag as not a ray-cast query result.
+    mIsRaycastQueryResult = false;
+
+    // Query.
+    b2AABB aabb;
+    mCompareTransform.SetIdentity();
+    mCompareCircleShape.m_p = centroid;
+    mCompareCircleShape.m_radius = radius;
+    mCompareCircleShape.ComputeAABB( &aabb, mCompareTransform, 0 );
+    mCheckCircle = true;
+    Query( this, aabb );
+    mCheckCircle = false;
+
+    // Inject always-in-scope.
+    injectAlwaysInScope();
+
+    return getQueryResultsCount();
+}
+
+//-----------------------------------------------------------------------------
+
+U32 WorldQuery::oobbQueryAABB( const b2AABB& aabb )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(WorldQuery_aabbQueryAABB);
 
     mMasterQueryKey++;
 
@@ -295,10 +352,12 @@ U32 WorldQuery::oobbQueryArea( const b2AABB& aabb )
     verts[1].Set( aabb.upperBound.x, aabb.lowerBound.y );
     verts[2].Set( aabb.upperBound.x, aabb.upperBound.y );
     verts[3].Set( aabb.lowerBound.x, aabb.upperBound.y );
-    mCompareShape.Set( verts, 4 );
+    mComparePolygonShape.Set( verts, 4 );
     mCompareTransform.SetIdentity();
     mCheckOOBB = true;
+    mCheckAABB = true;
     Query( this, aabb );
+    mCheckAABB = false;
     mCheckOOBB = false;
 
     // Inject always-in-scope.
@@ -366,17 +425,27 @@ U32 WorldQuery::oobbQueryPoint( const Vector2& point )
 
 //-----------------------------------------------------------------------------
 
-U32 WorldQuery::anyQueryArea( const b2AABB& aabb )
+U32 WorldQuery::oobbQueryCircle( const Vector2& centroid, const F32 radius )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(WorldQuery_AnyQueryAreaAABB);
+    PROFILE_SCOPE(WorldQuery_OOBBQueryCircle);
+
+    mMasterQueryKey++;
+
+    // Flag as not a ray-cast query result.
+    mIsRaycastQueryResult = false;
 
     // Query.
-    aabbQueryArea( aabb );
-    mMasterQueryKey--;
-    oobbQueryArea( aabb );
-    mMasterQueryKey--;
-    collisionQueryArea( aabb );
+    b2AABB aabb;
+    mCompareTransform.SetIdentity();
+    mCompareCircleShape.m_p = centroid;
+    mCompareCircleShape.m_radius = radius;
+    mCompareCircleShape.ComputeAABB( &aabb, mCompareTransform, 0 );
+    mCheckOOBB = true;
+    mCheckCircle = true;
+    Query( this, aabb );
+    mCheckCircle = false;
+    mCheckOOBB = false;
 
     // Inject always-in-scope.
     injectAlwaysInScope();
@@ -386,18 +455,20 @@ U32 WorldQuery::anyQueryArea( const b2AABB& aabb )
 
 //-----------------------------------------------------------------------------
 
-U32 WorldQuery::anyQueryArea( const Vector2& lowerBound, const Vector2& upperBound )
+U32 WorldQuery::anyQueryAABB( const b2AABB& aabb )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(WorldQuery_AnyQueryAreaBounds);
-
-    // Calculate AABB.
-    b2AABB aabb;
-    aabb.lowerBound.Set( getMin( lowerBound.x, upperBound.x ), getMin( lowerBound.x, upperBound.x ) );
-    aabb.upperBound.Set( getMax( lowerBound.x, upperBound.x ), getMax( lowerBound.x, upperBound.x ) );
+    PROFILE_SCOPE(WorldQuery_anyQueryAABBAABB);
 
     // Query.
-    return anyQueryArea( aabb );
+    oobbQueryAABB( aabb );
+    mMasterQueryKey--;
+    collisionQueryAABB( aabb );
+
+    // Inject always-in-scope.
+    injectAlwaysInScope();
+
+    return getQueryResultsCount();
 }
 
 //-----------------------------------------------------------------------------
@@ -408,8 +479,6 @@ U32 WorldQuery::anyQueryRay( const Vector2& point1, const Vector2& point2 )
     PROFILE_SCOPE(WorldQuery_AnyQueryRay);
 
     // Query.
-    aabbQueryRay( point1, point2 );
-    mMasterQueryKey--;
     oobbQueryRay( point1, point2 );
     mMasterQueryKey--;
     collisionQueryRay( point1, point2 );
@@ -428,11 +497,27 @@ U32 WorldQuery::anyQueryPoint( const Vector2& point )
     PROFILE_SCOPE(WorldQuery_AnyQueryPoint);
 
     // Query.
-    aabbQueryPoint( point );
-    mMasterQueryKey--;
     oobbQueryPoint( point );
     mMasterQueryKey--;
     collisionQueryPoint( point );
+
+    // Inject always-in-scope.
+    injectAlwaysInScope();
+
+    return getQueryResultsCount();
+}
+
+//-----------------------------------------------------------------------------
+
+U32 WorldQuery::anyQueryCircle( const Vector2& centroid, const F32 radius )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(WorldQuery_AnyQueryCircle);
+
+    // Query.
+    oobbQueryCircle( centroid, radius );
+    mMasterQueryKey--;
+    collisionQueryCircle( centroid, radius );
 
     // Inject always-in-scope.
     injectAlwaysInScope();
@@ -528,10 +613,15 @@ bool WorldQuery::ReportFixture( b2Fixture* fixture )
     if ( mCheckPoint && !fixture->TestPoint( mComparePoint ) )
         return true;
 
-    // Check collision area.
-    if ( mCheckArea )
-        if ( !b2TestOverlap( &mCompareShape, 0, fixture->GetShape(), 0, mCompareTransform, fixture->GetBody()->GetTransform() ) )
-        return true;
+    // Check collision AABB.
+    if ( mCheckAABB )
+        if ( !b2TestOverlap( &mComparePolygonShape, 0, fixture->GetShape(), 0, mCompareTransform, fixture->GetBody()->GetTransform() ) )
+            return true;
+
+    // Check collision circle.
+    if ( mCheckCircle )
+        if ( !b2TestOverlap( &mCompareCircleShape, 0, fixture->GetShape(), 0, mCompareTransform, fixture->GetBody()->GetTransform() ) )
+            return true;
 
     // Fetch layer and group masks.
     const U32 sceneLayerMask = pSceneObject->getSceneLayerMask();
@@ -590,7 +680,7 @@ F32 WorldQuery::ReportFixture( b2Fixture* fixture, const b2Vec2& point, const b2
     const S32 shapeIndex = pSceneObject->getCollisionShapeIndex( fixture );
 
     // Sanity!
-    AssertFatal( shapeIndex >= 0, "2dWorldQuery::ReportFixture() - Cannot find shape index reported on physics proxy of a fixture." );
+    AssertFatal( shapeIndex >= 0, "WorldQuery::ReportFixture() - Cannot find shape index reported on physics proxy of a fixture." );
 
     // Compare masks and report.
     if ( (mQueryFilter.mSceneLayerMask & sceneLayerMask) != 0 && (mQueryFilter.mSceneGroupMask & sceneGroupMask) != 0 )
@@ -640,21 +730,45 @@ bool WorldQuery::QueryCallback( S32 proxyId )
     // Check OOBB.
     if ( mCheckOOBB )
     {
-            // Fetch the shapes render OOBB.
+        // Fetch the shapes render OOBB.
         b2PolygonShape oobb;
         oobb.Set( pSceneObject->getRenderOOBB(), 4);
 
+        // Check point.
         if ( mCheckPoint )
         {
             if ( !oobb.TestPoint( mCompareTransform, mComparePoint ) )
                 return true;
         }
-        else
+        // Check AABB.
+        else if ( mCheckAABB )
         {
-            if ( !b2TestOverlap( &mCompareShape, 0, &oobb, 0, mCompareTransform, mCompareTransform ) )
+            if ( !b2TestOverlap( &mComparePolygonShape, 0, &oobb, 0, mCompareTransform, mCompareTransform ) )
+                return true;
+        }
+        // Check circle.
+        else if ( mCheckCircle )
+        {
+            if ( !b2TestOverlap( &mCompareCircleShape, 0, &oobb, 0, mCompareTransform, mCompareTransform ) )
                 return true;
         }
     }
+    // Check circle.
+    else if ( mCheckCircle )
+    {
+        // Fetch the shapes AABB.
+        b2AABB aabb = pSceneObject->getAABB();
+        b2Vec2 verts[4];
+        verts[0].Set( aabb.lowerBound.x, aabb.lowerBound.y );
+        verts[1].Set( aabb.upperBound.x, aabb.lowerBound.y );
+        verts[2].Set( aabb.upperBound.x, aabb.upperBound.y );
+        verts[3].Set( aabb.lowerBound.x, aabb.upperBound.y );
+        b2PolygonShape shapeAABB;
+        shapeAABB.Set( verts, 4);
+        if ( !b2TestOverlap( &mCompareCircleShape, 0, &shapeAABB, 0, mCompareTransform, mCompareTransform ) )
+            return true;
+    }
+
 
     // Fetch layer and group masks.
     const U32 sceneLayerMask = pSceneObject->getSceneLayerMask();

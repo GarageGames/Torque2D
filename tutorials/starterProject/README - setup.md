@@ -16,7 +16,7 @@ In its simplest form, a project consists of a top-level directory with the follo
 1. If you do not have a copy of the Torque2D binary, obtain or compile one.
 2. Copy this "startProject" directory to wherever you want to create the project.  This becomes the main project directory.
 3. If you are running Windows, copy the following files from your Torque2D original to this directory:
-  * Torque2D.app
+  * Torque2D.exe
   * OpenAL32.dll
 	* unicows.dll
 4. If you are running OSX, copy the following files from your Torque2D original to this directory:

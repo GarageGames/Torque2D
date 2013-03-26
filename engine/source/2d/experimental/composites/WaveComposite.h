@@ -29,10 +29,10 @@
 
 //------------------------------------------------------------------------------  
 
-class WaveComposite : public CompositeSprite
+class WaveComposite : public SceneObject, public SpriteBatch
 {
 protected:
-    typedef CompositeSprite Parent;
+    typedef SceneObject Parent;
 
 private:
     AssetPtr<ImageAsset>        mImageAsset;
@@ -53,12 +53,17 @@ public:
 
     static void initPersistFields();
 
-    virtual bool validRender( void ) const { return mImageAsset.notNull(); }
     virtual void preIntegrate( const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
     virtual void integrateObject( const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
     virtual void interpolateObject( const F32 timeDelta );
 
     virtual void copyTo( SimObject* object );
+
+    virtual bool canPrepareRender( void ) const { return true; }
+    virtual bool validRender( void ) const { return mImageAsset.notNull(); }
+    virtual bool shouldRender( void ) const { return true; }
+    virtual void scenePrepareRender( const SceneRenderState* pSceneRenderState, SceneRenderQueue* pSceneRenderQueue );    
+    virtual void sceneRender( const SceneRenderState* pSceneRenderState, const SceneRenderRequest* pSceneRenderRequest, BatchRender* pBatchRenderer );
 
     bool setImage( const char* pImageAssetId );
     inline StringTableEntry getImage( void ) const { return mImageAsset.getAssetId(); }

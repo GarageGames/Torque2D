@@ -43,9 +43,11 @@ function DeadlyReef::create( %this )
 
     // load some scripts and variables
     // exec("./scripts/someScript.cs");
+    exec("./scripts/aquarium.cs");
 
     buildAquarium(mainScene);
     createAquariumEffects(mainScene);
+
     DeadlyReef.spawnPlayerFish();
 }
 
@@ -76,7 +78,8 @@ function DeadlyReef::spawnPlayerFish(%this)
     };
 
     %fish.createPolygonBoxCollisionShape(%size);
+    %fish.setCollisionShapeIsSensor(0, true);
     %fish.setCollisionGroups( "15" );
-    %fish.FixedAngle = true;
+
     mainScene.add( %fish ); 
 }

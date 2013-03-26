@@ -68,6 +68,10 @@ SimObjectPtr<Scene> Scene::LoadingScene = NULL;
 
 //------------------------------------------------------------------------------
 
+IMPLEMENT_CONOBJECT_CHILDREN(Scene);
+
+//------------------------------------------------------------------------------
+
 static ContactFilter mContactFilter;
 
 // Scene counter.
@@ -97,6 +101,7 @@ static StringTableEntry jointRevoluteMotorMaxTorqueName   = StringTable->insert(
 static StringTableEntry jointWeldNodeName                 = StringTable->insert( "Weld" );
 static StringTableEntry jointWeldFrequencyName            = jointDistanceFrequencyName;
 static StringTableEntry jointWeldDampingRatioName         = jointDistanceDampingRatioName;
+static StringTableEntry jointRevoluteMotorMaxTorqueName;
 
 static StringTableEntry jointWheelNodeName                = StringTable->insert( "Wheel" );
 static StringTableEntry jointWheelWorldAxisName           = StringTable->insert( "WorldAxis" );
@@ -108,6 +113,7 @@ static StringTableEntry jointWheelDampingRatioName        = jointDistanceDamping
 static StringTableEntry jointFrictionNodeName             = StringTable->insert( "Friction" );
 static StringTableEntry jointFrictionMaxForceName         = StringTable->insert( "MaxForce" );
 static StringTableEntry jointFrictionMaxTorqueName        = jointRevoluteMotorMaxTorqueName;
+static StringTableEntry jointWheelDampingRatioName;
 
 static StringTableEntry jointPrismaticNodeName            = StringTable->insert( "Prismatic" );
 static StringTableEntry jointPrismaticWorldAxisName       = jointWheelWorldAxisName;
@@ -132,6 +138,7 @@ static StringTableEntry jointTargetDampingRatioName       = jointDistanceDamping
 static StringTableEntry jointMotorNodeName                = StringTable->insert( "Motor" );
 static StringTableEntry jointMotorLinearOffsetName        = StringTable->insert( "LinearOffset" );
 static StringTableEntry jointMotorAngularOffsetName       = StringTable->insert( "AngularOffset" );
+static StringTableEntry jointTargetNodeName;
 static StringTableEntry jointMotorMaxForceName            = jointFrictionMaxForceName;
 static StringTableEntry jointMotorMaxTorqueName           = jointRevoluteMotorMaxTorqueName;
 static StringTableEntry jointMotorCorrectionFactorName    = StringTable->insert( "CorrectionFactor" );
@@ -172,6 +179,79 @@ Scene::Scene() :
     mRenderCallback(false),
     mSceneIndex(0)
 {
+    // Initialize Taml property names.
+    if ( !tamlPropertiesInitialized )
+    {
+        jointCustomNodeName               = StringTable->insert( "Joints" );
+        jointCollideConnectedName         = StringTable->insert( "CollideConnected" );
+        jointLocalAnchorAName             = StringTable->insert( "LocalAnchorA" );
+        jointLocalAnchorBName             = StringTable->insert( "LocalAnchorB" );
+
+        jointDistanceNodeName             = StringTable->insert( "Distance" );
+        jointDistanceLengthName           = StringTable->insert( "Length" );
+        jointDistanceFrequencyName        = StringTable->insert( "Frequency" );
+        jointDistanceDampingRatioName     = StringTable->insert( "DampingRatio" );
+
+        jointRopeNodeName                 = StringTable->insert( "Rope" );
+        jointRopeMaxLengthName            = StringTable->insert( "MaxLength" );
+
+        jointRevoluteNodeName             = StringTable->insert( "Revolute" );
+        jointRevoluteLimitLowerAngleName  = StringTable->insert( "LowerAngle" );
+        jointRevoluteLimitUpperAngleName  = StringTable->insert( "UpperAngle" );
+        jointRevoluteMotorSpeedName       = StringTable->insert( "MotorSpeed" );
+        jointRevoluteMotorMaxTorqueName   = StringTable->insert( "MaxTorque" );
+
+        jointWeldNodeName                 = StringTable->insert( "Weld" );
+        jointWeldFrequencyName            = jointDistanceFrequencyName;
+        jointWeldDampingRatioName         = jointDistanceDampingRatioName;
+
+        jointWheelNodeName                = StringTable->insert( "Wheel" );
+        jointWheelWorldAxisName           = StringTable->insert( "WorldAxis" );
+        jointWheelMotorSpeedName          = StringTable->insert( "MotorSpeed" );
+        jointWheelMotorMaxTorqueName      = jointRevoluteMotorMaxTorqueName;
+        jointWheelFrequencyName           = jointDistanceFrequencyName;
+        jointWheelDampingRatioName        = jointDistanceDampingRatioName;
+
+        jointFrictionNodeName             = StringTable->insert( "Friction" );
+        jointFrictionMaxForceName         = StringTable->insert( "MaxForce" );
+        jointFrictionMaxTorqueName        = jointRevoluteMotorMaxTorqueName;
+
+        jointPrismaticNodeName            = StringTable->insert( "Prismatic" );
+        jointPrismaticWorldAxisName       = jointWheelWorldAxisName;
+        jointPrismaticLimitLowerTransName = StringTable->insert( "LowerTranslation" );
+        jointPrismaticLimitUpperTransName = StringTable->insert( "UpperTranslation" );
+        jointPrismaticMotorSpeedName      = jointRevoluteMotorSpeedName;
+        jointPrismaticMotorMaxForceName   = jointFrictionMaxForceName;
+
+        jointPulleyNodeName               = StringTable->insert( "Pulley" );
+        jointPulleyGroundAnchorAName      = StringTable->insert( "GroundAnchorA" );
+        jointPulleyGroundAnchorBName      = StringTable->insert( "GroundAnchorB" );
+        jointPulleyLengthAName            = StringTable->insert( "LengthA" );
+        jointPulleyLengthBName            = StringTable->insert( "LengthB" );
+        jointPulleyRatioName              = StringTable->insert( "Ratio" );
+
+        jointTargetNodeName               = StringTable->insert( "Target" );
+        jointTargetWorldTargetName        = StringTable->insert( "WorldTarget" );
+        jointTargetMaxForceName           = StringTable->insert( jointFrictionMaxForceName );
+        jointTargetFrequencyName          = jointDistanceFrequencyName;
+        jointTargetDampingRatioName       = jointDistanceDampingRatioName;
+
+        jointMotorNodeName                = StringTable->insert( "Motor" );
+        jointMotorLinearOffsetName        = StringTable->insert( "LinearOffset" );
+        jointMotorAngularOffsetName       = StringTable->insert( "AngularOffset" );
+        jointMotorMaxForceName            = jointFrictionMaxForceName;
+        jointMotorMaxTorqueName           = jointRevoluteMotorMaxTorqueName;
+        jointMotorCorrectionFactorName    = StringTable->insert( "CorrectionFactor" );
+
+        controllerCustomNodeName	      = StringTable->insert( "Controllers" );
+
+        assetPreloadNodeName              = StringTable->insert( "AssetPreloads" );
+        assetNodeName                     = StringTable->insert( "Asset" );
+
+        // Flag as initialized.
+        tamlPropertiesInitialized = true;
+    }
+
     // Set Vector Associations.
     VECTOR_SET_ASSOCIATION( mSceneObjects );
     VECTOR_SET_ASSOCIATION( mDeleteRequests );
@@ -497,16 +577,16 @@ void Scene::dispatchBeginContactCallbacks( void )
         const F32 tangentImpulse2 = tickContact.mTangentImpulses[1];
 
         // Format objects.
-        char sceneObjectABuffer[16];
-        char sceneObjectBBuffer[16];
-        dSprintf( sceneObjectABuffer, sizeof(sceneObjectABuffer), "%d", pSceneObjectA->getId() );
-        dSprintf( sceneObjectBBuffer, sizeof(sceneObjectBBuffer), "%d", pSceneObjectB->getId() );
+        char* pSceneObjectABuffer = Con::getArgBuffer( 8 );
+        char* pSceneObjectBBuffer = Con::getArgBuffer( 8 );
+        dSprintf( pSceneObjectABuffer, 8, "%d", pSceneObjectA->getId() );
+        dSprintf( pSceneObjectBBuffer, 8, "%d", pSceneObjectB->getId() );
 
         // Format miscellaneous information.
-        char miscInfoBuffer[128];
+        char* pMiscInfoBuffer = Con::getArgBuffer(128);
         if ( pointCount == 2 )
         {
-            dSprintf(miscInfoBuffer, sizeof(miscInfoBuffer),
+            dSprintf(pMiscInfoBuffer, 128,
                 "%d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
                 shapeIndexA, shapeIndexB,
                 normal.x, normal.y,
@@ -991,7 +1071,7 @@ void Scene::sceneRender( const SceneRenderState* pSceneRenderState )
     mpWorldQuery->setQueryFilter( queryFilter );
 
     // Query render AABB.
-    mpWorldQuery->aabbQueryArea( cameraAABB );
+    mpWorldQuery->aabbQueryAABB( cameraAABB );
 
     // Debug Profiling.
     PROFILE_END();  //Scene_RenderSceneVisibleQuery

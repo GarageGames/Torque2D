@@ -47,9 +47,6 @@ WaveComposite::WaveComposite() :
     //          For smaller scale composites, this is more efficient and saves memory.
     //          Do not turn this off for larger scale composites like tile-maps.
     SpriteBatch::setBatchCulling( false );
-
-    // Turn-off layout.
-    setBatchLayout( NO_LAYOUT );
 }
 
 //------------------------------------------------------------------------------
@@ -84,6 +81,20 @@ void WaveComposite::preIntegrate( const F32 totalTime, const F32 elapsedTime, De
     // Update composition at pre-tick time.
     updateComposition( mPreTickTime );
 
+    // Are the spatials dirty?
+    if ( getSpatialDirty() )
+    {
+        // Yes, so update the world transform.
+        setBatchTransform( getRenderTransform() );
+    }
+
+    // Are the render extents dirty?
+    if ( getLocalExtentsDirty() )
+    {
+        // Yes, so set size as local extents.
+        setSize( getLocalExtents() );
+    }
+
     // Call parent.
     Parent::preIntegrate( totalTime, elapsedTime, pDebugStats );
 }
@@ -95,8 +106,13 @@ void WaveComposite::integrateObject( const F32 totalTime, const F32 elapsedTime,
     // Call Parent.
     Parent::integrateObject( totalTime, elapsedTime, pDebugStats );
 
-}
+    // Finish if the spatials are NOT dirty.
+    if ( !getSpatialDirty() )
+        return;
 
+    // Update the batch world transform.
+    setBatchTransform( getRenderTransform() );
+}
 //-----------------------------------------------------------------------------
 
 void WaveComposite::interpolateObject( const F32 timeDelta )
@@ -106,6 +122,13 @@ void WaveComposite::interpolateObject( const F32 timeDelta )
 
     // Update composition time (interpolated).
     updateComposition( (timeDelta * mPreTickTime) + ((1.0f-timeDelta) * mPostTickTime) );
+
+    // Finish if the spatials are NOT dirty.
+    if ( !getSpatialDirty() )
+        return;
+
+    // Update the batch world transform.
+    setBatchTransform( getRenderTransform() );
 }
 
 //------------------------------------------------------------------------------
@@ -127,6 +150,22 @@ void WaveComposite::copyTo(SimObject* object)
     pComposite->setSpriteCount( getSpriteCount() );
     pComposite->setSpriteSize( getSpriteSize() );
     pComposite->setAmplitude( getAmplitude() );
+}
+
+//-----------------------------------------------------------------------------
+
+void WaveComposite::scenePrepareRender( const SceneRenderState* pSceneRenderState, SceneRenderQueue* pSceneRenderQueue )
+{
+    // Prepare render.
+    SpriteBatch::prepareRender( this, pSceneRenderState, pSceneRenderQueue );
+}
+
+//-----------------------------------------------------------------------------
+
+void WaveComposite::sceneRender( const SceneRenderState* pSceneRenderState, const SceneRenderRequest* pSceneRenderRequest, BatchRender* pBatchRenderer )
+{
+    // Render.
+    SpriteBatch::render( pSceneRenderState, pSceneRenderRequest, pBatchRenderer );
 }
 
 //-----------------------------------------------------------------------------

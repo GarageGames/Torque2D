@@ -107,7 +107,7 @@ void BuoyancyController::integrate( Scene* pScene, const F32 totalTime, const F3
     WorldQuery* pWorldQuery = prepareQueryFilter( pScene );
 
     // Query for candidate objects.
-    pWorldQuery->anyQueryArea( mFluidArea ); 
+    pWorldQuery->anyQueryAABB( mFluidArea ); 
 
     // Fetch results.
     typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();

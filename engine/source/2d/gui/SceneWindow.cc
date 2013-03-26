@@ -1764,7 +1764,7 @@ void SceneWindow::renderMetricsOverlay( Point2I offset, const RectI& updateRect 
     glEnable        ( GL_BLEND );
     glBlendFunc     ( GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA );
 
-    // Set banner background colour.
+    // Set banner background color.
     const ColorI& fillColor = mProfile->mFillColor;
     const F32 colorScale = 1.0f / 255.0f;
     glColor4f( fillColor.red * colorScale, fillColor.green * colorScale, fillColor.blue * colorScale, fillColor.alpha * colorScale );
@@ -1801,7 +1801,7 @@ void SceneWindow::renderMetricsOverlay( Point2I offset, const RectI& updateRect 
     // Disable Banner Blending.
     glDisable       ( GL_BLEND );
         
-    // Set Debug Text Colour.
+    // Set Debug Text color.
     dglSetBitmapModulation( mProfile->mFontColor );
 
     // ****************************************************************

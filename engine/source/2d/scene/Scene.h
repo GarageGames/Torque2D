@@ -619,6 +619,11 @@ public:
 
     F32                     getMotorJointMaxTorque( const U32 jointId );
 
+	/// Misc Joint Utilities - 19-03-13 - capnlove
+
+	F32                     getRevoluteJointAngle(const U32 jointID);
+	F32						getRevoluteJointSpeed(const U32 jointID);
+
     /// Debug and metrics.
     inline void             setDebugOn( const U32 debugMask )           { mDebugMask |= debugMask; }
     inline void             setDebugOff( const U32 debugMask )          { mDebugMask &= ~debugMask; }

@@ -74,7 +74,7 @@ private:
 
 private:
     SpriteBatch*                mpSpriteBatch;
-    b2PolygonShape              mCompareShape;
+    b2PolygonShape              mComparePolygonShape;
     b2RayCastInput              mCompareRay;
     b2Vec2                      mComparePoint;
     b2Transform                 mCompareTransform;

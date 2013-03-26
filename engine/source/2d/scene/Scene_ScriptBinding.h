@@ -2399,19 +2399,19 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
     // Perform query.
     if ( pickMode == Scene::PICK_ANY )
     {
-        pWorldQuery->anyQueryArea( aabb );    
+        pWorldQuery->anyQueryAABB( aabb );    
     }
     else if ( pickMode == Scene::PICK_AABB )
     {
-        pWorldQuery->aabbQueryArea( aabb );    
+        pWorldQuery->aabbQueryAABB( aabb );    
     }
     else if ( pickMode == Scene::PICK_OOBB )
     {
-        pWorldQuery->oobbQueryArea( aabb );    
+        pWorldQuery->oobbQueryAABB( aabb );    
     }
     else if ( pickMode == Scene::PICK_COLLISION )
     {
-        pWorldQuery->collisionQueryArea( aabb );    
+        pWorldQuery->collisionQueryAABB( aabb );    
     }
     else
     {
@@ -2708,6 +2708,155 @@ ConsoleMethod(Scene, pickPoint, const char*, 3, 7, "(x / y, [sceneGroupMask], [s
     else if ( pickMode == Scene::PICK_COLLISION )
     {
         pWorldQuery->collisionQueryPoint( point );    
+    }
+    else
+    {
+        AssertFatal( false, "Unsupported pick mode." );
+    }
+
+    // Fetch result count.
+    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+
+    // Finish if no results.
+    if ( resultCount == 0 )
+        return NULL;
+
+    // Fetch results.
+    typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
+
+    // Set Max Buffer Size.
+    const U32 maxBufferSize = 4096;
+
+    // Create Returnable Buffer.
+    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
+
+    // Set Buffer Counter.
+    U32 bufferCount = 0;
+
+    // Add Picked Objects to List.
+    for ( U32 n = 0; n < resultCount; n++ )
+    {
+        // Output Object ID.
+        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
+
+        // Finish early if we run out of buffer space.
+        if ( bufferCount >= maxBufferSize )
+        {
+            // Warn.
+            Con::warnf("Scene::pickPoint() - Too many items picked to return to scripts!");
+            break;
+        }
+    }
+
+    // Clear world query.
+    pWorldQuery->clearQuery();
+
+    // Return buffer.
+    return pBuffer;
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, pickCircle, const char*, 4, 8, "(x / y, radius, [sceneGroupMask], [sceneLayerMask], [pickMode] ) Picks objects intersecting the specified circle with optional group/layer masks.\n"
+              "@param x/y The coordinate of the point as either (\"x y\") or (x,y)\n"
+              "@param radius The radius of the circle.\n"
+              "@param sceneGroupMask Optional scene group mask.  (-1) or empty string selects all groups.\n"
+              "@param sceneLayerMask Optional scene layer mask.  (-1) or empty string selects all layers.\n"
+              "@param pickMode Optional mode 'any', 'aabb', 'oobb' or 'collision' (default is 'ooabb').\n"
+              "@return Returns list of object IDs.")
+{
+    // The point.
+    Vector2 point;
+
+    // The index of the first optional parameter.
+    U32 firstArg;
+
+    // Grab the number of elements in the first parameter.
+    U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+
+    // ("x y")
+    if ((elementCount == 2) && (argc < 8))
+    {
+        point = Utility::mGetStringElementVector(argv[2]);
+        firstArg = 3;
+    }
+   
+    // (x, y)
+    else if ((elementCount == 1) && (argc > 3))
+    {
+        point = Vector2(dAtof(argv[2]), dAtof(argv[3]));
+        firstArg = 4;
+    }
+   
+    // Invalid
+    else
+    {
+        Con::warnf("Scene::pickPoint() - Invalid number of parameters!");
+        return NULL;
+    }
+
+    // Fetch radius.
+    const F32 radius = dAtof(argv[firstArg++]);
+
+    // Check radius.
+    if ( radius <= 0.0f )
+    {
+        Con::warnf( "Scene::pickCircle()  Radius must be greater than zero." );
+        return StringTable->EmptyString;
+    }
+
+    // Calculate scene group mask.
+    U32 sceneGroupMask = MASK_ALL;
+    if ( (U32)argc > firstArg )
+    {
+        if ( *argv[firstArg] != 0 )
+            sceneGroupMask = dAtoi(argv[firstArg]);
+    }
+
+    // Calculate scene layer mask.
+    U32 sceneLayerMask = MASK_ALL;
+    if ( (U32)argc > (firstArg + 1) )
+    {
+        if ( *argv[firstArg + 1] != 0 )
+            sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    }
+
+    // Calculate pick mode.
+    Scene::PickMode pickMode = Scene::PICK_OOBB;
+    if ( (U32)argc > (firstArg + 2 ))
+    {
+        pickMode = Scene::getPickModeEnum(argv[firstArg + 2]);
+    }
+    if ( pickMode == Scene::PICK_INVALID )
+    {
+        Con::warnf("Scene::pickPoint() - Invalid pick mode of %s", argv[firstArg + 2]);
+        pickMode = Scene::PICK_OOBB;
+    }
+
+
+    // Fetch world query and clear results.
+    WorldQuery* pWorldQuery = object->getWorldQuery( true );
+
+    // Set filter.
+    WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
+    pWorldQuery->setQueryFilter( queryFilter );
+
+    // Perform query.
+    if ( pickMode == Scene::PICK_ANY )
+    {
+        pWorldQuery->anyQueryCircle( point, radius );    
+    }
+    else if ( pickMode == Scene::PICK_AABB )
+    {
+        pWorldQuery->aabbQueryCircle( point, radius );    
+    }
+    else if ( pickMode == Scene::PICK_OOBB )
+    {
+        pWorldQuery->oobbQueryCircle( point, radius );    
+    }
+    else if ( pickMode == Scene::PICK_COLLISION )
+    {
+        pWorldQuery->collisionQueryCircle( point, radius );    
     }
     else
     {
@@ -3204,3 +3353,40 @@ ConsoleMethod(Scene, create, const char*, 3, 3, "(type) Creates the specified sc
     return pSceneObject == NULL ? NULL : pSceneObject->getIdString();
 }
 
+ConsoleMethod(Scene, getRevoluteJointAngle, const char*, 3, 3,  "(jointId) Gets the current angle of a revolute joint.\n"
+                                                                        "@param jointId The Id of the joint to use.\n"
+                                                                    "@return Returns the joint angle in degrees (not Rad" )
+{
+    // Fetch joint Id.
+    const S32 jointId = dAtoi(argv[2]);
+
+    // Args.
+    F32 currentAngle;
+
+    // Access joint.
+	currentAngle = object->getRevoluteJointAngle( jointId);
+    
+    // Format output.
+    char* pBuffer = Con::getReturnBuffer(64);
+    dSprintf( pBuffer, 64, "%g", mRadToDeg(currentAngle) );
+    return pBuffer;
+}
+
+ConsoleMethod(Scene, getRevoluteJointSpeed, const char*, 3, 3,  "(jointId) Gets the current speed of a revolute joint.\n"
+                                                                        "@param jointId The Id of the joint to use.\n"
+                                                                    "@return Returns the joint speed as Angular Velocity" )
+{
+    // Fetch joint Id.
+    const S32 jointId = dAtoi(argv[2]);
+
+    // Args.
+    F32 angularVel;
+
+    // Access joint.
+	angularVel = object->getRevoluteJointSpeed( jointId);
+    
+    // Format output.
+    char* pBuffer = Con::getReturnBuffer(64);
+    dSprintf( pBuffer, 64, "%g", angularVel);
+    return pBuffer;
+}

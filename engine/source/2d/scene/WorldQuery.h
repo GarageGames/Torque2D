@@ -57,25 +57,28 @@ public:
     void            removeAlwaysInScope( SceneObject* pSceneObject );
 
     /// World collision-shape queries.
-    U32             collisionQueryArea( const b2AABB& aabb );
+    U32             collisionQueryAABB( const b2AABB& aabb );
     U32             collisionQueryRay( const Vector2& point1, const Vector2& point2 );
     U32             collisionQueryPoint( const Vector2& point );
+    U32             collisionQueryCircle( const Vector2& centroid, const F32 radius );
 
     /// AABB queries.
-    U32             aabbQueryArea( const b2AABB& aabb );
+    U32             aabbQueryAABB( const b2AABB& aabb );
     U32             aabbQueryRay( const Vector2& point1, const Vector2& point2 );
     U32             aabbQueryPoint( const Vector2& point );
+    U32             aabbQueryCircle( const Vector2& centroid, const F32 radius );
 
     /// OOBB queries.
-    U32             oobbQueryArea( const b2AABB& aabb );
+    U32             oobbQueryAABB( const b2AABB& aabb );
     U32             oobbQueryRay( const Vector2& point1, const Vector2& point2 );
     U32             oobbQueryPoint( const Vector2& point );
+    U32             oobbQueryCircle( const Vector2& centroid, const F32 radius );
 
     /// Any queries.
-    U32             anyQueryArea( const b2AABB& aabb );
-    U32             anyQueryArea( const Vector2& lowerBound, const Vector2& upperBound );
+    U32             anyQueryAABB( const b2AABB& aabb );
     U32             anyQueryRay( const Vector2& point1, const Vector2& point2 );
     U32             anyQueryPoint( const Vector2& point );
+    U32             anyQueryCircle( const Vector2& centroid, const F32 radius );
 
     /// Filtering.
     inline void     setQueryFilter( const WorldQueryFilter& queryFilter ) { mQueryFilter = queryFilter; }
@@ -101,13 +104,15 @@ private:
 private:
     Scene*                      mpScene;
     WorldQueryFilter            mQueryFilter;
-    b2PolygonShape              mCompareShape;
+    b2PolygonShape              mComparePolygonShape;
+    b2CircleShape               mCompareCircleShape;
     b2RayCastInput              mCompareRay;
     b2Vec2                      mComparePoint;
     b2Transform                 mCompareTransform;
     bool                        mCheckPoint;
-    bool                        mCheckArea;
+    bool                        mCheckAABB;
     bool                        mCheckOOBB;
+    bool                        mCheckCircle;
     typeWorldQueryResultVector  mLayeredQueryResults[MAX_LAYERS_SUPPORTED];
     typeWorldQueryResultVector  mQueryResults;
     bool                        mIsRaycastQueryResult;

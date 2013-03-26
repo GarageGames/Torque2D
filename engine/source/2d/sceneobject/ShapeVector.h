@@ -55,28 +55,24 @@ public:
     void setPolyScale( const Vector2& scale );
     void setPolyPrimitive( const U32 polyVertexCount );
     void setPolyCustom( const U32 polyVertexCount, const char* pCustomPolygon );
-
-    /// Rendering Attributes.
-    void setLineColorString( const char* lineColour );
-    void setLineColor( const ColorF& lineColour );
-    void setLineAlpha( const F32 alpha );
-    void setFillColorString( const char* fillColour );
-    void setFillColor( const ColorF& fillColour );
-    void setFillAlpha( const F32 alpha );
-    void setFillMode( const bool fillMode );
-    void setIsCircle( const bool isCircle );
-    void setCircleRadius( F32 radius );
-
-    /// Retrieval.
     U32 getPolyVertexCount( void ) { return U32(mPolygonBasisList.size()); };
+    inline const Vector2* getPolyBasis( void ) const { return &(mPolygonBasisList[0]); };
     const char* getPoly( void );
     const char* getWorldPoly( void );
-    inline const Vector2* getPolyBasis( void ) const         { return &(mPolygonBasisList[0]); };
-    bool getFillMode( void );
-    const char* getLineColor( void );
-    const char* getFillColor( void );
-    bool getIsCircle( void );
-    F32 getCircleRadius ( void );
+
+    inline void setLineColor( const ColorF& linecolor ) { mLineColor = linecolor; }
+    inline const ColorF& getLineColor( void ) const { return mLineColor; }
+    inline void setLineAlpha( const F32 alpha ) { mLineColor.alpha = alpha; }
+    inline void setFillColor( const ColorF& fillcolor ) { mFillColor = fillcolor; }
+    inline const ColorF& getFillColor( void ) const { return mFillColor; }
+    inline void setFillAlpha( const F32 alpha ) { mFillColor.alpha = alpha; }
+    inline void setFillMode( const bool fillMode ) { mFillMode = fillMode; }
+    inline bool getFillMode( void ) const { return mFillMode; }
+    inline void setIsCircle( const bool isCircle ) { mIsCircle = isCircle; }
+    inline bool getIsCircle( void ) const { return mIsCircle; }
+    inline void setCircleRadius( const F32 circleRadius ) { mCircleRadius = circleRadius; }
+    inline F32 getCircleRadius ( void ) const { return mCircleRadius; }
+
     Vector2 getBoxFromPoints( void );
 
     /// Internal Crunchers.
@@ -112,25 +108,15 @@ public:
 protected:
     static bool setPolyList(void* obj, const char* data)
     {
-       //Vector2 poly[b2_maxPolygonVertices];
-       U32 count = Utility::mGetStringElementCount(data) >> 1;
-       //for (U32 i = 0; i < count; i++)
-       //   poly[i] = Utility::mGetStringElementVector(data, i * 2);
-
+       const U32 count = Utility::mGetStringElementCount(data) >> 1;
        static_cast<ShapeVector*>(obj)->setPolyCustom(count, data);
        return false;
     }
     static bool writePolyList( void* obj, StringTableEntry pFieldName ) { return static_cast<ShapeVector*>(obj)->mPolygonBasisList.size() > 0; }
-
-    static bool setLineColor(void* obj, const char* data) { static_cast<ShapeVector*>(obj)->setLineColorString(data); return false; }
     static bool writeLineColor( void* obj, StringTableEntry pFieldName ) { return static_cast<ShapeVector*>(obj)->mLineColor != ColorF(1.0f,1.0f,1.0f,1.0f); }
-    static bool setFillColor(void* obj, const char* data) { static_cast<ShapeVector*>(obj)->setFillColorString(data); return false; }
     static bool writeFillColor( void* obj, StringTableEntry pFieldName ) { return static_cast<ShapeVector*>(obj)->mFillColor != ColorF(0.5f,0.5f,0.5f,1.0f); }
-    static bool setFillMode(void* obj, const char* data) { static_cast<ShapeVector*>(obj)->setFillMode(dAtob(data)); return false; }
     static bool writeFillMode( void* obj, StringTableEntry pFieldName ) { return static_cast<ShapeVector*>(obj)->mFillMode == true; }
-    static bool setIsCircle(void* obj, const char* data) { static_cast<ShapeVector*>(obj)->setIsCircle(dAtob(data)); return false; }
     static bool writeIsCircle( void* obj, StringTableEntry pFieldName ) { return static_cast<ShapeVector*>(obj)->mIsCircle == true; }
-    static bool setCircleRadius(void* obj, const char* data) { static_cast<ShapeVector*>(obj)->setCircleRadius(dAtof(data)); return false; }
     static bool writeCircleRadius( void* obj, StringTableEntry pFieldName ) { return static_cast<ShapeVector*>(obj)->mIsCircle != 1; }
 };
 

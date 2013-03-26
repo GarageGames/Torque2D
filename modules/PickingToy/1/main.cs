@@ -27,10 +27,11 @@ function PickingToy::create( %this )
     PickingToy.PickMode = Any;
     PickingToy.NotPickedAlpha = 0.2;
     PickingToy.PickAreaSize = 10;
+    PickingToy.RayStart = "0 30";
 
     // Add the configuration options.
-    addSelectionOption( "Any,AABB,OOBB,Collision", "Pick Mode", 4, "setPickMode", false, "Selects the picking mode." );
-    addSelectionOption( "Point,Area", "Pick Type", 2, "setPickType", true, "Selects the picking type." );
+    addSelectionOption( "Point,Area,Circle,Ray", "Pick Type", 4, "setPickType", true, "Selects the picking type." );
+    addSelectionOption( "Any,OOBB,AABB,Collision", "Pick Mode", 4, "setPickMode", false, "Selects the picking mode." );
 
     // Force-on debug options.
     setAABBOption( true );
@@ -49,8 +50,7 @@ function PickingToy::destroy( %this )
     // Force-off debug options.
     setAABBOption( false );
     setOOBBOption( false );
-    setCollisionOption( false );
-    
+    setCollisionOption( false );    
 }
 
 //-----------------------------------------------------------------------------
@@ -67,7 +67,10 @@ function PickingToy::reset( %this )
     %this.createTarget();   
     
     // Create pick cursor.
-    %this.createPickCursor();    
+    %this.createPickCursor();
+    
+    // Create the ray-cast overlay.
+    %this.createRaycastOverlay();    
 }
 
 //-----------------------------------------------------------------------------
@@ -114,7 +117,7 @@ function PickingToy::createPickCursor( %this )
     %object.BlendColor = Red;
     %object.PickingAllowed = false;
     
-    if ( PickingToy.PickType $= "point" )
+    if ( PickingToy.PickType $= "point" || PickingToy.PickType $= "ray" )
     {
         %object.Image = "ToyAssets:CrossHair1";
     }
@@ -122,9 +125,33 @@ function PickingToy::createPickCursor( %this )
     {
         %object.Image = "ToyAssets:Blank";
     }
+    else if ( PickingToy.PickType $= "circle" )
+    {
+        %object.Image = "ToyAssets:BlankCircle";
+    }
     
-    // Set the cursor object.
+    // Set the cursor.
     PickingToy.CursorObject = %object;
+}
+
+//-----------------------------------------------------------------------------
+
+function PickingToy::createRaycastOverlay( %this )
+{    
+    // Finish if not in ray mode.
+    if ( PickingToy.PickType !$= "ray" )
+        return;
+    
+    // Create the sprite.
+    %object = SandboxScene.create( ShapeVector );
+    %object.Size = "1 1";
+    %object.PickingAllowed = false;
+    %object.IsCircle = false;
+    %object.FillMode = false;
+    %object.LineColor = Red;   
+    
+    // Set the ray-cast overlay object.
+    PickingToy.RaycastOverlay = %object;
 }
 
 //-----------------------------------------------------------------------------
@@ -133,6 +160,13 @@ function PickingToy::onTouchMoved(%this, %touchID, %worldPosition)
 {
     // Update cursor position.
     PickingToy.CursorObject.Position = %worldPosition;
+    
+    // Are we in ray mode?
+    if ( PickingToy.PickType $= "ray" )
+    {
+        // Yes, so update the ray geometry.
+        PickingToy.RaycastOverlay.PolyList = PickingToy.RayStart SPC %worldPosition;
+    }    
     
     // Handle picking mode appropriately.
     switch$( PickingToy.PickType )
@@ -145,6 +179,13 @@ function PickingToy::onTouchMoved(%this, %touchID, %worldPosition)
             %lower = (%worldPosition._0 - %halfSize) SPC(%worldPosition._1 - %halfSize);    
             %upper = (%worldPosition._0 + %halfSize) SPC(%worldPosition._1 + %halfSize);    
             %picked = SandboxScene.pickArea( %lower, %upper, "", "", PickingToy.PickMode );
+            
+        case "ray":
+            %picked = SandboxScene.pickRay( PickingToy.RayStart, %worldPosition, "", "", PickingToy.PickMode );
+            
+        case "circle":
+            %halfSize = PickingToy.PickAreaSize * 0.5;
+            %picked = SandboxScene.pickCircle( %worldPosition, %halfSize, "", "", PickingToy.PickMode );
     }
         
     // Fetch pick count.

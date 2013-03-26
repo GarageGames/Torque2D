@@ -2603,14 +2603,14 @@ void SceneObject::setBlendOptions( void )
         // Set Blend Function.
         glBlendFunc( mSrcBlendFactor, mDstBlendFactor );
 
-        // Set Colour.
+        // Set color.
         glColor4f(mBlendColor.red,mBlendColor.green,mBlendColor.blue,mBlendColor.alpha );
     }
     else
     {
         // Disable Blending.
         glDisable( GL_BLEND );
-        // Reset Colour.
+        // Reset color.
         glColor4f(1,1,1,1);
     }
 
@@ -2637,7 +2637,7 @@ void SceneObject::resetBlendOptions( void )
 
     glDisable( GL_ALPHA_TEST);
 
-    // Reset Colour.
+    // Reset color.
     glColor4f(1,1,1,1);
 }
 
