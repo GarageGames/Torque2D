@@ -27,12 +27,6 @@
 
 //-----------------------------------------------------------------------------
 
-StringTableEntry tamlRefIdName          = StringTable->insert( "TamlId" );
-StringTableEntry tamlRefToIdName        = StringTable->insert( "TamlRefId" );
-StringTableEntry tamlNamedObjectName    = StringTable->insert( "Name" );
-
-//-----------------------------------------------------------------------------
-
 SimObject* TamlXmlReader::read( FileStream& stream )
 {
     // Debug Profiling.

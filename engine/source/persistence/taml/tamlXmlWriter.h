@@ -33,12 +33,6 @@
 
 //-----------------------------------------------------------------------------
 
-extern StringTableEntry tamlRefIdName;
-static StringTableEntry tamlRefToIdName;
-static StringTableEntry tamlNamedObjectName;
-
-//-----------------------------------------------------------------------------
-
 class TamlXmlWriter
 {
 public:
