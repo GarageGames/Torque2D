@@ -34,6 +34,8 @@
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:ab110056b3a6fcb9691b2df0ba47ee8b6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSceneWindow.html#ab110056b3a6fcb9691b2df0ba47ee8b6">addInputListener</a> (inputListener)</td></tr>
+<tr class="separator:ab110056b3a6fcb9691b2df0ba47ee8b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a792601284e243c4439e000b5ebdb0331"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSceneWindow.html#a792601284e243c4439e000b5ebdb0331">clampCameraViewLimit</a> ()</td></tr>
 <tr class="separator:a792601284e243c4439e000b5ebdb0331"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab58a97226e521d9bfdc8d19d5ed25032"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSceneWindow.html#ab58a97226e521d9bfdc8d19d5ed25032">completeCameraMove</a> ()</td></tr>
@@ -100,6 +102,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a409e388bb52a534d4436d35d48b3f9f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d52114f0e22b22b10fcb6e9afb5afb5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSceneWindow.html#a8d52114f0e22b22b10fcb6e9afb5afb5">mount</a> (sceneObject,[offsetX/offsetY],[mountForce],[sendToMount?],[mountAngle?])</td></tr>
 <tr class="separator:a8d52114f0e22b22b10fcb6e9afb5afb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8951a19710b80571bb551695841b9b4"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSceneWindow.html#ae8951a19710b80571bb551695841b9b4">removeInputListener</a> (inputListener)</td></tr>
+<tr class="separator:ae8951a19710b80571bb551695841b9b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3810ee594104fd9d55a1e88374cde5b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSceneWindow.html#aa3810ee594104fd9d55a1e88374cde5b">resetScene</a> ()</td></tr>
 <tr class="separator:aa3810ee594104fd9d55a1e88374cde5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49709886b5d1e8e167e86d05f35341a2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSceneWindow.html#a49709886b5d1e8e167e86d05f35341a2">setBackgroundColor</a> (float red, float green, float blue,[float alpha=1.0])</td></tr>
@@ -382,6 +386,38 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ab83c7a59a66018d9b5eec3c8dcd3397d inherit pub_attribs_classSimObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ab110056b3a6fcb9691b2df0ba47ee8b6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool SceneWindow::addInputListener </td>
+          <td>(</td>
+          <td class="paramtype">inputListener&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Adds an object as an input listener. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">inputListener</td><td>The object to add as an input listener. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the object was added as an input event listener or not. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a792601284e243c4439e000b5ebdb0331"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1256,6 +1292,38 @@ Public Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>No return value </dd></dl>
 </li>
 </ul>
+
+</div>
+</div>
+<a class="anchor" id="ae8951a19710b80571bb551695841b9b4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool SceneWindow::removeInputListener </td>
+          <td>(</td>
+          <td class="paramtype">inputListener&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Removes an object from being an input listener. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">inputListener</td><td>The object to remove as an input listener. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the object was removed as an input event listener or not. </dd></dl>
 
 </div>
 </div>

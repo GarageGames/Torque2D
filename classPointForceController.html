@@ -46,6 +46,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5e4214a63a7e3cb3a8c136a3d65fceab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fa8fd917c5ac9a77f557b5e68a2997b"><td class="memItemLeft" align="right" valign="top">virtual float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPointForceController.html#a9fa8fd917c5ac9a77f557b5e68a2997b">getRadius</a> ()</td></tr>
 <tr class="separator:a9fa8fd917c5ac9a77f557b5e68a2997b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4aa9365f252e05898bdcc5715f187b0d"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPointForceController.html#a4aa9365f252e05898bdcc5715f187b0d">getTrackedObject</a> ()</td></tr>
+<tr class="separator:a4aa9365f252e05898bdcc5715f187b0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2bddfc525658c0e453ad0ca45bff9729"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPointForceController.html#a2bddfc525658c0e453ad0ca45bff9729">setAngularDrag</a> (angularDrag)</td></tr>
 <tr class="separator:a2bddfc525658c0e453ad0ca45bff9729"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d87de2c393a468a4731edec3d7426c0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPointForceController.html#a9d87de2c393a468a4731edec3d7426c0">setForce</a> (force)</td></tr>
@@ -58,6 +60,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9c264a34cbfb3be74b833f761ee3f514"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32c3f9da5d973cf7b47676aeba97551f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPointForceController.html#a32c3f9da5d973cf7b47676aeba97551f">setRadius</a> (radius)</td></tr>
 <tr class="separator:a32c3f9da5d973cf7b47676aeba97551f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a065013059cd6002dad90a899dfab2559"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPointForceController.html#a065013059cd6002dad90a899dfab2559">setTrackedObject</a> (sceneObject)</td></tr>
+<tr class="separator:a065013059cd6002dad90a899dfab2559"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classPickingSceneController"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classPickingSceneController')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classPickingSceneController.html">PickingSceneController</a></td></tr>
 <tr class="memitem:a077bf0e4f334704c51fe1eda0b106b43 inherit pub_methods_classPickingSceneController"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPickingSceneController.html#a077bf0e4f334704c51fe1eda0b106b43">getControlGroups</a> ()</td></tr>
 <tr class="separator:a077bf0e4f334704c51fe1eda0b106b43 inherit pub_methods_classPickingSceneController"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -342,6 +346,33 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a4aa9365f252e05898bdcc5715f187b0d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual string PointForceController::getTrackedObject </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<ul>
+<li>Gets the scene object from which the position will be tracked. <dl class="section return"><dt>Returns</dt><dd>The scene object from which the position will be tracked or an empty string if nothing is being tracked. </dd></dl>
+</li>
+</ul>
+
+</div>
+</div>
 <a class="anchor" id="a2bddfc525658c0e453ad0ca45bff9729"></a>
 <div class="memitem">
 <div class="memproto">
@@ -548,6 +579,40 @@ Public Attributes</h2></td></tr>
 <li>Sets the radius of the point force to use. <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">radius</td><td>The radius of the point force to use. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>No return value. </dd></dl>
+</li>
+</ul>
+
+</div>
+</div>
+<a class="anchor" id="a065013059cd6002dad90a899dfab2559"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void PointForceController::setTrackedObject </td>
+          <td>(</td>
+          <td class="paramtype">sceneObject&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<ul>
+<li>Sets a scene object from which the position will be tracked. <dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sceneObject</td><td>The scene object from which the position will be tracked. An empty string will stop tracking. </td></tr>
   </table>
   </dd>
 </dl>

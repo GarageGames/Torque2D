@@ -48,12 +48,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9a5856fb2369be2ecbe725cad1198faa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdcb8ae64e5ffdaaf18664afc31df27f"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderProxy.html#abdcb8ae64e5ffdaaf18664afc31df27f">getIsAnimationFinished</a> ()</td></tr>
 <tr class="separator:abdcb8ae64e5ffdaaf18664afc31df27f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f2be6af410b1f35333798b5c400fb8c"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderProxy.html#a8f2be6af410b1f35333798b5c400fb8c">isStaticMode</a> ()</td></tr>
-<tr class="separator:a8f2be6af410b1f35333798b5c400fb8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cf5a0d053c172766a33af4abce4caec"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderProxy.html#a9cf5a0d053c172766a33af4abce4caec">isStaticFrameProvider</a> ()</td></tr>
+<tr class="separator:a9cf5a0d053c172766a33af4abce4caec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afcc4165fa1611312b2eb967b2681196a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderProxy.html#afcc4165fa1611312b2eb967b2681196a">pauseAnimation</a> (bool enable)</td></tr>
 <tr class="separator:afcc4165fa1611312b2eb967b2681196a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87ec5940cf4fa1e620ce581eaae4baa6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderProxy.html#a87ec5940cf4fa1e620ce581eaae4baa6">playAnimation</a> (string animationAssetId,[bool autoRestore])</td></tr>
-<tr class="separator:a87ec5940cf4fa1e620ce581eaae4baa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae54c7d21b44b2edef621c54cf60d7232"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderProxy.html#ae54c7d21b44b2edef621c54cf60d7232">playAnimation</a> (string animationAssetId)</td></tr>
+<tr class="separator:ae54c7d21b44b2edef621c54cf60d7232"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a827be81a5d662177f6aa889e1f90df3e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderProxy.html#a827be81a5d662177f6aa889e1f90df3e">setAnimationFrame</a> (int frame)</td></tr>
 <tr class="separator:a827be81a5d662177f6aa889e1f90df3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82f1df8dcf4b24068536365fa1e24dc8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderProxy.html#a82f1df8dcf4b24068536365fa1e24dc8">setAnimationTimeScale</a> (float timeScale)</td></tr>
@@ -360,7 +360,7 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a8f2be6af410b1f35333798b5c400fb8c"></a>
+<a class="anchor" id="a9cf5a0d053c172766a33af4abce4caec"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -368,7 +368,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool RenderProxy::isStaticMode </td>
+          <td class="memname">virtual bool RenderProxy::isStaticFrameProvider </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -420,7 +420,7 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a87ec5940cf4fa1e620ce581eaae4baa6"></a>
+<a class="anchor" id="ae54c7d21b44b2edef621c54cf60d7232"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -445,7 +445,6 @@ Public Attributes</h2></td></tr>
 <li>Plays an animation. <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">animationAssetId</td><td>The animation asset Id to play </td></tr>
-    <tr><td class="paramname">autoRestore</td><td>If true, the previous animation will be played when this new animation finishes. </td></tr>
   </table>
   </dd>
 </dl>
