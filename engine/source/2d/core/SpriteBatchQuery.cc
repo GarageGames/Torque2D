@@ -39,8 +39,8 @@ SpriteBatchQuery::SpriteBatchQuery( SpriteBatch* pSpriteBatch ) :
         mpSpriteBatch(pSpriteBatch),
         mIsRaycastQueryResult(false),
         mMasterQueryKey(0),
-        mCheckFixturePoint(false),
-        mFixturePoint(0.0f, 0.0f)
+        mCheckPoint(false),
+        mComparePoint(0.0f, 0.0f)
 {
     // Set debug associations.
     VECTOR_SET_ASSOCIATION( mQueryResults );
@@ -81,10 +81,10 @@ bool SpriteBatchQuery::update( SpriteBatchItem* pSpriteBatchItem, const b2AABB& 
 
 //-----------------------------------------------------------------------------
 
-U32 SpriteBatchQuery::renderQueryArea( const b2AABB& aabb )
+U32 SpriteBatchQuery::queryArea( const b2AABB& aabb, const bool targetOOBB )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(SpriteBatchQuery_RenderQueryArea);
+    PROFILE_SCOPE(SpriteBatchQuery_QueryArea);
 
     mMasterQueryKey++;
 
@@ -92,17 +92,26 @@ U32 SpriteBatchQuery::renderQueryArea( const b2AABB& aabb )
     mIsRaycastQueryResult = false;
 
     // Query.
+    b2Vec2 verts[4];
+    verts[0].Set( aabb.lowerBound.x, aabb.lowerBound.y );
+    verts[1].Set( aabb.upperBound.x, aabb.lowerBound.y );
+    verts[2].Set( aabb.upperBound.x, aabb.upperBound.y );
+    verts[3].Set( aabb.lowerBound.x, aabb.upperBound.y );
+    mComparePolygonShape.Set( verts, 4 );
+    mCompareTransform.SetIdentity();
+    mCheckOOBB = targetOOBB;
     Query( this, aabb );
+    mCheckOOBB = false;
 
     return getQueryResultsCount();
 }
 
 //-----------------------------------------------------------------------------
 
-U32 SpriteBatchQuery::renderQueryRay( const Vector2& point1, const Vector2& point2 )
+U32 SpriteBatchQuery::queryRay( const Vector2& point1, const Vector2& point2, const bool targetOOBB )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(SpriteBatchQuery_RenderQueryRay);
+    PROFILE_SCOPE(SpriteBatchQuery_QueryRay);
 
     mMasterQueryKey++;
 
@@ -110,23 +119,23 @@ U32 SpriteBatchQuery::renderQueryRay( const Vector2& point1, const Vector2& poin
     mIsRaycastQueryResult = true;
 
     // Query.
-    b2RayCastInput rayInput;
-    rayInput.p1 = point1;
-    rayInput.p2 = point2;
-
-    rayInput.maxFraction = 1.0f;
-
-    RayCast( this, rayInput );
+    mCompareRay.p1 = point1;
+    mCompareRay.p2 = point2;
+    mCompareRay.maxFraction = 1.0f;
+    mCompareTransform.SetIdentity();
+    mCheckOOBB = targetOOBB;
+    RayCast( this, mCompareRay );
+    mCheckOOBB = false;
 
     return getQueryResultsCount();
 }
 
 //-----------------------------------------------------------------------------
 
-U32 SpriteBatchQuery::renderQueryPoint( const Vector2& point )
+U32 SpriteBatchQuery::queryPoint( const Vector2& point, const bool targetOOBB )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(SpriteBatchQuery_RenderQueryPoint);
+    PROFILE_SCOPE(SpriteBatchQuery_QueryPoint);
 
     mMasterQueryKey++;
 
@@ -134,12 +143,13 @@ U32 SpriteBatchQuery::renderQueryPoint( const Vector2& point )
     mIsRaycastQueryResult = false;
 
     // Query.
-    b2RayCastInput rayInput;
-    rayInput.p1 = point;
-    rayInput.p2 = b2Vec2( point.x + b2_linearSlop, point.y + b2_linearSlop );
-    rayInput.maxFraction = 1.0f;
-
-    RayCast( this, rayInput );
+    b2AABB aabb;
+    aabb.lowerBound = point;
+    aabb.upperBound = point;
+    mCompareTransform.SetIdentity();
+    mCheckOOBB = targetOOBB;
+    Query( this, aabb );
+    mCheckOOBB = false;
 
     return getQueryResultsCount();
 }
@@ -180,6 +190,25 @@ bool SpriteBatchQuery::QueryCallback( S32 proxyId )
     if ( pSpriteBatchItem->getSpriteBatchQueryKey() == mMasterQueryKey )
         return true;
 
+    // Check OOBB.
+    if ( mCheckOOBB )
+    {
+            // Fetch the shapes render OOBB.
+        b2PolygonShape oobb;
+        oobb.Set( pSpriteBatchItem->getRenderOOBB(), 4);
+
+        if ( mCheckPoint )
+        {
+            if ( !oobb.TestPoint( mCompareTransform, mComparePoint ) )
+                return true;
+        }
+        else
+        {
+            if ( !b2TestOverlap( &mComparePolygonShape, 0, &oobb, 0, mCompareTransform, mCompareTransform ) )
+                return true;
+        }
+    }
+
     // Tag with world query key.
     pSpriteBatchItem->setSpriteBatchQueryKey( mMasterQueryKey );
 
@@ -202,6 +231,17 @@ F32 SpriteBatchQuery::RayCastCallback( const b2RayCastInput& input, S32 proxyId 
     // Ignore if already tagged with the sprite batch query key.
     if ( pSpriteBatchItem->getSpriteBatchQueryKey() == mMasterQueryKey )
         return 1.0f;
+
+    // Check OOBB.
+    if ( mCheckOOBB )
+    {
+        // Fetch the shapes render OOBB.
+        b2PolygonShape oobb;
+        oobb.Set( pSpriteBatchItem->getRenderOOBB(), 4);
+        b2RayCastOutput rayOutput;
+        if ( !oobb.RayCast( &rayOutput, mCompareRay, mCompareTransform, 0 ) )
+            return true;
+    }
 
     // Tag with world query key.
     pSpriteBatchItem->setSpriteBatchQueryKey( mMasterQueryKey );

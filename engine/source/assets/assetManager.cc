@@ -157,7 +157,7 @@ bool AssetManager::compileReferencedAssets( ModuleDefinition* pModuleDefinition 
 
 //-----------------------------------------------------------------------------
 
-bool AssetManager::addDeclaredAssets( ModuleDefinition* pModuleDefinition )
+bool AssetManager::addModuleDeclaredAssets( ModuleDefinition* pModuleDefinition )
 {
     // Debug Profiling.
     PROFILE_SCOPE(AssetManager_AddDeclaredAssets);
@@ -191,7 +191,7 @@ bool AssetManager::addDeclaredAssets( ModuleDefinition* pModuleDefinition )
         if ( !scanDeclaredAssets( filePathBuffer, pDeclaredAssets->getExtension(), pDeclaredAssets->getRecurse(), pModuleDefinition ) )
         {
             // Warn.
-            Con::warnf( "AssetManager::addDeclaredAssets() - Could not scan for declared assets at location '%s' with extension '%s'.", filePathBuffer, pDeclaredAssets->getExtension() );
+            Con::warnf( "AssetManager::addModuleDeclaredAssets() - Could not scan for declared assets at location '%s' with extension '%s'.", filePathBuffer, pDeclaredAssets->getExtension() );
         }
     }  
 
@@ -200,7 +200,7 @@ bool AssetManager::addDeclaredAssets( ModuleDefinition* pModuleDefinition )
 
 //-----------------------------------------------------------------------------
 
-bool AssetManager::addSingleDeclaredAsset( ModuleDefinition* pModuleDefinition, const char* pAssetFilePath )
+bool AssetManager::addDeclaredAsset( ModuleDefinition* pModuleDefinition, const char* pAssetFilePath )
 {
     // Debug Profiling.
     PROFILE_SCOPE(AssetManager_AddSingleDeclaredAsset);
@@ -220,7 +220,7 @@ bool AssetManager::addSingleDeclaredAsset( ModuleDefinition* pModuleDefinition, 
     if ( pFileStart == NULL )
     {
         // No, so warn.
-        Con::warnf( "AssetManager::addSingleDeclaredAsset() - Could not add single declared asset file '%s' as file-path '%s' is not valid.",
+        Con::warnf( "AssetManager::addDeclaredAsset() - Could not add single declared asset file '%s' as file-path '%s' is not valid.",
             assetFilePathBuffer,
             pModuleDefinition->getModulePath() );
         return false;
@@ -236,7 +236,7 @@ bool AssetManager::addSingleDeclaredAsset( ModuleDefinition* pModuleDefinition, 
     if ( !scanDeclaredAssets( assetFilePathBuffer, pFileStart, false, pModuleDefinition ) )
     {
         // Warn.
-        Con::warnf( "AssetManager::addSingleDeclaredAsset() - Could not scan declared assets at location '%s' with extension '%s'.", assetFilePathBuffer, pFileStart );
+        Con::warnf( "AssetManager::addDeclaredAsset() - Could not scan declared assets at location '%s' with extension '%s'.", assetFilePathBuffer, pFileStart );
         return false;
     }
 
@@ -273,10 +273,10 @@ StringTableEntry AssetManager::addPrivateAsset( AssetBase* pAssetBase )
     pAssetDefinition->mpAssetBase = pAssetBase;
     pAssetDefinition->mAssetDescription = pSourceAssetDefinition->mAssetDescription;
     pAssetDefinition->mAssetCategory = pSourceAssetDefinition->mAssetCategory;
-    pAssetDefinition->mAssetAutoUnload = false;
+    pAssetDefinition->mAssetAutoUnload = true;
     pAssetDefinition->mAssetRefreshEnable = false;
     pAssetDefinition->mAssetType = StringTable->insert( pAssetBase->getClassName() );
-    pAssetDefinition->mAssetLoadedCount = 1;
+    pAssetDefinition->mAssetLoadedCount = 0;
     pAssetDefinition->mAssetInternal = false;
     pAssetDefinition->mAssetPrivate = true;
 
@@ -326,7 +326,7 @@ bool AssetManager::removeDeclaredAssets( ModuleDefinition* pModuleDefinition )
         AssetDefinition* pAssetDefinition = *moduleAssets.begin();
 
         // Remove this asset.
-        removeSingleDeclaredAsset( pAssetDefinition->mAssetId );
+        removeDeclaredAsset( pAssetDefinition->mAssetId );
     }
 
     // Info.
@@ -338,7 +338,7 @@ bool AssetManager::removeDeclaredAssets( ModuleDefinition* pModuleDefinition )
 
 //-----------------------------------------------------------------------------
 
-bool AssetManager::removeSingleDeclaredAsset( const char* pAssetId )
+bool AssetManager::removeDeclaredAsset( const char* pAssetId )
 {
     // Debug Profiling.
     PROFILE_SCOPE(AssetManager_RemoveSingleDeclaredAsset);
@@ -1003,156 +1003,6 @@ void AssetManager::purgeAssets( void )
 
 //-----------------------------------------------------------------------------
 
-bool AssetManager::getAssetSnapshot( AssetSnapshot* pAssetSnapshot, const char* pAssetId )
-{
-    // Debug Profiling.
-    PROFILE_SCOPE(AssetManager_GetAssetSnapshot);
-
-    // Sanity!
-    AssertFatal( pAssetSnapshot != NULL, "cannot get asset snapshot using NULL asset snapshot." );
-    AssertFatal( pAssetId != NULL, "Cannot get asset snapshot NULL asset Id." );
-
-    // Find asset.
-    AssetDefinition* pAssetDefinition = findAsset( pAssetId );
-
-    // Did we find the asset?
-    if ( pAssetDefinition == NULL )
-    {
-        // No, so warn.
-        Con::warnf( "Asset Manager: Failed to get asset snapshot of asset Id '%s' as it does not exist.", pAssetId );
-        return false;
-    }
-
-    // Acquire asset.
-    AssetBase* pAssetBase = acquireAsset<AssetBase>( pAssetId );
-
-    // Did we acquire the asset?
-    if ( pAssetBase == NULL )
-    {
-        // No, so warn.
-        Con::warnf( "Asset Manager: Failed to get asset snapshot of asset Id '%s' as it could not be acquired.", pAssetId );
-        return false;
-    }
-
-    // Reset asset snapshot.
-    pAssetSnapshot->resetSnapshot();
-
-    // Fetch asset parent abstract class rep.
-    // NOTE: I don't like referring to types in a string but we don't have much choice here.
-    AbstractClassRep* pAssetBaseParentClassRep = AbstractClassRep::findClassRep( "AssetBase" )->getParentClass();
-
-    // Fetch asset field list.
-    const AbstractClassRep::FieldList& assetFieldList = pAssetBase->getFieldList();
-
-    // Populate asset snapshot.
-    for( Vector<AbstractClassRep::Field>::const_iterator assetFieldItr = assetFieldList.begin(); assetFieldItr != assetFieldList.end(); ++assetFieldItr )
-    {
-        // Skip abstract class rep fields.
-        if (    assetFieldItr->type == AbstractClassRep::StartGroupFieldType ||
-                assetFieldItr->type == AbstractClassRep::EndGroupFieldType ||
-                assetFieldItr->type == AbstractClassRep::DepricatedFieldType )
-            continue;
-
-        // Fetch asset field name.
-        StringTableEntry assetFieldName = assetFieldItr->pFieldname;
-
-        // Skip asset parent field.
-        if ( pAssetBaseParentClassRep->findField( assetFieldName ) != NULL )
-            continue;
-
-        // Fetch asset field value.
-        const char* pFieldValue = pAssetBase->getDataField( assetFieldName, NULL );
-
-        // Set asset snapshot field.
-        pAssetSnapshot->setDataField( assetFieldName, NULL, pFieldValue );
-    }
-
-    // Release asset.
-    releaseAsset( pAssetId );
-
-    return true;
-}
-
-//-----------------------------------------------------------------------------
-
-bool AssetManager::setAssetSnapshot( AssetSnapshot* pAssetSnapshot, const char* pAssetId )
-{
-    // Debug Profiling.
-    PROFILE_SCOPE(AssetManager_SetAssetSnapshot);
-
-    // Sanity!
-    AssertFatal( pAssetSnapshot != NULL, "cannot get asset snapshot using NULL asset snapshot." );
-    AssertFatal( pAssetId != NULL, "Cannot get asset snapshot NULL asset Id." );
-
-    // Find asset.
-    AssetDefinition* pAssetDefinition = findAsset( pAssetId );
-
-    // Did we find the asset?
-    if ( pAssetDefinition == NULL )
-    {
-        // No, so warn.
-        Con::warnf( "Asset Manager: Failed to set asset snapshot of asset Id '%s' as it does not exist.", pAssetId );
-        return false;
-    }
-
-    // Acquire asset.
-    AssetBase* pAssetBase = acquireAsset<AssetBase>( pAssetId );
-
-    // Did we acquire the asset?
-    if ( pAssetBase == NULL )
-    {
-        // No, so warn.
-        Con::warnf( "Asset Manager: Failed to set asset snapshot of asset Id '%s' as it could not be acquired.", pAssetId );
-        return false;
-    }
-
-    // Disable asset refresh so we don't perform a refresh on each field change.
-    pAssetDefinition->mAssetRefreshEnable = false;
-
-    // Fetch asset parent abstract class rep.
-    // NOTE: I don't like referring to types in a string but we don't have much choice here.
-    AbstractClassRep* pAssetBaseParentClassRep = AbstractClassRep::findClassRep( "AssetBase" )->getParentClass();
-
-    // Fetch asset name field.
-    StringTableEntry assetNameField = StringTable->insert( ASSET_BASE_ASSETNAME_FIELD );
-
-    SimFieldDictionary* pSnapshotFields = pAssetSnapshot->getFieldDictionary();
-
-    // Iterate snapshot dynamic fields.
-    for( SimFieldDictionaryIterator fieldItr(pSnapshotFields); *fieldItr; ++fieldItr )
-    {
-        // Fetch dynamic field entry.
-        const SimFieldDictionary::Entry* pFieldEntry = *fieldItr;
-
-        // Fetch asset snapshot field name.
-        StringTableEntry assetSnapshotField = pFieldEntry->slotName;
-
-        // Skip asset name field.
-        if ( assetSnapshotField == assetNameField )
-            continue;
-
-        // Skip asset parent field.
-        if ( pAssetBaseParentClassRep->findField( assetSnapshotField ) != NULL )
-            continue;
-
-        // Set asset field.
-        pAssetBase->setDataField( assetSnapshotField, NULL, pFieldEntry->value );
-    }
-
-    // Re-enable asset refresh.
-    pAssetDefinition->mAssetRefreshEnable = true;
-
-    // Refresh asset.
-    refreshAsset( pAssetId );
-
-    // Release asset.
-    releaseAsset( pAssetId );
-
-    return true;
-}
-
-//-----------------------------------------------------------------------------
-
 bool AssetManager::deleteAsset( const char* pAssetId, const bool deleteLooseFiles, const bool deleteDependencies )
 {
     // Debug Profiling.
@@ -1250,7 +1100,7 @@ bool AssetManager::deleteAsset( const char* pAssetId, const bool deleteLooseFile
     pAssetDefinition = NULL;
 
     // Remove asset.
-    removeSingleDeclaredAsset( pAssetId );
+    removeDeclaredAsset( pAssetId );
 
     // Delete the asset definition file.
     if ( !Platform::fileDelete( assetDefinitionFile ) )
@@ -3106,7 +2956,7 @@ void AssetManager::unloadAsset( AssetDefinition* pAssetDefinition )
         mLoadedPrivateAssetsCount--;
 
         // Remove it completely.
-        removeSingleDeclaredAsset( pAssetDefinition->mAssetId );
+        removeDeclaredAsset( pAssetDefinition->mAssetId );
     }
 }
 
@@ -3117,8 +2967,8 @@ void AssetManager::onModulePreLoad( ModuleDefinition* pModuleDefinition )
     // Debug Profiling.
     PROFILE_SCOPE(AssetManager_OnModulePreLoad);
 
-    // Add declared assets.
-    addDeclaredAssets( pModuleDefinition );
+    // Add module declared assets.
+    addModuleDeclaredAssets( pModuleDefinition );
 
     // Is an asset tags manifest specified?
     if ( pModuleDefinition->getAssetTagsManifest() != StringTable->EmptyString )

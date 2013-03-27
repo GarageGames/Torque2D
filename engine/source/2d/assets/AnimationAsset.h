@@ -58,9 +58,10 @@ public:
     static void initPersistFields();
     virtual bool onAdd();
     virtual void onRemove();
+    virtual void copyTo(SimObject* object);
 
     void            setImage( const char* pAssetId );
-    const AssetPtr<ImageAsset>& getImage( void ) const     { return mImageAsset; }
+    inline const AssetPtr<ImageAsset>& getImage( void ) const           { return mImageAsset; }
 
     void            setAnimationFrames( const char* pAnimationFrames );
     inline const Vector<S32>& getSpecifiedAnimationFrames( void ) const { return mAnimationFrames; }

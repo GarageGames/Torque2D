@@ -85,7 +85,7 @@ bool FileStream::setPosition(const U32 i_newPosition)
    {
       // flush the buffer if its dirty
       if (true == mDirty)
-         flush();
+         Flush();
       // and clear out the state of the file stream
       clearBuffer();
 
@@ -165,7 +165,7 @@ void FileStream::close()
 
    // make sure nothing in the buffer differs from what is on disk
    if (true == mDirty)
-      flush();
+      Flush();
     
    // and close the file
    File::Status closeResult;
@@ -178,7 +178,7 @@ void FileStream::close()
 }
 
 //-----------------------------------------------------------------------------
-bool FileStream::flush()
+bool FileStream::Flush()
 {
    AssertWarn(0 != mStreamCaps, "FileStream::flush: the stream isn't open");
    AssertFatal(false == mDirty || BUFFER_INVALID != mBuffHead, "FileStream::flush: buffer must be valid if its dirty");
@@ -255,7 +255,7 @@ bool FileStream::_read(const U32 i_numBytes, void *o_pBuffer)
 
          if (mBuffPos > mBuffTail && remaining != 0)
          {
-            flush();
+            Flush();
             mBuffHead = BUFFER_INVALID;
             if (mEOF == true)
                Stream::setStatus(EOS);
@@ -267,7 +267,7 @@ bool FileStream::_read(const U32 i_numBytes, void *o_pBuffer)
       {
          // flush the buffer if its dirty, since we now need to go to disk
          if (true == mDirty)
-            flush();
+            Flush();
 
          // make sure we know the current read location in the underlying file
          mBuffPos = mFile.getPosition();
@@ -366,7 +366,7 @@ bool FileStream::_write(const U32 i_numBytes, const void *i_pBuffer)
       {
          // flush the buffer if its dirty, since we now need to go to disk
          if (true == mDirty)
-            flush();
+            Flush();
 
          // make sure we know the current write location in the underlying file
          mBuffPos = mFile.getPosition();

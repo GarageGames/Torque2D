@@ -271,6 +271,9 @@ void TamlBinaryReader::parseChildren( Stream& stream, TamlCallbacks* pCallbacks,
         return;
     }
 
+    // Fetch any container child class specifier.
+    AbstractClassRep* pContainerChildClass = pSimObject->getClassRep()->getContainerChildClass( true );
+
     // Iterate children.
     for ( U32 index = 0; index < childrenCount; ++ index )
     {
@@ -280,6 +283,26 @@ void TamlBinaryReader::parseChildren( Stream& stream, TamlCallbacks* pCallbacks,
         // Finish if child failed.
         if ( pChildSimObject == NULL )
             return;
+
+        // Do we have a container child class?
+        if ( pContainerChildClass != NULL )
+        {
+            // Yes, so is the child object the correctly derived type?
+            if ( !pChildSimObject->getClassRep()->isClass( pContainerChildClass ) )
+            {
+                // No, so warn.
+                Con::warnf("Taml: Child element '%s' found under parent '%s' but object is restricted to children of type '%s'.",
+                    pChildSimObject->getClassName(),
+                    pSimObject->getClassName(),
+                    pContainerChildClass->getClassName() );
+
+                // NOTE: We can't delete the object as it may be referenced elsewhere!
+                pChildSimObject = NULL;
+
+                // Skip.
+                continue;
+            }
+        }
 
         // Add child.
         pChildren->addTamlChild( pChildSimObject );

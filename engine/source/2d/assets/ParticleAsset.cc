@@ -119,10 +119,6 @@ ConsoleSetType( TypeParticleAssetPtr )
     Con::warnf( "(TypeParticleAssetPtr) - Cannot set multiple args to a single asset." );
 }
 
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_CONOBJECT(ParticleAsset);
-
 //------------------------------------------------------------------------------
 
 ParticleAsset::ParticleAsset() :
@@ -493,3 +489,20 @@ void ParticleAsset::onTamlCustomRead( const TamlCustomNodes& customNodes )
     // Read the fields.
     mParticleFields.onTamlCustomRead( customNodes );
 }
+
+//-----------------------------------------------------------------------------
+
+static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "ParticleAsset::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "ParticleAsset::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    // Write the particle asset fields.
+    ParticleAsset particleAsset;
+    particleAsset.getParticleFields().WriteCustomTamlSchema( pClassRep, pParentElement );
+}
+
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_CONOBJECT_CHILDREN_SCHEMA(ParticleAsset, WriteCustomTamlSchema);

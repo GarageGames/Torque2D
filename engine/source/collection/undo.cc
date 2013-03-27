@@ -35,8 +35,6 @@ UndoAction::UndoAction( const UTF8* actionName)
 {
    mActionName = StringTable->insert(actionName);
    mUndoManager = NULL;
-
-   mNSLinkMask = LinkSuperClassName | LinkClassName;
 }
 
 // Modified to clean up quiet sub actions [KNM | 08/10/11 | ITGB-152]

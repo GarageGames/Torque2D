@@ -291,3 +291,13 @@ ConsoleFunction(TamlRead, const char*, 2, 4,    "(filename, [format]) - Read an 
 
     return pSimObject->getIdString();
 }
+
+//-----------------------------------------------------------------------------
+
+ConsoleFunction(GenerateTamlSchema, bool, 1, 1, "() - Generate a TAML schema file of all engine types.\n"
+                                                "The schema file is specified using the console variable '" TAML_SCHEMA_VARIABLE "'.\n"
+                                                "@return Whether the schema file was writtent or not." )
+{
+    // Generate the schema.
+    return Taml::generateTamlSchema();
+}

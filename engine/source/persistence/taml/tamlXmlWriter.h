@@ -31,7 +31,6 @@
 #include "persistence/tinyXML/tinyxml.h"
 #endif
 
-
 //-----------------------------------------------------------------------------
 
 class TamlXmlWriter
@@ -39,8 +38,7 @@ class TamlXmlWriter
 public:
     TamlXmlWriter( Taml* pTaml ) :
         mpTaml( pTaml )
-    {
-    }
+    {}
     virtual ~TamlXmlWriter() {}
 
     /// Write.
@@ -50,7 +48,7 @@ private:
     Taml* mpTaml;
 
 private:
-    TiXmlNode* compileElement( const TamlWriteNode* pTamlWriteNode );
+    TiXmlElement* compileElement( const TamlWriteNode* pTamlWriteNode );
     void compileAttributes( TiXmlElement* pXmlElement, const TamlWriteNode* pTamlWriteNode );
     void compileCustomElements( TiXmlElement* pXmlElement, const TamlWriteNode* pTamlWriteNode );
     void compileCustomNode( TiXmlElement* pXmlElement, const TamlCustomNode* pCustomNode );

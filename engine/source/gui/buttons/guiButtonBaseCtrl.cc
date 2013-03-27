@@ -381,4 +381,3 @@ void GuiButtonBaseCtrl::onMessage( GuiControl *sender, S32 msg )
         mStateOn = ( sender == this );
     }
 }
-

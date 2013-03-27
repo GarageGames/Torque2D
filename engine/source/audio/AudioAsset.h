@@ -63,6 +63,7 @@ private:
 public:
    AudioAsset();
    static void initPersistFields();
+   virtual void copyTo(SimObject* object);
 
    void setAudioFile( const char* pAudioFile );
    inline StringTableEntry getAudioFile( void ) const { return mAudioFile; }

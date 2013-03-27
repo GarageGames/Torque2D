@@ -48,7 +48,6 @@ public:
 
 private:
     Taml*               mpTaml;
-    StringTableEntry    mTamlObjectName;
 
     typedef HashMap<SimObjectId, SimObject*> typeObjectReferenceHash;
 

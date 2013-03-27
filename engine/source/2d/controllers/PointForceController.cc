@@ -86,6 +86,14 @@ void PointForceController::copyTo(SimObject* object)
 
 //------------------------------------------------------------------------------
 
+void PointForceController::setTrackedObject( SceneObject* pSceneObject )
+{
+    // Set tracked object.
+    mTrackedObject = pSceneObject;
+}
+
+//------------------------------------------------------------------------------
+
 void PointForceController::integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats )
 {
     // Finish if the attractor would have no effect.
@@ -95,13 +103,16 @@ void PointForceController::integrate( Scene* pScene, const F32 totalTime, const 
     // Prepare query filter.
     WorldQuery* pWorldQuery = prepareQueryFilter( pScene );
 
+    // Fetch the current position.
+    const Vector2 currentPosition = getCurrentPosition();
+
     // Calculate the AABB of the attractor.
     b2AABB aabb;
-    aabb.lowerBound.Set( mPosition.x - mRadius, mPosition.y - mRadius );
-    aabb.upperBound.Set( mPosition.x + mRadius, mPosition.y + mRadius );
+    aabb.lowerBound.Set( currentPosition.x - mRadius, currentPosition.y - mRadius );
+    aabb.upperBound.Set( currentPosition.x + mRadius, currentPosition.y + mRadius );
 
     // Query for candidate objects.
-    pWorldQuery->anyQueryArea( aabb ); 
+    pWorldQuery->anyQueryAABB( aabb ); 
 
     // Fetch results.
     typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
@@ -123,28 +134,38 @@ void PointForceController::integrate( Scene* pScene, const F32 totalTime, const 
     const F32 linearDrag = mClampF( mLinearDrag, 0.0f, 1.0f ) * elapsedTime;
     const F32 angularDrag = mClampF( mAngularDrag, 0.0f, 1.0f ) * elapsedTime;
 
+    // Fetch the tracked object.
+    const SceneObject* pTrackedObject = mTrackedObject;
+
     // Iterate the results.
     for ( U32 n = 0; n < resultCount; n++ )
     {
         // Fetch the scene object.
         SceneObject* pSceneObject = queryResults[n].mpSceneObject;
 
+        // Ignore if it's the tracked object.
+        if ( pSceneObject == pTrackedObject )
+            continue;
+
         // Ignore if it's a static body.
         if ( pSceneObject->getBodyType() == b2_staticBody )
             continue;
 
-        // Calculate the force distance to the controllers position.
-        Vector2 distanceForce = mPosition - pSceneObject->getPosition();
+        // Calculate the force distance to the controllers current position.
+        Vector2 distanceForce = currentPosition - pSceneObject->getPosition();
 
-        // Skip if the position is outside the radius.
-        if ( distanceForce.LengthSquared() > radiusSqr )
+        // Fetch distance squared.
+        const F32 distanceSqr = distanceForce.LengthSquared();
+
+        // Skip if the position is outside the radius or is centered on the controller.
+        if ( distanceSqr > radiusSqr || distanceSqr < FLT_EPSILON )
             continue;
 
         // Non-Linear force?
         if ( mNonLinear )
         {
             // Yes, so use an approximation of the inverse-square law.
-            distanceForce *= (1.0f / distanceForce.LengthSquared()) * forceSqr;
+            distanceForce *= (1.0f / distanceSqr) * forceSqr;
         }
         else
         {
@@ -191,5 +212,5 @@ void PointForceController::renderOverlay( Scene* pScene, const SceneRenderState*
     Parent::renderOverlay( pScene, pSceneRenderState, pBatchRenderer );
 
     // Draw force radius.
-    pScene->mDebugDraw.DrawCircle( mPosition, mRadius, ColorF(1.0f, 1.0f, 0.0f ) );
+    pScene->mDebugDraw.DrawCircle( getCurrentPosition(), mRadius, ColorF(1.0f, 1.0f, 0.0f ) );
 }

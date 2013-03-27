@@ -137,6 +137,8 @@ class Stream {
    /// writeString is safer.
    void writeLongString(U32 maxStringLen, const char *string);
 
+   inline bool Put( char character ) { return write( character ); }
+
    /// Writes a string to the stream.
    virtual void writeString(const char *stringBuf, S32 maxLen=255);
 
@@ -167,6 +169,7 @@ class Stream {
    }
    DECLARE_OVERLOADED_WRITE(S8)
    DECLARE_OVERLOADED_WRITE(U8)
+   DECLARE_OVERLOADED_WRITE(char)
 
    DECLARE_ENDIAN_OVERLOADED_WRITE(S16)
    DECLARE_ENDIAN_OVERLOADED_WRITE(S32)

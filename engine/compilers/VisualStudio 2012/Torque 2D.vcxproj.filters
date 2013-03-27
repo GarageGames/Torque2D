@@ -172,6 +172,12 @@
     <Filter Include="2d\controllers\core">
       <UniqueIdentifier>{e11e344e-6418-4ed0-980a-77d66cd64d65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="2d\experimental">
+      <UniqueIdentifier>{1eb9e730-583b-4aa4-ac25-b83960799ba4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2d\experimental\composites">
+      <UniqueIdentifier>{30e1ec13-118b-4d50-8e04-76e76fcfdc01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\audio\audio.cc">
@@ -711,9 +717,6 @@
     <ClCompile Include="..\..\source\assets\assetTagsManifest.cc">
       <Filter>assets</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\assets\assetSnapshot.cc">
-      <Filter>assets</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\assets\assetBase.cc">
       <Filter>assets</Filter>
     </ClCompile>
@@ -1122,9 +1125,6 @@
     <ClCompile Include="..\..\source\2d\assets\AnimationAsset.cc">
       <Filter>2d\assets</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\2d\assets\AnimationController.cc">
-      <Filter>2d\assets</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\2d\assets\ImageAsset.cc">
       <Filter>2d\assets</Filter>
     </ClCompile>
@@ -1159,9 +1159,6 @@
       <Filter>2d\core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\2d\core\SpriteBatchItem.cc">
-      <Filter>2d\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\2d\core\SpriteProxyBase.cc">
       <Filter>2d\core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\2d\core\Utility.cc">
@@ -1297,6 +1294,15 @@
       <Filter>2d\controllers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\2d\core\SpriteBatchQuery.cc">
+      <Filter>2d\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\experimental\composites\WaveComposite.cc">
+      <Filter>2d\experimental\composites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\core\ImageFrameProvider.cc">
+      <Filter>2d\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\core\ImageFrameProviderCore.cc">
       <Filter>2d\core</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1910,9 +1916,6 @@
     <ClInclude Include="..\..\source\module\moduleCallbacks.h">
       <Filter>module</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\assets\assetSnapshot.h">
-      <Filter>assets</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\assets\assetBase.h">
       <Filter>assets</Filter>
     </ClInclude>
@@ -2351,9 +2354,6 @@
     <ClInclude Include="..\..\source\2d\assets\AnimationAsset_ScriptBinding.h">
       <Filter>2d\assets</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\2d\assets\AnimationController.h">
-      <Filter>2d\assets</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\2d\assets\ImageAsset.h">
       <Filter>2d\assets</Filter>
     </ClInclude>
@@ -2421,9 +2421,6 @@
       <Filter>2d\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\2d\core\SpriteBatchItem.h">
-      <Filter>2d\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\2d\core\SpriteProxyBase.h">
       <Filter>2d\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\2d\core\Utility.h">
@@ -2662,6 +2659,18 @@
       <Filter>2d\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\2d\core\SpriteBatchQueryResult.h">
+      <Filter>2d\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\experimental\composites\WaveComposite.h">
+      <Filter>2d\experimental\composites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\experimental\composites\WaveComposite_ScriptBinding.h">
+      <Filter>2d\experimental\composites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\core\ImageFrameProvider.h">
+      <Filter>2d\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\core\ImageFrameProviderCore.h">
       <Filter>2d\core</Filter>
     </ClInclude>
   </ItemGroup>

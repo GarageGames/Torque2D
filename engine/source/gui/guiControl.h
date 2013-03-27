@@ -94,6 +94,7 @@ class GuiControl : public SimGroup
 {
 private:
    typedef SimGroup Parent;
+   typedef GuiControl Children;
 
 public:
 

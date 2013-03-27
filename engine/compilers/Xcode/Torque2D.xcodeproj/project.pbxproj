@@ -11,6 +11,8 @@
 		2A033011165D1D4100E9CD70 /* platformFileIoTests.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2A033010165D1D4100E9CD70 /* platformFileIoTests.cc */; };
 		2A25739016A48DAC00363C6F /* ParticlePlayer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2A25738E16A48DAC00363C6F /* ParticlePlayer.cc */; };
 		2A6F78CE16A4528C005C76D9 /* ParticleAssetEmitter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2A6F78CC16A4528C005C76D9 /* ParticleAssetEmitter.cc */; };
+		2AA3655916F3552200E7A900 /* ImageFrameProvider.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3655516F3552200E7A900 /* ImageFrameProvider.cc */; };
+		2AA3655A16F3552200E7A900 /* ImageFrameProviderCore.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3655716F3552200E7A900 /* ImageFrameProviderCore.cc */; };
 		2AA6865F16D69943003CEF0A /* SceneObjectList.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AA6865A16D69943003CEF0A /* SceneObjectList.cc */; };
 		2AA6866016D69943003CEF0A /* SceneObjectSet.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AA6865D16D69943003CEF0A /* SceneObjectSet.cc */; };
 		2AB14A0516D7CDC300EABBF2 /* PointForceController.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AB14A0316D7CDC200EABBF2 /* PointForceController.cc */; };
@@ -25,6 +27,7 @@
 		2ACFC0A8166CE1AB00FE7370 /* platformMemoryTests.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ACFC0A7166CE1AB00FE7370 /* platformMemoryTests.cc */; };
 		2ADCAC1516A41E5500E07619 /* ParticleAsset.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ADCAC1116A41E5500E07619 /* ParticleAsset.cc */; };
 		2ADCAC1716A41E5500E07619 /* ParticleAssetField.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ADCAC1316A41E5500E07619 /* ParticleAssetField.cc */; };
+		2AE2938516EF4C220015E200 /* WaveComposite.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AE2938316EF4C220015E200 /* WaveComposite.cc */; };
 		2AE2F55D16D6B08800B6A058 /* BuoyancyController.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AE2F55B16D6B08800B6A058 /* BuoyancyController.cc */; };
 		2AE5B54216A6D860006908D5 /* ParticleAssetFieldCollection.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AE5B54016A6D860006908D5 /* ParticleAssetFieldCollection.cc */; };
 		2AE851D21681E56E00193F17 /* color.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AE851D11681E56E00193F17 /* color.cc */; };
@@ -174,7 +177,6 @@
 		86C281CD16A4307E00F030F4 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86C281CB16A4307E00F030F4 /* MainMenu.xib */; };
 		86D76F78165683240046D71F /* osxOutlineGL.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86D76F76165683240046D71F /* osxOutlineGL.cc */; };
 		86D76F791656868D0046D71F /* AnimationAsset.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7E7716518D4600D96ADF /* AnimationAsset.cc */; };
-		86D76F7A1656868D0046D71F /* AnimationController.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7E7A16518D4600D96ADF /* AnimationController.cc */; };
 		86D76F7B1656868D0046D71F /* ImageAsset.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7E7C16518D4600D96ADF /* ImageAsset.cc */; };
 		86D76F7C1656868D0046D71F /* BatchRender.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7E8116518D4600D96ADF /* BatchRender.cc */; };
 		86D76F7D1656868D0046D71F /* CoreMath.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7E8316518D4600D96ADF /* CoreMath.cc */; };
@@ -182,7 +184,6 @@
 		86D76F7F1656868D0046D71F /* SpriteBase.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7E8816518D4600D96ADF /* SpriteBase.cc */; };
 		86D76F801656868D0046D71F /* SpriteBatch.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7E8B16518D4600D96ADF /* SpriteBatch.cc */; };
 		86D76F811656868D0046D71F /* SpriteBatchItem.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7E8D16518D4600D96ADF /* SpriteBatchItem.cc */; };
-		86D76F821656868D0046D71F /* SpriteProxyBase.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7E8F16518D4600D96ADF /* SpriteProxyBase.cc */; };
 		86D76F831656868D0046D71F /* Utility.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7E9116518D4600D96ADF /* Utility.cc */; };
 		86D76F841656868D0046D71F /* Vector2.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7E9316518D4600D96ADF /* Vector2.cc */; };
 		86D76F851656868D0046D71F /* guiImageButtonCtrl.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7E9716518D4600D96ADF /* guiImageButtonCtrl.cc */; };
@@ -205,7 +206,6 @@
 		86D76F9C165686D80046D71F /* assetFieldTypes.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7EEC16518D4600D96ADF /* assetFieldTypes.cc */; };
 		86D76F9D165686D80046D71F /* assetManager.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7EEE16518D4600D96ADF /* assetManager.cc */; };
 		86D76F9F165686D80046D71F /* assetQuery.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7EF416518D4600D96ADF /* assetQuery.cc */; };
-		86D76FA0165686D80046D71F /* assetSnapshot.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7EF716518D4600D96ADF /* assetSnapshot.cc */; };
 		86D76FA1165686D80046D71F /* assetTagsManifest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7EF916518D4600D96ADF /* assetTagsManifest.cc */; };
 		86D76FA2165686D80046D71F /* audio.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7F0116518D4600D96ADF /* audio.cc */; };
 		86D76FA3165686D80046D71F /* AudioAsset.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC7F0316518D4600D96ADF /* AudioAsset.cc */; };
@@ -459,6 +459,10 @@
 		2A25738F16A48DAC00363C6F /* ParticlePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticlePlayer.h; sourceTree = "<group>"; };
 		2A6F78CC16A4528C005C76D9 /* ParticleAssetEmitter.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleAssetEmitter.cc; sourceTree = "<group>"; };
 		2A6F78CD16A4528C005C76D9 /* ParticleAssetEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleAssetEmitter.h; sourceTree = "<group>"; };
+		2AA3655516F3552200E7A900 /* ImageFrameProvider.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageFrameProvider.cc; sourceTree = "<group>"; };
+		2AA3655616F3552200E7A900 /* ImageFrameProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFrameProvider.h; sourceTree = "<group>"; };
+		2AA3655716F3552200E7A900 /* ImageFrameProviderCore.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageFrameProviderCore.cc; sourceTree = "<group>"; };
+		2AA3655816F3552200E7A900 /* ImageFrameProviderCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFrameProviderCore.h; sourceTree = "<group>"; };
 		2AA6865A16D69943003CEF0A /* SceneObjectList.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneObjectList.cc; sourceTree = "<group>"; };
 		2AA6865B16D69943003CEF0A /* SceneObjectList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObjectList.h; sourceTree = "<group>"; };
 		2AA6865C16D69943003CEF0A /* SceneObjectSet_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObjectSet_ScriptBinding.h; sourceTree = "<group>"; };
@@ -496,6 +500,9 @@
 		2ADCAC1216A41E5500E07619 /* ParticleAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleAsset.h; sourceTree = "<group>"; };
 		2ADCAC1316A41E5500E07619 /* ParticleAssetField.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleAssetField.cc; sourceTree = "<group>"; };
 		2ADCAC1416A41E5500E07619 /* ParticleAssetField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleAssetField.h; sourceTree = "<group>"; };
+		2AE2938216EF4C220015E200 /* WaveComposite_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveComposite_ScriptBinding.h; path = experimental/composites/WaveComposite_ScriptBinding.h; sourceTree = "<group>"; };
+		2AE2938316EF4C220015E200 /* WaveComposite.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WaveComposite.cc; path = experimental/composites/WaveComposite.cc; sourceTree = "<group>"; };
+		2AE2938416EF4C220015E200 /* WaveComposite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveComposite.h; path = experimental/composites/WaveComposite.h; sourceTree = "<group>"; };
 		2AE2F55A16D6B08800B6A058 /* BuoyancyController_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BuoyancyController_ScriptBinding.h; path = controllers/BuoyancyController_ScriptBinding.h; sourceTree = "<group>"; };
 		2AE2F55B16D6B08800B6A058 /* BuoyancyController.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BuoyancyController.cc; path = controllers/BuoyancyController.cc; sourceTree = "<group>"; };
 		2AE2F55C16D6B08800B6A058 /* BuoyancyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BuoyancyController.h; path = controllers/BuoyancyController.h; sourceTree = "<group>"; };
@@ -714,8 +721,6 @@
 		86BC7E7716518D4600D96ADF /* AnimationAsset.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnimationAsset.cc; sourceTree = "<group>"; };
 		86BC7E7816518D4600D96ADF /* AnimationAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimationAsset.h; sourceTree = "<group>"; };
 		86BC7E7916518D4600D96ADF /* AnimationAsset_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimationAsset_ScriptBinding.h; sourceTree = "<group>"; };
-		86BC7E7A16518D4600D96ADF /* AnimationController.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnimationController.cc; sourceTree = "<group>"; };
-		86BC7E7B16518D4600D96ADF /* AnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimationController.h; sourceTree = "<group>"; };
 		86BC7E7C16518D4600D96ADF /* ImageAsset.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageAsset.cc; sourceTree = "<group>"; };
 		86BC7E7D16518D4600D96ADF /* ImageAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAsset.h; sourceTree = "<group>"; };
 		86BC7E7E16518D4600D96ADF /* ImageAsset_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAsset_ScriptBinding.h; sourceTree = "<group>"; };
@@ -733,8 +738,6 @@
 		86BC7E8C16518D4600D96ADF /* SpriteBatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteBatch.h; sourceTree = "<group>"; };
 		86BC7E8D16518D4600D96ADF /* SpriteBatchItem.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpriteBatchItem.cc; sourceTree = "<group>"; };
 		86BC7E8E16518D4600D96ADF /* SpriteBatchItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteBatchItem.h; sourceTree = "<group>"; };
-		86BC7E8F16518D4600D96ADF /* SpriteProxyBase.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpriteProxyBase.cc; sourceTree = "<group>"; };
-		86BC7E9016518D4600D96ADF /* SpriteProxyBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteProxyBase.h; sourceTree = "<group>"; };
 		86BC7E9116518D4600D96ADF /* Utility.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utility.cc; sourceTree = "<group>"; };
 		86BC7E9216518D4600D96ADF /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
 		86BC7E9316518D4600D96ADF /* Vector2.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector2.cc; sourceTree = "<group>"; };
@@ -810,8 +813,6 @@
 		86BC7EF416518D4600D96ADF /* assetQuery.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = assetQuery.cc; sourceTree = "<group>"; };
 		86BC7EF516518D4600D96ADF /* assetQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assetQuery.h; sourceTree = "<group>"; };
 		86BC7EF616518D4600D96ADF /* assetQuery_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assetQuery_ScriptBinding.h; sourceTree = "<group>"; };
-		86BC7EF716518D4600D96ADF /* assetSnapshot.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = assetSnapshot.cc; sourceTree = "<group>"; };
-		86BC7EF816518D4600D96ADF /* assetSnapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assetSnapshot.h; sourceTree = "<group>"; };
 		86BC7EF916518D4600D96ADF /* assetTagsManifest.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = assetTagsManifest.cc; sourceTree = "<group>"; };
 		86BC7EFA16518D4600D96ADF /* assetTagsManifest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assetTagsManifest.h; sourceTree = "<group>"; };
 		86BC7EFB16518D4600D96ADF /* assetTagsManifest_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assetTagsManifest_ScriptBinding.h; sourceTree = "<group>"; };
@@ -1407,6 +1408,24 @@
 			name = controllers;
 			sourceTree = "<group>";
 		};
+		2AE2938016EF4BFA0015E200 /* experimental */ = {
+			isa = PBXGroup;
+			children = (
+				2AE2938116EF4C070015E200 /* composites */,
+			);
+			name = experimental;
+			sourceTree = "<group>";
+		};
+		2AE2938116EF4C070015E200 /* composites */ = {
+			isa = PBXGroup;
+			children = (
+				2AE2938216EF4C220015E200 /* WaveComposite_ScriptBinding.h */,
+				2AE2938316EF4C220015E200 /* WaveComposite.cc */,
+				2AE2938416EF4C220015E200 /* WaveComposite.h */,
+			);
+			name = composites;
+			sourceTree = "<group>";
+		};
 		865A20BD1651589F00527C44 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -1804,6 +1823,7 @@
 		86BC7E7516518D4600D96ADF /* 2d */ = {
 			isa = PBXGroup;
 			children = (
+				2AE2938016EF4BFA0015E200 /* experimental */,
 				2AB4F1CF16D55B7300C9A27B /* controllers */,
 				86BC7E7616518D4600D96ADF /* assets */,
 				86BC7E8016518D4600D96ADF /* core */,
@@ -1831,8 +1851,6 @@
 				86BC7E7716518D4600D96ADF /* AnimationAsset.cc */,
 				86BC7E7816518D4600D96ADF /* AnimationAsset.h */,
 				86BC7E7916518D4600D96ADF /* AnimationAsset_ScriptBinding.h */,
-				86BC7E7A16518D4600D96ADF /* AnimationController.cc */,
-				86BC7E7B16518D4600D96ADF /* AnimationController.h */,
 				86BC7E7C16518D4600D96ADF /* ImageAsset.cc */,
 				86BC7E7D16518D4600D96ADF /* ImageAsset.h */,
 				86BC7E7E16518D4600D96ADF /* ImageAsset_ScriptBinding.h */,
@@ -1843,6 +1861,10 @@
 		86BC7E8016518D4600D96ADF /* core */ = {
 			isa = PBXGroup;
 			children = (
+				2AA3655516F3552200E7A900 /* ImageFrameProvider.cc */,
+				2AA3655616F3552200E7A900 /* ImageFrameProvider.h */,
+				2AA3655716F3552200E7A900 /* ImageFrameProviderCore.cc */,
+				2AA3655816F3552200E7A900 /* ImageFrameProviderCore.h */,
 				2ACF5A2516E52D4B00F838D9 /* SpriteBatchQuery.cc */,
 				2ACF5A2616E52D4B00F838D9 /* SpriteBatchQuery.h */,
 				2ACF5A2716E52D4B00F838D9 /* SpriteBatchQueryResult.h */,
@@ -1862,8 +1884,6 @@
 				86BC7E8C16518D4600D96ADF /* SpriteBatch.h */,
 				86BC7E8D16518D4600D96ADF /* SpriteBatchItem.cc */,
 				86BC7E8E16518D4600D96ADF /* SpriteBatchItem.h */,
-				86BC7E8F16518D4600D96ADF /* SpriteProxyBase.cc */,
-				86BC7E9016518D4600D96ADF /* SpriteProxyBase.h */,
 				86BC7E9116518D4600D96ADF /* Utility.cc */,
 				86BC7E9216518D4600D96ADF /* Utility.h */,
 				86BC7E9316518D4600D96ADF /* Vector2.cc */,
@@ -1990,8 +2010,6 @@
 				86BC7EF416518D4600D96ADF /* assetQuery.cc */,
 				86BC7EF516518D4600D96ADF /* assetQuery.h */,
 				86BC7EF616518D4600D96ADF /* assetQuery_ScriptBinding.h */,
-				86BC7EF716518D4600D96ADF /* assetSnapshot.cc */,
-				86BC7EF816518D4600D96ADF /* assetSnapshot.h */,
 				86BC7EF916518D4600D96ADF /* assetTagsManifest.cc */,
 				86BC7EFA16518D4600D96ADF /* assetTagsManifest.h */,
 				86BC7EFB16518D4600D96ADF /* assetTagsManifest_ScriptBinding.h */,
@@ -3078,7 +3096,6 @@
 				86D76F9C165686D80046D71F /* assetFieldTypes.cc in Sources */,
 				86D76F9D165686D80046D71F /* assetManager.cc in Sources */,
 				86D76F9F165686D80046D71F /* assetQuery.cc in Sources */,
-				86D76FA0165686D80046D71F /* assetSnapshot.cc in Sources */,
 				86D76FA1165686D80046D71F /* assetTagsManifest.cc in Sources */,
 				86D76FA2165686D80046D71F /* audio.cc in Sources */,
 				86D76FA3165686D80046D71F /* AudioAsset.cc in Sources */,
@@ -3101,7 +3118,6 @@
 				86D76F98165686B00046D71F /* Sprite.cc in Sources */,
 				86D76F99165686B00046D71F /* Trigger.cc in Sources */,
 				86D76F791656868D0046D71F /* AnimationAsset.cc in Sources */,
-				86D76F7A1656868D0046D71F /* AnimationController.cc in Sources */,
 				86D76F7B1656868D0046D71F /* ImageAsset.cc in Sources */,
 				86D76F7C1656868D0046D71F /* BatchRender.cc in Sources */,
 				86D76F7D1656868D0046D71F /* CoreMath.cc in Sources */,
@@ -3109,7 +3125,6 @@
 				86D76F7F1656868D0046D71F /* SpriteBase.cc in Sources */,
 				86D76F801656868D0046D71F /* SpriteBatch.cc in Sources */,
 				86D76F811656868D0046D71F /* SpriteBatchItem.cc in Sources */,
-				86D76F821656868D0046D71F /* SpriteProxyBase.cc in Sources */,
 				86D76F831656868D0046D71F /* Utility.cc in Sources */,
 				86D76F841656868D0046D71F /* Vector2.cc in Sources */,
 				86D76F851656868D0046D71F /* guiImageButtonCtrl.cc in Sources */,
@@ -3278,6 +3293,9 @@
 				2AB4C19F16DE9F0600B02479 /* PickingSceneController.cc in Sources */,
 				2AB4C1A316DE9F1100B02479 /* AmbientForceController.cc in Sources */,
 				2ACF5A2816E52D4B00F838D9 /* SpriteBatchQuery.cc in Sources */,
+				2AE2938516EF4C220015E200 /* WaveComposite.cc in Sources */,
+				2AA3655916F3552200E7A900 /* ImageFrameProvider.cc in Sources */,
+				2AA3655A16F3552200E7A900 /* ImageFrameProviderCore.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

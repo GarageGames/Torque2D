@@ -250,6 +250,66 @@ ConsoleMethod(Scene, getSceneObjectList, const char*, 2, 2, "() Gets the Scene O
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(Scene, getAssetPreloadCount, S32, 2, 2,   "() Gets the number of assets set to preload for this scene.\n"
+                                                        "@return The number of assets set to preload for this scene.")
+{
+    return object->getAssetPreloadCount();
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, getAssetPreload, const char*, 3, 3,    "(index) Gets the asset to be preloaded at the specified index.\n"
+                                                            "@param index The index of the preloaded asset.\n"
+                                                            "@return The asset to be preloaded at the specified index.")
+{
+    // Fetch preload index.
+    const S32 index = dAtoi(argv[2]);
+
+    // Fetch the asset pointer.
+    const AssetPtr<AssetBase>* pAssetPtr = object->getAssetPreload( index );
+
+    return pAssetPtr == NULL ? NULL : pAssetPtr->getAssetId();
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, addAssetPreload, void, 3, 3,   "(assetId) Adds the asset Id so that it is preloaded when the scene is loaded.\n"
+                                                    "The asset loaded immediately by this operation.  Duplicate assets are ignored.\n"
+                                                    "@param assetId The asset Id to be added.\n"
+                                                    "@return No return value.")
+{
+    // Fetch asset Id.
+    const char* pAssetId = argv[2];
+
+    // Add asset preload.
+    object->addAssetPreload( pAssetId );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, removeAssetPreload, void, 3, 3,    "(assetId) Removes the asset Id from being preloaded when the scene is loaded.\n"
+                                                        "The asset may be unloaded immediately by this operation if it has no other references.\n"
+                                                        "@param assetId The asset Id to be removed.\n"
+                                                        "@return No return value.")
+{
+    // Fetch asset Id.
+    const char* pAssetId = argv[2];
+
+    // Remove asset preload.
+    object->removeAssetPreload( pAssetId );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, clearAssetPreloads, void, 2, 2,    "() Clears all assets added as a preload.\n"
+                                                        "@return No return value.")
+{
+    // Clear asset preloads.
+    object->clearAssetPreloads();
+}
+
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(Scene, mergeScene, void, 3, 3,    "(scene) Merges the specified scene into this scene by cloning the scenes contents.")
 {
     // Find the specified scene.
@@ -269,7 +329,7 @@ ConsoleMethod(Scene, mergeScene, void, 3, 3,    "(scene) Merges the specified sc
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(Scene, getControllers, const char*, 2, 2,	"() Gets the Scene Controllers.\n"
-														"@return Gets the scene controllers.")
+                                                        "@return Gets the scene controllers.")
 {
     // Fetch the scene controllers.
     SimSet* pControllerSet = object->getControllers();
@@ -319,7 +379,7 @@ ConsoleMethod(Scene, isJoint, bool, 3, 3,   "(int jointId) Gets whether the join
                                             "@return whether the joint Id is valid or not." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi( argv[2] );
+    const S32 jointId = dAtoi( argv[2] );
 
     return object->findJoint( jointId ) != NULL;
 }                                                                  
@@ -332,7 +392,7 @@ ConsoleMethod(Scene, getJointType, const char*, 3, 3,   "(int jointId) Gets the 
                                                                 "@return The type of joint of the specified joint Id." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi( argv[2] );
+    const S32 jointId = dAtoi( argv[2] );
 
     // Fetch joint type.
     const b2JointType jointType = object->getJointType( jointId );
@@ -351,7 +411,7 @@ ConsoleMethod(Scene, deleteJoint, bool, 3, 3,           "(int jointId) Deletes t
                                                                 "@return Whether the joint was successfully deleted or not." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi( argv[2] );
+    const S32 jointId = dAtoi( argv[2] );
 
     return object->deleteJoint( jointId );
 }
@@ -369,9 +429,9 @@ ConsoleMethod(Scene, createDistanceJoint, S32, 4, 12,   "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -490,7 +550,7 @@ ConsoleMethod(Scene, setDistanceJointLength, void, 4, 4,    "(jointId, length) S
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 length = dAtof(argv[3]);
@@ -506,7 +566,7 @@ ConsoleMethod(Scene, getDistanceJointLength, F32, 3, 3,     "(jointId) Gets the 
                                                                     "@return Returns the distance the joint should maintain between scene objects (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getDistanceJointLength( jointId );
@@ -520,7 +580,7 @@ ConsoleMethod(Scene, setDistanceJointFrequency, void, 4, 4, "(jointId, frequency
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 frequency = dAtof(argv[3]);
@@ -536,7 +596,7 @@ ConsoleMethod(Scene, getDistanceJointFrequency, F32, 3, 3,  "(jointId) Gets the 
                                                                     "@return Returns the mass-spring-damper frequency in Hertz (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getDistanceJointFrequency( jointId );
@@ -550,7 +610,7 @@ ConsoleMethod(Scene, setDistanceJointDampingRatio, void, 4, 4,  "(jointId, dampi
                                                                         "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 dampingRatio = dAtof(argv[3]);
@@ -566,7 +626,7 @@ ConsoleMethod(Scene, getDistanceJointDampingRatio, F32, 3, 3,   "(jointId) Gets 
                                                                         "@return Returns the damping ratio (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getDistanceJointDampingRatio( jointId );
@@ -583,9 +643,9 @@ ConsoleMethod(Scene, createRopeJoint, S32, 4, 10,       "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -688,7 +748,7 @@ ConsoleMethod(Scene, setRopeJointMaxLength, void, 4, 4,     "(jointId, maxLength
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 maxLength = dAtof(argv[3]);
@@ -704,7 +764,7 @@ ConsoleMethod(Scene, getRopeJointMaxLength, F32, 3, 3,     "(jointId) Gets the m
                                                                     "@return Returns the maximum rigid length of the rope (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getRopeJointMaxLength( jointId );
@@ -720,9 +780,9 @@ ConsoleMethod(Scene, createRevoluteJoint, S32, 4, 9,    "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -819,7 +879,7 @@ ConsoleMethod(Scene, setRevoluteJointLimit, void, 4, 6,     "(jointId, enableLim
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const bool enableLimit = dAtob(argv[3]);
@@ -837,7 +897,7 @@ ConsoleMethod(Scene, getRevoluteJointLimit, const char*, 3, 3,  "(jointId) Gets 
                                                                         "@return Returns whether the joint has angular limits or not and the limits themselves (empty string indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Args.
     bool enableLimit;
@@ -866,7 +926,7 @@ ConsoleMethod(Scene, setRevoluteJointMotor, void, 4, 6,     "(jointId, enableMot
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const bool enableMotor = dAtob(argv[3]);
@@ -884,7 +944,7 @@ ConsoleMethod(Scene, getRevoluteJointMotor, const char*, 3, 3,  "(jointId) Gets 
                                                                         "@return Returns whether the joint has a motor or not and the motor settings (empty string indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Args.
     bool enableMotor;
@@ -892,7 +952,7 @@ ConsoleMethod(Scene, getRevoluteJointMotor, const char*, 3, 3,  "(jointId) Gets 
     F32 maxMotorTorque;
 
     // Access joint.
-    if ( !object->getRevoluteJointLimit( jointId, enableMotor, motorSpeed, maxMotorTorque ) )
+    if ( !object->getRevoluteJointMotor( jointId, enableMotor, motorSpeed, maxMotorTorque ) )
     {
         return NULL;
     }
@@ -901,6 +961,32 @@ ConsoleMethod(Scene, getRevoluteJointMotor, const char*, 3, 3,  "(jointId) Gets 
     char* pBuffer = Con::getReturnBuffer(64);
     dSprintf( pBuffer, 64, "%d %g %g", enableMotor, mRadToDeg(motorSpeed), maxMotorTorque );
     return pBuffer;
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, getRevoluteJointAngle, F32, 3, 3,      "(jointId) Gets the current angle of a revolute joint.\n"
+                                                            "@param jointId The Id of the joint to use.\n"
+                                                            "@return Returns the joint angle." )
+{
+    // Fetch joint Id.
+    const S32 jointId = dAtoi(argv[2]);
+
+    // Access joint.
+	return object->getRevoluteJointAngle( jointId );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, getRevoluteJointSpeed, F32, 3, 3,  "(jointId) Gets the current speed of a revolute joint.\n"
+                                                        "@param jointId The Id of the joint to use.\n"
+                                                        "@return Returns the joint speed as Angular Velocity" )
+{
+    // Fetch joint Id.
+    const S32 jointId = dAtoi(argv[2]);
+
+    // Access joint.
+	return object->getRevoluteJointSpeed( jointId );
 }
 
 //-----------------------------------------------------------------------------
@@ -915,9 +1001,9 @@ ConsoleMethod(Scene, createWeldJoint, S32, 4, 11,       "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -1028,7 +1114,7 @@ ConsoleMethod(Scene, setWeldJointFrequency, void, 4, 4,     "(jointId, frequency
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 frequency = dAtof(argv[3]);
@@ -1044,7 +1130,7 @@ ConsoleMethod(Scene, getWeldJointFrequency, F32, 3, 3,     "(jointId) Gets the m
                                                                     "@return Returns the mass-spring-damper frequency in Hertz (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getWeldJointFrequency( jointId );
@@ -1058,7 +1144,7 @@ ConsoleMethod(Scene, setWeldJointDampingRatio, void, 4, 4,      "(jointId, dampi
                                                                         "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 dampingRatio = dAtof(argv[3]);
@@ -1074,7 +1160,7 @@ ConsoleMethod(Scene, getWeldJointDampingRatio, F32, 3, 3,       "(jointId) Gets 
                                                                         "@return Returns the damping ratio (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getWeldJointDampingRatio( jointId );
@@ -1091,9 +1177,9 @@ ConsoleMethod(Scene, createWheelJoint, S32, 7, 11,      "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -1201,7 +1287,7 @@ ConsoleMethod(Scene, setWheelJointMotor, void, 4, 6,        "(jointId, enableMot
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const bool enableMotor = dAtob(argv[3]);
@@ -1219,7 +1305,7 @@ ConsoleMethod(Scene, getWheelJointMotor, const char*, 3, 3, "(jointId) Gets whet
                                                                     "@return Returns whether the joint has a motor or not and the motor settings (empty string indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Args.
     bool enableMotor;
@@ -1246,7 +1332,7 @@ ConsoleMethod(Scene, setWheelJointFrequency, void, 4, 4,    "(jointId, frequency
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 frequency = dAtof(argv[3]);
@@ -1262,7 +1348,7 @@ ConsoleMethod(Scene, getWheelJointFrequency, F32, 3, 3,     "(jointId) Gets the 
                                                                     "@return Returns the mass-spring-damper frequency in Hertz (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getWheelJointFrequency( jointId );
@@ -1276,7 +1362,7 @@ ConsoleMethod(Scene, setWheelJointDampingRatio, void, 4, 4,     "(jointId, dampi
                                                                         "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 dampingRatio = dAtof(argv[3]);
@@ -1292,7 +1378,7 @@ ConsoleMethod(Scene, getWheelJointDampingRatio, F32, 3, 3,      "(jointId) Gets 
                                                                         "@return Returns the damping ratio (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getWheelJointDampingRatio( jointId );
@@ -1310,9 +1396,9 @@ ConsoleMethod(Scene, createFrictionJoint, S32, 4, 11,   "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -1418,7 +1504,7 @@ ConsoleMethod(Scene, setFrictionJointMaxForce, void, 4, 4,  "(jointId, maxForce)
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 maxForce = dAtof(argv[3]);
@@ -1434,7 +1520,7 @@ ConsoleMethod(Scene, getFrictionJointMaxForce, F32, 3, 3,   "(jointId) Sets the 
                                                                     "@return Returns the maximum friction force (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getFrictionJointMaxForce( jointId );
@@ -1448,7 +1534,7 @@ ConsoleMethod(Scene, setFrictionJointMaxTorque, void, 4, 4, "(jointId, maxTorque
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 maxTorque = dAtof(argv[3]);
@@ -1464,7 +1550,7 @@ ConsoleMethod(Scene, getFrictionJointMaxTorque, F32, 3, 3,  "(jointId) Gets the 
                                                                     "@return Returns the maximum torque force (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getFrictionJointMaxTorque( jointId );
@@ -1481,9 +1567,9 @@ ConsoleMethod(Scene, createPrismaticJoint, S32, 7, 11,  "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -1591,7 +1677,7 @@ ConsoleMethod(Scene, setPrismaticJointLimit, void, 4, 6,    "(jointId, enableLim
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const bool enableLimit = dAtob(argv[3]);
@@ -1608,7 +1694,7 @@ ConsoleMethod(Scene, getPrismaticJointLimit, const char*, 3, 3, "(jointId) Gets 
                                                                         "@return Returns whether the joint has translational limits or not and the limits themselves (empty string indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Args.
     bool enableLimit;
@@ -1637,7 +1723,7 @@ ConsoleMethod(Scene, setPrismaticJointMotor, void, 4, 6,    "(jointId, enableMot
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const bool enableMotor = dAtob(argv[3]);
@@ -1654,7 +1740,7 @@ ConsoleMethod(Scene, getPrismaticJointMotor, const char*, 3, 3,    "(jointId) Ge
                                                                             "@return Returns whether the joint has a motor or not and the motor settings (empty string indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Args.
     bool enableMotor;
@@ -1688,9 +1774,9 @@ ConsoleMethod(Scene, createPulleyJoint, S32, 9, 16,     "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -1824,7 +1910,7 @@ ConsoleMethod(Scene, createTargetJoint, S32, 5, 10,     "(sceneObject, worldTarg
                                                         "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                         "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object.
+    // Fetch scene object.
     SceneObject* pSceneObject = Sim::findObject<SceneObject>(argv[2]);
 
     // Check scene object.
@@ -1877,7 +1963,7 @@ ConsoleMethod(Scene, createTargetJoint, S32, 5, 10,     "(sceneObject, worldTarg
 
     if ( argc <= nextArg )
     {
-        return object->createTargetJoint( pSceneObject, worldTarget, maxForce, frequency );
+        return object->createTargetJoint( pSceneObject, worldTarget, maxForce, centerOfMass, frequency );
     }
 
     // Fetch damping ratio.
@@ -1885,13 +1971,13 @@ ConsoleMethod(Scene, createTargetJoint, S32, 5, 10,     "(sceneObject, worldTarg
 
     if ( argc <= nextArg )
     {
-        return object->createTargetJoint( pSceneObject, worldTarget, maxForce, frequency, dampingRatio );
+        return object->createTargetJoint( pSceneObject, worldTarget, maxForce, centerOfMass, frequency, dampingRatio );
     }
 
     // Fetch collide connected.
     const bool collideConnected = dAtob(argv[nextArg++]);
 
-    return object->createTargetJoint( pSceneObject, worldTarget, maxForce, frequency, dampingRatio, collideConnected );
+    return object->createTargetJoint( pSceneObject, worldTarget, maxForce, centerOfMass, frequency, dampingRatio, collideConnected );
 }
 
 //-----------------------------------------------------------------------------
@@ -1902,7 +1988,7 @@ ConsoleMethod(Scene, setTargetJointTarget, void, 4, 5,      "(jointId, worldTarg
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // World target.
     const U32 worldTargetElementCount = Utility::mGetStringElementCount(argv[3]);
@@ -1934,7 +2020,7 @@ ConsoleMethod(Scene, getTargetJointTarget, const char*, 3, 3,   "(jointId) Gets 
                                                                         "@return Returns the target world point for the scene object (always 0,0 if error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     const Vector2 worldTarget = object->getTargetJointTarget( jointId );
@@ -1950,7 +2036,7 @@ ConsoleMethod(Scene, setTargetJointFrequency, void, 4, 4,   "(jointId, frequency
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 frequency = dAtof(argv[3]);
@@ -1966,7 +2052,7 @@ ConsoleMethod(Scene, getTargetJointFrequency, F32, 3, 3,   "(jointId) Gets the m
                                                                     "@return Returns the mass-spring-damper frequency in Hertz (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getTargetJointFrequency( jointId );
@@ -1980,7 +2066,7 @@ ConsoleMethod(Scene, setTargetJointDampingRatio, void, 4, 4,    "(jointId, dampi
                                                                         "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 dampingRatio = dAtof(argv[3]);
@@ -1996,7 +2082,7 @@ ConsoleMethod(Scene, getTargetJointDampingRatio, F32, 3, 3,    "(jointId) Sets t
                                                                         "@return Returns the damping ratio (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getTargetJointDampingRatio( jointId );
@@ -2015,9 +2101,9 @@ ConsoleMethod(Scene, createMotorJoint, S32, 4, 11,      "(sceneObjectA, sceneObj
                                                                 "@param collideConnected Whether the scene objects can collide with each other while connected with this joint.\n"
                                                                 "@return The joint Id (-1 if error).")
 {
-	// Fetch scene object references.
-	const char* sceneObjectA = argv[2];
-	const char* sceneObjectB = argv[3];
+    // Fetch scene object references.
+    const char* sceneObjectA = argv[2];
+    const char* sceneObjectB = argv[3];
 
     SceneObject* pSceneObjectA = NULL;
     SceneObject* pSceneObjectB = NULL;
@@ -2110,7 +2196,7 @@ ConsoleMethod(Scene, setMotorJointLinearOffset, void, 4, 5,     "(jointId, linea
                                                                         "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Linear offset.
     const U32 linearOffsetElementCount = Utility::mGetStringElementCount(argv[3]);
@@ -2142,7 +2228,7 @@ ConsoleMethod(Scene, getMotorJointLinearOffset, const char*, 3, 3,  "(jointId) G
                                                                             "@return Returns the linear offset in sceneObjectA space (always 0,0 if error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     const Vector2 linearOffset = object->getMotorJointLinearOffset( jointId );
@@ -2158,7 +2244,7 @@ ConsoleMethod(Scene, setMotorJointAngularOffset, void, 4, 4,    "(jointId, angul
                                                                         "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 angularOffset = mDegToRad(dAtof(argv[3]));
@@ -2174,7 +2260,7 @@ ConsoleMethod(Scene, getMotorJointAngularOffset, F32, 3, 3,     "(jointId) Gets 
                                                                         "@return Returns the angularOffset between the bodies (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return mRadToDeg( object->getMotorJointAngularOffset( jointId ) );
@@ -2188,7 +2274,7 @@ ConsoleMethod(Scene, setMotorJointMaxForce, void, 4, 4,     "(jointId, maxForce)
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 maxForce = dAtof(argv[3]);
@@ -2204,7 +2290,7 @@ ConsoleMethod(Scene, getMotorJointMaxForce, F32, 3, 3,   "(jointId) Sets the max
                                                                     "@return Returns the maximum motor force (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getMotorJointMaxForce( jointId );
@@ -2218,7 +2304,7 @@ ConsoleMethod(Scene, setMotorJointMaxTorque, void, 4, 4, "(jointId, maxTorque) S
                                                                     "@return Returns no value." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Fetch args.
     const F32 maxTorque = dAtof(argv[3]);
@@ -2234,7 +2320,7 @@ ConsoleMethod(Scene, getMotorJointMaxTorque, F32, 3, 3,  "(jointId) Gets the max
                                                                     "@return Returns the maximum motor torque force (-1 indicates error)." )
 {
     // Fetch joint Id.
-    const U32 jointId = dAtoi(argv[2]);
+    const S32 jointId = dAtoi(argv[2]);
 
     // Access joint.
     return object->getMotorJointMaxTorque( jointId );
@@ -2245,9 +2331,9 @@ ConsoleMethod(Scene, getMotorJointMaxTorque, F32, 3, 3,  "(jointId) Gets the max
 ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGroupMask], [sceneLayerMask], [pickMode] ) Picks objects intersecting the specified area with optional group/layer masks.\n"
               "@param startx/y The coordinates of the start point as either (\"x y\") or (x,y)\n"
               "@param endx/y The coordinates of the end point as either (\"x y\") or (x,y)\n"
-              "@param sceneGroupMask Optional scene group mask.\n"
-              "@param sceneLayerMask Optional scene layer mask.\n"
-              "@param pickMode Optional mode 'any', 'size' or 'collision' (default is 'size').\n"
+              "@param sceneGroupMask Optional scene group mask.  (-1) or empty string selects all groups.\n"
+              "@param sceneLayerMask Optional scene layer mask.  (-1) or empty string selects all layers.\n"
+              "@param pickMode Optional mode 'any', 'aabb', 'oobb' or 'collision' (default is 'oobb').\n"
               "@return Returns list of object IDs.")
 {
     // Upper left and lower right bound.
@@ -2296,15 +2382,21 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
     // Calculate scene group mask.
     U32 sceneGroupMask = MASK_ALL;
     if ( (U32)argc > firstArg )
-        sceneGroupMask = dAtoi(argv[firstArg]);
+    {
+        if ( *argv[firstArg] != 0 )
+            sceneGroupMask = dAtoi(argv[firstArg]);
+    }
 
     // Calculate scene layer mask.
     U32 sceneLayerMask = MASK_ALL;
     if ( (U32)argc > (firstArg + 1) )
-        sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    {
+        if ( *argv[firstArg + 1] != 0 )
+            sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    }
 
     // Calculate pick mode.
-    Scene::PickMode pickMode = Scene::PICK_SIZE;
+    Scene::PickMode pickMode = Scene::PICK_OOBB;
     if ( (U32)argc > (firstArg + 2))
     {
         pickMode = Scene::getPickModeEnum(argv[firstArg + 2]);
@@ -2312,7 +2404,7 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
     if ( pickMode == Scene::PICK_INVALID )
     {
         Con::warnf("Scene::pickArea() - Invalid pick mode of %s", argv[firstArg + 2]);
-        pickMode = Scene::PICK_SIZE;
+        pickMode = Scene::PICK_OOBB;
     }
 
 
@@ -2333,15 +2425,19 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
     // Perform query.
     if ( pickMode == Scene::PICK_ANY )
     {
-        pWorldQuery->anyQueryArea( aabb );    
+        pWorldQuery->anyQueryAABB( aabb );    
     }
-    else if ( pickMode == Scene::PICK_SIZE )
+    else if ( pickMode == Scene::PICK_AABB )
     {
-        pWorldQuery->renderQueryArea( aabb );    
+        pWorldQuery->aabbQueryAABB( aabb );    
+    }
+    else if ( pickMode == Scene::PICK_OOBB )
+    {
+        pWorldQuery->oobbQueryAABB( aabb );    
     }
     else if ( pickMode == Scene::PICK_COLLISION )
     {
-        pWorldQuery->fixtureQueryArea( aabb );    
+        pWorldQuery->collisionQueryAABB( aabb );    
     }
     else
     {
@@ -2394,9 +2490,9 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
 ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroupMask], [sceneLayerMask], [pickMode] ) Picks objects intersecting the specified ray with optional group/layer masks.\n"
               "@param startx/y The coordinates of the start point as either (\"x y\") or (x,y)\n"
               "@param endx/y The coordinates of the end point as either (\"x y\") or (x,y)\n"
-              "@param sceneGroupMask Optional scene group mask.\n"
-              "@param sceneLayerMask Optional scene layer mask.\n"
-              "@param pickMode Optional mode 'any', 'size' or 'collision' (default is 'size').\n"
+              "@param sceneGroupMask Optional scene group mask.  (-1) or empty string selects all groups.\n"
+              "@param sceneLayerMask Optional scene layer mask.  (-1) or empty string selects all layers.\n"
+              "@param pickMode Optional mode 'any', 'aabb', 'oobb' or 'collision' (default is 'oobb').\n"
               "@return Returns list of object IDs.")
 {
     // Upper left and lower right bound.
@@ -2445,15 +2541,21 @@ ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroup
     // Calculate scene group mask.
     U32 sceneGroupMask = MASK_ALL;
     if ( (U32)argc > firstArg )
-        sceneGroupMask = dAtoi(argv[firstArg]);
+    {
+        if ( *argv[firstArg] != 0 )
+            sceneGroupMask = dAtoi(argv[firstArg]);
+    }
 
     // Calculate scene layer mask.
     U32 sceneLayerMask = MASK_ALL;
     if ( (U32)argc > (firstArg + 1) )
-        sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    {
+        if ( *argv[firstArg + 1] != 0 )
+            sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    }
 
     // Calculate pick mode.
-    Scene::PickMode pickMode = Scene::PICK_SIZE;
+    Scene::PickMode pickMode = Scene::PICK_OOBB;
     if ( (U32)argc > (firstArg + 2))
     {
         pickMode = Scene::getPickModeEnum(argv[firstArg + 2]);
@@ -2461,7 +2563,7 @@ ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroup
     if ( pickMode == Scene::PICK_INVALID )
     {
         Con::warnf("Scene::pickRay() - Invalid pick mode of %s", argv[firstArg + 2]);
-        pickMode = Scene::PICK_SIZE;
+        pickMode = Scene::PICK_OOBB;
     }
 
 
@@ -2477,13 +2579,17 @@ ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroup
     {
         pWorldQuery->anyQueryRay( v1, v2 );    
     }
-    else if ( pickMode == Scene::PICK_SIZE )
+    else if ( pickMode == Scene::PICK_AABB )
     {
-        pWorldQuery->renderQueryRay( v1, v2 );    
+        pWorldQuery->aabbQueryRay( v1, v2 );    
+    }
+    else if ( pickMode == Scene::PICK_OOBB )
+    {
+        pWorldQuery->oobbQueryRay( v1, v2 );    
     }
     else if ( pickMode == Scene::PICK_COLLISION )
     {
-        pWorldQuery->fixtureQueryRay( v1, v2 );    
+        pWorldQuery->collisionQueryRay( v1, v2 );    
     }
     else
     {
@@ -2539,12 +2645,300 @@ ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroup
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(Scene, pickPoint, const char*, 3, 7, "(x / y, [sceneGroupMask], [sceneLayerMask], [pickMode] ) Picks objects intersecting the specified point with optional group/layer masks.\n"
+              "@param x/y The coordinate of the point as either (\"x y\") or (x,y)\n"
+              "@param sceneGroupMask Optional scene group mask.  (-1) or empty string selects all groups.\n"
+              "@param sceneLayerMask Optional scene layer mask.  (-1) or empty string selects all layers.\n"
+              "@param pickMode Optional mode 'any', 'aabb', 'oobb' or 'collision' (default is 'ooabb').\n"
+              "@return Returns list of object IDs.")
+{
+    // The point.
+    Vector2 point;
+
+    // The index of the first optional parameter.
+    U32 firstArg;
+
+    // Grab the number of elements in the first parameter.
+    U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+
+    // ("x y")
+    if ((elementCount == 2) && (argc < 8))
+    {
+        point = Utility::mGetStringElementVector(argv[2]);
+        firstArg = 3;
+    }
+   
+    // (x, y)
+    else if ((elementCount == 1) && (argc > 3))
+    {
+        point = Vector2(dAtof(argv[2]), dAtof(argv[3]));
+        firstArg = 4;
+    }
+   
+    // Invalid
+    else
+    {
+        Con::warnf("Scene::pickPoint() - Invalid number of parameters!");
+        return NULL;
+    }
+
+    // Calculate scene group mask.
+    U32 sceneGroupMask = MASK_ALL;
+    if ( (U32)argc > firstArg )
+    {
+        if ( *argv[firstArg] != 0 )
+            sceneGroupMask = dAtoi(argv[firstArg]);
+    }
+
+    // Calculate scene layer mask.
+    U32 sceneLayerMask = MASK_ALL;
+    if ( (U32)argc > (firstArg + 1) )
+    {
+        if ( *argv[firstArg + 1] != 0 )
+            sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    }
+
+    // Calculate pick mode.
+    Scene::PickMode pickMode = Scene::PICK_OOBB;
+    if ( (U32)argc > (firstArg + 2 ))
+    {
+        pickMode = Scene::getPickModeEnum(argv[firstArg + 2]);
+    }
+    if ( pickMode == Scene::PICK_INVALID )
+    {
+        Con::warnf("Scene::pickPoint() - Invalid pick mode of %s", argv[firstArg + 2]);
+        pickMode = Scene::PICK_OOBB;
+    }
+
+
+    // Fetch world query and clear results.
+    WorldQuery* pWorldQuery = object->getWorldQuery( true );
+
+    // Set filter.
+    WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
+    pWorldQuery->setQueryFilter( queryFilter );
+
+    // Perform query.
+    if ( pickMode == Scene::PICK_ANY )
+    {
+        pWorldQuery->anyQueryPoint( point );    
+    }
+    else if ( pickMode == Scene::PICK_AABB )
+    {
+        pWorldQuery->aabbQueryPoint( point );    
+    }
+    else if ( pickMode == Scene::PICK_OOBB )
+    {
+        pWorldQuery->oobbQueryPoint( point );    
+    }
+    else if ( pickMode == Scene::PICK_COLLISION )
+    {
+        pWorldQuery->collisionQueryPoint( point );    
+    }
+    else
+    {
+        AssertFatal( false, "Unsupported pick mode." );
+    }
+
+    // Fetch result count.
+    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+
+    // Finish if no results.
+    if ( resultCount == 0 )
+        return NULL;
+
+    // Fetch results.
+    typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
+
+    // Set Max Buffer Size.
+    const U32 maxBufferSize = 4096;
+
+    // Create Returnable Buffer.
+    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
+
+    // Set Buffer Counter.
+    U32 bufferCount = 0;
+
+    // Add Picked Objects to List.
+    for ( U32 n = 0; n < resultCount; n++ )
+    {
+        // Output Object ID.
+        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
+
+        // Finish early if we run out of buffer space.
+        if ( bufferCount >= maxBufferSize )
+        {
+            // Warn.
+            Con::warnf("Scene::pickPoint() - Too many items picked to return to scripts!");
+            break;
+        }
+    }
+
+    // Clear world query.
+    pWorldQuery->clearQuery();
+
+    // Return buffer.
+    return pBuffer;
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, pickCircle, const char*, 4, 8, "(x / y, radius, [sceneGroupMask], [sceneLayerMask], [pickMode] ) Picks objects intersecting the specified circle with optional group/layer masks.\n"
+              "@param x/y The coordinate of the point as either (\"x y\") or (x,y)\n"
+              "@param radius The radius of the circle.\n"
+              "@param sceneGroupMask Optional scene group mask.  (-1) or empty string selects all groups.\n"
+              "@param sceneLayerMask Optional scene layer mask.  (-1) or empty string selects all layers.\n"
+              "@param pickMode Optional mode 'any', 'aabb', 'oobb' or 'collision' (default is 'ooabb').\n"
+              "@return Returns list of object IDs.")
+{
+    // The point.
+    Vector2 point;
+
+    // The index of the first optional parameter.
+    U32 firstArg;
+
+    // Grab the number of elements in the first parameter.
+    U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+
+    // ("x y")
+    if ((elementCount == 2) && (argc < 8))
+    {
+        point = Utility::mGetStringElementVector(argv[2]);
+        firstArg = 3;
+    }
+   
+    // (x, y)
+    else if ((elementCount == 1) && (argc > 3))
+    {
+        point = Vector2(dAtof(argv[2]), dAtof(argv[3]));
+        firstArg = 4;
+    }
+   
+    // Invalid
+    else
+    {
+        Con::warnf("Scene::pickPoint() - Invalid number of parameters!");
+        return NULL;
+    }
+
+    // Fetch radius.
+    const F32 radius = dAtof(argv[firstArg++]);
+
+    // Check radius.
+    if ( radius <= 0.0f )
+    {
+        Con::warnf( "Scene::pickCircle()  Radius must be greater than zero." );
+        return StringTable->EmptyString;
+    }
+
+    // Calculate scene group mask.
+    U32 sceneGroupMask = MASK_ALL;
+    if ( (U32)argc > firstArg )
+    {
+        if ( *argv[firstArg] != 0 )
+            sceneGroupMask = dAtoi(argv[firstArg]);
+    }
+
+    // Calculate scene layer mask.
+    U32 sceneLayerMask = MASK_ALL;
+    if ( (U32)argc > (firstArg + 1) )
+    {
+        if ( *argv[firstArg + 1] != 0 )
+            sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    }
+
+    // Calculate pick mode.
+    Scene::PickMode pickMode = Scene::PICK_OOBB;
+    if ( (U32)argc > (firstArg + 2 ))
+    {
+        pickMode = Scene::getPickModeEnum(argv[firstArg + 2]);
+    }
+    if ( pickMode == Scene::PICK_INVALID )
+    {
+        Con::warnf("Scene::pickPoint() - Invalid pick mode of %s", argv[firstArg + 2]);
+        pickMode = Scene::PICK_OOBB;
+    }
+
+
+    // Fetch world query and clear results.
+    WorldQuery* pWorldQuery = object->getWorldQuery( true );
+
+    // Set filter.
+    WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
+    pWorldQuery->setQueryFilter( queryFilter );
+
+    // Perform query.
+    if ( pickMode == Scene::PICK_ANY )
+    {
+        pWorldQuery->anyQueryCircle( point, radius );    
+    }
+    else if ( pickMode == Scene::PICK_AABB )
+    {
+        pWorldQuery->aabbQueryCircle( point, radius );    
+    }
+    else if ( pickMode == Scene::PICK_OOBB )
+    {
+        pWorldQuery->oobbQueryCircle( point, radius );    
+    }
+    else if ( pickMode == Scene::PICK_COLLISION )
+    {
+        pWorldQuery->collisionQueryCircle( point, radius );    
+    }
+    else
+    {
+        AssertFatal( false, "Unsupported pick mode." );
+    }
+
+    // Fetch result count.
+    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+
+    // Finish if no results.
+    if ( resultCount == 0 )
+        return NULL;
+
+    // Fetch results.
+    typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
+
+    // Set Max Buffer Size.
+    const U32 maxBufferSize = 4096;
+
+    // Create Returnable Buffer.
+    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
+
+    // Set Buffer Counter.
+    U32 bufferCount = 0;
+
+    // Add Picked Objects to List.
+    for ( U32 n = 0; n < resultCount; n++ )
+    {
+        // Output Object ID.
+        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
+
+        // Finish early if we run out of buffer space.
+        if ( bufferCount >= maxBufferSize )
+        {
+            // Warn.
+            Con::warnf("Scene::pickPoint() - Too many items picked to return to scripts!");
+            break;
+        }
+    }
+
+    // Clear world query.
+    pWorldQuery->clearQuery();
+
+    // Return buffer.
+    return pBuffer;
+}
+
+
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [sceneGroupMask], [sceneLayerMask] ) Picks objects with collision shapes intersecting the specified ray with optional group/layer masks.\n"
                 "Unlike other pick methods, this returns the complete detail for each object encountered, returning the collision point, normal and fraction of the ray intersection.\n"
                 "@param startx/y The coordinates of the start point as either (\"x y\") or (x,y)\n"
                 "@param endx/y The coordinates of the end point as either (\"x y\") or (x,y)\n"
-                "@param sceneGroupMask Optional scene group mask.\n"
-                "@param sceneLayerMask Optional scene layer mask.\n"
+                "@param sceneGroupMask Optional scene group mask.  (-1) or empty string selects all groups.\n"
+                "@param sceneLayerMask Optional scene layer mask.  (-1) or empty string selects all layers.\n"
                 "@return Returns a list of objects in blocks of detail items where each block represents a single object and its collision detail in the format:"
                 "<ObjectId PointX PointY NormalX NormalY RayFraction ShapeIndex> <ObjectId PointX PointY NormalX NormalY RayFraction ShapeIndex> <ObjectId PointX PointY NormalX NormalY RayFraction ShapeIndex> etc.\n")
 {
@@ -2594,12 +2988,18 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
     // Calculate scene group mask.
     U32 sceneGroupMask = MASK_ALL;
     if ( (U32)argc > firstArg )
-        sceneGroupMask = dAtoi(argv[firstArg]);
+    {
+        if ( *argv[firstArg] != 0 )
+            sceneGroupMask = dAtoi(argv[firstArg]);
+    }
 
     // Calculate scene layer mask.
     U32 sceneLayerMask = MASK_ALL;
     if ( (U32)argc > (firstArg + 1) )
-        sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    {
+        if ( *argv[firstArg + 1] != 0 )
+            sceneLayerMask = dAtoi(argv[firstArg + 1]);
+    }
 
     // Fetch world query and clear results.
     WorldQuery* pWorldQuery = object->getWorldQuery( true );
@@ -2609,7 +3009,7 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
     pWorldQuery->setQueryFilter( queryFilter );
 
     // Perform query.
-    pWorldQuery->fixtureQueryRay( v1, v2 );    
+    pWorldQuery->collisionQueryRay( v1, v2 );    
 
     // Sanity!
     AssertFatal( pWorldQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );
@@ -2654,134 +3054,6 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
         {
             // Warn.
             Con::warnf("Scene::pickRayCollision() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
-
-    // Clear world query.
-    pWorldQuery->clearQuery();
-
-    // Return buffer.
-    return pBuffer;
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(Scene, pickPoint, const char*, 3, 7, "(x / y, [sceneGroupMask], [sceneLayerMask], [pickMode] ) Picks objects intersecting the specified point with optional group/layer masks.\n"
-              "@param x/y The coordinate of the point as either (\"x y\") or (x,y)\n"
-              "@param sceneGroupMask Optional scene group mask.\n"
-              "@param sceneLayerMask Optional scene layer mask.\n"
-              "@param pickMode Optional mode 'any', 'size' or 'collision' (default is 'size').\n"
-              "@return Returns list of object IDs.")
-{
-    // The point.
-    Vector2 point;
-
-    // The index of the first optional parameter.
-    U32 firstArg;
-
-    // Grab the number of elements in the first parameter.
-    U32 elementCount = Utility::mGetStringElementCount(argv[2]);
-
-    // ("x y")
-    if ((elementCount == 2) && (argc < 8))
-    {
-        point = Utility::mGetStringElementVector(argv[2]);
-        firstArg = 3;
-    }
-   
-    // (x, y)
-    else if ((elementCount == 1) && (argc > 3))
-    {
-        point = Vector2(dAtof(argv[2]), dAtof(argv[3]));
-        firstArg = 4;
-    }
-   
-    // Invalid
-    else
-    {
-        Con::warnf("Scene::pickPoint() - Invalid number of parameters!");
-        return NULL;
-    }
-
-    // Calculate scene group mask.
-    U32 sceneGroupMask = MASK_ALL;
-    if ( (U32)argc > firstArg )
-        sceneGroupMask = dAtoi(argv[firstArg]);
-
-    // Calculate scene layer mask.
-    U32 sceneLayerMask = MASK_ALL;
-    if ( (U32)argc > (firstArg + 1) )
-        sceneLayerMask = dAtoi(argv[firstArg + 1]);
-
-    // Calculate pick mode.
-    Scene::PickMode pickMode = Scene::PICK_SIZE;
-    if ( (U32)argc > (firstArg + 2 ))
-    {
-        pickMode = Scene::getPickModeEnum(argv[firstArg + 2]);
-    }
-    if ( pickMode == Scene::PICK_INVALID )
-    {
-        Con::warnf("Scene::pickPoint() - Invalid pick mode of %s", argv[firstArg + 2]);
-        pickMode = Scene::PICK_SIZE;
-    }
-
-
-    // Fetch world query and clear results.
-    WorldQuery* pWorldQuery = object->getWorldQuery( true );
-
-    // Set filter.
-    WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
-    pWorldQuery->setQueryFilter( queryFilter );
-
-    // Perform query.
-    if ( pickMode == Scene::PICK_ANY )
-    {
-        pWorldQuery->anyQueryPoint( point );    
-    }
-    else if ( pickMode == Scene::PICK_SIZE )
-    {
-        pWorldQuery->renderQueryPoint( point );    
-    }
-    else if ( pickMode == Scene::PICK_COLLISION )
-    {
-        pWorldQuery->fixtureQueryPoint( point );    
-    }
-    else
-    {
-        AssertFatal( false, "Unsupported pick mode." );
-    }
-
-    // Fetch result count.
-    const U32 resultCount = pWorldQuery->getQueryResultsCount();
-
-    // Finish if no results.
-    if ( resultCount == 0 )
-        return NULL;
-
-    // Fetch results.
-    typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
-
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
-
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
-
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
-
-    // Add Picked Objects to List.
-    for ( U32 n = 0; n < resultCount; n++ )
-    {
-        // Output Object ID.
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
-
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("Scene::pickPoint() - Too many items picked to return to scripts!");
             break;
         }
     }
@@ -2931,12 +3203,33 @@ ConsoleMethod(Scene, setDebugOff, void, 3, 2 + DEBUG_MODE_COUNT,    "(debugOptio
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Scene, getDebugOn, bool, 3, 3, "(debugMode) Gets the state of the debug mode.\n"
-              "@param The specific debug mode to check active state of.\n"
-              "@return Returns true if active, false if not.")
+ConsoleMethod(Scene, getDebugOn, const char*, 2, 2, "() Gets the state of the debug modes.\n"
+                                                    "@return Returns a space separated list of debug modes that are active.")
 {
-   const U32 mask = 1 << dAtoi(argv[2]);
-   return object->getDebugMask() & mask;
+    // Fetch debug mask,.
+    const U32 debugMask = object->getDebugMask();
+
+    // Fetch a return buffer.
+    S32 bufferSize = 1024;
+    char* pReturnBuffer = Con::getReturnBuffer(bufferSize);
+    *pReturnBuffer = 0;
+    char* pWriteCursor = pReturnBuffer;
+
+    // Iterate debug mask.
+    for( U32 bit = 0; bit < 32; ++bit )
+    {
+        // Calculate debug mask bit.
+        const S32 debugBit = 1 << bit;
+        if ( (debugMask & debugBit) == 0 )
+            continue;
+
+        // Format option.
+        const S32 size = dSprintf( pWriteCursor, bufferSize, "%s ", object->getDebugOptionDescription( (Scene::DebugOption)debugBit ) );
+        bufferSize -= size;
+        pWriteCursor += size;
+    }
+
+    return pReturnBuffer;
 }
 
 //-----------------------------------------------------------------------------
@@ -3069,8 +3362,20 @@ ConsoleMethod(Scene, getBatchingEnabled, bool, 2, 2,    "() Gets whether render 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Scene, setIsEditorScene, void, 3, 3, "() Sets whether this is an editor scene\n"
+ConsoleMethod(Scene, setIsEditorScene, void, 3, 3, "() Sets whether this is an editor scene.\n"
                                                             "@return No return value.")
 {
    object->setIsEditorScene(dAtob(argv[2]));
 }
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, create, const char*, 3, 3, "(type) Creates the specified scene-object derived type and adds it to the scene.\n"
+                                                "@return The scene-object or NULL if not created.")
+{
+    // Create the scene object.
+    SceneObject* pSceneObject = object->create( argv[2] );
+
+    return pSceneObject == NULL ? NULL : pSceneObject->getIdString();
+}
+

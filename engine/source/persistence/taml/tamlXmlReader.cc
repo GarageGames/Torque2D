@@ -174,6 +174,9 @@ SimObject* TamlXmlReader::parseElement( TiXmlElement* pXmlElement )
         // Fetch the Taml children.
         TamlChildren* pChildren = dynamic_cast<TamlChildren*>( pSimObject );
 
+        // Fetch any container child class specifier.
+        AbstractClassRep* pContainerChildClass = pSimObject->getClassRep()->getContainerChildClass( true );
+
         // Iterate siblings.
         do
         {
@@ -208,6 +211,26 @@ SimObject* TamlXmlReader::parseElement( TiXmlElement* pXmlElement )
                 // Skip if the child was not created.
                 if ( pChildSimObject == NULL )
                     continue;
+
+                // Do we have a container child class?
+                if ( pContainerChildClass != NULL )
+                {
+                    // Yes, so is the child object the correctly derived type?
+                    if ( !pChildSimObject->getClassRep()->isClass( pContainerChildClass ) )
+                    {
+                        // No, so warn.
+                        Con::warnf("Taml: Child element '%s' found under parent '%s' but object is restricted to children of type '%s'.",
+                            pChildSimObject->getClassName(),
+                            pSimObject->getClassName(),
+                            pContainerChildClass->getClassName() );
+
+                        // NOTE: We can't delete the object as it may be referenced elsewhere!
+                        pChildSimObject = NULL;
+
+                        // Skip.
+                        continue;
+                    }
+                }
 
                 // Add child.
                 pChildren->addTamlChild( pChildSimObject );
@@ -262,11 +285,10 @@ void TamlXmlReader::parseAttributes( TiXmlElement* pXmlElement, SimObject* pSimO
         StringTableEntry attributeName = StringTable->insert( pAttribute->Name() );
 
         // Ignore if this is a Taml attribute.
-        if (    attributeName == mTamlRefId ||
-                attributeName == mTamlRefToId ||
-                attributeName == mTamlObjectName ||
-                attributeName == mTamlRefField )
-                continue;
+        if (    attributeName == tamlRefIdName ||
+                attributeName == tamlRefToIdName ||
+                attributeName == tamlNamedObjectName )
+            continue;
 
         // We can assume this is a field for now.
         pSimObject->setPrefixedDataField( attributeName, NULL, pAttribute->Value() );
@@ -340,7 +362,7 @@ void TamlXmlReader::parseCustomNode( TiXmlElement* pXmlElement, TamlCustomNode* 
         StringTableEntry attributeName = StringTable->insert( pAttribute->Name() );
 
         // Skip if a Taml reference attribute.
-        if ( attributeName == mTamlRefId || attributeName == mTamlRefToId )
+        if ( attributeName == tamlRefIdName || attributeName == tamlRefToIdName )
             continue;
 
         // Add node field.
@@ -396,7 +418,7 @@ U32 TamlXmlReader::getTamlRefId( TiXmlElement* pXmlElement )
         StringTableEntry attributeName = StringTable->insert( pAttribute->Name() );
 
         // Skip if not the correct attribute.
-        if ( attributeName != mTamlRefId )
+        if ( attributeName != tamlRefIdName )
             continue;
 
         // Return it.
@@ -421,7 +443,7 @@ U32 TamlXmlReader::getTamlRefToId( TiXmlElement* pXmlElement )
         StringTableEntry attributeName = StringTable->insert( pAttribute->Name() );
 
         // Skip if not the correct attribute.
-        if ( attributeName != mTamlRefToId )
+        if ( attributeName != tamlRefToIdName )
             continue;
 
         // Return it.
@@ -446,7 +468,7 @@ const char* TamlXmlReader::getTamlObjectName( TiXmlElement* pXmlElement )
         StringTableEntry attributeName = StringTable->insert( pAttribute->Name() );
 
         // Skip if not the correct attribute.
-        if ( attributeName != mTamlObjectName )
+        if ( attributeName != tamlNamedObjectName )
             continue;
 
         // Return it.
@@ -457,26 +479,5 @@ const char* TamlXmlReader::getTamlObjectName( TiXmlElement* pXmlElement )
     return NULL;
 }
 
-//-----------------------------------------------------------------------------
-
-const char* TamlXmlReader::getTamlRefField( TiXmlElement* pXmlElement )
-{
-    // Iterate attributes.
-    for ( TiXmlAttribute* pAttribute = pXmlElement->FirstAttribute(); pAttribute; pAttribute = pAttribute->Next() )
-    {
-        // Insert attribute name.
-        StringTableEntry attributeName = StringTable->insert( pAttribute->Name() );
-
-        // Skip if not the correct attribute.
-        if ( attributeName != mTamlRefField )
-            continue;
-
-        // Return it.
-        return pAttribute->Value();
-    }
-
-    // Not found.
-    return NULL;
-}
 
 

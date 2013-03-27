@@ -35,8 +35,40 @@ bool TamlXmlWriter::write( FileStream& stream, const TamlWriteNode* pTamlWriteNo
     // Create document.
     TiXmlDocument xmlDocument;
 
-    // Compile root element.
-    xmlDocument.LinkEndChild( compileElement( pTamlWriteNode ) );
+    // Compile the root element.
+    TiXmlElement* pRootElement = compileElement( pTamlWriteNode );
+
+    // Fetch any TAML Schema file reference.
+    const char* pTamlSchemaFile = Con::getVariable( TAML_SCHEMA_VARIABLE );
+
+    // Do we have a schema file reference?
+    if ( pTamlSchemaFile != NULL && *pTamlSchemaFile != 0 )
+    {
+        // Yes, so add namespace attribute to root.
+        pRootElement->SetAttribute( "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance" );
+
+        // Expand the file-path reference.
+        char schemaFilePathBuffer[1024];
+        Con::expandPath( schemaFilePathBuffer, sizeof(schemaFilePathBuffer), pTamlSchemaFile );
+
+        // Fetch the output path for the Taml file.
+        char outputFileBuffer[1024];
+        dSprintf( outputFileBuffer, sizeof(outputFileBuffer), "%s", mpTaml->getFilePathBuffer() );
+        char* pFileStart = dStrrchr( outputFileBuffer, '/' );
+        if ( pFileStart == NULL )
+            *outputFileBuffer = 0;
+        else
+            *pFileStart = 0;
+
+        // Fetch the schema file-path relative to the output file.
+        StringTableEntry relativeSchemaFilePath = Platform::makeRelativePathName( schemaFilePathBuffer, outputFileBuffer );
+
+        // Add schema location attribute to root.
+        pRootElement->SetAttribute( "xsi:noNamespaceSchemaLocation", relativeSchemaFilePath );
+    }
+
+    // Link the root element.
+    xmlDocument.LinkEndChild( pRootElement );
 
     // Save document to stream.
     return xmlDocument.SaveFile( stream );
@@ -44,7 +76,7 @@ bool TamlXmlWriter::write( FileStream& stream, const TamlWriteNode* pTamlWriteNo
 
 //-----------------------------------------------------------------------------
 
-TiXmlNode* TamlXmlWriter::compileElement( const TamlWriteNode* pTamlWriteNode )
+TiXmlElement* TamlXmlWriter::compileElement( const TamlWriteNode* pTamlWriteNode )
 {
     // Debug Profiling.
     PROFILE_SCOPE(TamlXmlWriter_CompileElement);
@@ -65,7 +97,7 @@ TiXmlNode* TamlXmlWriter::compileElement( const TamlWriteNode* pTamlWriteNode )
     if ( referenceId != 0 )
     {
         // Yes, so set reference Id attribute.
-        pElement->SetAttribute( TAML_ID_ATTRIBUTE_NAME, referenceId );
+        pElement->SetAttribute( tamlRefIdName, referenceId );
     }
 
     // Do we have a reference to node?
@@ -78,7 +110,7 @@ TiXmlNode* TamlXmlWriter::compileElement( const TamlWriteNode* pTamlWriteNode )
         AssertFatal( referenceToId != 0, "Taml: Invalid reference to Id." );
 
         // Set reference to Id attribute.
-        pElement->SetAttribute( TAML_REFID_ATTRIBUTE_NAME, referenceToId );
+        pElement->SetAttribute( tamlRefToIdName, referenceToId );
 
         // Finish because we're a reference to another object.
         return pElement;
@@ -91,7 +123,7 @@ TiXmlNode* TamlXmlWriter::compileElement( const TamlWriteNode* pTamlWriteNode )
     if ( pObjectName != NULL )
     {
         // Yes, so set name attribute.
-        pElement->SetAttribute( TAML_OBJECTNAME_ATTRIBUTE_NAME, pObjectName );
+        pElement->SetAttribute( tamlNamedObjectName, pObjectName );
     }
 
     // Compile attributes.
