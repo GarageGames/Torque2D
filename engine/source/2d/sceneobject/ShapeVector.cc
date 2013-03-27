@@ -374,10 +374,10 @@ void ShapeVector::setPolyPrimitive( const U32 polyVertexCount )
     else if ( polyVertexCount == 4 )
     {
         // Yes, so set Quad.
-        mPolygonBasisList[0].Set(-1.0f, -1.0f);
-        mPolygonBasisList[1].Set(+1.0f, -1.0f);
-        mPolygonBasisList[2].Set(+1.0f, +1.0f);
-        mPolygonBasisList[3].Set(-1.0f, +1.0f);
+        mPolygonBasisList[0].Set(-0.5f, -0.5f);
+        mPolygonBasisList[1].Set(+0.5f, -0.5f);
+        mPolygonBasisList[2].Set(+0.5f, +0.5f);
+        mPolygonBasisList[3].Set(-0.5f, +0.5f);
     }
     else
     {
