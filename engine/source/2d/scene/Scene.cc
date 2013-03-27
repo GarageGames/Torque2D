@@ -567,8 +567,8 @@ void Scene::dispatchBeginContactCallbacks( void )
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[5] = { "onCollision", "", sceneObjectABuffer, sceneObjectBBuffer, miscInfoBuffer };
-                pSceneObjectA->callOnBehaviors( 5, args );
+                const char* args[4] = { "onCollision", "", sceneObjectBBuffer, miscInfoBuffer };
+                pSceneObjectA->callOnBehaviors( 4, args );
             }
         }
 
@@ -587,8 +587,8 @@ void Scene::dispatchBeginContactCallbacks( void )
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[5] = { "onCollision", "", sceneObjectBBuffer, sceneObjectABuffer, miscInfoBuffer };
-                pSceneObjectB->callOnBehaviors( 5, args );
+                const char* args[4] = { "onCollision", "", sceneObjectABuffer, miscInfoBuffer };
+                pSceneObjectB->callOnBehaviors( 4, args );
             }
         }
     }
@@ -679,8 +679,8 @@ void Scene::dispatchEndContactCallbacks( void )
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[5] = { "onEndCollision", "", sceneObjectABuffer, sceneObjectBBuffer, miscInfoBuffer };
-                pSceneObjectA->callOnBehaviors( 5, args );
+                const char* args[4] = { "onEndCollision", "", sceneObjectBBuffer, miscInfoBuffer };
+                pSceneObjectA->callOnBehaviors( 4, args );
             }
         }
 
@@ -699,8 +699,8 @@ void Scene::dispatchEndContactCallbacks( void )
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[5] = { "onEndCollision", "", sceneObjectBBuffer, sceneObjectABuffer, miscInfoBuffer };
-                pSceneObjectB->callOnBehaviors( 5, args );
+                const char* args[4] = { "onEndCollision", "", sceneObjectABuffer, miscInfoBuffer };
+                pSceneObjectB->callOnBehaviors( 4, args );
             }
         }
     }
