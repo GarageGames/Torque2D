@@ -61,9 +61,9 @@ function DealsDamageBehavior::explode(%this, %position)
 
 //-----------------------------------------------------------------------------
 
-function DealsDamageBehavior::onCollision(%this, %objectA, %objectB, %collisionDetails)
+function DealsDamageBehavior::onCollision(%this, %object, %collisionDetails)
 {
-    %this.dealDamage(%this.strength, %objectB);
+    %this.dealDamage(%this.strength, %object);
    
     if (%this.deleteOnHit)
     {
