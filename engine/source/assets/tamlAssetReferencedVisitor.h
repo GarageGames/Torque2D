@@ -24,7 +24,7 @@
 #define _TAML_ASSET_REFERENCED_VISITOR_H_
 
 #ifndef _TAML_XMLPARSER_H_
-#include "persistence//taml/tamlXmlParser.h"
+#include "persistence//taml/xml/tamlXmlParser.h"
 #endif
 
 #ifndef _ASSET_FIELD_TYPES_H_

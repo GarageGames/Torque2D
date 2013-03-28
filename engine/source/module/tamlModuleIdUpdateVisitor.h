@@ -24,7 +24,7 @@
 #define _TAML_MODULE_ID_UPDATE_VISITOR_H_
 
 #ifndef _TAML_XMLPARSER_H_
-#include "persistence//taml/tamlXmlParser.h"
+#include "persistence//taml/xml/tamlXmlParser.h"
 #endif
 
 #ifndef _STRINGTABLE_H_

@@ -23,19 +23,27 @@
 #include "taml.h"
 
 #ifndef _TAML_XMLWRITER_H_
-#include "persistence/taml/tamlXmlWriter.h"
+#include "persistence/taml/xml/tamlXmlWriter.h"
 #endif
 
 #ifndef _TAML_XMLREADER_H_
-#include "persistence/taml/tamlXmlReader.h"
+#include "persistence/taml/xml/tamlXmlReader.h"
 #endif
 
 #ifndef _TAML_BINARYWRITER_H_
-#include "persistence/taml/tamlBinaryWriter.h"
+#include "persistence/taml/binary/tamlBinaryWriter.h"
 #endif
 
 #ifndef _TAML_BINARYREADER_H_
-#include "persistence/taml/tamlBinaryReader.h"
+#include "persistence/taml/binary/tamlBinaryReader.h"
+#endif
+
+#ifndef _TAML_JSONWRITER_H_
+#include "persistence/taml/json/tamlJSONWriter.h"
+#endif
+
+#ifndef _TAML_JSONREADER_H_
+#include "persistence/taml/json/tamlJSONReader.h"
 #endif
 
 #ifndef _FRAMEALLOCATOR_H_
@@ -96,6 +104,7 @@ static EnumTable::Enums tamlFormatModeLookup[] =
                 {
                 { Taml::XmlFormat, "xml" },
                 { Taml::BinaryFormat, "binary" },
+                { Taml::JSONFormat, "json" }
                 };
 
 EnumTable tamlFormatModeTable(sizeof(tamlFormatModeLookup) / sizeof(EnumTable::Enums), &tamlFormatModeLookup[0]);
@@ -139,12 +148,14 @@ const char* Taml::getFormatModeDescription(const Taml::TamlFormatMode formatMode
 // The string-table-entries are set to string literals below because Taml is used in a static scope and the string-table cannot currently be used like that.
 Taml::Taml() :
     mFormatMode(XmlFormat),
+    mJSONStrict( true ),
     mBinaryCompression(true),
     mWriteDefaults(false),
     mProgenitorUpdate(true),    
     mAutoFormat(true),
     mAutoFormatXmlExtension("taml"),    
-    mAutoFormatBinaryExtension("baml")
+    mAutoFormatBinaryExtension("baml"),
+    mAutoFormatJSONExtension("json")
 {
     // Reset the file-path buffer.
     mFilePathBuffer[0] = 0;
@@ -158,12 +169,42 @@ void Taml::initPersistFields()
     Parent::initPersistFields();
 
     addField("Format", TypeEnum, Offset(mFormatMode, Taml), 1, &tamlFormatModeTable, "The read/write format that should be used.");
+    addField("JSONStrict", TypeBool, Offset(mBinaryCompression, Taml), "Whether to write JSON that is strictly compatible with RFC4627 or not.\n");
     addField("BinaryCompression", TypeBool, Offset(mBinaryCompression, Taml), "Whether ZIP compression is used on binary formatting or not.\n");
     addField("WriteDefaults", TypeBool, Offset(mWriteDefaults, Taml), "Whether to write static fields that are at their default or not.\n");
     addField("ProgenitorUpdate", TypeBool, Offset(mProgenitorUpdate, Taml), "Whether to update each type instances file-progenitor or not.\n");
     addField("AutoFormat", TypeBool, Offset(mAutoFormat, Taml), "Whether the format type is automatically determined by the filename extension or not.\n");
     addField("AutoFormatXmlExtension", TypeString, Offset(mAutoFormatXmlExtension, Taml), "When using auto-format, this is the extension (end of filename) used to detect the XML format.\n");
     addField("AutoFormatBinaryExtension", TypeString, Offset(mAutoFormatBinaryExtension, Taml), "When using auto-format, this is the extension (end of filename) used to detect the BINARY format.\n");
+    addField("AutoFormatJSONExtension", TypeString, Offset(mAutoFormatJSONExtension, Taml), "When using auto-format, this is the extension (end of filename) used to detect the JSON format.\n");
+}
+
+//-----------------------------------------------------------------------------
+
+bool Taml::onAdd()
+{
+    // Call parent.
+    if ( !Parent::onAdd() )
+        return false;
+
+    // Set JSON strict mode.
+    mJSONStrict = Con::getBoolVariable( TAML_JSON_STRICT_VARIBLE, true );
+
+    // Reset the compilation.
+    resetCompilation();
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
+void Taml::onRemove()
+{
+    // Reset the compilation.
+    resetCompilation();
+
+    // Call parent.
+    Parent::onRemove();
 }
 
 //-----------------------------------------------------------------------------
@@ -274,6 +315,7 @@ bool Taml::write( FileStream& stream, SimObject* pSimObject, const TamlFormatMod
         {
             // Create writer.
             TamlXmlWriter writer( this );
+
             // Write.
             return writer.write( stream, pRootNode );
         }
@@ -283,10 +325,21 @@ bool Taml::write( FileStream& stream, SimObject* pSimObject, const TamlFormatMod
         {
             // Create writer.
             TamlBinaryWriter writer( this );
+
             // Write.
             return writer.write( stream, pRootNode, mBinaryCompression );
         }
-        
+
+        /// JSON.
+        case JSONFormat:
+        {
+            // Create writer.
+            TamlJSONWriter writer( this );
+
+            // Write.
+            return writer.write( stream, pRootNode );
+        }
+
         /// Invalid.
         case InvalidFormat:
         {
@@ -323,6 +376,16 @@ SimObject* Taml::read( FileStream& stream, const TamlFormatMode formatMode )
         {
             // Create reader.
             TamlBinaryReader reader( this );
+
+            // Read.
+            return reader.read( stream );
+        }
+
+        /// JSON.
+        case JSONFormat:
+        {
+            // Create reader.
+            TamlJSONReader reader( this );
 
             // Read.
             return reader.read( stream );
@@ -383,6 +446,7 @@ Taml::TamlFormatMode Taml::getFileAutoFormatMode( const char* pFilename )
         // Yes, so fetch the extension lengths.
         const U32 xmlExtensionLength = dStrlen( mAutoFormatXmlExtension );
         const U32 binaryExtensionLength = dStrlen( mAutoFormatBinaryExtension );
+        const U32 jsonExtensionLength = dStrlen( mAutoFormatJSONExtension );
 
         // Fetch filename length.
         const U32 filenameLength = dStrlen( pFilename );
@@ -397,6 +461,10 @@ Taml::TamlFormatMode Taml::getFileAutoFormatMode( const char* pFilename )
         // Check for the Binary format.
         if ( binaryExtensionLength <= filenameLength && dStricmp( pEndOfFilename - xmlExtensionLength, mAutoFormatBinaryExtension ) == 0 )
             return Taml::BinaryFormat;  
+
+        // Check for the XML format.
+        if ( jsonExtensionLength <= filenameLength && dStricmp( pEndOfFilename - jsonExtensionLength, mAutoFormatJSONExtension ) == 0 )
+            return Taml::JSONFormat;
     }
 
     // Use the explicitly specified format mode.
