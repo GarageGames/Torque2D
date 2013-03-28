@@ -61,31 +61,26 @@ function SandboxInputController::onTouchDown(%this, %touchID, %worldPosition)
         
     // Sanity!
     if ( %this.TouchEventActive[%touchId] == true )
-    {
-        error( "SandboxInputController::onTouchDown() - Touch Id already active." );
-    }
-    else
-    {
-        // Calculate window position.
-        %windowPosition = SandboxWindow.getWindowPoint( %worldPosition );
-
-        // Store the new touch position.
-        %this.NewTouchPosition[%touchId] = %windowPosition;
-            
-        // Set the old touch position as new touch position.
-        %this.OldTouchPosition[%touchId] = %windowPosition;
+        return;
         
-        // Flag event as active.
-        %this.TouchEventActive[%touchId] = true;
+    // Calculate window position.
+    %windowPosition = SandboxWindow.getWindowPoint( %worldPosition );
 
-        // Insert the new touch Id.
-        %this.PreviousTouchId = %this.CurrentTouchId;
-        %this.CurrentTouchId = %touchId;
+    // Store the new touch position.
+    %this.NewTouchPosition[%touchId] = %windowPosition;
+        
+    // Set the old touch position as new touch position.
+    %this.OldTouchPosition[%touchId] = %windowPosition;
+    
+    // Flag event as active.
+    %this.TouchEventActive[%touchId] = true;
 
-        // Increase event count.
-        %this.TouchEventCount++;           
-    }
-                      
+    // Insert the new touch Id.
+    %this.PreviousTouchId = %this.CurrentTouchId;
+    %this.CurrentTouchId = %touchId;
+
+    // Increase event count.
+    %this.TouchEventCount++;                               
            
     // Handle "pull" mode.
     if ( Sandbox.ManipulationMode $= "pull" )
@@ -133,34 +128,30 @@ function SandboxInputController::onTouchUp(%this, %touchID, %worldPosition)
         
     // Sanity!
     if ( %this.TouchEventActive[%touchId] == false )
+        return;
+        
+    // Reset previous touch.
+    %this.OldTouchPosition[%touchId] = "";
+    
+    // Reset current touch.
+    %this.NewTouchPosition[%touchId] = "";
+    
+    // Flag event as inactive.
+    %this.TouchEventActive[%touchId] = false;
+
+    // Remove the touch Id.
+    if ( %this.PreviousTouchId == %touchId )
     {
-        error( "SandboxInputController::onTouchUp() - Touch Id not active." );
+         %this.PreviousTouchId = "";
     }
-    else
-    {    
-        // Reset previous touch.
-        %this.OldTouchPosition[%touchId] = "";
-        
-        // Reset current touch.
-        %this.NewTouchPosition[%touchId] = "";
-        
-        // Flag event as inactive.
-        %this.TouchEventActive[%touchId] = false;
-
-        // Remove the touch Id.
-        if ( %this.PreviousTouchId == %touchId )
-        {
-             %this.PreviousTouchId = "";
-        }
-        if ( %this.CurrentTouchId == %touchId )
-        {
-             %this.CurrentTouchId = %this.PreviousTouchId;
-             %this.PreviousTouchId = "";
-        }
-
-        // Decrease event count.
-        %this.TouchEventCount--;
+    if ( %this.CurrentTouchId == %touchId )
+    {
+         %this.CurrentTouchId = %this.PreviousTouchId;
+         %this.PreviousTouchId = "";
     }
+
+    // Decrease event count.
+    %this.TouchEventCount--;
 
     // Handle "pull" mode.
     if ( Sandbox.ManipulationMode $= "pull" )
@@ -189,20 +180,16 @@ function SandboxInputController::onTouchDragged(%this, %touchID, %worldPosition)
 
     // Sanity!
     if ( %this.TouchEventActive[%touchId] == false )
-    {
-        error( "SandboxInputController::onTouchDraggedEvent() - Touch Id not active." );
-    }
-    else
-    {
-        // Calculate window position.
-        %windowPosition = SandboxWindow.getWindowPoint( %worldPosition );
-
-        // Set the current touch as the previous touch.
-        %this.OldTouchPosition[%touchId] = %this.NewTouchPosition[%touchId];
+        return;
         
-        // Store the touch event.
-        %this.NewTouchPosition[%touchId] = %windowPosition;
-    }
+    // Calculate window position.
+    %windowPosition = SandboxWindow.getWindowPoint( %worldPosition );
+
+    // Set the current touch as the previous touch.
+    %this.OldTouchPosition[%touchId] = %this.NewTouchPosition[%touchId];
+    
+    // Store the touch event.
+    %this.NewTouchPosition[%touchId] = %windowPosition;
         
     // Handle "pan" mode.
     if ( Sandbox.ManipulationMode $= "pan" )
@@ -289,10 +276,7 @@ function SandboxInputController::performPanGesture( %this )
 
     // Sanity!
     if ( %touchId $= "" )
-    {
-        error( "SandboxInputController::performPanGesture() - Current touch Id not available." );
         return;
-    }
 
     // Calculate pan offset.
     %panOffset = Vector2Sub( %this.NewTouchPosition[%touchId], %this.OldTouchPosition[%touchId] );
@@ -321,10 +305,7 @@ function SandboxInputController::performZoomGesture( %this )
 
     // Finish if we don't have touch Ids active.
     if ( !%this.TouchEventActive[%currentTouchId] || !%this.TouchEventActive[%previousTouchId] )
-    {
-        error( "SandboxInputController::performZoomGesture() - Current or previous touch events were no active." );
         return;
-    }
 
     %currentNewPosition = %this.NewTouchPosition[%currentTouchId];
     %currentOldPosition = %this.OldTouchPosition[%currentTouchId];
@@ -396,11 +377,7 @@ function Sandbox::useManipulation( %this, %mode )
 {
     // Is the drag mode available?
     if ( %mode !$= "off" && !Sandbox.ManipulationModeState[%mode] )
-    {
-        // No, so warn.
-        error( "Cannot set sandbox drag mode to " @ %mode @ " as it is currently disabled." );
         return;
-    }
     
     // Set the manipulation mode.
     Sandbox.ManipulationMode = %mode;
