@@ -39,6 +39,9 @@ public:
     {}
     virtual ~TamlParser() {}
 
+    /// Whether the parser can change a property or not.
+    virtual bool canChangeProperty( void ) = 0;
+
     /// Accept visitor.
     virtual bool accept( const char* pFilename, TamlVisitor& visitor ) = 0;
 

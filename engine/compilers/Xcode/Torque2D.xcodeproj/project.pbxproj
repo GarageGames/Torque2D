@@ -23,6 +23,7 @@
 		2ABF5C8F16569A0C00BBBF1D /* osxMutex.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2ABF5C8E16569A0C00BBBF1D /* osxMutex.mm */; };
 		2AC4404516B0142B00FC4091 /* ImageFont.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AC4404316B0142B00FC4091 /* ImageFont.cc */; };
 		2AC5C7E81667C85700A0D046 /* platformStringTests.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AC5C7E71667C85700A0D046 /* platformStringTests.cc */; };
+		2ACAFD4A1705CF4A0022601C /* tamlJSONParser.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ACAFD481705CF4A0022601C /* tamlJSONParser.cc */; };
 		2ACF5A2816E52D4B00F838D9 /* SpriteBatchQuery.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ACF5A2516E52D4B00F838D9 /* SpriteBatchQuery.cc */; };
 		2ACFC0A8166CE1AB00FE7370 /* platformMemoryTests.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ACFC0A7166CE1AB00FE7370 /* platformMemoryTests.cc */; };
 		2AD42140170433FE005BB8AD /* tamlXmlParser.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AD42139170433FE005BB8AD /* tamlXmlParser.cc */; };
@@ -492,6 +493,8 @@
 		2AC4404316B0142B00FC4091 /* ImageFont.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageFont.cc; sourceTree = "<group>"; };
 		2AC4404416B0142B00FC4091 /* ImageFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFont.h; sourceTree = "<group>"; };
 		2AC5C7E71667C85700A0D046 /* platformStringTests.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = platformStringTests.cc; path = ../../../source/testing/tests/platformStringTests.cc; sourceTree = "<group>"; };
+		2ACAFD481705CF4A0022601C /* tamlJSONParser.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tamlJSONParser.cc; path = json/tamlJSONParser.cc; sourceTree = "<group>"; };
+		2ACAFD491705CF4A0022601C /* tamlJSONParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tamlJSONParser.h; path = json/tamlJSONParser.h; sourceTree = "<group>"; };
 		2ACF5A2516E52D4B00F838D9 /* SpriteBatchQuery.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpriteBatchQuery.cc; sourceTree = "<group>"; };
 		2ACF5A2616E52D4B00F838D9 /* SpriteBatchQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteBatchQuery.h; sourceTree = "<group>"; };
 		2ACF5A2716E52D4B00F838D9 /* SpriteBatchQueryResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteBatchQueryResult.h; sourceTree = "<group>"; };
@@ -1474,6 +1477,8 @@
 		2AD42137170433EA005BB8AD /* json */ = {
 			isa = PBXGroup;
 			children = (
+				2ACAFD481705CF4A0022601C /* tamlJSONParser.cc */,
+				2ACAFD491705CF4A0022601C /* tamlJSONParser.h */,
 				2AD4214317043408005BB8AD /* tamlJSONReader.cc */,
 				2AD4214417043408005BB8AD /* tamlJSONReader.h */,
 				2AD4214517043408005BB8AD /* tamlJSONWriter.cc */,
@@ -3380,6 +3385,7 @@
 				2AD4214817043408005BB8AD /* tamlJSONWriter.cc in Sources */,
 				2AD4214D17043413005BB8AD /* tamlBinaryReader.cc in Sources */,
 				2AD4214E17043413005BB8AD /* tamlBinaryWriter.cc in Sources */,
+				2ACAFD4A1705CF4A0022601C /* tamlJSONParser.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

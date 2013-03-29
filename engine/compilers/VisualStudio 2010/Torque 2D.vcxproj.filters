@@ -1326,6 +1326,9 @@
     <ClCompile Include="..\..\source\persistence\taml\xml\tamlXmlWriter.cc">
       <Filter>persistence\taml\xml</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\persistence\taml\json\tamlJSONParser.cc">
+      <Filter>persistence\taml\json</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\audio\audio.h">
@@ -2747,6 +2750,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\persistence\taml\tamlVisitor.h">
       <Filter>persistence\taml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\persistence\taml\json\tamlJSONParser.h">
+      <Filter>persistence\taml\json</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

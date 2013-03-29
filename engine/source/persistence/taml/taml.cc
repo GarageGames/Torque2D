@@ -50,6 +50,10 @@
 #include "persistence/taml/json/tamlJSONReader.h"
 #endif
 
+#ifndef _TAML_JSONPARSER_H_
+#include "persistence/taml/json/tamlJSONParser.h"
+#endif
+
 #ifndef _FRAMEALLOCATOR_H_
 #include "memory/frameAllocator.h"
 #endif
@@ -428,11 +432,35 @@ bool Taml::parse( const char* pFilename, TamlVisitor& visitor )
         case XmlFormat:
         {
             // Parse with the visitor.
-            TamlXmlParser xmlParser;
-            return xmlParser.accept( pFilename, visitor );            
+            TamlXmlParser parser;
+
+            // Are property changes needed but not supported?
+            if ( visitor.wantsPropertyChanges() && !parser.canChangeProperty() )
+            {
+                // Yes, so warn.
+                Con::warnf( "Taml::parse() - Cannot parse '%s' file-type for filename '%s' as a specified visitor requires property changes which are not supported by the parser.", getFormatModeDescription(formatMode), pFilename );
+                return false;
+            }
+
+            return parser.accept( pFilename, visitor );            
         }
 
         case JSONFormat:
+        {
+            // Parse with the visitor.
+            TamlJSONParser parser;
+
+            // Are property changes needed but not supported?
+            if ( visitor.wantsPropertyChanges() && !parser.canChangeProperty() )
+            {
+                // Yes, so warn.
+                Con::warnf( "Taml::parse() - Cannot parse '%s' file-type for filename '%s' as a specified visitor requires property changes which are not supported by the parser.", getFormatModeDescription(formatMode), pFilename );
+                return false;
+            }
+
+            return parser.accept( pFilename, visitor );            
+        }
+
         case BinaryFormat:
         default:
             break;

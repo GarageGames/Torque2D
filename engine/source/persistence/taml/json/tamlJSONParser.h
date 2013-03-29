@@ -20,24 +20,24 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _TAML_XMLPARSER_H_
-#define _TAML_XMLPARSER_H_
+#ifndef _TAML_JSONPARSER_H_
+#define _TAML_JSONPARSER_H_
 
 #ifndef _TAML_PARSER_H_
 #include "persistence/taml/tamlParser.h"
 #endif
 
-#ifndef TINYXML_INCLUDED
-#include "persistence/tinyXML/tinyxml.h"
-#endif
+/// RapidJson.
+#include "rapidjson/document.h"
+#include "rapidjson/prettywriter.h"
 
 //-----------------------------------------------------------------------------
 
-class TamlXmlParser : public TamlParser
+class TamlJSONParser : public TamlParser
 {
 public:
-    TamlXmlParser() {}
-    virtual ~TamlXmlParser() {}
+    TamlJSONParser() {}
+    virtual ~TamlJSONParser() {}
 
     /// Whether the parser can change a property or not.
     virtual bool canChangeProperty( void ) { return true; }
@@ -46,10 +46,10 @@ public:
     virtual bool accept( const char* pFilename, TamlVisitor& visitor );
 
 private:
-    inline bool parseElement( TiXmlElement* pXmlElement, TamlVisitor& visitor );
-    inline bool parseAttributes( TiXmlElement* pXmlElement, TamlVisitor& visitor );
+    inline bool parseType( rapidjson::Value::MemberIterator& memberItr, TamlVisitor& visitor, const bool isRoot );
+    inline bool parseStringValue( char* pBuffer, const S32 bufferSize, const rapidjson::Value& value, const char* pName );
 
     bool mDocumentDirty;
 };
 
-#endif // _TAML_XMLPARSER_H_
+#endif // _TAML_JSONPARSER_H_

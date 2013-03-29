@@ -104,7 +104,7 @@ bool TamlXmlParser::accept( const char* pFilename, TamlVisitor& visitor )
 
 //-----------------------------------------------------------------------------
 
-bool TamlXmlParser::parseElement( TiXmlElement* pXmlElement, TamlVisitor& visitor )
+inline bool TamlXmlParser::parseElement( TiXmlElement* pXmlElement, TamlVisitor& visitor )
 {
     // Debug Profiling.
     PROFILE_SCOPE(TamlXmlParser_ParseElement);
@@ -137,7 +137,7 @@ bool TamlXmlParser::parseElement( TiXmlElement* pXmlElement, TamlVisitor& visito
 
 //-----------------------------------------------------------------------------
 
-bool TamlXmlParser::parseAttributes( TiXmlElement* pXmlElement, TamlVisitor& visitor )
+inline bool TamlXmlParser::parseAttributes( TiXmlElement* pXmlElement, TamlVisitor& visitor )
 {
     // Debug Profiling.
     PROFILE_SCOPE(TamlXmlParser_ParseAttribute);

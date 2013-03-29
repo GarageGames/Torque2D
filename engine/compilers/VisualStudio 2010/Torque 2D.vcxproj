@@ -453,6 +453,7 @@
     <ClCompile Include="..\..\source\network\telnetConsole.cc" />
     <ClCompile Include="..\..\source\persistence\taml\binary\tamlBinaryReader.cc" />
     <ClCompile Include="..\..\source\persistence\taml\binary\tamlBinaryWriter.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\json\tamlJSONParser.cc" />
     <ClCompile Include="..\..\source\persistence\taml\json\tamlJSONReader.cc" />
     <ClCompile Include="..\..\source\persistence\taml\json\tamlJSONWriter.cc" />
     <ClCompile Include="..\..\source\persistence\taml\taml.cc" />
@@ -915,6 +916,7 @@
     <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\writer.h" />
     <ClInclude Include="..\..\source\persistence\taml\binary\tamlBinaryReader.h" />
     <ClInclude Include="..\..\source\persistence\taml\binary\tamlBinaryWriter.h" />
+    <ClInclude Include="..\..\source\persistence\taml\json\tamlJSONParser.h" />
     <ClInclude Include="..\..\source\persistence\taml\json\tamlJSONReader.h" />
     <ClInclude Include="..\..\source\persistence\taml\json\tamlJSONWriter.h" />
     <ClInclude Include="..\..\source\persistence\taml\taml.h" />

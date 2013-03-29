@@ -39,17 +39,24 @@ SimObject* TamlJSONReader::read( FileStream& stream )
     // Read JSON file.
     const U32 streamSize = stream.getStreamSize();
     FrameTemp<char> jsonText( streamSize + 1 );
-    jsonText.getObjectCount();
     if ( !stream.read( streamSize, jsonText ) )
     {
         // Warn!
-        Con::warnf("Taml: Could not load Taml JSON file from stream.");
+        Con::warnf("TamlJSONReader::read() -  Could not load Taml JSON file from stream.");
         return NULL;
     }
 
     // Create JSON document.
     rapidjson::Document document;
     document.Parse<0>( jsonText );
+
+    // Check the document is valid.
+    if ( document.GetType() != rapidjson::kObjectType )
+    {
+        // Warn!
+        Con::warnf("TamlJSONReader::read() -  Load Taml JSON file from stream but was invalid.");
+        return NULL;
+    }
     
     // Parse root value.
     SimObject* pSimObject = parseType( document.MemberBegin() );
@@ -86,7 +93,7 @@ SimObject* TamlJSONReader::parseType( const rapidjson::Value::ConstMemberIterato
     if ( !typeValue.IsObject() )
     {
         // No, so warn.
-        Con::warnf( "Taml: Cannot process type '%s' as it is not an object.", typeName.GetString() );
+        Con::warnf( "TamlJSONReader::parseType() -  Cannot process type '%s' as it is not an object.", typeName.GetString() );
         return NULL;
     }
 
@@ -106,7 +113,7 @@ SimObject* TamlJSONReader::parseType( const rapidjson::Value::ConstMemberIterato
         if ( referenceItr == mObjectReferenceMap.end() )
         {
             // No, so warn.
-            Con::warnf( "Taml: Could not find a reference Id of '%d'", tamlRefToId );
+            Con::warnf( "TamlJSONReader::parseType() -  Could not find a reference Id of '%d'", tamlRefToId );
             return NULL;
         }
 
@@ -242,7 +249,7 @@ inline void TamlJSONReader::parseField( rapidjson::Value::ConstMemberIterator& m
     if ( !parseStringValue( valueBuffer, sizeof(valueBuffer), value, fieldName ) )
     {
         // Warn.
-        Con::warnf( "Taml: Could not interpret value for field '%s'", fieldName );
+        Con::warnf( "Taml::parseField() Could not interpret value for field '%s'", fieldName );
         return;
     }
 
@@ -267,7 +274,7 @@ inline void TamlJSONReader::parseChild( rapidjson::Value::ConstMemberIterator& m
     if ( pChildren == NULL )
     {
         // No, so warn.
-        Con::warnf("Taml: Child member '%s' found under parent '%s' but object cannot have children.",
+        Con::warnf("Taml::parseChild() - Child member '%s' found under parent '%s' but object cannot have children.",
             name.GetString(),
             pSimObject->getClassName() );
 
@@ -291,7 +298,7 @@ inline void TamlJSONReader::parseChild( rapidjson::Value::ConstMemberIterator& m
         if ( !pChildSimObject->getClassRep()->isClass( pContainerChildClass ) )
         {
             // No, so warn.
-            Con::warnf("Taml: Child element '%s' found under parent '%s' but object is restricted to children of type '%s'.",
+            Con::warnf("Taml::parseChild() - Child element '%s' found under parent '%s' but object is restricted to children of type '%s'.",
                 pChildSimObject->getClassName(),
                 pSimObject->getClassName(),
                 pContainerChildClass->getClassName() );
@@ -340,7 +347,7 @@ inline void TamlJSONReader::parseCustom( rapidjson::Value::ConstMemberIterator& 
         if ( !customValue.IsObject() && !customValue.IsArray() )
         {
             // No, so warn.
-            Con::warnf( "Taml: Cannot process custom node name '%s' member as child value is not an object or array.", pCustomNodeName );
+            Con::warnf( "Taml::parseCustom() - Cannot process custom node name '%s' member as child value is not an object or array.", pCustomNodeName );
             return;
         }
 
@@ -398,13 +405,13 @@ inline void TamlJSONReader::parseCustomNode( rapidjson::Value::ConstMemberIterat
             else
             {
                 // Warn.
-                Con::warnf( "Taml: Encountered text in the custom node '%s' but could not interpret the value.", nodeName );
+                Con::warnf( "Taml::parseCustomNode() - Encountered text in the custom node '%s' but could not interpret the value.", nodeName );
             }
         }
         else
         {
             // No, so warn.
-            Con::warnf( "Taml: Encountered text in the custom node '%s' but more than a single element was found in the array.", nodeName );
+            Con::warnf( "Taml::parseCustomNode() - Encountered text in the custom node '%s' but more than a single element was found in the array.", nodeName );
         }
 
         return;
@@ -438,12 +445,12 @@ inline void TamlJSONReader::parseCustomNode( rapidjson::Value::ConstMemberIterat
                 }
 
                 // Warn.
-                Con::warnf( "Taml: Encountered text in the custom node '%s' but could not interpret the value.", fieldName );
+                Con::warnf( "Taml::parseCustomNode() - Encountered text in the custom node '%s' but could not interpret the value.", fieldName );
                 return;
             }
 
             // No, so warn.
-            Con::warnf( "Taml: Encountered text in the custom node '%s' but more than a single element was found in the array.", fieldName );
+            Con::warnf( "Taml::parseCustomNode() - Encountered text in the custom node '%s' but more than a single element was found in the array.", fieldName );
             return;
         }
 
@@ -465,7 +472,7 @@ inline void TamlJSONReader::parseCustomNode( rapidjson::Value::ConstMemberIterat
         if ( !parseStringValue( valueBuffer, sizeof(valueBuffer), childValue, childName.GetString() ) )
         {
             // Warn.
-            Con::warnf( "Taml: Could not interpret value for field '%s'", fieldName );
+            Con::warnf( "Taml::parseCustomNode() - Could not interpret value for field '%s'", fieldName );
             continue;
         }
         
@@ -497,7 +504,7 @@ inline StringTableEntry TamlJSONReader::getDemangledName( const char* pMangledNa
 inline bool TamlJSONReader::parseStringValue( char* pBuffer, const S32 bufferSize, const rapidjson::Value& value, const char* pName )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(TTamlJSONReader_ParseStringValue);
+    PROFILE_SCOPE(TamlJSONReader_ParseStringValue);
 
     // Handle field value appropriately.
 
@@ -562,7 +569,7 @@ inline U32 TamlJSONReader::getTamlRefId( const rapidjson::Value& value )
     if ( !value.IsObject()  )
     {
         // No, so warn.
-        Con::warnf( "Taml: Cannot get '%s' member as value is not an object.", tamlRefIdName );
+        Con::warnf( "Taml::getTamlRefId() - Cannot get '%s' member as value is not an object.", tamlRefIdName );
         return 0;
     }
 
@@ -580,7 +587,7 @@ inline U32 TamlJSONReader::getTamlRefId( const rapidjson::Value& value )
         if ( !memberItr->value.IsInt() )
         {
             // No, so warn.
-            Con::warnf( "Taml: Found '%s' member but it is not an integer.", tamlRefIdName );
+            Con::warnf( "Taml::getTamlRefId() - Found '%s' member but it is not an integer.", tamlRefIdName );
             return 0;
         }
 
@@ -603,7 +610,7 @@ inline U32 TamlJSONReader::getTamlRefToId( const rapidjson::Value& value )
     if ( !value.IsObject()  )
     {
         // No, so warn.
-        Con::warnf( "Taml: Cannot get '%s' member as value is not an object.", tamlRefToIdName );
+        Con::warnf( "Taml::getTamlRefToId() - Cannot get '%s' member as value is not an object.", tamlRefToIdName );
         return 0;
     }
 
@@ -621,7 +628,7 @@ inline U32 TamlJSONReader::getTamlRefToId( const rapidjson::Value& value )
         if ( !memberItr->value.IsInt() )
         {
             // No, so warn.
-            Con::warnf( "Taml: Found '%s' member but it is not an integer.", tamlRefToIdName );
+            Con::warnf( "Taml::getTamlRefToId() - Found '%s' member but it is not an integer.", tamlRefToIdName );
             return 0;
         }
 
@@ -644,7 +651,7 @@ inline const char* TamlJSONReader::getTamlObjectName( const rapidjson::Value& va
     if ( !value.IsObject()  )
     {
         // No, so warn.
-        Con::warnf( "Taml: Cannot get '%s' member as value is not an object.", tamlNamedObjectName );
+        Con::warnf( "Taml::getTamlObjectName() - Cannot get '%s' member as value is not an object.", tamlNamedObjectName );
         return 0;
     }
 
@@ -662,7 +669,7 @@ inline const char* TamlJSONReader::getTamlObjectName( const rapidjson::Value& va
         if ( !memberItr->value.IsString() )
         {
             // No, so warn.
-            Con::warnf( "Taml: Found '%s' member but it is not a string.", tamlNamedObjectName );
+            Con::warnf( "Taml::getTamlObjectName() - Found '%s' member but it is not a string.", tamlNamedObjectName );
             return NULL;
         }
 
