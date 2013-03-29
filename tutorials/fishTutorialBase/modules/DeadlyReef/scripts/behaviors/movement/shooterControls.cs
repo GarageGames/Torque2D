@@ -58,17 +58,10 @@ function ShooterControlsBehavior::onBehaviorRemove(%this)
     if (!isObject(GlobalActionMap))
        return;
 
-    %this.owner.disableUpdateCallback();
-
     GlobalActionMap.unbindObj(getWord(%this.upKey, 0), getWord(%this.upKey, 1), %this);
     GlobalActionMap.unbindObj(getWord(%this.downKey, 0), getWord(%this.downKey, 1), %this);
     GlobalActionMap.unbindObj(getWord(%this.leftKey, 0), getWord(%this.leftKey, 1), %this);
     GlobalActionMap.unbindObj(getWord(%this.rightKey, 0), getWord(%this.rightKey, 1), %this);
-
-    %this.up = 0;
-    %this.down = 0;
-    %this.left = 0;
-    %this.right = 0;
 }
 
 function ShooterControlsBehavior::updateMovement(%this)
