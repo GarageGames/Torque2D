@@ -126,7 +126,7 @@ function CompoundObjectsToy::createCompoundObject( %this, %worldPosition )
     %composite.BatchCulling = false;
     
     // Turn-off batch layout as these sprites will be positioned explicitly.
-    %composite.BatchLayout = "none";
+    %composite.BatchLayout = "off";
     
     // Render everything together, don't sort the sprites with the rest of the scene layer.
     %composite.BatchIsolated = true;

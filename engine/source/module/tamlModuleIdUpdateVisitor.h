@@ -23,12 +23,12 @@
 #ifndef _TAML_MODULE_ID_UPDATE_VISITOR_H_
 #define _TAML_MODULE_ID_UPDATE_VISITOR_H_
 
-#ifndef _TAML_XMLPARSER_H_
-#include "persistence//taml/tamlXmlParser.h"
+#ifndef _TAML_VISITOR_H_
+#include "persistence/taml/tamlVisitor.h"
 #endif
 
-#ifndef _STRINGTABLE_H_
-#include "string/stringTable.h"
+#ifndef _TAML_PARSER_H_
+#include "persistence/taml/tamlParser.h"
 #endif
 
 #ifndef _ASSET_FIELD_TYPES_H_
@@ -37,74 +37,72 @@
 
 //-----------------------------------------------------------------------------
 
-class TamlModuleIdUpdateVisitor : public TamlXmlVisitor
+class TamlModuleIdUpdateVisitor : public TamlVisitor
 {
-protected:
-    virtual bool visit( TiXmlElement* pXmlElement, TamlXmlParser& xmlParser )
-    {
-        // Iterate attributes.
-        for ( TiXmlAttribute* pAttribute = pXmlElement->FirstAttribute(); pAttribute; pAttribute = pAttribute->Next() )
-        {
-            // Fetch attribute value.
-            const char* pAttributeValue = pAttribute->Value();
-
-            // Fetch value length.
-            const U32 valueLenth = dStrlen(pAttributeValue);
-
-            char newAttributeValueBuffer[1024];
-
-            // Is this an expando?
-            if ( *pAttributeValue == '^' )
-            {
-                // Yes, so skip if it's not the correct length.
-                if ( valueLenth < mModuleIdLengthFrom+1 )
-                    continue;
-
-                // Is this the module Id?
-                if ( dStrnicmp( pAttributeValue+1, mModuleIdFrom, mModuleIdLengthFrom ) == 0 )
-                {
-                    // Yes, so format a new value.
-                    dSprintf( newAttributeValueBuffer, sizeof(newAttributeValueBuffer), "^%s%s",
-                        mModuleIdTo, pAttributeValue+1+mModuleIdLengthFrom );
-
-                    // Assign new value.
-                    pAttribute->SetValue( newAttributeValueBuffer );
-                }
-
-                // Skip to next attribute.
-                continue;
-            }
-
-            // Does the field start with the module Id?
-            if ( dStrnicmp( pAttributeValue, mModuleIdFrom, mModuleIdLengthFrom ) == 0 )
-            {
-                // Yes, so format a new value.
-                dSprintf( newAttributeValueBuffer, sizeof(newAttributeValueBuffer), "%s%s",
-                    mModuleIdTo, pAttributeValue+mModuleIdLengthFrom );
-
-                // Assign new value.
-                pAttribute->SetValue( newAttributeValueBuffer );
-            }
-        }
-
-        return true;
-    }
-
-    virtual bool visit( TiXmlAttribute* pAttribute, TamlXmlParser& xmlParser ) { return true; }
+private:    
+    StringTableEntry mModuleIdFrom;
+    StringTableEntry mModuleIdTo;
+    U32 mModuleIdFromLength;
+    U32 mModuleIdToLength;
 
 public:
     TamlModuleIdUpdateVisitor() :
         mModuleIdFrom( StringTable->EmptyString ),
         mModuleIdTo( StringTable->EmptyString ),
-        mModuleIdLengthFrom( 0 ),
-        mModuleIdLengthTo( 0 )      
+        mModuleIdFromLength( 0 ),
+        mModuleIdToLength( 0 )      
         {}
     virtual ~TamlModuleIdUpdateVisitor() {}
 
-    bool parse( const char* pFilename )
+    virtual bool wantsPropertyChanges( void ) { return true; }
+    virtual bool wantsRootOnly( void ) { return true; }
+
+    virtual bool visit( const TamlParser& parser, TamlVisitor::PropertyState& propertyState )
     {
-        TamlXmlParser parser;
-        return parser.parse( pFilename, *this, true );
+        // Debug Profiling.
+        PROFILE_SCOPE(TamlModuleIdUpdateVisitor_Visit);
+
+        // Fetch property value.
+        const char* pPropertyValue = propertyState.getPropertyValue();
+
+        // Fetch value length.
+        const U32 valueLenth = dStrlen(pPropertyValue);
+
+        char newAttributeValueBuffer[1024];
+
+        // Is this an expando?
+        if ( *pPropertyValue == '^' )
+        {
+            // Yes, so finish if it's not the correct length.
+            if ( valueLenth < mModuleIdFromLength+1 )
+                return true;
+
+            // Is this the module Id?
+            if ( dStrnicmp( pPropertyValue+1, mModuleIdFrom, mModuleIdFromLength ) == 0 )
+            {
+                // Yes, so format a new value.
+                dSprintf( newAttributeValueBuffer, sizeof(newAttributeValueBuffer), "^%s%s",
+                    mModuleIdTo, pPropertyValue+1+mModuleIdFromLength );
+
+                // Assign new value.
+                propertyState.updatePropertyValue( newAttributeValueBuffer );
+            }
+
+            return true;
+        }
+
+        // Does the field start with the module Id?
+        if ( dStrnicmp( pPropertyValue, mModuleIdFrom, mModuleIdFromLength ) == 0 )
+        {
+            // Yes, so format a new value.
+            dSprintf( newAttributeValueBuffer, sizeof(newAttributeValueBuffer), "%s%s",
+                mModuleIdTo, pPropertyValue+mModuleIdFromLength );
+
+            // Assign new value.
+            propertyState.updatePropertyValue( newAttributeValueBuffer );
+        }
+
+        return true;
     }
 
     void setModuleIdFrom( const char* pModuleIdFrom )
@@ -114,7 +112,7 @@ public:
 
         // Set module Id.
         mModuleIdFrom = StringTable->insert( pModuleIdFrom );
-        mModuleIdLengthFrom = dStrlen(mModuleIdFrom);
+        mModuleIdFromLength = dStrlen(mModuleIdFrom);
     }
     StringTableEntry getModuleIdFrom( void ) const { return mModuleIdFrom; }
 
@@ -125,15 +123,9 @@ public:
 
         // Set module Id.
         mModuleIdTo = StringTable->insert( pModuleIdTo );
-        mModuleIdLengthTo = dStrlen(mModuleIdTo);
+        mModuleIdToLength = dStrlen(mModuleIdTo);
     }
     const char* getModuleIdTo( void ) const { return mModuleIdTo; }
-
-private:    
-    StringTableEntry mModuleIdFrom;
-    StringTableEntry mModuleIdTo;
-    U32 mModuleIdLengthFrom;
-    U32 mModuleIdLengthTo;
 };
 
 #endif // _TAML_MODULE_ID_UPDATE_VISITOR_H_

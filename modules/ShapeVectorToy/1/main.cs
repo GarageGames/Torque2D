@@ -30,12 +30,11 @@ function ShapeVectorToy::create( %this )
 
     // Set the toy properties
 
-    // Shape determines the poly points for the ShapeVector
-    // "Square": Simple box
-    // "Triangle": Equilateral triangle
-    // "Circle": Simple circle
-    // "Complex": Shape with enough vertices to make an uncommon shape
-    ShapeVectorToy.shape = "Square";
+    // Shape determines the number of vertices for the ShapeVector
+    ShapeVectorToy.shape = 4;
+    
+    // Default shape is a polygon instead of a circle
+    ShapeVectorToy.circle = false;
 
     // Toggles filling the shape with color or leaving as an outline
     ShapeVectorToy.fillMode = true;
@@ -47,7 +46,8 @@ function ShapeVectorToy::create( %this )
     ShapeVectorToy.lineColor = "0.5 1 1 1";
 
     // Add custom controls for toy
-    addSelectionOption("Square,Triangle,Circle,Complex", "Shape", 4, "setShape", true, "Selects the shape to add to the scene");
+    addNumericOption("Vertices Count", 3, 20, 1, "setShape", ShapeVectorToy.shape, true, "Selects the shape to add to the scene based on the number of vertices");
+    addFlagOption("Make a Circle", "setCircle", ShapeVectorToy.circle, true, "Override the number of vertices to make a circle");
     addFlagOption("Fill mode", "setFillMode", ShapeVectorToy.fillMode, true, "Whether new shapes are filled in or not");
 
     // Reset the toy.
@@ -80,6 +80,13 @@ function ShapeVectorToy::setShape( %this, %value )
 
 //-----------------------------------------------------------------------------
 
+function ShapeVectorToy::setCircle(%this, %value)
+{
+    %this.circle = %value;
+}
+
+//-----------------------------------------------------------------------------
+
 function ShapeVectorToy::setFillMode( %this, %value)
 {
     %this.fillMode = %value;
@@ -89,41 +96,23 @@ function ShapeVectorToy::setFillMode( %this, %value)
 
 function ShapeVectorToy::generateShape( %this )
 {
-    // Start with default values
-    %points = "0 0 0 0 0 0";
-    %isCircle = false;
-    %radius = 0;
-    %size = "40";
-
-    // Create the poly point list based on the selected shape
-    switch$(%this.shape)
-    {
-        case "Square":
-            %points = "-0.5 -0.5 0.5 -0.5 0.5 0.5 -0.5 0.5";
-
-        case "Triangle":
-            %points = "-0.0025 0.5 0.5 -0.5 -0.5 -0.5";
-
-        case "Circle":
-            %radius = %size / 2;
-            %isCircle = true;
-
-        case "Complex":
-            %points = "-0.997 0.005 -0.737 -0.750 -0.010 -0.993 0.746 -0.750 0.997 0.005 0.742 0.740 0.005 0.998 -0.761 0.740";
-    }
-
     // Create the shape vector
-    %shape = new ShapeVector()
+    %shape = new ShapeVector();
+    %shape.setPosition("0 0");
+    %shape.setSize(20);
+    %shape.setLineColor(%this.lineColor);
+    %shape.setFillColor(%this.fillColor);
+    %shape.setFillMode(%this.fillMode);
+
+    // Check if circle, if not make an equiangular convex polygon with n number of sides
+    if (%this.circle)
     {
-        position = "0 0";
-        size = %size;
-        LineColor = %this.lineColor;
-        FillColor = %this.fillColor;
-        FillMode = %this.fillMode;
-        PolyList = %points;
-        isCircle = %isCircle;
-        circleRadius = %radius;
-    };
+        %shape.setIsCircle(true);
+        %shape.setCircleRadius(20);
+    }else
+    {
+        %shape.setPolyPrimitive(%this.shape);
+    }
 
     // Return the shape to be added to the scene
     return %shape;

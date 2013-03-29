@@ -132,6 +132,7 @@ static StringTableEntry jointTargetDampingRatioName       = jointDistanceDamping
 static StringTableEntry jointMotorNodeName                = StringTable->insert( "Motor" );
 static StringTableEntry jointMotorLinearOffsetName        = StringTable->insert( "LinearOffset" );
 static StringTableEntry jointMotorAngularOffsetName       = StringTable->insert( "AngularOffset" );
+
 static StringTableEntry jointMotorMaxForceName            = jointFrictionMaxForceName;
 static StringTableEntry jointMotorMaxTorqueName           = jointRevoluteMotorMaxTorqueName;
 static StringTableEntry jointMotorCorrectionFactorName    = StringTable->insert( "CorrectionFactor" );
@@ -566,8 +567,8 @@ void Scene::dispatchBeginContactCallbacks( void )
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[5] = { "onCollision", "", sceneObjectABuffer, sceneObjectBBuffer, miscInfoBuffer };
-                pSceneObjectA->callOnBehaviors( 5, args );
+                const char* args[4] = { "onCollision", "", sceneObjectBBuffer, miscInfoBuffer };
+                pSceneObjectA->callOnBehaviors( 4, args );
             }
         }
 
@@ -586,8 +587,8 @@ void Scene::dispatchBeginContactCallbacks( void )
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[5] = { "onCollision", "", sceneObjectBBuffer, sceneObjectABuffer, miscInfoBuffer };
-                pSceneObjectB->callOnBehaviors( 5, args );
+                const char* args[4] = { "onCollision", "", sceneObjectABuffer, miscInfoBuffer };
+                pSceneObjectB->callOnBehaviors( 4, args );
             }
         }
     }
@@ -678,8 +679,8 @@ void Scene::dispatchEndContactCallbacks( void )
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[5] = { "onEndCollision", "", sceneObjectABuffer, sceneObjectBBuffer, miscInfoBuffer };
-                pSceneObjectA->callOnBehaviors( 5, args );
+                const char* args[4] = { "onEndCollision", "", sceneObjectBBuffer, miscInfoBuffer };
+                pSceneObjectA->callOnBehaviors( 4, args );
             }
         }
 
@@ -698,8 +699,8 @@ void Scene::dispatchEndContactCallbacks( void )
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[5] = { "onEndCollision", "", sceneObjectBBuffer, sceneObjectABuffer, miscInfoBuffer };
-                pSceneObjectB->callOnBehaviors( 5, args );
+                const char* args[4] = { "onEndCollision", "", sceneObjectABuffer, miscInfoBuffer };
+                pSceneObjectB->callOnBehaviors( 4, args );
             }
         }
     }
@@ -2152,6 +2153,60 @@ bool Scene::getRevoluteJointMotor(
     maxMotorTorque = pRealJoint->GetMaxMotorTorque();
 
     return true;
+}
+
+//-----------------------------------------------------------------------------
+
+F32 Scene::getRevoluteJointAngle( const U32 jointId )
+{
+    // Fetch joint.
+    b2Joint* pJoint = findJoint( jointId );
+
+    // Ignore invalid joint.
+    if ( !pJoint )
+        return 0.0f;
+
+    // Fetch joint type.
+    const b2JointType jointType = pJoint->GetType();
+
+    if ( jointType != e_revoluteJoint )
+    {
+        Con::warnf( "Invalid joint type of %s.", getJointTypeDescription(jointType) );
+        return 0.0f;
+    }
+
+    // Cast joint.
+    b2RevoluteJoint* pRealJoint = static_cast<b2RevoluteJoint*>( pJoint );
+
+    // Access joint.
+    return pRealJoint->GetJointAngle();
+}
+
+//-----------------------------------------------------------------------------
+
+F32	Scene::getRevoluteJointSpeed( const U32 jointId )
+{
+    // Fetch joint.
+    b2Joint* pJoint = findJoint( jointId );
+
+    // Ignore invalid joint.
+    if ( !pJoint )
+        return 0.0f;
+
+    // Fetch joint type.
+    const b2JointType jointType = pJoint->GetType();
+
+    if ( jointType != e_revoluteJoint )
+    {
+        Con::warnf( "Invalid joint type of %s.", getJointTypeDescription(jointType) );
+        return 0.0f;
+    }
+
+    // Cast joint.
+    b2RevoluteJoint* pRealJoint = static_cast<b2RevoluteJoint*>( pJoint );
+
+    // Access joint.
+    return pRealJoint->GetJointSpeed();
 }
 
 //-----------------------------------------------------------------------------

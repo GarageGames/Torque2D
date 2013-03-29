@@ -965,6 +965,32 @@ ConsoleMethod(Scene, getRevoluteJointMotor, const char*, 3, 3,  "(jointId) Gets 
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(Scene, getRevoluteJointAngle, F32, 3, 3,      "(jointId) Gets the current angle of a revolute joint.\n"
+                                                            "@param jointId The Id of the joint to use.\n"
+                                                            "@return Returns the joint angle." )
+{
+    // Fetch joint Id.
+    const S32 jointId = dAtoi(argv[2]);
+
+    // Access joint.
+	return object->getRevoluteJointAngle( jointId );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Scene, getRevoluteJointSpeed, F32, 3, 3,  "(jointId) Gets the current speed of a revolute joint.\n"
+                                                        "@param jointId The Id of the joint to use.\n"
+                                                        "@return Returns the joint speed as Angular Velocity" )
+{
+    // Fetch joint Id.
+    const S32 jointId = dAtoi(argv[2]);
+
+    // Access joint.
+	return object->getRevoluteJointSpeed( jointId );
+}
+
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(Scene, createWeldJoint, S32, 4, 11,       "(sceneObjectA, sceneObjectB, [localAnchorA X/Y], [localAnchorB X/Y], [frequency], [dampingRatio], [collideConnected]) Creates a weld joint.\n"
                                                                 "@param sceneObjectA The first scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
                                                                 "@param sceneObjectB The second scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.\n"
@@ -1937,7 +1963,7 @@ ConsoleMethod(Scene, createTargetJoint, S32, 5, 10,     "(sceneObject, worldTarg
 
     if ( argc <= nextArg )
     {
-        return object->createTargetJoint( pSceneObject, worldTarget, maxForce, frequency );
+        return object->createTargetJoint( pSceneObject, worldTarget, maxForce, centerOfMass, frequency );
     }
 
     // Fetch damping ratio.
@@ -1945,13 +1971,13 @@ ConsoleMethod(Scene, createTargetJoint, S32, 5, 10,     "(sceneObject, worldTarg
 
     if ( argc <= nextArg )
     {
-        return object->createTargetJoint( pSceneObject, worldTarget, maxForce, frequency, dampingRatio );
+        return object->createTargetJoint( pSceneObject, worldTarget, maxForce, centerOfMass, frequency, dampingRatio );
     }
 
     // Fetch collide connected.
     const bool collideConnected = dAtob(argv[nextArg++]);
 
-    return object->createTargetJoint( pSceneObject, worldTarget, maxForce, frequency, dampingRatio, collideConnected );
+    return object->createTargetJoint( pSceneObject, worldTarget, maxForce, centerOfMass, frequency, dampingRatio, collideConnected );
 }
 
 //-----------------------------------------------------------------------------

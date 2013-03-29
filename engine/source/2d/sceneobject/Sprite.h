@@ -60,7 +60,6 @@ public:
 protected:
     static bool writeFlipX( void* obj, StringTableEntry pFieldName )        { return static_cast<Sprite*>(obj)->getFlipX() == true; }
     static bool writeFlipY( void* obj, StringTableEntry pFieldName )        { return static_cast<Sprite*>(obj)->getFlipY() == true; }
-
 };
 
 #endif // _SPRITE_H_
