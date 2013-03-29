@@ -23,35 +23,31 @@
 #ifndef _TAML_XMLPARSER_H_
 #define _TAML_XMLPARSER_H_
 
-#ifndef _TAML_XML_VISITOR_H_
-#include "persistence/taml/xml/tamlXmlVisitor.h"
+#ifndef _TAML_PARSER_H_
+#include "persistence/taml/tamlParser.h"
 #endif
 
-#ifndef _TAML_H_
-#include "persistence/taml/taml.h"
+#ifndef TINYXML_INCLUDED
+#include "persistence/tinyXML/tinyxml.h"
 #endif
+
 
 //-----------------------------------------------------------------------------
 
-class TamlXmlParser
+class TamlXmlParser : public TamlParser
 {
 public:
-    TamlXmlParser() :
-        mpParsingFilename( NULL ) {}
+    TamlXmlParser() {}
     virtual ~TamlXmlParser() {}
 
-    /// Parse.
-    bool parse( const char* pFilename, TamlXmlVisitor& visitor, const bool writeDocument );
-
-    /// Filename.
-    inline const char* getParsingFilename( void ) const { return mpParsingFilename; }
+    /// Accept visitor.
+    virtual bool accept( const char* pFilename, TamlVisitor& visitor );
 
 private:
-    const char* mpParsingFilename;
+    bool parseElement( TiXmlElement* pXmlElement, TamlVisitor& visitor );
+    bool parseAttributes( TiXmlElement* pXmlElement, TamlVisitor& visitor );
 
-private:
-    bool parseElement( TiXmlElement* pXmlElement, TamlXmlVisitor& visitor );
-    bool parseAttributes( TiXmlElement* pXmlElement, TamlXmlVisitor& visitor );
+    bool mDocumentDirty;
 };
 
 #endif // _TAML_XMLPARSER_H_

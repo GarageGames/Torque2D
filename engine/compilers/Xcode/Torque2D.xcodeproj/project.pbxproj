@@ -473,6 +473,8 @@
 		2AB14A0216D7CDC200EABBF2 /* PointForceController_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PointForceController_ScriptBinding.h; path = controllers/PointForceController_ScriptBinding.h; sourceTree = "<group>"; };
 		2AB14A0316D7CDC200EABBF2 /* PointForceController.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PointForceController.cc; path = controllers/PointForceController.cc; sourceTree = "<group>"; };
 		2AB14A0416D7CDC300EABBF2 /* PointForceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PointForceController.h; path = controllers/PointForceController.h; sourceTree = "<group>"; };
+		2AB4A5221705A84D0043CBAA /* tamlParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlParser.h; sourceTree = "<group>"; };
+		2AB4A5231705A84D0043CBAA /* tamlVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlVisitor.h; sourceTree = "<group>"; };
 		2AB4C19716DE9F0600B02479 /* GroupedSceneController_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupedSceneController_ScriptBinding.h; path = controllers/core/GroupedSceneController_ScriptBinding.h; sourceTree = "<group>"; };
 		2AB4C19816DE9F0600B02479 /* GroupedSceneController.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GroupedSceneController.cc; path = controllers/core/GroupedSceneController.cc; sourceTree = "<group>"; };
 		2AB4C19916DE9F0600B02479 /* GroupedSceneController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupedSceneController.h; path = controllers/core/GroupedSceneController.h; sourceTree = "<group>"; };
@@ -515,7 +517,6 @@
 		2AD4213A170433FE005BB8AD /* tamlXmlParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tamlXmlParser.h; path = xml/tamlXmlParser.h; sourceTree = "<group>"; };
 		2AD4213B170433FE005BB8AD /* tamlXmlReader.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tamlXmlReader.cc; path = xml/tamlXmlReader.cc; sourceTree = "<group>"; };
 		2AD4213C170433FE005BB8AD /* tamlXmlReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tamlXmlReader.h; path = xml/tamlXmlReader.h; sourceTree = "<group>"; };
-		2AD4213D170433FE005BB8AD /* tamlXmlVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tamlXmlVisitor.h; path = xml/tamlXmlVisitor.h; sourceTree = "<group>"; };
 		2AD4213E170433FE005BB8AD /* tamlXmlWriter.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tamlXmlWriter.cc; path = xml/tamlXmlWriter.cc; sourceTree = "<group>"; };
 		2AD4213F170433FE005BB8AD /* tamlXmlWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tamlXmlWriter.h; path = xml/tamlXmlWriter.h; sourceTree = "<group>"; };
 		2AD4214317043408005BB8AD /* tamlJSONReader.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tamlJSONReader.cc; path = json/tamlJSONReader.cc; sourceTree = "<group>"; };
@@ -1488,7 +1489,6 @@
 				2AD4213A170433FE005BB8AD /* tamlXmlParser.h */,
 				2AD4213B170433FE005BB8AD /* tamlXmlReader.cc */,
 				2AD4213C170433FE005BB8AD /* tamlXmlReader.h */,
-				2AD4213D170433FE005BB8AD /* tamlXmlVisitor.h */,
 				2AD4213E170433FE005BB8AD /* tamlXmlWriter.cc */,
 				2AD4213F170433FE005BB8AD /* tamlXmlWriter.h */,
 			);
@@ -2717,6 +2717,8 @@
 		86BC80F216518D4600D96ADF /* taml */ = {
 			isa = PBXGroup;
 			children = (
+				2AB4A5221705A84D0043CBAA /* tamlParser.h */,
+				2AB4A5231705A84D0043CBAA /* tamlVisitor.h */,
 				2AD42138170433F3005BB8AD /* xml */,
 				2AD42137170433EA005BB8AD /* json */,
 				2AD42136170433E4005BB8AD /* binary */,

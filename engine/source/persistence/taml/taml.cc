@@ -30,6 +30,10 @@
 #include "persistence/taml/xml/tamlXmlReader.h"
 #endif
 
+#ifndef _TAML_XMLPARSER_H_
+#include "persistence/taml/xml/tamlXmlParser.h"
+#endif
+
 #ifndef _TAML_BINARYWRITER_H_
 #include "persistence/taml/binary/tamlBinaryWriter.h"
 #endif
@@ -407,6 +411,40 @@ SimObject* Taml::read( FileStream& stream, const TamlFormatMode formatMode )
 
 //-----------------------------------------------------------------------------
 
+bool Taml::parse( const char* pFilename, TamlVisitor& visitor )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(Taml_Parse);
+
+    // Sanity!
+    AssertFatal( pFilename != NULL, "Taml::parse() - Cannot parse a NULL filename." );
+
+    // Fetch format mode.
+    const TamlFormatMode formatMode = getFileAutoFormatMode( pFilename );
+
+    // Handle format mode appropriately.
+    switch( formatMode )
+    {
+        case XmlFormat:
+        {
+            // Parse with the visitor.
+            TamlXmlParser xmlParser;
+            return xmlParser.accept( pFilename, visitor );            
+        }
+
+        case JSONFormat:
+        case BinaryFormat:
+        default:
+            break;
+    }
+
+    // Warn.
+    Con::warnf( "Taml::parse() - Cannot parse '%s' file-type for filename '%s' as a required parser is not available.", getFormatModeDescription(formatMode), pFilename );
+    return false;
+}
+
+//-----------------------------------------------------------------------------
+
 void Taml::resetCompilation( void )
 {
     // Debug Profiling.
@@ -438,7 +476,7 @@ void Taml::resetCompilation( void )
 Taml::TamlFormatMode Taml::getFileAutoFormatMode( const char* pFilename )
 {
     // Sanity!
-    AssertFatal( pFilename != NULL, "Cannot auto-format using a NULL filename." );
+    AssertFatal( pFilename != NULL, "Taml::getFileAutoFormatMode() - Cannot auto-format using a NULL filename." );
 
     // Is auto-format active?
     if ( mAutoFormat )
@@ -479,7 +517,7 @@ TamlWriteNode* Taml::compileObject( SimObject* pSimObject, const bool forceId )
     PROFILE_SCOPE(Taml_CompileObject);
 
     // Sanity!
-    AssertFatal( pSimObject != NULL, "Cannot compile a NULL object." );
+    AssertFatal( pSimObject != NULL, "Taml::compileObject() - Cannot compile a NULL object." );
 
     // Fetch object Id.
     const SimObjectId objectId = pSimObject->getId();
@@ -491,7 +529,7 @@ TamlWriteNode* Taml::compileObject( SimObject* pSimObject, const bool forceId )
     if ( compiledItr != mCompiledObjects.end() )
     {
         // Yes, so sanity!
-        AssertFatal( mCompiledNodes.size() != 0, "Found a compiled node at the root." );
+        AssertFatal( mCompiledNodes.size() != 0, "Taml::compileObject() - Found a compiled node at the root." );
 
         // Yes, so fetch node.
         TamlWriteNode* compiledNode = compiledItr->value;

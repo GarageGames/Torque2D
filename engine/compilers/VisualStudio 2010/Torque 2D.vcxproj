@@ -921,11 +921,12 @@
     <ClInclude Include="..\..\source\persistence\taml\tamlCallbacks.h" />
     <ClInclude Include="..\..\source\persistence\taml\tamlChildren.h" />
     <ClInclude Include="..\..\source\persistence\taml\tamlCustom.h" />
+    <ClInclude Include="..\..\source\persistence\taml\tamlParser.h" />
+    <ClInclude Include="..\..\source\persistence\taml\tamlVisitor.h" />
     <ClInclude Include="..\..\source\persistence\taml\tamlWriteNode.h" />
     <ClInclude Include="..\..\source\persistence\taml\taml_ScriptBinding.h" />
     <ClInclude Include="..\..\source\persistence\taml\xml\tamlXmlParser.h" />
     <ClInclude Include="..\..\source\persistence\taml\xml\tamlXmlReader.h" />
-    <ClInclude Include="..\..\source\persistence\taml\xml\tamlXmlVisitor.h" />
     <ClInclude Include="..\..\source\persistence\taml\xml\tamlXmlWriter.h" />
     <ClInclude Include="..\..\source\persistence\tinyXML\tinystr.h" />
     <ClInclude Include="..\..\source\persistence\tinyXML\tinyxml.h" />

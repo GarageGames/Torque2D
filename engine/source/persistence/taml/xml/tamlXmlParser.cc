@@ -21,20 +21,23 @@
 //-----------------------------------------------------------------------------
 
 #include "persistence/taml/xml/tamlXmlParser.h"
+#include "persistence/taml/tamlVisitor.h"
+#include "console/console.h"
 
 // Debug Profiling.
 #include "debug/profiler.h"
 
 //-----------------------------------------------------------------------------
 
-bool TamlXmlParser::parse( const char* pFilename, TamlXmlVisitor& visitor, const bool writeDocument )
+bool TamlXmlParser::accept( const char* pFilename, TamlVisitor& visitor )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(TamlXmlParser_Parse);
+    PROFILE_SCOPE(TamlXmlParser_Accept);
 
     // Sanity!
     AssertFatal( pFilename != NULL, "Cannot parse a NULL filename." );
 
+    // Expand the file-path.
     char filenameBuffer[1024];
     Con::expandPath( filenameBuffer, sizeof(filenameBuffer), pFilename );
 
@@ -62,53 +65,56 @@ bool TamlXmlParser::parse( const char* pFilename, TamlXmlVisitor& visitor, const
     stream.close();
 
     // Set parsing filename.
-    mpParsingFilename = filenameBuffer;
+    setParsingFilename( filenameBuffer );
+
+    // Flag document as not dirty.
+    mDocumentDirty = false;
 
     // Parse root element.
     parseElement( xmlDocument.RootElement(), visitor );
 
     // Reset parsing filename.
-    mpParsingFilename = NULL;
+    setParsingFilename( StringTable->EmptyString );
 
-    // Are we writing the document?
-    if ( writeDocument )
+    // Finish if the document is not dirty.
+    if ( !mDocumentDirty )
+        return true;
+
+    // Open for write?
+    if ( !stream.open( filenameBuffer, FileStream::Write ) )
     {
-        // Yes, so open for write?
-        if ( !stream.open( filenameBuffer, FileStream::Write ) )
-        {
-            // No, so warn.
-            Con::warnf("TamlXmlParser::parse() - Could not open filename '%s' for write.", filenameBuffer );
-            return false;
-        }
-
-        // Yes, so save the document.
-        if ( !xmlDocument.SaveFile( stream ) )
-        {
-            // Warn!
-            Con::warnf("TamlXmlParser: Could not save Taml XML document.");
-            return false;
-        }
-
-        // Close the stream.
-        stream.close();
+        // No, so warn.
+        Con::warnf("TamlXmlParser::parse() - Could not open filename '%s' for write.", filenameBuffer );
+        return false;
     }
+
+    // Yes, so save the document.
+    if ( !xmlDocument.SaveFile( stream ) )
+    {
+        // Warn!
+        Con::warnf("TamlXmlParser: Could not save Taml XML document.");
+        return false;
+    }
+
+    // Close the stream.
+    stream.close();
 
     return true;
 }
 
 //-----------------------------------------------------------------------------
 
-bool TamlXmlParser::parseElement( TiXmlElement* pXmlElement, TamlXmlVisitor& visitor )
+bool TamlXmlParser::parseElement( TiXmlElement* pXmlElement, TamlVisitor& visitor )
 {
     // Debug Profiling.
     PROFILE_SCOPE(TamlXmlParser_ParseElement);
 
-    // Visit this element (stop processing if instructed).
-    if ( !visitor.visit( pXmlElement, *this ) )
-        return false;
-
     // Parse attributes (stop processing if instructed).
     if ( !parseAttributes( pXmlElement, visitor ) )
+        return false;
+
+    // Finish if only the root is needed.
+    if ( visitor.wantsRootOnly() )
         return false;
 
     // Fetch any children.
@@ -131,16 +137,39 @@ bool TamlXmlParser::parseElement( TiXmlElement* pXmlElement, TamlXmlVisitor& vis
 
 //-----------------------------------------------------------------------------
 
-bool TamlXmlParser::parseAttributes( TiXmlElement* pXmlElement, TamlXmlVisitor& visitor )
+bool TamlXmlParser::parseAttributes( TiXmlElement* pXmlElement, TamlVisitor& visitor )
 {
     // Debug Profiling.
     PROFILE_SCOPE(TamlXmlParser_ParseAttribute);
 
+    // Calculate if element is at the root or not.
+    const bool isRoot = pXmlElement->GetDocument()->RootElement() == pXmlElement;
+
+    // Create a visitor property state.
+    TamlVisitor::PropertyState propertyState;
+    propertyState.setObjectName( pXmlElement->Value(), isRoot );
+
     // Iterate attributes.
     for ( TiXmlAttribute* pAttribute = pXmlElement->FirstAttribute(); pAttribute; pAttribute = pAttribute->Next() )
     {
-        // Visit this attribute (stop processing if instructed).
-        if ( !visitor.visit( pAttribute, *this ) )
+        // Configure property state.
+        propertyState.setProperty( pAttribute->Name(), pAttribute->Value() );
+
+        // Visit this attribute.
+        const bool visitStatus = visitor.visit( *this, propertyState );
+
+        // Was the property value changed?
+        if ( propertyState.getPropertyValueDirty() )
+        {
+            // Yes, so update the attribute.
+            pAttribute->SetValue( propertyState.getPropertyValue() );
+
+            // Flag the document as dirty.
+            mDocumentDirty = true;
+        }
+
+        // Finish if requested.
+        if ( !visitStatus )
             return false;
     }
 

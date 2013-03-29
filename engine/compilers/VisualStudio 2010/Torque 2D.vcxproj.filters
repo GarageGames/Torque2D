@@ -2739,11 +2739,14 @@
     <ClInclude Include="..\..\source\persistence\taml\xml\tamlXmlReader.h">
       <Filter>persistence\taml\xml</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\persistence\taml\xml\tamlXmlVisitor.h">
-      <Filter>persistence\taml\xml</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\persistence\taml\xml\tamlXmlWriter.h">
       <Filter>persistence\taml\xml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\persistence\taml\tamlParser.h">
+      <Filter>persistence\taml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\persistence\taml\tamlVisitor.h">
+      <Filter>persistence\taml</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

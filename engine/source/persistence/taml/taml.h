@@ -36,7 +36,11 @@
 #endif
 
 #ifndef _TAML_WRITE_NODE_H_
-#include "persistence/taml/TamlWriteNode.h"
+#include "persistence/taml/tamlWriteNode.h"
+#endif
+
+#ifndef _TAML_VISITOR_H_
+#include "persistence/taml/tamlVisitor.h"
 #endif
 
 #ifndef _SIMBASE_H_
@@ -178,10 +182,10 @@ public:
     }
     SimObject* read( const char* pFilename );
 
-    static TamlFormatMode getFormatModeEnum( const char* label );
-    static const char* getFormatModeDescription( const TamlFormatMode formatMode );
+    /// Parse.
+    bool parse( const char* pFilename, TamlVisitor& visitor );
 
-    // Create type.
+    /// Create type.
     static SimObject* createType( StringTableEntry typeName, const Taml* pTaml, const char* pProgenitorSuffix = NULL );
 
     /// Schema generation.
@@ -189,6 +193,10 @@ public:
 
     /// Write a unrestricted custom Taml schema.
     static void WriteUnrestrictedCustomTamlSchema( const char* pCustomNodeName, const AbstractClassRep* pClassRep, TiXmlElement* pParentElement );
+
+    /// Get format mode info.
+    static TamlFormatMode getFormatModeEnum( const char* label );
+    static const char* getFormatModeDescription( const TamlFormatMode formatMode );
 
     /// Taml callbacks.
     inline void tamlPreWrite( TamlCallbacks* pCallbacks )                                           { pCallbacks->onTamlPreWrite(); }

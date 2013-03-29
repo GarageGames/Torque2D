@@ -20,34 +20,34 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _TAML_XML_VISITOR_H_
-#define _TAML_XML_VISITOR_H_
+#ifndef _TAML_PARSER_H_
+#define _TAML_PARSER_H_
 
-#ifndef TINYXML_INCLUDED
-#include "persistence/tinyXML/tinyxml.h"
-#endif
+#include "string/stringTable.h"
 
 //-----------------------------------------------------------------------------
 
-class TamlXmlParser;
+class TamlVisitor;
 
 //-----------------------------------------------------------------------------
 
-class TamlXmlVisitor
+class TamlParser
 {
-private:
-    friend class TamlXmlParser;
-
 public:
-    TamlXmlVisitor() {}
-    virtual ~TamlXmlVisitor() {}
+    TamlParser() :
+        mParsingFilename(StringTable->EmptyString)
+    {}
+    virtual ~TamlParser() {}
 
-    /// Parsing.
-    virtual bool parse( const char* pFilename ) = 0;
+    /// Accept visitor.
+    virtual bool accept( const char* pFilename, TamlVisitor& visitor ) = 0;
 
-protected:
-    virtual bool visit( TiXmlElement* pXmlElement, TamlXmlParser& xmlParser ) = 0;
-    virtual bool visit( TiXmlAttribute* pAttribute, TamlXmlParser& xmlParser ) = 0;
+    /// Filename.
+    inline void setParsingFilename( const char* pFilename ) { mParsingFilename = StringTable->insert(pFilename); }
+    inline StringTableEntry getParsingFilename( void ) const { return mParsingFilename; }
+
+private:
+    StringTableEntry mParsingFilename;
 };
 
-#endif // _TAML_XML_VISITOR_H_
+#endif // _TAML_PARSER_H_
