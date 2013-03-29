@@ -1883,9 +1883,6 @@
     <ClInclude Include="..\..\source\assets\assetFieldTypes.h">
       <Filter>assets</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\assets\tamlAssetUpdateVisitor.h">
-      <Filter>assets</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\assets\tamlAssetDeclaredVisitor.h">
       <Filter>assets</Filter>
     </ClInclude>
