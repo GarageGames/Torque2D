@@ -50,7 +50,7 @@
 //-----------------------------------------------------------------------------
 
 #define BATCHRENDER_BUFFERSIZE      (65535)
-#define BATCHRENDER_MAXQUADS        (BATCHRENDER_BUFFERSIZE/6)
+#define BATCHRENDER_MAXTRIANGLES    (BATCHRENDER_BUFFERSIZE/3)
 
 //-----------------------------------------------------------------------------
 
@@ -60,6 +60,58 @@ class SceneRenderRequest;
 
 class BatchRender
 {
+private:
+    struct TriangleRun
+    {
+        enum PrimitiveMode
+        {
+            TRIANGLE,
+            QUAD,
+        };
+
+        TriangleRun( const PrimitiveMode primitive, const U32 primitiveCount, const U32 startIndex ) :
+            mPrimitiveMode( primitive ),
+            mPrimitiveCount( primitiveCount ),
+            mStartIndex( startIndex )
+        { }
+
+        PrimitiveMode mPrimitiveMode;
+        U32 mPrimitiveCount;
+        U32 mStartIndex;
+    };
+
+    typedef Vector<TriangleRun> indexVectorType;
+    typedef HashMap<U32, indexVectorType*> textureBatchType;
+
+    VectorPtr< indexVectorType* > mIndexVectorPool;
+    textureBatchType    mTextureBatchMap;
+
+    const ColorF        NoColor;
+
+    Vector2             mVertexBuffer[ BATCHRENDER_BUFFERSIZE ];
+    Vector2             mTextureBuffer[ BATCHRENDER_BUFFERSIZE ];
+    U16                 mIndexBuffer[ BATCHRENDER_BUFFERSIZE ];
+    ColorF              mColorBuffer[ BATCHRENDER_BUFFERSIZE ];
+   
+    U32                 mTriangleCount;
+    U32                 mVertexCount;
+    U32                 mTextureCoordCount;
+    U32                 mIndexCount;
+    U32                 mColorCount;
+
+    bool                mBlendMode;
+    GLenum              mSrcBlendFactor;
+    GLenum              mDstBlendFactor;
+    ColorF              mBlendColor;
+    F32                 mAlphaTestMode;
+
+    bool                mStrictOrderMode;
+    TextureHandle       mStrictOrderTextureHandle;
+    DebugStats*         mpDebugStats;
+
+    bool                mWireframeMode;
+    bool                mBatchEnabled;
+
 public:
     BatchRender();
     virtual ~BatchRender();
@@ -117,7 +169,7 @@ public:
     void setBlendMode( const SceneRenderRequest* pSceneRenderRequest );
 
     /// Set alpha-test mode.
-    inline void setAlphaTestMode( const F32 alphaTestMode )
+    void setAlphaTestMode( const F32 alphaTestMode )
     {
         // Ignore no change.
         if ( mIsEqual( mAlphaTestMode, alphaTestMode ) )
@@ -167,6 +219,19 @@ public:
     /// Sets the debug stats to use.
     inline void setDebugStats( DebugStats* pDebugStats ) { mpDebugStats = pDebugStats; }
 
+    /// Submit triangles for batching.
+    /// Vertex and textures are indexed as:
+    ///  2        5
+    ///   |\      |\
+    ///   | \     | \
+    ///  0| _\1  3| _\4
+    void SubmitTriangles(
+            const U32 vertexCount,
+            const Vector2* pVertexArray,
+            const Vector2* pTextureArray,
+            TextureHandle& texture,
+            const ColorF& color = ColorF(-1.0f, -1.0f, -1.0f) );
+
     /// Submit a quad for batching.
     /// Vertex and textures are indexed as:
     ///  3 ___ 2
@@ -200,7 +265,19 @@ public:
             const Vector2& texturePos0,
             const Vector2& texturePos1,
             const Vector2& texturePos2,
-            const Vector2& texturePos3 );
+            const Vector2& texturePos3 )
+    {
+        glBegin( GL_TRIANGLE_STRIP );
+            glTexCoord2f( texturePos0.x, texturePos0.y );
+            glVertex2f( vertexPos0.x, vertexPos0.y );
+            glTexCoord2f( texturePos1.x, texturePos1.y );
+            glVertex2f( vertexPos1.x, vertexPos1.y );
+            glTexCoord2f( texturePos3.x, texturePos3.y );
+            glVertex2f( vertexPos3.x, vertexPos3.y );
+            glTexCoord2f( texturePos2.x, texturePos2.y );
+            glVertex2f( vertexPos2.x, vertexPos2.y );
+        glEnd();
+    }
 
     /// Flush (render) any pending batches with a reason metric.
     void flush( U32& reasonMetric );
@@ -212,38 +289,8 @@ private:
     /// Flush (render) any pending batches.
     void flushInternal( void );
 
-private:
-    typedef Vector<U32> indexVectorType;
-    typedef HashMap<U32, indexVectorType*> textureBatchType;
-
-    VectorPtr< indexVectorType* > mIndexVectorPool;
-    textureBatchType    mTextureBatchMap;
-
-    const ColorF        NoColor;
-
-    Vector2             mVertexBuffer[ BATCHRENDER_BUFFERSIZE ];
-    Vector2             mTextureBuffer[ BATCHRENDER_BUFFERSIZE ];
-    U16                 mIndexBuffer[ BATCHRENDER_BUFFERSIZE ];
-    ColorF              mColorBuffer[ BATCHRENDER_BUFFERSIZE ];
-   
-    U32                 mQuadCount;
-    U32                 mVertexCount;
-    U32                 mTextureResidentCount;
-    U32                 mIndexCount;
-    U32                 mColorCount;
-
-    bool                mBlendMode;
-    GLenum              mSrcBlendFactor;
-    GLenum              mDstBlendFactor;
-    ColorF              mBlendColor;
-    F32                 mAlphaTestMode;
-
-    bool                mStrictOrderMode;
-    TextureHandle       mStrictOrderTextureHandle;
-    DebugStats*         mpDebugStats;
-
-    bool                mWireframeMode;
-    bool                mBatchEnabled;
+    /// Find texture batch.
+    indexVectorType* findTextureBatch( TextureHandle& handle );
 };
 
 #endif
