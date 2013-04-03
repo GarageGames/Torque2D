@@ -178,6 +178,8 @@
 		866381E51655615200C8C551 /* osxInput.mm in Sources */ = {isa = PBXBuildFile; fileRef = 866381E41655615200C8C551 /* osxInput.mm */; };
 		866381E91655674B00C8C551 /* osxTime.mm in Sources */ = {isa = PBXBuildFile; fileRef = 866381E81655674B00C8C551 /* osxTime.mm */; };
 		86854E341663AAE6009FAFB2 /* osxOpenGLDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 86854E331663AAE6009FAFB2 /* osxOpenGLDevice.mm */; };
+		868DA9D1170CC5840051E061 /* SkeletonAsset.cc in Sources */ = {isa = PBXBuildFile; fileRef = 868DA9CF170CC5840051E061 /* SkeletonAsset.cc */; };
+		868DA9D5170CC5CD0051E061 /* SkeletonObject.cc in Sources */ = {isa = PBXBuildFile; fileRef = 868DA9D3170CC5CD0051E061 /* SkeletonObject.cc */; };
 		8694ADC81656B06B0080ABAC /* osxEvents.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8694ADC51656B06B0080ABAC /* osxEvents.mm */; };
 		8694ADC91656B06B0080ABAC /* osxWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8694ADC61656B06B0080ABAC /* osxWindow.mm */; };
 		8694ADD11656B7FC0080ABAC /* osxVideo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8694ADD01656B7FC0080ABAC /* osxVideo.mm */; };
@@ -744,6 +746,12 @@
 		866381E81655674B00C8C551 /* osxTime.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = osxTime.mm; sourceTree = "<group>"; };
 		86854E321663AAE6009FAFB2 /* osxOpenGLDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = osxOpenGLDevice.h; sourceTree = "<group>"; };
 		86854E331663AAE6009FAFB2 /* osxOpenGLDevice.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = osxOpenGLDevice.mm; sourceTree = "<group>"; };
+		868DA9CE170CC5840051E061 /* SkeletonAsset_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonAsset_ScriptBinding.h; sourceTree = "<group>"; };
+		868DA9CF170CC5840051E061 /* SkeletonAsset.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SkeletonAsset.cc; sourceTree = "<group>"; };
+		868DA9D0170CC5840051E061 /* SkeletonAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonAsset.h; sourceTree = "<group>"; };
+		868DA9D2170CC5CD0051E061 /* SkeletonObject_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonObject_ScriptBinding.h; sourceTree = "<group>"; };
+		868DA9D3170CC5CD0051E061 /* SkeletonObject.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SkeletonObject.cc; sourceTree = "<group>"; };
+		868DA9D4170CC5CD0051E061 /* SkeletonObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonObject.h; sourceTree = "<group>"; };
 		8694ADC41656B06B0080ABAC /* osxEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = osxEvents.h; sourceTree = "<group>"; };
 		8694ADC51656B06B0080ABAC /* osxEvents.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = osxEvents.mm; sourceTree = "<group>"; };
 		8694ADC61656B06B0080ABAC /* osxWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = osxWindow.mm; sourceTree = "<group>"; };
@@ -1930,6 +1938,9 @@
 		86BC7E7616518D4600D96ADF /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				868DA9CE170CC5840051E061 /* SkeletonAsset_ScriptBinding.h */,
+				868DA9CF170CC5840051E061 /* SkeletonAsset.cc */,
+				868DA9D0170CC5840051E061 /* SkeletonAsset.h */,
 				2AF80CFF16A80CB400CE13F1 /* ParticleAssetEmitter_ScriptBinding.h */,
 				2AE5B54016A6D860006908D5 /* ParticleAssetFieldCollection.cc */,
 				2AE5B54116A6D860006908D5 /* ParticleAssetFieldCollection.h */,
@@ -2033,6 +2044,9 @@
 		86BC7EB716518D4600D96ADF /* sceneobject */ = {
 			isa = PBXGroup;
 			children = (
+				868DA9D2170CC5CD0051E061 /* SkeletonObject_ScriptBinding.h */,
+				868DA9D3170CC5CD0051E061 /* SkeletonObject.cc */,
+				868DA9D4170CC5CD0051E061 /* SkeletonObject.h */,
 				2AA6865A16D69943003CEF0A /* SceneObjectList.cc */,
 				2AA6865B16D69943003CEF0A /* SceneObjectList.h */,
 				2AA6865C16D69943003CEF0A /* SceneObjectSet_ScriptBinding.h */,
@@ -3386,6 +3400,8 @@
 				2AD4214D17043413005BB8AD /* tamlBinaryReader.cc in Sources */,
 				2AD4214E17043413005BB8AD /* tamlBinaryWriter.cc in Sources */,
 				2ACAFD4A1705CF4A0022601C /* tamlJSONParser.cc in Sources */,
+				868DA9D1170CC5840051E061 /* SkeletonAsset.cc in Sources */,
+				868DA9D5170CC5CD0051E061 /* SkeletonObject.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

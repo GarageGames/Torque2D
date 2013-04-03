@@ -481,6 +481,8 @@
 		86A9A3FE16AEC836003F01E6 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86A9A3E416AEC817003F01E6 /* OpenAL.framework */; };
 		86A9A3FF16AEC836003F01E6 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86A9A3E516AEC817003F01E6 /* OpenGLES.framework */; };
 		86A9A40016AEC836003F01E6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86A9A3E616AEC817003F01E6 /* QuartzCore.framework */; };
+		86B2F10C170CD22E003D4645 /* SkeletonAsset.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86B2F10A170CD22E003D4645 /* SkeletonAsset.cc */; };
+		86B2F110170CD23B003D4645 /* SkeletonObject.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86B2F10E170CD23B003D4645 /* SkeletonObject.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1441,6 +1443,12 @@
 		86A9A3E416AEC817003F01E6 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		86A9A3E516AEC817003F01E6 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		86A9A3E616AEC817003F01E6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		86B2F109170CD22E003D4645 /* SkeletonAsset_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonAsset_ScriptBinding.h; sourceTree = "<group>"; };
+		86B2F10A170CD22E003D4645 /* SkeletonAsset.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SkeletonAsset.cc; sourceTree = "<group>"; };
+		86B2F10B170CD22E003D4645 /* SkeletonAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonAsset.h; sourceTree = "<group>"; };
+		86B2F10D170CD23B003D4645 /* SkeletonObject_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonObject_ScriptBinding.h; sourceTree = "<group>"; };
+		86B2F10E170CD23B003D4645 /* SkeletonObject.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SkeletonObject.cc; sourceTree = "<group>"; };
+		86B2F10F170CD23B003D4645 /* SkeletonObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonObject.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1682,6 +1690,9 @@
 		867BACF916AEC9050033868F /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				86B2F109170CD22E003D4645 /* SkeletonAsset_ScriptBinding.h */,
+				86B2F10A170CD22E003D4645 /* SkeletonAsset.cc */,
+				86B2F10B170CD22E003D4645 /* SkeletonAsset.h */,
 				867BACFA16AEC9050033868F /* AnimationAsset.cc */,
 				867BACFB16AEC9050033868F /* AnimationAsset.h */,
 				867BACFC16AEC9050033868F /* AnimationAsset_ScriptBinding.h */,
@@ -1785,6 +1796,9 @@
 		867BAD4516AEC9050033868F /* sceneobject */ = {
 			isa = PBXGroup;
 			children = (
+				86B2F10D170CD23B003D4645 /* SkeletonObject_ScriptBinding.h */,
+				86B2F10E170CD23B003D4645 /* SkeletonObject.cc */,
+				86B2F10F170CD23B003D4645 /* SkeletonObject.h */,
 				2AA6866516D69968003CEF0A /* SceneObjectList.cc */,
 				2AA6866616D69968003CEF0A /* SceneObjectList.h */,
 				2AA6866716D69968003CEF0A /* SceneObjectSet_ScriptBinding.h */,
@@ -3522,6 +3536,8 @@
 				2AD42166170434F0005BB8AD /* tamlJSONReader.cc in Sources */,
 				2AD42167170434F0005BB8AD /* tamlJSONWriter.cc in Sources */,
 				2ACAFD471705CF340022601C /* tamlJSONParser.cc in Sources */,
+				86B2F10C170CD22E003D4645 /* SkeletonAsset.cc in Sources */,
+				86B2F110170CD23B003D4645 /* SkeletonObject.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
