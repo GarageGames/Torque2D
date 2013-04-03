@@ -1329,6 +1329,12 @@
     <ClCompile Include="..\..\source\persistence\taml\json\tamlJSONParser.cc">
       <Filter>persistence\taml\json</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\2d\assets\SkeletonAsset.cc">
+      <Filter>2d\assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\sceneobject\SkeletonObject.cc">
+      <Filter>2d\sceneobject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\audio\audio.h">
@@ -2753,6 +2759,18 @@
     </ClInclude>
     <ClInclude Include="..\..\source\persistence\taml\json\tamlJSONParser.h">
       <Filter>persistence\taml\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\assets\SkeletonAsset.h">
+      <Filter>2d\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\assets\SkeletonAsset_ScriptBinding.h">
+      <Filter>2d\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\SkeletonObject.h">
+      <Filter>2d\sceneobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\SkeletonObject_ScriptBinding.h">
+      <Filter>2d\sceneobject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

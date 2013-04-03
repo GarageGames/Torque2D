@@ -238,6 +238,7 @@
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetEmitter.cc" />
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetField.cc" />
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetFieldCollection.cc" />
+    <ClCompile Include="..\..\source\2d\assets\SkeletonAsset.cc" />
     <ClCompile Include="..\..\source\2d\controllers\AmbientForceController.cc" />
     <ClCompile Include="..\..\source\2d\controllers\BuoyancyController.cc" />
     <ClCompile Include="..\..\source\2d\controllers\core\GroupedSceneController.cc" />
@@ -268,6 +269,7 @@
     <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectSet.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Scroller.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\ShapeVector.cc" />
+    <ClCompile Include="..\..\source\2d\sceneobject\SkeletonObject.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Sprite.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Trigger.cc" />
     <ClCompile Include="..\..\source\2d\scene\ContactFilter.cc" />
@@ -622,6 +624,8 @@
     <ClInclude Include="..\..\source\2d\assets\ParticleAssetField.h" />
     <ClInclude Include="..\..\source\2d\assets\ParticleAssetFieldCollection.h" />
     <ClInclude Include="..\..\source\2d\assets\ParticleAsset_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\assets\SkeletonAsset.h" />
+    <ClInclude Include="..\..\source\2d\assets\SkeletonAsset_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\controllers\AmbientForceController.h" />
     <ClInclude Include="..\..\source\2d\controllers\AmbientForceController_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\controllers\BuoyancyController.h" />
@@ -676,6 +680,8 @@
     <ClInclude Include="..\..\source\2d\sceneobject\Scroller_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\ShapeVector.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\ShapeVector_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\SkeletonObject.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\SkeletonObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Sprite.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Sprite_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Trigger.h" />
