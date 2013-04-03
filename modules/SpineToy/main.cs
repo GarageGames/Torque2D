@@ -26,6 +26,14 @@
 // This is called when the module is loaded
 function SpineToy::create(%this)
 {
+    // Set the sandbox drag mode availability.
+    Sandbox.allowManipulation( pan );
+
+    // Set the manipulation mode.
+    Sandbox.useManipulation( pan );
+
+    // Reset the toy.
+    SpineToy.reset();
 }
 
 // This is called when the module is destroyed
@@ -37,4 +45,12 @@ function SpineToy::destroy(%this)
 // without reloading it entirely
 function SpineToy::reset(%this)
 {
+    // Clear the scene.
+    SandboxScene.clear();
+
+    %spineSkeletonObject = new SkeletonObject();
+
+    %spineSkeletonObject.Skeleton = "SpineToy:TestSkeleton";
+    
+    SandboxScene.add(%spineSkeletonObject);
 }
