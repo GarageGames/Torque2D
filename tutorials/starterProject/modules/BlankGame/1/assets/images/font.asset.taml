@@ -1,0 +1,9 @@
+<ImageAsset
+    AssetName="font"
+    ImageFile="font.png"
+	CellOffsetY="1"
+	CellStrideY="16"
+    CellCountX="16"
+    CellCountY="6"
+    CellWidth="16"
+    CellHeight="14" />

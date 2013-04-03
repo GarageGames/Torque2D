@@ -55,6 +55,9 @@ function Sandbox::create( %this )
     // Initialize the toolbox.    
     initializeToolbox();
     
+    // Initialize the input controller.
+    Sandbox.InputController.initialize();
+    
     // Initialize the "cannot render" proxy.
     new RenderProxy(CannotRenderProxy)
     {

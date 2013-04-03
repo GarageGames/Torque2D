@@ -1,0 +1,33 @@
+<ParticleAsset
+    AssetName="Caustics">
+    <ParticleAssetEmitter
+        EmitterName="caustics"
+		EmitterType="line"
+		EmitterSize="100 1"
+		FixedAspect="false"
+        OldestInFront="1"
+        Image="@asset=TropicalAssets:Beam">
+        <ParticleAssetEmitter.Fields>
+            <Quantity
+                Keys="0 1" />
+            <QuantityVariation
+                Keys="0 1" />				
+            <Lifetime
+                Keys="0 4" />				
+            <LifetimeVariation
+                Keys="0 2" />
+            <Speed
+                Keys="0 0" />
+            <RandomMotion
+                Keys="0 45" />				
+            <SizeX
+                Keys="0 50" />				
+            <SizeXVariation
+                Keys="0 40" />
+            <SizeY
+                Keys="0 75" />								
+            <AlphaChannel
+                Keys="0 0 0.5 0.3 0.8 0.3 1 0" />
+        </ParticleAssetEmitter.Fields>
+    </ParticleAssetEmitter>
+</ParticleAsset>

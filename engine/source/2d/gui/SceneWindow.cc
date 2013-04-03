@@ -40,6 +40,28 @@
 // Debug Profiling.
 #include "debug/profiler.h"
 
+// Input event names.
+static StringTableEntry inputEventEnterName            = StringTable->insert("onTouchEnter");
+static StringTableEntry inputEventLeaveName            = StringTable->insert("onTouchLeave");
+static StringTableEntry inputEventDownName             = StringTable->insert("onTouchDown");
+static StringTableEntry inputEventUpName               = StringTable->insert("onTouchUp");
+static StringTableEntry inputEventMovedName            = StringTable->insert("onTouchMoved");
+static StringTableEntry inputEventDraggedName          = StringTable->insert("onTouchDragged");
+
+static StringTableEntry mouseEventMiddleMouseDownName   = StringTable->insert("onMiddleMouseDown");
+static StringTableEntry mouseEventMiddleMouseUpName     = StringTable->insert("onMiddleMouseUp");
+static StringTableEntry mouseEventMiddleMouseDraggedName= StringTable->insert("onMiddleMouseDragged");
+
+static StringTableEntry mouseEventRightMouseDownName   = StringTable->insert("onRightMouseDown");
+static StringTableEntry mouseEventRightMouseUpName     = StringTable->insert("onRightMouseUp");
+static StringTableEntry mouseEventRightMouseDraggedName= StringTable->insert("onRightMouseDragged");
+
+static StringTableEntry mouseEventWheelUpName          = StringTable->insert("onMouseWheelUp");
+static StringTableEntry mouseEventWheelDownName        = StringTable->insert("onMouseWheelDown");
+
+static StringTableEntry mouseEventEnterName            = StringTable->insert("onMouseEnter");
+static StringTableEntry mouseEventLeaveName            = StringTable->insert("onMouseLeave");
+
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_CONOBJECT(SceneWindow);
@@ -99,23 +121,6 @@ SceneWindow::SceneWindow() :    mpScene(NULL),
     VECTOR_SET_ASSOCIATION( mInputEventEntering );
     VECTOR_SET_ASSOCIATION( mInputEventLeaving );    
 
-    // Touch input event names.
-    mInputEventDownName             = StringTable->insert("onTouchDown");
-    mInputEventUpName               = StringTable->insert("onTouchUp");
-    mInputEventMovedName            = StringTable->insert("onTouchMoved");
-    mInputEventDraggedName          = StringTable->insert("onTouchDragged");
-    mInputEventEnterName            = StringTable->insert("onTouchEnter");
-    mInputEventLeaveName            = StringTable->insert("onTouchLeave");
-
-    // Mouse input event names.
-    mMouseEventRightMouseDownName   = StringTable->insert("onRightMouseDown");
-    mMouseEventRightMouseUpName     = StringTable->insert("onRightMouseUp");
-    mMouseEventRightMouseDraggedName= StringTable->insert("onRightMouseDragged");
-    mMouseEventWheelUpName          = StringTable->insert("onMouseWheelUp");
-    mMouseEventWheelDownName        = StringTable->insert("onMouseWheelDown");
-    mMouseEventEnterName            = StringTable->insert("onMouseEnter");
-    mMouseEventLeaveName            = StringTable->insert("onMouseLeave");
-
     // Turn-on Tick Processing.
     setProcessTicks( true );
 }
@@ -130,8 +135,13 @@ SceneWindow::~SceneWindow()
 
 bool SceneWindow::onAdd()
 {
+    // Call parent.
     if(!Parent::onAdd())
         return false;
+
+    // Register input sets.
+    mInputEventWatching.registerObject();
+    mInputListeners.registerObject();
 
     // Reset the camera position.
     setCameraPosition( Vector2::getZero() );
@@ -155,6 +165,10 @@ void SceneWindow::onRemove()
 {
     // Reset Scene.
     resetScene();
+
+    // Unregister input sets.
+    mInputEventWatching.unregisterObject();
+    mInputListeners.unregisterObject();
 
     // Call Parent.
     Parent::onRemove();
@@ -820,6 +834,28 @@ void SceneWindow::setObjectInputEventInvisibleFilter( const bool useInvisible )
 
 //-----------------------------------------------------------------------------
 
+void SceneWindow::addInputListener( SimObject* pSimObject )
+{
+    // Sanity!
+    AssertFatal( pSimObject != NULL, "SceneWindow::addInputEventListener() - Cannot add NULL object as input event listener." );
+
+    // Ignore if the object is already a listener.
+    if ( mInputListeners.find( pSimObject ) != mInputListeners.end() )
+        return;
+
+    // Add as listener.
+    mInputListeners.addObject( pSimObject );
+}
+
+//-----------------------------------------------------------------------------
+
+void SceneWindow::removeInputListener( SimObject* pSimObject )
+{
+    mInputListeners.removeObject( pSimObject );
+}
+
+//-----------------------------------------------------------------------------
+
 void SceneWindow::setMousePosition( const Vector2& mousePosition )
 {
     // Fetch Canvas.
@@ -967,6 +1003,13 @@ void SceneWindow::sendWindowInputEvent( StringTableEntry name, const GuiEvent& e
 
     // Call Scripts.
     Con::executef(this, 4, name, argBuffer[0], argBuffer[1], argBuffer[2]);
+
+    // Iterate listeners.
+    for( SimSet::iterator listenerItr = mInputListeners.begin(); listenerItr != mInputListeners.end(); ++listenerItr )
+    {
+        // Call scripts on listener.
+        Con::executef( *listenerItr, 4, name, argBuffer[0], argBuffer[1], argBuffer[2] );
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -980,10 +1023,10 @@ void SceneWindow::sendObjectInputEvent( StringTableEntry name, const GuiEvent& e
     if ( !getScene() ) return;
 
     // Only process appropriate input events.
-    if ( !( name == mInputEventDownName ||
-            name == mInputEventUpName ||
-            name == mInputEventMovedName ||
-            name == mInputEventDraggedName ) )
+    if ( !( name == inputEventDownName ||
+            name == inputEventUpName ||
+            name == inputEventMovedName ||
+            name == inputEventDraggedName ) )
         return;
 
     // Convert Event-Position into scene coordinates.
@@ -1089,7 +1132,7 @@ void SceneWindow::sendObjectInputEvent( StringTableEntry name, const GuiEvent& e
         SceneObject* pSceneObject = mInputEventLeaving[index];
 
         // Emit event.
-        pSceneObject->onInputEvent( mInputEventLeaveName, event, worldMousePoint );
+        pSceneObject->onInputEvent( inputEventLeaveName, event, worldMousePoint );
 
         // Remove scene object.
         mInputEventWatching.removeObject( pSceneObject );
@@ -1102,10 +1145,10 @@ void SceneWindow::sendObjectInputEvent( StringTableEntry name, const GuiEvent& e
         SceneObject* pSceneObject = mInputEventEntering[index];
 
         // Emit event.
-        pSceneObject->onInputEvent( mInputEventEnterName, event, worldMousePoint );
+        pSceneObject->onInputEvent( inputEventEnterName, event, worldMousePoint );
 
         // Process "moved" or "dragged" events.
-        if ( name == mInputEventMovedName || name == mInputEventDraggedName )
+        if ( name == inputEventMovedName || name == inputEventDraggedName )
             pSceneObject->onInputEvent( name, event, worldMousePoint );
 
         // Add scene object.
@@ -1120,6 +1163,22 @@ void SceneWindow::sendObjectInputEvent( StringTableEntry name, const GuiEvent& e
 
 //-----------------------------------------------------------------------------
 
+void SceneWindow::onMouseEnter( const GuiEvent& event )
+{
+    // Dispatch input event.
+    dispatchInputEvent(mouseEventEnterName, event);
+}
+
+//-----------------------------------------------------------------------------
+
+void SceneWindow::onMouseLeave( const GuiEvent& event )
+{
+    // Dispatch input event.
+    dispatchInputEvent(mouseEventLeaveName, event);
+}
+
+//-----------------------------------------------------------------------------
+
 void SceneWindow::onMouseDown( const GuiEvent& event )
 {
     // Lock Mouse (if necessary).
@@ -1127,7 +1186,7 @@ void SceneWindow::onMouseDown( const GuiEvent& event )
         mouseLock();
 
     // Dispatch input event.
-    dispatchInputEvent( mInputEventDownName, event);
+    dispatchInputEvent( inputEventDownName, event);
 }
 
 //-----------------------------------------------------------------------------
@@ -1139,7 +1198,7 @@ void SceneWindow::onMouseUp( const GuiEvent& event )
         mouseUnlock();
 
     // Dispatch input event.
-    dispatchInputEvent(mInputEventUpName, event);
+    dispatchInputEvent(inputEventUpName, event);
 }
 
 //-----------------------------------------------------------------------------
@@ -1147,7 +1206,7 @@ void SceneWindow::onMouseUp( const GuiEvent& event )
 void SceneWindow::onMouseMove( const GuiEvent& event )
 {
     // Dispatch input event.
-    dispatchInputEvent(mInputEventMovedName, event);
+    dispatchInputEvent(inputEventMovedName, event);
 }
 
 //-----------------------------------------------------------------------------
@@ -1155,23 +1214,39 @@ void SceneWindow::onMouseMove( const GuiEvent& event )
 void SceneWindow::onMouseDragged( const GuiEvent& event )
 {
     // Dispatch input event.
-    dispatchInputEvent(mInputEventDraggedName, event);
+    dispatchInputEvent(inputEventDraggedName, event);
 }
 
 //-----------------------------------------------------------------------------
 
-void SceneWindow::onMouseEnter( const GuiEvent& event )
+void SceneWindow::onMiddleMouseDown( const GuiEvent& event )
 {
+    // Lock Mouse (if necessary).
+    if(mLockMouse)
+        mouseLock();
+
     // Dispatch input event.
-    dispatchInputEvent(mMouseEventEnterName, event);
+    dispatchInputEvent(mouseEventMiddleMouseDownName, event);
 }
 
 //-----------------------------------------------------------------------------
 
-void SceneWindow::onMouseLeave( const GuiEvent& event )
+void SceneWindow::onMiddleMouseUp( const GuiEvent& event )
+{
+    // Lock Mouse (if necessary).
+    if(mLockMouse)
+        mouseUnlock();
+
+    // Dispatch input event.
+    dispatchInputEvent(mouseEventMiddleMouseUpName, event);
+}
+
+//-----------------------------------------------------------------------------
+
+void SceneWindow::onMiddleMouseDragged( const GuiEvent& event )
 {
     // Dispatch input event.
-    dispatchInputEvent(mMouseEventLeaveName, event);
+    dispatchInputEvent(mouseEventMiddleMouseDraggedName, event);
 }
 
 //-----------------------------------------------------------------------------
@@ -1183,7 +1258,7 @@ void SceneWindow::onRightMouseDown( const GuiEvent& event )
         mouseLock();
 
     // Dispatch input event.
-    dispatchInputEvent(mMouseEventRightMouseDownName, event);
+    dispatchInputEvent(mouseEventRightMouseDownName, event);
 }
 
 //-----------------------------------------------------------------------------
@@ -1195,7 +1270,7 @@ void SceneWindow::onRightMouseUp( const GuiEvent& event )
         mouseUnlock();
 
     // Dispatch input event.
-    dispatchInputEvent(mMouseEventRightMouseUpName, event);
+    dispatchInputEvent(mouseEventRightMouseUpName, event);
 }
 
 //-----------------------------------------------------------------------------
@@ -1203,7 +1278,7 @@ void SceneWindow::onRightMouseUp( const GuiEvent& event )
 void SceneWindow::onRightMouseDragged( const GuiEvent& event )
 {
     // Dispatch input event.
-    dispatchInputEvent(mMouseEventRightMouseDraggedName, event);
+    dispatchInputEvent(mouseEventRightMouseDraggedName, event);
 }
 
 //-----------------------------------------------------------------------------
@@ -1214,7 +1289,7 @@ bool SceneWindow::onMouseWheelUp( const GuiEvent& event )
    Parent::onMouseWheelUp( event );
 
    // Dispatch input event.
-   dispatchInputEvent(mMouseEventWheelUpName, event);
+   dispatchInputEvent(mouseEventWheelUpName, event);
 
    // Return Success.
    return true;
@@ -1228,7 +1303,7 @@ bool SceneWindow::onMouseWheelDown( const GuiEvent& event )
    Parent::onMouseWheelDown( event );
 
    // Dispatch input event.
-   dispatchInputEvent(mMouseEventWheelDownName, event);
+   dispatchInputEvent(mouseEventWheelDownName, event);
 
    // Return Success.
    return true;
@@ -1689,7 +1764,7 @@ void SceneWindow::renderMetricsOverlay( Point2I offset, const RectI& updateRect 
     glEnable        ( GL_BLEND );
     glBlendFunc     ( GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA );
 
-    // Set banner background colour.
+    // Set banner background color.
     const ColorI& fillColor = mProfile->mFillColor;
     const F32 colorScale = 1.0f / 255.0f;
     glColor4f( fillColor.red * colorScale, fillColor.green * colorScale, fillColor.blue * colorScale, fillColor.alpha * colorScale );
@@ -1726,7 +1801,7 @@ void SceneWindow::renderMetricsOverlay( Point2I offset, const RectI& updateRect 
     // Disable Banner Blending.
     glDisable       ( GL_BLEND );
         
-    // Set Debug Text Colour.
+    // Set Debug Text color.
     dglSetBitmapModulation( mProfile->mFontColor );
 
     // ****************************************************************
@@ -1791,13 +1866,12 @@ void SceneWindow::renderMetricsOverlay( Point2I offset, const RectI& updateRect 
 
         // Batching #1.
         dglDrawText( font, bannerOffset + Point2I(0,(S32)linePositionY), "Batching", NULL );
-        dSprintf( mDebugText, sizeof( mDebugText ), "- %sTris=%d<%d>, MaxTriDraw=%d, MaxVerts=%d, Single=%d<%d>, Mult=%d<%d>, Sorted=%d<%d>",
+        dSprintf( mDebugText, sizeof( mDebugText ), "- %sTris=%d<%d>, MaxTriDraw=%d, MaxVerts=%d, Strict=%d<%d>, Sorted=%d<%d>",
             pScene->getBatchingEnabled() ? "" : "(OFF) ",
             debugStats.batchTrianglesSubmitted, debugStats.maxBatchTrianglesSubmitted,
             debugStats.batchMaxTriangleDrawn,
             debugStats.batchMaxVertexBuffer,
-            debugStats.batchDrawCallsStrictSingle, debugStats.maxBatchDrawCallsStrictSingle,
-            debugStats.batchDrawCallsStrictMultiple, debugStats.maxBatchDrawCallsStrictMultiple,
+            debugStats.batchDrawCallsStrict, debugStats.maxBatchDrawCallsStrict,
             debugStats.batchDrawCallsSorted, debugStats.maxBatchDrawCallsSorted                   
             );
         dglDrawText( font, bannerOffset + Point2I(metricsOffset,(S32)linePositionY), mDebugText, NULL );

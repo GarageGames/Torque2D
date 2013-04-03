@@ -101,6 +101,8 @@
 class SimSet: public SimObject, public TamlChildren
 {
    typedef SimObject Parent;
+   typedef SimObject Children;
+
 protected:
    SimObjectList objectList;
    void *mMutex;

@@ -34,6 +34,10 @@
 
 //------------------------------------------------------------------------------
 
+static StringTableEntry spritesNodeName = StringTable->insert( "Sprites" );
+
+//------------------------------------------------------------------------------
+
 SpriteBatch::SpriteBatch() :
     mMasterBatchId( 0 ),
     mSelectedSprite( NULL ),
@@ -52,14 +56,28 @@ SpriteBatch::SpriteBatch() :
     // Reset local extents.
     mLocalExtents.SetZero();
     mLocalExtentsDirty = true;
-
-    // Create the sprite batch query if sprite clipping is on.
-    createSpriteBatchQuery();
 }
 
 //------------------------------------------------------------------------------
 
 SpriteBatch::~SpriteBatch()
+{
+}
+
+//-----------------------------------------------------------------------------
+
+bool SpriteBatch::onAdd()
+{
+    // Create the sprite batch query if required.
+    if ( mBatchCulling )
+        createSpriteBatchQuery();
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
+void SpriteBatch::onRemove()
 {
     // Clear the sprites.
     clearSprites();
@@ -91,7 +109,7 @@ void SpriteBatch::prepareRender( SceneRenderObject* pSceneRenderObject, const Sc
         SpriteBatchQuery* pSpriteBatchQuery = getSpriteBatchQuery( true );
 
         // Perform query.
-        pSpriteBatchQuery->renderQueryArea( localAABB );
+        pSpriteBatchQuery->queryArea( localAABB, false );
 
         // Debug Profiling.
         PROFILE_END(); // SpriteBatch_PrepareRenderQuery
@@ -372,6 +390,9 @@ void SpriteBatch::setBatchCulling( const bool batchCulling )
     if ( mBatchCulling == batchCulling )
         return;
 
+    // Set batch culling.
+    mBatchCulling = batchCulling;
+
     // Create/destroy sprite batch query appropriately.
     if ( mBatchCulling )
         createSpriteBatchQuery();
@@ -490,7 +511,7 @@ U32 SpriteBatch::getSpriteImageFrame( void ) const
 
 //------------------------------------------------------------------------------
 
-void SpriteBatch::setSpriteAnimation( const char* pAssetId, const bool autoRestore )
+void SpriteBatch::setSpriteAnimation( const char* pAssetId )
 {
     // Debug Profiling.
     PROFILE_SCOPE(SpriteBatch_SetSpriteAnimation);
@@ -503,7 +524,7 @@ void SpriteBatch::setSpriteAnimation( const char* pAssetId, const bool autoResto
         return;
 
     // Set animation.
-    mSelectedSprite->setAnimation( pAssetId, autoRestore );
+    mSelectedSprite->setAnimation( pAssetId );
 }
 
 //------------------------------------------------------------------------------
@@ -527,7 +548,7 @@ void SpriteBatch::clearSpriteAsset( void )
         return;
 
     // Clear the asset.
-    mSelectedSprite->clearAsset();
+    mSelectedSprite->clearAssets();
 }
 
 //------------------------------------------------------------------------------
@@ -925,6 +946,30 @@ SimObject* SpriteBatch::getSpriteDataObject( void ) const
 
 //------------------------------------------------------------------------------
 
+void SpriteBatch::setUserData( void* pUserData )
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return;
+
+    // Set user data.
+    mSelectedSprite->setUserData( pUserData );
+}
+
+//------------------------------------------------------------------------------
+
+void* SpriteBatch::getUserData( void ) const
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return NULL;
+
+    // Get user data.
+    return mSelectedSprite->getUserData();
+}
+
+//------------------------------------------------------------------------------
+
 void SpriteBatch::setSpriteName( const char* pName )
 {
     // Finish if a sprite is not selected.
@@ -1187,86 +1232,7 @@ void SpriteBatch::destroySpriteBatchQuery( void )
 
     // Finish if sprite clipping 
     delete mpSpriteBatchQuery;
-}
-
-//------------------------------------------------------------------------------
-
-void SpriteBatch::onTamlCustomWrite( TamlCustomNode* pSpritesNode )
-{
-    // Debug Profiling.
-    PROFILE_SCOPE(SpriteBatch_TamlCustomWrite);
-
-    // Fetch property names.
-    StringTableEntry spriteItemTypeName = StringTable->insert( "Sprite" );
-
-    // Write all sprites.
-    for( typeSpriteBatchHash::iterator spriteItr = mSprites.begin(); spriteItr != mSprites.end(); ++spriteItr )
-    {
-        // Add sprite node.
-        TamlCustomNode* pNode = pSpritesNode->addNode( spriteItemTypeName );
-        
-        // Write type with sprite item.
-        spriteItr->value->onTamlCustomWrite( pNode );
-    }
-}
-
-//------------------------------------------------------------------------------
-
-void SpriteBatch::onTamlCustomRead( const TamlCustomNode* pSpritesNode )
-{
-    // Debug Profiling.
-    PROFILE_SCOPE(SpriteBatch_TamlCustomRead);
-
-    // Fetch node name.
-    StringTableEntry spriteItemNodeName = StringTable->insert( "Sprite" );
-
-    // Fetch children nodes.
-    const TamlCustomNodeVector& spriteNodes = pSpritesNode->getChildren();
-
-    // Iterate sprite item types.
-    for( TamlCustomNodeVector::const_iterator spriteItr = spriteNodes.begin(); spriteItr != spriteNodes.end(); ++spriteItr )
-    {
-        // Fetch sprite node.
-        TamlCustomNode* pNode = *spriteItr;
-
-        // Fetch alias name.
-        StringTableEntry nodeName = pNode->getNodeName();
-
-        // Is this a known node name?
-        if ( nodeName != spriteItemNodeName )
-        {
-            // No, so warn.
-            Con::warnf( "SpriteBatch - Unknown custom type '%s'.", nodeName );
-            continue;
-        }
-
-        // Create sprite.
-        SpriteBatchItem* pSpriteBatchItem = createSprite();
-
-        // Read type with sprite item.
-        pSpriteBatchItem->onTamlCustomRead( pNode );
-
-        // Fetch logical position.
-        const SpriteBatchItem::LogicalPosition& logicalPosition = pSpriteBatchItem->getLogicalPosition();
-
-        // Did we get a logical position?
-        if ( logicalPosition.isValid() )
-        {
-            // Yes, so insert into sprite positions.
-            mSpritePositions.insert( logicalPosition, pSpriteBatchItem );
-        }
-
-        // Fetch sprite name.
-        StringTableEntry spriteName = pSpriteBatchItem->getName();
-
-        // Did we get a sprite name?
-        if ( spriteName != StringTable->EmptyString )
-        {
-            // Yes, so insert into sprite names if it doesn't already exist.
-            if ( mSpriteNames.find( spriteName ) != mSpriteNames.end() ) 
-                mSpriteNames.insert( spriteName, mSelectedSprite );
-        }
-    }
+    mpSpriteBatchQuery = NULL;
 }
 
 //------------------------------------------------------------------------------
@@ -1329,4 +1295,121 @@ b2AABB SpriteBatch::calculateLocalAABB( const b2AABB& renderAABB )
     CoreMath::mOOBBtoAABB( localOOBB, localAABB );
     
     return localAABB;
+}
+
+//------------------------------------------------------------------------------
+
+void SpriteBatch::onTamlCustomWrite( TamlCustomNodes& customNodes )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(SpriteBatch_TamlCustomWrite);
+
+    // Finish if no sprites.
+    if ( getSpriteCount() == 0 )
+        return;
+
+    // Add sprites node.
+    TamlCustomNode* pSpritesNode = customNodes.addNode( spritesNodeName );
+
+    // Write all sprites.
+    for( typeSpriteBatchHash::iterator spriteItr = mSprites.begin(); spriteItr != mSprites.end(); ++spriteItr )
+    {      
+        // Write type with sprite item.
+        spriteItr->value->onTamlCustomWrite( pSpritesNode );
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void SpriteBatch::onTamlCustomRead( const TamlCustomNodes& customNodes )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(SpriteBatch_TamlCustomRead);
+
+    // Find sprites custom node.
+    const TamlCustomNode* pSpritesNode = customNodes.findNode( spritesNodeName );
+
+    // Finish if we don't have the node.
+    if ( pSpritesNode == NULL )
+        return;
+
+    // Fetch children nodes.
+    const TamlCustomNodeVector& spriteNodes = pSpritesNode->getChildren();
+
+    // Iterate sprite item types.
+    for( TamlCustomNodeVector::const_iterator spriteItr = spriteNodes.begin(); spriteItr != spriteNodes.end(); ++spriteItr )
+    {
+        // Fetch sprite node.
+        TamlCustomNode* pNode = *spriteItr;
+
+        // Fetch alias name.
+        StringTableEntry nodeName = pNode->getNodeName();
+
+        // Is this a known node name?
+        if ( nodeName != spritesItemTypeName )
+        {
+            // No, so warn.
+            Con::warnf( "SpriteBatch - Unknown custom type '%s'.", nodeName );
+            continue;
+        }
+
+        // Create sprite.
+        SpriteBatchItem* pSpriteBatchItem = createSprite();
+
+        // Read type with sprite item.
+        pSpriteBatchItem->onTamlCustomRead( pNode );
+
+        // Fetch logical position.
+        const SpriteBatchItem::LogicalPosition& logicalPosition = pSpriteBatchItem->getLogicalPosition();
+
+        // Did we get a logical position?
+        if ( logicalPosition.isValid() )
+        {
+            // Yes, so insert into sprite positions.
+            mSpritePositions.insert( logicalPosition, pSpriteBatchItem );
+        }
+
+        // Fetch sprite name.
+        StringTableEntry spriteName = pSpriteBatchItem->getName();
+
+        // Did we get a sprite name?
+        if ( spriteName != StringTable->EmptyString )
+        {
+            // Yes, so insert into sprite names if it doesn't already exist.
+            if ( mSpriteNames.find( spriteName ) != mSpriteNames.end() ) 
+                mSpriteNames.insert( spriteName, mSelectedSprite );
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void SpriteBatch::WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "SpriteBatch::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "SpriteBatch::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    char buffer[1024];
+
+    // Create sprite batch node element.
+    TiXmlElement* pBatchNodeElement = new TiXmlElement( "xs:element" );
+    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), spritesNodeName );
+    pBatchNodeElement->SetAttribute( "name", buffer );
+    pBatchNodeElement->SetAttribute( "minOccurs", 0 );
+    pBatchNodeElement->SetAttribute( "maxOccurs", 1 );
+    pParentElement->LinkEndChild( pBatchNodeElement );
+
+    // Create complex type.
+    TiXmlElement* pBatchNodeComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pBatchNodeElement->LinkEndChild( pBatchNodeComplexTypeElement );
+    
+    // Create choice element.
+    TiXmlElement* pBatchNodeChoiceElement = new TiXmlElement( "xs:choice" );
+    pBatchNodeChoiceElement->SetAttribute( "minOccurs", 0 );
+    pBatchNodeChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
+    pBatchNodeComplexTypeElement->LinkEndChild( pBatchNodeChoiceElement );
+
+    // Write sprite batch item.
+    SpriteBatchItem::WriteCustomTamlSchema( pClassRep, pBatchNodeChoiceElement );
 }

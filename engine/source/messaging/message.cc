@@ -53,32 +53,11 @@ extern SimIdDictionary *gIdDictionary;
 Message::Message()
 {
    mRefCount = 0;
-
-   mNSLinkMask = LinkSuperClassName | LinkClassName;
 }
 
 
 IMPLEMENT_CONOBJECT(Message);
 
-//////////////////////////////////////////////////////////////////////////
-
-bool Message::onAdd()
-{
-   if(! Parent::onAdd())
-      return false;
-
-   linkNamespaces();
-   Con::executef(this, 1, "onAdd");
-   return true;
-}
-
-void Message::onRemove()
-{
-   Con::executef(this, 1, "onRemove");
-   unlinkNamespaces();
-   
-   Parent::onRemove();
-}
 
 //////////////////////////////////////////////////////////////////////////
 // Public Methods

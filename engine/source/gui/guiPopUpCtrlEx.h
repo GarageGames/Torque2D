@@ -28,7 +28,7 @@
 //										class.
 // May 19, 2004			David Wyand		Added the bool usesColorBox and ColorI colorbox to the
 //										Entry structure of the GuiPopUpMenuCtrl class.  These
-//										are used to draw a coloured rectangle beside the text in
+//										are used to draw a colored rectangle beside the text in
 //										the list.
 // November 16, 2005	David Wyand		Added the method setNoneSelected() to set none of the
 //										items as selected.  Use this over setSelected(-1); when

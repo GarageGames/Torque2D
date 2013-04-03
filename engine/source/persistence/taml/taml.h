@@ -36,7 +36,11 @@
 #endif
 
 #ifndef _TAML_WRITE_NODE_H_
-#include "persistence/taml/TamlWriteNode.h"
+#include "persistence/taml/tamlWriteNode.h"
+#endif
+
+#ifndef _TAML_VISITOR_H_
+#include "persistence/taml/tamlVisitor.h"
 #endif
 
 #ifndef _SIMBASE_H_
@@ -53,34 +57,27 @@
 
 //-----------------------------------------------------------------------------
 
-#define TAML_SIGNATURE                  "Taml"
-#define TAML_ID_ATTRIBUTE_NAME          "TamlId"
-#define TAML_REFID_ATTRIBUTE_NAME       "TamlRefId"
-#define TAML_REF_FIELD_NAME             "TamlRefField"
-#define TAML_OBJECTNAME_ATTRIBUTE_NAME  "Name"
+extern StringTableEntry tamlRefIdName;
+extern StringTableEntry tamlRefToIdName;
+extern StringTableEntry tamlNamedObjectName;
 
 //-----------------------------------------------------------------------------
 
-class TamlXmlWriter;
-class TamlXmlReader;
-class TamlBinaryWriter;
-class TamlBinaryReader;
+#define TAML_SIGNATURE                  "Taml"
+#define TAML_SCHEMA_VARIABLE            "$pref::T2D::TAMLSchema"
+#define TAML_JSON_STRICT_VARIBLE        "$pref::T2D::JSONStrict"
 
 //-----------------------------------------------------------------------------
 
 class Taml : public SimObject
 {
-    friend class TamlXmlWriter;
-    friend class TamlXmlReader;
-    friend class TamlBinaryWriter;
-    friend class TamlBinaryReader;
-
 public:
     enum TamlFormatMode
     {
         InvalidFormat = 0,
         XmlFormat,
-        BinaryFormat
+        BinaryFormat,
+        JSONFormat,
     };
 
 private:
@@ -92,13 +89,15 @@ private:
     typeCompiledHash    mCompiledObjects;
     U32                 mMasterNodeId;
     TamlFormatMode      mFormatMode;
-    bool                mBinaryCompression;
-    bool                mAutoFormat;
     StringTableEntry    mAutoFormatXmlExtension;
     StringTableEntry    mAutoFormatBinaryExtension;
+    StringTableEntry    mAutoFormatJSONExtension;
+    bool                mJSONStrict;
+    bool                mBinaryCompression;
+    bool                mAutoFormat;
     bool                mWriteDefaults;
-    char                mFilePathBuffer[1024];
     bool                mProgenitorUpdate;
+    char                mFilePathBuffer[1024];
 
 private:
     void resetCompilation( void );
@@ -124,23 +123,12 @@ private:
         return NULL;
     }
 
-    static SimObject* createType( StringTableEntry typeName, const Taml* pTaml, const char* pProgenitorSuffix = NULL );
-
-    /// Taml callbacks.
-    inline void tamlPreWrite( TamlCallbacks* pCallbacks )                                           { pCallbacks->onTamlPreWrite(); }
-    inline void tamlPostWrite( TamlCallbacks* pCallbacks )                                          { pCallbacks->onTamlPostWrite(); }
-    inline void tamlPreRead( TamlCallbacks* pCallbacks )                                            { pCallbacks->onTamlPreRead(); }
-    inline void tamlPostRead( TamlCallbacks* pCallbacks, const TamlCustomNodes& customNodes )       { pCallbacks->onTamlPostRead( customNodes ); }
-    inline void tamlAddParent( TamlCallbacks* pCallbacks, SimObject* pParentObject )                { pCallbacks->onTamlAddParent( pParentObject ); }
-    inline void tamlCustomWrite( TamlCallbacks* pCallbacks, TamlCustomNodes& customNodes )          { pCallbacks->onTamlCustomWrite( customNodes ); }
-    inline void tamlCustomRead( TamlCallbacks* pCallbacks, const TamlCustomNodes& customNodes )     { pCallbacks->onTamlCustomRead( customNodes ); }
-
 public:
     Taml();
     virtual ~Taml() {}
 
-    virtual bool onAdd() { if ( !Parent::onAdd() ) return false; resetCompilation(); return true; }
-    virtual void onRemove() { resetCompilation(); Parent::onRemove(); }
+    virtual bool onAdd();
+    virtual void onRemove();
     static void initPersistFields();
 
     /// Format mode.
@@ -155,10 +143,11 @@ public:
     inline void setWriteDefaults( const bool writeDefaults ) { mWriteDefaults = writeDefaults; }
     inline bool getWriteDefaults( void ) const { return mWriteDefaults; }
 
+    /// Progenitor.
     inline void setProgenitorUpdate( const bool progenitorUpdate ) { mProgenitorUpdate = progenitorUpdate; }
     inline bool getProgenitorUpdate( void ) const { return mProgenitorUpdate; }
 
-    // Auto-format extensions.
+    /// Auto-format extensions.
     inline void setAutoFormatXmlExtension( const char* pExtension ) { mAutoFormatXmlExtension = StringTable->insert( pExtension ); }
     inline StringTableEntry getAutoFormatXmlExtension( void ) const { return mAutoFormatXmlExtension; }
     inline void setAutoFormatBinaryExtension( const char* pExtension ) { mAutoFormatBinaryExtension = StringTable->insert( pExtension ); }
@@ -167,6 +156,10 @@ public:
     /// Compression.
     inline void setBinaryCompression( const bool compressed ) { mBinaryCompression = compressed; }
     inline bool getBinaryCompression( void ) const { return mBinaryCompression; }
+
+    /// JSON Strict RFC4627 mode.
+    inline void setJSONStrict( const bool jsonStrict ) { mJSONStrict = jsonStrict; }
+    inline bool getJSONStrict( void ) const { return mJSONStrict; }
 
     TamlFormatMode getFileAutoFormatMode( const char* pFilename );
 
@@ -189,8 +182,30 @@ public:
     }
     SimObject* read( const char* pFilename );
 
+    /// Parse.
+    bool parse( const char* pFilename, TamlVisitor& visitor );
+
+    /// Create type.
+    static SimObject* createType( StringTableEntry typeName, const Taml* pTaml, const char* pProgenitorSuffix = NULL );
+
+    /// Schema generation.
+    static bool generateTamlSchema();
+
+    /// Write a unrestricted custom Taml schema.
+    static void WriteUnrestrictedCustomTamlSchema( const char* pCustomNodeName, const AbstractClassRep* pClassRep, TiXmlElement* pParentElement );
+
+    /// Get format mode info.
     static TamlFormatMode getFormatModeEnum( const char* label );
     static const char* getFormatModeDescription( const TamlFormatMode formatMode );
+
+    /// Taml callbacks.
+    inline void tamlPreWrite( TamlCallbacks* pCallbacks )                                           { pCallbacks->onTamlPreWrite(); }
+    inline void tamlPostWrite( TamlCallbacks* pCallbacks )                                          { pCallbacks->onTamlPostWrite(); }
+    inline void tamlPreRead( TamlCallbacks* pCallbacks )                                            { pCallbacks->onTamlPreRead(); }
+    inline void tamlPostRead( TamlCallbacks* pCallbacks, const TamlCustomNodes& customNodes )       { pCallbacks->onTamlPostRead( customNodes ); }
+    inline void tamlAddParent( TamlCallbacks* pCallbacks, SimObject* pParentObject )                { pCallbacks->onTamlAddParent( pParentObject ); }
+    inline void tamlCustomWrite( TamlCallbacks* pCallbacks, TamlCustomNodes& customNodes )          { pCallbacks->onTamlCustomWrite( customNodes ); }
+    inline void tamlCustomRead( TamlCallbacks* pCallbacks, const TamlCustomNodes& customNodes )     { pCallbacks->onTamlCustomRead( customNodes ); }
 
     /// Declare Console Object.
     DECLARE_CONOBJECT( Taml );

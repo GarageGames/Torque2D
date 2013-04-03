@@ -107,7 +107,7 @@ void BuoyancyController::integrate( Scene* pScene, const F32 totalTime, const F3
     WorldQuery* pWorldQuery = prepareQueryFilter( pScene );
 
     // Query for candidate objects.
-    pWorldQuery->anyQueryArea( mFluidArea ); 
+    pWorldQuery->anyQueryAABB( mFluidArea ); 
 
     // Fetch results.
     typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
@@ -123,7 +123,7 @@ void BuoyancyController::integrate( Scene* pScene, const F32 totalTime, const F3
             continue;
 
         // Ignore if it's a static body.
-        if ( pSceneObject->getBodyType() == b2BodyType::b2_staticBody )
+        if ( pSceneObject->getBodyType() == b2_staticBody )
             continue;
 
         // Fetch the shape count.
@@ -136,10 +136,10 @@ void BuoyancyController::integrate( Scene* pScene, const F32 totalTime, const F3
         // Fetch the body transform.
         const b2Transform& bodyTransform = pSceneObject->getBody()->GetTransform();;
 
-		Vector2 areaCenter(0.0f, 0.0f);
-		Vector2 massCenter(0.0f, 0.0f);
-		F32 area = 0.0f;
-		F32 mass = 0.0f;
+        Vector2 areaCenter(0.0f, 0.0f);
+        Vector2 massCenter(0.0f, 0.0f);
+        F32 area = 0.0f;
+        F32 mass = 0.0f;
 
         // Yes, so iterate them.
         for( U32 i = 0; i < shapeCount; ++i )
@@ -150,9 +150,9 @@ void BuoyancyController::integrate( Scene* pScene, const F32 totalTime, const F3
             // Fetch the shape.
             const b2Shape* pShape = fixtureDef.shape;
 
-			Vector2 shapeCenter(0.0f, 0.0f);
+            Vector2 shapeCenter(0.0f, 0.0f);
             
-			F32 shapeArea = 0.0f;
+            F32 shapeArea = 0.0f;
 
             // Calculate the area for the shape type.
             if ( pShape->GetType() == b2Shape::e_circle )
@@ -174,36 +174,36 @@ void BuoyancyController::integrate( Scene* pScene, const F32 totalTime, const F3
             }
 
             // Calculate area.
-			area += shapeArea;
-			areaCenter.x += shapeArea * shapeCenter.x;
-			areaCenter.y += shapeArea * shapeCenter.y;
+            area += shapeArea;
+            areaCenter.x += shapeArea * shapeCenter.x;
+            areaCenter.y += shapeArea * shapeCenter.y;
 
             // Calculate mass.
-			const F32 shapeDensity = mUseShapeDensity ? fixtureDef.density : 1.0f;
-			mass += shapeArea*shapeDensity;
-			massCenter.x += shapeArea * shapeCenter.x * shapeDensity;
-			massCenter.y += shapeArea * shapeCenter.y * shapeDensity;
+            const F32 shapeDensity = mUseShapeDensity ? fixtureDef.density : 1.0f;
+            mass += shapeArea*shapeDensity;
+            massCenter.x += shapeArea * shapeCenter.x * shapeDensity;
+            massCenter.y += shapeArea * shapeCenter.y * shapeDensity;
         }
 
         // Skip not in water.
-		if( area < b2_epsilon )
-			continue;
+        if( area < b2_epsilon )
+            continue;
 
         // Calculate area/mass centers.
-		areaCenter.x /= area;
-		areaCenter.y /= area;
-		massCenter.x /= mass;
-		massCenter.y /= mass;
+        areaCenter.x /= area;
+        areaCenter.y /= area;
+        massCenter.x /= mass;
+        massCenter.y /= mass;
 
-		// Buoyancy
-		const Vector2 buoyancyForce = -mFluidDensity * area * mFluidGravity;
+        // Buoyancy
+        const Vector2 buoyancyForce = -mFluidDensity * area * mFluidGravity;
         pSceneObject->applyForce(buoyancyForce, massCenter);
 
-		// Linear drag
+        // Linear drag
         const Vector2 dragForce = (pSceneObject->getLinearVelocityFromWorldPoint(areaCenter) - mFlowVelocity) * (-mLinearDrag * area);
-		pSceneObject->applyForce(dragForce, areaCenter );
+        pSceneObject->applyForce(dragForce, areaCenter );
 
-		// Angular drag
+        // Angular drag
         pSceneObject->applyTorque( -pSceneObject->getInertia() / pSceneObject->getMass() * area * pSceneObject->getAngularVelocity()*mAngularDrag );
     }
 }
@@ -225,30 +225,30 @@ F32 BuoyancyController::ComputeCircleSubmergedArea( const b2Transform& bodyTrans
 
     // Submerged?
     if (l < - radius + FLT_MIN)
-	{
+    {
         // No, so return zero area submerged.
-		return 0.0f;
-	}
+        return 0.0f;
+    }
 
-	// Completely wet?
-	if (l > pShape->m_radius)
-	{
+    // Completely wet?
+    if (l > pShape->m_radius)
+    {
         // Yes!
-		center = worldShapeCenter;
-		return  b2_pi * radius * radius;
-	}
-		
-	// Partial submersion.
+        center = worldShapeCenter;
+        return  b2_pi * radius * radius;
+    }
+        
+    // Partial submersion.
     const F32 r2 = radius * radius;
     const F32 l2 = l * l;
     const F32 area = r2 *( mAsin(l / radius) + b2_pi / 2.0f) + l * mSqrt( r2 - l2 );
     const F32 com = -2.0f / 3.0f * mPow(r2 - l2, 1.5f) / area;
-	
+    
     // Calculate center.
-	center.x = worldShapeCenter.x + mSurfaceNormal.x * com;
-	center.y = worldShapeCenter.y + mSurfaceNormal.y * com;
-		
-	return area;
+    center.x = worldShapeCenter.x + mSurfaceNormal.x * com;
+    center.y = worldShapeCenter.y + mSurfaceNormal.y * com;
+        
+    return area;
 }
 
 //------------------------------------------------------------------------------

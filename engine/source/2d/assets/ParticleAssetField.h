@@ -111,6 +111,8 @@ public:
 
     void onTamlCustomWrite( TamlCustomNode* pCustomNode  );
     void onTamlCustomRead( const TamlCustomNode* pCustomNode );
+
+    void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement );
 };
 
 //-----------------------------------------------------------------------------

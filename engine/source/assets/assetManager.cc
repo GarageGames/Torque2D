@@ -795,7 +795,7 @@ bool AssetManager::renameDeclaredAsset( const char* pAssetIdFrom, const char* pA
     assetDeclaredUpdateVisitor.setAssetIdTo( assetIdTo );
 
     // Update asset file declaration.
-    if ( !assetDeclaredUpdateVisitor.parse( pAssetDefinition->mAssetBaseFilePath ) )
+    if ( !mTaml.parse( pAssetDefinition->mAssetBaseFilePath, assetDeclaredUpdateVisitor ) )
     {
         // No, so warn.
         Con::warnf("Asset Manager: Cannot rename declared asset Id '%s' to asset Id '%s' as the declared asset file could not be parsed: %s",
@@ -1003,156 +1003,6 @@ void AssetManager::purgeAssets( void )
 
 //-----------------------------------------------------------------------------
 
-bool AssetManager::getAssetSnapshot( AssetSnapshot* pAssetSnapshot, const char* pAssetId )
-{
-    // Debug Profiling.
-    PROFILE_SCOPE(AssetManager_GetAssetSnapshot);
-
-    // Sanity!
-    AssertFatal( pAssetSnapshot != NULL, "cannot get asset snapshot using NULL asset snapshot." );
-    AssertFatal( pAssetId != NULL, "Cannot get asset snapshot NULL asset Id." );
-
-    // Find asset.
-    AssetDefinition* pAssetDefinition = findAsset( pAssetId );
-
-    // Did we find the asset?
-    if ( pAssetDefinition == NULL )
-    {
-        // No, so warn.
-        Con::warnf( "Asset Manager: Failed to get asset snapshot of asset Id '%s' as it does not exist.", pAssetId );
-        return false;
-    }
-
-    // Acquire asset.
-    AssetBase* pAssetBase = acquireAsset<AssetBase>( pAssetId );
-
-    // Did we acquire the asset?
-    if ( pAssetBase == NULL )
-    {
-        // No, so warn.
-        Con::warnf( "Asset Manager: Failed to get asset snapshot of asset Id '%s' as it could not be acquired.", pAssetId );
-        return false;
-    }
-
-    // Reset asset snapshot.
-    pAssetSnapshot->resetSnapshot();
-
-    // Fetch asset parent abstract class rep.
-    // NOTE: I don't like referring to types in a string but we don't have much choice here.
-    AbstractClassRep* pAssetBaseParentClassRep = AbstractClassRep::findClassRep( "AssetBase" )->getParentClass();
-
-    // Fetch asset field list.
-    const AbstractClassRep::FieldList& assetFieldList = pAssetBase->getFieldList();
-
-    // Populate asset snapshot.
-    for( Vector<AbstractClassRep::Field>::const_iterator assetFieldItr = assetFieldList.begin(); assetFieldItr != assetFieldList.end(); ++assetFieldItr )
-    {
-        // Skip abstract class rep fields.
-        if (    assetFieldItr->type == AbstractClassRep::StartGroupFieldType ||
-                assetFieldItr->type == AbstractClassRep::EndGroupFieldType ||
-                assetFieldItr->type == AbstractClassRep::DepricatedFieldType )
-            continue;
-
-        // Fetch asset field name.
-        StringTableEntry assetFieldName = assetFieldItr->pFieldname;
-
-        // Skip asset parent field.
-        if ( pAssetBaseParentClassRep->findField( assetFieldName ) != NULL )
-            continue;
-
-        // Fetch asset field value.
-        const char* pFieldValue = pAssetBase->getDataField( assetFieldName, NULL );
-
-        // Set asset snapshot field.
-        pAssetSnapshot->setDataField( assetFieldName, NULL, pFieldValue );
-    }
-
-    // Release asset.
-    releaseAsset( pAssetId );
-
-    return true;
-}
-
-//-----------------------------------------------------------------------------
-
-bool AssetManager::setAssetSnapshot( AssetSnapshot* pAssetSnapshot, const char* pAssetId )
-{
-    // Debug Profiling.
-    PROFILE_SCOPE(AssetManager_SetAssetSnapshot);
-
-    // Sanity!
-    AssertFatal( pAssetSnapshot != NULL, "cannot get asset snapshot using NULL asset snapshot." );
-    AssertFatal( pAssetId != NULL, "Cannot get asset snapshot NULL asset Id." );
-
-    // Find asset.
-    AssetDefinition* pAssetDefinition = findAsset( pAssetId );
-
-    // Did we find the asset?
-    if ( pAssetDefinition == NULL )
-    {
-        // No, so warn.
-        Con::warnf( "Asset Manager: Failed to set asset snapshot of asset Id '%s' as it does not exist.", pAssetId );
-        return false;
-    }
-
-    // Acquire asset.
-    AssetBase* pAssetBase = acquireAsset<AssetBase>( pAssetId );
-
-    // Did we acquire the asset?
-    if ( pAssetBase == NULL )
-    {
-        // No, so warn.
-        Con::warnf( "Asset Manager: Failed to set asset snapshot of asset Id '%s' as it could not be acquired.", pAssetId );
-        return false;
-    }
-
-    // Disable asset refresh so we don't perform a refresh on each field change.
-    pAssetDefinition->mAssetRefreshEnable = false;
-
-    // Fetch asset parent abstract class rep.
-    // NOTE: I don't like referring to types in a string but we don't have much choice here.
-    AbstractClassRep* pAssetBaseParentClassRep = AbstractClassRep::findClassRep( "AssetBase" )->getParentClass();
-
-    // Fetch asset name field.
-    StringTableEntry assetNameField = StringTable->insert( ASSET_BASE_ASSETNAME_FIELD );
-
-    SimFieldDictionary* pSnapshotFields = pAssetSnapshot->getFieldDictionary();
-
-    // Iterate snapshot dynamic fields.
-    for( SimFieldDictionaryIterator fieldItr(pSnapshotFields); *fieldItr; ++fieldItr )
-    {
-        // Fetch dynamic field entry.
-        const SimFieldDictionary::Entry* pFieldEntry = *fieldItr;
-
-        // Fetch asset snapshot field name.
-        StringTableEntry assetSnapshotField = pFieldEntry->slotName;
-
-        // Skip asset name field.
-        if ( assetSnapshotField == assetNameField )
-            continue;
-
-        // Skip asset parent field.
-        if ( pAssetBaseParentClassRep->findField( assetSnapshotField ) != NULL )
-            continue;
-
-        // Set asset field.
-        pAssetBase->setDataField( assetSnapshotField, NULL, pFieldEntry->value );
-    }
-
-    // Re-enable asset refresh.
-    pAssetDefinition->mAssetRefreshEnable = true;
-
-    // Refresh asset.
-    refreshAsset( pAssetId );
-
-    // Release asset.
-    releaseAsset( pAssetId );
-
-    return true;
-}
-
-//-----------------------------------------------------------------------------
-
 bool AssetManager::deleteAsset( const char* pAssetId, const bool deleteLooseFiles, const bool deleteDependencies )
 {
     // Debug Profiling.
@@ -1342,7 +1192,7 @@ bool AssetManager::refreshAsset( const char* pAssetId )
             TamlAssetDeclaredVisitor assetDeclaredVisitor;
 
             // Parse the filename.
-            if ( !assetDeclaredVisitor.parse( pAssetDefinition->mAssetBaseFilePath ) )
+            if ( !mTaml.parse( pAssetDefinition->mAssetBaseFilePath, assetDeclaredVisitor ) )
             {
                 // Warn.
                 Con::warnf( "Asset Manager: Failed to parse file containing asset declaration: '%s'.\nDependencies are now incorrect!", pAssetDefinition->mAssetBaseFilePath );
@@ -2531,7 +2381,7 @@ bool AssetManager::scanDeclaredAssets( const char* pPath, const char* pExtension
         dSprintf( assetFileBuffer, sizeof(assetFileBuffer), "%s/%s", fileInfo.pFullPath, fileInfo.pFileName );
 
         // Parse the filename.
-        if ( !assetDeclaredVisitor.parse( assetFileBuffer ) )
+        if ( !mTaml.parse( assetFileBuffer, assetDeclaredVisitor ) )
         {
             // Warn.
             Con::warnf( "Asset Manager: Failed to parse file containing asset declaration: '%s'.", assetFileBuffer );
@@ -2725,7 +2575,7 @@ bool AssetManager::scanReferencedAssets( const char* pPath, const char* pExtensi
         typeReferenceFilePath referenceFilePath = StringTable->insert( assetFileBuffer );
 
         // Parse the filename.
-        if ( !assetReferencedVisitor.parse( referenceFilePath ) )
+        if ( !mTaml.parse( referenceFilePath, assetReferencedVisitor ) )
         {
             // Warn.
             Con::warnf( "Asset Manager: Failed to parse file containing asset references: '%s'.", referenceFilePath );
@@ -2880,7 +2730,7 @@ void AssetManager::renameAssetReferences( StringTableEntry assetIdFrom, StringTa
         }
 
         // Update asset file declaration.
-        if ( !assetReferencedUpdateVisitor.parse( referencedAssetItr->value ) )
+        if ( !mTaml.parse( referencedAssetItr->value, assetReferencedUpdateVisitor ) )
         {
             // No, so warn.
             Con::warnf("Asset Manager: Cannot rename referenced asset Id '%s' to asset Id '%s' as the referenced asset file could not be parsed: %s",
@@ -2930,7 +2780,7 @@ void AssetManager::removeAssetReferences( StringTableEntry assetId )
         }
 
         // Update asset file declaration.
-        if ( !assetReferencedUpdateVisitor.parse( referencedAssetItr->value ) )
+        if ( !mTaml.parse( referencedAssetItr->value, assetReferencedUpdateVisitor ) )
         {
             // No, so warn.
             Con::warnf("Asset Manager: Cannot remove referenced asset Id '%s' as the referenced asset file could not be parsed: %s",

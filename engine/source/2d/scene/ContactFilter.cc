@@ -48,10 +48,15 @@ bool ContactFilter::ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB)
     if ( pSceneObjectA->mCollisionSuppress || pSceneObjectB->mCollisionSuppress )
         return false;
 
-    // Check group/layer masks.
-    return
-        (pSceneObjectA->mCollisionGroupMask & pSceneObjectB->mSceneGroupMask) != 0 &&
-        (pSceneObjectB->mCollisionGroupMask & pSceneObjectA->mSceneGroupMask) != 0 &&
-        (pSceneObjectA->mCollisionLayerMask & pSceneObjectB->mSceneLayerMask) != 0 &&
-        (pSceneObjectB->mCollisionLayerMask & pSceneObjectA->mSceneLayerMask) != 0;
+    // Check collision rule A -> B.
+    if ( (pSceneObjectA->mCollisionGroupMask & pSceneObjectB->mSceneGroupMask) != 0 &&
+         (pSceneObjectA->mCollisionLayerMask & pSceneObjectB->mSceneLayerMask) != 0 )
+         return true;
+
+    // Check collision rule B -> A.
+    if ( (pSceneObjectB->mCollisionGroupMask & pSceneObjectA->mSceneGroupMask) != 0 &&
+         (pSceneObjectB->mCollisionLayerMask & pSceneObjectA->mSceneLayerMask) != 0 )
+         return true;
+
+    return false;
 }

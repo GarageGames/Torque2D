@@ -355,15 +355,11 @@ ConsoleMethod(CompositeSprite, getSpriteImageFrame, S32, 2, 2,  "() - Gets the s
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(CompositeSprite, setSpriteAnimation, void, 3, 4,  "(animationAssetId, [bool autoRestore]) - Sets the sprite animation.\n"
+ConsoleMethod(CompositeSprite, setSpriteAnimation, void, 3, 4,  "(animationAssetId) - Sets the sprite animation.\n"
                                                                 "@param imageAssetId The animation to set the sprite to.\n"
-                                                                "@param autoRestore Whether to restore any previously playing animation or not.\n"
                                                                 "@return No return value." )
 {
-    // Fetch Auto-Restore Flag.
-    const bool autoRestore = (argc >= 4) ? dAtob(argv[3]) : false;
-
-    object->setSpriteAnimation( argv[2], autoRestore );
+    object->setSpriteAnimation( argv[2] );
 }
 
 //-----------------------------------------------------------------------------
@@ -772,14 +768,25 @@ ConsoleMethod(CompositeSprite, setSpriteBlendColor, void, 3, 6, "(float red, flo
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(CompositeSprite, getSpriteBlendColor, const char*, 2, 2,  "Gets the sprite blend color\n"
+ConsoleMethod(CompositeSprite, getSpriteBlendColor, const char*, 2, 3,  "(allowColorNames) Gets the sprite blend color\n"
+                                                                        "@param allowColorNames Whether to allow stock color names to be returned or not.  Optional: Defaults to false.\n"
                                                                         "@return (float red / float green / float blue / float alpha) The sprite blend color.")
 {
-    // Get Blend Colour.
+    // Get Blend color.
     ColorF blendColor = object->getSpriteBlendColor();
 
-    // Fetch the field value.
-    return Con::getData( TypeColorF, &blendColor, 0 );
+    // Fetch allow color names flag.
+    const bool allowColorNames = (argc > 2) ? dAtob(argv[2] ) : false;
+
+    // Are color names allowed?
+    if ( allowColorNames )
+    {
+        // Yes, so fetch the field value.
+        return Con::getData( TypeColorF, &blendColor, 0 );
+    }
+
+    // No, so fetch the raw color values.
+    return blendColor.scriptThis();
 }
 
 //-----------------------------------------------------------------------------
@@ -908,7 +915,7 @@ ConsoleMethod(CompositeSprite, pickPoint, const char*, 3, 4,    "(x / y ) Picks 
     point = b2MulT( renderTransform, point );
 
     // Perform query.
-    pSpriteBatchQuery->renderQueryPoint( point );
+    pSpriteBatchQuery->queryPoint( point, true );
 
     // Fetch result count.
     const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
@@ -1032,7 +1039,7 @@ ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y )
     CoreMath::mRotateAABB( aabb, -renderTransform.q.GetAngle(), aabb );
 
     // Perform query.
-    pSpriteBatchQuery->renderQueryArea( aabb );
+    pSpriteBatchQuery->queryArea( aabb, true );
 
     // Fetch result count.
     const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
@@ -1146,7 +1153,7 @@ ConsoleMethod(CompositeSprite, pickRay, const char*, 4, 6,  "(startx/y, endx/y) 
     v2 = b2MulT( renderTransform, v2 );
 
     // Perform query.
-    pSpriteBatchQuery->renderQueryRay( v1, v2 );
+    pSpriteBatchQuery->queryRay( v1, v2, true );
 
     // Sanity!
     AssertFatal( pSpriteBatchQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );

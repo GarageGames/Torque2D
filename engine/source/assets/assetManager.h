@@ -47,10 +47,6 @@
 #include "assets/assetDefinition.h"
 #endif
 
-#ifndef _ASSET_SNAPSHOT_H_
-#include "assets/assetSnapshot.h"
-#endif
-
 #ifndef _ASSET_TAGS_MANIFEST_H_
 #include "assets/assetTagsManifest.h"
 #endif
@@ -325,10 +321,6 @@ public:
 
     bool releaseAsset( const char* pAssetId );
     void purgeAssets( void );
-
-    /// Asset snapshot.
-    bool getAssetSnapshot( AssetSnapshot* pAssetSnapshot, const char* pAssetId );
-    bool setAssetSnapshot( AssetSnapshot* pAssetSnapshot, const char* pAssetId );
 
     /// Asset deletion.
     bool deleteAsset( const char* pAssetId, const bool deleteLooseFiles, const bool deleteDependencies );
