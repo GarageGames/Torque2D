@@ -47,9 +47,9 @@ IMPLEMENT_CONOBJECT( AssetBase );
 StringTableEntry assetNameField = StringTable->insert( "AssetName" );
 StringTableEntry assetDescriptionField = StringTable->insert( "AssetDescription" );
 StringTableEntry assetCategoryField = StringTable->insert( "AssetCategory" );
+StringTableEntry assetAutoUnloadField = StringTable->insert( "AssetAutoUnload" );
 StringTableEntry assetInternalField = StringTable->insert( "AssetInternal" );
 StringTableEntry assetPrivateField = StringTable->insert( "AssetPrivate" );
-StringTableEntry assetAutoUnloadField = StringTable->insert( "AssetAutoUnload" );
 
 //-----------------------------------------------------------------------------
 
@@ -83,9 +83,9 @@ void AssetBase::initPersistFields()
     addProtectedField( assetNameField, TypeString, 0, &setAssetName, &getAssetName, &writeAssetName, "The name of the asset.  The is not a unique identification like an asset Id." );
     addProtectedField( assetDescriptionField, TypeString, 0, &setAssetDescription, &getAssetDescription, &writeAssetDescription, "The simple description of the asset contents." );
     addProtectedField( assetCategoryField, TypeString, 0, &setAssetCategory, &getAssetCategory, &writeAssetCategory, "An arbitrary category that can be used to categorized assets." );
-    addProtectedField( assetInternalField, TypeBool, 0, &setAssetAutoUnload, &getAssetAutoUnload, &writeAssetAutoUnload, "Whether the asset is automatically unloaded when an asset is released and has no other acquisitions or not." );
-    addProtectedField( assetPrivateField, TypeBool, 0, &setAssetInternal, &getAssetInternal, &writeAssetInternal, "Whether the asset is used internally only or not." );
-    addProtectedField( assetAutoUnloadField, TypeBool, 0, &defaultProtectedNotSetFn, &getAssetPrivate, &defaultProtectedNotWriteFn, "Whether the asset is private or not." );
+    addProtectedField( assetAutoUnloadField, TypeBool, 0, &setAssetAutoUnload, &getAssetAutoUnload, &writeAssetAutoUnload, "Whether the asset is automatically unloaded when an asset is released and has no other acquisitions or not." );
+    addProtectedField( assetInternalField, TypeBool, 0, &setAssetInternal, &getAssetInternal, &writeAssetInternal, "Whether the asset is used internally only or not." );
+    addProtectedField( assetPrivateField, TypeBool, 0, &defaultProtectedNotSetFn, &getAssetPrivate, &defaultProtectedNotWriteFn, "Whether the asset is private or not." );
 }
 
 //------------------------------------------------------------------------------
