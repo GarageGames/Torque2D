@@ -188,17 +188,26 @@ void SkeletonObject::generateComposition( void )
     
     // Generate visualization.
 
-	 // BOZO - Is this the right place to load stuff based on the SkeletonAsset?
-	 mSkeleton = _Torque2DSkeleton_create(mSkeletonAsset->mSkeletonData, this);
-	 mState = AnimationState_create(mSkeletonAsset->mStateData);
+    // BOZO - Is this the right place to load stuff based on the SkeletonAsset?
+    // Mich - Yup. It's here we will create Sprite objects, so we need to start
+    // grabbing data from the mSkeletonAsset
+	mSkeleton = _Torque2DSkeleton_create(mSkeletonAsset->mSkeletonData, this);
+	mState = AnimationState_create(mSkeletonAsset->mStateData);
 }
 
 //-----------------------------------------------------------------------------
-
+// time is the delta since the last update.
+// Note that this is called twice, once from ::preIntegrate, then
+// from ::interpolateObject. Check those functions out to see
+// the different timing values that will be passed in.
 void SkeletonObject::updateComposition( const F32 time )
 {
     // Scale time.
-    const F32 scaledTime = time * 100.0f; // BOZO - Why is time * 100?
+    // Mich - This is a placeholder variable, just showing we can create
+    // additional data based on the time that has elapsed. It can be anything we want it to be
+    // This code was copied from WaveComposite, which needed the time to be scaled
+    // to interpolate a sin wave. Right now we don't use it, so it can just be deleted
+    //const F32 scaledTime = time * 100.0f; // BOZO - Why is time * 100?
     
     // Update position/orientation/state of visualization
     

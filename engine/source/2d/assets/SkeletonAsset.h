@@ -28,8 +28,8 @@ private:
     typedef AssetBase Parent;
 
 public:
-    StringTableEntry            mSkeletonFile;
-	 float                       mScale; // BOZO - How to expose scale to scripts?
+    StringTableEntry             mSkeletonFile;
+	 float                       mScale;
 	 spine::Atlas*               mAtlas;
 	 spine::SkeletonData*        mSkeletonData;
 	 spine::AnimationStateData*  mStateData;

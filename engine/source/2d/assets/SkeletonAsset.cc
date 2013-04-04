@@ -212,20 +212,42 @@ void SkeletonAsset::initializeAsset( void )
     mSkeletonFile = expandAssetFilePath( mSkeletonFile );
 
     // Initialize any states or data
+    // Mich - At this point, this is where we should probably
+    // create an ImageAsset, build it based on the data from the .atlas.
+    // We can then add it to our AssetDatabase as a private asset
+    // This will later be used by the SkeletonObject. That object will
+    // create sprites and feed them this ImageAsset
+    // If there are multiple .atlas files (skins, right?), we would loop
+    // through them all, load them, then convert them to ImageAsset
     mAtlas = Atlas_readAtlasFile("spineboy.atlas"); // BOZO - Use reference to ImageAsset?
-    if (!mAtlas) return; // BOZO - Report atlas load failure? AssertFatal?
 
-	 SkeletonJson* json = SkeletonJson_create(mAtlas);
+    //if (!mAtlas) return; // BOZO - Report atlas load failure? AssertFatal?
+
+    // Torque 2D can technically render an object without an asset
+    // But I think the atlas is critical to a functioning Spine
+    // object. I think it would be good to AssertFatal now, then
+    // change it later if there are safe fallbacks
+    AssertFatal(mAtlas != NULL, "SkeletonAsset::initializeAsset() - Atlas was not loaded.");
+
+
+    SkeletonJson* json = SkeletonJson_create(mAtlas);
     json->scale = mScale;
     mSkeletonData = SkeletonJson_readSkeletonDataFile(json, mSkeletonFile);
-    if (!mSkeletonData) {
-        Atlas_dispose(mAtlas);
-		  mAtlas = 0;
-        // BOZO - Report json->error message? AssertFatal?
-    }
-	 SkeletonJson_dispose(json);
 
-	 mStateData = AnimationStateData_create(mSkeletonData);
+    if (!mSkeletonData)
+    {
+        Atlas_dispose(mAtlas);
+		mAtlas = 0;
+
+        // BOZO - Report json->error message? AssertFatal?
+        // MP - Same as above. Because the skeleton data is core to this
+        // working, let's assert for now until there is a fallback in place
+        AssertFatal(mSkeletonData != NULL, "SkeletonAsset::initializeAsset() - Skeleton data was not valid.");
+    }
+
+	SkeletonJson_dispose(json);
+
+    mStateData = AnimationStateData_create(mSkeletonData);
 }
 
 //------------------------------------------------------------------------------
