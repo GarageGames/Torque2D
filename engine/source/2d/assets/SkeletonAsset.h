@@ -48,7 +48,9 @@ public:
     virtual void copyTo(SimObject* object);
 
     void                    setSkeletonFile( const char* pSkeletonFile );
-    inline StringTableEntry getSkeletonFile( void ) const                      { return mSkeletonFile; };
+    inline StringTableEntry getSkeletonFile( void ) const                   { return mSkeletonFile; };
+    void                    setScale( const F32 fScale );
+    inline F32              getScale( void ) const                          { return mScale; } ;
 
     inline TextureHandle&   getImageTexture( void )                         { return mImageTextureHandle; }
     inline S32              getImageWidth( void ) const                     { return mImageTextureHandle.getWidth(); }
@@ -73,9 +75,12 @@ protected:
 
 
 protected:
-    static bool setSkeletonFile( void* obj, const char* data )                 { static_cast<SkeletonAsset*>(obj)->setSkeletonFile(data); return false; }
-    static const char* getSkeletonFile(void* obj, const char* data)            { return static_cast<SkeletonAsset*>(obj)->getSkeletonFile(); }
+    static bool setSkeletonFile( void* obj, const char* data )              { static_cast<SkeletonAsset*>(obj)->setSkeletonFile(data); return false; }
+    static const char* getSkeletonFile(void* obj, const char* data)         { return static_cast<SkeletonAsset*>(obj)->getSkeletonFile(); }
     static bool writeImageFile( void* obj, StringTableEntry pFieldName )    { return static_cast<SkeletonAsset*>(obj)->getSkeletonFile() != StringTable->EmptyString; }
+    static bool setScale( void* obj, const char* data )              { static_cast<SkeletonAsset*>(obj)->setScale(dAtof(data)); return false; }
+    static F32 getScale(void* obj, const char* data)         { return static_cast<SkeletonAsset*>(obj)->getScale(); }
+    static bool writeScale( void* obj, StringTableEntry pFieldName )   { return static_cast<SkeletonAsset*>(obj)->getScale() != 1.0f; }
 };
 
 #endif // _SKELETON_ASSET_H_

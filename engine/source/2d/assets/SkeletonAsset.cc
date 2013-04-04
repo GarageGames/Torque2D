@@ -129,7 +129,9 @@ void SkeletonAsset::initPersistFields()
     Parent::initPersistFields();
 
     // Fields.
-    addProtectedField("SkeletonFile", TypeAssetLooseFilePath, Offset(mSkeletonFile, SkeletonAsset), &setSkeletonFile, &getSkeletonFile, &defaultProtectedWriteFn, "");
+    
+    addProtectedField("SkeletonFile", TypeAssetLooseFilePath, Offset(mSkeletonFile, SkeletonAsset), &setSkeletonFile, &getSkeletonFile, &defaultProtectedWriteFn, "The loose file produced by the editor, which is fed into this asset");
+    addProtectedField("Scale", TypeF32, Offset(mScale, SkeletonAsset), &defaultProtectedSetFn, &defaultProtectedGetFn, &defaultProtectedWriteFn, "");
 }
 
 //------------------------------------------------------------------------------
@@ -170,6 +172,15 @@ void SkeletonAsset::setSkeletonFile( const char* pSkeletonFile )
 
     // Refresh the asset.
     refreshAsset();
+}
+
+//------------------------------------------------------------------------------
+
+void SkeletonAsset::setScale( F32 fScale)
+{
+    mScale = fScale;
+
+    // Scale has been set, what should happen after this?
 }
 
 //------------------------------------------------------------------------------
