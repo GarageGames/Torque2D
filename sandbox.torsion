@@ -21,7 +21,7 @@
 <Name>Debug</Name>
 <Executable>Torque2D_DEBUG.exe</Executable>
 <Arguments/>
-<HasExports>false</HasExports>
+<HasExports>true</HasExports>
 <Precompile>false</Precompile>
 <InjectDebugger>true</InjectDebugger>
 <UseSetModPaths>false</UseSetModPaths>
