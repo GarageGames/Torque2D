@@ -42,10 +42,10 @@ function ShooterControlsBehavior::onBehaviorAdd(%this)
     if (!isObject(GlobalActionMap))
        return;
 
-    GlobalActionMap.bindObj(getWord(%this.upKey, 0), getWord(%this.upKey, 1), "moveUp", %this);
-    GlobalActionMap.bindObj(getWord(%this.downKey, 0), getWord(%this.downKey, 1), "moveDown", %this);
-    GlobalActionMap.bindObj(getWord(%this.leftKey, 0), getWord(%this.leftKey, 1), "moveLeft", %this);
-    GlobalActionMap.bindObj(getWord(%this.rightKey, 0), getWord(%this.rightKey, 1), "moveRight", %this);
+    GlobalActionMap.bindObj(%this.upKey._0, %this.upKey._1, "moveUp", %this);
+    GlobalActionMap.bindObj(%this.downKey._0, %this.downKey._1, "moveDown", %this);
+    GlobalActionMap.bindObj(%this.leftKey._0, %this.leftKey._1, "moveLeft", %this);
+    GlobalActionMap.bindObj(%this.rightKey._0, %this.rightKey._1, "moveRight", %this);
 
     %this.up = 0;
     %this.down = 0;
@@ -58,17 +58,10 @@ function ShooterControlsBehavior::onBehaviorRemove(%this)
     if (!isObject(GlobalActionMap))
        return;
 
-    %this.owner.disableUpdateCallback();
-
     GlobalActionMap.unbindObj(getWord(%this.upKey, 0), getWord(%this.upKey, 1), %this);
     GlobalActionMap.unbindObj(getWord(%this.downKey, 0), getWord(%this.downKey, 1), %this);
     GlobalActionMap.unbindObj(getWord(%this.leftKey, 0), getWord(%this.leftKey, 1), %this);
     GlobalActionMap.unbindObj(getWord(%this.rightKey, 0), getWord(%this.rightKey, 1), %this);
-
-    %this.up = 0;
-    %this.down = 0;
-    %this.left = 0;
-    %this.right = 0;
 }
 
 function ShooterControlsBehavior::updateMovement(%this)
