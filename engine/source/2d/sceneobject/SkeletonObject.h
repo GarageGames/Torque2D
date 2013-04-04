@@ -28,6 +28,9 @@ private:
     AssetPtr<SkeletonAsset>     mSkeletonAsset;
     F32                         mPreTickTime;
     F32                         mPostTickTime;
+	 spine::Skeleton*            mSkeleton;
+	 spine::AnimationState*      mState;
+	 float                       mTimeScale;
     
 public:
     SkeletonObject();
@@ -47,8 +50,8 @@ public:
     virtual void scenePrepareRender( const SceneRenderState* pSceneRenderState, SceneRenderQueue* pSceneRenderQueue );
     virtual void sceneRender( const SceneRenderState* pSceneRenderState, const SceneRenderRequest* pSceneRenderRequest, BatchRender* pBatchRenderer );
     
-    bool setSkeleton( const char* pSkeletonAssetId );
-    inline StringTableEntry getSkeleton( void ) const { return mSkeletonAsset.getAssetId(); }
+    bool setSkeletonAsset( const char* pSkeletonAssetId );
+    inline StringTableEntry getSkeletonAsset( void ) const { return mSkeletonAsset.getAssetId(); }
     
     /// Declare Console Object.
     DECLARE_CONOBJECT( SkeletonObject );
@@ -58,9 +61,9 @@ protected:
     void updateComposition( const F32 time );
     
 protected:
-    static bool setSkeleton( void* obj, const char* data )                 { static_cast<SkeletonObject*>(obj)->setSkeleton(data); return false; }
-    static const char* getSkeleton(void* obj, const char* data)            { return static_cast<SkeletonObject*>(obj)->getSkeleton(); }
-    static bool writeSkeleton( void* obj, StringTableEntry pFieldName ) { return static_cast<SkeletonObject*>(obj)->mSkeletonAsset.notNull(); }
+    static bool setSkeletonAsset( void* obj, const char* data )                 { static_cast<SkeletonObject*>(obj)->setSkeletonAsset(data); return false; }
+    static const char* getSkeletonAsset(void* obj, const char* data)            { return static_cast<SkeletonObject*>(obj)->getSkeletonAsset(); }
+    static bool writeSkeletonAsset( void* obj, StringTableEntry pFieldName ) { return static_cast<SkeletonObject*>(obj)->mSkeletonAsset.notNull(); }
 };
 
 #endif // _SKELETON_OBJECT_H_

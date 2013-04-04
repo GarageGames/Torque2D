@@ -55,6 +55,8 @@
 // Script bindings.
 #include "SkeletonAsset_ScriptBinding.h"
 
+using namespace spine;
+
 //------------------------------------------------------------------------------
 
 IMPLEMENT_CONOBJECT(SkeletonAsset);
@@ -105,17 +107,18 @@ ConsoleSetType( TypeSkeletonAssetPtr )
 
 //------------------------------------------------------------------------------
 
-SkeletonAsset::SkeletonAsset() :  mSourceFile(StringTable->EmptyString),
+SkeletonAsset::SkeletonAsset() :  mSkeletonFile(StringTable->EmptyString),
                                mImageTextureHandle(NULL)
 {
-    int x;
-    x = 0;
 }
 
 //------------------------------------------------------------------------------
 
 SkeletonAsset::~SkeletonAsset()
 {
+	AnimationStateData_dispose(mStateData);
+	SkeletonData_dispose(mSkeletonData);
+	Atlas_dispose(mAtlas);
 }
 
 //------------------------------------------------------------------------------
@@ -126,7 +129,7 @@ void SkeletonAsset::initPersistFields()
     Parent::initPersistFields();
 
     // Fields.
-    addProtectedField("SourceFile", TypeAssetLooseFilePath, Offset(mSourceFile, SkeletonAsset), &setSourceFile, &getSourceFile, &defaultProtectedWriteFn, "");
+    addProtectedField("SkeletonFile", TypeAssetLooseFilePath, Offset(mSkeletonFile, SkeletonAsset), &setSkeletonFile, &getSkeletonFile, &defaultProtectedWriteFn, "");
 }
 
 //------------------------------------------------------------------------------
@@ -150,20 +153,20 @@ void SkeletonAsset::onRemove()
 
 //------------------------------------------------------------------------------
 
-void SkeletonAsset::setSourceFile( const char* pSourceFile )
+void SkeletonAsset::setSkeletonFile( const char* pSkeletonFile )
 {
     // Sanity!
-    AssertFatal( pSourceFile != NULL, "Cannot use a NULL image file." );
+    AssertFatal( pSkeletonFile != NULL, "Cannot use a NULL image file." );
 
     // Fetch image file.
-    pSourceFile = StringTable->insert( pSourceFile );
+    pSkeletonFile = StringTable->insert( pSkeletonFile );
 
     // Ignore no change,
-    if ( pSourceFile == mSourceFile )
+    if ( pSkeletonFile == mSkeletonFile )
         return;
 
     // Update.
-    mSourceFile = getOwned() ? expandAssetFilePath( pSourceFile ) : StringTable->insert( pSourceFile );
+    mSkeletonFile = getOwned() ? expandAssetFilePath( pSkeletonFile ) : StringTable->insert( pSkeletonFile );
 
     // Refresh the asset.
     refreshAsset();
@@ -183,7 +186,8 @@ void SkeletonAsset::copyTo(SimObject* object)
     AssertFatal(pAsset != NULL, "SkeletonAsset::copyTo() - Object is not the correct type.");
 
     // Copy state.
-    pAsset->setSourceFile( getSourceFile() );
+    pAsset->setSkeletonFile( getSkeletonFile() );
+	 // BOZO - Need to copy data loaded from files?
 }
 
 //------------------------------------------------------------------------------
@@ -194,9 +198,23 @@ void SkeletonAsset::initializeAsset( void )
     Parent::initializeAsset();
 
     // Ensure the image-file is expanded.
-    mSourceFile = expandAssetFilePath( mSourceFile );
+    mSkeletonFile = expandAssetFilePath( mSkeletonFile );
 
     // Initialize any states or data
+    mAtlas = Atlas_readAtlasFile("spineboy.atlas"); // BOZO - Use reference to ImageAsset?
+    if (!mAtlas) return; // BOZO - Report atlas load failure? AssertFatal?
+
+	 SkeletonJson* json = SkeletonJson_create(mAtlas);
+    json->scale = mScale;
+    mSkeletonData = SkeletonJson_readSkeletonDataFile(json, mSkeletonFile);
+    if (!mSkeletonData) {
+        Atlas_dispose(mAtlas);
+		  mAtlas = 0;
+        // BOZO - Report json->error message? AssertFatal?
+    }
+	 SkeletonJson_dispose(json);
+
+	 mStateData = AnimationStateData_create(mSkeletonData);
 }
 
 //------------------------------------------------------------------------------
@@ -221,8 +239,8 @@ void SkeletonAsset::onTamlPreWrite( void )
     // Call parent.
     Parent::onTamlPreWrite();
 
-    // Ensure the source-file is collapsed.
-    mSourceFile = collapseAssetFilePath( mSourceFile );
+    // Ensure the skeleton file is collapsed.
+    mSkeletonFile = collapseAssetFilePath( mSkeletonFile );
 }
 
 //-----------------------------------------------------------------------------
@@ -232,8 +250,8 @@ void SkeletonAsset::onTamlPostWrite( void )
     // Call parent.
     Parent::onTamlPostWrite();
 
-    // Ensure the image-file is expanded.
-    mSourceFile = expandAssetFilePath( mSourceFile );
+    // Ensure the skeleton file is expanded.
+    mSkeletonFile = expandAssetFilePath( mSkeletonFile );
 }
 
 //------------------------------------------------------------------------------

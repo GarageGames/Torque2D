@@ -20,12 +20,14 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _WAVE_COMPOSITE_H_
+#ifndef _SKELETON_OBJECT_H_
 #include "2d/sceneobject/SkeletonObject.h"
 #endif
 
 // Script bindings.
 #include "2d/sceneobject/SkeletonObject_ScriptBinding.h"
+
+using namespace spine;
 
 //-----------------------------------------------------------------------------
 
@@ -53,7 +55,7 @@ void SkeletonObject::initPersistFields()
     // Call parent.
     Parent::initPersistFields();
     
-    addProtectedField( "Asset", TypeSkeletonAssetPtr, Offset(mSkeletonAsset, SkeletonObject), &setSkeleton, &getSkeleton, &writeSkeleton, "The skeleton asset Id used for the skeleton." );
+    addProtectedField( "Asset", TypeSkeletonAssetPtr, Offset(mSkeletonAsset, SkeletonObject), &setSkeletonAsset, &getSkeletonAsset, &writeSkeletonAsset, "The skeleton asset ID used for the skeleton." );
 }
 
 //-----------------------------------------------------------------------------
@@ -132,7 +134,8 @@ void SkeletonObject::copyTo(SimObject* object)
     AssertFatal(pComposite != NULL, "SkeletonObject::copyTo() - Object is not the correct type.");
     
     // Copy state.
-    pComposite->setSkeleton( getSkeleton() );
+    pComposite->setSkeletonAsset( getSkeletonAsset() );
+	 // BOZO - Copy anything else?
 }
 
 //-----------------------------------------------------------------------------
@@ -141,6 +144,8 @@ void SkeletonObject::scenePrepareRender( const SceneRenderState* pSceneRenderSta
 {
     // Prepare render.
     SpriteBatch::prepareRender( this, pSceneRenderState, pSceneRenderQueue );
+
+	 // BOZO - Why would I do something here and not in sceneRender?
 }
 
 //-----------------------------------------------------------------------------
@@ -149,11 +154,12 @@ void SkeletonObject::sceneRender( const SceneRenderState* pSceneRenderState, con
 {
     // Render.
     SpriteBatch::render( pSceneRenderState, pSceneRenderRequest, pBatchRenderer );
+
 }
 
 //-----------------------------------------------------------------------------
 
-bool SkeletonObject::setSkeleton( const char* pSkeletonAssetId )
+bool SkeletonObject::setSkeletonAsset( const char* pSkeletonAssetId )
 {
     // Sanity!
     AssertFatal( pSkeletonAssetId != NULL, "Cannot use a NULL asset Id." );
@@ -176,11 +182,15 @@ void SkeletonObject::generateComposition( void )
     // Finish if image asset isn't available.
     if ( mSkeletonAsset.isNull() )
         return;
-    
+
     // Fetch asset Id.
     //StringTableEntry assetId = mSkeletonAsset.getAssetId();
     
     // Generate visualization.
+
+	 // BOZO - Is this the right place to load stuff based on the SkeletonAsset?
+	 mSkeleton = _Torque2DSkeleton_create(mSkeletonAsset->mSkeletonData, this);
+	 mState = AnimationState_create(mSkeletonAsset->mStateData);
 }
 
 //-----------------------------------------------------------------------------
@@ -188,8 +198,13 @@ void SkeletonObject::generateComposition( void )
 void SkeletonObject::updateComposition( const F32 time )
 {
     // Scale time.
-    const F32 scaledTime = time * 100.0f;
+    const F32 scaledTime = time * 100.0f; // BOZO - Why is time * 100?
     
     // Update position/orientation/state of visualization
     
+	 float deltaTime = 0.16f; // BOZO - Need time since last frame. What is "time"?
+    Skeleton_update(mSkeleton, deltaTime);
+    AnimationState_update(mState, deltaTime * mTimeScale);
+    AnimationState_apply(mState, mSkeleton);
+    Skeleton_updateWorldTransform(mSkeleton);
 }

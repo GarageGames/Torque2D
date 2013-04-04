@@ -12,6 +12,10 @@
 #include "graphics/TextureManager.h"
 #endif
 
+#ifndef _SPINE_TORQUE2D_H_
+#include "spine/spine-torque2d.h"
+#endif
+
 //-----------------------------------------------------------------------------
 
 DefineConsoleType( TypeSkeletonAssetPtr )
@@ -24,12 +28,11 @@ private:
     typedef AssetBase Parent;
 
 public:
-
-    //
-    // mSourceFile can be replaced with amore appropriate
-    // name, based on what it's loading. For example,
-    // if it's a png, this could be mImageFile
-    StringTableEntry            mSourceFile;
+    StringTableEntry            mSkeletonFile;
+	 float                       mScale; // BOZO - How to expose scale to scripts?
+	 spine::Atlas*               mAtlas;
+	 spine::SkeletonData*        mSkeletonData;
+	 spine::AnimationStateData*  mStateData;
 
     // Leaving this here, just in case we need to create textures
     TextureHandle               mImageTextureHandle;
@@ -44,8 +47,8 @@ public:
     virtual void onRemove();
     virtual void copyTo(SimObject* object);
 
-    void                    setSourceFile( const char* pSourceFile );
-    inline StringTableEntry getSourceFile( void ) const                      { return mSourceFile; };
+    void                    setSkeletonFile( const char* pSkeletonFile );
+    inline StringTableEntry getSkeletonFile( void ) const                      { return mSkeletonFile; };
 
     inline TextureHandle&   getImageTexture( void )                         { return mImageTextureHandle; }
     inline S32              getImageWidth( void ) const                     { return mImageTextureHandle.getWidth(); }
@@ -70,9 +73,9 @@ protected:
 
 
 protected:
-    static bool setSourceFile( void* obj, const char* data )                 { static_cast<SkeletonAsset*>(obj)->setSourceFile(data); return false; }
-    static const char* getSourceFile(void* obj, const char* data)            { return static_cast<SkeletonAsset*>(obj)->getSourceFile(); }
-    static bool writeImageFile( void* obj, StringTableEntry pFieldName )    { return static_cast<SkeletonAsset*>(obj)->getSourceFile() != StringTable->EmptyString; }
+    static bool setSkeletonFile( void* obj, const char* data )                 { static_cast<SkeletonAsset*>(obj)->setSkeletonFile(data); return false; }
+    static const char* getSkeletonFile(void* obj, const char* data)            { return static_cast<SkeletonAsset*>(obj)->getSkeletonFile(); }
+    static bool writeImageFile( void* obj, StringTableEntry pFieldName )    { return static_cast<SkeletonAsset*>(obj)->getSkeletonFile() != StringTable->EmptyString; }
 };
 
 #endif // _SKELETON_ASSET_H_

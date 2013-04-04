@@ -20,16 +20,16 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SkeletonAsset, setSourceFile, void, 3, 3,     "(SourceFile) Sets the source file (? file).\n"
+ConsoleMethod(SkeletonAsset, setSkeletonFile, void, 3, 3,     "(SkeletonFile) Sets the skeleton file (? file).\n"
                                                         "@return No return value.")
 {
-    object->setSourceFile( argv[2] );
+    object->setSkeletonFile( argv[2] );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SkeletonAsset, getImageFile, const char*, 2, 2,  "() Gets the source file.\n"
+ConsoleMethod(SkeletonAsset, getImageFile, const char*, 2, 2,  "() Gets the skeleton file.\n"
                                                             "@return Returns the ? file.")
 {
-    return object->getSourceFile();
+    return object->getSkeletonFile();
 }
