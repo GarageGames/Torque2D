@@ -107,11 +107,13 @@ ConsoleSetType( TypeImageAssetPtr )
 
 //------------------------------------------------------------------------------
 
-static StringTableEntry cellCustomNodeName          = StringTable->insert( "Cells" );
+static StringTableEntry cellCustomNodeCellsName     = StringTable->insert( "Cells" );
+static StringTableEntry cellCustomNodeNamedCells    = StringTable->insert(" NamedCells" );
 static StringTableEntry cellNodeName                = StringTable->insert( "Cell" );
 static StringTableEntry cellOffsetName              = StringTable->insert( "Offset" );
 static StringTableEntry cellWidthName               = StringTable->insert( "Width" );
 static StringTableEntry cellHeightName              = StringTable->insert( "Height" );
+static StringTableEntry cellNameEntryName           = StringTable->insert( "CellName" );
 
 //------------------------------------------------------------------------------
 
@@ -1085,6 +1087,7 @@ void ImageAsset::calculateImplicitMode( void )
 
     // Sanity!
     AssertFatal( !mExplicitMode, "Cannot calculate implicit cells when in explicit mode." );
+    AssertFatal( !mNameMode, "Cannot calculate implicit cells when in name mode." );
 
     // Fetch the texture object.
     TextureObject* pTextureObject = ((TextureObject*)mImageTextureHandle);
@@ -1286,7 +1289,11 @@ void ImageAsset::calculateExplicitMode( void )
 
 void ImageAsset::calculateNameMode( void )
 {
+    // Debug Profiling.
+    PROFILE_SCOPE(ImageAsset_CalculateNameMode);
 
+    // Sanity!
+    AssertFatal( mNameMode, "Cannot calculate name cells when not in name mode." );
 }
 
 //------------------------------------------------------------------------------
@@ -1308,25 +1315,50 @@ void ImageAsset::onTamlCustomWrite( TamlCustomNodes& customNodes )
     Parent::onTamlCustomWrite( customNodes );
 
     // Finish if not in explicit mode.
-    if ( !mExplicitMode )
+    if ( !mExplicitMode && !mNameMode)
         return;
 
-    // Add cell custom node.
-    TamlCustomNode* pCustomCellNodes = customNodes.addNode( cellCustomNodeName );
-
-    // Iterate explicit frames.
-    for( typeExplicitFrameAreaVector::iterator frameItr = mExplicitFrames.begin(); frameItr != mExplicitFrames.end(); ++frameItr )
+    if (mExplicitFrames.size() > 0)
     {
-        // Fetch pixel area.
-        const FrameArea::PixelArea& pixelArea = *frameItr;
+        // Add cell custom node.
+        TamlCustomNode* pCustomCellNodes = customNodes.addNode( cellCustomNodeCellsName );
 
-        // Add cell alias.
-        TamlCustomNode* pCellNode = pCustomCellNodes->addNode( cellNodeName );
+        // Iterate explicit frames.
+        for( typeExplicitFrameAreaVector::iterator frameItr = mExplicitFrames.begin(); frameItr != mExplicitFrames.end(); ++frameItr )
+        {
+            // Fetch pixel area.
+            const FrameArea::PixelArea& pixelArea = *frameItr;
 
-        // Add cell properties.
-        pCellNode->addField( cellOffsetName, pixelArea.mPixelOffset );
-        pCellNode->addField( cellWidthName, pixelArea.mPixelWidth );
-        pCellNode->addField( cellHeightName, pixelArea.mPixelHeight );
+            // Add cell alias.
+            TamlCustomNode* pCellNode = pCustomCellNodes->addNode( cellNodeName );
+
+            // Add cell properties.
+            pCellNode->addField( cellOffsetName, pixelArea.mPixelOffset );
+            pCellNode->addField( cellWidthName, pixelArea.mPixelWidth );
+            pCellNode->addField( cellHeightName, pixelArea.mPixelHeight );
+        }
+    }
+
+    if (mNamedFrames.size() > 0)
+    {
+        // Add named cell custom node.
+        TamlCustomNode* pCustomNamedCellNodes = customNodes.addNode( cellCustomNodeCellsName );
+
+        // Iterate named frames.
+        for( typeNameFrameAreaHash::iterator itr = mNamedFrames.begin(); itr != mNamedFrames.end(); ++itr )
+        {
+            // Fetch pixel area.
+            const FrameArea::PixelArea& pixelArea = itr->value;
+
+            // Add cell alias
+            TamlCustomNode* pCellNode = pCustomNamedCellNodes->addNode( cellNodeName );
+
+            // Add cell properties.
+            pCellNode->addField( cellNameEntryName, itr->key );
+            pCellNode->addField( cellOffsetName, pixelArea.mPixelOffset );
+            pCellNode->addField( cellWidthName, pixelArea.mPixelWidth );
+            pCellNode->addField( cellHeightName, pixelArea.mPixelHeight );
+        }
     }
 }
 
@@ -1341,99 +1373,200 @@ void ImageAsset::onTamlCustomRead( const TamlCustomNodes& customNodes )
     Parent::onTamlCustomRead( customNodes );
 
     // Find cell custom node.
-    const TamlCustomNode* pCustomCellNodes = customNodes.findNode( cellCustomNodeName );
+    const TamlCustomNode* pCustomCellNodes = customNodes.findNode( cellCustomNodeCellsName );
 
-    // Finish if we don't have explicit cells.
-    if ( pCustomCellNodes == NULL )
-        return;
-
-    // Set explicit mode.
-    mExplicitMode = true;
-
-    // Fetch children cell nodes.
-    const TamlCustomNodeVector& cellNodes = pCustomCellNodes->getChildren();
-
-    // Iterate cells.
-    for( TamlCustomNodeVector::const_iterator cellNodeItr = cellNodes.begin(); cellNodeItr != cellNodes.end(); ++cellNodeItr )
+    // Continue if we have explicit cells.
+    if ( pCustomCellNodes != NULL )
     {
-        // Fetch cell node.
-        TamlCustomNode* pCellNode = *cellNodeItr;
+        // Set explicit mode.
+        mExplicitMode = true;
 
-        // Fetch node name.
-        StringTableEntry nodeName = pCellNode->getNodeName();
+        // Fetch children cell nodes.
+        const TamlCustomNodeVector& cellNodes = pCustomCellNodes->getChildren();
 
-        // Is this a valid alias?
-        if ( nodeName != cellNodeName )
+        // Iterate cells.
+        for( TamlCustomNodeVector::const_iterator cellNodeItr = cellNodes.begin(); cellNodeItr != cellNodes.end(); ++cellNodeItr )
         {
-            // No, so warn.
-            Con::warnf( "ImageAsset::onTamlCustomRead() - Encountered an unknown custom name of '%s'.  Only '%s' is valid.", nodeName, cellNodeName );
-            continue;
-        }
+            // Fetch cell node.
+            TamlCustomNode* pCellNode = *cellNodeItr;
 
-        Point2I cellOffset(-1, -1);
-        S32 cellWidth = 0;
-        S32 cellHeight = 0;
+            // Fetch node name.
+            StringTableEntry nodeName = pCellNode->getNodeName();
 
-        // Fetch fields.
-        const TamlCustomFieldVector& fields = pCellNode->getFields();
-
-        // Iterate property fields.
-        for ( TamlCustomFieldVector::const_iterator fieldItr = fields.begin(); fieldItr != fields.end(); ++fieldItr )
-        {
-            // Fetch field.
-            const TamlCustomField* pField = *fieldItr;
-
-            // Fetch field name.
-            StringTableEntry fieldName = pField->getFieldName();
-
-            // Check common fields.
-            if ( fieldName == cellOffsetName )
+            // Is this a valid alias?
+            if ( nodeName != cellNodeName )
             {
-                pField->getFieldValue( cellOffset );
-            }
-            else if ( fieldName == cellWidthName )
-            {
-                pField->getFieldValue( cellWidth );
-            }
-            else if ( fieldName == cellHeightName )
-            {
-                pField->getFieldValue( cellHeight );
-            }
-            else
-            {
-                // Unknown name so warn.
-                Con::warnf( "ImageAsset::onTamlCustomRead() - Encountered an unknown custom field name of '%s'.", fieldName );
+                // No, so warn.
+                Con::warnf( "ImageAsset::onTamlCustomRead() - Encountered an unknown custom name of '%s'.  Only '%s' is valid.", nodeName, cellNodeName );
                 continue;
             }
-        }
 
-        // Is cell offset valid?
-        if ( cellOffset.x < 0 || cellOffset.y < 0 )
+            Point2I cellOffset(-1, -1);
+            S32 cellWidth = 0;
+            S32 cellHeight = 0;
+
+            // Fetch fields.
+            const TamlCustomFieldVector& fields = pCellNode->getFields();
+
+            // Iterate property fields.
+            for ( TamlCustomFieldVector::const_iterator fieldItr = fields.begin(); fieldItr != fields.end(); ++fieldItr )
+            {
+                // Fetch field.
+                const TamlCustomField* pField = *fieldItr;
+
+                // Fetch field name.
+                StringTableEntry fieldName = pField->getFieldName();
+
+                // Check common fields.
+                if ( fieldName == cellOffsetName )
+                {
+                    pField->getFieldValue( cellOffset );
+                }
+                else if ( fieldName == cellWidthName )
+                {
+                    pField->getFieldValue( cellWidth );
+                }
+                else if ( fieldName == cellHeightName )
+                {
+                    pField->getFieldValue( cellHeight );
+                }
+                else
+                {
+                    // Unknown name so warn.
+                    Con::warnf( "ImageAsset::onTamlCustomRead() - Encountered an unknown custom field name of '%s'.", fieldName );
+                    continue;
+                }
+            }
+
+            // Is cell offset valid?
+            if ( cellOffset.x < 0 || cellOffset.y < 0 )
+            {
+                // No, so warn.
+                Con::warnf( "ImageAsset::onTamlCustomRead() - Cell offset of '(%d,%d)' is invalid or was not set.", cellOffset.x, cellOffset.y );
+                continue;
+            }
+
+            // Is cell width valid?
+            if ( cellWidth <= 0 )
+            {
+                // No, so warn.
+                Con::warnf( "ImageAsset::onTamlCustomRead() - Cell width of '%d' is invalid or was not set.", cellWidth );
+                continue;
+            }
+
+            // Is cell height valid?
+            if ( cellHeight <= 0 )
+            {
+                // No, so warn.
+                Con::warnf( "ImageAsset::onTamlCustomRead() - Cell height of '%d' is invalid or was not set.", cellHeight );
+                continue;
+            }
+
+            // Add explicit frame.
+            FrameArea::PixelArea pixelArea( cellOffset.x, cellOffset.y, cellWidth, cellHeight );
+            mExplicitFrames.push_back( pixelArea );
+        }
+    }
+
+    // Find cell custom node.
+    const TamlCustomNode* pCustomNamedCellNodes = customNodes.findNode( cellCustomNodeNamedCells );
+
+    // Continue if we have explicit cells.
+    if ( pCustomNamedCellNodes != NULL )
+    {
+        // Set name mode.
+        mNameMode = true;
+
+        // Fetch children cell nodes.
+        const TamlCustomNodeVector& cellNodes = pCustomNamedCellNodes->getChildren();
+
+        // Iterate cells.
+        for( TamlCustomNodeVector::const_iterator cellNodeItr = cellNodes.begin(); cellNodeItr != cellNodes.end(); ++cellNodeItr )
         {
-            // No, so warn.
-            Con::warnf( "ImageAsset::onTamlCustomRead() - Cell offset of '(%d,%d)' is invalid or was not set.", cellOffset.x, cellOffset.y );
-            continue;
-        }
+            // Fetch cell node.
+            TamlCustomNode* pCellNode = *cellNodeItr;
 
-        // Is cell width valid?
-        if ( cellWidth <= 0 )
-        {
-            // No, so warn.
-            Con::warnf( "ImageAsset::onTamlCustomRead() - Cell width of '%d' is invalid or was not set.", cellWidth );
-            continue;
-        }
+            // Fetch node name.
+            StringTableEntry nodeName = pCellNode->getNodeName();
 
-        // Is cell height valid?
-        if ( cellHeight <= 0 )
-        {
-            // No, so warn.
-            Con::warnf( "ImageAsset::onTamlCustomRead() - Cell height of '%d' is invalid or was not set.", cellHeight );
-            continue;
-        }
+            // Is this a valid alias?
+            if ( nodeName != cellNameEntryName )
+            {
+                // No, so warn.
+                Con::warnf( "ImageAsset::onTamlCustomRead() - Encountered an unknown custom name of '%s'.  Only '%s' is valid.", nodeName, cellNameEntryName );
+                continue;
+            }
 
-        // Add explicit frame.
-        FrameArea::PixelArea pixelArea( cellOffset.x, cellOffset.y, cellWidth, cellHeight );
-        mExplicitFrames.push_back( pixelArea );
+            StringTableEntry cellName;
+            Point2I cellOffset(-1, -1);
+            S32 cellWidth = 0;
+            S32 cellHeight = 0;
+
+            // Fetch fields.
+            const TamlCustomFieldVector& fields = pCellNode->getFields();
+
+            // Iterate property fields.
+            for ( TamlCustomFieldVector::const_iterator fieldItr = fields.begin(); fieldItr != fields.end(); ++fieldItr )
+            {
+                // Fetch field.
+                const TamlCustomField* pField = *fieldItr;
+
+                // Fetch field name.
+                StringTableEntry fieldName = pField->getFieldName();
+
+                // Check common fields.
+                if ( fieldName == cellNameEntryName )
+                {
+                    cellName = StringTable->insert(pField->getFieldValue());
+                }
+                if ( fieldName == cellOffsetName )
+                {
+                    pField->getFieldValue( cellOffset );
+                }
+                else if ( fieldName == cellWidthName )
+                {
+                    pField->getFieldValue( cellWidth );
+                }
+                else if ( fieldName == cellHeightName )
+                {
+                    pField->getFieldValue( cellHeight );
+                }
+                else
+                {
+                    // Unknown name so warn.
+                    Con::warnf( "ImageAsset::onTamlCustomRead() - Encountered an unknown custom field name of '%s'.", fieldName );
+                    continue;
+                }
+            }
+
+            // Is cell offset valid?
+            if ( cellOffset.x < 0 || cellOffset.y < 0 )
+            {
+                // No, so warn.
+                Con::warnf( "ImageAsset::onTamlCustomRead() - Cell offset of '(%d,%d)' is invalid or was not set.", cellOffset.x, cellOffset.y );
+                continue;
+            }
+
+            // Is cell width valid?
+            if ( cellWidth <= 0 )
+            {
+                // No, so warn.
+                Con::warnf( "ImageAsset::onTamlCustomRead() - Cell width of '%d' is invalid or was not set.", cellWidth );
+                continue;
+            }
+
+            // Is cell height valid?
+            if ( cellHeight <= 0 )
+            {
+                // No, so warn.
+                Con::warnf( "ImageAsset::onTamlCustomRead() - Cell height of '%d' is invalid or was not set.", cellHeight );
+                continue;
+            }
+
+            // Add explicit frame.
+            FrameArea::PixelArea pixelArea( cellOffset.x, cellOffset.y, cellWidth, cellHeight );
+            mNamedFrames.insert( cellName, pixelArea );
+        }
     }
 }
 
@@ -1449,7 +1582,7 @@ static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlEleme
 
     // Create ImageAsset node element.
     TiXmlElement* pImageAssetNodeElement = new TiXmlElement( "xs:element" );
-    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), cellCustomNodeName );
+    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), cellCustomNodeCellsName );
     pImageAssetNodeElement->SetAttribute( "name", buffer );
     pImageAssetNodeElement->SetAttribute( "minOccurs", 0 );
     pImageAssetNodeElement->SetAttribute( "maxOccurs", 1 );
