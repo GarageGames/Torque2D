@@ -140,7 +140,7 @@ public:
 private:
     typedef Vector<FrameArea> typeFrameAreaVector;
     typedef Vector<FrameArea::PixelArea> typeExplicitFrameAreaVector;
-    typedef HashMap<StringTableEntry, FrameArea::PixelArea> typeNameFrameAreaHash;
+    typedef HashMap<const char*, FrameArea> typeNameFrameAreaHash;
 
     /// Configuration.
     StringTableEntry            mImageFile;
@@ -222,8 +222,10 @@ public:
     inline U32              getFrameCount( void ) const                     { return (U32)mFrames.size(); };
     inline bool             containsFrame( const char* namedFrame ) const                     { return false; };
 
+    FrameArea&              getNamedCell(const char* cellName);
+
     inline const FrameArea& getImageFrameArea( U32 frame ) const            { clampFrame(frame); return mFrames[frame]; };
-    inline const FrameArea& getImageFrameArea( const char* namedFrame) const    { return mFrames[0]; };
+    inline const FrameArea& getImageFrameArea( const char* namedFrame)      { return getNamedCell(namedFrame); };
     inline const void       bindImageTexture( void)                         { glBindTexture( GL_TEXTURE_2D, getImageTexture().getGLName() ); };
     
     virtual bool            isAssetValid( void ) const                      { return !mImageTextureHandle.IsNull(); }
@@ -238,8 +240,7 @@ public:
     
     /// Named cell control.
     bool                    clearNamedCells( void );
-    bool                    addNamedCell( const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight );
-    bool                    insertNamedCell( const char* cellName, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight );
+    bool                    addNamedCell( const char* cellName, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight );
     bool                    removeNamedCell( const char* cellName );
     bool                    setNamedCell( const char* cellName, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight );
     inline S32              getNamedCellCount( void ) const              { return mNamedFrames.size(); }

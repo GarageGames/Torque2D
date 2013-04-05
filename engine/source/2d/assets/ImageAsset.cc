@@ -316,8 +316,8 @@ void ImageAsset::copyTo(SimObject* object)
         // Fetch the cell pixel area.
         const FrameArea::PixelArea& pixelArea = getImageFrameArea( itr->key ).mPixelArea;
 
-        // Add the explicit cell.
-        pAsset->addNamedCell( pixelArea.mPixelOffset.x, pixelArea.mPixelOffset.y, pixelArea.mPixelWidth, pixelArea.mPixelHeight );
+        // Add the named cell.
+        pAsset->addNamedCell( itr->key, pixelArea.mPixelOffset.x, pixelArea.mPixelOffset.y, pixelArea.mPixelWidth, pixelArea.mPixelHeight );
     }    
 }
 
@@ -866,47 +866,119 @@ bool ImageAsset::clearNamedCells( void )
 
 //------------------------------------------------------------------------------
 
-bool ImageAsset::addNamedCell( const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight )
+ImageAsset::FrameArea& ImageAsset::getNamedCell(const char* cellName)
 {
-    // Are we in explicit mode?
+    // Warn if we are not in name mode
     if ( !getNameMode() )
-    {
-        // No, so warn.
-        Con::warnf( "ImageAsset::clearNamedCells() - Cannot perform named cell operation when not in name mode." );
-        return false;
-    }
+        Con::warnf( "ImageAsset::getNamedCell() - Performing named cell operation when not in name mode." );
 
-    return false;
+    typeNameFrameAreaHash::iterator frameItr = mNamedFrames.find( cellName );
+
+    // Found the frame?
+    if (frameItr == mNamedFrames.end())
+    {
+        Con::warnf( "ImageAsset::getNamedCell() - Could not find cell named %s.", cellName);
+        return BadFrameArea;
+    }
+    else
+    {
+        return frameItr->value;
+    }
 }
 
 //------------------------------------------------------------------------------
 
-bool ImageAsset::insertNamedCell( const char* cellName, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight )
+bool ImageAsset::addNamedCell( const char* cellName, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight )
 {
     // Are we in explicit mode?
     if ( !getNameMode() )
     {
         // No, so warn.
-        Con::warnf( "ImageAsset::clearNamedCells() - Cannot perform named cell operation when not in name mode." );
+        Con::warnf( "ImageAsset::addNamedCell() - Cannot perform name cell operation when not in name mode." );
         return false;
     }
 
-    return false;
+    // Fetch the original image dimensions.
+    const S32 imageWidth = getImageWidth();
+    const S32 imageHeight = getImageHeight();
+
+    // The Cell Offset X needs to be within the image.
+    if ( cellOffsetX < 0 || cellOffsetX >= imageWidth )
+    {
+        // Warn.
+        Con::warnf("ImageAsset::addNamedCell() - Invalid Cell OffsetX of %d.", cellOffsetX );
+        return false;
+    }
+
+    // The Cell Offset Y needs to be within the image.
+    if ( cellOffsetY < 0 || cellOffsetY >= imageWidth )
+    {
+        // Warn.
+        Con::warnf("ImageAsset::addNamedCell() - Invalid Cell OffsetY of %d.", cellOffsetY );
+        return false;
+    }
+
+    // The Cell Width needs to be within the image.
+    if ( cellWidth <= 0 || (cellOffsetX+cellWidth) > imageWidth )
+    {
+        // Warn.
+        Con::warnf("ImageAsset::addNamedCell() - Invalid Cell Width of %d.", cellWidth );
+        return false;
+    }
+
+    // The Cell Height needs to be within the image.
+    if ( cellHeight <= 0 || (cellOffsetY+cellHeight) > imageHeight )
+    {
+        // Warn.
+        Con::warnf("ImageAsset::addNamedCell() - Invalid Cell Width of %d.", cellHeight );
+        return false;
+    }
+
+    // Store frame.
+    // Fetch the texture object.
+    TextureObject* pTextureObject = ((TextureObject*)mImageTextureHandle);
+ 
+    // Calculate texel scales.
+    const F32 texelWidthScale = 1.0f / (F32)pTextureObject->getTextureWidth();
+    const F32 texelHeightScale = 1.0f / (F32)pTextureObject->getTextureHeight();
+
+    // Store frame.
+    FrameArea frameArea( cellOffsetX, cellOffsetY, cellWidth, cellHeight, texelWidthScale, texelHeightScale );
+
+    mNamedFrames.insert(cellName, frameArea);
+
+    // Refresh the asset.
+    refreshAsset();
+
+    return true;
 }
 
 //------------------------------------------------------------------------------
 
-bool ImageAsset::removeNamedCell( const char* cellname )
+bool ImageAsset::removeNamedCell( const char* cellName )
 {
     // Are we in explicit mode?
     if ( !getNameMode() )
     {
         // No, so warn.
-        Con::warnf( "ImageAsset::clearNamedCells() - Cannot perform named cell operation when not in name mode." );
+        Con::warnf( "ImageAsset::removeNamedCell() - Cannot perform named cell operation when not in name mode." );
         return false;
     }
 
-    return false;
+    typeNameFrameAreaHash::iterator frameItr = mNamedFrames.find( cellName );
+
+    // Found the frame?
+    if (frameItr == mNamedFrames.end())
+    {
+        Con::warnf( "ImageAsset::removeNamedCell() - Could not find cell named %s.", cellName);
+        return false;
+    }
+    else
+    {
+        // Found it, so get rid of it
+        mNamedFrames.erase(cellName);
+        return true;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -917,8 +989,26 @@ bool ImageAsset::setNamedCell( const char* cellName, const S32 cellOffsetX, cons
     if ( !getNameMode() )
     {
         // No, so warn.
-        Con::warnf( "ImageAsset::clearNamedCells() - Cannot perform named cell operation when not in name mode." );
+        Con::warnf( "ImageAsset::setNamedCell() - Cannot perform named cell operation when not in name mode." );
         return false;
+    }
+
+    typeNameFrameAreaHash::iterator frameItr = mNamedFrames.find( cellName );
+
+    // Found the frame?
+    if (frameItr == mNamedFrames.end())
+    {
+        Con::warnf( "ImageAsset::setNamedCell() - Could not find cell named %s.", cellName);
+        return false;
+    }
+    else
+    {
+        // Found it, so get rid of it
+        frameItr->value.mPixelArea.mPixelOffset.x = cellOffsetX;
+        frameItr->value.mPixelArea.mPixelOffset.y = cellOffsetY;
+        frameItr->value.mPixelArea.mPixelWidth = cellWidth;
+        frameItr->value.mPixelArea.mPixelHeight = cellHeight;
+        return true;
     }
 
     return false;
@@ -1294,6 +1384,37 @@ void ImageAsset::calculateNameMode( void )
 
     // Sanity!
     AssertFatal( mNameMode, "Cannot calculate name cells when not in name mode." );
+
+    // Fetch the texture object.
+    TextureObject* pTextureObject = ((TextureObject*)mImageTextureHandle);
+ 
+    // Calculate texel scales.
+    const F32 texelWidthScale = 1.0f / (F32)pTextureObject->getTextureWidth();
+    const F32 texelHeightScale = 1.0f / (F32)pTextureObject->getTextureHeight();
+
+    // Fetch the original image dimensions.
+    const S32 imageWidth = getImageWidth();
+    const S32 imageHeight = getImageHeight();
+
+    // Clear default frame.
+    mFrames.clear();
+
+    // Are any explicit frames set.
+    if ( mNamedFrames.size() == 0 )
+    {
+        // No, so set full-frame as default.
+        FrameArea frameArea( 0, 0, imageWidth, imageHeight, texelWidthScale, texelHeightScale );
+        mFrames.push_back( frameArea );
+
+        return;
+    }
+
+    // Iterate explicit frames.
+    for( typeNameFrameAreaHash::iterator frameItr = mNamedFrames.begin(); frameItr != mNamedFrames.end(); ++frameItr )
+    {
+        // Store frame.
+        mFrames.push_back( frameItr->value );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -1348,7 +1469,7 @@ void ImageAsset::onTamlCustomWrite( TamlCustomNodes& customNodes )
         for( typeNameFrameAreaHash::iterator itr = mNamedFrames.begin(); itr != mNamedFrames.end(); ++itr )
         {
             // Fetch pixel area.
-            const FrameArea::PixelArea& pixelArea = itr->value;
+            const FrameArea::PixelArea& pixelArea = itr->value.mPixelArea;
 
             // Add cell alias
             TamlCustomNode* pCellNode = pCustomNamedCellNodes->addNode( cellNodeName );
@@ -1563,9 +1684,16 @@ void ImageAsset::onTamlCustomRead( const TamlCustomNodes& customNodes )
                 continue;
             }
 
-            // Add explicit frame.
-            FrameArea::PixelArea pixelArea( cellOffset.x, cellOffset.y, cellWidth, cellHeight );
-            mNamedFrames.insert( cellName, pixelArea );
+            // Fetch the texture object.
+            TextureObject* pTextureObject = ((TextureObject*)mImageTextureHandle);
+ 
+            // Calculate texel scales.
+            const F32 texelWidthScale = 1.0f / (F32)pTextureObject->getTextureWidth();
+            const F32 texelHeightScale = 1.0f / (F32)pTextureObject->getTextureHeight();
+
+            // Store frame.
+            FrameArea frameArea( cellOffset.x, cellOffset.y, cellWidth, cellHeight, texelWidthScale, texelHeightScale );
+            mNamedFrames.insert(cellName, frameArea);
         }
     }
 }
