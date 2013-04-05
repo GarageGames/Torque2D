@@ -27,6 +27,10 @@
 #include "assets/assetBase.h"
 #endif
 
+#ifndef _HASHTABLE_H
+#include "collection/hashTable.h"
+#endif
+
 #ifndef _VECTOR_H_
 #include "collection/vector.h"
 #endif
@@ -136,12 +140,14 @@ public:
 private:
     typedef Vector<FrameArea> typeFrameAreaVector;
     typedef Vector<FrameArea::PixelArea> typeExplicitFrameAreaVector;
+    typedef HashMap<StringTableEntry, FrameArea::PixelArea> typeNameFrameAreaHash;
 
     /// Configuration.
     StringTableEntry            mImageFile;
     bool						mForce16Bit;
     TextureFilterMode           mLocalFilterMode;
     bool                        mExplicitMode;
+    bool                        mNameMode;
     bool                        mCellRowOrder;
     S32                         mCellOffsetX;
     S32                         mCellOffsetY;
@@ -155,6 +161,7 @@ private:
     /// Imagery.
     typeFrameAreaVector         mFrames;
     typeExplicitFrameAreaVector mExplicitFrames;
+    typeNameFrameAreaHash       mNamedFrames;
     TextureHandle               mImageTextureHandle;
 
 public:
@@ -178,6 +185,9 @@ public:
 
     void                    setExplicitMode( const bool explicitMode );
     bool                    getExplicitMode( void ) const                   { return mExplicitMode; }
+
+    void                    setNameMode( const bool nameMode );
+    bool                    getNameMode( void ) const                       {return mNameMode; }
 
     void                    setCellRowOrder( const bool cellRowOrder );
     inline bool             getCellRowOrder( void ) const                   { return mCellRowOrder; }
@@ -210,8 +220,10 @@ public:
     inline S32              getImageWidth( void ) const                     { return mImageTextureHandle.getWidth(); }
     inline S32              getImageHeight( void ) const                    { return mImageTextureHandle.getHeight(); }
     inline U32              getFrameCount( void ) const                     { return (U32)mFrames.size(); };
+    inline bool             containsFrame( const char* namedFrame ) const                     { return false; };
 
     inline const FrameArea& getImageFrameArea( U32 frame ) const            { clampFrame(frame); return mFrames[frame]; };
+    inline const FrameArea& getImageFrameArea( const char* namedFrame) const    { return mFrames[0]; };
     inline const void       bindImageTexture( void)                         { glBindTexture( GL_TEXTURE_2D, getImageTexture().getGLName() ); };
     
     virtual bool            isAssetValid( void ) const                      { return !mImageTextureHandle.IsNull(); }
@@ -224,6 +236,14 @@ public:
     bool                    setExplicitCell( const S32 cellIndex, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight );
     inline S32              getExplicitCellCount( void ) const              { return mExplicitFrames.size(); }
     
+    /// Named cell control.
+    bool                    clearNamedCells( void );
+    bool                    addNamedCell( const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight );
+    bool                    insertNamedCell( const char* cellName, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight );
+    bool                    removeNamedCell( const char* cellName );
+    bool                    setNamedCell( const char* cellName, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight );
+    inline S32              getNamedCellCount( void ) const              { return mNamedFrames.size(); }
+
     static TextureFilterMode getFilterModeEnum(const char* label);
     static const char* getFilterModeDescription( TextureFilterMode filterMode );
 
@@ -235,6 +255,7 @@ private:
     void calculateImage( void );
     void calculateImplicitMode( void );
     void calculateExplicitMode( void );
+    void calculateNameMode( void );
     void setTextureFilter( const TextureFilterMode filterMode );
 
 protected:
@@ -262,33 +283,34 @@ protected:
     static bool writeFilterMode( void* obj, StringTableEntry pFieldName )   { return static_cast<ImageAsset*>(obj)->getFilterMode() != FILTER_BILINEAR; }
 
     static bool setExplicitMode( void* obj, const char* data )              { static_cast<ImageAsset*>(obj)->setExplicitMode(dAtob(data)); return false; }
+    static bool setNameMode( void* obj, const char* data )                  { static_cast<ImageAsset*>(obj)->setNameMode(dAtob(data)); return false; }
 
     static bool setCellRowOrder( void* obj, const char* data )              { static_cast<ImageAsset*>(obj)->setCellRowOrder(dAtob(data)); return false; }
-    static bool writeCellRowOrder( void* obj, StringTableEntry pFieldName ) { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && !pImageAsset->getCellRowOrder(); }
+    static bool writeCellRowOrder( void* obj, StringTableEntry pFieldName ) { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && !pImageAsset->getNameMode() && !pImageAsset->getCellRowOrder(); }
 
     static bool setCellOffsetX( void* obj, const char* data )               { static_cast<ImageAsset*>(obj)->setCellOffsetX(dAtoi(data)); return false; }
-    static bool writeCellOffsetX( void* obj, StringTableEntry pFieldName )  { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && pImageAsset->getCellOffsetX() != 0; }
+    static bool writeCellOffsetX( void* obj, StringTableEntry pFieldName )  { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && !pImageAsset->getNameMode() && pImageAsset->getCellOffsetX() != 0; }
 
     static bool setCellOffsetY( void* obj, const char* data )               { static_cast<ImageAsset*>(obj)->setCellOffsetY(dAtoi(data)); return false; }
-    static bool writeCellOffsetY( void* obj, StringTableEntry pFieldName )  { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && pImageAsset->getCellOffsetY() != 0; }
+    static bool writeCellOffsetY( void* obj, StringTableEntry pFieldName )  { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && !pImageAsset->getNameMode() && pImageAsset->getCellOffsetY() != 0; }
 
     static bool setCellStrideX( void* obj, const char* data )               { static_cast<ImageAsset*>(obj)->setCellStrideX(dAtoi(data)); return false; }
-    static bool writeCellStrideX( void* obj, StringTableEntry pFieldName )  { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && pImageAsset->getCellStrideX() != 0; }
+    static bool writeCellStrideX( void* obj, StringTableEntry pFieldName )  { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && !pImageAsset->getNameMode() && pImageAsset->getCellStrideX() != 0; }
 
     static bool setCellStrideY( void* obj, const char* data )               { static_cast<ImageAsset*>(obj)->setCellStrideY(dAtoi(data)); return false; }
-    static bool writeCellStrideY( void* obj, StringTableEntry pFieldName )  { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && pImageAsset->getCellStrideY() != 0; }
+    static bool writeCellStrideY( void* obj, StringTableEntry pFieldName )  { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && !pImageAsset->getNameMode() && pImageAsset->getCellStrideY() != 0; }
 
     static bool setCellCountX( void* obj, const char* data )                { static_cast<ImageAsset*>(obj)->setCellCountX(dAtoi(data)); return false; }
-    static bool writeCellCountX( void* obj, StringTableEntry pFieldName )   { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && pImageAsset->getCellCountX() != 0; }
+    static bool writeCellCountX( void* obj, StringTableEntry pFieldName )   { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && !pImageAsset->getNameMode() && pImageAsset->getCellCountX() != 0; }
 
     static bool setCellCountY( void* obj, const char* data )                { static_cast<ImageAsset*>(obj)->setCellCountY(dAtoi(data)); return false; }
-    static bool writeCellCountY( void* obj, StringTableEntry pFieldName )   { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && pImageAsset->getCellCountY() != 0; }
+    static bool writeCellCountY( void* obj, StringTableEntry pFieldName )   { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && !pImageAsset->getNameMode() && pImageAsset->getCellCountY() != 0; }
 
     static bool setCellWidth( void* obj, const char* data )                 { static_cast<ImageAsset*>(obj)->setCellWidth(dAtoi(data)); return false; }
-    static bool writeCellWidth( void* obj, StringTableEntry pFieldName )    { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && pImageAsset->getCellWidth() != 0; }
+    static bool writeCellWidth( void* obj, StringTableEntry pFieldName )    { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && !pImageAsset->getNameMode() && pImageAsset->getCellWidth() != 0; }
 
     static bool setCellHeight( void* obj, const char* data )                { static_cast<ImageAsset*>(obj)->setCellHeight(dAtoi(data)); return false; }
-    static bool writeCellHeight( void* obj, StringTableEntry pFieldName )   { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && pImageAsset->getCellHeight() != 0; }
+    static bool writeCellHeight( void* obj, StringTableEntry pFieldName )   { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && !pImageAsset->getNameMode() && pImageAsset->getCellHeight() != 0; }
 };
 
 //-----------------------------------------------------------------------------

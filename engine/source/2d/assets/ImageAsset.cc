@@ -159,7 +159,7 @@ ImageAsset::ImageAsset() :  mImageFile(StringTable->EmptyString),
                             mForce16Bit(false),
                             mLocalFilterMode(FILTER_INVALID),
                             mExplicitMode(false),
-
+                            mNameMode(false),
                             mCellRowOrder(true),
                             mCellOffsetX(0),
                             mCellOffsetY(0),
@@ -195,6 +195,7 @@ void ImageAsset::initPersistFields()
     addProtectedField("Force16bit", TypeBool, Offset(mForce16Bit, ImageAsset), &setForce16Bit, &defaultProtectedGetFn, &writeForce16Bit, "");
     addProtectedField("FilterMode", TypeEnum, Offset(mLocalFilterMode, ImageAsset), &setFilterMode, &defaultProtectedGetFn, &writeFilterMode, 1, &textureFilterTable);   
     addProtectedField("ExplicitMode", TypeBool, Offset(mExplicitMode, ImageAsset), &setExplicitMode, &defaultProtectedGetFn, &defaultProtectedNotWriteFn, "");
+    addProtectedField("NameMode", TypeBool, Offset(mNameMode, ImageAsset), &setNameMode, &defaultProtectedGetFn, &defaultProtectedNotWriteFn, "");
 
     addProtectedField("CellRowOrder", TypeBool, Offset(mCellRowOrder, ImageAsset), &setCellRowOrder, &defaultProtectedGetFn, &writeCellRowOrder, "");
     addProtectedField("CellOffsetX", TypeS32, Offset(mCellOffsetX, ImageAsset), &setCellOffsetX, &defaultProtectedGetFn, &writeCellOffsetX, "");
@@ -265,6 +266,7 @@ void ImageAsset::copyTo(SimObject* object)
     pAsset->setForce16Bit( getForce16Bit() );
     pAsset->setFilterMode( getFilterMode() );
     pAsset->setExplicitMode( getExplicitMode() );
+    pAsset->setNameMode( getNameMode() );
     pAsset->setCellRowOrder( getCellRowOrder() );
     pAsset->setCellOffsetX( getCellCountX() );
     pAsset->setCellOffsetY( getCellCountY() );
@@ -276,7 +278,7 @@ void ImageAsset::copyTo(SimObject* object)
     pAsset->setCellHeight( getCellHeight() );
 
     // Finish if not in explicit mode.
-    if ( !getExplicitMode() )
+    if ( !getExplicitMode() && !getNameMode() )
         return;
 
     // Fetch the explicit cell count.
@@ -296,6 +298,25 @@ void ImageAsset::copyTo(SimObject* object)
         // Add the explicit cell.
         pAsset->addExplicitCell( pixelArea.mPixelOffset.x, pixelArea.mPixelOffset.y, pixelArea.mPixelWidth, pixelArea.mPixelHeight );
     }
+    
+    // Fetch the name cell count.
+    const S32 nameCellCount = getNamedCellCount();
+
+     // Finish if no name cells exist.
+    if ( nameCellCount == 0 )
+        return;
+
+    // Copy name cells.
+    pAsset->clearNamedCells();
+
+    for ( typeNameFrameAreaHash::iterator itr = mNamedFrames.begin(); itr != mNamedFrames.end(); ++itr )
+    {
+        // Fetch the cell pixel area.
+        const FrameArea::PixelArea& pixelArea = getImageFrameArea( itr->key ).mPixelArea;
+
+        // Add the explicit cell.
+        pAsset->addNamedCell( pixelArea.mPixelOffset.x, pixelArea.mPixelOffset.y, pixelArea.mPixelWidth, pixelArea.mPixelHeight );
+    }    
 }
 
 //------------------------------------------------------------------------------
@@ -350,6 +371,21 @@ void ImageAsset::setExplicitMode( const bool explicitMode )
     // Refresh the asset.
     refreshAsset();
 }    
+
+//------------------------------------------------------------------------------
+
+void ImageAsset::setNameMode( const bool nameMode)
+{
+    // Ignore no change
+    if ( nameMode == mNameMode )
+        return;
+
+    // Update.
+    mNameMode = nameMode;
+
+    // Refresh the asset
+    refreshAsset();
+}
 
 //------------------------------------------------------------------------------
 
@@ -813,6 +849,81 @@ bool ImageAsset::removeExplicitCell( const S32 cellIndex )
 
 //------------------------------------------------------------------------------
 
+bool ImageAsset::clearNamedCells( void )
+{
+    // Are we in explicit mode?
+    if ( !getNameMode() )
+    {
+        // No, so warn.
+        Con::warnf( "ImageAsset::clearNamedCells() - Cannot perform named cell operation when not in name mode." );
+        return false;
+    }
+
+    return false;
+}
+
+//------------------------------------------------------------------------------
+
+bool ImageAsset::addNamedCell( const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight )
+{
+    // Are we in explicit mode?
+    if ( !getNameMode() )
+    {
+        // No, so warn.
+        Con::warnf( "ImageAsset::clearNamedCells() - Cannot perform named cell operation when not in name mode." );
+        return false;
+    }
+
+    return false;
+}
+
+//------------------------------------------------------------------------------
+
+bool ImageAsset::insertNamedCell( const char* cellName, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight )
+{
+    // Are we in explicit mode?
+    if ( !getNameMode() )
+    {
+        // No, so warn.
+        Con::warnf( "ImageAsset::clearNamedCells() - Cannot perform named cell operation when not in name mode." );
+        return false;
+    }
+
+    return false;
+}
+
+//------------------------------------------------------------------------------
+
+bool ImageAsset::removeNamedCell( const char* cellname )
+{
+    // Are we in explicit mode?
+    if ( !getNameMode() )
+    {
+        // No, so warn.
+        Con::warnf( "ImageAsset::clearNamedCells() - Cannot perform named cell operation when not in name mode." );
+        return false;
+    }
+
+    return false;
+}
+
+//------------------------------------------------------------------------------
+
+bool ImageAsset::setNamedCell( const char* cellName, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight )
+{
+    // Are we in explicit mode?
+    if ( !getNameMode() )
+    {
+        // No, so warn.
+        Con::warnf( "ImageAsset::clearNamedCells() - Cannot perform named cell operation when not in name mode." );
+        return false;
+    }
+
+    return false;
+}
+
+//------------------------------------------------------------------------------
+
 void ImageAsset::setTextureFilter( const TextureFilterMode filterMode )
 {
     // Finish if no texture.
@@ -951,7 +1062,11 @@ void ImageAsset::calculateImage( void )
     }
 
     // Calculate according to mode.
-    if ( mExplicitMode )
+    if ( mNameMode )
+    {
+        calculateNameMode();
+    }
+    else if ( mExplicitMode )
     {
         calculateExplicitMode();
     }
@@ -1165,6 +1280,13 @@ void ImageAsset::calculateExplicitMode( void )
         // Store frame.
         mFrames.push_back( frameArea );
     }
+}
+
+//------------------------------------------------------------------------------
+
+void ImageAsset::calculateNameMode( void )
+{
+
 }
 
 //------------------------------------------------------------------------------

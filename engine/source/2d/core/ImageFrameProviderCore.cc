@@ -178,11 +178,34 @@ bool ImageFrameProviderCore::validRender( void ) const
     if ( isStaticFrameProvider() )
     {
         // Yes, so we must have an image asset and the frame must be in bounds.
-        return mpImageAsset->notNull() && ( getImageFrame() < (*mpImageAsset)->getFrameCount() );
+        if (isUsingNamedImageFrame())
+            return mpImageAsset->notNull() && ( getImageFrame() < (*mpImageAsset)->getFrameCount() );
+        else
+            return mpImageAsset->notNull() && getImageFrameByName() != StringTable->EmptyString && ( (*mpImageAsset)->containsFrame(getImageFrameByName()) );
     }
 
     // No, so if the animation must be valid.
     return isAnimationValid();
+}
+
+//------------------------------------------------------------------------------
+
+const ImageAsset::FrameArea& ImageFrameProviderCore::getProviderImageFrameArea( void ) const
+{ 
+    // If this does not have a valid render state, return a bad frame
+    if (!validRender())
+        return BadFrameArea;
+
+    // If it is a static frame and it's not using named frames, get the image area based mImageFrame
+    // If it is a static frame and it's using named frames, get the image area based on mImageNameFrame
+    // Otherwise, get the current animation frame
+    if (isStaticFrameProvider())
+        return !isUsingNamedImageFrame() ? (*mpImageAsset)->getImageFrameArea(mImageFrame) : (*mpImageAsset)->getImageFrameArea(mImageNameFrame);
+    else
+        return (*mpAnimationAsset)->getImage()->getImageFrameArea(getCurrentAnimationFrame());
+    
+    // If we got here for some reason, that's bad. So return a bad area frame
+    return BadFrameArea;
 }
 
 //------------------------------------------------------------------------------
@@ -284,6 +307,40 @@ bool ImageFrameProviderCore::setImage( const char* pImageAssetId, const U32 fram
     // Set as static provider.
     mStaticProvider = true;
 
+    // Using a numerical frame index.
+    mUsingNameFrame = false;
+
+    // Turn-off tick processing.
+    setProcessTicks( false );
+
+    // Return Okay.
+    return true;
+}
+
+//------------------------------------------------------------------------------
+
+bool ImageFrameProviderCore::setImage( const char* pImageAssetId, const char* pNameFrame )
+{
+    // Finish if invalid image asset.
+    if ( pImageAssetId == NULL )
+        return false;
+
+    // Set asset.
+    mpImageAsset->setAssetId( pImageAssetId );
+
+    // Set the image frame if the image asset was set.
+    if ( mpImageAsset->notNull() )
+        setImageFrameByName( pNameFrame );
+
+    // Set Frame.
+    mImageNameFrame = StringTable->insert(pNameFrame);
+
+    // Set as static provider.
+    mStaticProvider = true;
+
+    // Using a named frame index.
+    mUsingNameFrame = true;
+
     // Turn-off tick processing.
     setProcessTicks( false );
 
@@ -316,6 +373,36 @@ bool ImageFrameProviderCore::setImageFrame( const U32 frame )
 
     // Set Frame.
     mImageFrame = frame;
+
+    // Return Okay.
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool ImageFrameProviderCore::setImageFrameByName(const char* frame)
+{
+    // Check Existing Image.
+    if ( mpImageAsset->isNull() )
+    {
+        // Warn.
+        Con::warnf("ImageFrameProviderCore::setImageNameFrame() - Cannot set Frame without existing asset Id.");
+
+        // Return Here.
+        return false;
+    }
+
+    // Check Frame Validity.
+    if ( frame == StringTable->EmptyString )
+    {
+        // Warn.
+        Con::warnf( "ImageFrameProviderCore::setImageNameFrame() - Invalid Frame %s for asset Id '%s'.", frame, mpImageAsset->getAssetId() );
+        // Return Here.
+        return false;
+    }
+
+    // Set Frame.
+    mImageNameFrame = StringTable->insert(frame);
 
     // Return Okay.
     return true;
@@ -569,6 +656,8 @@ void ImageFrameProviderCore::clearAssets( void )
 
     // Reset remaining state.
     mImageFrame = 0;
+    mUsingNameFrame = false;
+    mImageNameFrame = StringTable->EmptyString;
     mStaticProvider = true;
     setProcessTicks( false );
 }
