@@ -32,6 +32,7 @@
 #endif
 
 #include <math.h>
+#include <limits>
 
 // Remove a couple of annoying macros, if they are present (In VC 6, they are.)
 #ifdef min
@@ -360,6 +361,13 @@ inline U32 mMulDiv(S32 a, S32 b, U32 c)
    return m_mulDivU32(a, b, c);
 }
 
+/// Template function for doing a linear interpolation between any two
+/// types which implement operators for scalar multiply and addition.
+template <typename T>
+inline T mLerp( const T &v1, const T &v2, F32 factor )
+{
+    return ( v1 * ( 1.0f - factor ) ) + ( v2 * factor );
+}
 
 inline F32 mSin(const F32 angle)
 {
@@ -389,6 +397,11 @@ inline F32 mAcos(const F32 val)
 inline F32 mAtan(const F32 x, const F32 y)
 {
    return (F32) atan2(x, y);
+}
+
+inline F32 mAtan2(const F32 y, const F32 x)
+{
+    return (F32)atan2(y, x);
 }
 
 inline void mSinCos(const F32 angle, F32 &s, F32 &c)
@@ -446,6 +459,11 @@ inline F64 mAcos(const F64 val)
 inline F64 mAtan(const F64 x, const F64 y)
 {
    return (F64) atan2(x, y);
+}
+
+inline F64 mAtan2(const F64 y, const F64 x)
+{
+    return (F64)atan2(y, x);
 }
 
 inline void mSinCos(const F64 angle, F64 &sin, F64 &cos)
@@ -512,45 +530,7 @@ inline bool isZero(F32 a)
 }
 
 //--------------------------------------
-#ifndef _MPOINT_H_
-#include "math/mPoint.h"
-#endif
-
-inline F32 mDot(const Point2F &p1, const Point2F &p2)
-{
-   return (p1.x*p2.x + p1.y*p2.y);
-}
-
-inline F32 mDot(const Point3F &p1, const Point3F &p2)
-{
-   return (p1.x*p2.x + p1.y*p2.y + p1.z*p2.z);
-}
-
-inline void mCross(const Point3F &a, const Point3F &b, Point3F *res)
-{
-   res->x = (a.y * b.z) - (a.z * b.y);
-   res->y = (a.z * b.x) - (a.x * b.z);
-   res->z = (a.x * b.y) - (a.y * b.x);
-}
-
-inline F64 mDot(const Point3D &p1, const Point3D &p2)
-{
-   return (p1.x*p2.x + p1.y*p2.y + p1.z*p2.z);
-}
-
-inline void mCross(const Point3D &a, const Point3D &b, Point3D *res)
-{
-   res->x = (a.y * b.z) - (a.z * b.y);
-   res->y = (a.z * b.x) - (a.x * b.z);
-   res->z = (a.x * b.y) - (a.y * b.x);
-}
-
-inline Point3F mCross(const Point3F &a, const Point3F &b)
-{
-   Point3F ret;
-   mCross(a,b,&ret);
-   return ret;
-}
+class Point3F;
 
 inline void mCross(const F32* a, const F32* b, F32 *res)
 {
@@ -588,6 +568,44 @@ inline F64 mDegToRad(F64 d)
 inline F64 mRadToDeg(F64 r)
 {
    return (r * 180.0) / M_PI;
+}
+
+//------------------------------------------------------------------------------
+
+inline bool mIsNaN_F( const F32 x )
+{
+    // If x is a floating point variable, then (x != x) will be TRUE if x has the value NaN.
+    // This is only going to work if the compiler is IEEE 748 compliant.
+    //
+    // Tested and working on VC2k5
+    return ( x != x );
+}
+
+inline bool mIsInf_F( const F32 x )
+{
+    return ( x == std::numeric_limits< float >::infinity() );
+}
+
+inline F32 mSign( const F32 n )
+{
+    if ( n > 0.0f )
+        return 1.0f;
+    if ( n < 0.0f )
+        return -1.0f;
+    
+    return 0.0f;
+}
+
+/// Returns the input value squared.
+inline F32 mSquared( F32 n )
+{
+    return n * n;
+}
+
+/// @copydoc mSquaredF
+inline F64 mSquared( F64 n )
+{
+    return n * n;
 }
 
 /// Get an angle flipping the Y (along the X axis).

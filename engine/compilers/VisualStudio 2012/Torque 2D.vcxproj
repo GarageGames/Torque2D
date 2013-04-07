@@ -76,7 +76,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../Source;../../Source/persistence/rapidjson/include;../../Source/persistence/libjson;../../source/testing/googleTest;../../source/testing/googleTest/include;../../source/testing/googleTest;../../source/testing/googleTest/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>TORQUE_DEBUG;TORQUE_DEBUG_GUARD;_CRT_SECURE_NO_DEPRECATE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TORQUE_DEBUG;TORQUE_DEBUG_GUARD;_CRT_SECURE_NO_DEPRECATE;UNICODE;_VARIADIC_MAX=10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
@@ -125,7 +125,7 @@
       <Optimization>MinSpace</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../Source;../../Source/persistence/rapidjson/include;../../Source/persistence/libjson;../../source/testing/googleTest;../../source/testing/googleTest/include;../../source/testing/googleTest;../../source/testing/googleTest/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>UNICODE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>UNICODE;_CRT_SECURE_NO_DEPRECATE;_VARIADIC_MAX=10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -877,6 +877,9 @@
     <ClInclude Include="..\..\source\io\zip\zipStatFilter.h" />
     <ClInclude Include="..\..\source\io\zip\zipSubStream.h" />
     <ClInclude Include="..\..\source\io\zip\zipTempStream.h" />
+    <ClInclude Include="..\..\source\math\mPoint2.h" />
+    <ClInclude Include="..\..\source\math\mPoint3.h" />
+    <ClInclude Include="..\..\source\math\mPoint4.h" />
     <ClInclude Include="..\..\source\math\rectClipper.h" />
     <ClInclude Include="..\..\source\memory\dataChunker.h" />
     <ClInclude Include="..\..\source\memory\factoryCache.h" />

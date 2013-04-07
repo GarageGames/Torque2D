@@ -25,14 +25,6 @@
 #include "math/mMatrix.h"
 
 
-void mTransformPlane(const MatrixF& mat,
-                     const Point3F& scale,
-                     const PlaneF&  plane,
-                     PlaneF*        result)
-{
-   m_matF_x_scale_x_planeF(mat, &scale.x, &plane.x, &result->x);
-}
-
 //--------------------------------------
 
 U32 getNextPow2(U32 io_num)

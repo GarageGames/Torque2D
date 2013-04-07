@@ -1361,6 +1361,9 @@
 		86EA5B3F1678C7C700598E68 /* osxCocoaUtilities.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = osxCocoaUtilities.mm; sourceTree = "<group>"; };
 		86EC5AC5165C1E0100757872 /* osxTorqueView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = osxTorqueView.h; sourceTree = "<group>"; };
 		86EC5AC6165C1E0100757872 /* osxTorqueView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = osxTorqueView.mm; sourceTree = "<group>"; };
+		DA8AEBB316C20BF40002F858 /* mPoint2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mPoint2.h; sourceTree = "<group>"; };
+		DA8AEBB416C20BF40002F858 /* mPoint3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mPoint3.h; sourceTree = "<group>"; };
+		DA8AEBB516C20BF40002F858 /* mPoint4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mPoint4.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2583,6 +2586,9 @@
 		86BC809116518D4600D96ADF /* math */ = {
 			isa = PBXGroup;
 			children = (
+				DA8AEBB316C20BF40002F858 /* mPoint2.h */,
+				DA8AEBB416C20BF40002F858 /* mPoint3.h */,
+				DA8AEBB516C20BF40002F858 /* mPoint4.h */,
 				86BC809216518D4600D96ADF /* mathIO.h */,
 				86BC809316518D4600D96ADF /* mathTypes.cc */,
 				86BC809416518D4600D96ADF /* mathTypes.h */,
