@@ -28,6 +28,9 @@ function AppCore::create( %this )
     exec("./scripts/canvas.cs");
     exec("./scripts/openal.cs");
     
+    GenerateTamlSchema();
+    quit();
+    
     // Initialize the canvas
     initializeCanvas("Torque 2D");
     

@@ -178,7 +178,7 @@ bool ImageFrameProviderCore::validRender( void ) const
     if ( isStaticFrameProvider() )
     {
         // Yes, so we must have an image asset and the frame must be in bounds.
-        if (isUsingNamedImageFrame())
+        if (!isUsingNamedImageFrame())
             return mpImageAsset->notNull() && ( getImageFrame() < (*mpImageAsset)->getFrameCount() );
         else
             return mpImageAsset->notNull() && getImageFrameByName() != StringTable->EmptyString && ( (*mpImageAsset)->containsFrame(getImageFrameByName()) );
@@ -374,6 +374,9 @@ bool ImageFrameProviderCore::setImageFrame( const U32 frame )
     // Set Frame.
     mImageFrame = frame;
 
+    // Using a named frame index.
+    mUsingNameFrame = false;
+
     // Return Okay.
     return true;
 }
@@ -403,6 +406,7 @@ bool ImageFrameProviderCore::setImageFrameByName(const char* frame)
 
     // Set Frame.
     mImageNameFrame = StringTable->insert(frame);
+    mUsingNameFrame = true;
 
     // Return Okay.
     return true;

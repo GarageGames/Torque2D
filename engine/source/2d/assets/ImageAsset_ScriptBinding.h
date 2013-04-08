@@ -312,11 +312,12 @@ ConsoleMethod(ImageAsset, clearExplicitCells, bool, 2, 2,   "() Clears all expli
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ImageAsset, addExplicitCell, bool, 6, 6,      "(int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight) Add an explicit cell.\n"
+ConsoleMethod(ImageAsset, addExplicitCell, bool, 7, 7,      "(int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight, string cellName) Add an explicit cell.\n"
                                                             "@param cellOffsetX The offset in the X axis to the top-left of the cell.\n"
                                                             "@param cellOffsetY The offset in the Y axis to the top-left of the cell.\n"
                                                             "@param cellWidth The width of the cell.\n"
                                                             "@param cellHeight The height of the cell.\n"
+                                                            "@param cellName The name of the cell's region.\n"
                                                             "The image asset must be in explicit mode for this operation to succeed.\n"
                                                             "@return Whether the operation was successful or not.")
 {
@@ -328,17 +329,18 @@ ConsoleMethod(ImageAsset, addExplicitCell, bool, 6, 6,      "(int cellOffsetX, i
     const S32 cellWidth = dAtoi( argv[4] );
     const S32 cellHeight = dAtoi (argv[5] );
 
-    return object->addExplicitCell( cellOffsetX, cellOffsetY, cellWidth, cellHeight );
+    return object->addExplicitCell( cellOffsetX, cellOffsetY, cellWidth, cellHeight, argv[6] );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ImageAsset, insertExplicitCell, bool, 7, 7,   "(int cellIndex, int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight) Insert an explicit cell at the specified index.\n"
+ConsoleMethod(ImageAsset, insertExplicitCell, bool, 8, 8,   "(int cellIndex, int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight, string cellName) Insert an explicit cell at the specified index.\n"
                                                             "@param cellIndex The zero-based index to insert the cell.  This will work when no cells are present.  If the index is beyond the cell count then the cell is simply added.\n"
                                                             "@param cellOffsetX The offset in the X axis to the top-left of the cell.\n"
                                                             "@param cellOffsetY The offset in the Y axis to the top-left of the cell.\n"
                                                             "@param cellWidth The width of the cell.\n"
                                                             "@param cellHeight The height of the cell.\n"
+                                                            "@param cellName The name of the cell's region.\n"
                                                             "The image asset must be in explicit mode for this operation to succeed.\n"
                                                             "@return Whether the operation was successful or not.")
 {
@@ -353,7 +355,7 @@ ConsoleMethod(ImageAsset, insertExplicitCell, bool, 7, 7,   "(int cellIndex, int
     const S32 cellWidth = dAtoi( argv[5] );
     const S32 cellHeight = dAtoi (argv[6] );
 
-    return object->insertExplicitCell( cellIndex, cellOffsetX, cellOffsetY, cellWidth, cellHeight );
+    return object->insertExplicitCell( cellIndex, cellOffsetX, cellOffsetY, cellWidth, cellHeight, argv[7] );
 }
 
 
@@ -371,12 +373,13 @@ ConsoleMethod(ImageAsset, removeExplicitCell, bool, 7, 7,   "(int cellIndex) Rem
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ImageAsset, setExplicitCell, bool, 7, 7,      "(int cellIndex, int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight) Set an explicit cell at the specified index.\n"
+ConsoleMethod(ImageAsset, setExplicitCell, bool, 8, 8,      "(int cellIndex, int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight, string cellName) Set an explicit cell at the specified index.\n"
                                                             "@param cellIndex The zero-based index to insert the cell.  This will work when no cells are present.  If the index is beyond the cell count then the cell is simply added.\n"
                                                             "@param cellOffsetX The offset in the X axis to the top-left of the cell.\n"
                                                             "@param cellOffsetY The offset in the Y axis to the top-left of the cell.\n"
                                                             "@param cellWidth The width of the cell.\n"
                                                             "@param cellHeight The height of the cell.\n"
+                                                            "@param cellName The name of the cell's region.\n"
                                                             "The image asset must be in explicit mode for this operation to succeed.\n"
                                                             "@return Whether the operation was successful or not.")
 {
@@ -391,7 +394,7 @@ ConsoleMethod(ImageAsset, setExplicitCell, bool, 7, 7,      "(int cellIndex, int
     const S32 cellWidth = dAtoi( argv[5] );
     const S32 cellHeight = dAtoi (argv[6] );
 
-    return object->setExplicitCell( cellIndex, cellOffsetX, cellOffsetY, cellWidth, cellHeight );
+    return object->setExplicitCell( cellIndex, cellOffsetX, cellOffsetY, cellWidth, cellHeight, argv[7] );
 }
 
 //-----------------------------------------------------------------------------
