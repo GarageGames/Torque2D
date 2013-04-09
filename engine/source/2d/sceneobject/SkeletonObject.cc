@@ -142,10 +142,15 @@ void SkeletonObject::copyTo(SimObject* object)
 
 void SkeletonObject::scenePrepareRender( const SceneRenderState* pSceneRenderState, SceneRenderQueue* pSceneRenderQueue )
 {
+    // BOZO - Why would I do something here and not in sceneRender?
+    // Mich - Just how the system is basically set up. This is the last chance to
+    // make any adjustments to how things will render, before the actual rendering
+    // code is called. The most common work, like calculating AABB, sorting, and so
+    // on is handled in SpriteBatch::prepareRender. This function exists for additional
+    // massaging, which I don't think we'll be using for this task.
+
     // Prepare render.
     SpriteBatch::prepareRender( this, pSceneRenderState, pSceneRenderQueue );
-
-	 // BOZO - Why would I do something here and not in sceneRender?
 }
 
 //-----------------------------------------------------------------------------
@@ -178,21 +183,50 @@ bool SkeletonObject::setSkeletonAsset( const char* pSkeletonAssetId )
 void SkeletonObject::generateComposition( void )
 {
     // Clear existing visualization
+    clearSprites();
+    mSkeletonSprites.clear();
 
-    // Finish if image asset isn't available.
+    // Finish if skeleton asset isn't available.
     if ( mSkeletonAsset.isNull() )
         return;
 
-    // Fetch asset Id.
-    //StringTableEntry assetId = mSkeletonAsset.getAssetId();
-    
-    // Generate visualization.
+    // Generate visualization.  
+
+    /* // Get the ImageAsset used by the sprites
+    StringTableEntry assetId = (*mSkeletonAsset).mImageAsset.getAssetId();
+
+    if (*mSkeletonAsset).mImageAsset.isNull())
+    {
+        Con::warnf( "SkeletonObject::generateComposition() - Image asset was NULL, so nothing can be added to the composition.");
+        return;
+    }
+    */
 
     // BOZO - Is this the right place to load stuff based on the SkeletonAsset?
     // Mich - Yup. It's here we will create Sprite objects, so we need to start
     // grabbing data from the mSkeletonAsset
 	mSkeleton = _Torque2DSkeleton_create(mSkeletonAsset->mSkeletonData, this);
 	mState = AnimationState_create(mSkeletonAsset->mStateData);
+
+    /*
+    for( U32 i = 0; i < mSkeleton->boneCount; ++i )
+    {
+        // Create the sprite.
+        SpriteBatchItem* pSprite = SpriteBatch::createSprite();
+
+        // Configure the sprite.
+        pSprite->setImage(assetId);
+
+        // Mich - Slot name?
+        pSprite->setImageNameFrame();
+
+        // scaleX and scaleY?
+        pSprite->setSize();
+
+        // Store the sprite reference.
+        mSkeletonSprites.push_back(pSprite);
+    }
+    */
 }
 
 //-----------------------------------------------------------------------------
@@ -216,4 +250,15 @@ void SkeletonObject::updateComposition( const F32 time )
     AnimationState_update(mState, deltaTime * mTimeScale);
     AnimationState_apply(mState, mSkeleton);
     Skeleton_updateWorldTransform(mSkeleton);
+
+    // Update sprite positions.
+    for( typeSkeletonSpritesVector::iterator spriteItr = mSkeletonSprites.begin(); spriteItr < mSkeletonSprites.end(); ++spriteItr )
+    {
+        // Fetch sprite,
+        SpriteBatchItem* pSprite = *spriteItr;
+
+        // Update the position
+        // Update the scale
+        // Update the rotation
+    }
 }

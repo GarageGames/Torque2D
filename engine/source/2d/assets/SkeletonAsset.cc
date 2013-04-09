@@ -221,12 +221,45 @@ void SkeletonAsset::initializeAsset( void )
     // through them all, load them, then convert them to ImageAsset
     mAtlas = Atlas_readAtlasFile("spineboy.atlas"); // BOZO - Use reference to ImageAsset?
 
-    //if (!mAtlas) return; // BOZO - Report atlas load failure? AssertFatal?
+    /*
+    // Allocate a new ImageAsset. If we have multiple atlases, we would loop this multiple times
+    ImageAsset* pImageAsset = new ImageAsset();
 
-    // Torque 2D can technically render an object without an asset
-    // But I think the atlas is critical to a functioning Spine
-    // object. I think it would be good to AssertFatal now, then
-    // change it later if there are safe fallbacks
+    // Optionally set the name
+    // pImageAsset->setAssetName("Some_Name");
+
+    // Point to the raw file (png or jpg)
+    pImageAsset->setImageFile( imageFilePath);
+
+    // Enable Explicit Mode so we can use region coordinates
+    pImageAsset->setExplicitMode( true );
+    
+    // Loop through the Atlas information to create cell regions
+    for (each_each_region_in_atlas)
+    {
+        // Starting left position of the region
+        xOffset = ?;
+
+        // Starting top position of the region
+        yOffset = ?;
+
+        // Width of region
+        regionWidth = ?;
+
+        // Height of region
+        regionHeight = ?;
+
+        // Name of region
+        regionName = ?;
+
+        pImageAsset->addExplicitCell( xOffset, yOffset, regionWidth, regionHeight, regionName );
+    }
+
+    // Add it to the AssetDatabase, making it accessible everywhere
+    mImageAsset = AssetDatabase.addPrivateAsset( pImageAsset );
+    */
+
+    // Atlas load failure
     AssertFatal(mAtlas != NULL, "SkeletonAsset::initializeAsset() - Atlas was not loaded.");
 
 
@@ -239,9 +272,7 @@ void SkeletonAsset::initializeAsset( void )
         Atlas_dispose(mAtlas);
 		mAtlas = 0;
 
-        // BOZO - Report json->error message? AssertFatal?
-        // MP - Same as above. Because the skeleton data is core to this
-        // working, let's assert for now until there is a fallback in place
+        // Report json->error message
         AssertFatal(mSkeletonData != NULL, "SkeletonAsset::initializeAsset() - Skeleton data was not valid.");
     }
 

@@ -4,8 +4,12 @@
 #ifndef _SKELETON_ASSET_H_
 #define _SKELETON_ASSET_H_
 
-#ifndef _ASSET_BASE_H_
-#include "assets/assetBase.h"
+#ifndef _ASSET_PTR_H_
+#include "assets/assetPtr.h"
+#endif
+
+#ifndef _IMAGE_ASSET_H_
+#include "2d/assets/imageAsset.h"
 #endif
 
 #ifndef _TEXTURE_MANAGER_H_
@@ -30,6 +34,7 @@ private:
 public:
     StringTableEntry             mSkeletonFile;
 	 float                       mScale;
+     AssetPtr<ImageAsset>        mImageAsset;
 	 spine::Atlas*               mAtlas;
 	 spine::SkeletonData*        mSkeletonData;
 	 spine::AnimationStateData*  mStateData;

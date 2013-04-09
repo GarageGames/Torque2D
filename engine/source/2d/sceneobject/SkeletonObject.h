@@ -28,9 +28,12 @@ private:
     AssetPtr<SkeletonAsset>     mSkeletonAsset;
     F32                         mPreTickTime;
     F32                         mPostTickTime;
-	 spine::Skeleton*            mSkeleton;
-	 spine::AnimationState*      mState;
-	 float                       mTimeScale;
+    spine::Skeleton*            mSkeleton;
+    spine::AnimationState*      mState;
+    float                       mTimeScale;
+
+    typedef Vector<SpriteBatchItem*> typeSkeletonSpritesVector;
+    typeSkeletonSpritesVector        mSkeletonSprites;
     
 public:
     SkeletonObject();
