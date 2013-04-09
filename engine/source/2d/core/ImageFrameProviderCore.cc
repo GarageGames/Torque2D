@@ -200,9 +200,31 @@ const ImageAsset::FrameArea& ImageFrameProviderCore::getProviderImageFrameArea( 
     // If it is a static frame and it's using named frames, get the image area based on mImageNameFrame
     // Otherwise, get the current animation frame
     if (isStaticFrameProvider())
-        return !isUsingNamedImageFrame() ? (*mpImageAsset)->getImageFrameArea(mImageFrame) : (*mpImageAsset)->getImageFrameArea(mImageNameFrame);
+    {
+        if (!isUsingNamedImageFrame())
+        {
+            const ImageAsset::FrameArea& area = (*mpImageAsset)->getImageFrameArea(mImageFrame);
+            return area;
+        }
+        else
+        {
+            const ImageAsset::FrameArea& area = (*mpImageAsset)->getImageFrameArea(mImageNameFrame);
+            return area;
+        }
+    }
     else
-        return (*mpAnimationAsset)->getImage()->getImageFrameArea(getCurrentAnimationFrame());
+    {
+        if (!(*mpAnimationAsset)->getNamedCellsMode())
+        {
+            const ImageAsset::FrameArea& area = (*mpAnimationAsset)->getImage()->getImageFrameArea(getCurrentAnimationFrame());
+            return area;
+        }
+        else
+        {
+            const ImageAsset::FrameArea& area = (*mpAnimationAsset)->getImage()->getImageFrameArea(getCurrentAnimationNameFrame());
+            return area;
+        }
+    }
     
     // If we got here for some reason, that's bad. So return a bad area frame
     return BadFrameArea;
@@ -430,17 +452,37 @@ const U32 ImageFrameProviderCore::getCurrentAnimationFrame( void ) const
 
 //-----------------------------------------------------------------------------
 
+const char* ImageFrameProviderCore::getCurrentAnimationNameFrame( void ) const
+{
+    // Sanity!
+    AssertFatal( mpAnimationAsset->notNull(), "Animation controller requested current image frame but no animation asset assigned." );
+
+    // Fetch validated frames.
+    const Vector<StringTableEntry>& validatedFrames = (*mpAnimationAsset)->getValidatedNamedAnimationFrames();
+
+    // Sanity!
+    AssertFatal( mCurrentFrameIndex < validatedFrames.size(), "Animation controller requested the current frame but it is out of bounds of the validated frames." );
+
+    return validatedFrames[mCurrentFrameIndex];
+}
+
+//-----------------------------------------------------------------------------
+
 bool ImageFrameProviderCore::isAnimationValid( void ) const
 {
     // Not valid if no animation asset.
     if ( mpAnimationAsset->isNull() )
         return false;
 
-    // Fetch validated frames.
-    const Vector<S32>& validatedFrames = (*mpAnimationAsset)->getValidatedAnimationFrames();
+    S32 validatedFrameSize = 0;
+
+    if ((*mpAnimationAsset)->getNamedCellsMode())
+        validatedFrameSize = (*mpAnimationAsset)->getValidatedNamedAnimationFrames().size();
+    else
+        validatedFrameSize = (*mpAnimationAsset)->getValidatedAnimationFrames().size();
 
     // Not valid if current frame index is out of bounds of the validated frames.
-    if ( mCurrentFrameIndex >= validatedFrames.size() )
+    if ( mCurrentFrameIndex >= validatedFrameSize )
         return false;
 
     // Fetch image asset.
@@ -450,13 +492,23 @@ bool ImageFrameProviderCore::isAnimationValid( void ) const
     if ( imageAsset.isNull() )
         return false;
 
-    // Fetch current frame.
-    const U32 currentFrame = getCurrentAnimationFrame();
+    if (!(*mpAnimationAsset)->getNamedCellsMode())
+    {
+        // Fetch current frame.
+        const U32 currentFrame = getCurrentAnimationFrame();
 
-    // Not valid if current frame is out of bounds of the image asset.
-    if ( currentFrame >= imageAsset->getFrameCount() )
-        return false;
+        // Not valid if current frame is out of bounds of the image asset.
+        if ( currentFrame >= imageAsset->getFrameCount() )
+            return false;
+    }
+    else
+    {
+        // Fetch the current name frame.
+        const char* frameName = getCurrentAnimationNameFrame();
 
+        if (!imageAsset->containsFrame(frameName))
+            return false;
+    }
     // Valid.
     return true;
 }
@@ -509,11 +561,15 @@ bool ImageFrameProviderCore::playAnimation( const AssetPtr<AnimationAsset>& anim
     // Set as dynamic provider.
     mStaticProvider = false;
 
-    // Fetch validated frames.
-    const Vector<S32>& validatedFrames = animationAsset->getValidatedAnimationFrames();
+    U32 validatedFrameSize = 0;
+
+    if (animationAsset->getNamedCellsMode())
+        validatedFrameSize = animationAsset->getValidatedNamedAnimationFrames().size();
+    else
+        validatedFrameSize = animationAsset->getValidatedAnimationFrames().size();
 
     // Check we've got some frames.
-    if ( validatedFrames.size() == 0 )
+    if ( validatedFrameSize == 0 )
     {
         Con::warnf( "ImageFrameProviderCore::playAnimation() - Cannot play AnimationAsset '%s' - Animation has no validated frames!", mpAnimationAsset->getAssetId() );
         return false;
@@ -523,13 +579,13 @@ bool ImageFrameProviderCore::playAnimation( const AssetPtr<AnimationAsset>& anim
     mpAnimationAsset->setAssetId( animationAsset.getAssetId() );
 
     // Set Maximum Frame Index.
-    mMaxFrameIndex = validatedFrames.size()-1;
+    mMaxFrameIndex = validatedFrameSize-1;
 
     // Calculate Total Integration Time.
     mTotalIntegrationTime = (*mpAnimationAsset)->getAnimationTime();
 
     // Calculate Frame Integration Time.
-    mFrameIntegrationTime = mTotalIntegrationTime / validatedFrames.size();
+    mFrameIntegrationTime = mTotalIntegrationTime / validatedFrameSize;
 
     // No, so random Start?
     if ( (*mpAnimationAsset)->getRandomStart() )
@@ -568,12 +624,25 @@ bool ImageFrameProviderCore::updateAnimation( const F32 elapsedTime )
     if ( mAnimationFinished )
         return false;
 
-    // Fetch validated frames.
-    const Vector<S32>& validatedFrames = (*mpAnimationAsset)->getValidatedAnimationFrames();
+    // Check for validity in the different frame lists
+    if ((*mpAnimationAsset)->getNamedCellsMode())
+    {
+        // Fetch the validated name frames.
+        const Vector<StringTableEntry>& validatedFrames = (*mpAnimationAsset)->getValidatedNamedAnimationFrames();
 
-    // Finish if there are no validated frames.
-    if ( validatedFrames.size() == 0 )
-        return false;
+        // Finish if there are no validated frames.
+        if ( validatedFrames.size() == 0 )
+            return false;
+    }
+    else
+    {
+        // Fetch validated frames.
+        const Vector<S32>& validatedFrames = (*mpAnimationAsset)->getValidatedAnimationFrames();
+
+        // Finish if there are no validated frames.
+        if ( validatedFrames.size() == 0 )
+            return false;
+    }
 
     // Calculate scaled time.
     const F32 scaledTime = elapsedTime * mAnimationTimeScale;
@@ -597,17 +666,8 @@ bool ImageFrameProviderCore::updateAnimation( const F32 elapsedTime )
     // Calculate Current Frame.
     mCurrentFrameIndex = (S32)(mCurrentModTime / mFrameIntegrationTime);
 
-    // Fetch frame.
-    S32 frame = validatedFrames[mCurrentFrameIndex];
-
     // Fetch image frame count.
     const S32 imageFrameCount = (*mpAnimationAsset)->getImage()->getFrameCount();
-
-    // Clamp frames.
-    if ( frame < 0 )
-        frame = 0;
-    else if (frame >= imageFrameCount )
-        frame = imageFrameCount-1;
 
     // Calculate if frame has changed.
     bool frameChanged = (mCurrentFrameIndex != mLastFrameIndex);

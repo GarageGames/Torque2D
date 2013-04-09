@@ -145,6 +145,7 @@ public:
     inline const AnimationAsset* getCurrentAnimation( void ) const { return mpAnimationAsset->notNull() ? *mpAnimationAsset : NULL; };
     inline const StringTableEntry getCurrentAnimationAssetId( void ) const { return mpAnimationAsset->getAssetId(); };
     const U32 getCurrentAnimationFrame( void ) const;
+    const char* getCurrentAnimationNameFrame( void ) const;
     inline const F32 getCurrentAnimationTime( void ) const { return mCurrentTime; };
 
     void clearAssets( void );

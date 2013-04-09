@@ -48,21 +48,33 @@ function SpineToy::reset(%this)
     // Clear the scene.
     SandboxScene.clear();
 
+    //%spineSkeletonObject = new SkeletonObject();
+    //%spineSkeletonObject.Skeleton = "SpineToy:TestSkeleton";
+    //SandboxScene.add(%spineSkeletonObject);
+    
     // BEGIN: This code is just for testing name based frames
+    //%this.createStaticSprite();
+    %this.createAnimatedSprite();
+}
+
+function SpineToy::createStaticSprite(%this)
+{
     %this.testSprite = new Sprite();
     %this.testSprite.Size = "10 10";
     %this.testSprite.Position = "0 0";
     %this.testSprite.Image = "SpineToy:Test";
     %this.testSprite.NameFrame = "Trail_Leaf";
-    SandboxScene.add(%this.testSprite);    
-    // END: This code is just for testing name based frames    
-    
-    //%spineSkeletonObject = new SkeletonObject();
-    //%spineSkeletonObject.Skeleton = "SpineToy:TestSkeleton";
-    //SandboxScene.add(%spineSkeletonObject);
+    SandboxScene.add(%this.testSprite);
 }
 
-function SpineToy::testUpdateFrame(%this, %frameName)
+function SpineToy::createAnimatedSprite(%this)
 {
-    %this.testSprite.setImageFrameByName(%frameName);
+    %this.testSprite = new Sprite();
+    %this.testSprite.Size = "10 10";
+    %this.testSprite.Position = "0 0";
+    %this.testSprite.Animation = "SpineToy:TestAnimation";
+    
+    SandboxScene.add(%this.testSprite);
 }
+
+// END: This code is just for testing name based frames    
