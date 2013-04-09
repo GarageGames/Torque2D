@@ -53,8 +53,9 @@ function SpineToy::reset(%this)
     //SandboxScene.add(%spineSkeletonObject);
     
     // BEGIN: This code is just for testing name based frames
-    //%this.createStaticSprite();
-    %this.createAnimatedSprite();
+    %this.createStaticSprite();
+    //%this.createAnimatedSprite();
+    //%this.createParticlePlayer();
 }
 
 function SpineToy::createStaticSprite(%this)
@@ -77,4 +78,14 @@ function SpineToy::createAnimatedSprite(%this)
     SandboxScene.add(%this.testSprite);
 }
 
+function SpineToy::createParticlePlayer(%this)
+{
+    // Create planetoid bubble.
+    %player = new ParticlePlayer();
+    %player.BodyType = static;
+    %player.Position = %position;
+    %player.Particle = "SpineToy:TestParticleAsset";
+    %player.SceneLayer = 0;
+    SandboxScene.add( %player );
+}
 // END: This code is just for testing name based frames    

@@ -562,7 +562,7 @@ bool ImageAsset::containsNamedRegion(const char* regionName)
         const FrameArea::PixelArea& pixelArea = frameItr->mPixelArea;
         
         // Check to see if the name matches the argument
-        if (pixelArea.mRegionName == regionName)
+        if (!dStrcmp(pixelArea.mRegionName, regionName))
         {
             // Found it, so erase it and return success
             return true;

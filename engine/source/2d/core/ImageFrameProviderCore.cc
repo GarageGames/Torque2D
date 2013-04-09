@@ -200,31 +200,10 @@ const ImageAsset::FrameArea& ImageFrameProviderCore::getProviderImageFrameArea( 
     // If it is a static frame and it's using named frames, get the image area based on mImageNameFrame
     // Otherwise, get the current animation frame
     if (isStaticFrameProvider())
-    {
-        if (!isUsingNamedImageFrame())
-        {
-            const ImageAsset::FrameArea& area = (*mpImageAsset)->getImageFrameArea(mImageFrame);
-            return area;
-        }
-        else
-        {
-            const ImageAsset::FrameArea& area = (*mpImageAsset)->getImageFrameArea(mImageNameFrame);
-            return area;
-        }
-    }
+        return !isUsingNamedImageFrame() ? (*mpImageAsset)->getImageFrameArea(mImageFrame) : (*mpImageAsset)->getImageFrameArea(mImageNameFrame);
     else
-    {
-        if (!(*mpAnimationAsset)->getNamedCellsMode())
-        {
-            const ImageAsset::FrameArea& area = (*mpAnimationAsset)->getImage()->getImageFrameArea(getCurrentAnimationFrame());
-            return area;
-        }
-        else
-        {
-            const ImageAsset::FrameArea& area = (*mpAnimationAsset)->getImage()->getImageFrameArea(getCurrentAnimationNameFrame());
-            return area;
-        }
-    }
+    return !(*mpAnimationAsset)->getNamedCellsMode() ? (*mpAnimationAsset)->getImage()->getImageFrameArea(getCurrentAnimationFrame()) :
+                                                       (*mpAnimationAsset)->getImage()->getImageFrameArea(getCurrentAnimationNameFrame());
     
     // If we got here for some reason, that's bad. So return a bad area frame
     return BadFrameArea;
@@ -720,7 +699,7 @@ void ImageFrameProviderCore::clearAssets( void )
 
     // Reset remaining state.
     mImageFrame = 0;
-    mUsingNameFrame = false;
+    //mUsingNameFrame = false;
     mImageNameFrame = StringTable->EmptyString;
     mStaticProvider = true;
     setProcessTicks( false );
