@@ -213,14 +213,24 @@ void SkeletonAsset::initializeAsset( void )
 
     // Initialize any states or data
     // Mich - At this point, this is where we should probably
-    // create an ImageAsset, build it based on the data from the .atlas.
+    // create an ImageAsset
+    // 
+    // We have two options. First, we can build it based on the data from the .atlas.
+    // such as this...
+    mAtlas = Atlas_readAtlasFile("spineboy.atlas"); // BOZO - Use reference to ImageAsset?
+
     // We can then add it to our AssetDatabase as a private asset
     // This will later be used by the SkeletonObject. That object will
     // create sprites and feed them this ImageAsset
     // If there are multiple .atlas files (skins, right?), we would loop
     // through them all, load them, then convert them to ImageAsset
-    mAtlas = Atlas_readAtlasFile("spineboy.atlas"); // BOZO - Use reference to ImageAsset?
 
+    // The second option would be to specify the ImageAsset reference(s) in the SkeletonAsset.
+    // Rather than pointing to a .atlas, we can just refer to existing what a user has
+    // created previously. What I don't know is how that would work between Spine and Torque 2D
+    
+    // If we have to build an ImageAsset from an intermediate format, like .atlas, it would go
+    // something like this:
     /*
     // Allocate a new ImageAsset. If we have multiple atlases, we would loop this multiple times
     ImageAsset* pImageAsset = new ImageAsset();
