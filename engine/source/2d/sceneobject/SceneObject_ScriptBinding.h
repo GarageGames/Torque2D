@@ -1860,7 +1860,7 @@ ConsoleMethod(SceneObject, applyTorque, void, 3, 3,      "(torque) - Applies a t
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, applyLinearImpulse, void, 4, 6,   "(worldImpulse X/Y, [worldPoint X/Y]) - Applies an impulse at a world point.\n"
+ConsoleMethod(SceneObject, applyLinearImpulse, void, 3, 6,   "(worldImpulse X/Y, [worldPoint X/Y]) - Applies an impulse at a world point.\n"
                                                                 "This immediately modifies the linear velocity.  It also modifies the angular velocity if the point of application is not the center of mass.\n"
                                                                 "@param worldImpulse/Y - The world impulse vector in Newtons (N-seconds) or Kg-m/s."
                                                                 "@param worldPointX/Y - The world point where the force is applied.  If world point is not specified, the center of mass is used."
@@ -1892,6 +1892,7 @@ ConsoleMethod(SceneObject, applyLinearImpulse, void, 4, 6,   "(worldImpulse X/Y,
     {
         // Apply force.
         object->applyForce( worldImpulse );
+		return;
     }
 
     // World point.
