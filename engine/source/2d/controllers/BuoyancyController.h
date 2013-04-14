@@ -41,26 +41,26 @@ private:
     /// The fluid area.
     b2AABB mFluidArea;
 
-	/// The fluid density.
-	F32 mFluidDensity;
+    /// The fluid density.
+    F32 mFluidDensity;
 
-	/// Fluid flow velocity for drag calculations.
-	Vector2 mFlowVelocity;
+    /// Fluid flow velocity for drag calculations.
+    Vector2 mFlowVelocity;
 
-	/// Linear drag co-efficient.
-	F32 mLinearDrag;
+    /// Linear drag co-efficient.
+    F32 mLinearDrag;
 
-	/// Linear drag co-efficient.
-	F32 mAngularDrag;
+    /// Linear drag co-efficient.
+    F32 mAngularDrag;
 
-	/// Gravity to use inside the fluid.
-	Vector2 mFluidGravity;
+    /// Gravity to use inside the fluid.
+    Vector2 mFluidGravity;
 
-	/// Whether to use the collision shape densities or assume a uniform density.
-	bool mUseShapeDensity;
+    /// Whether to use the collision shape densities or assume a uniform density.
+    bool mUseShapeDensity;
 
-	/// The outer fluid surface normal.
-	Vector2 mSurfaceNormal;
+    /// The outer fluid surface normal.
+    Vector2 mSurfaceNormal;
 
 protected:
     F32 ComputeCircleSubmergedArea( const b2Transform& bodyTransform, const b2CircleShape* pShape, Vector2& center );

@@ -23,17 +23,13 @@
 #ifndef _GUISPRITECTRL_H_
 #define _GUISPRITECTRL_H_
 
-#ifndef _GUICONTROL_H_
-#include "gui/guiControl.h"
-#endif
-
-#ifndef _SPRITE_PROXY_BASE_H_
-#include "2d/core/SpriteProxyBase.h"
+#ifndef _IMAGE_FRAME_PROVIDER_H
+#include "2d/core/imageFrameProvider.h"
 #endif
 
 //-----------------------------------------------------------------------------
 
-class GuiSpriteCtrl : public GuiControl, public SpriteProxyBase
+class GuiSpriteCtrl : public GuiControl, public ImageFrameProvider
 {
 private:
     typedef GuiControl Parent;
@@ -63,13 +59,13 @@ protected:
 
 protected:
     static bool setImage(void* obj, const char* data) { static_cast<GuiSpriteCtrl*>(obj)->setImage( data ); return false; }
-    static const char* getImage(void* obj, const char* data) { return DYNAMIC_VOID_CAST_TO(GuiSpriteCtrl, SpriteProxyBase, obj)->getImage(); }
-    static bool writeImage( void* obj, StringTableEntry pFieldName ) { GuiSpriteCtrl* pCastObject = static_cast<GuiSpriteCtrl*>(obj); if ( !pCastObject->isStaticMode() ) return false; return pCastObject->mImageAssetId != StringTable->EmptyString; }
+    static const char* getImage(void* obj, const char* data) { return DYNAMIC_VOID_CAST_TO(GuiSpriteCtrl, ImageFrameProvider, obj)->getImage(); }
+    static bool writeImage( void* obj, StringTableEntry pFieldName ) { GuiSpriteCtrl* pCastObject = static_cast<GuiSpriteCtrl*>(obj); if ( !pCastObject->isStaticFrameProvider() ) return false; return pCastObject->mImageAssetId != StringTable->EmptyString; }
     static bool setImageFrame(void* obj, const char* data) { static_cast<GuiSpriteCtrl*>(obj)->setImageFrame( dAtoi(data) ); return false; }
-    static bool writeImageFrame( void* obj, StringTableEntry pFieldName ) { GuiSpriteCtrl* pCastObject = static_cast<GuiSpriteCtrl*>(obj); return pCastObject->isStaticMode() && pCastObject->getImageFrame() > 0; }
+    static bool writeImageFrame( void* obj, StringTableEntry pFieldName ) { GuiSpriteCtrl* pCastObject = static_cast<GuiSpriteCtrl*>(obj); return pCastObject->isStaticFrameProvider() && pCastObject->getImageFrame() > 0; }
     static bool setAnimation(void* obj, const char* data) { static_cast<GuiSpriteCtrl*>(obj)->setAnimation(data); return false; };
-    static const char* getAnimation(void* obj, const char* data) { return DYNAMIC_VOID_CAST_TO(GuiSpriteCtrl, SpriteProxyBase, obj)->getAnimation(); }
-    static bool writeAnimation( void* obj, StringTableEntry pFieldName ) { GuiSpriteCtrl* pCastObject = static_cast<GuiSpriteCtrl*>(obj); if ( pCastObject->isStaticMode() ) return false; return pCastObject->mAnimationAssetId != StringTable->EmptyString; }
+    static const char* getAnimation(void* obj, const char* data) { return DYNAMIC_VOID_CAST_TO(GuiSpriteCtrl, ImageFrameProvider, obj)->getAnimation(); }
+    static bool writeAnimation( void* obj, StringTableEntry pFieldName ) { GuiSpriteCtrl* pCastObject = static_cast<GuiSpriteCtrl*>(obj); if ( pCastObject->isStaticFrameProvider() ) return false; return pCastObject->mAnimationAssetId != StringTable->EmptyString; }
 };
 
 #endif //_GUISPRITECTRL_H_

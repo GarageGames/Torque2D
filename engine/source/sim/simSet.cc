@@ -246,8 +246,7 @@ SimObject* SimSet::findObjectByInternalName(const char* internalName, bool searc
 
 //////////////////////////////////////////////////////////////////////////
 
-IMPLEMENT_CONOBJECT(SimSet);
-
+IMPLEMENT_CONOBJECT_CHILDREN(SimSet);
 
 
 inline void SimSetIterator::Stack::push_back(SimSet* set)

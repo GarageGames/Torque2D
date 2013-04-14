@@ -291,4 +291,8 @@ protected:
     static bool writeCellHeight( void* obj, StringTableEntry pFieldName )   { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && pImageAsset->getCellHeight() != 0; }
 };
 
+//-----------------------------------------------------------------------------
+
+extern ImageAsset::FrameArea BadFrameArea;
+
 #endif // _IMAGE_ASSET_H_

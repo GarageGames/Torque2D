@@ -31,14 +31,6 @@
 #include "2d/core/particleSystem.h"
 #endif
 
-#ifndef _SCENE_OBJECT_H_
-#include "2d/sceneObject/sceneObject.h"
-#endif
-
-#ifndef _ANIMATION_CONTROLLER_H_
-#include "2d/assets/AnimationController.h"
-#endif
-
 //-----------------------------------------------------------------------------
 
 #define PARTICLE_PLAYER_EMISSION_RATE_SCALE     "$pref::T2D::ParticlePlayerEmissionRateScale"
@@ -48,11 +40,10 @@
 
 //-----------------------------------------------------------------------------
 
-class ParticlePlayer : public SceneObject, public AssetPtrCallback
+class ParticlePlayer : public SceneObject, protected AssetPtrCallback
 {
 private:
     typedef SceneObject Parent;
-
 
     /// Emitter node.
     class EmitterNode
@@ -198,6 +189,8 @@ protected:
     virtual void OnRegisterScene( Scene* pScene );
     virtual void OnUnregisterScene( Scene* pScene );
 
+    virtual void onAssetRefreshed( AssetPtrBase* pAssetPtrBase );
+
     /// Particle Creation/Integration.
     void configureParticle( EmitterNode* pEmitterNode, ParticleSystem::ParticleNode* pParticleNode );
     void integrateParticle( EmitterNode* pEmitterNode, ParticleSystem::ParticleNode* pParticleNode, const F32 particleAge, const F32 elapsedTime );
@@ -214,8 +207,6 @@ protected:
     static bool     writeTimeScale( void* obj, StringTableEntry pFieldName )                { return !mIsOne( static_cast<ParticlePlayer*>( obj )->getTimeScale() ); }
 
 private:
-    virtual void onAssetRefreshed( AssetPtrBase* pAssetPtrBase );
-
     void initializeParticleAsset( void );
     void destroyParticleAsset( void );
 };

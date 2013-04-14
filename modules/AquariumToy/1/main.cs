@@ -23,20 +23,16 @@
 function AquariumToy::create( %this )
 {
     exec("./scripts/aquarium.cs");
+    exec("./scripts/fish.cs");
 
     // Configure settings.
     AquariumToy.maxFish = 10;
     AquariumToy.currentFish = 0;
-    AquariumToy.selectedAnimation = "AquariumToy:angelfish1Anim";
+    AquariumToy.selectedAnimation = "TropicalAssets:angelfish1Anim";
     
-    // Set all the fish scene-layers to sort in "batch" mode
+    // Set the fish scene-layer to sort in "batch" mode
     // so that all the fish will be sorted into a batchable order to reduce draw calls.
-    SandboxScene.setLayerSortMode( 0, batch );
-    SandboxScene.setLayerSortMode( 1, batch );
-    SandboxScene.setLayerSortMode( 2, batch );
-    SandboxScene.setLayerSortMode( 3, batch );
-    SandboxScene.setLayerSortMode( 4, batch );
-    SandboxScene.setLayerSortMode( 5, batch );
+    SandboxScene.setLayerSortMode( 15, batch );
     
     addNumericOption("Max Fish", 1, 50, 1, "setMaxFish", %this.maxFish, true, "Sets the maximum number of fish to be created.");
     addSelectionOption(getFishAnimationList(), "Fish Animation", 5, "setSelectedAnimation", false, "Selects the fish animation that can be spawned manually.");
@@ -62,8 +58,8 @@ function AquariumToy::reset(%this)
     // Set the gravity.
     SandboxScene.setGravity(0, 0);
 
-    buildAquarium();
-    createAquariumEffects();
+    buildAquarium(SandboxScene);
+    createAquariumEffects(SandboxScene);
 
     // Reset the ball count.
     %this.currentFish = 0;
@@ -80,25 +76,25 @@ function AquariumToy::spawnFish(%this)
     %index = getRandom(0, 5);
     %anim = getUnit(getFishAnimationList(), %index, ",");
 
-    %fishInfo = getFishSize(%anim);
+    %fishSize = getFishSize(%anim);
 
     %fish = new Sprite()
     {
         Animation = %anim;
         class = "FishClass";
         position = %position;
-        size = %fishInfo;
-        SceneLayer = "2";
+        size = %fishSize;
+        SceneLayer = "15";
         SceneGroup = "14";
         minSpeed = "5";
         maxSpeed = "15";
         CollisionCallback = true;
     };
 
-    %fish.createPolygonBoxCollisionShape( 15, 15);
+    // aquarium boundary triggers are in group 15.  See TropicalAssets/scripts/aquarium.cs
     %fish.setCollisionGroups( 15 );
+    %fish.createPolygonBoxCollisionShape(%fishSize);
     %fish.setDefaultDensity( 1 );
-    %fish.setDefaultFriction( 1.0 );
     SandboxScene.add( %fish );
 
     %this.currentFish++;

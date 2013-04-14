@@ -81,10 +81,6 @@ const char* CompositeSprite::getBatchLayoutTypeDescription(const CompositeSprite
     return StringTable->EmptyString;
 }
 
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_CONOBJECT(CompositeSprite);
-
 //------------------------------------------------------------------------------
 
 CompositeSprite::CompositeSprite() :
@@ -108,13 +104,36 @@ void CompositeSprite::initPersistFields()
     Parent::initPersistFields();
 
     /// Defaults.
-    addProtectedField( "DefaultSpriteStride", TypeVector2, Offset(mDefaultSpriteStride, CompositeSprite), &defaultProtectedSetFn, &defaultProtectedGetFn, &defaultProtectedWriteFn, "");
-    addProtectedField( "DefaultSpriteSize", TypeVector2, Offset(mDefaultSpriteSize, CompositeSprite), &defaultProtectedSetFn, &defaultProtectedGetFn, &defaultProtectedWriteFn, "");
+    addProtectedField( "DefaultSpriteStride", TypeVector2, Offset(mDefaultSpriteStride, CompositeSprite), &defaultProtectedSetFn, &defaultProtectedGetFn, &writeDefaultSpriteStride, "");
+    addProtectedField( "DefaultSpriteSize", TypeVector2, Offset(mDefaultSpriteSize, CompositeSprite), &defaultProtectedSetFn, &defaultProtectedGetFn, &writeDefaultSpriteSize, "");
     addProtectedField( "DefaultSpriteAngle", TypeF32, Offset(mDefaultSpriteSize, CompositeSprite), &setDefaultSpriteAngle, &getDefaultSpriteAngle, &writeDefaultSpriteAngle, "");
     addProtectedField( "BatchLayout", TypeEnum, Offset(mBatchLayoutType, CompositeSprite), &setBatchLayout, &defaultProtectedGetFn, &writeBatchLayout, 1, &batchLayoutTypeTable, "");
     addProtectedField( "BatchCulling", TypeBool, Offset(mBatchCulling, CompositeSprite), &setBatchCulling, &defaultProtectedGetFn, &writeBatchCulling, "");
     addField( "BatchIsolated", TypeBool, Offset(mBatchIsolated, CompositeSprite), &writeBatchIsolated, "");
     addField( "BatchSortMode", TypeEnum, Offset(mBatchSortMode, CompositeSprite), &writeBatchSortMode, 1, &SceneRenderQueue::renderSortTable, "");
+}
+
+//-----------------------------------------------------------------------------
+
+bool CompositeSprite::onAdd()
+{
+    // Call parent.
+    if ( !Parent::onAdd() )
+        return false;
+
+    // Call sprite batch.
+    return SpriteBatch::onAdd();
+}
+
+//-----------------------------------------------------------------------------
+
+void CompositeSprite::onRemove()
+{
+    // Call sprite batch.
+    SpriteBatch::onRemove();
+
+    // Call parent.
+    Parent::onRemove();
 }
 
 //-----------------------------------------------------------------------------
@@ -248,8 +267,8 @@ SpriteBatchItem* CompositeSprite::createSprite( const SpriteBatchItem::LogicalPo
             return createCustomLayout( logicalPosition );
 
         default:
-            // Sanity!
-            AssertFatal( false, "CompositeSprite::createSprite() - Unknown layout type encountered." );
+            // Warn.
+            Con::warnf( "CompositeSprite::createSprite() - Unknown layout type encountered." );
             return SpriteBatch::createSprite( logicalPosition );
     }
 }
@@ -386,18 +405,8 @@ void CompositeSprite::onTamlCustomWrite( TamlCustomNodes& customNodes )
     // Call parent.
     Parent::onTamlCustomWrite( customNodes );
 
-    // Fetch sprite count.
-    const U32 spriteCount = getSpriteCount();
-
-    // Finish if no sprites.
-    if ( spriteCount == 0 )
-        return;
-
-    // Add sprites node.
-    TamlCustomNode* pSpritesNode = customNodes.addNode( StringTable->insert("Sprites") );
-
     // Write node with sprite batch.
-    SpriteBatch::onTamlCustomWrite( pSpritesNode );
+    SpriteBatch::onTamlCustomWrite( customNodes );
 }
 
 //-----------------------------------------------------------------------------
@@ -407,13 +416,22 @@ void CompositeSprite::onTamlCustomRead( const TamlCustomNodes& customNodes )
     // Call parent.
     Parent::onTamlCustomRead( customNodes );
 
-    // Find sprites custom node.
-    const TamlCustomNode* pSpritesNode = customNodes.findNode( StringTable->insert("Sprites") );
-
-    // Finish if we don't have the node.
-    if ( pSpritesNode == NULL )
-        return;
-
     // Read node with sprite batch.
-    SpriteBatch::onTamlCustomRead( pSpritesNode );
+    SpriteBatch::onTamlCustomRead( customNodes );
 }
+
+//-----------------------------------------------------------------------------
+
+static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "CompositeSprite::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "CompositeSprite::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    // Write sprite batch.
+    SpriteBatch::WriteCustomTamlSchema( pClassRep, pParentElement );
+}
+
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_CONOBJECT_SCHEMA(CompositeSprite, WriteCustomTamlSchema);

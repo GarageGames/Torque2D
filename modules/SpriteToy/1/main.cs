@@ -32,7 +32,6 @@ function SpriteToy::create( %this )
     SpriteToy.reset();
 }
 
-
 //-----------------------------------------------------------------------------
 
 function SpriteToy::destroy( %this )

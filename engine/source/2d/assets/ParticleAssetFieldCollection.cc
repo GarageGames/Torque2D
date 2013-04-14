@@ -24,15 +24,14 @@
 
 //-----------------------------------------------------------------------------
 
-static StringTableEntry particleAssetFieldNodeName;
+    // Set custom property name.
+static StringTableEntry particleAssetFieldNodeName = StringTable->insert("Fields");
 
 //-----------------------------------------------------------------------------
 
 ParticleAssetFieldCollection::ParticleAssetFieldCollection() :
                                     mpSelectedField( NULL )
 {
-    // Set custom property name.
-    particleAssetFieldNodeName = StringTable->insert("Fields");
 }
 
 //-----------------------------------------------------------------------------
@@ -483,5 +482,40 @@ void ParticleAssetFieldCollection::onTamlCustomRead( const TamlCustomNodes& cust
     }
 }
 
+//-----------------------------------------------------------------------------
+
+void ParticleAssetFieldCollection::WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement ) const
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "ParticleAssetFieldCollection::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "ParticleAssetFieldCollection::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    char buffer[1024];
+
+    // Create Fields node element.
+    TiXmlElement* pFieldsNodeElement = new TiXmlElement( "xs:element" );
+    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), particleAssetFieldNodeName );
+    pFieldsNodeElement->SetAttribute( "name", buffer );
+    pFieldsNodeElement->SetAttribute( "minOccurs", 0 );
+    pFieldsNodeElement->SetAttribute( "maxOccurs", 1 );
+    pParentElement->LinkEndChild( pFieldsNodeElement );
+
+    // Create complex type.
+    TiXmlElement* pFieldsNodeComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pFieldsNodeElement->LinkEndChild( pFieldsNodeComplexTypeElement );
+    
+    // Create choice element.
+    TiXmlElement* pFieldsNodeChoiceElement = new TiXmlElement( "xs:choice" );
+    pFieldsNodeChoiceElement->SetAttribute( "minOccurs", 0 );
+    pFieldsNodeChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
+    pFieldsNodeComplexTypeElement->LinkEndChild( pFieldsNodeChoiceElement );
+
+    // Iterate the fields.
+    for( typeFieldHash::const_iterator fieldItr = mFields.begin(); fieldItr != mFields.end(); ++fieldItr )
+    {
+        // Write schema for the field.
+        fieldItr->value->WriteCustomTamlSchema( pClassRep, pFieldsNodeChoiceElement );
+    }
+}
 
 

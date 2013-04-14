@@ -22,9 +22,6 @@
 
 function CompositeSpriteToy::create( %this )
 {
-    // Activate the package.
-    activatePackage( CompositeSpriteToyPackage );
-    
     // Load scripts.
     exec( "./scripts/noLayout.cs" );
     exec( "./scripts/rectLayout.cs" );
@@ -49,7 +46,7 @@ function CompositeSpriteToy::create( %this )
     addNumericOption("Maximum Sprite Count", 10, 1000, 10, "setSpriteCount", CompositeSpriteToy.SpriteCount, true, "Sets the maximum number of sprites to create." );
     addNumericOption("Angular Velocity", -180, 180, 20, "setAngularVelocity", CompositeSpriteToy.AngularVelocity, false, "Sets the rate at which the composite sprite spins." );    
     addFlagOption("Render Isolated", "setRenderIsolated", CompositeSpriteToy.RenderIsolated, true , "Whether the composite renders its sprites isolated from the scene layer it occupies or not.");
-        
+    
     // Reset the toy.
     %this.reset();     
 }
@@ -58,8 +55,6 @@ function CompositeSpriteToy::create( %this )
 
 function CompositeSpriteToy::destroy( %this )
 {
-    // Deactivate the package.
-    deactivatePackage( CompositeSpriteToyPackage );    
 }
 
 //-----------------------------------------------------------------------------
@@ -141,15 +136,10 @@ function CompositeSpriteToy::createBackground(%this)
     SandboxScene.add( %obj );   
 }
 
+//-----------------------------------------------------------------------------
 
-package CompositeSpriteToyPackage
+function CompositeSpriteToy::onTouchDown(%this, %touchID, %worldPosition)
 {
-
-function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
-{
-    // Call parent.
-    Parent::onTouchDown(%this, %touchID, %worldPosition );
-    
     // Fetch the composite sprite.
     %compositeSprite = CompositeSpriteToy.CompositeSprite;
     
@@ -176,5 +166,3 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
         %compositeSprite.removeSprite();
     }
 }
-  
-};

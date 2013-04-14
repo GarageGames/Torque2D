@@ -288,6 +288,19 @@ if(!isObject(GuiScrollProfile)) new GuiControlProfile (GuiScrollProfile)
 
 //-----------------------------------------------------------------------------
 
+if(!isObject(GuiTransparentScrollProfile)) new GuiControlProfile (GuiTransparentScrollProfile)
+{
+   opaque = false;
+   fillColor = "255 255 255";
+   border = false;
+   borderThickness = 2;
+   borderColor = "0 0 0";
+   bitmap = "^Sandbox/gui/images/scrollBar.png";
+   hasBitmapArray = true;
+};
+
+//-----------------------------------------------------------------------------
+
 if(!isObject(ConsoleScrollProfile)) new GuiControlProfile( ConsoleScrollProfile : GuiScrollProfile )
 {
     opaque = true;

@@ -1146,6 +1146,52 @@ ConsoleMethod(SceneWindow, setObjectInputEventInvisibleFilter, void, 3, 3, "(boo
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(SceneWindow, addInputListener, bool, 3, 3,    "(inputListener) Adds an object as an input listener.\n"
+                                                            "@param inputListener The object to add as an input listener.\n"
+                                                            "@return Whether the object was added as an input event listener or not.")
+{
+    // Find the SimObject
+    SimObject* pSimObject = Sim::findObject( argv[2] );
+
+    // Did we find the SimObject?
+    if ( pSimObject == NULL )
+    {
+        // No, so warn.
+        Con::warnf( "SceneWindow::addInputListener() - Could not find the object '%s' to add as an input event listener.", argv[2] );
+        return false;
+    }
+
+    // Add input listener.
+    object->addInputListener( pSimObject );
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SceneWindow, removeInputListener, bool, 3, 3, "(inputListener) Removes an object from being an input listener.\n"
+                                                            "@param inputListener The object to remove as an input listener.\n"
+                                                            "@return Whether the object was removed as an input event listener or not.")
+{
+    // Find the SimObject
+    SimObject* pSimObject = Sim::findObject( argv[2] );
+
+    // Did we find the SimObject?
+    if ( pSimObject == NULL )
+    {
+        // No, so warn.
+        Con::warnf( "SceneWindow::removeInputListener() - Could not find the object '%s' to remove from being an input event listener.", argv[2] );
+        return false;
+    }
+
+    // Remove input listener.
+    object->removeInputListener( pSimObject );
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(SceneWindow, setLockMouse, void, 3, 3, "(bool lockSet) Sets the window mouse-lock status."
               "@return No return value.")
 {

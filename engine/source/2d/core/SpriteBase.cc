@@ -21,19 +21,15 @@
 //-----------------------------------------------------------------------------
 
 #ifndef _SPRITE_BASE_H_
-#include "SpriteBase.h"
+#include "2d/core/SpriteBase.h"
 #endif
 
 #ifndef _DGL_H_
 #include "graphics/dgl.h"
 #endif
 
-#ifndef _STRINGBUFFER_H_
-#include "string/stringBuffer.h"
-#endif
-
 // Script bindings.
-#include "SpriteBase_ScriptBinding.h"
+#include "2d/core/SpriteBase_ScriptBinding.h"
 
 //------------------------------------------------------------------------------
 
@@ -70,15 +66,15 @@ void SpriteBase::integrateObject( const F32 totalTime, const F32 elapsedTime, De
     // Call Parent.
     Parent::integrateObject( totalTime, elapsedTime, pDebugStats );
 
-    // Update render proxy base.
-    SpriteProxyBase::update( elapsedTime );
+    // Update image frame provider.
+    ImageFrameProvider::update( elapsedTime );
 }
 
 //------------------------------------------------------------------------------
 
 bool SpriteBase::validRender( void ) const
 {
-    return SpriteProxyBase::validRender();
+    return ImageFrameProvider::validRender();
 }
 
 //------------------------------------------------------------------------------
@@ -94,8 +90,8 @@ void SpriteBase::copyTo(SimObject* object)
     // Sanity!
     AssertFatal(pSpriteBase != NULL, "SpriteBase::copyTo() - Object is not the correct type.");
 
-    // Call render proxy base.
-    SpriteProxyBase::copyTo( pSpriteBase );
+    // Call image frame provider.
+    ImageFrameProvider::copyTo( pSpriteBase );
 }
 
 //------------------------------------------------------------------------------

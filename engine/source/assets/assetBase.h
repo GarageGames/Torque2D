@@ -41,12 +41,19 @@ class AssetManager;
 
 //-----------------------------------------------------------------------------
 
-#define ASSET_BASE_ASSETNAME_FIELD         "AssetName"
-#define ASSET_BASE_ASSETDESCRIPTION_FIELD  "AssetDescription"
-#define ASSET_BASE_CATEGORY_FIELD          "AssetCategory"
-#define ASSET_BASE_ASSETINTERNAL_FIELD     "AssetInternal"
-#define ASSET_BASE_ASSETPRIVATE_FIELD      "AssetPrivate"
-#define ASSET_BASE_AUTOUNLOAD_FIELD        "AssetAutoUnload"
+extern StringTableEntry assetNameField;
+extern StringTableEntry assetDescriptionField;
+extern StringTableEntry assetCategoryField;
+extern StringTableEntry assetInternalField;
+extern StringTableEntry assetPrivateField;
+extern StringTableEntry assetAutoUnloadField;
+
+//#define ASSET_BASE_ASSETNAME_FIELD         "AssetName"
+//#define ASSET_BASE_ASSETDESCRIPTION_FIELD  "AssetDescription"
+//#define ASSET_BASE_ASSETCATEGORY_FIELD     "AssetCategory"
+//#define ASSET_BASE_ASSETINTERNAL_FIELD     "AssetInternal"
+//#define ASSET_BASE_ASSETPRIVATE_FIELD      "AssetPrivate"
+//#define ASSET_BASE_AUTOUNLOAD_FIELD        "AssetAutoUnload"
 
 //-----------------------------------------------------------------------------
 

@@ -331,56 +331,6 @@ ConsoleMethod( AssetManager, purgeAssets, void, 2, 2,           "() - Purge all 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetManager, getAssetSnapshot, bool, 4, 4,      "(assetSnapshot, assetId) - Gets an asset snapshot of the specified asset Id.\n"
-                                                                "@param assetSnapshot The asset snapshot object to populate with the snapshot.\n"
-                                                                "@param assetId The selected asset Id.\n"
-                                                                "@return Whether the getting the asset snapshot was successful or not.")
-{
-    // Fetch asset snapshot.
-    AssetSnapshot* pAssetSnapshot = Sim::findObject<AssetSnapshot>( argv[2] );
-
-    // Did we find the asset snapshot?
-    if ( pAssetSnapshot == NULL )
-    {
-        // No, so warn.
-        Con::warnf( "AssetManager::getAssetSnapshot() - Could not find the asset snapshot object '%s'.", argv[2] );
-        return false;
-    }
-
-    // Fetch asset Id.
-    const char* pAssetId = argv[3];
-
-    // Get asset snapshot.
-    return object->getAssetSnapshot( pAssetSnapshot, pAssetId );
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod( AssetManager, setAssetSnapshot, bool, 4, 4,      "(assetSnapshot, assetId) - Set an asset snapshot to the specified asset Id.\n"
-                                                                "@param assetSnapshot The asset snapshot object to assign to the specified asset Id.\n"
-                                                                "@param assetId The selected asset Id.\n"
-                                                                "@return Whether setting the asset snapshot was successful or not.")
-{
-    // Fetch asset snapshot.
-    AssetSnapshot* pAssetSnapshot = Sim::findObject<AssetSnapshot>( argv[2] );
-
-    // Did we find the asset snapshot?
-    if ( pAssetSnapshot == NULL )
-    {
-        // No, so warn.
-        Con::warnf( "AssetManager::setAssetSnapshot() - Could not find the asset snapshot object '%s'.", argv[2] );
-        return false;
-    }
-
-    // Fetch asset Id.
-    const char* pAssetId = argv[3];
-
-    // Set asset snapshot.
-    return object->setAssetSnapshot( pAssetSnapshot, pAssetId );
-}
-
-//-----------------------------------------------------------------------------
-
 ConsoleMethod( AssetManager, deleteAsset, bool, 5, 5,   "(assetId, deleteLooseFiles, deleteDependencies) Deletes the specified asset Id and optionally its loose files and asset dependencies.\n"
                                                         "@param assetId The selected asset Id.\n"
                                                         "@param deleteLooseFiles Whether to delete an assets loose files or not.\n"

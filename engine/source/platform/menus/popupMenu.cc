@@ -37,8 +37,6 @@ PopupMenu::PopupMenu()
    mSubmenus->registerObject();
 
    mIsPopup = false;
-
-   mNSLinkMask = LinkSuperClassName | LinkClassName;
 }
 
 PopupMenu::~PopupMenu()
@@ -80,14 +78,11 @@ bool PopupMenu::onAdd()
 
    createPlatformMenu();
 
-   Con::executef(this, 1, "onAdd");
    return true;
 }
 
 void PopupMenu::onRemove()
 {
-   Con::executef(this, 1, "onRemove");
-
    Parent::onRemove();
 }
 

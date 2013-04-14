@@ -48,10 +48,10 @@ public:
     void            remove( SpriteBatchItem* pSpriteBatchItem );
     bool            update( SpriteBatchItem* pSpriteBatchItem, const b2AABB& aabb, const b2Vec2& displacement );
 
-    //// Render queries.
-    U32             renderQueryArea( const b2AABB& aabb );
-    U32             renderQueryRay( const Vector2& point1, const Vector2& point2 );
-    U32             renderQueryPoint( const Vector2& point );
+    //// Spatial queries.
+    U32             queryArea( const b2AABB& aabb, const bool targetOOBB );
+    U32             queryRay( const Vector2& point1, const Vector2& point2, const bool targetOOBB );
+    U32             queryPoint( const Vector2& point, const bool targetOOBB );
  
     /// Results.
     void            clearQuery( void );
@@ -74,8 +74,12 @@ private:
 
 private:
     SpriteBatch*                mpSpriteBatch;
-    bool                        mCheckFixturePoint;
-    b2Vec2                      mFixturePoint;
+    b2PolygonShape              mComparePolygonShape;
+    b2RayCastInput              mCompareRay;
+    b2Vec2                      mComparePoint;
+    b2Transform                 mCompareTransform;
+    bool                        mCheckOOBB;
+    bool                        mCheckPoint;
     typeSpriteBatchQueryResultVector mQueryResults;
     bool                        mIsRaycastQueryResult;
     typeSceneObjectVector       mAlwaysInScopeSet;

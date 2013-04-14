@@ -75,7 +75,8 @@ public:
    virtual bool open(const char *i_pFilename, AccessMode i_openMode);
    virtual void close();
 
-   bool flush();
+   bool Flush();
+
 
 protected:
    // more mandatory methods from Stream base class...
