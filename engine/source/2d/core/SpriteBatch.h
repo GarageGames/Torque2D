@@ -183,6 +183,7 @@ public:
 
 protected:
     SpriteBatchItem* createSprite( void );
+    SpriteBatchItem* createSprite( const Vector2* explicitVertices  );
     SpriteBatchItem* findSpritePosition( const SpriteBatchItem::LogicalPosition& logicalPosition );
     SpriteBatchItem* findSpriteId( const U32 batchId );
     SpriteBatchItem* findSpriteName( const char* pName );
