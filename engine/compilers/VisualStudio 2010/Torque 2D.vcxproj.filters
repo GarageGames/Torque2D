@@ -1272,6 +1272,9 @@
     <ClCompile Include="..\..\source\persistence\taml\tamlCustom.cc">
       <Filter>persistence\taml</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\gui\containers\guiGridCtrl.cc">
+      <Filter>gui\containers</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectList.cc">
       <Filter>2d\sceneobject</Filter>
     </ClCompile>
@@ -2615,6 +2618,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\persistence\taml\tamlCustom.h">
       <Filter>persistence\taml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\gui\containers\guiGridCtrl.h">
+      <Filter>gui\containers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\sim\simObjectTimerEvent.h">
       <Filter>sim</Filter>
