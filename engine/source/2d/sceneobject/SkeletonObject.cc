@@ -245,20 +245,23 @@ void SkeletonObject::updateComposition( const F32 time )
     
     // Update position/orientation/state of visualization
     
-	 float deltaTime = 0.16f; // BOZO - Need time since last frame. What is "time"?
+    float deltaTime = 0.16f; // BOZO - Need time since last frame. What is "time"?
     Skeleton_update(mSkeleton, deltaTime);
     AnimationState_update(mState, deltaTime * mTimeScale);
     AnimationState_apply(mState, mSkeleton);
     Skeleton_updateWorldTransform(mSkeleton);
 
-    // Update sprite positions.
+    // Update sprites
     for( typeSkeletonSpritesVector::iterator spriteItr = mSkeletonSprites.begin(); spriteItr < mSkeletonSprites.end(); ++spriteItr )
     {
         // Fetch sprite,
         SpriteBatchItem* pSprite = *spriteItr;
 
-        // Update the position
+        // Update the local position
         // Update the scale
         // Update the rotation
+        // Set the explicit vertices
+        Vector2 vertices[4];
+        pSprite->setExplicitVertices(vertices);
     }
 }
