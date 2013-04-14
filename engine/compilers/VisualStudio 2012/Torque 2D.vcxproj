@@ -1045,6 +1045,7 @@
     <ClInclude Include="..\..\source\sim\scriptGroup.h" />
     <ClInclude Include="..\..\source\sim\scriptObject.h" />
     <ClInclude Include="..\..\source\sim\simBase.h" />
+    <ClInclude Include="..\..\source\sim\simBase_ScriptBinding.h" />
     <ClInclude Include="..\..\source\sim\simConsoleEvent.h" />
     <ClInclude Include="..\..\source\sim\simConsoleThreadExecEvent.h" />
     <ClInclude Include="..\..\source\sim\simDatablock.h" />

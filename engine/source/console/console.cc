@@ -185,10 +185,6 @@ ConsoleConstructor::ConsoleConstructor(const char* className, const char* usage)
    ns = true;
 }
 
-// We comment out the implementation of the Con namespace when doxygenizing because
-// otherwise Doxygen decides to ignore our docs in console.h
-#ifndef DOXYGENIZING
-
 namespace Con
 {
 
@@ -1807,5 +1803,3 @@ ConsoleFunction(getPathExpandoValue, const char*, 2, 2, "(int expandoIndex) - Ge
 
 
 } // end of Console namespace
-
-#endif

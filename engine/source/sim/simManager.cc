@@ -33,10 +33,6 @@
 
 //---------------------------------------------------------------------------
 
-// We comment out the implementation of the Con namespace when doxygenizing because
-// otherwise Doxygen decides to ignore our docs in console.h
-#ifndef DOXYGENIZING
-
 namespace Sim
 {
 //---------------------------------------------------------------------------
@@ -129,6 +125,11 @@ U32 postEvent(SimObject *destObject, SimEvent* event,U32 time)
 //---------------------------------------------------------------------------
 // event cancellation
 
+/*! cancel a previously scheduled event.
+	@param eventSequence The numeric ID of a previously scheduled event.
+	@return No return value.
+	@sa getEventTimeLeft, getScheduleDuration, getTimeSinceStart, isEventPending, schedule, obj.schedule
+*/
 void cancelEvent(U32 eventSequence)
 {
    Mutex::lockMutex(gEventQueueMutex);
@@ -399,9 +400,6 @@ void shutdown()
 }
 
 } // Sim Namespace.
-
-
-#endif // DOXYGENIZING.
 
 SimDataBlockGroup::SimDataBlockGroup()
 {

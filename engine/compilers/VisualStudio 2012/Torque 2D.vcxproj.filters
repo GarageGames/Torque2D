@@ -2751,6 +2751,9 @@
     <ClInclude Include="..\..\source\persistence\taml\json\tamlJSONParser.h">
       <Filter>persistence\taml\json</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\sim\simBase_ScriptBinding.h">
+      <Filter>sim</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\math\mMath_ASM.asm">

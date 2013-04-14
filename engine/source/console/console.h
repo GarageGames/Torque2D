@@ -778,8 +778,20 @@ public:
 #define conmethod_nullify(val)
 #define conmethod_return_void               conmethod_nullify(void
 #define conmethod_return_bool               return (bool
+#define conmethod_return_ConsoleConst       conmethod_return_const
+#define conmethod_return_ConsoleInt         conmethod_return_S32
+#define conmethod_return_ConsoleFloat       conmethod_return_F32
+#define conmethod_return_ConsoleVoid        conmethod_return_void
+#define conmethod_return_ConsoleBool        conmethod_return_bool
 
 #if !defined(TORQUE_SHIPPING)
+
+// Console function return types
+#define ConsoleString	const char*
+#define ConsoleInt		S32
+#define ConsoleFloat	F32
+#define ConsoleVoid		void
+#define ConsoleBool		bool
 
 // Console function macros
 #  define ConsoleFunctionGroupBegin(groupName, usage) \
@@ -790,6 +802,11 @@ public:
       static ConsoleConstructor g##name##obj(NULL,#name,c##name,usage1,minArgs,maxArgs);  \
       static returnType c##name(SimObject *, S32 argc, const char **argv)
 
+#  define ConsoleFunctionWithDocs(name,returnType,minArgs,maxArgs,argString)              \
+      static returnType c##name(SimObject *, S32, const char **argv);                     \
+      static ConsoleConstructor g##name##obj(NULL,#name,c##name,"",minArgs,maxArgs);      \
+      static returnType c##name(SimObject *, S32 argc, const char **argv)
+
 #  define ConsoleFunctionGroupEnd(groupName) \
       static ConsoleConstructor gConsoleFunctionGroup##groupName##__GroupEnd(NULL,#groupName,NULL);
 
@@ -797,25 +814,46 @@ public:
 #  define ConsoleNamespace(className, usage) \
       static ConsoleConstructor className##__Namespace(#className, usage);
 
+#  define ConsoleMethodBeginWithDocs(className)
+#  define ConsoleMethodEndWithDocs(className)
+
 #  define ConsoleMethodGroupBegin(className, groupName, usage) \
       static ConsoleConstructor className##groupName##__GroupBegin(#className,#groupName,usage);
 
-#  define ConsoleMethod(className,name,returnType,minArgs,maxArgs,usage1)                             \
-      static inline returnType c##className##name(className *, S32, const char **argv);               \
-      static returnType c##className##name##caster(SimObject *object, S32 argc, const char **argv) {  \
-         AssertFatal( dynamic_cast<className*>( object ), "Object passed to " #name " is not a " #className "!" ); \
-         conmethod_return_##returnType ) c##className##name(static_cast<className*>(object),argc,argv);              \
-      };                                                                                              \
+#  define ConsoleMethod(className,name,returnType,minArgs,maxArgs,usage1)                                                 \
+      static inline returnType c##className##name(className *, S32, const char **argv);                                   \
+      static returnType c##className##name##caster(SimObject *object, S32 argc, const char **argv) {                      \
+         AssertFatal( dynamic_cast<className*>( object ), "Object passed to " #name " is not a " #className "!" );        \
+         conmethod_return_##returnType ) c##className##name(static_cast<className*>(object),argc,argv);                   \
+      };                                                                                                                  \
       static ConsoleConstructor className##name##obj(#className,#name,c##className##name##caster,usage1,minArgs,maxArgs); \
+      static inline returnType c##className##name(className *object, S32 argc, const char **argv)
+
+#  define ConsoleMethodWithDocs(className,name,returnType,minArgs,maxArgs,argString)                                  \
+      static inline returnType c##className##name(className *, S32, const char **argv);                               \
+      static returnType c##className##name##caster(SimObject *object, S32 argc, const char **argv) {                  \
+         AssertFatal( dynamic_cast<className*>( object ), "Object passed to " #name " is not a " #className "!" );    \
+         conmethod_return_##returnType ) c##className##name(static_cast<className*>(object),argc,argv);               \
+      };                                                                                                              \
+      static ConsoleConstructor className##name##obj(#className,#name,c##className##name##caster,"",minArgs,maxArgs); \
       static inline returnType c##className##name(className *object, S32 argc, const char **argv)
 
 #  define ConsoleStaticMethod(className,name,returnType,minArgs,maxArgs,usage1)                       \
       static inline returnType c##className##name(S32, const char **);                                \
       static returnType c##className##name##caster(SimObject *object, S32 argc, const char **argv) {  \
-         conmethod_return_##returnType ) c##className##name(argc,argv);                                \
+         conmethod_return_##returnType ) c##className##name(argc,argv);                               \
       };                                                                                              \
       static ConsoleConstructor                                                                       \
          className##name##obj(#className,#name,c##className##name##caster,usage1,minArgs,maxArgs);    \
+      static inline returnType c##className##name(S32 argc, const char **argv)
+
+#  define ConsoleStaticMethodWithDocs(className,name,returnType,minArgs,maxArgs,argString)            \
+      static inline returnType c##className##name(S32, const char **);                                \
+      static returnType c##className##name##caster(SimObject *object, S32 argc, const char **argv) {  \
+         conmethod_return_##returnType ) c##className##name(argc,argv);                               \
+      };                                                                                              \
+      static ConsoleConstructor                                                                       \
+         className##name##obj(#className,#name,c##className##name##caster,"",minArgs,maxArgs);        \
       static inline returnType c##className##name(S32 argc, const char **argv)
 
 #  define ConsoleMethodGroupEnd(className, groupName) \
