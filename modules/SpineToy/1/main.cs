@@ -48,12 +48,12 @@ function SpineToy::reset(%this)
     // Clear the scene.
     SandboxScene.clear();
 
-    //%spineSkeletonObject = new SkeletonObject();
-    //%spineSkeletonObject.Skeleton = "SpineToy:TestSkeleton";
-    //SandboxScene.add(%spineSkeletonObject);
+    %spineSkeletonObject = new SkeletonObject();
+    %spineSkeletonObject.Asset = "SpineToy:TestSkeleton";
+    SandboxScene.add(%spineSkeletonObject);
     
     // BEGIN: This code is just for testing name based frames
-    %this.createStaticSprite();
+    //%this.createStaticSprite();
     //%this.createAnimatedSprite();
     //%this.createParticlePlayer();
 }

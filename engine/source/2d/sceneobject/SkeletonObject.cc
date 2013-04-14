@@ -236,6 +236,8 @@ void SkeletonObject::generateComposition( void )
 // the different timing values that will be passed in.
 void SkeletonObject::updateComposition( const F32 time )
 {
+    return;
+
     // Scale time.
     // Mich - This is a placeholder variable, just showing we can create
     // additional data based on the time that has elapsed. It can be anything we want it to be

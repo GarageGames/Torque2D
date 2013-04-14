@@ -28,14 +28,6 @@
 #include "console/consoleInternal.h"
 #endif
 
-#ifndef _CONSOLETYPES_H_
-#include "console/consoleTypes.h"
-#endif
-
-#ifndef _PLATFORM_H_
-#include "platform/platform.h"
-#endif
-
 #ifndef _GBITMAP_H_
 #include "graphics/gBitmap.h"
 #endif
@@ -87,7 +79,7 @@ ConsoleSetType( TypeSkeletonAssetPtr )
         AssetPtr<SkeletonAsset>* pAssetPtr = dynamic_cast<AssetPtr<SkeletonAsset>*>((AssetPtrBase*)(dptr));
 
         // Is the asset pointer the correct type?
-        if ( pAssetPtr == NULL )
+        if (pAssetPtr == NULL )
         {
             // No, so fail.
             Con::warnf( "(TypeSkeletonAssetPtr) - Failed to set asset Id '%d'.", pFieldValue );
@@ -108,7 +100,11 @@ ConsoleSetType( TypeSkeletonAssetPtr )
 //------------------------------------------------------------------------------
 
 SkeletonAsset::SkeletonAsset() :  mSkeletonFile(StringTable->EmptyString),
-                               mImageTextureHandle(NULL)
+                                  mAtlasFile(StringTable->EmptyString),
+                                  mAtlasDirty(true),
+                                  mAtlas(NULL),
+                                  mSkeletonData(NULL),
+                                  mStateData(NULL)
 {
 }
 
@@ -129,7 +125,7 @@ void SkeletonAsset::initPersistFields()
     Parent::initPersistFields();
 
     // Fields.
-    
+    addProtectedField("AtlasFile", TypeAssetLooseFilePath, Offset(mAtlasFile, SkeletonAsset), &setAtlasFile, &getAtlasFile, &defaultProtectedWriteFn, "The loose file pointing to the .atlas file used for skinning");
     addProtectedField("SkeletonFile", TypeAssetLooseFilePath, Offset(mSkeletonFile, SkeletonAsset), &setSkeletonFile, &getSkeletonFile, &defaultProtectedWriteFn, "The loose file produced by the editor, which is fed into this asset");
     addProtectedField("Scale", TypeF32, Offset(mScale, SkeletonAsset), &defaultProtectedSetFn, &defaultProtectedGetFn, &defaultProtectedWriteFn, "");
 }
@@ -158,13 +154,13 @@ void SkeletonAsset::onRemove()
 void SkeletonAsset::setSkeletonFile( const char* pSkeletonFile )
 {
     // Sanity!
-    AssertFatal( pSkeletonFile != NULL, "Cannot use a NULL image file." );
+    AssertFatal( pSkeletonFile != NULL, "Cannot use a NULL skeleton file." );
 
-    // Fetch image file.
+    // Fetch skeleton file.
     pSkeletonFile = StringTable->insert( pSkeletonFile );
 
-    // Ignore no change,
-    if ( pSkeletonFile == mSkeletonFile )
+    // Ignore no change.
+    if (pSkeletonFile == mSkeletonFile )
         return;
 
     // Update.
@@ -176,11 +172,38 @@ void SkeletonAsset::setSkeletonFile( const char* pSkeletonFile )
 
 //------------------------------------------------------------------------------
 
+void SkeletonAsset::setAtlasFile( const char* pAtlasFile )
+{
+    // Sanity!
+    AssertFatal( pAtlasFile != NULL, "Cannot use a NULL atlas file." );
+
+    // Fetch atlas file.
+    pAtlasFile = StringTable->insert( pAtlasFile );
+
+    // Ignore no change.
+    if (pAtlasFile == mAtlasFile )
+        return;
+
+    // Update.
+    mAtlasFile = getOwned() ? expandAssetFilePath( pAtlasFile ) : StringTable->insert( pAtlasFile );
+    mAtlasDirty = true;
+
+    // Refresh the asset.
+    refreshAsset();
+}
+
+//------------------------------------------------------------------------------
+
 void SkeletonAsset::setScale( F32 fScale)
 {
+    // Ignore no change.
+    if (fScale == mScale )
+        return;
+
     mScale = fScale;
 
-    // Scale has been set, what should happen after this?
+    // Scale has been set, refresh the asset based on this
+    refreshAsset();
 }
 
 //------------------------------------------------------------------------------
@@ -197,8 +220,8 @@ void SkeletonAsset::copyTo(SimObject* object)
     AssertFatal(pAsset != NULL, "SkeletonAsset::copyTo() - Object is not the correct type.");
 
     // Copy state.
+    pAsset->setAtlasFile( getAtlasFile() );
     pAsset->setSkeletonFile( getSkeletonFile() );
-	 // BOZO - Need to copy data loaded from files?
 }
 
 //------------------------------------------------------------------------------
@@ -208,71 +231,102 @@ void SkeletonAsset::initializeAsset( void )
     // Call parent.
     Parent::initializeAsset();
 
-    // Ensure the image-file is expanded.
+    // Ensure the skeleton file is expanded.
     mSkeletonFile = expandAssetFilePath( mSkeletonFile );
 
-    // Initialize any states or data
-    // Mich - At this point, this is where we should probably
-    // create an ImageAsset
-    // 
-    // We have two options. First, we can build it based on the data from the .atlas.
-    // such as this...
-    mAtlas = Atlas_readAtlasFile("spineboy.atlas"); // BOZO - Use reference to ImageAsset?
+    // Ensure the skeleton file is expanded.
+    mAtlasFile = expandAssetFilePath( mAtlasFile );
 
-    // We can then add it to our AssetDatabase as a private asset
-    // This will later be used by the SkeletonObject. That object will
-    // create sprites and feed them this ImageAsset
-    // If there are multiple .atlas files (skins, right?), we would loop
-    // through them all, load them, then convert them to ImageAsset
+    // Build the atlas data
+    if (mAtlasDirty)
+        buildAtlasData();
 
-    // The second option would be to specify the ImageAsset reference(s) in the SkeletonAsset.
-    // Rather than pointing to a .atlas, we can just refer to existing what a user has
-    // created previously. What I don't know is how that would work between Spine and Torque 2D
-    
-    // If we have to build an ImageAsset from an intermediate format, like .atlas, it would go
-    // something like this:
-    /*
-    // Allocate a new ImageAsset. If we have multiple atlases, we would loop this multiple times
-    ImageAsset* pImageAsset = new ImageAsset();
+    // Build the skeleton data
+    buildSkeletonData();
+}
 
-    // Optionally set the name
-    // pImageAsset->setAssetName("Some_Name");
+//------------------------------------------------------------------------------
 
-    // Point to the raw file (png or jpg)
-    pImageAsset->setImageFile( imageFilePath);
+void SkeletonAsset::onAssetRefresh( void )
+{
+    // Ignore if not yet added to the sim.
+    if (!isProperlyAdded() )
+        return;
 
-    // Enable Explicit Mode so we can use region coordinates
-    pImageAsset->setExplicitMode( true );
-    
-    // Loop through the Atlas information to create cell regions
-    for (each_each_region_in_atlas)
-    {
-        // Starting left position of the region
-        xOffset = ?;
+    // Call parent.
+    Parent::onAssetRefresh();
 
-        // Starting top position of the region
-        yOffset = ?;
+    // Reset any states or data
+    if (mAtlasDirty)
+        buildAtlasData();
 
-        // Width of region
-        regionWidth = ?;
+    buildSkeletonData();
+}
 
-        // Height of region
-        regionHeight = ?;
+//-----------------------------------------------------------------------------
 
-        // Name of region
-        regionName = ?;
+void SkeletonAsset::buildAtlasData( void )
+{
+    // If the atlas data was previously created, need to release it
+    if (mAtlas)
+	    Atlas_dispose(mAtlas);
 
-        pImageAsset->addExplicitCell( xOffset, yOffset, regionWidth, regionHeight, regionName );
-    }
-
-    // Add it to the AssetDatabase, making it accessible everywhere
-    mImageAsset = AssetDatabase.addPrivateAsset( pImageAsset );
-    */
+    // If we are using a .atlas file
+    if (mAtlasFile != StringTable->EmptyString)
+        mAtlas = Atlas_readAtlasFile(mAtlasFile);
 
     // Atlas load failure
-    AssertFatal(mAtlas != NULL, "SkeletonAsset::initializeAsset() - Atlas was not loaded.");
+    AssertFatal(mAtlas != NULL, "SkeletonAsset::buildAtlasData() - Atlas was not loaded.");
 
+    AtlasPage* currentPage = mAtlas->pages;
 
+    while (currentPage != NULL)
+    {
+        // Allocate a new ImageAsset. If we have multiple atlases, we would loop this multiple times
+        ImageAsset* pImageAsset = new ImageAsset();
+
+        const char* imageFilePath = expandAssetFilePath(currentPage->name);
+        
+        // Point to the raw file (png or jpg)
+        pImageAsset->setImageFile( imageFilePath);        
+
+        // Enable Explicit Mode so we can use region coordinates
+        pImageAsset->setExplicitMode( true );
+
+        AtlasRegion* currentRegion = mAtlas->regions;
+
+        // Add it to the AssetDatabase, making it accessible everywhere
+        mImageAsset = AssetDatabase.addPrivateAsset( pImageAsset );
+
+        // Loop through the Atlas information to create cell regions
+        while (currentRegion != NULL)
+        {
+            pImageAsset->addExplicitCell( currentRegion->x, currentRegion->y, currentRegion->width, currentRegion->height, currentRegion->name );
+
+            currentRegion = currentRegion->next;
+        }
+
+        currentPage = currentPage->next;
+    }
+
+    mAtlasDirty = false;
+}
+
+//-----------------------------------------------------------------------------
+
+void SkeletonAsset::buildSkeletonData( void )
+{
+    // Atlas load failure
+    AssertFatal(mAtlas != NULL, "SkeletonAsset::buildSkeletonData() - Atlas was not loaded.");
+    
+    // Clear state data
+    if (mStateData)
+        AnimationStateData_dispose(mStateData);
+
+    // Clear skeleton data
+    if (mSkeletonData)
+	    SkeletonData_dispose(mSkeletonData);
+    
     SkeletonJson* json = SkeletonJson_create(mAtlas);
     json->scale = mScale;
     mSkeletonData = SkeletonJson_readSkeletonDataFile(json, mSkeletonFile);
@@ -283,7 +337,7 @@ void SkeletonAsset::initializeAsset( void )
 		mAtlas = 0;
 
         // Report json->error message
-        AssertFatal(mSkeletonData != NULL, "SkeletonAsset::initializeAsset() - Skeleton data was not valid.");
+        AssertFatal(mSkeletonData != NULL, "SkeletonAsset::buildSkeletonData() - Skeleton data was not valid.");
     }
 
 	SkeletonJson_dispose(json);
@@ -291,19 +345,11 @@ void SkeletonAsset::initializeAsset( void )
     mStateData = AnimationStateData_create(mSkeletonData);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
-void SkeletonAsset::onAssetRefresh( void )
+bool SkeletonAsset::isAssetValid( void ) const
 {
-    // Ignore if not yet added to the sim.
-    if ( !isProperlyAdded() )
-        return;
-
-    // Call parent.
-    Parent::onAssetRefresh();
-
-    // Reset any states or data
-
+    return ((mAtlas != NULL) && (mSkeletonData != NULL) && (mStateData != NULL) && mImageAsset.notNull());
 }
 
 //-----------------------------------------------------------------------------
