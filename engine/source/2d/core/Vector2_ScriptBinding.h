@@ -30,22 +30,16 @@
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunctionGroupBegin( Vector2Math, "Vector2 math functions.");
-
-/*!	@addtogroup Vector2Math
-	two-element vectors engine functions
-	@{
-*/
+/*! Vector2 math functions. */
+ConsoleFunctionGroupBeginWithDocs(Vector2Math)
 
 //-----------------------------------------------------------------------------
 
-/*! Add two 2D Vectors.
-	Returns v1+v2
-
-	@see Scene::createMotorJoint
+/*! Add two 2-Vectors.
+	@return v1+v2
 
 	\par From Engine
-	@copydoc Scene::createMotorJoint
+	@see Vector2::operator+
 */
 ConsoleFunctionWithDocs( Vector2Add, ConsoleString, 3, 3, (Vector2 v1, Vector2 v2) )
 {
@@ -65,12 +59,10 @@ ConsoleFunctionWithDocs( Vector2Add, ConsoleString, 3, 3, (Vector2 v1, Vector2 v
 //-----------------------------------------------------------------------------
 
 /*! Subtract two 2D Vectors.
-    Returns v1-v2
-
-	@see Scene::createMotorJoint
+    @return v1-v2
 
 	\par From Engine
-	@copydoc Scene::createMotorJoint
+	@see Vector2::operator-(Vector2)
 */
 ConsoleFunctionWithDocs( Vector2Sub, ConsoleString, 3, 3,(Vector2 v1, Vector2 v2))
 {
@@ -88,15 +80,12 @@ ConsoleFunctionWithDocs( Vector2Sub, ConsoleString, 3, 3,(Vector2 v1, Vector2 v2
 }
 
 //-----------------------------------------------------------------------------
-// The absolute difference between two 2D Vectors.
-//-----------------------------------------------------------------------------
 
-/*! Returns abs(v1-v2)
-
-	@see Scene::createMotorJoint
+/*! Absolute difference of two 2-Vectors
+	@return abs(v1-v2)
 
 	\par From Engine
-	@copydetails Scene::createMotorJoint
+	@see Vector2::absolute
 */
 ConsoleFunctionWithDocs( Vector2Abs, ConsoleString, 3, 3, (Vector2 v1, Vector2 v2) )
 {
@@ -114,9 +103,10 @@ ConsoleFunctionWithDocs( Vector2Abs, ConsoleString, 3, 3, (Vector2 v1, Vector2 v
 }
 
 //-----------------------------------------------------------------------------
-// Multiply two 2D Vectors (Not Dot-Product!)
-//-----------------------------------------------------------------------------
-ConsoleFunction( Vector2Mult, ConsoleString, 3, 3, "(Vector2 v1, Vector2 v2) - Returns v1 mult v2.")
+/*! Multiply two 2D Vectors (Not Dot-Product!)
+	@return v1 mult v2.
+*/
+ConsoleFunctionWithDocs( Vector2Mult, ConsoleString, 3, 3, (Vector2 v1, Vector2 v2))
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 ||Utility::mGetStringElementCount(argv[2]) < 2 )
@@ -132,9 +122,13 @@ ConsoleFunction( Vector2Mult, ConsoleString, 3, 3, "(Vector2 v1, Vector2 v2) - R
 }
 
 //-----------------------------------------------------------------------------
-// Scale a 2D Vector.
-//-----------------------------------------------------------------------------
-ConsoleFunction( Vector2Scale, ConsoleString, 3, 3, "(Vector2 v1, scale) - Returns v1 scaled by scale.")
+/*! Scale a 2D Vector.
+	@return v1 scaled by scale.
+
+	\par From Engine
+	@see Vector2::operator*
+*/
+ConsoleFunctionWithDocs( Vector2Scale, ConsoleString, 3, 3, (Vector2 v1, scale))
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 )
@@ -151,9 +145,13 @@ ConsoleFunction( Vector2Scale, ConsoleString, 3, 3, "(Vector2 v1, scale) - Retur
 }
 
 //-----------------------------------------------------------------------------
-// Normalize a 2D Vector.
-//-----------------------------------------------------------------------------
-ConsoleFunction( Vector2Normalize, ConsoleString, 2, 2, "(Vector2 v1) - Returns Normalized v1.")
+/*! Normalize a 2D Vector.
+	@return Normalized v1.
+
+	\par From Engine
+	@see Vector2::Normalize
+*/
+ConsoleFunctionWithDocs( Vector2Normalize, ConsoleString, 2, 2, (Vector2 v1))
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 )
@@ -168,9 +166,13 @@ ConsoleFunction( Vector2Normalize, ConsoleString, 2, 2, "(Vector2 v1) - Returns 
 }
 
 //-----------------------------------------------------------------------------
-// Dot-Product of two 2D Vectors.
-//-----------------------------------------------------------------------------
-ConsoleFunction(Vector2Dot, ConsoleFloat, 3, 3, "(Vector2 v1, Vector2 v2) - Returns dot-product of v1 and v2.")
+/*! Dot-Product of two 2D Vectors.
+	@return dot-product of v1 and v2.
+
+	\par From Engine
+	@see Vector2::dot
+*/
+ConsoleFunctionWithDocs(Vector2Dot, ConsoleFloat, 3, 3, (Vector2 v1, Vector2 v2))
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 ||Utility::mGetStringElementCount(argv[2]) < 2 )
@@ -186,9 +188,11 @@ ConsoleFunction(Vector2Dot, ConsoleFloat, 3, 3, "(Vector2 v1, Vector2 v2) - Retu
 }
 
 //-----------------------------------------------------------------------------
-// Equality of two 2D Points.
-//-----------------------------------------------------------------------------
-ConsoleFunction( Vector2Compare, ConsoleBool, 3, 4, "(Vector2 p1, Vector2 p2, [epsilon]) - Compares points p1 and p2 with optional difference (epsilon).")
+/*! Equality of two 2D Points.
+	Compares points p1 and p2 with optional difference (epsilon).
+	@return true if equal
+*/
+ConsoleFunctionWithDocs( Vector2Compare, ConsoleBool, 3, 4, (Vector2 p1, Vector2 p2, [epsilon]))
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 ||Utility::mGetStringElementCount(argv[2]) < 2 )
@@ -211,9 +215,10 @@ ConsoleFunction( Vector2Compare, ConsoleBool, 3, 4, "(Vector2 p1, Vector2 p2, [e
 }
 
 //-----------------------------------------------------------------------------
-// Distance between two 2D Points.
-//-----------------------------------------------------------------------------
-ConsoleFunction( Vector2Distance, ConsoleFloat, 3, 3, "(Vector2 p1, Vector2 p2) - Returns the distance between points p1 and p2.")
+/*! Distance between two 2D Points.
+	@return the distance between points p1 and p2
+*/
+ConsoleFunctionWithDocs( Vector2Distance, ConsoleFloat, 3, 3, (Vector2 p1, Vector2 p2))
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 ||Utility::mGetStringElementCount(argv[2]) < 2 )
@@ -229,9 +234,10 @@ ConsoleFunction( Vector2Distance, ConsoleFloat, 3, 3, "(Vector2 p1, Vector2 p2) 
 }
 
 //-----------------------------------------------------------------------------
-// Angle between two 2D Vectors.
-//-----------------------------------------------------------------------------
-ConsoleFunction( Vector2AngleBetween, ConsoleFloat, 3, 3, "(Vector2 v1, Vector2 v2) - Returns the angle between v1 and v2.")
+/*! Angle between two 2D Vectors.
+	@return the angle between v1 and v2.
+*/
+ConsoleFunctionWithDocs( Vector2AngleBetween, ConsoleFloat, 3, 3, (Vector2 v1, Vector2 v2))
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 ||Utility::mGetStringElementCount(argv[2]) < 2 )
@@ -250,9 +256,10 @@ ConsoleFunction( Vector2AngleBetween, ConsoleFloat, 3, 3, "(Vector2 v1, Vector2 
 }
 
 //-----------------------------------------------------------------------------
-// Angle from one point to another.
-//-----------------------------------------------------------------------------
-ConsoleFunction( Vector2AngleToPoint, ConsoleFloat, 3, 3, "(Vector2 p1, Vector2 p1) - Returns the angle from p1 to p2.")
+/*! Angle from one point to another.
+	@return the angle from p1 to p2.
+*/
+ConsoleFunctionWithDocs( Vector2AngleToPoint, ConsoleFloat, 3, 3, (Vector2 p1, Vector2 p1))
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 ||Utility::mGetStringElementCount(argv[2]) < 2 )
@@ -269,12 +276,14 @@ ConsoleFunction( Vector2AngleToPoint, ConsoleFloat, 3, 3, "(Vector2 p1, Vector2 
 }
 
 //-----------------------------------------------------------------------------
-// Vector from angle and magnitude.
+/*! Vector from angle and magnitude.
+	Calculates a direction from an angle and magnitude.
+    @param angle The angle of the direction.
+    @param magnitude The magnitude of the direction.
+    @return No return value.
+*/
 //-----------------------------------------------------------------------------
-ConsoleFunction( Vector2Direction, ConsoleString, 3, 3,   "(F32 angle, F32 magnitude) - Calculates a direction from an angle and magnitude.\n"
-                                                        "@param angle The angle of the direction.\n"
-                                                        "@param magnitude The magnitude of the direction.\n"
-                                                        "@return No return value.")
+ConsoleFunctionWithDocs( Vector2Direction, ConsoleString, 3, 3, (F32 angle, F32 magnitude))
 {
     // Fetch angle.
     const F32 angle = mDegToRad(dAtof(argv[1]));
@@ -289,9 +298,13 @@ ConsoleFunction( Vector2Direction, ConsoleString, 3, 3,   "(F32 angle, F32 magni
 }
 
 //-----------------------------------------------------------------------------
-// Length of a 2D Vector.
-//-----------------------------------------------------------------------------
-ConsoleFunction( Vector2Length, ConsoleFloat, 2, 2, "(Vector2 v1) - Returns the length of v1.")
+/*! Length of a 2D Vector.
+	@return the length of v1.
+
+	\par From Engine
+	@see Vector2::Length
+*/
+ConsoleFunctionWithDocs( Vector2Length, ConsoleFloat, 2, 2, (Vector2 v1))
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 )
@@ -306,9 +319,14 @@ ConsoleFunction( Vector2Length, ConsoleFloat, 2, 2, "(Vector2 v1) - Returns the 
 }
 
 //-----------------------------------------------------------------------------
-// Inverse of a 2D Vector.
+/*! Inverse of a 2D Vector.
+	@return the inverse of v1.
+
+	\par From Engine
+	@see Vector2::operator-()
+*/
 //-----------------------------------------------------------------------------
-ConsoleFunction( Vector2Inverse, ConsoleString, 2, 2, "(Vector2 v1) - Returns the inverse of v1.")
+ConsoleFunctionWithDocs( Vector2Inverse, ConsoleString, 2, 2, (Vector2 v1))
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 )
@@ -323,9 +341,10 @@ ConsoleFunction( Vector2Inverse, ConsoleString, 2, 2, "(Vector2 v1) - Returns th
 }
 
 //-----------------------------------------------------------------------------
-// Inverse X component of a 2D Vector.
-//-----------------------------------------------------------------------------
-ConsoleFunction( Vector2InverseX, ConsoleString, 2, 2, "(Vector2 v1) - Returns the inverse of the v1 X component.")
+/*! Inverse X component of a 2D Vector.
+	@return the inverse of the v1 X component.
+*/
+ConsoleFunctionWithDocs( Vector2InverseX, ConsoleString, 2, 2, (Vector2 v1))
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 )
@@ -341,9 +360,10 @@ ConsoleFunction( Vector2InverseX, ConsoleString, 2, 2, "(Vector2 v1) - Returns t
 }
 
 //-----------------------------------------------------------------------------
-// Inverse Y component of a 2D Vector.
-//-----------------------------------------------------------------------------
-ConsoleFunction( Vector2InverseY, ConsoleString, 2, 2, "(Vector2 v1) - Returns the inverse of the v1 Y component.")
+/*! Inverse Y component of a 2D Vector.
+	@return the inverse of the v1 Y component.
+*/
+ConsoleFunctionWithDocs( Vector2InverseY, ConsoleString, 2, 2, (Vector2 v1))
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 )
@@ -359,9 +379,10 @@ ConsoleFunction( Vector2InverseY, ConsoleString, 2, 2, "(Vector2 v1) - Returns t
 }
 
 //-----------------------------------------------------------------------------
-// Normalize Rectangle (two 2D Vectors) with relation to each other.
-//-----------------------------------------------------------------------------
-ConsoleFunction( Vector2AreaNormalize, ConsoleString, 3, 3, "(Vector2 v1, Vector2 v2) - Returns Normalize rectangle of v1 and v2.")
+/*! Normalize Rectangle (two 2D Vectors) with relation to each other.
+	@return Normalize rectangle of v1 and v2.
+*/
+ConsoleFunctionWithDocs( Vector2AreaNormalize, ConsoleString, 3, 3, (Vector2 v1, Vector2 v2))
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 ||Utility::mGetStringElementCount(argv[2]) < 2 )
@@ -387,9 +408,6 @@ ConsoleFunction( Vector2AreaNormalize, ConsoleString, 3, 3, "(Vector2 v1, Vector
     return pBuffer;
 }
 
-
 //-----------------------------------------------------------------------------
 
-/*!	@} */
-
-ConsoleFunctionGroupEnd( Vector2Math );
+ConsoleFunctionGroupEndWithDocs( Vector2Math );

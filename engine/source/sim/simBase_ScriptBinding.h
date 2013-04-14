@@ -26,12 +26,8 @@
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunctionGroupBegin ( SimFunctions, "Functions relating to Sim.");
-
-/*!	@addtogroup SimFunctions
-	simulation engine functions
-	@{
-*/
+/*! Functions relating to Sim. */
+ConsoleFunctionGroupBeginWithDocs( SimFunctions );
 
 //-----------------------------------------------------------------------------
 
@@ -184,6 +180,4 @@ ConsoleFunctionWithDocs(schedule, ConsoleInt, 4, 0, ( t , objID || 0 , functionN
 
 //-----------------------------------------------------------------------------
 
-/*!	@} */
-
-ConsoleFunctionGroupEnd( SimFunctions );
+ConsoleFunctionGroupEndWithDocs( SimFunctions );
