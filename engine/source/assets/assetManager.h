@@ -47,10 +47,6 @@
 #include "assets/assetDefinition.h"
 #endif
 
-#ifndef _ASSET_SNAPSHOT_H_
-#include "assets/assetSnapshot.h"
-#endif
-
 #ifndef _ASSET_TAGS_MANIFEST_H_
 #include "assets/assetTagsManifest.h"
 #endif
@@ -125,11 +121,11 @@ public:
     static void initPersistFields();
 
     /// Declared assets.
-    bool addDeclaredAssets( ModuleDefinition* pModuleDefinition );
-    bool addSingleDeclaredAsset( ModuleDefinition* pModuleDefinition, const char* pAssetFilePath );
+    bool addModuleDeclaredAssets( ModuleDefinition* pModuleDefinition );
+    bool addDeclaredAsset( ModuleDefinition* pModuleDefinition, const char* pAssetFilePath );
     StringTableEntry addPrivateAsset( AssetBase* pAssetBase );
     bool removeDeclaredAssets( ModuleDefinition* pModuleDefinition );
-    bool removeSingleDeclaredAsset( const char* pAssetId );
+    bool removeDeclaredAsset( const char* pAssetId );
     bool renameDeclaredAsset( const char* pAssetIdFrom, const char* pAssetIdTo );
     StringTableEntry getAssetName( const char* pAssetId );
     StringTableEntry getAssetDescription( const char* pAssetId );
@@ -151,7 +147,7 @@ public:
     bool isReferencedAsset( const char* pAssetId );
     bool renameReferencedAsset( const char* pAssetIdFrom, const char* pAssetIdTo );
 
-    /// Asset acquisition.
+    /// Public asset acquisition.
     template<typename T> T* acquireAsset( const char* pAssetId )
     {
         // Sanity!
@@ -298,12 +294,33 @@ public:
         return pAcquiredAsset;
     }
 
+    /// Private asset acquisition.
+    template<typename T> T* acquireAsPrivateAsset( const char* pAssetId )
+    {
+        // Acquire the asset normally.
+        T* pAsset = acquireAsset<T>( pAssetId );
+
+        // Finish if the asset was not acquired.
+        if ( pAsset == NULL )
+            return NULL;
+
+        // Clone the asset.
+        T* pAssetClone = dynamic_cast<T*>( pAsset->clone( true ) );
+
+        // Sanity!
+        AssertFatal( pAssetClone != NULL, "acquireAsPrivateAsset() - Failed to clone asset type." );
+
+        // Release the public asset.
+        releaseAsset( pAssetId );
+
+        // Add as a private asset.
+        addPrivateAsset( pAssetClone );
+
+        return pAssetClone;
+    }
+
     bool releaseAsset( const char* pAssetId );
     void purgeAssets( void );
-
-    /// Asset snapshot.
-    bool getAssetSnapshot( AssetSnapshot* pAssetSnapshot, const char* pAssetId );
-    bool setAssetSnapshot( AssetSnapshot* pAssetSnapshot, const char* pAssetId );
 
     /// Asset deletion.
     bool deleteAsset( const char* pAssetId, const bool deleteLooseFiles, const bool deleteDependencies );

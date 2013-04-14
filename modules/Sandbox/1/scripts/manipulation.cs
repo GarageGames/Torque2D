@@ -30,9 +30,9 @@ Sandbox.ManipulationMode = "off";
 Sandbox.ManipulationPullMaxForce = 1000;
 
 // Reset the touch events.
-Sandbox.TouchController = new ScriptObject()
+Sandbox.InputController = new ScriptObject()
 {
-    class = SandboxTouchGesture;
+    class = SandboxInputController;
     TouchEventCount = 0;
     TouchEventActive[0] = false;
     TouchEventActive[1] = false;
@@ -45,17 +45,24 @@ Sandbox.TouchController = new ScriptObject()
 
 //-----------------------------------------------------------------------------
 
-function SandboxTouchGesture::onTouchDownEvent( %this, %touchId, %worldPosition )
+function SandboxInputController::initialize( %this )
 {
-    //echo( "SandboxTouchGesture::onTouchDownEvent(" @ %touchId @ "," @ %worldPosition @ ")" );
+    // Add sandbox touch gester as an input listener.
+    SandboxWindow.addInputListener( %this );
+}
 
+//-----------------------------------------------------------------------------
+
+function SandboxInputController::onTouchDown(%this, %touchID, %worldPosition)
+{
+    // Finish if the drag mode is off.
+    if ( Sandbox.ManipulationMode $= "off" )
+        return;
+        
     // Sanity!
     if ( %this.TouchEventActive[%touchId] == true )
-    {
-        error( "SandboxTouchGesture::onTouchDownEvent() - Touch Id already active." );
-        return;        
-    }
-
+        return;
+        
     // Calculate window position.
     %windowPosition = SandboxWindow.getWindowPoint( %worldPosition );
 
@@ -73,21 +80,55 @@ function SandboxTouchGesture::onTouchDownEvent( %this, %touchId, %worldPosition 
     %this.CurrentTouchId = %touchId;
 
     // Increase event count.
-    %this.TouchEventCount++;
+    %this.TouchEventCount++;                               
+           
+    // Handle "pull" mode.
+    if ( Sandbox.ManipulationMode $= "pull" )
+    {
+        // Reset the pull
+        Sandbox.ManipulationPullObject[%touchID] = "";
+        Sandbox.ManipulationPullJointId[%touchID] = "";
+        
+        // Pick an object.
+        %picked = SandboxScene.pickPoint( %worldPosition );
+        
+        // Finish if nothing picked.
+        if ( %picked $= "" )
+            return;
+        
+        // Fetch the pick count.
+        %pickCount = %picked.Count;
+        
+        for( %n = 0; %n < %pickCount; %n++ )
+        {
+            // Fetch the picked object.
+            %pickedObject = getWord( %picked, %n );
+            
+            // Skip if the object is static.
+            if ( %pickedObject.getBodyType() $= "static" )
+                continue;
+                
+            // Set the pull object.
+            Sandbox.ManipulationPullObject[%touchID] = %pickedObject;
+            Sandbox.ManipulationPullJointId[%touchID] = SandboxScene.createTargetJoint( %pickedObject, %worldPosition, Sandbox.ManipulationPullMaxForce );            
+            return;
+        }
+        
+        return;
+    }    
 }
 
 //-----------------------------------------------------------------------------
 
-function SandboxTouchGesture::onTouchUpEvent( %this, %touchId, %worldPosition )
+function SandboxInputController::onTouchUp(%this, %touchID, %worldPosition)
 {
-    //echo( "SandboxTouchGesture::onTouchUpEvent(" @ %touchId @ "," @ %worldPosition @ ")" );
-
+    // Finish if the drag mode is off.
+    if ( Sandbox.ManipulationMode $= "off" )
+        return;
+        
     // Sanity!
     if ( %this.TouchEventActive[%touchId] == false )
-    {
-        error( "SandboxTouchGesture::onTouchUpEvent() - Touch Id not active." );
-        return;        
-    }
+        return;
         
     // Reset previous touch.
     %this.OldTouchPosition[%touchId] = "";
@@ -111,21 +152,36 @@ function SandboxTouchGesture::onTouchUpEvent( %this, %touchId, %worldPosition )
 
     // Decrease event count.
     %this.TouchEventCount--;
+
+    // Handle "pull" mode.
+    if ( Sandbox.ManipulationMode $= "pull" )
+    {       
+        // Finish if nothing is being pulled.
+        if ( !isObject(Sandbox.ManipulationPullObject[%touchID]) )
+            return;
+        
+        // Reset the pull object.
+        Sandbox.ManipulationPullObject[%touchID] = "";
+        
+        // Remove the pull joint.
+        SandboxScene.deleteJoint( Sandbox.ManipulationPullJointId[%touchID] );
+        Sandbox.ManipulationPullJointId[%touchID] = "";        
+        return;
+    }      
 }
 
 //-----------------------------------------------------------------------------
 
-function SandboxTouchGesture::onTouchDraggedEvent( %this, %touchId, %worldPosition )
+function SandboxInputController::onTouchDragged(%this, %touchID, %worldPosition)
 {
-    //echo( "SandboxTouchGesture::onTouchDraggedEvent(" @ %touchId @ "," @ %worldPosition @ ")" );
+    // Finish if the drag mode is off.
+    if ( Sandbox.ManipulationMode $= "off" )
+        return;
 
     // Sanity!
     if ( %this.TouchEventActive[%touchId] == false )
-    {
-        error( "SandboxTouchGesture::onTouchDraggedEvent() - Touch Id not active." );
-        return;        
-    }
-
+        return;
+        
     // Calculate window position.
     %windowPosition = SandboxWindow.getWindowPoint( %worldPosition );
 
@@ -134,11 +190,82 @@ function SandboxTouchGesture::onTouchDraggedEvent( %this, %touchId, %worldPositi
     
     // Store the touch event.
     %this.NewTouchPosition[%touchId] = %windowPosition;
+        
+    // Handle "pan" mode.
+    if ( Sandbox.ManipulationMode $= "pan" )
+    {
+        // Fetch the touch event count.
+        %touchEventCount = Sandbox.InputController.TouchEventCount;
+        
+        // Do we have a single touch event?
+        if ( %touchEventCount == 1 )
+        {
+            // Yes, so perform pan gesture.
+            Sandbox.InputController.performPanGesture();
+            
+            return;
+        }
+        
+        // Do we have two event counts?
+        if ( %touchEventCount == 2 )
+        {
+            // Yes, so perform zoom gesture.
+            Sandbox.InputController.performZoomGesture();
+
+            return;
+        }
+    }
+    
+    // Handle "pull" mode.
+    if ( Sandbox.ManipulationMode $= "pull" )
+    {
+        // Finish if nothing is being pulled.
+        if ( !isObject(Sandbox.ManipulationPullObject[%touchID]) )
+            return;
+              
+        // Set a new target for the target joint.
+        SandboxScene.setTargetJointTarget( Sandbox.ManipulationPullJointId[%touchID], %worldPosition );
+        
+        return;
+    }
 }
 
 //-----------------------------------------------------------------------------
 
-function SandboxTouchGesture::performPanGesture( %this )
+function SandboxInputController::onTouchMoved(%this, %touchID, %worldPosition)
+{
+    // Finish if the drag mode is off.
+    if ( Sandbox.ManipulationMode $= "off" )
+        return;
+}
+
+//-----------------------------------------------------------------------------
+
+function SandboxInputController::onMouseWheelUp(%this, %modifier, %mousePoint, %mouseClickCount)
+{
+    // Finish if the drag mode is not "pan".
+    if ( !Sandbox.ManipulationMode $= "pan" )
+        return;
+        
+    // Increase the zoom.
+    SandboxWindow.setCameraZoom( SandboxWindow.getCameraZoom() + $pref::Sandbox::cameraMouseZoomRate );
+}
+
+//-----------------------------------------------------------------------------
+
+function SandboxInputController::onMouseWheelDown(%this, %modifier, %mousePoint, %mouseClickCount)
+{
+    // Finish if the drag mode is not "pan".
+    if ( !Sandbox.ManipulationMode $= "pan" )
+        return;
+
+    // Increase the zoom.
+    SandboxWindow.setCameraZoom( SandboxWindow.getCameraZoom() - $pref::Sandbox::cameraMouseZoomRate );
+}
+
+//-----------------------------------------------------------------------------
+
+function SandboxInputController::performPanGesture( %this )
 {
     // Finish if we don't have two touch events.
     if ( %this.TouchEventCount != 1 )
@@ -149,10 +276,7 @@ function SandboxTouchGesture::performPanGesture( %this )
 
     // Sanity!
     if ( %touchId $= "" )
-    {
-        error( "SandboxTouchGesture::performPanGesture() - Current touch Id not available." );
         return;
-    }
 
     // Calculate pan offset.
     %panOffset = Vector2Sub( %this.NewTouchPosition[%touchId], %this.OldTouchPosition[%touchId] );
@@ -169,7 +293,7 @@ function SandboxTouchGesture::performPanGesture( %this )
 
 //-----------------------------------------------------------------------------
 
-function SandboxTouchGesture::performZoomGesture( %this )
+function SandboxInputController::performZoomGesture( %this )
 {
     // Finish if we don't have two touch events.
     if ( %this.TouchEventCount != 2 )
@@ -181,10 +305,7 @@ function SandboxTouchGesture::performZoomGesture( %this )
 
     // Finish if we don't have touch Ids active.
     if ( !%this.TouchEventActive[%currentTouchId] || !%this.TouchEventActive[%previousTouchId] )
-    {
-        error( "SandboxTouchGesture::performZoomGesture() - Current or previous touch events were no active." );
         return;
-    }
 
     %currentNewPosition = %this.NewTouchPosition[%currentTouchId];
     %currentOldPosition = %this.OldTouchPosition[%currentTouchId];
@@ -256,11 +377,7 @@ function Sandbox::useManipulation( %this, %mode )
 {
     // Is the drag mode available?
     if ( %mode !$= "off" && !Sandbox.ManipulationModeState[%mode] )
-    {
-        // No, so warn.
-        error( "Cannot set sandbox drag mode to " @ %mode @ " as it is currently disabled." );
         return;
-    }
     
     // Set the manipulation mode.
     Sandbox.ManipulationMode = %mode;
@@ -326,166 +443,4 @@ function cycleManipulation( %make )
     {
         Sandbox.useManipulation("off");
     }          
-}
-
-//-----------------------------------------------------------------------------
-
-function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
-{
-    // Finish if the drag mode is off.
-    if ( Sandbox.ManipulationMode $= "off" )
-        return;
-        
-    // Set touch event.
-    Sandbox.TouchController.onTouchDownEvent( %touchID, %worldPosition );
-           
-    // Handle "pull" mode.
-    if ( Sandbox.ManipulationMode $= "pull" )
-    {
-        // Reset the pull
-        Sandbox.ManipulationPullObject[%touchID] = "";
-        Sandbox.ManipulationPullJointId[%touchID] = "";
-        
-        // Pick an object.
-        %picked = SandboxScene.pickPoint( %worldPosition );
-        
-        // Finish if nothing picked.
-        if ( %picked $= "" )
-            return;
-        
-        // Fetch the pick count.
-        %pickCount = getWordCount( %picked );
-        
-        for( %n = 0; %n < %pickCount; %n++ )
-        {
-            // Fetch the picked object.
-            %pickedObject = getWord( %picked, %n );
-            
-            // Skip if the object is static.
-            if ( %pickedObject.getBodyType() $= "static" )
-                continue;
-                
-            // Skipp if the object is ignoring being picked.
-            if ( %pickedObject.ignorePick )
-                continue;
-                
-            // Set the pull object.
-            Sandbox.ManipulationPullObject[%touchID] = %pickedObject;
-            Sandbox.ManipulationPullJointId[%touchID] = SandboxScene.createTargetJoint( %pickedObject, %worldPosition, Sandbox.ManipulationPullMaxForce );            
-            return;
-        }
-        
-        return;
-    }    
-}
-
-//-----------------------------------------------------------------------------
-
-function SandboxWindow::onTouchUp(%this, %touchID, %worldPosition)
-{
-    // Finish if the drag mode is off.
-    if ( Sandbox.ManipulationMode $= "off" )
-        return;
-        
-    // Set touch event.
-    Sandbox.TouchController.onTouchUpEvent( %touchID, %worldPosition );
-
-    // Handle "pull" mode.
-    if ( Sandbox.ManipulationMode $= "pull" )
-    {       
-        // Finish if nothing is being pulled.
-        if ( !isObject(Sandbox.ManipulationPullObject[%touchID]) )
-            return;
-        
-        // Reset the pull object.
-        Sandbox.ManipulationPullObject[%touchID] = "";
-        
-        // Remove the pull joint.
-        SandboxScene.deleteJoint( Sandbox.ManipulationPullJointId[%touchID] );
-        Sandbox.ManipulationPullJointId[%touchID] = "";        
-        return;
-    }      
-}
-
-//-----------------------------------------------------------------------------
-
-function SandboxWindow::onTouchMoved(%this, %touchID, %worldPosition)
-{
-    // Finish if the drag mode is off.
-    if ( Sandbox.ManipulationMode $= "off" )
-        return;
-}
-
-//-----------------------------------------------------------------------------
-
-function SandboxWindow::onTouchDragged(%this, %touchID, %worldPosition)
-{
-    // Finish if the drag mode is off.
-    if ( Sandbox.ManipulationMode $= "off" )
-        return;
-
-    // Set touch event.
-    Sandbox.TouchController.onTouchDraggedEvent( %touchID, %worldPosition );
-    
-    // Handle "pan" mode.
-    if ( Sandbox.ManipulationMode $= "pan" )
-    {
-        // Fetch the touch event count.
-        %touchEventCount = Sandbox.TouchController.TouchEventCount;
-        
-        // Do we have a single touch event?
-        if ( %touchEventCount == 1 )
-        {
-            // Yes, so perform pan gesture.
-            Sandbox.TouchController.performPanGesture();
-            
-            return;
-        }
-        
-        // Do we have two event counts?
-        if ( %touchEventCount == 2 )
-        {
-            // Yes, so perform zoom gesture.
-            Sandbox.TouchController.performZoomGesture();
-
-            return;
-        }
-    }
-    
-    // Handle "pull" mode.
-    if ( Sandbox.ManipulationMode $= "pull" )
-    {
-        // Finish if nothing is being pulled.
-        if ( !isObject(Sandbox.ManipulationPullObject[%touchID]) )
-            return;
-              
-        // Set a new target for the target joint.
-        SandboxScene.setTargetJointTarget( Sandbox.ManipulationPullJointId[%touchID], %worldPosition );
-        
-        return;
-    }
-}
-
-//-----------------------------------------------------------------------------
-
-function SandboxWindow::onMouseWheelUp(%this, %modifier, %mousePoint, %mouseClickCount)
-{
-    // Finish if the drag mode is not "pan".
-    if ( !Sandbox.ManipulationMode $= "pan" )
-        return;
-        
-    // Increase the zoom.
-    SandboxWindow.setCameraZoom( SandboxWindow.getCameraZoom() + $pref::Sandbox::cameraMouseZoomRate );
-}
-
-//-----------------------------------------------------------------------------
-
-function SandboxWindow::onMouseWheelDown(%this, %modifier, %mousePoint, %mouseClickCount)
-{
-    // Finish if the drag mode is not "pan".
-    if ( !Sandbox.ManipulationMode $= "pan" )
-        return;
-
-    // Increase the zoom.
-    SandboxWindow.setCameraZoom( SandboxWindow.getCameraZoom() - $pref::Sandbox::cameraMouseZoomRate );
 }

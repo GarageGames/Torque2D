@@ -128,10 +128,6 @@ const char* ParticleAssetEmitter::getOrientationTypeDescription( const ParticleO
 
 //------------------------------------------------------------------------------
 
-IMPLEMENT_CONOBJECT(ParticleAssetEmitter);
-
-//------------------------------------------------------------------------------
-
 ParticleAssetEmitter::ParticleAssetEmitter() :
                             mEmitterName( StringTable->EmptyString ),
                             mOwner( NULL ),
@@ -295,7 +291,7 @@ void ParticleAssetEmitter::copyTo(SimObject* object)
    pParticleAssetEmitter->setAlphaTest( getAlphaTest() );
 
    pParticleAssetEmitter->setRandomImageFrame( getRandomImageFrame() );
-   if ( pParticleAssetEmitter->isStaticMode() )
+   if ( pParticleAssetEmitter->isStaticFrameProvider() )
    {
        pParticleAssetEmitter->setImage( getImage() );
        pParticleAssetEmitter->setImageFrame( getImageFrame() );
@@ -489,23 +485,40 @@ void ParticleAssetEmitter::onAssetRefreshed( AssetPtrBase* pAssetPtrBase )
 
 //------------------------------------------------------------------------------
 
-void ParticleAssetEmitter::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void ParticleAssetEmitter::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ParticleAssetEmitter_OnTamlCustomWrite);
 
     // Write the fields.
-    mParticleFields.onTamlCustomWrite( customProperties );
+    mParticleFields.onTamlCustomWrite( customNodes );
 }
 
 //-----------------------------------------------------------------------------
 
-void ParticleAssetEmitter::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void ParticleAssetEmitter::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ParticleAssetEmitter_OnTamlCustomRead);
 
     // Read the fields.
-    mParticleFields.onTamlCustomRead( customProperties );
+    mParticleFields.onTamlCustomRead( customNodes );
 }
 
+
+//-----------------------------------------------------------------------------
+
+static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "ParticleAssetEmitter::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "ParticleAssetEmitter::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    // Write the particle asset emitter fields.
+    ParticleAssetEmitter particleAssetEmitter;
+    particleAssetEmitter.getParticleFields().WriteCustomTamlSchema( pClassRep, pParentElement );
+}
+
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_CONOBJECT_SCHEMA(ParticleAssetEmitter, WriteCustomTamlSchema);

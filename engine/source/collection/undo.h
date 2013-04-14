@@ -147,7 +147,6 @@ public:
 
    UndoScriptAction() : UndoAction()
    {
-      mNSLinkMask = LinkSuperClassName | LinkClassName;
    };
 
    virtual void undo() { Con::executef(this, 1, "undo"); };
@@ -159,11 +158,6 @@ public:
       if(!Parent::onAdd())
          return false;
 
-
-      // Notify Script.
-      if(isMethod("onAdd"))
-         Con::executef(this, 1, "onAdd");
-
       // Return Success.
       return true;
    };
@@ -172,10 +166,6 @@ public:
    {
       if (mUndoManager)
          mUndoManager->removeAction((UndoAction*)this);
-
-      // notify script
-      if(isMethod("onRemove"))
-         Con::executef(this, 1, "onRemove");
 
       Parent::onRemove();
    }

@@ -41,12 +41,6 @@ bool _iOSTorqueFatalError = false;
 
 @synthesize window = _window;
 
-- (void)dealloc 
-{
-    [_window release];
-
-    [super dealloc];
-}
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
     

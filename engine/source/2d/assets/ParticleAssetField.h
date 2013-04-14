@@ -109,8 +109,10 @@ public:
     static F32 calculateFieldBVE( const ParticleAssetField& base, const ParticleAssetField& variation, const ParticleAssetField& effect, const F32 effectAge, const bool modulate = false, const F32 modulo = 0.0f );
     static F32 calculateFieldBVLE( const ParticleAssetField& base, const ParticleAssetField& variation, const ParticleAssetField& overlife, const ParticleAssetField& effect, const F32 effectTime, const F32 particleAge, const bool modulate = false, const F32 modulo = 0.0f );
 
-    void onTamlCustomWrite( TamlCustomProperty* pCustomProperty  );
-    void onTamlCustomRead( const TamlPropertyAlias* pPropertyAlias );
+    void onTamlCustomWrite( TamlCustomNode* pCustomNode  );
+    void onTamlCustomRead( const TamlCustomNode* pCustomNode );
+
+    void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement );
 };
 
 //-----------------------------------------------------------------------------

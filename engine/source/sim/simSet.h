@@ -28,6 +28,22 @@
 #ifndef _SIMSET_H_
 #define _SIMSET_H_
 
+#ifndef _SIM_OBJECT_H_
+#include "sim/simObject.h"
+#endif
+
+#ifndef _SIM_OBJECT_LIST_H_
+#include "sim/SimObjectList.h"
+#endif
+
+#ifndef _FIND_ITERATOR_H_
+#include "collection/findIterator.h"
+#endif
+
+#ifndef _SIMDICTIONARY_H_
+#include "sim/simDictionary.h"
+#endif
+
 #ifndef _TAML_CHILDREN_H_
 #include "persistence/taml/tamlChildren.h"
 #endif
@@ -85,6 +101,8 @@
 class SimSet: public SimObject, public TamlChildren
 {
    typedef SimObject Parent;
+   typedef SimObject Children;
+
 protected:
    SimObjectList objectList;
    void *mMutex;

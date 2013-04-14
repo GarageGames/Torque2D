@@ -20,10 +20,10 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( GuiSpriteCtrl, isStaticMode, bool, 2, 2, "() - Gets whether the control is in static or dynamic (animated)mode.\n"
+ConsoleMethod( GuiSpriteCtrl, isStaticFrameProvider, bool, 2, 2, "() - Gets whether the control is in static or dynamic (animated)mode.\n"
                                                         "@return Returns whether the control is in static or dynamic (animated)mode.")
 {
-    return object->isStaticMode();
+    return object->isStaticFrameProvider();
 }
 
 //-----------------------------------------------------------------------------
@@ -41,7 +41,7 @@ ConsoleMethod( GuiSpriteCtrl, getImage, const char*, 2, 2,  "() - Gets current i
                                                             "@return (string imageAssetId) The image being displayed.")
 {
     // Are we in static mode?
-    if ( !object->isStaticMode() )
+    if ( !object->isStaticFrameProvider() )
     {
         // No, so warn.
         Con::warnf( "GuiSpriteCtrl::getImage() - Method invalid, not in static mode." );
@@ -49,7 +49,7 @@ ConsoleMethod( GuiSpriteCtrl, getImage, const char*, 2, 2,  "() - Gets current i
     }
 
     // Get image.
-    return object->getImage();
+    return DYNAMIC_VOID_CAST_TO(GuiSpriteCtrl, ImageFrameProvider, object)->getImage();
 }
 
 //-----------------------------------------------------------------------------
@@ -67,7 +67,7 @@ ConsoleMethod( GuiSpriteCtrl, getImageFrame, S32, 2, 2, "() - Gets current image
                                                         "@return (int frame) The frame currently being displayed.")
 {
     // Are we in static mode?
-    if ( !object->isStaticMode() )
+    if ( !object->isStaticFrameProvider() )
     {
         // No, so warn.
         Con::warnf( "GuiSpriteCtrl::getFrame() - Method invalid, not in static mode." );
@@ -94,7 +94,7 @@ ConsoleMethod( GuiSpriteCtrl, getAnimation, const char*, 2, 2,  "() - Gets the c
                                                                 "@return (string ianimationAssetId) The animation being displayed.")
 {
     // Are we in static mode?
-    if ( object->isStaticMode() )
+    if ( object->isStaticFrameProvider() )
     {
         // Yes, so warn.
         Con::warnf( "GuiSpriteCtrl::getAnimation() - Method invalid, in static mode." );
@@ -102,54 +102,5 @@ ConsoleMethod( GuiSpriteCtrl, getAnimation, const char*, 2, 2,  "() - Gets the c
     }
 
     // Get animation.
-    return object->getAnimation();
-}
-
-//------------------------------------------------------------------------------
-
-ConsoleMethod( GuiSpriteCtrl, play, void, 2, 2,  "() - plays the control's current animation.  Resumes playback if paused.\n")
-{
-    // Are we in static mode?
-    if ( object->isStaticMode() )
-    {
-        // Yes, so warn.
-        Con::warnf( "GuiSpriteCtrl::play() - Method invalid, in static mode." );
-        return;
-    }
-
-    // play animation.
-    object->play();
-}
-
-//------------------------------------------------------------------------------
-
-ConsoleMethod( GuiSpriteCtrl, pause, void, 3, 3,  "(bool flag) - pauses/unpauses the control's current animation.\n"
-                                                    "@param flag true to pause, false to resume.")
-{
-    // Are we in static mode?
-    if ( object->isStaticMode() )
-    {
-        // Yes, so warn.
-        Con::warnf( "GuiSpriteCtrl::pause() - Method invalid, in static mode." );
-        return;
-    }
-
-    // pause animation.
-    object->pause( dAtob(argv[2]) );
-}
-
-//------------------------------------------------------------------------------
-
-ConsoleMethod( GuiSpriteCtrl, stop, void, 2, 2,  "() - stops the control's current animation.\n")
-{
-    // Are we in static mode?
-    if ( object->isStaticMode() )
-    {
-        // Yes, so warn.
-        Con::warnf( "GuiSpriteCtrl::stop() - Method invalid, in static mode." );
-        return;
-    }
-
-    // stop animation.
-    object->stop();
+    return DYNAMIC_VOID_CAST_TO(GuiSpriteCtrl, ImageFrameProvider, object)->getAnimation();
 }

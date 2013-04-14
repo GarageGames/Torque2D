@@ -329,19 +329,26 @@ int dVprintf(const char *format, void *arglist)
    return (len);
 }   
 
-int dSprintf(char *buffer, dsize_t /*bufferSize*/, const char *format, ...)
+int dSprintf(char *buffer, dsize_t bufferSize, const char *format, ...)
 {
    va_list args;
    va_start(args, format);
    S32 len = vsprintf(buffer, format, args);
 
+    // Sanity!
+    AssertFatal(len <= bufferSize, "dSprintf - String format exceeded buffer size.  This will cause corruption.");
+    
    return (len);
 }   
 
 
-int dVsprintf(char *buffer, dsize_t /*bufferSize*/, const char *format, void *arglist)
+int dVsprintf(char *buffer, dsize_t bufferSize, const char *format, void *arglist)
 {
 	S32 len = vsprintf(buffer, format, (char*)arglist);
+
+    // Sanity!
+    AssertFatal(len <= bufferSize, "dSprintf - String format exceeded buffer size.  This will cause corruption.");
+    
    return (len);
 }   
 
@@ -409,10 +416,9 @@ void dQsort(void *base, U32 nelem, U32 width, int (QSORT_CALLBACK *fcmp)(const v
 StringTableEntry Platform::createUUID( void )
 {
     CFUUIDRef ref = CFUUIDCreate(nil);
-    NSString* uuid = (NSString *)CFUUIDCreateString(nil,ref);
+    NSString* uuid = (__bridge_transfer NSString *)CFUUIDCreateString(nil,ref);
     CFRelease(ref);
 
     StringTableEntry uuidString = StringTable->insert([uuid UTF8String]);
-    [uuid release];
     return uuidString;
 }

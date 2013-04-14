@@ -24,15 +24,14 @@
 
 //-----------------------------------------------------------------------------
 
-static StringTableEntry particleAssetFieldCollectionName;
+    // Set custom property name.
+static StringTableEntry particleAssetFieldNodeName = StringTable->insert("Fields");
 
 //-----------------------------------------------------------------------------
 
 ParticleAssetFieldCollection::ParticleAssetFieldCollection() :
                                     mpSelectedField( NULL )
 {
-    // Set custom property name.
-    particleAssetFieldCollectionName = StringTable->insert("Fields");
 }
 
 //-----------------------------------------------------------------------------
@@ -422,7 +421,7 @@ F32 ParticleAssetFieldCollection::getValueScale( void ) const
 
 //------------------------------------------------------------------------------
 
-void ParticleAssetFieldCollection::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void ParticleAssetFieldCollection::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ParticleAssetFieldCollection_OnTamlCustomWrite);
@@ -431,54 +430,92 @@ void ParticleAssetFieldCollection::onTamlCustomWrite( TamlCustomProperties& cust
     if ( mFields.size() == 0 )
         return;
 
-    // Add particle asset custom property.
-    TamlCustomProperty* pParticleAssetCustomProperty = customProperties.addProperty( particleAssetFieldCollectionName );
+    // Add particle asset custom node.
+    TamlCustomNode* pParticleAssetCustomNode = customNodes.addNode( particleAssetFieldNodeName );
 
     // Iterate the fields.
     for( typeFieldHash::iterator fieldItr = mFields.begin(); fieldItr != mFields.end(); ++fieldItr )
     {
-        fieldItr->value->onTamlCustomWrite( pParticleAssetCustomProperty );
+        fieldItr->value->onTamlCustomWrite( pParticleAssetCustomNode );
     }
 }
 
 //-----------------------------------------------------------------------------
 
-void ParticleAssetFieldCollection::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void ParticleAssetFieldCollection::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ParticleAssetFieldCollection_OnTamlCustomRead);
 
-    // Find the particle asset custom property.
-    const TamlCustomProperty* pParticleAssetCustomProperty = customProperties.findProperty( particleAssetFieldCollectionName );
+    // Find the particle asset custom node.
+    const TamlCustomNode* pParticleAssetCustomNode = customNodes.findNode( particleAssetFieldNodeName );
 
-    // Finish if we don't have a custom property.
-    if ( pParticleAssetCustomProperty == NULL )
+    // Finish if we don't have a custom node.
+    if ( pParticleAssetCustomNode == NULL )
         return;
 
-    // Iterate the custom properties.
-    for( TamlCustomProperty::const_iterator propertyAliasItr = pParticleAssetCustomProperty->begin(); propertyAliasItr != pParticleAssetCustomProperty->end(); ++propertyAliasItr )
-    {
-        // Fetch property alias.
-        TamlPropertyAlias* pPropertyAlias = *propertyAliasItr;
+    // Fetch children.
+    const TamlCustomNodeVector& children = pParticleAssetCustomNode->getChildren();
 
-        // Fetch alias name.
-        StringTableEntry aliasName = pPropertyAlias->mAliasName;
+    // Iterate the custom properties.
+    for( TamlCustomNodeVector::const_iterator childNodeItr = children.begin(); childNodeItr != children.end(); ++childNodeItr )
+    {
+        // Fetch child node.
+        TamlCustomNode* pChildNode = *childNodeItr;
+
+        // Fetch node name.
+        StringTableEntry nodeName = pChildNode->getNodeName();
 
         // Find the field.
-        ParticleAssetField* pParticleAssetField = findField( aliasName );
+        ParticleAssetField* pParticleAssetField = findField( nodeName );
 
         // Did we find the field?
         if ( pParticleAssetField == NULL )
         {
             // No, so warn.
-            Con::warnf( "ParticleAssetFieldCollection::onTamlCustomRead() - Cannot find data field '%s'.", aliasName );
+            Con::warnf( "ParticleAssetFieldCollection::onTamlCustomRead() - Cannot find data field '%s'.", nodeName );
             continue;
         }
 
         // Read the alias.
-        pParticleAssetField->onTamlCustomRead( pPropertyAlias );
+        pParticleAssetField->onTamlCustomRead( pChildNode );
     }
 }
 
+//-----------------------------------------------------------------------------
+
+void ParticleAssetFieldCollection::WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement ) const
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "ParticleAssetFieldCollection::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "ParticleAssetFieldCollection::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    char buffer[1024];
+
+    // Create Fields node element.
+    TiXmlElement* pFieldsNodeElement = new TiXmlElement( "xs:element" );
+    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), particleAssetFieldNodeName );
+    pFieldsNodeElement->SetAttribute( "name", buffer );
+    pFieldsNodeElement->SetAttribute( "minOccurs", 0 );
+    pFieldsNodeElement->SetAttribute( "maxOccurs", 1 );
+    pParentElement->LinkEndChild( pFieldsNodeElement );
+
+    // Create complex type.
+    TiXmlElement* pFieldsNodeComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pFieldsNodeElement->LinkEndChild( pFieldsNodeComplexTypeElement );
+    
+    // Create choice element.
+    TiXmlElement* pFieldsNodeChoiceElement = new TiXmlElement( "xs:choice" );
+    pFieldsNodeChoiceElement->SetAttribute( "minOccurs", 0 );
+    pFieldsNodeChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
+    pFieldsNodeComplexTypeElement->LinkEndChild( pFieldsNodeChoiceElement );
+
+    // Iterate the fields.
+    for( typeFieldHash::const_iterator fieldItr = mFields.begin(); fieldItr != mFields.end(); ++fieldItr )
+    {
+        // Write schema for the field.
+        fieldItr->value->WriteCustomTamlSchema( pClassRep, pFieldsNodeChoiceElement );
+    }
+}
 
 

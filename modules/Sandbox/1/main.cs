@@ -25,26 +25,11 @@ function Sandbox::create( %this )
     // Load the preferences.
     %this.loadPreferences();
     
-    // Load system scripts
-    exec( "./scripts/constants.cs");
-    exec( "./scripts/canvas.cs" );
-    exec( "./scripts/openal.cs" );
+    // Load Sandbox scripts.
     exec( "./scripts/console.cs" );
     exec( "./scripts/toolbox.cs" );    
     exec( "./scripts/customToolboxGui.cs" );
     exec( "./scripts/manipulation.cs" );
-
-    // Initialize the canvas.
-    initializeCanvas("Sandbox");
-    
-    // Set the canvas color.
-    Canvas.BackgroundColor = "CornflowerBlue";
-    Canvas.UseBackgroundColor = false;
-    
-    // Initialize audio.
-    initializeOpenAL();
-    
-    // Load Sandbox scripts.
     exec( "./scripts/scene.cs" );
     exec( "./scripts/toys.cs" );        
         
@@ -69,6 +54,9 @@ function Sandbox::create( %this )
 
     // Initialize the toolbox.    
     initializeToolbox();
+    
+    // Initialize the input controller.
+    Sandbox.InputController.initialize();
     
     // Initialize the "cannot render" proxy.
     new RenderProxy(CannotRenderProxy)
@@ -100,7 +88,7 @@ function Sandbox::destroy( %this )
 function Sandbox::loadPreferences( %this )
 {
     // Load the default preferences.
-    exec( "./scripts/defaultPreferences.cs" );
+    exec( "./scripts/sandboxPreferences.cs" );
     
     // Load the last session preferences if available.
     if ( isFile("preferences.cs") )

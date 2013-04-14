@@ -81,8 +81,10 @@ public:
     bool setValueScale( const F32 valueScale );
     F32 getValueScale( void ) const;    
 
-    void onTamlCustomWrite( TamlCustomProperties& customProperties );
-    void onTamlCustomRead( const TamlCustomProperties& customProperties );
+    void onTamlCustomWrite( TamlCustomNodes& customNodes );
+    void onTamlCustomRead( const TamlCustomNodes& customNodes );
+
+    void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement ) const;
 };
 
 #endif // ParticleAssetFieldCollection

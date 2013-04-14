@@ -46,7 +46,7 @@ function CompositeSpriteToy::create( %this )
     addNumericOption("Maximum Sprite Count", 10, 1000, 10, "setSpriteCount", CompositeSpriteToy.SpriteCount, true, "Sets the maximum number of sprites to create." );
     addNumericOption("Angular Velocity", -180, 180, 20, "setAngularVelocity", CompositeSpriteToy.AngularVelocity, false, "Sets the rate at which the composite sprite spins." );    
     addFlagOption("Render Isolated", "setRenderIsolated", CompositeSpriteToy.RenderIsolated, true , "Whether the composite renders its sprites isolated from the scene layer it occupies or not.");
-        
+    
     // Reset the toy.
     %this.reset();     
 }
@@ -134,4 +134,35 @@ function CompositeSpriteToy::createBackground(%this)
     
     // Add to the scene.
     SandboxScene.add( %obj );   
+}
+
+//-----------------------------------------------------------------------------
+
+function CompositeSpriteToy::onTouchDown(%this, %touchID, %worldPosition)
+{
+    // Fetch the composite sprite.
+    %compositeSprite = CompositeSpriteToy.CompositeSprite;
+    
+    // Pick sprites.
+    %sprites = %compositeSprite.pickPoint( %worldPosition );    
+
+    // Fetch sprite count.    
+    %spriteCount = %sprites.count;
+    
+    // Finish if no sprites picked.
+    if ( %spriteCount == 0 )
+        return;    
+        
+    // Iterate sprites.
+    for( %i = 0; %i < %spriteCount; %i++ )
+    {
+        // Fetch sprite Id.
+        %spriteId = getWord( %sprites, %i );
+        
+        // Select the sprite Id.
+        %compositeSprite.selectSpriteId( %spriteId );
+        
+        // Remove the se
+        %compositeSprite.removeSprite();
+    }
 }

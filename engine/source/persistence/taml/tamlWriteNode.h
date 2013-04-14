@@ -67,8 +67,6 @@ public:
     {
         // NOTE: This MUST be done before the state is reset otherwise we'll be touching uninitialized stuff.
         mRefToNode = NULL;
-        mRefField = StringTable->EmptyString;
-        mChildren = NULL;
         mpSimObject = NULL;
         mpTamlCallbacks = NULL;
         mpObjectName = NULL;
@@ -107,13 +105,12 @@ public:
 
     U32                         mRefId;
     TamlWriteNode*              mRefToNode;
-    StringTableEntry            mRefField;
     SimObject*                  mpSimObject;
     TamlCallbacks*              mpTamlCallbacks;
     const char*                 mpObjectName;
     Vector<TamlWriteNode::FieldValuePair*> mFields;
     Vector<TamlWriteNode*>*     mChildren;
-    TamlCustomProperties        mCustomProperties;
+    TamlCustomNodes             mCustomNodes;
 };
 
 #endif // _TAML_WRITE_NODE_H_

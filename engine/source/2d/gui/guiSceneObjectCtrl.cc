@@ -434,7 +434,8 @@ void GuiSceneObjectCtrl::onRender(Point2I offset, const RectI& updateRect)
           MASK_ALL,
           MASK_ALL,
           Vector2::getOne(),
-          &debugStats );
+          &debugStats,
+          this );
 
       SceneRenderRequest guiSceneRenderRequest;
       guiSceneRenderRequest.set(

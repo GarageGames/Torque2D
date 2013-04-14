@@ -27,16 +27,12 @@
 #include "2d/assets/particleAssetFieldCollection.h"
 #endif
 
-#ifndef _PARTICLE_ASSET_FIELD_H_
-#include "2d/assets/particleAssetField.h"
-#endif
-
 #ifndef _IMAGE_ASSET_H_
 #include "2d/assets/ImageAsset.h"
 #endif
 
-#ifndef _ANIMATION_CONTROLLER_H_
-#include "2d/assets/AnimationController.h"
+#ifndef _ANIMATION_ASSET_H_
+#include "2d/assets/AnimationAsset.h"
 #endif
 
 #ifndef _SCENE_OBJECT_H_
@@ -49,7 +45,7 @@ class ParticleAsset;
 
 //-----------------------------------------------------------------------------
 
-class ParticleAssetEmitter : public SimObject, public AssetPtrCallback
+class ParticleAssetEmitter : public SimObject, protected AssetPtrCallback
 {
     friend ParticleAsset;
 
@@ -185,7 +181,7 @@ public:
     inline void setOldestInFront( const bool oldestInFront ) { mOldestInFront = oldestInFront; refreshAsset();  }
     inline bool getOldestInFront( void ) const { return mOldestInFront; }
    
-    inline bool isStaticMode( void ) const { return mStaticMode; }
+    inline bool isStaticFrameProvider( void ) const { return mStaticMode; }
     bool setImage( const char* pAssetId, const U32 frame = 0 );
     inline StringTableEntry getImage( void ) const { return mImageAsset.getAssetId(); }
     bool setImageFrame( const U32 frame );
@@ -194,8 +190,8 @@ public:
     inline bool getRandomImageFrame( void ) const { return mRandomImageFrame; }
     bool setAnimation( const char* animationName );
     inline StringTableEntry getAnimation( void ) const { return mAnimationAsset.getAssetId(); }
-    inline const AssetPtr<ImageAsset>& getImageAsset( void ) const { return mImageAsset; }
-    inline const AssetPtr<AnimationAsset>& getAnimationAsset( void ) const { return mAnimationAsset; }
+    inline AssetPtr<ImageAsset>& getImageAsset( void ) { return mImageAsset; }
+    inline AssetPtr<AnimationAsset>& getAnimationAsset( void ) { return mAnimationAsset; }
 
     inline void setBlendMode( bool blendMode ) { mBlendMode = blendMode; refreshAsset(); }
     inline bool getBlendMode( void ) const { return mBlendMode; };
@@ -257,11 +253,11 @@ public:
 private:
     void setOwner( ParticleAsset* pParticleAsset );
     inline void refreshAsset( void );
-    virtual void onAssetRefreshed( AssetPtrBase* pAssetPtrBase );
 
 protected:
-    void onTamlCustomWrite( TamlCustomProperties& customProperties );
-    void onTamlCustomRead( const TamlCustomProperties& customProperties );
+    virtual void onAssetRefreshed( AssetPtrBase* pAssetPtrBase );
+    void onTamlCustomWrite( TamlCustomNodes& customNodes );
+    void onTamlCustomRead( const TamlCustomNodes& customNodes );
 
     static bool     setEmitterName(void* obj, const char* data)                         { static_cast<ParticleAssetEmitter*>(obj)->setEmitterName( data ); return false; }
     static bool     setEmitterType(void* obj, const char* data)                         { static_cast<ParticleAssetEmitter*>(obj)->setEmitterType( getEmitterTypeEnum(data) ); return false; }
@@ -305,14 +301,14 @@ protected:
 
     static bool     setImage(void* obj, const char* data)                               { static_cast<ParticleAssetEmitter*>(obj)->setImage(data); return false; };
     static const char* getImage(void* obj, const char* data)                            { return static_cast<ParticleAssetEmitter*>(obj)->getImage(); }
-    static bool     writeImage( void* obj, StringTableEntry pFieldName )                { ParticleAssetEmitter* pCastObject = static_cast<ParticleAssetEmitter*>(obj); if ( !pCastObject->isStaticMode() ) return false; return pCastObject->mImageAsset.notNull(); }
+    static bool     writeImage( void* obj, StringTableEntry pFieldName )                { ParticleAssetEmitter* pCastObject = static_cast<ParticleAssetEmitter*>(obj); if ( !pCastObject->isStaticFrameProvider() ) return false; return pCastObject->mImageAsset.notNull(); }
     static bool     setImageFrame(void* obj, const char* data)                          { static_cast<ParticleAssetEmitter*>(obj)->setImageFrame(dAtoi(data)); return false; };
-    static bool     writeImageFrame( void* obj, StringTableEntry pFieldName )           { ParticleAssetEmitter* pCastObject = static_cast<ParticleAssetEmitter*>(obj); if ( !pCastObject->isStaticMode() ) return false; return pCastObject->mImageAsset.notNull() && !pCastObject->getRandomImageFrame(); }
+    static bool     writeImageFrame( void* obj, StringTableEntry pFieldName )           { ParticleAssetEmitter* pCastObject = static_cast<ParticleAssetEmitter*>(obj); if ( !pCastObject->isStaticFrameProvider() ) return false; return pCastObject->mImageAsset.notNull() && !pCastObject->getRandomImageFrame(); }
     static bool     setRandomImageFrame(void* obj, const char* data)                    { static_cast<ParticleAssetEmitter*>(obj)->setRandomImageFrame(dAtob(data)); return false; };
-    static bool     writeRandomImageFrame( void* obj, StringTableEntry pFieldName )     { ParticleAssetEmitter* pCastObject = static_cast<ParticleAssetEmitter*>(obj); if ( !pCastObject->isStaticMode() ) return false; return pCastObject->getRandomImageFrame(); }
+    static bool     writeRandomImageFrame( void* obj, StringTableEntry pFieldName )     { ParticleAssetEmitter* pCastObject = static_cast<ParticleAssetEmitter*>(obj); if ( !pCastObject->isStaticFrameProvider() ) return false; return pCastObject->getRandomImageFrame(); }
     static bool     setAnimation(void* obj, const char* data)                           { static_cast<ParticleAssetEmitter*>(obj)->setAnimation(data); return false; };
     static const char* getAnimation(void* obj, const char* data)                        { return static_cast<ParticleAssetEmitter*>(obj)->getAnimation(); }
-    static bool     writeAnimation( void* obj, StringTableEntry pFieldName )            { ParticleAssetEmitter* pCastObject = static_cast<ParticleAssetEmitter*>(obj); if ( pCastObject->isStaticMode() ) return false; return pCastObject->mAnimationAsset.notNull(); }
+    static bool     writeAnimation( void* obj, StringTableEntry pFieldName )            { ParticleAssetEmitter* pCastObject = static_cast<ParticleAssetEmitter*>(obj); if ( pCastObject->isStaticFrameProvider() ) return false; return pCastObject->mAnimationAsset.notNull(); }
 
     static bool     setBlendMode(void* obj, const char* data)                           { static_cast<ParticleAssetEmitter*>(obj)->setBlendMode(dAtob(data)); return false; }
     static bool     writeBlendMode( void* obj, StringTableEntry pFieldName )            { return static_cast<ParticleAssetEmitter*>(obj)->getBlendMode() == false; }

@@ -59,6 +59,9 @@ public:
 
     static void initPersistFields();
 
+    virtual bool onAdd();
+    virtual void onRemove();
+
     virtual void preIntegrate( const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
     virtual void integrateObject( const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
     virtual void interpolateObject( const F32 timeDelta );
@@ -85,13 +88,15 @@ protected:
     virtual SpriteBatchItem* createSpriteIsometricLayout( const SpriteBatchItem::LogicalPosition& logicalPosition );
     virtual SpriteBatchItem* createCustomLayout( const SpriteBatchItem::LogicalPosition& logicalPosition );
 
-    virtual void onTamlCustomWrite( TamlCustomProperties& customProperties );
-    virtual void onTamlCustomRead( const TamlCustomProperties& customProperties );
+    virtual void onTamlCustomWrite( TamlCustomNodes& customNodes );
+    virtual void onTamlCustomRead( const TamlCustomNodes& customNodes );
 
 protected:
+    static bool         writeDefaultSpriteStride( void* obj, StringTableEntry pFieldName )  { return !STATIC_VOID_CAST_TO(CompositeSprite, SpriteBatch, obj)->getDefaultSpriteStride().isEqual( Vector2::getOne() ); }
+    static bool         writeDefaultSpriteSize( void* obj, StringTableEntry pFieldName )    { return !STATIC_VOID_CAST_TO(CompositeSprite, SpriteBatch, obj)->getDefaultSpriteSize().isEqual( Vector2::getOne() ); }
     static bool         setDefaultSpriteAngle(void* obj, const char* data)                  { STATIC_VOID_CAST_TO(CompositeSprite, SpriteBatch, obj)->setDefaultSpriteAngle(mDegToRad(dAtof(data))); return false; }
     static const char*  getDefaultSpriteAngle(void* obj, const char* data)                  { return Con::getFloatArg( mRadToDeg(STATIC_VOID_CAST_TO(CompositeSprite, SpriteBatch, obj)->getDefaultSpriteAngle()) ); }
-    static bool         writeDefaultSpriteAngle( void* obj, StringTableEntry pFieldName )   { return mNotZero( static_cast<SpriteBatch*>(obj)->getDefaultSpriteAngle() ); }
+    static bool         writeDefaultSpriteAngle( void* obj, StringTableEntry pFieldName )   { return mNotZero( STATIC_VOID_CAST_TO(CompositeSprite, SpriteBatch, obj)->getDefaultSpriteAngle() ); }
     static bool         writeBatchIsolated( void* obj, StringTableEntry pFieldName )        { return static_cast<CompositeSprite*>(obj)->getBatchIsolated(); }
     static bool         writeBatchSortMode( void* obj, StringTableEntry pFieldName )        { return static_cast<CompositeSprite*>(obj)->getBatchSortMode() != SceneRenderQueue::RENDER_SORT_OFF; }
 

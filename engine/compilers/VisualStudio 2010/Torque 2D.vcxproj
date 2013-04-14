@@ -72,7 +72,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../Source;../../source/testing/googleTest;../../source/testing/googleTest/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../Source;../../Source/persistence/rapidjson/include;../../source/testing/googleTest;../../source/testing/googleTest/include;../../source/testing/googleTest;../../source/testing/googleTest/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>TORQUE_DEBUG;TORQUE_DEBUG_GUARD;_CRT_SECURE_NO_DEPRECATE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -119,7 +119,7 @@
     <ClCompile>
       <Optimization>MinSpace</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../Source;../../source/testing/googleTest;../../source/testing/googleTest/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../Source;../../Source/persistence/rapidjson/include;../../source/testing/googleTest;../../source/testing/googleTest/include;../../source/testing/googleTest;../../source/testing/googleTest/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>UNICODE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -178,7 +178,7 @@
     <ClCompile>
       <Optimization>MinSpace</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../Source;../../Source/persistence/rapidjson/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>TORQUE_SHIPPING;UNICODE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -233,22 +233,29 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\2d\assets\AnimationAsset.cc" />
-    <ClCompile Include="..\..\source\2d\assets\AnimationController.cc" />
     <ClCompile Include="..\..\source\2d\assets\ImageAsset.cc" />
     <ClCompile Include="..\..\source\2d\assets\ParticleAsset.cc" />
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetEmitter.cc" />
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetField.cc" />
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetFieldCollection.cc" />
+    <ClCompile Include="..\..\source\2d\controllers\AmbientForceController.cc" />
+    <ClCompile Include="..\..\source\2d\controllers\BuoyancyController.cc" />
+    <ClCompile Include="..\..\source\2d\controllers\core\GroupedSceneController.cc" />
+    <ClCompile Include="..\..\source\2d\controllers\core\PickingSceneController.cc" />
+    <ClCompile Include="..\..\source\2d\controllers\PointForceController.cc" />
     <ClCompile Include="..\..\source\2d\core\BatchRender.cc" />
     <ClCompile Include="..\..\source\2d\core\CoreMath.cc" />
+    <ClCompile Include="..\..\source\2d\core\ImageFrameProvider.cc" />
+    <ClCompile Include="..\..\source\2d\core\ImageFrameProviderCore.cc" />
     <ClCompile Include="..\..\source\2d\core\ParticleSystem.cc" />
     <ClCompile Include="..\..\source\2d\core\RenderProxy.cc" />
     <ClCompile Include="..\..\source\2d\core\SpriteBase.cc" />
     <ClCompile Include="..\..\source\2d\core\SpriteBatch.cc" />
     <ClCompile Include="..\..\source\2d\core\SpriteBatchItem.cc" />
-    <ClCompile Include="..\..\source\2d\core\SpriteProxyBase.cc" />
+    <ClCompile Include="..\..\source\2d\core\SpriteBatchQuery.cc" />
     <ClCompile Include="..\..\source\2d\core\Utility.cc" />
     <ClCompile Include="..\..\source\2d\core\Vector2.cc" />
+    <ClCompile Include="..\..\source\2d\experimental\composites\WaveComposite.cc" />
     <ClCompile Include="..\..\source\2d\gui\guiImageButtonCtrl.cc" />
     <ClCompile Include="..\..\source\2d\gui\guiSceneObjectCtrl.cc" />
     <ClCompile Include="..\..\source\2d\gui\guiSpriteCtrl.cc" />
@@ -257,6 +264,8 @@
     <ClCompile Include="..\..\source\2d\sceneobject\ImageFont.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\ParticlePlayer.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\SceneObject.cc" />
+    <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectList.cc" />
+    <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectSet.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Scroller.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\ShapeVector.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Sprite.cc" />
@@ -273,7 +282,6 @@
     <ClCompile Include="..\..\source\assets\assetFieldTypes.cc" />
     <ClCompile Include="..\..\source\assets\assetManager.cc" />
     <ClCompile Include="..\..\source\assets\assetQuery.cc" />
-    <ClCompile Include="..\..\source\assets\assetSnapshot.cc" />
     <ClCompile Include="..\..\source\assets\assetTagsManifest.cc" />
     <ClCompile Include="..\..\source\assets\declaredAssets.cc" />
     <ClCompile Include="..\..\source\assets\referencedAssets.cc" />
@@ -444,14 +452,17 @@
     <ClCompile Include="..\..\source\network\serverQuery.cc" />
     <ClCompile Include="..\..\source\network\tcpObject.cc" />
     <ClCompile Include="..\..\source\network\telnetConsole.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\binary\tamlBinaryReader.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\binary\tamlBinaryWriter.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\json\tamlJSONParser.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\json\tamlJSONReader.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\json\tamlJSONWriter.cc" />
     <ClCompile Include="..\..\source\persistence\taml\taml.cc" />
-    <ClCompile Include="..\..\source\persistence\taml\tamlBinaryReader.cc" />
-    <ClCompile Include="..\..\source\persistence\taml\tamlBinaryWriter.cc" />
     <ClCompile Include="..\..\source\persistence\taml\tamlCustom.cc" />
     <ClCompile Include="..\..\source\persistence\taml\tamlWriteNode.cc" />
-    <ClCompile Include="..\..\source\persistence\taml\tamlXmlParser.cc" />
-    <ClCompile Include="..\..\source\persistence\taml\tamlXmlReader.cc" />
-    <ClCompile Include="..\..\source\persistence\taml\tamlXmlWriter.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\xml\tamlXmlParser.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\xml\tamlXmlReader.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\xml\tamlXmlWriter.cc" />
     <ClCompile Include="..\..\source\persistence\tinyXML\tinystr.cpp" />
     <ClCompile Include="..\..\source\persistence\tinyXML\tinyxml.cpp" />
     <ClCompile Include="..\..\source\persistence\tinyXML\tinyxmlerror.cpp" />
@@ -604,7 +615,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\source\2d\assets\AnimationAsset.h" />
     <ClInclude Include="..\..\source\2d\assets\AnimationAsset_ScriptBinding.h" />
-    <ClInclude Include="..\..\source\2d\assets\AnimationController.h" />
     <ClInclude Include="..\..\source\2d\assets\ImageAsset.h" />
     <ClInclude Include="..\..\source\2d\assets\ImageAsset_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\assets\ParticleAsset.h" />
@@ -613,8 +623,21 @@
     <ClInclude Include="..\..\source\2d\assets\ParticleAssetField.h" />
     <ClInclude Include="..\..\source\2d\assets\ParticleAssetFieldCollection.h" />
     <ClInclude Include="..\..\source\2d\assets\ParticleAsset_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\controllers\AmbientForceController.h" />
+    <ClInclude Include="..\..\source\2d\controllers\AmbientForceController_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\controllers\BuoyancyController.h" />
+    <ClInclude Include="..\..\source\2d\controllers\BuoyancyController_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\controllers\core\GroupedSceneController.h" />
+    <ClInclude Include="..\..\source\2d\controllers\core\GroupedSceneController_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\controllers\core\PickingSceneController.h" />
+    <ClInclude Include="..\..\source\2d\controllers\core\PickingSceneController_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\controllers\core\SceneController.h" />
+    <ClInclude Include="..\..\source\2d\controllers\PointForceController.h" />
+    <ClInclude Include="..\..\source\2d\controllers\PointForceController_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\core\BatchRender.h" />
     <ClInclude Include="..\..\source\2d\core\CoreMath.h" />
+    <ClInclude Include="..\..\source\2d\core\ImageFrameProvider.h" />
+    <ClInclude Include="..\..\source\2d\core\ImageFrameProviderCore.h" />
     <ClInclude Include="..\..\source\2d\core\ParticleSystem.h" />
     <ClInclude Include="..\..\source\2d\core\RenderProxy.h" />
     <ClInclude Include="..\..\source\2d\core\RenderProxy_ScriptBinding.h" />
@@ -622,10 +645,13 @@
     <ClInclude Include="..\..\source\2d\core\SpriteBase_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\core\SpriteBatch.h" />
     <ClInclude Include="..\..\source\2d\core\SpriteBatchItem.h" />
-    <ClInclude Include="..\..\source\2d\core\SpriteProxyBase.h" />
+    <ClInclude Include="..\..\source\2d\core\SpriteBatchQuery.h" />
+    <ClInclude Include="..\..\source\2d\core\SpriteBatchQueryResult.h" />
     <ClInclude Include="..\..\source\2d\core\Utility.h" />
     <ClInclude Include="..\..\source\2d\core\Vector2.h" />
     <ClInclude Include="..\..\source\2d\core\Vector2_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\experimental\composites\WaveComposite.h" />
+    <ClInclude Include="..\..\source\2d\experimental\composites\WaveComposite_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\gui\guiImageButtonCtrl.h" />
     <ClInclude Include="..\..\source\2d\gui\guiImageButtonCtrl_ScriptBindings.h" />
     <ClInclude Include="..\..\source\2d\gui\guiSceneObjectCtrl.h" />
@@ -640,8 +666,11 @@
     <ClInclude Include="..\..\source\2d\sceneobject\ParticlePlayer.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\ParticlePlayer_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObject.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectList.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectMoveToEvent.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectRotateToEvent.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectTimerEvent.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Scroller.h" />
@@ -679,7 +708,6 @@
     <ClInclude Include="..\..\source\assets\assetPtr.h" />
     <ClInclude Include="..\..\source\assets\assetQuery.h" />
     <ClInclude Include="..\..\source\assets\assetQuery_ScriptBinding.h" />
-    <ClInclude Include="..\..\source\assets\assetSnapshot.h" />
     <ClInclude Include="..\..\source\assets\assetTagsManifest.h" />
     <ClInclude Include="..\..\source\assets\assetTagsManifest_ScriptBinding.h" />
     <ClInclude Include="..\..\source\assets\declaredAssets.h" />
@@ -688,7 +716,6 @@
     <ClInclude Include="..\..\source\assets\tamlAssetDeclaredVisitor.h" />
     <ClInclude Include="..\..\source\assets\tamlAssetReferencedUpdateVisitor.h" />
     <ClInclude Include="..\..\source\assets\tamlAssetReferencedVisitor.h" />
-    <ClInclude Include="..\..\source\assets\tamlAssetUpdateVisitor.h" />
     <ClInclude Include="..\..\source\audio\AudioAsset.h" />
     <ClInclude Include="..\..\source\box2d\Box2D.h" />
     <ClInclude Include="..\..\source\box2d\Collision\b2BroadPhase.h" />
@@ -874,18 +901,37 @@
     <ClInclude Include="..\..\source\network\serverQuery.h" />
     <ClInclude Include="..\..\source\network\tcpObject.h" />
     <ClInclude Include="..\..\source\network\telnetConsole.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\allocators.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\document.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\encodedstream.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\encodings.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\filereadstream.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\filestream.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\filewritestream.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\internal\pow10.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\internal\stack.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\internal\strfunc.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\prettywriter.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\rapidjson.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\reader.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\stringbuffer.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\writer.h" />
+    <ClInclude Include="..\..\source\persistence\taml\binary\tamlBinaryReader.h" />
+    <ClInclude Include="..\..\source\persistence\taml\binary\tamlBinaryWriter.h" />
+    <ClInclude Include="..\..\source\persistence\taml\json\tamlJSONParser.h" />
+    <ClInclude Include="..\..\source\persistence\taml\json\tamlJSONReader.h" />
+    <ClInclude Include="..\..\source\persistence\taml\json\tamlJSONWriter.h" />
     <ClInclude Include="..\..\source\persistence\taml\taml.h" />
-    <ClInclude Include="..\..\source\persistence\taml\tamlBinaryReader.h" />
-    <ClInclude Include="..\..\source\persistence\taml\tamlBinaryWriter.h" />
     <ClInclude Include="..\..\source\persistence\taml\tamlCallbacks.h" />
     <ClInclude Include="..\..\source\persistence\taml\tamlChildren.h" />
     <ClInclude Include="..\..\source\persistence\taml\tamlCustom.h" />
+    <ClInclude Include="..\..\source\persistence\taml\tamlParser.h" />
+    <ClInclude Include="..\..\source\persistence\taml\tamlVisitor.h" />
     <ClInclude Include="..\..\source\persistence\taml\tamlWriteNode.h" />
-    <ClInclude Include="..\..\source\persistence\taml\tamlXmlParser.h" />
-    <ClInclude Include="..\..\source\persistence\taml\tamlXmlReader.h" />
-    <ClInclude Include="..\..\source\persistence\taml\tamlXmlVisitor.h" />
-    <ClInclude Include="..\..\source\persistence\taml\tamlXmlWriter.h" />
     <ClInclude Include="..\..\source\persistence\taml\taml_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\persistence\taml\xml\tamlXmlParser.h" />
+    <ClInclude Include="..\..\source\persistence\taml\xml\tamlXmlReader.h" />
+    <ClInclude Include="..\..\source\persistence\taml\xml\tamlXmlWriter.h" />
     <ClInclude Include="..\..\source\persistence\tinyXML\tinystr.h" />
     <ClInclude Include="..\..\source\persistence\tinyXML\tinyxml.h" />
     <ClInclude Include="..\..\source\audio\audio.h" />
@@ -1005,6 +1051,7 @@
     <ClInclude Include="..\..\source\sim\simObject.h" />
     <ClInclude Include="..\..\source\sim\SimObjectList.h" />
     <ClInclude Include="..\..\source\sim\simObjectPtr.h" />
+    <ClInclude Include="..\..\source\sim\simObjectTimerEvent.h" />
     <ClInclude Include="..\..\source\sim\simSet.h" />
     <ClInclude Include="..\..\source\string\findMatch.h" />
     <ClInclude Include="..\..\source\string\stringBuffer.h" />

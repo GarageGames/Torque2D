@@ -119,10 +119,6 @@ ConsoleSetType( TypeParticleAssetPtr )
     Con::warnf( "(TypeParticleAssetPtr) - Cannot set multiple args to a single asset." );
 }
 
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_CONOBJECT(ParticleAsset);
-
 //------------------------------------------------------------------------------
 
 ParticleAsset::ParticleAsset() :
@@ -474,22 +470,39 @@ void ParticleAsset::moveEmitter( S32 fromIndex, S32 toIndex )
 
 //------------------------------------------------------------------------------
 
-void ParticleAsset::onTamlCustomWrite( TamlCustomProperties& customProperties )
+void ParticleAsset::onTamlCustomWrite( TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ParticleAsset_OnTamlCustomWrite);
 
     // Write the fields.
-    mParticleFields.onTamlCustomWrite( customProperties );
+    mParticleFields.onTamlCustomWrite( customNodes );
 }
 
 //-----------------------------------------------------------------------------
 
-void ParticleAsset::onTamlCustomRead( const TamlCustomProperties& customProperties )
+void ParticleAsset::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ParticleAsset_OnTamlCustomRead);
 
     // Read the fields.
-    mParticleFields.onTamlCustomRead( customProperties );
+    mParticleFields.onTamlCustomRead( customNodes );
 }
+
+//-----------------------------------------------------------------------------
+
+static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "ParticleAsset::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "ParticleAsset::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    // Write the particle asset fields.
+    ParticleAsset particleAsset;
+    particleAsset.getParticleFields().WriteCustomTamlSchema( pClassRep, pParentElement );
+}
+
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_CONOBJECT_CHILDREN_SCHEMA(ParticleAsset, WriteCustomTamlSchema);

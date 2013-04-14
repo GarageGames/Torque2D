@@ -35,8 +35,6 @@ class ScriptGroup : public SimGroup
    
 public:
    ScriptGroup();
-   bool onAdd();
-   void onRemove();
 
    DECLARE_CONOBJECT(ScriptGroup);
 };

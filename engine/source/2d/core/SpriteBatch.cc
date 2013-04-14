@@ -24,20 +24,28 @@
 #include "SpriteBatch.h"
 #endif
 
+#ifndef _SPRITE_BATCH_QUERY_H_
+#include "2d/core/spriteBatchQuery.h"
+#endif
+
 #ifndef _SCENE_RENDER_OBJECT_H_
 #include "2d/scene/SceneRenderObject.h"
 #endif
 
 //------------------------------------------------------------------------------
 
+static StringTableEntry spritesNodeName = StringTable->insert( "Sprites" );
+
+//------------------------------------------------------------------------------
+
 SpriteBatch::SpriteBatch() :
-    mMasterBatchId( 1 ),
+    mMasterBatchId( 0 ),
     mSelectedSprite( NULL ),
     mBatchSortMode( SceneRenderQueue::RENDER_SORT_OFF ),
     mDefaultSpriteStride( 1.0f, 1.0f),
     mDefaultSpriteSize( 1.0f, 1.0f ),
     mDefaultSpriteAngle( 0.0f ),
-    mpSpriteBatchTree( NULL ),
+    mpSpriteBatchQuery( NULL ),
     mBatchCulling( true )
 {
     // Reset batch transform.
@@ -48,20 +56,34 @@ SpriteBatch::SpriteBatch() :
     // Reset local extents.
     mLocalExtents.SetZero();
     mLocalExtentsDirty = true;
-
-    // Create the sprite batch tree if sprite clipping is on.
-    createSpriteBatchTree();
 }
 
 //------------------------------------------------------------------------------
 
 SpriteBatch::~SpriteBatch()
 {
+}
+
+//-----------------------------------------------------------------------------
+
+bool SpriteBatch::onAdd()
+{
+    // Create the sprite batch query if required.
+    if ( mBatchCulling )
+        createSpriteBatchQuery();
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
+void SpriteBatch::onRemove()
+{
     // Clear the sprites.
     clearSprites();
 
-    // Delete the sprite batch tree.
-    destroySpriteBatchTree();
+    // Delete the sprite batch query.
+    destroySpriteBatchQuery();
 }
 
 //-----------------------------------------------------------------------------
@@ -77,27 +99,36 @@ void SpriteBatch::prepareRender( SceneRenderObject* pSceneRenderObject, const Sc
     // Calculate local AABB.
     const b2AABB localAABB = calculateLocalAABB( pSceneRenderState->mRenderAABB );
 
-    // Do we have a sprite batch tree?
-    if ( mpSpriteBatchTree != NULL )
+    // Do we have a sprite batch query?
+    if ( mpSpriteBatchQuery != NULL )
     {
-        // Debug Profiling.
+        // Yes, so debug Profiling.
         PROFILE_START(SpriteBatch_PrepareRenderQuery);
 
-        // Yes, so fetch sprite batch query.
-        SpriteBatchTree::typeSpriteItemVector& batchQuery = mpSpriteBatchTree->mBatchQuery;
-        batchQuery.clear();
+        // Yes, so fetch sprite batch query and clear results.
+        SpriteBatchQuery* pSpriteBatchQuery = getSpriteBatchQuery( true );
 
-        // Perform sprite batch query.
-        mpSpriteBatchTree->Query( mpSpriteBatchTree, localAABB );
+        // Perform query.
+        pSpriteBatchQuery->queryArea( localAABB, false );
 
         // Debug Profiling.
         PROFILE_END(); // SpriteBatch_PrepareRenderQuery
 
-        // Iterate the sprite batch query results.
-        for( SpriteBatchTree::typeSpriteItemVector::iterator spriteItr = batchQuery.begin(); spriteItr != batchQuery.end(); ++spriteItr )
+        // Fetch result count.
+        const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
+
+        // Finish if no results.
+        if ( resultCount == 0 )
+            return;
+
+        // Fetch results.
+        typeSpriteBatchQueryResultVector& queryResults = pSpriteBatchQuery->getQueryResults();
+
+        // Add picked sprites.
+        for ( U32 n = 0; n < resultCount; n++ )
         {
             // Fetch sprite batch Item.
-            SpriteBatchItem* pSpriteBatchItem = *spriteItr;
+            SpriteBatchItem* pSpriteBatchItem = queryResults[n].mpSpriteBatchItem;
 
             // Skip if not visible.
             if ( !pSpriteBatchItem->getVisible() )
@@ -117,7 +148,7 @@ void SpriteBatch::prepareRender( SceneRenderObject* pSceneRenderObject, const Sc
         }
 
         // Clear sprite batch query.
-        batchQuery.clear();
+        pSpriteBatchQuery->clearQuery();
     }
     else
     {
@@ -159,56 +190,73 @@ void SpriteBatch::render( const SceneRenderState* pSceneRenderState, const Scene
 
 //------------------------------------------------------------------------------
 
-void SpriteBatch::createTreeProxy( const b2AABB& localAABB, SpriteBatchItem* spriteBatchItem )
+void SpriteBatch::createQueryProxy( SpriteBatchItem* pSpriteBatchItem )
 {
+    // Sanity!
+    AssertFatal( pSpriteBatchItem != NULL, "SpriteBatch:createQueryProxy() - Cannot create query proxy on NULL sprite batch item." );
+
     // Debug Profiling.
     PROFILE_SCOPE(SpriteBatch_CreateTreeProxy);
 
-    // Finish if the batch tree is not available.
-    if ( mpSpriteBatchTree == NULL )
+    // Finish if the batch query is not available.
+    if ( mpSpriteBatchQuery == NULL )
         return;
 
     // Create proxy.
-    spriteBatchItem->mProxyId = mpSpriteBatchTree->CreateProxy( localAABB, spriteBatchItem );    
+    pSpriteBatchItem->mProxyId = mpSpriteBatchQuery->add( pSpriteBatchItem );    
 }
 
 //------------------------------------------------------------------------------
 
-void SpriteBatch::destroyTreeProxy( SpriteBatchItem* spriteBatchItem )
+void SpriteBatch::destroyQueryProxy( SpriteBatchItem* pSpriteBatchItem )
 {
+    // Sanity!
+    AssertFatal( pSpriteBatchItem != NULL, "SpriteBatch:destroyQueryProxy() - Cannot destroy query proxy on NULL sprite batch item." );
+
     // Debug Profiling.
     PROFILE_SCOPE(SpriteBatch_DestroyTreeProxy);
 
-    // Finish if the batch tree is not available.
-    if ( mpSpriteBatchTree == NULL )
+    // Finish if the batch query is not available.
+    if ( mpSpriteBatchQuery == NULL )
         return;
 
-    // Fetch sprite proxy Id.
-    const S32 proxyId = spriteBatchItem->getProxyId();
-
     // Destroy proxy.
-    mpSpriteBatchTree->DestroyProxy( proxyId );
+    mpSpriteBatchQuery->remove( pSpriteBatchItem );
 
     // Remove proxy reference.
-    spriteBatchItem->mProxyId = INVALID_SPRITE_PROXY;
+    pSpriteBatchItem->mProxyId = INVALID_SPRITE_PROXY;
 }
 
 //------------------------------------------------------------------------------
 
-void SpriteBatch::moveTreeProxy( SpriteBatchItem* spriteBatchItem, const b2AABB& localAABB )
+void SpriteBatch::moveQueryProxy( SpriteBatchItem* pSpriteBatchItem, const b2AABB& localAABB )
 {
+    // Sanity!
+    AssertFatal( pSpriteBatchItem != NULL, "SpriteBatch:moveQueryProxy() - Cannot move query proxy on NULL sprite batch item." );
+
     // Debug Profiling.
     PROFILE_SCOPE(SpriteBatch_MoveTreeProxy);
 
-    // Finish if the batch tree is not available.
-    if ( mpSpriteBatchTree == NULL )
+    // Finish if the batch query is not available.
+    if ( mpSpriteBatchQuery == NULL || pSpriteBatchItem->getProxyId() == INVALID_SPRITE_PROXY )
         return;
 
-    // Fetch sprite proxy Id.
-    const S32 proxyId = spriteBatchItem->getProxyId();
-
     // Move proxy.
-    mpSpriteBatchTree->MoveProxy( proxyId, localAABB, b2Vec2(0.0f, 0.0f) );
+    mpSpriteBatchQuery->update( pSpriteBatchItem, localAABB, b2Vec2(0.0f, 0.0f) );
+}
+
+//------------------------------------------------------------------------------
+
+SpriteBatchQuery* SpriteBatch::getSpriteBatchQuery( const bool clearQuery )
+{
+    if ( mpSpriteBatchQuery == NULL )
+        return NULL;
+
+    // Clear the query if specified.
+    if ( clearQuery )
+        mpSpriteBatchQuery->clearQuery();
+    
+    return mpSpriteBatchQuery;
 }
 
 //------------------------------------------------------------------------------
@@ -246,8 +294,6 @@ void SpriteBatch::copyTo( SpriteBatch* pSpriteBatch ) const
 
         // Push a copy to it.
         pSpriteBatchItem->copyTo( pNewSpriteBatchItem );
-
-
     }
 }
 
@@ -344,11 +390,14 @@ void SpriteBatch::setBatchCulling( const bool batchCulling )
     if ( mBatchCulling == batchCulling )
         return;
 
-    // Create/destroy sprite batch tree appropriately.
+    // Set batch culling.
+    mBatchCulling = batchCulling;
+
+    // Create/destroy sprite batch query appropriately.
     if ( mBatchCulling )
-        createSpriteBatchTree();
+        createSpriteBatchQuery();
     else
-        destroySpriteBatchTree();
+        destroySpriteBatchQuery();
 }
 
 //------------------------------------------------------------------------------
@@ -462,7 +511,7 @@ U32 SpriteBatch::getSpriteImageFrame( void ) const
 
 //------------------------------------------------------------------------------
 
-void SpriteBatch::setSpriteAnimation( const char* pAssetId, const bool autoRestore )
+void SpriteBatch::setSpriteAnimation( const char* pAssetId )
 {
     // Debug Profiling.
     PROFILE_SCOPE(SpriteBatch_SetSpriteAnimation);
@@ -475,7 +524,7 @@ void SpriteBatch::setSpriteAnimation( const char* pAssetId, const bool autoResto
         return;
 
     // Set animation.
-    mSelectedSprite->setAnimation( pAssetId, autoRestore );
+    mSelectedSprite->setAnimation( pAssetId );
 }
 
 //------------------------------------------------------------------------------
@@ -499,7 +548,7 @@ void SpriteBatch::clearSpriteAsset( void )
         return;
 
     // Clear the asset.
-    mSelectedSprite->clearAsset();
+    mSelectedSprite->clearAssets();
 }
 
 //------------------------------------------------------------------------------
@@ -897,6 +946,30 @@ SimObject* SpriteBatch::getSpriteDataObject( void ) const
 
 //------------------------------------------------------------------------------
 
+void SpriteBatch::setUserData( void* pUserData )
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return;
+
+    // Set user data.
+    mSelectedSprite->setUserData( pUserData );
+}
+
+//------------------------------------------------------------------------------
+
+void* SpriteBatch::getUserData( void ) const
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return NULL;
+
+    // Get user data.
+    return mSelectedSprite->getUserData();
+}
+
+//------------------------------------------------------------------------------
+
 void SpriteBatch::setSpriteName( const char* pName )
 {
     // Finish if a sprite is not selected.
@@ -906,6 +979,9 @@ void SpriteBatch::setSpriteName( const char* pName )
     // Finish if the sprite name already exists.
     if ( findSpriteName( pName ) )
         return;
+
+    // Insert sprite name.
+    mSpriteNames.insert( StringTable->insert( pName ), mSelectedSprite );
 
     // Set name.
     mSelectedSprite->setName( pName );
@@ -931,7 +1007,7 @@ SpriteBatchItem* SpriteBatch::createSprite( void )
     PROFILE_SCOPE(SpriteBatch_CreateSprite);
 
     // Allocate batch Id.
-    const U32 batchId = mMasterBatchId++;
+    const U32 batchId = ++mMasterBatchId;
 
     // Create sprite batch item,
     SpriteBatchItem* pSpriteBatchItem = SpriteBatchItemFactory.createObject();
@@ -1105,17 +1181,17 @@ void SpriteBatch::updateLocalExtents( void )
 
 //------------------------------------------------------------------------------
 
-void SpriteBatch::createSpriteBatchTree( void )
+void SpriteBatch::createSpriteBatchQuery( void )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(SpriteBatch_CreateSpriteBatchTree);
+    PROFILE_SCOPE(SpriteBatch_CreateSpriteBatchQuery);
 
-    // Finish if batch culling is off or there is already a sprite batch tree.
-    if ( !mBatchCulling || mpSpriteBatchTree != NULL )
+    // Finish if batch culling is off or there is already a sprite batch query.
+    if ( !mBatchCulling || mpSpriteBatchQuery != NULL )
         return;
 
-    // Set the sprite batch tree appropriately.
-    mpSpriteBatchTree = new SpriteBatchTree();
+    // Set the sprite batch query appropriately.
+    mpSpriteBatchQuery = new SpriteBatchQuery( this );
 
     // Finish if there are no sprites.
     if ( mSprites.size() == 0 )
@@ -1127,20 +1203,20 @@ void SpriteBatch::createSpriteBatchTree( void )
         // Fetch sprite batch item.
         SpriteBatchItem* pSpriteBatchItem = spriteItr->value;
 
-        // Create tree proxy for sprite.
-        createTreeProxy( pSpriteBatchItem->getLocalAABB(), pSpriteBatchItem );
+        // Create query proxy for sprite.
+        createQueryProxy( pSpriteBatchItem );
     }
 }
 
 //------------------------------------------------------------------------------
 
-void SpriteBatch::destroySpriteBatchTree( void )
+void SpriteBatch::destroySpriteBatchQuery( void )
 {
     // Debug Profiling.
-    PROFILE_SCOPE(SpriteBatch_DestroySpriteBatchTree);
+    PROFILE_SCOPE(SpriteBatch_DestroySpriteBatchQuery);
 
-    // Finish if there is no sprite batch tree.
-    if ( mpSpriteBatchTree == NULL )
+    // Finish if there is no sprite batch query.
+    if ( mpSpriteBatchQuery == NULL )
         return;
 
     // Are there any sprites?
@@ -1149,79 +1225,14 @@ void SpriteBatch::destroySpriteBatchTree( void )
         // Yes, so destroy proxies of all the sprites.
         for( typeSpriteBatchHash::iterator spriteItr = mSprites.begin(); spriteItr != mSprites.end(); ++spriteItr )
         {
-            // Destroy tree proxy for sprite.
-            destroyTreeProxy( spriteItr->value );
+            // Destroy query proxy for sprite.
+            destroyQueryProxy( spriteItr->value );
         }
     }
 
     // Finish if sprite clipping 
-    delete mpSpriteBatchTree;
-}
-
-//------------------------------------------------------------------------------
-
-void SpriteBatch::onTamlCustomWrite( TamlCustomProperty* pSpritesProperty )
-{
-    // Debug Profiling.
-    PROFILE_SCOPE(SpriteBatch_TamlCustomWrite);
-
-    // Fetch property names.
-    StringTableEntry spriteItemTypeName = StringTable->insert( "Sprite" );
-
-    // Write all sprites.
-    for( typeSpriteBatchHash::iterator spriteItr = mSprites.begin(); spriteItr != mSprites.end(); ++spriteItr )
-    {
-        // Add alias.
-        TamlPropertyAlias* pSpriteAlias = pSpritesProperty->addAlias( spriteItemTypeName );
-        
-        // Write type with sprite item.
-        spriteItr->value->onTamlCustomWrite( pSpriteAlias );
-    }
-}
-
-//------------------------------------------------------------------------------
-
-void SpriteBatch::onTamlCustomRead( const TamlCustomProperty* pSpritesProperty )
-{
-    // Debug Profiling.
-    PROFILE_SCOPE(SpriteBatch_TamlCustomRead);
-
-    // Fetch property names.
-    StringTableEntry spriteItemTypeName = StringTable->insert( "Sprite" );
-
-    // Iterate sprite item types.
-    for( TamlCustomProperty::const_iterator spriteAliasItr = pSpritesProperty->begin(); spriteAliasItr != pSpritesProperty->end(); ++spriteAliasItr )
-    {
-        // Fetch sprite alias.
-        TamlPropertyAlias* pSpriteAlias = *spriteAliasItr;
-
-        // Fetch alias name.
-        StringTableEntry aliasName = pSpriteAlias->mAliasName;
-
-        // Is this a known alias?
-        if ( aliasName != spriteItemTypeName )
-        {
-            // No, so warn.
-            Con::warnf( "SpriteBatch - Unknown custom type '%s'.", aliasName );
-            continue;
-        }
-
-        // Create sprite.
-        SpriteBatchItem* pSpriteBatchItem = createSprite();
-
-        // Read type with sprite item.
-        pSpriteBatchItem->onTamlCustomRead( pSpriteAlias );
-
-        // Fetch logical position.
-        const SpriteBatchItem::LogicalPosition& logicalPosition = pSpriteBatchItem->getLogicalPosition();
-
-        // Did we get a logical position?
-        if ( logicalPosition.isValid() )
-        {
-            // Yes, so insert into sprite positions.
-            mSpritePositions.insert( logicalPosition, pSpriteBatchItem );
-        }
-    }
+    delete mpSpriteBatchQuery;
+    mpSpriteBatchQuery = NULL;
 }
 
 //------------------------------------------------------------------------------
@@ -1231,15 +1242,24 @@ bool SpriteBatch::destroySprite( const U32 batchId )
     // Debug Profiling.
     PROFILE_SCOPE(SpriteBatch_DestroySprite);
 
-    // Find sprite.    
-    SpriteBatchItem* pSpriteBatchItem = findSpriteId( batchId );
+    // Find sprite.
+    typeSpriteBatchHash::iterator spriteItr = mSprites.find( batchId );
 
-    // Finish if not found.
-    if ( pSpriteBatchItem == NULL )
+    // Finish if sprite not found.
+    if ( spriteItr == mSprites.end() )
         return false;
+
+    // Find sprite.    
+    SpriteBatchItem* pSpriteBatchItem = spriteItr->value;
+
+    // Sanity!
+    AssertFatal( pSpriteBatchItem != NULL, "SpriteBatch::destroySprite() - Found sprite but it was NULL." );
 
     // Cache sprite.
     SpriteBatchItemFactory.cacheObject( pSpriteBatchItem );
+
+    // Remove from sprites.
+    mSprites.erase( batchId );
 
     return true;
 }
@@ -1275,4 +1295,121 @@ b2AABB SpriteBatch::calculateLocalAABB( const b2AABB& renderAABB )
     CoreMath::mOOBBtoAABB( localOOBB, localAABB );
     
     return localAABB;
+}
+
+//------------------------------------------------------------------------------
+
+void SpriteBatch::onTamlCustomWrite( TamlCustomNodes& customNodes )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(SpriteBatch_TamlCustomWrite);
+
+    // Finish if no sprites.
+    if ( getSpriteCount() == 0 )
+        return;
+
+    // Add sprites node.
+    TamlCustomNode* pSpritesNode = customNodes.addNode( spritesNodeName );
+
+    // Write all sprites.
+    for( typeSpriteBatchHash::iterator spriteItr = mSprites.begin(); spriteItr != mSprites.end(); ++spriteItr )
+    {      
+        // Write type with sprite item.
+        spriteItr->value->onTamlCustomWrite( pSpritesNode );
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void SpriteBatch::onTamlCustomRead( const TamlCustomNodes& customNodes )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(SpriteBatch_TamlCustomRead);
+
+    // Find sprites custom node.
+    const TamlCustomNode* pSpritesNode = customNodes.findNode( spritesNodeName );
+
+    // Finish if we don't have the node.
+    if ( pSpritesNode == NULL )
+        return;
+
+    // Fetch children nodes.
+    const TamlCustomNodeVector& spriteNodes = pSpritesNode->getChildren();
+
+    // Iterate sprite item types.
+    for( TamlCustomNodeVector::const_iterator spriteItr = spriteNodes.begin(); spriteItr != spriteNodes.end(); ++spriteItr )
+    {
+        // Fetch sprite node.
+        TamlCustomNode* pNode = *spriteItr;
+
+        // Fetch alias name.
+        StringTableEntry nodeName = pNode->getNodeName();
+
+        // Is this a known node name?
+        if ( nodeName != spritesItemTypeName )
+        {
+            // No, so warn.
+            Con::warnf( "SpriteBatch - Unknown custom type '%s'.", nodeName );
+            continue;
+        }
+
+        // Create sprite.
+        SpriteBatchItem* pSpriteBatchItem = createSprite();
+
+        // Read type with sprite item.
+        pSpriteBatchItem->onTamlCustomRead( pNode );
+
+        // Fetch logical position.
+        const SpriteBatchItem::LogicalPosition& logicalPosition = pSpriteBatchItem->getLogicalPosition();
+
+        // Did we get a logical position?
+        if ( logicalPosition.isValid() )
+        {
+            // Yes, so insert into sprite positions.
+            mSpritePositions.insert( logicalPosition, pSpriteBatchItem );
+        }
+
+        // Fetch sprite name.
+        StringTableEntry spriteName = pSpriteBatchItem->getName();
+
+        // Did we get a sprite name?
+        if ( spriteName != StringTable->EmptyString )
+        {
+            // Yes, so insert into sprite names if it doesn't already exist.
+            if ( mSpriteNames.find( spriteName ) != mSpriteNames.end() ) 
+                mSpriteNames.insert( spriteName, mSelectedSprite );
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void SpriteBatch::WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "SpriteBatch::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "SpriteBatch::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    char buffer[1024];
+
+    // Create sprite batch node element.
+    TiXmlElement* pBatchNodeElement = new TiXmlElement( "xs:element" );
+    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), spritesNodeName );
+    pBatchNodeElement->SetAttribute( "name", buffer );
+    pBatchNodeElement->SetAttribute( "minOccurs", 0 );
+    pBatchNodeElement->SetAttribute( "maxOccurs", 1 );
+    pParentElement->LinkEndChild( pBatchNodeElement );
+
+    // Create complex type.
+    TiXmlElement* pBatchNodeComplexTypeElement = new TiXmlElement( "xs:complexType" );
+    pBatchNodeElement->LinkEndChild( pBatchNodeComplexTypeElement );
+    
+    // Create choice element.
+    TiXmlElement* pBatchNodeChoiceElement = new TiXmlElement( "xs:choice" );
+    pBatchNodeChoiceElement->SetAttribute( "minOccurs", 0 );
+    pBatchNodeChoiceElement->SetAttribute( "maxOccurs", "unbounded" );
+    pBatchNodeComplexTypeElement->LinkEndChild( pBatchNodeChoiceElement );
+
+    // Write sprite batch item.
+    SpriteBatchItem::WriteCustomTamlSchema( pClassRep, pBatchNodeChoiceElement );
 }

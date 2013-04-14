@@ -514,24 +514,6 @@ ConsoleMethod(SceneObject, getPosition, const char*, 2, 2, "() Gets the object's
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getPositionX, F32, 2, 2, "() Gets the object's x position.\n"
-                                                       "@return (float x) The horizontal position of the object")
-{
-    // Get Position X-Component.
-    return object->getPosition().x;
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(SceneObject, getPositionY, F32, 2, 2, "() Gets the object's y position.\n"
-                                                       "@return (float y) The vertical position of the object")
-{
-    // Get Position Y-Component.
-    return object->getPosition().y;
-}
-
-//-----------------------------------------------------------------------------
-
 ConsoleMethod(SceneObject, getRenderPosition, const char*, 2, 2, "() Gets the current render position.\n"
                                                                     "@return (float x/float y) The x and y (horizontal and vertical) render position of the object.")
 {
@@ -982,7 +964,7 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
     }
 
     // Fetch contacts.
-    const typeContactVector* pCurrentContacts = object->getCurrentContacts();
+    const Scene::typeContactVector* pCurrentContacts = object->getCurrentContacts();
 
     // Sanity!
     AssertFatal( pCurrentContacts != NULL, "SceneObject::getContact() - Contacts not initialized correctly." );
@@ -1017,10 +999,10 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
     AssertFatal( shapeIndexCollider >= 0, "SceneObject::getContact() - Cannot find shape index reported on physics proxy of a fixture." );
 
     // Fetch normal and contact points.
+    const U32& pointCount = tickContact.mPointCount;
     const b2Vec2& normal = tickContact.mWorldManifold.normal;
     const b2Vec2& point1 = tickContact.mWorldManifold.points[0];
     const b2Vec2& point2 = tickContact.mWorldManifold.points[1];
-    const U32& pointCount = tickContact.mPointCount;
 
     // Fetch collision impulse information
     const F32 normalImpulse1 = tickContact.mNormalImpulses[0];
@@ -1044,7 +1026,7 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
             normalImpulse2,
             tangentImpulse2 );
     }
-    else
+    else if ( pointCount == 1 )
     {
         dSprintf(pReturnBuffer, 128,
             "%d %d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
@@ -1055,6 +1037,13 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
             normalImpulse1,
             tangentImpulse1 );
     }
+	else
+	{
+        dSprintf(pReturnBuffer, 64,
+            "%d %d %d",
+            pSceneObjectCollider,
+            shapeIndexThis, shapeIndexCollider );
+	}
 
     return pReturnBuffer;
 }
@@ -1073,7 +1062,8 @@ ConsoleMethod(SceneObject, setCollisionMasks, void, 3, 4,    "(groupMask, [layer
     const U32 layerMask = (argc > 3) ? dAtoi(argv[3]) : MASK_ALL;
 
     // Set Collision Masks.
-    object->setCollisionMasks( groupMask, layerMask );
+    object->setCollisionGroupMask( groupMask );
+    object->setCollisionLayerMask( layerMask );
 }
 
 //-----------------------------------------------------------------------------
@@ -1117,122 +1107,164 @@ ConsoleMethod(SceneObject, setCollisionAgainst, void, 3, 4, "(SceneObject object
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setCollisionLayers, void, 3, 2 + MASK_BITCOUNT, "(layers$) - Sets the collision layers(s).\n"
-                                                                                  "@param layers A list of layers numbers to collide with.\n"
-                                                      "@return No return value.")
+ConsoleMethod(SceneObject, setCollisionLayers, void, 2, 2 + MASK_BITCOUNT,  "(layers) - Sets the collision layers(s).\n"
+                                                                            "@param layers A list of layers to collide with.\n"
+                                                                            "@return No return value.")
 {
-   // The mask.
-   U32 mask = 0;
+    // Set to all if no arguments.
+    if ( argc == 2 )
+    {
+        object->setCollisionLayerMask(MASK_ALL);
+        return;
+    }
 
-   // Grab the element count of the first parameter.
-   const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+    // Grab the element count of the first parameter.
+    const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
 
-   // Make sure we get at least one number.
-   if (elementCount < 1)
-   {
-      object->setCollisionLayers(0);
-      return;
-   }
+    // Make sure we get at least one number.
+    if (elementCount < 1)
+    {
+        object->setCollisionLayerMask(MASK_ALL);
+        return;
+    }
+    else if ( elementCount == 1 )
+    {
+        if ( dStricmp( argv[2], "all" ) == 0 )
+        {
+            object->setCollisionLayerMask(MASK_ALL);
+            return;
+        }
+        else if ( dStricmp( argv[2], "none" ) == 0 || dStricmp( argv[2], "off" ) == 0 )
+        {
+            object->setCollisionLayerMask(0);
+            return;
+        }
 
-   // Space separated list.
-   if (argc == 3)
-   {
-      // Convert the string to a mask.
-      for (U32 i = 0; i < elementCount; i++)
-      {
-         S32 bit = dAtoi(Utility::mGetStringElement(argv[2], i));
+        return;
+    }
+
+    // The mask.
+    U32 mask = 0;
+
+    // Space separated list.
+    if (argc == 3)
+    {
+        // Convert the string to a mask.
+        for (U32 i = 0; i < elementCount; i++)
+        {
+            S32 bit = dAtoi(Utility::mGetStringElement(argv[2], i));
          
-         // Make sure the group is valid.
-         if ((bit < 0) || (bit >= MASK_BITCOUNT))
-         {
+            // Make sure the group is valid.
+            if ((bit < 0) || (bit >= MASK_BITCOUNT))
+            {
             Con::warnf("SceneObject::setCollisionLayers() - Invalid layer specified (%d); skipped!", bit);
             continue;
-         }
+            }
          
-         mask |= (1 << bit);
-      }
-   }
+            mask |= (1 << bit);
+        }
+    }
 
-   // Comma separated list.
-   else
-   {
-      // Convert the list to a mask.
-      for (U32 i = 2; i < (U32)argc; i++)
-      {
-         S32 bit = dAtoi(argv[i]);
+    // Comma separated list.
+    else
+    {
+        // Convert the list to a mask.
+        for (U32 i = 2; i < (U32)argc; i++)
+        {
+            S32 bit = dAtoi(argv[i]);
          
-         // Make sure the group is valid.
-         if ((bit < 0) || (bit >= MASK_BITCOUNT))
-         {
+            // Make sure the group is valid.
+            if ((bit < 0) || (bit >= MASK_BITCOUNT))
+            {
             Con::warnf("SceneObject::setCollisionLayers() - Invalid layer specified (%d); skipped!", bit);
             continue;
-         }
+            }
 
-         mask |= (1 << bit);
-      }
-   }
-   // Set Collision Groups.
-   object->setCollisionLayers(mask);
+            mask |= (1 << bit);
+        }
+    }
+    // Set Collision Layers
+    object->setCollisionLayerMask(mask);
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setCollisionGroups, void, 3, 2 + MASK_BITCOUNT, "(groups$) - Sets the collision group(s).\n"
-                                                                                  "@param groups A list of collision group numbers to collide with.\n"
-                                                                                "@return No return value.")
+ConsoleMethod(SceneObject, setCollisionGroups, void, 2, 2 + MASK_BITCOUNT,  "(groups) - Sets the collision group(s).\n"
+                                                                            "@param groups A list of collision groups to collide with.\n"
+                                                                            "@return No return value.")
 {
-   // The mask.
-   U32 mask = 0;
+    // Set to all if no arguments.
+    if ( argc == 2 )
+    {
+        object->setCollisionGroupMask(MASK_ALL);
+        return;
+    }
 
-   // Grab the element count of the first parameter.
-   const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+    // Grab the element count of the first parameter.
+    const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
 
-   // Make sure we get at least one number.
-   if (elementCount < 1)
-   {
-      object->setCollisionGroups(0);
-      return;
-   }
+    // Make sure we get at least one number.
+    if (elementCount < 1)
+    {
+        object->setCollisionGroupMask(MASK_ALL);
+        return;
+    }
+    else if ( elementCount == 1 )
+    {
+        if ( dStricmp( argv[2], "all" ) == 0 )
+        {
+            object->setCollisionGroupMask(MASK_ALL);
+            return;
+        }
+        else if ( dStricmp( argv[2], "none" ) == 0 || dStricmp( argv[2], "off" ) == 0 )
+        {
+            object->setCollisionGroupMask(0);
+            return;
+        }
+    }
 
-   // Space separated list.
-   if (argc == 3)
-   {
-      // Convert the string to a mask.
-      for (U32 i = 0; i < elementCount; i++)
-      {
-         S32 bit = dAtoi(Utility::mGetStringElement(argv[2], i));
+    // The mask.
+    U32 mask = 0;
+
+    // Space separated list.
+    if (argc == 3)
+    {
+        // Convert the string to a mask.
+        for (U32 i = 0; i < elementCount; i++)
+        {
+            S32 bit = dAtoi(Utility::mGetStringElement(argv[2], i));
          
-         // Make sure the group is valid.
-         if ((bit < 0) || (bit >= MASK_BITCOUNT))
-         {
+            // Make sure the group is valid.
+            if ((bit < 0) || (bit >= MASK_BITCOUNT))
+            {
             Con::warnf("SceneObject::setCollisionGroups() - Invalid group specified (%d); skipped!", bit);
             continue;
-         }
+            }
          
-         mask |= (1 << bit);
-      }
-   }
+            mask |= (1 << bit);
+        }
+    }
 
-   // Comma separated list.
-   else
-   {
-      // Convert the list to a mask.
-      for (U32 i = 2; i < (U32)argc; i++)
-      {
-         S32 bit = dAtoi(argv[i]);
+    // Comma separated list.
+    else
+    {
+        // Convert the list to a mask.
+        for (U32 i = 2; i < (U32)argc; i++)
+        {
+            S32 bit = dAtoi(argv[i]);
          
-         // Make sure the group is valid.
-         if ((bit < 0) || (bit >= MASK_BITCOUNT))
-         {
+            // Make sure the group is valid.
+            if ((bit < 0) || (bit >= MASK_BITCOUNT))
+            {
             Con::warnf("SceneObject::setCollisionGroups() - Invalid group specified (%d); skipped!", bit);
             continue;
-         }
+            }
 
-         mask |= (1 << bit);
-      }
-   }
-   // Set Collision Groups.
-   object->setCollisionGroups(mask);
+            mask |= (1 << bit);
+        }
+    }
+    // Set Collision Groups.
+    object->setCollisionGroupMask(mask);
 }
 
 //-----------------------------------------------------------------------------
@@ -1240,23 +1272,23 @@ ConsoleMethod(SceneObject, setCollisionGroups, void, 3, 2 + MASK_BITCOUNT, "(gro
 ConsoleMethod(SceneObject, getCollisionLayers, const char*, 2, 2, "() - Gets the collision layers.\n"
                                                                      "@return (collisionLayers) A list of collision layers.")
 {
-   U32 mask = object->getCollisionLayerMask();
+    U32 mask = object->getCollisionLayerMask();
 
-   bool first = true;
-   char* bits = Con::getReturnBuffer(128);
-   bits[0] = '\0';
-   for (S32 i = 0; i < MASK_BITCOUNT; i++)
-   {
-      if (mask & BIT(i))
-      {
-         char bit[4];
-         dSprintf(bit, 4, "%s%d", first ? "" : " ", i);
-         first = false;
-         dStrcat(bits, bit);
-      }
-   }
+    bool first = true;
+    char* bits = Con::getReturnBuffer(128);
+    bits[0] = '\0';
+    for (S32 i = 0; i < MASK_BITCOUNT; i++)
+    {
+        if (mask & BIT(i))
+        {
+            char bit[4];
+            dSprintf(bit, 4, "%s%d", first ? "" : " ", i);
+            first = false;
+            dStrcat(bits, bit);
+        }
+    }
 
-   return bits;
+    return bits;
 }
 
 //-----------------------------------------------------------------------------
@@ -1264,23 +1296,23 @@ ConsoleMethod(SceneObject, getCollisionLayers, const char*, 2, 2, "() - Gets the
 ConsoleMethod(SceneObject, getCollisionGroups, const char*, 2, 2, "() - Gets the collision groups.\n"
                                                                      "@return (collisionGroups) A list of collision groups.")
 {
-   U32 mask = object->getCollisionGroupMask();
+    U32 mask = object->getCollisionGroupMask();
 
-   bool first = true;
-   char* bits = Con::getReturnBuffer(128);
-   bits[0] = '\0';
-   for (S32 i = 0; i < MASK_BITCOUNT; i++)
-   {
-      if (mask & BIT(i))
-      {
-         char bit[4];
-         dSprintf(bit, 4, "%s%d", first ? "" : " ", i);
-         first = false;
-         dStrcat(bits, bit);
-      }
-   }
+    bool first = true;
+    char* bits = Con::getReturnBuffer(128);
+    bits[0] = '\0';
+    for (S32 i = 0; i < MASK_BITCOUNT; i++)
+    {
+        if (mask & BIT(i))
+        {
+            char bit[4];
+            dSprintf(bit, 4, "%s%d", first ? "" : " ", i);
+            first = false;
+            dStrcat(bits, bit);
+        }
+    }
 
-   return bits;
+    return bits;
 }
 
 //-----------------------------------------------------------------------------
@@ -1610,13 +1642,13 @@ ConsoleMethod(SceneObject, getAngularDamping, F32, 2, 2, "() - Gets the angular 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, moveTo, bool, 3, 7,  "(worldPoint X/Y, [time = 1000], [autoStop = true], [warpToTarget = true]) - Moves the object to the specified world point.\n"
+ConsoleMethod(SceneObject, moveTo, bool, 4, 7,  "(worldPoint X/Y, speed, [autoStop = true], [warpToTarget = true]) - Moves the object to the specified world point.\n"
                                                 "The point is moved by calculating the initial linear velocity required and applies it.\n"
                                                 "The object may never reach the point if it has linear damping applied or collides with another object.\n"
-                                                "@param worldPoint/Y - The world point to move the object to.\n"
-                                                "@param time - The time (milliseconds) taken to move the object to the specified point."
-                                                "@param autoStop? - Whether to automatically set the linear velocity to zero when time has elapsed or not\n"
-                                                "@param warpToTarget? - Whether to move instantly to the target point after the specified time or not in-case the target was not quite reached.\n"
+                                                "@param worldPoint/Y The world point to move the object to.\n"
+                                                "@param speed The speed (in m/s) to use to move to the specified point."
+                                                "@param autoStop? Whether to automatically set the linear velocity to zero when time has elapsed or not\n"
+                                                "@param warpToTarget? Whether to move instantly to the target point after the specified time or not in-case the target was not quite reached.\n"
                                                 "@return Whether the move could be started or not.")
 {
     // World point.
@@ -1641,17 +1673,12 @@ ConsoleMethod(SceneObject, moveTo, bool, 3, 7,  "(worldPoint X/Y, [time = 1000],
         return false;
     }
 
-    if ( argc <= nextArg )
-    {
-        return object->moveTo( worldPoint );
-    }
-
-    // Time.
-    const U32 time = dAtoi(argv[nextArg++]);
+    // Speed.
+    const F32 speed = dAtof(argv[nextArg++]);
 
     if ( argc <= nextArg )
     {
-        return object->moveTo( worldPoint, time );
+        return object->moveTo( worldPoint, speed );
     }
 
     // Auto stop?
@@ -1659,40 +1686,35 @@ ConsoleMethod(SceneObject, moveTo, bool, 3, 7,  "(worldPoint X/Y, [time = 1000],
 
     if ( argc <= nextArg )
     {
-        return object->moveTo( worldPoint, time, autoStop );
+        return object->moveTo( worldPoint, speed, autoStop );
     }
 
     // Warp to target?
     const bool warpToTarget = dAtob(argv[nextArg++]);
 
-    return object->moveTo( worldPoint, time, autoStop, warpToTarget );
+    return object->moveTo( worldPoint, speed, autoStop, warpToTarget );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, rotateTo, bool, 3, 6,    "(angle, [time = 1000], [autoStop = true], [warpToTarget = true]) - Rotates the object to the specified angle.\n"
+ConsoleMethod(SceneObject, rotateTo, bool, 4, 6,    "(angle, speed, [autoStop = true], [warpToTarget = true]) - Rotates the object to the specified angle.\n"
                                                     "The angle is rotated to by calculating the initial angular velocity required and applies it.\n"
                                                     "The object may never reach the point if it has angular damping applied or collides with another object.\n"
-                                                    "@param angle- The angle to rotate the object to.\n"
-                                                    "@param time - The time (milliseconds) taken to rotate the object to the specified angle."
-                                                    "@param autoStop? - Whether to automatically set the angular velocity to zero when time has elapsed or not\n"
-                                                    "@param warpToTarget? - Whether to rotate instantly to the target angle after the specified time or not in-case the target was not quite reached.\n"
+                                                    "@param angle The angle to rotate the object to.\n"
+                                                    "@param speed The speed (in degree/s) to use to rotate to the specified angle."
+                                                    "@param autoStop? Whether to automatically set the angular velocity to zero when time has elapsed or not\n"
+                                                    "@param warpToTarget? Whether to rotate instantly to the target angle after the specified time or not in-case the target was not quite reached.\n"
                                                     "@return Whether the rotation could be started or not.")
 {
     // Fetch angle.
     const F32 angle = mDegToRad(dAtof(argv[2]));
 
-    if ( argc == 3 )
-    {
-        return object->rotateTo( angle );
-    }
-
-    // Time.
-    const U32 time = dAtoi(argv[3]);
+    // Speed.
+    const F32 speed = mDegToRad(dAtof(argv[3]));
 
     if ( argc == 4 )
     {
-        return object->rotateTo( angle, time );
+        return object->rotateTo( angle, speed );
     }
 
     // Auto stop?
@@ -1700,13 +1722,13 @@ ConsoleMethod(SceneObject, rotateTo, bool, 3, 6,    "(angle, [time = 1000], [aut
 
     if ( argc == 5 )
     {
-        return object->rotateTo( angle, time, autoStop );
+        return object->rotateTo( angle, speed, autoStop );
     }
 
     // Warp to target.
     const bool warpToTarget = dAtob(argv[5]);
 
-    return object->rotateTo( angle, time, autoStop, warpToTarget );
+    return object->rotateTo( angle, speed, autoStop, warpToTarget );
 
 }
 
@@ -2383,13 +2405,23 @@ ConsoleMethod( SceneObject, createPolygonCollisionShape, S32, 3, 3,  "(localPoin
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, createPolygonBoxCollisionShape, S32, 3, 7,  "(width, height, [localCentroidX, localCentroidY], [angle]) Creates a polygon box collision shape.\n"
+ConsoleMethod( SceneObject, createPolygonBoxCollisionShape, S32, 2, 7,  "(width, height, [localCentroidX, localCentroidY], [angle]) Creates a polygon box collision shape.\n"
                                                                             "@param width The width of the box."
                                                                             "@param height The height of the box."
                                                                             "@param localCentroidX/Y The local position of the box centroid."
                                                                             "@param angle The angle of the box."
                                                                             "@return (int shapeIndex) The index of the collision shape or (-1) if not created.")
 {
+    // Were any dimensions specified?
+    if( argc == 2 )
+    {
+        // No, so fetch the objects size.
+        const Vector2& size = object->getSize();
+
+        // Create a box surrounding the object.
+        return object->createPolygonBoxCollisionShape( size.x, size.y );
+    }
+
     // Width and height.
     const U32 widthHeightElementCount = Utility::mGetStringElementCount(argv[2]);
 
@@ -3283,14 +3315,25 @@ ConsoleMethod(SceneObject, setBlendColor, void, 3, 6,   "(float red, float green
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getBlendColor, const char*, 2, 2, "Gets the Rendering Blend Colour.\n"
+ConsoleMethod(SceneObject, getBlendColor, const char*, 2, 3,    "(allowColorNames) Gets the Rendering Blend color.\n"
+                                                                "@param allowColorNames Whether to allow stock color names to be returned or not.  Optional: Defaults to false.\n"
                                                                 "@return (float red / float green / float blue / float alpha) The sprite blend color.")
 {
-    // Get Blend Colour.
+    // Get Blend color.
     ColorF blendColor = object->getBlendColor();
 
-    // Fetch the field value.
-    return Con::getData( TypeColorF, &blendColor, 0 );
+    // Fetch allow color names flag.
+    const bool allowColorNames = (argc > 2) ? dAtob(argv[2] ) : false;
+
+    // Are color names allowed?
+    if ( allowColorNames )
+    {
+        // Yes, so fetch the field value.
+        return Con::getData( TypeColorF, &blendColor, 0 );
+    }
+
+    // No, so fetch the raw color values.
+    return blendColor.scriptThis();
 }
 
 //-----------------------------------------------------------------------------
@@ -3681,18 +3724,6 @@ ConsoleMethod(SceneObject, detachGui, void, 2, 2, "() - Detach any GUI Control.\
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getAttachedToPath, S32, 2, 2, "() - Gets the Path that this object is attached to.\n"
-                                                            "@return (Path path) The path that this object is attached to, or 0 if it is not attached to a path.")
-{
-   SceneObject* path = object->getAttachedToPath();
-   if (path)
-      return path->getId();
-   
-   return NULL;
-}
-
-//-----------------------------------------------------------------------------
-
 ConsoleMethod(SceneObject, copyFrom, bool, 3, 4, "(SceneObject object, [copyDynamicFields? = false]) - Copies one scene object from another scene object.\n"
                                                     "The object being copied to needs to be of the same class as the object being copied from.\n"
                                                     "@param object The SceneObject to copy this object to.\n"
@@ -3721,6 +3752,26 @@ ConsoleMethod(SceneObject, copyFrom, bool, 3, 4, "(SceneObject object, [copyDyna
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(SceneObject, setPickingAllowed, void, 3, 3,   "(bool pickingAllowed) - Sets whether picking is allowed or not.\n"
+                                                            "@param pickingAllowed Whether picking is allowed or not.\n"
+                                                            "@return No return Value.")
+{
+    // Fetch flag.
+    const bool pickingAllowed = dAtob(argv[2]);
+
+    object->setPickingAllowed( pickingAllowed );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SceneObject, getPickingAllowed, bool, 2, 2,   "() - Gets whether picking is allowed or not.\n"
+                                                            "@return Whether picking is allowed or not.")
+{
+    return object->getPickingAllowed();
+}
+
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(SceneObject, safeDelete, void, 2, 2, "() - Safely deletes object.\n"
                                                                  "@return No return Value.")
 {
@@ -3728,56 +3779,3 @@ ConsoleMethod(SceneObject, safeDelete, void, 2, 2, "() - Safely deletes object.\
     object->safeDelete();
 }
 
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(SceneObject, setTimerOn, void, 3, 3, "(float timePeriod) - Starts a periodic timer for this object.\n"
-                                                      "Sets a timer on the object that, when it expires, will cause the object to execute the onTimer() callback.\n"
-                                                      "The timer event will continue to occur at regular intervals until setTimerOff() is called.\n"
-                                                      "@param timePeriod The period of time, in milliseconds, between each callback.\n"
-                                                    "@return No return Value.")
-{
-    // Is the periodic timer running?
-    if ( object->getPeriodicTimerID() != 0 )
-    {
-        // Yes, so cancel it.
-        Sim::cancelEvent( object->getPeriodicTimerID() );
-
-        // Reset Timer ID.
-        object->setPeriodicTimerID( 0 );
-    }
-
-    // Fetch Time-Delta.
-    U32 timeDelta = U32(dAtof(argv[2]));
-
-    // Create Timer Event.
-    SceneObjectTimerEvent* pEvent = new SceneObjectTimerEvent( timeDelta );
-
-    // Post Event.
-    object->setPeriodicTimerID( Sim::postEvent( object, pEvent, Sim::getCurrentTime() + timeDelta ) );
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(SceneObject, setTimerOff, void, 2, 2, "() - Stops the periodic timer for this object.\n"
-                                                                 "@return No return Value.")
-{
-    // Finish if the periodic timer isn't running.
-    if ( object->getPeriodicTimerID() == 0 )
-        return;
-
-    // Cancel It.
-    Sim::cancelEvent( object->getPeriodicTimerID() );
-
-    // Reset Timer ID.
-    object->setPeriodicTimerID( 0 );
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(SceneObject, behavior, S32, 3, 3, "(string behaviorName) - Gets the behavior instance ID off of the object based on the behavior name passed.\n"
-                                                   "@param behaviorName The name of the behavior you want to get the instance ID of.\n"
-                                                   "@return (integer behaviorID) The id of the behavior instance.")
-{
-   BehaviorInstance *inst = object->behavior(argv[2]);
-   return inst ? inst->getId() : 0;
-}

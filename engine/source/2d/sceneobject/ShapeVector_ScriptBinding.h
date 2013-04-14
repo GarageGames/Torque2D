@@ -93,30 +93,97 @@ ConsoleMethod(ShapeVector, getWorldPoly, const char*, 2, 2, "() Gets Polygon poi
 
 //----------------------------------------------------------------------------
 
-ConsoleMethod(ShapeVector, setLineColour, void, 3, 3, "(R / G / B / [A]) Sets the Rendering Line Color (identical to setLineColor).\n"
-              "@param R/G/B/[A] Color values (0.0f - 1.0f) formatted as (\"Red Green Blue [Alpha]\"). Alpha is optional.\n"
-              "@return No return value.")
+ConsoleMethod(ShapeVector, setLineColor, void, 3, 6,    "(float red, float green, float blue, [float alpha = 1.0]) or ( stockColorName ) - Sets the line color."
+                                                        "@param red The red value.\n"
+                                                        "@param green The green value.\n"
+                                                        "@param blue The blue value.\n"
+                                                        "@param alpha The alpha value.\n"
+                                                        "@return No return Value.")
 {
-    // Set Line Color.
-    object->setLineColorString( argv[2] );
+    // The colors.
+    F32 red;
+    F32 green;
+    F32 blue;
+    F32 alpha = 1.0f;
+
+    // Space separated.
+    if (argc == 3 )
+    {
+        // Grab the element count.
+        const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+
+        // Has a single argument been specified?
+        if ( elementCount == 1 )
+        {
+            // Set color.
+            Con::setData( TypeColorF, &const_cast<ColorF&>(object->getBlendColor()), 0, 1, &(argv[2]) );
+            return;
+        }
+
+        // ("R G B [A]")
+        if ((elementCount == 3) || (elementCount == 4))
+        {
+            // Extract the color.
+            red   = dAtof(Utility::mGetStringElement(argv[2], 0));
+            green = dAtof(Utility::mGetStringElement(argv[2], 1));
+            blue  = dAtof(Utility::mGetStringElement(argv[2], 2));
+
+            // Grab the alpha if it's there.
+            if (elementCount > 3)
+                alpha = dAtof(Utility::mGetStringElement(argv[2], 3));
+        }
+
+        // Invalid.
+        else
+        {
+            Con::warnf("ShapeVector::setLineColor() - Invalid Number of parameters!");
+            return;
+        }
+    }
+
+    // (R, G, B)
+    else if (argc >= 5)
+    {
+        red   = dAtof(argv[2]);
+        green = dAtof(argv[3]);
+        blue  = dAtof(argv[4]);
+
+        // Grab the alpha if it's there.
+        if (argc > 5)
+            alpha = dAtof(argv[5]);
+    }
+
+    // Invalid.
+    else
+    {
+        Con::warnf("ShapeVector::setLineColor() - Invalid Number of parameters!");
+        return;
+    }
+
+    object->setLineColor( ColorF(red, green, blue, alpha) );
 }
 
 //----------------------------------------------------------------------------
 
-ConsoleMethod(ShapeVector, setLineColor, void, 3, 3, "(R / G / B / [A]) - Sets the Rendering Line Color(identical to setLineColor).\n"
-              "@param R/G/B/[A] Color values (0.0f - 1.0f) formatted as (\"Red Green Blue [Alpha]\"). Alpha is optional.\n"
-              "@return No return value.")
+ConsoleMethod(ShapeVector, getLineColor, const char*, 2, 3,     "(allowColorNames) Gets the fill color.\n"
+                                                                "@param allowColorNames Whether to allow stock color names to be returned or not.  Optional: Defaults to false.\n"
+                                                                "@return (float red / float green / float blue / float alpha) The sprite blend color.")
 {
-    // Set Line Color.
-    object->setLineColorString( argv[2] );
-}
+    // Get line color.
+    ColorF color = object->getLineColor();
 
-//----------------------------------------------------------------------------
+    // Fetch allow color names flag.
+    const bool allowColorNames = (argc > 2) ? dAtob(argv[2] ) : false;
 
-ConsoleMethod(ShapeVector, getLineColor, const char*, 2, 2, "() Gets the Rendering Line Color.\n"
-              "@return Returns the fill color as a string formatted with \"Red Green Blue Alpha\"")
-{
-    return object->getLineColor();
+    // Are color names allowed?
+    if ( allowColorNames )
+    {
+        // Yes, so fetch the field value.
+        return Con::getData( TypeColorF, &color, 0 );
+    }
+
+    // No, so fetch the raw color values.
+    return color.scriptThis();
 }
 
 //----------------------------------------------------------------------------
@@ -131,31 +198,97 @@ ConsoleMethod(ShapeVector, setLineAlpha, void, 3, 3, "(alpha) Sets the Rendering
 
 //----------------------------------------------------------------------------
 
-ConsoleMethod(ShapeVector, setFillColour, void, 3, 3, "(R / G / B / [A]) Sets the Rendering Fill Color (identical to setFillColor).\n"
-              "@param R/G/B/[A] Color values (0.0f - 1.0f) formatted as (\"Red Green Blue [Alpha]\"). Alpha is optional.\n"
-              "@return No return value."
-              )
+ConsoleMethod(ShapeVector, setFillColor, void, 3, 3,    "(float red, float green, float blue, [float alpha = 1.0]) or ( stockColorName ) - Sets the fill color."
+                                                        "@param red The red value.\n"
+                                                        "@param green The green value.\n"
+                                                        "@param blue The blue value.\n"
+                                                        "@param alpha The alpha value.\n"
+                                                        "@return No return Value.")
 {
-    // Set Fill Color.
-    object->setLineColorString( argv[2] );
+    // The colors.
+    F32 red;
+    F32 green;
+    F32 blue;
+    F32 alpha = 1.0f;
+
+    // Space separated.
+    if (argc == 3 )
+    {
+        // Grab the element count.
+        const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+
+        // Has a single argument been specified?
+        if ( elementCount == 1 )
+        {
+            // Set color.
+            Con::setData( TypeColorF, &const_cast<ColorF&>(object->getBlendColor()), 0, 1, &(argv[2]) );
+            return;
+        }
+
+        // ("R G B [A]")
+        if ((elementCount == 3) || (elementCount == 4))
+        {
+            // Extract the color.
+            red   = dAtof(Utility::mGetStringElement(argv[2], 0));
+            green = dAtof(Utility::mGetStringElement(argv[2], 1));
+            blue  = dAtof(Utility::mGetStringElement(argv[2], 2));
+
+            // Grab the alpha if it's there.
+            if (elementCount > 3)
+                alpha = dAtof(Utility::mGetStringElement(argv[2], 3));
+        }
+
+        // Invalid.
+        else
+        {
+            Con::warnf("ShapeVector::setFillColor() - Invalid Number of parameters!");
+            return;
+        }
+    }
+
+    // (R, G, B)
+    else if (argc >= 5)
+    {
+        red   = dAtof(argv[2]);
+        green = dAtof(argv[3]);
+        blue  = dAtof(argv[4]);
+
+        // Grab the alpha if it's there.
+        if (argc > 5)
+            alpha = dAtof(argv[5]);
+    }
+
+    // Invalid.
+    else
+    {
+        Con::warnf("ShapeVector::setFillColor() - Invalid Number of parameters!");
+        return;
+    }
+
+    object->setFillColor( ColorF(red, green, blue, alpha) );
 }
 
 //----------------------------------------------------------------------------
 
-ConsoleMethod(ShapeVector, setFillColor, void, 3, 3, "(R / G / B / [A]) - Sets the Rendering Fill Color (identical to setFillColour).\n"
-              "@param R/G/B/[A] Color values (0.0f - 1.0f) formatted as (\"Red Green Blue [Alpha]\"). Alpha is optional.\n"
-              "@return No return value.")
+ConsoleMethod(ShapeVector, getFillColor, const char*, 2, 3,     "(allowColorNames) Gets the fill color.\n"
+                                                                "@param allowColorNames Whether to allow stock color names to be returned or not.  Optional: Defaults to false.\n"
+                                                                "@return (float red / float green / float blue / float alpha) The sprite blend color.")
 {
-    // Set Fill Color.
-    object->setFillColorString( argv[2] );
-}
+    // Get line color.
+    ColorF color = object->getFillColor();
 
-//----------------------------------------------------------------------------
+    // Fetch allow color names flag.
+    const bool allowColorNames = (argc > 2) ? dAtob(argv[2] ) : false;
 
-ConsoleMethod(ShapeVector, getFillColor, const char*, 2, 2, "() Gets the Rendering Fill Color.\n"
-              "@return Returns the fill color as a string formatted with \"Red Green Blue Alpha\"")
-{
-    return object->getFillColor();
+    // Are color names allowed?
+    if ( allowColorNames )
+    {
+        // Yes, so fetch the field value.
+        return Con::getData( TypeColorF, &color, 0 );
+    }
+
+    // No, so fetch the raw color values.
+    return color.scriptThis();
 }
 
 //----------------------------------------------------------------------------

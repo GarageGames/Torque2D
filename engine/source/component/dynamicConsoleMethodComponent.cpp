@@ -134,8 +134,6 @@ const char *DynamicConsoleMethodComponent::callOnBehaviors( U32 argc, const char
    pThis = dynamic_cast<SimObject *>( this );
    AssertFatal( pThis, "DynamicConsoleMethodComponent::callOnBehaviors : this should always exist!" );
 
-   const char *cbName = StringTable->insert(argv[0]);
-
    const char* result = "";
    bool handled = false;
 
@@ -144,7 +142,7 @@ const char *DynamicConsoleMethodComponent::callOnBehaviors( U32 argc, const char
       VectorPtr<SimComponent *>&componentList = lockComponentList();
       for( SimComponentIterator nItr = (componentList.end()-1);  nItr >= componentList.begin(); nItr-- )
       {
-         argv[0] = cbName;
+         argv[0] = StringTable->insert(argv[0]);
 
          SimComponent *pComponent = (*nItr);
          AssertFatal( pComponent, "DynamicConsoleMethodComponent::callOnBehaviors - NULL component in list!" );

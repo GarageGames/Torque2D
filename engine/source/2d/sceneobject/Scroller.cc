@@ -249,35 +249,12 @@ void Scroller::updateTickScrollPosition( void )
 void Scroller::sceneRender( const SceneRenderState* pSceneRenderState, const SceneRenderRequest* pSceneRenderRequest, BatchRender* pBatchRenderer )
 {
     // Finish if we can't render.
-    if ( !SpriteProxyBase::validRender() )
+    if ( !ImageFrameProvider::validRender() )
         return;
 
-    ImageAsset::FrameArea::TexelArea frameTexelArea;
-    TextureHandle texture;
-
-    // Static mode?
-    if ( isStaticMode() )
-    {
-        // Fetch frame texel area.
-        frameTexelArea = mImageAsset->getImageFrameArea( mImageFrame ).mTexelArea;
-
-        // Fetch asset texture.
-        texture = mImageAsset->getImageTexture();
-    }
-    else
-    {
-        // Fetch animation controller.
-        AnimationController* pAnimationController = getAnimationController();
-
-        // Sanity!
-        AssertFatal( pAnimationController != NULL, "Animation controller cannot be NULL." );
-      
-        // Fetch frame texel area.
-        frameTexelArea = pAnimationController->getCurrentImageFrameArea().mTexelArea;
-
-        // Fetch asset texture.
-        texture = pAnimationController->getImageTexture();
-    }
+    // Fetch texture and texture area.
+    const ImageAsset::FrameArea::TexelArea& frameTexelArea = getProviderImageFrameArea().mTexelArea;
+    TextureHandle& texture = getProviderTexture();
 
     // Calculate render offset.
     F32 renderOffsetX = mFmod( mRenderTickTextureOffset.x, 1.0f );

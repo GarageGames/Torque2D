@@ -183,7 +183,7 @@ bool ModuleManager::scanModules( const char* pPath, const bool rootOnly )
     Vector<StringTableEntry> directories;
 
     // Find directories.
-    if ( !Platform::dumpDirectories( pathBuffer, directories, 1 ) )
+    if ( !Platform::dumpDirectories( pathBuffer, directories, rootOnly ? 1 : -1 ) )
     {
         // Failed so warn.
         Con::warnf( "Module Manager: Failed to scan module directories in path '%s'.", pathBuffer );
@@ -293,8 +293,9 @@ bool ModuleManager::loadModuleGroup( const char* pModuleGroup )
         if ( mEchoInfo )
         {
             Con::printf( "Module Manager: No modules found for module group '%s'.", moduleGroup );
-            return true;
         }
+        
+        return true;
     }
 
     // Yes, so fetch the module Ids.
@@ -480,7 +481,7 @@ bool ModuleManager::unloadModuleGroup( const char* pModuleGroup )
     // Find the group loaded iterator.
     typeGroupVector::iterator groupLoadedItr = findGroupLoaded( moduleGroup );
 
-    // Is the module group already loaded?
+    // Is the module group already unloaded?
     if ( groupLoadedItr == NULL )
     {
         // No, so warn.
@@ -1262,8 +1263,8 @@ StringTableEntry ModuleManager::copyModule( ModuleDefinition* pSourceModuleDefin
             char parseFileBuffer[1024];
             dSprintf( parseFileBuffer, sizeof(parseFileBuffer), "%s/%s", pFileInfo->pFullPath, pFilename );
 
-            // Parse file.
-            if ( !moduleIdUpdateVisitor.parse( parseFileBuffer ) )
+            // Parse file.            
+            if ( !mTaml.parse( parseFileBuffer, moduleIdUpdateVisitor ) )
             {
                 // Warn.
                 Con::warnf("Module Manager: Failed to parse file '%s' whilst copying module Id '%s' using target directory '%s'.",
@@ -1835,6 +1836,39 @@ bool ModuleManager::removeModuleDefinition( ModuleDefinition* pModuleDefinition 
         // Delete module definition.
         pModuleDefinition->deleteObject();
 
+        // Are there any modules left for this module Id?
+        if ( findModuleId( moduleId ) == NULL )
+        {
+            bool moduleIdFound = false;
+
+            // No, so remove from groups.
+            for( typeGroupModuleHash::iterator moduleGroupItr = mGroupModules.begin(); moduleGroupItr != mGroupModules.end(); ++moduleGroupItr )
+            {
+                // Fetch module Ids.
+                typeModuleIdVector* pModuleIds = moduleGroupItr->value;
+
+                // Iterate module Id.
+                for( typeModuleIdVector::iterator moduleIdItr = pModuleIds->begin(); moduleIdItr != pModuleIds->end(); ++moduleIdItr )
+                {
+                    // Skip if this isn't the Id.
+                    if ( *moduleIdItr != moduleId )
+                        continue;
+
+                    // Remove the module Id.
+                    pModuleIds->erase( moduleIdItr );
+
+                    // Flag as found.
+                    moduleIdFound = true;
+
+                    break;
+                }
+
+                // Finish if found.
+                if ( moduleIdFound )
+                    break;
+            }
+        }
+
         return true;
     }
 
@@ -2038,11 +2072,12 @@ bool ModuleManager::registerModule( const char* pModulePath, const char* pModule
         for( typeModuleIdVector::iterator moduleIdItr = pModuleIds->begin(); moduleIdItr != pModuleIds->end(); ++moduleIdItr )
         {
             // Skip if this isn't the Id.
-            if ( *moduleIdItr == moduleId )
-            {
-                moduleIdFound = true;
-                break;
-            }
+            if ( *moduleIdItr != moduleId )
+                continue;
+
+            // Flag as found.
+            moduleIdFound = true;
+            break;
         }
 
         // Add if module Id was not found.
@@ -2095,6 +2130,31 @@ bool ModuleManager::registerModule( const char* pModulePath, const char* pModule
     }
 
     return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool ModuleManager::unregisterModule( const char* pModuleId, const U32 versionId )
+{
+    // Sanity!
+    AssertFatal( pModuleId != NULL, "A module Id cannot be NULL." );
+
+    // Fetch module Id.
+    StringTableEntry moduleId = StringTable->insert( pModuleId );
+
+    // Find the module definition.
+    ModuleDefinition* pModuleDefinition = findModule( pModuleId, versionId );
+
+    // Did we find the module definition?
+    if ( pModuleDefinition == NULL )
+    {
+        // No, so warn.
+        Con::warnf( "Module Manager: Cannot unregister module Id '%s' as it is not registered.", moduleId );
+        return false;
+    }
+
+    // Remove the module definition.
+    return removeModuleDefinition( pModuleDefinition );
 }
 
 //-----------------------------------------------------------------------------

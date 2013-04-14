@@ -33,13 +33,6 @@
 
 //-----------------------------------------------------------------------------
 
-#define BEHAVIOR_ID_FIELD_NAME                  "Id"
-#define BEHAVIOR_CUSTOMPROPERTY_NAME                "Behaviors"
-#define BEHAVIOR_CONNECTION_CUSTOMPROPERTY_NAME     "BehaviorConnections"
-#define BEHAVIOR_CONNECTION_TYPE_NAME           "Connection"
-
-//-----------------------------------------------------------------------------
-
 class BehaviorComponent : public DynamicConsoleMethodComponent
 {
     friend class BehaviorInterface;
@@ -88,8 +81,8 @@ protected:
     virtual const char* _callMethod( U32 argc, const char *argv[], bool callThis = true );
 
     /// Taml callbacks.
-    virtual void onTamlCustomWrite( TamlCustomProperties& customProperties );
-    virtual void onTamlCustomRead( const TamlCustomProperties& customProperties );
+    virtual void onTamlCustomWrite( TamlCustomNodes& customNodes );
+    virtual void onTamlCustomRead( const TamlCustomNodes& customNodes );
 
 private:
     void destroyBehaviorOutputConnections( BehaviorInstance* pOutputBehavior );

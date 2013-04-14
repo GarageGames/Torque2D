@@ -23,8 +23,20 @@
 #ifndef _DEBUG_STATS_H_
 #define _DEBUG_STATS_H_
 
+#ifndef _PROFILER_H_
+#include "debug/profiler.h"
+#endif
+
 #ifndef _TORQUE_TYPES_H_
 #include "platform\types.h"
+#endif
+
+#ifndef _PLATFORM_MEMORY_H_
+#include "platform/platformMemory.h"
+#endif
+
+#ifndef BOX2D_H
+#include "box2d/Box2D.h"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -69,8 +81,7 @@ public:
 
         // Batching.
         if ( batchTrianglesSubmitted > maxBatchTrianglesSubmitted ) maxBatchTrianglesSubmitted = batchTrianglesSubmitted;
-        if ( batchDrawCallsStrictSingle > maxBatchDrawCallsStrictSingle ) maxBatchDrawCallsStrictSingle = batchDrawCallsStrictSingle;
-        if ( batchDrawCallsStrictMultiple > maxBatchDrawCallsStrictMultiple ) maxBatchDrawCallsStrictMultiple = batchDrawCallsStrictMultiple;
+        if ( batchDrawCallsStrict > maxBatchDrawCallsStrict ) maxBatchDrawCallsStrict = batchDrawCallsStrict;
         if ( batchDrawCallsSorted > maxBatchDrawCallsSorted ) maxBatchDrawCallsSorted = batchDrawCallsSorted;
         if ( batchFlushes > maxBatchFlushes ) maxBatchFlushes = batchFlushes;
         if ( batchBlendStateFlush > maxBatchBlendStateFlush ) maxBatchBlendStateFlush = batchBlendStateFlush;
@@ -139,11 +150,8 @@ public:
         batchMaxVertexBuffer = 0;
         batchMaxTriangleDrawn = 0;
 
-        batchDrawCallsStrictSingle = 0;
-        maxBatchDrawCallsStrictSingle = 0;
-
-        batchDrawCallsStrictMultiple = 0;
-        maxBatchDrawCallsStrictMultiple = 0;
+        batchDrawCallsStrict = 0;
+        maxBatchDrawCallsStrict = 0;
 
         batchDrawCallsSorted = 0;
         maxBatchDrawCallsSorted = 0;
@@ -232,11 +240,8 @@ public:
     U32     batchMaxVertexBuffer;
     U32     batchMaxTriangleDrawn;
 
-    U32     batchDrawCallsStrictSingle;
-    U32     maxBatchDrawCallsStrictSingle;
-
-    U32     batchDrawCallsStrictMultiple;
-    U32     maxBatchDrawCallsStrictMultiple;
+    U32     batchDrawCallsStrict;
+    U32     maxBatchDrawCallsStrict;
 
     U32     batchDrawCallsSorted;
     U32     maxBatchDrawCallsSorted;

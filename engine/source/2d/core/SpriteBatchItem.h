@@ -23,16 +23,8 @@
 #ifndef _SPRITE_BATCH_ITEM_H_
 #define _SPRITE_BATCH_ITEM_H_
 
-#ifndef _SPRITE_PROXY_BASE_H_
-#include "2d/core/SpriteProxyBase.h"
-#endif
-
-#ifndef _SIM_OBJECT_PTR_H_
-#include "sim/simObjectPtr.h"
-#endif
-
-#ifndef _FACTORY_CACHE_H_
-#include "memory/factoryCache.h"
+#ifndef _IMAGE_FRAME_PROVIDER_H
+#include "2d/core/imageFrameProvider.h"
 #endif
 
 //------------------------------------------------------------------------------  
@@ -42,11 +34,15 @@ class SceneRenderRequest;
 
 //------------------------------------------------------------------------------  
 
-class SpriteBatchItem : public SpriteProxyBase
+extern StringTableEntry spritesItemTypeName;
+
+//------------------------------------------------------------------------------  
+
+class SpriteBatchItem : public ImageFrameProvider
 {
     friend class SpriteBatch;
 
-    typedef SpriteProxyBase Parent;
+    typedef ImageFrameProvider Parent;
 
 public:
     // Represents a logical position.
@@ -223,6 +219,10 @@ protected:
     Vector2             mRenderPosition;
     U32                 mLastBatchTransformId;
 
+    U32                 mSpriteBatchQueryKey;
+
+    void*               mUserData;
+
 public:
     SpriteBatchItem();
     virtual ~SpriteBatchItem();
@@ -282,10 +282,21 @@ public:
     inline void setDataObject( SimObject* pDataObject ) { mDataObject = pDataObject; }
     inline SimObject* getDataObject( void ) const { return mDataObject; }
 
+    inline void setUserData( void* pUserData ) { mUserData = pUserData; }
+    inline void* getUserData( void ) const { return mUserData; }
+    template<class T> T* getUserData( void ) const { return (T*)mUserData; }
+
+    inline void setSpriteBatchQueryKey( const U32 key ) { mSpriteBatchQueryKey = key; }
+    inline U32  getSpriteBatchQueryKey( void ) const { return mSpriteBatchQueryKey; }
+
     virtual void copyTo( SpriteBatchItem* pSpriteBatchItem ) const;
+
+    inline const Vector2* getRenderOOBB( void ) const { return mRenderOOBB; }
 
     void prepareRender( SceneRenderRequest* pSceneRenderRequest, const U32 batchTransformId );
     void render( BatchRender* pBatchRenderer, const SceneRenderRequest* pSceneRenderRequest, const U32 batchTransformId );
+
+    static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement );
 
 protected:
     void setBatchParent( SpriteBatch* pSpriteBatch, const U32 batchId );
@@ -294,8 +305,8 @@ protected:
     void updateLocalTransform( void );
     void updateWorldTransform( const U32 batchTransformId );
 
-    void onTamlCustomWrite( TamlPropertyAlias* pSpriteAlias );
-    void onTamlCustomRead( const TamlPropertyAlias* pSpriteAlias );
+    void onTamlCustomWrite( TamlCustomNode* pParentNode );
+    void onTamlCustomRead( const TamlCustomNode* pSpriteNode );
 };
 
 //------------------------------------------------------------------------------  

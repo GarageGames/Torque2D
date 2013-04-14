@@ -850,7 +850,126 @@ ConsoleMethod(SceneWindow, getRenderGroupMask, S32, 2, 2, "() - Gets the group m
               "@returns The bit mask corresponding to the groups which are to be rendered")
 {
    return object->getRenderGroupMask();
-} 
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SceneWindow, setBackgroundColor, void, 3, 6,  "(float red, float green, float blue, [float alpha = 1.0]) or ( stockColorName )  - Sets the background color for the scene."
+                                                            "@param red The red value.\n"
+                                                            "@param green The green value.\n"
+                                                            "@param blue The blue value.\n"
+                                                            "@param alpha The alpha value.\n"
+                                                            "@return No return Value.")
+{
+    // The colors.
+    F32 red;
+    F32 green;
+    F32 blue;
+    F32 alpha = 1.0f;
+
+    // Space separated.
+    if (argc == 3)
+    {
+        // Grab the element count.
+        const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+
+        // Has a single argument been specified?
+        if ( elementCount == 1 )
+        {
+            object->setDataField( StringTable->insert("BackgroundColor"), NULL, argv[2] );
+            return;
+        }
+
+        // ("R G B [A]")
+        if ((elementCount == 3) || (elementCount == 4))
+        {
+            // Extract the color.
+            red   = dAtof(Utility::mGetStringElement(argv[2], 0));
+            green = dAtof(Utility::mGetStringElement(argv[2], 1));
+            blue  = dAtof(Utility::mGetStringElement(argv[2], 2));
+
+            // Grab the alpha if it's there.
+            if (elementCount > 3)
+                alpha = dAtof(Utility::mGetStringElement(argv[2], 3));
+        }
+
+        // Invalid.
+        else
+        {
+            Con::warnf("SceneWindow::setBackgroundColor() - Invalid Number of parameters!");
+            return;
+        }
+    }
+
+    // (R, G, B)
+    else if (argc >= 5)
+    {
+        red   = dAtof(argv[2]);
+        green = dAtof(argv[3]);
+        blue  = dAtof(argv[4]);
+
+        // Grab the alpha if it's there.
+        if (argc > 5)
+            alpha = dAtof(argv[5]);
+    }
+
+    // Invalid.
+    else
+    {
+        Con::warnf("SceneWindow::setBackgroundColor() - Invalid Number of parameters!");
+        return;
+    }
+
+    // Set background color.
+    object->setBackgroundColor(ColorF(red, green, blue, alpha) );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SceneWindow, getBackgroundColor, const char*, 2, 2,   "Gets the background color for the scene.\n"
+                                                                    "@return (float red / float green / float blue / float alpha) The background color for the scene.")
+{
+    // Get the background color.
+    const ColorF& color = object->getBackgroundColor();
+
+    // Fetch color name.
+    StringTableEntry colorName = StockColor::name( color );
+
+    // Return the color name if it's valid.
+    if ( colorName != StringTable->EmptyString )
+        return colorName;
+
+    // Create Returnable Buffer.
+    char* pBuffer = Con::getReturnBuffer(64);
+
+    // Format Buffer.
+    dSprintf(pBuffer, 64, "%g %g %g %g", color.red, color.green, color.blue, color.alpha );
+
+    // Return buffer.
+    return pBuffer;
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SceneWindow, setUseBackgroundColor, void, 3, 3,   "Sets whether to use the scene background color or not.\n"
+                                                                "@param useBackgroundColor Whether to use the scene background color or not.\n"
+                                                                "@return No return value." )
+{
+    // Fetch flag.
+    const bool useBackgroundColor = dAtob(argv[2]);
+
+    // Set the flag.
+    object->setUseBackgroundColor( useBackgroundColor );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SceneWindow, getUseBackgroundColor, bool, 2, 2,   "Gets whether the scene background color is in use or not.\n"
+                                                                "@return Whether the scene background color is in use or not." )
+{
+    // Get the flag.
+    return object->getUseBackgroundColor();
+}
 
 //-----------------------------------------------------------------------------
 
@@ -1023,6 +1142,52 @@ ConsoleMethod(SceneWindow, setObjectInputEventFilter, void, 4, 5, "(groupMask, l
 ConsoleMethod(SceneWindow, setObjectInputEventInvisibleFilter, void, 3, 3, "(bool useInvisibleFilter) Sets whether invisible objects should be filtered for input events or not.")
 {
    object->setObjectInputEventInvisibleFilter(dAtob(argv[2]));
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SceneWindow, addInputListener, bool, 3, 3,    "(inputListener) Adds an object as an input listener.\n"
+                                                            "@param inputListener The object to add as an input listener.\n"
+                                                            "@return Whether the object was added as an input event listener or not.")
+{
+    // Find the SimObject
+    SimObject* pSimObject = Sim::findObject( argv[2] );
+
+    // Did we find the SimObject?
+    if ( pSimObject == NULL )
+    {
+        // No, so warn.
+        Con::warnf( "SceneWindow::addInputListener() - Could not find the object '%s' to add as an input event listener.", argv[2] );
+        return false;
+    }
+
+    // Add input listener.
+    object->addInputListener( pSimObject );
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SceneWindow, removeInputListener, bool, 3, 3, "(inputListener) Removes an object from being an input listener.\n"
+                                                            "@param inputListener The object to remove as an input listener.\n"
+                                                            "@return Whether the object was removed as an input event listener or not.")
+{
+    // Find the SimObject
+    SimObject* pSimObject = Sim::findObject( argv[2] );
+
+    // Did we find the SimObject?
+    if ( pSimObject == NULL )
+    {
+        // No, so warn.
+        Con::warnf( "SceneWindow::removeInputListener() - Could not find the object '%s' to remove from being an input event listener.", argv[2] );
+        return false;
+    }
+
+    // Remove input listener.
+    object->removeInputListener( pSimObject );
+
+    return true;
 }
 
 //-----------------------------------------------------------------------------

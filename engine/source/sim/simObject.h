@@ -284,6 +284,9 @@ private:
 
     StringTableEntry    mProgenitorFile;
 
+    S32 mPeriodicTimerID;
+
+
     /// @name Notification
     /// @{
     Notify*     mNotifyList;
@@ -318,10 +321,10 @@ protected:
     virtual void onTamlPreWrite( void ) {}
     virtual void onTamlPostWrite( void ) {}
     virtual void onTamlPreRead( void ) {}
-    virtual void onTamlPostRead( const TamlCustomProperties& customProperties ) {}
+    virtual void onTamlPostRead( const TamlCustomNodes& customNodes ) {}
     virtual void onTamlAddParent( SimObject* pParentObject ) {}
-    virtual void onTamlCustomWrite( TamlCustomProperties& customProperties ) {}
-    virtual void onTamlCustomRead( const TamlCustomProperties& customProperties ) {}
+    virtual void onTamlCustomWrite( TamlCustomNodes& customNodes ) {}
+    virtual void onTamlCustomRead( const TamlCustomNodes& customNodes ) {}
     
 protected:
     bool	mCanSaveFieldDictionary; ///< true if dynamic fields (added at runtime) should be saved, defaults to true
@@ -450,7 +453,7 @@ public:
     //from the console or C++.
     virtual void			dumpClassHierarchy();
     ///
-    SimObject( const U8 namespaceLinkMask = 0 );
+    SimObject( const U8 namespaceLinkMask = LinkSuperClassName | LinkClassName );
     virtual ~SimObject();
 
     virtual bool processArguments(S32 argc, const char **argv);  ///< Process constructor options. (ie, new SimObject(1,2,3))
@@ -621,6 +624,10 @@ public:
     inline void setProgenitorFile( const char* pFile ) { mProgenitorFile = StringTable->insert( pFile ); }
     inline StringTableEntry getProgenitorFile( void ) const { return mProgenitorFile; }
 
+    inline void setPeriodicTimerID( const S32 timerID )     { mPeriodicTimerID = timerID; }
+    inline S32 getPeriodicTimerID( void ) const             { return mPeriodicTimerID; }
+    inline bool isPeriodicTimerActive( void ) const         { return mPeriodicTimerID != 0; }
+
     /// @}
 
     /// @name Sets
@@ -719,6 +726,8 @@ public:
     static void initPersistFields();
     SimObject* clone( const bool copyDynamicFields );
     virtual void copyTo(SimObject* object);
+
+    template<typename T> bool isType(void) { return dynamic_cast<T>(this) != NULL; }
 
     // Component Console Overrides
     virtual bool handlesConsoleMethod(const char * fname, S32 * routingId) { return false; }

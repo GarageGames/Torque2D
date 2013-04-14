@@ -94,6 +94,10 @@ private:
     Point2F             mPreTickPosition;
     Point2F             mPostTickPosition;
 
+    /// Background color.
+    ColorF                      mBackgroundColor;
+    bool                        mUseBackgroundColor;
+
     /// Camera Attachment.
     bool                mCameraMounted;
     SceneObject*        mpMountedTo;
@@ -127,27 +131,11 @@ private:
     U32                 mInputEventGroupMaskFilter;
     U32                 mInputEventLayerMaskFilter;
     bool                mInputEventInvisibleFilter;
-    SimSet              mInputEventWatching;
     typeWorldQueryResultVector mInputEventQuery;
     typeSceneObjectVector mInputEventEntering;
     typeSceneObjectVector mInputEventLeaving;
-
-    // Input event names.
-    StringTableEntry    mInputEventDownName;
-    StringTableEntry    mInputEventUpName;
-    StringTableEntry    mInputEventMovedName;
-    StringTableEntry    mInputEventDraggedName;
-    StringTableEntry    mInputEventEnterName;
-    StringTableEntry    mInputEventLeaveName;
-
-    StringTableEntry    mMouseEventRightMouseDownName;
-    StringTableEntry    mMouseEventRightMouseUpName;
-    StringTableEntry    mMouseEventRightMouseDraggedName;
-    StringTableEntry    mMouseEventWheelUpName;
-    StringTableEntry    mMouseEventWheelDownName;
-    StringTableEntry    mMouseEventEnterName;
-    StringTableEntry    mMouseEventLeaveName;
-
+    SimSet              mInputEventWatching;
+    SimSet              mInputListeners;
 
     /// Render Masks.
     U32                 mRenderLayerMask;
@@ -198,6 +186,12 @@ public:
     Vector2 getMousePosition( void );
     void setMousePosition( const Vector2& mousePosition );
 
+    /// Background color.
+    inline void             setBackgroundColor( const ColorF& backgroundColor ) { mBackgroundColor = backgroundColor; }
+    inline const ColorF&    getBackgroundColor( void ) const            { return mBackgroundColor; }
+    inline void             setUseBackgroundColor( const bool useBackgroundColor ) { mUseBackgroundColor = useBackgroundColor; }
+    inline bool             getUseBackgroundColor( void ) const         { return mUseBackgroundColor; }
+
     /// Input.
     void setObjectInputEventFilter( const U32 groupMask, const U32 layerMask, const bool useInvisible = false );
     void setObjectInputEventGroupFilter( const U32 groupMask );
@@ -209,6 +203,9 @@ public:
     inline bool getUseObjectInputEvents( void ) const { return mUseObjectInputEvents; };
     inline void clearWatchedInputEvents( void ) { mInputEventWatching.clear(); }
     inline void removeFromInputEventPick(SceneObject* pSceneObject ) { mInputEventWatching.removeObject((SimObject*)pSceneObject); }
+
+    void addInputListener( SimObject* pSimObject );
+    void removeInputListener( SimObject* pSimObject );
 
     /// Coordinate Conversion.
     void windowToScenePoint( const Vector2& srcPoint, Vector2& dstPoint ) const;
@@ -294,18 +291,27 @@ public:
 
     /// GuiControl
     virtual void resize(const Point2I &newPosition, const Point2I &newExtent);
-    void onMouseDown( const GuiEvent& event );
-    void onMouseUp( const GuiEvent& event );
-    void onMouseMove( const GuiEvent& event );
-    void onMouseDragged( const GuiEvent& event );
-    void onMouseEnter( const GuiEvent& event );
-    void onMouseLeave( const GuiEvent& event );
-    void onRightMouseDown( const GuiEvent& event );
-    void onRightMouseUp( const GuiEvent& event );
-    void onRightMouseDragged( const GuiEvent& event );
-    bool onMouseWheelDown( const GuiEvent &event );
-    bool onMouseWheelUp( const GuiEvent &event );
     virtual void onRender( Point2I offset, const RectI& updateRect );
+
+    virtual void onMouseEnter( const GuiEvent& event );
+    virtual void onMouseLeave( const GuiEvent& event );
+
+    virtual void onMouseDown( const GuiEvent& event );
+    virtual void onMouseUp( const GuiEvent& event );
+    virtual void onMouseMove( const GuiEvent& event );
+    virtual void onMouseDragged( const GuiEvent& event );
+
+    virtual void onMiddleMouseDown(const GuiEvent &event);
+    virtual void onMiddleMouseUp(const GuiEvent &event);
+    virtual void onMiddleMouseDragged(const GuiEvent &event);
+
+    virtual void onRightMouseDown( const GuiEvent& event );
+    virtual void onRightMouseUp( const GuiEvent& event );
+    virtual void onRightMouseDragged( const GuiEvent& event );
+
+    virtual bool onMouseWheelDown( const GuiEvent &event );
+    virtual bool onMouseWheelUp( const GuiEvent &event );
+
     void renderMetricsOverlay( Point2I offset, const RectI& updateRect );
 
     static CameraInterpolationMode getInterpolationModeEnum(const char* label);
@@ -317,6 +323,8 @@ protected:
     static bool writeLockMouse( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneWindow*>(obj)->mLockMouse == true; }
     static bool writeUseWindowInputEvents( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneWindow*>(obj)->mUseWindowInputEvents == false; }
     static bool writeUseObjectInputEvents( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneWindow*>(obj)->mUseObjectInputEvents == true; }
+    static bool writeBackgroundColor( void* obj, StringTableEntry pFieldName )      { return static_cast<SceneWindow*>(obj)->mUseBackgroundColor == true; }
+    static bool writeUseBackgroundColor( void* obj, StringTableEntry pFieldName )   { return static_cast<SceneWindow*>(obj)->mUseBackgroundColor == true; }
 };
 
 #endif // _SCENE_WINDOW_H_

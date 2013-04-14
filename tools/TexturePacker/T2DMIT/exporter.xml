@@ -29,7 +29,7 @@
     </files>
 
     <!-- target framework supports trimming -->
-    <supportsTrimming>true</supportsTrimming>
+    <supportsTrimming>false</supportsTrimming>
 
     <!-- target framework supports rotated sprites -->
     <supportsRotation>false</supportsRotation>

@@ -23,20 +23,12 @@
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
-#ifndef _VECTOR_H_
-#include "collection/vector.h"
-#endif
-
 #ifndef _MMATH_H_
 #include "math/mMath.h"
 #endif
 
 #ifndef _VECTOR2_H_
 #include "2d/core/Vector2.h"
-#endif
-
-#ifndef _FILESTREAM_H_
-#include "io/fileStream.h"
 #endif
 
 #ifndef _NETOBJECT_H_
@@ -47,20 +39,12 @@
 #include "platform/Tickable.h"
 #endif
 
-#ifndef _DEBUG_STATS_H_
-#include "2d/scene/DebugStats.h"
-#endif
-
 #ifndef _PHYSICS_PROXY_H_
 #include "2d/scene/PhysicsProxy.h"
 #endif
 
 #ifndef _WORLD_QUERY_H_
 #include "2d/scene/WorldQuery.h"
-#endif
-
-#ifndef BOX2D_H
-#include "box2d\Box2D.h"
 #endif
 
 #ifndef _DEBUG_DRAW_H_
@@ -85,6 +69,10 @@
 
 #ifndef _BEHAVIOR_COMPONENT_H_
 #include "component/behaviors/behaviorComponent.h"
+#endif
+
+#ifndef _ASSET_PTR_H_
+#include "assets/assetPtr.h"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -169,14 +157,6 @@ struct TickContact
 
 ///-----------------------------------------------------------------------------
 
-typedef HashMap<U32, b2Joint*>              typeJointHash;
-typedef HashMap<U32, U32>                   typeReverseJointHash;
-typedef Vector<tDeleteRequest>              typeDeleteVector;
-typedef Vector<TickContact>                 typeContactVector;
-typedef HashMap<b2Contact*, TickContact>    typeContactHash;
-
-///-----------------------------------------------------------------------------
-
 class Scene :
     public BehaviorComponent,
     public TamlChildren,
@@ -186,6 +166,13 @@ class Scene :
     public virtual Tickable
 {
 public:
+    typedef HashMap<S32, b2Joint*>              typeJointHash;
+    typedef HashMap<U32, S32>                   typeReverseJointHash;
+    typedef Vector<tDeleteRequest>              typeDeleteVector;
+    typedef Vector<TickContact>                 typeContactVector;
+    typedef HashMap<b2Contact*, TickContact>    typeContactHash;
+    typedef Vector<AssetPtr<AssetBase>*>        typeAssetPtrVector;
+
     /// Scene Debug Options.
     enum DebugOption
     {
@@ -193,15 +180,16 @@ public:
         ///
         SCENE_DEBUG_METRICS            = BIT(0),
         SCENE_DEBUG_FPS_METRICS        = BIT(1),
-        SCENE_DEBUG_JOINTS             = BIT(2),
-        SCENE_DEBUG_WIREFRAME_RENDER   = BIT(3),
+        SCENE_DEBUG_CONTROLLERS        = BIT(2), 
+        SCENE_DEBUG_JOINTS             = BIT(3),
+        SCENE_DEBUG_WIREFRAME_RENDER   = BIT(4),
         ///
-        SCENE_DEBUG_AABB               = BIT(4),
-        SCENE_DEBUG_OOBB               = BIT(5),
-        SCENE_DEBUG_SLEEP              = BIT(6),
-        SCENE_DEBUG_COLLISION_SHAPES   = BIT(7),
-        SCENE_DEBUG_POSITION_AND_COM   = BIT(8),
-        SCENE_DEBUG_SORT_POINTS        = BIT(9),
+        SCENE_DEBUG_AABB               = BIT(16),
+        SCENE_DEBUG_OOBB               = BIT(17),
+        SCENE_DEBUG_SLEEP              = BIT(18),
+        SCENE_DEBUG_COLLISION_SHAPES   = BIT(19),
+        SCENE_DEBUG_POSITION_AND_COM   = BIT(20),
+        SCENE_DEBUG_SORT_POINTS        = BIT(21),
     };
 
     /// Pick mode.
@@ -210,7 +198,8 @@ public:
         PICK_INVALID,
         ///---
         PICK_ANY,
-        PICK_SIZE,
+        PICK_AABB,
+        PICK_OOBB,
         PICK_COLLISION,
     };
 
@@ -219,6 +208,7 @@ public:
 
 private:
     typedef BehaviorComponent   Parent;
+    typedef SceneObject         Children;
 
     /// World.
     b2World*                    mpWorld;
@@ -236,7 +226,13 @@ private:
     /// Joint access.
     typeJointHash               mJoints;
     typeReverseJointHash        mReverseJoints;
-    U32                         mJointMasterId;
+    S32                         mJointMasterId;
+
+    /// Scene controllers.
+    SimObjectPtr<SimSet>	    mControllers;
+
+    /// Asset pre-loads.
+    typeAssetPtrVector          mAssetPreloads;
 
     /// Scene time.
     F32                         mSceneTime;
@@ -255,10 +251,6 @@ private:
 
     /// Window rendering.
     SceneWindow*                mpCurrentRenderWindow;
-
-    /// Background color.
-    ColorF                      mBackgroundColor;
-    bool                        mUseBackgroundColor;
 
     /// Window attachments.
     SimSet                      mAttachedSceneWindows;
@@ -305,9 +297,9 @@ private:
 protected:
     /// Taml callbacks.
     virtual void            onTamlPreRead( void );
-    virtual void            onTamlPostRead( const TamlCustomProperties& customProperties );
-    virtual void            onTamlCustomWrite( TamlCustomProperties& customProperties );
-    virtual void            onTamlCustomRead( const TamlCustomProperties& customProperties );
+    virtual void            onTamlPostRead( const TamlCustomNodes& customNodes );
+    virtual void            onTamlCustomWrite( TamlCustomNodes& customNodes );
+    virtual void            onTamlCustomRead( const TamlCustomNodes& customNodes );
 
 public:
     Scene();
@@ -348,12 +340,6 @@ public:
     inline void             setPositionIterations( const S32 iterations ) { mPositionIterations = iterations; }
     inline S32              getPositionIterations( void ) const         { return mPositionIterations; }
 
-    /// Background color.
-    inline void             setBackgroundColor( const ColorF& backgroundColor ) { mBackgroundColor = backgroundColor; }
-    inline const ColorF&    getBackgroundColor( void ) const            { return mBackgroundColor; }
-    inline void             setUseBackgroundColor( const bool useBackgroundColor ) { mUseBackgroundColor = useBackgroundColor; }
-    inline bool             getUseBackgroundColor( void ) const         { return mUseBackgroundColor; }
-
     /// Scene occupancy.
     void                    clearScene( bool deleteObjects = true );
     void                    addToScene( SceneObject* pSceneObject );
@@ -367,6 +353,14 @@ public:
 
     void                    mergeScene( const Scene* pScene );
 
+    inline SimSet*			getControllers( void )						{ return mControllers; }
+
+    inline S32              getAssetPreloadCount( void ) const          { return mAssetPreloads.size(); }
+    const AssetPtr<AssetBase>* getAssetPreload( const S32 index ) const;
+    void                    addAssetPreload( const char* pAssetId );
+    void                    removeAssetPreload( const char* pAssetId );
+    void                    clearAssetPreloads( void );
+
     /// Scene time.
     inline F32              getSceneTime( void ) const                  { return mSceneTime; };
     inline void             setScenePause( bool status )                { mScenePause = status; }
@@ -374,15 +368,15 @@ public:
 
     /// Joint access.
     inline U32              getJointCount( void ) const                 { return mJoints.size(); }
-    b2JointType             getJointType( const U32 jointId );
-    b2Joint*                findJoint( const U32 jointId );
-    U32                     findJointId( b2Joint* pJoint );
-    U32                     createJoint( b2JointDef* pJointDef );
+    b2JointType             getJointType( const S32 jointId );
+    b2Joint*                findJoint( const S32 jointId );
+    S32                     findJointId( b2Joint* pJoint );
+    S32                     createJoint( b2JointDef* pJointDef );
     bool                    deleteJoint( const U32 jointId );
     bool                    hasJoints( SceneObject* pSceneObject );
 
     /// Distance joint.
-    U32                     createDistanceJoint(
+    S32                     createDistanceJoint(
                                 const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
                                 const b2Vec2& localAnchorA = b2Vec2_zero, const b2Vec2& localAnchorB = b2Vec2_zero,
                                 const F32 length = -1.0f,
@@ -409,7 +403,7 @@ public:
     F32                     getDistanceJointDampingRatio( const U32 jointId );
 
     /// Rope joint.
-    U32                     createRopeJoint(
+    S32                     createRopeJoint(
                                 const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
                                 const b2Vec2& localAnchorA = b2Vec2_zero, const b2Vec2& localAnchorB = b2Vec2_zero,
                                 const F32 maxLength = -1.0f,
@@ -422,7 +416,7 @@ public:
     F32                     getRopeJointMaxLength( const U32 jointId );
 
     /// Revolute joint.
-    U32                     createRevoluteJoint(
+    S32                     createRevoluteJoint(
                                 const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
                                 const b2Vec2& localAnchorA = b2Vec2_zero, const b2Vec2& localAnchorB = b2Vec2_zero,
                                 const bool collideConnected = false );
@@ -448,8 +442,12 @@ public:
                                 bool& enableMotor,
                                 F32& motorSpeed,
                                 F32& maxMotorTorque );
+
+	F32                     getRevoluteJointAngle( const U32 jointId );
+	F32						getRevoluteJointSpeed( const U32 jointId );
+
     /// Weld joint.
-    U32                     createWeldJoint(
+    S32                     createWeldJoint(
                                 const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
                                 const b2Vec2& localAnchorA = b2Vec2_zero, const b2Vec2& localAnchorB = b2Vec2_zero,
                                 const F32 frequency = 0.0f,
@@ -469,7 +467,7 @@ public:
     F32                     getWeldJointDampingRatio( const U32 jointId );
 
     /// Wheel joint.
-    U32                     createWheelJoint(
+    S32                     createWheelJoint(
                                 const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
                                 const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
                                 const b2Vec2& worldAxis,
@@ -500,7 +498,7 @@ public:
     F32                     getWheelJointDampingRatio( const U32 jointId );
 
     /// Friction joint.
-    U32                     createFrictionJoint(
+    S32                     createFrictionJoint(
                                 const SceneObject* pSceneObjectA,const  SceneObject* pSceneObjectB,
                                 const b2Vec2& localAnchorA = b2Vec2_zero, const b2Vec2& localAnchorB = b2Vec2_zero,
                                 const F32 maxForce = 0.0f,
@@ -520,7 +518,7 @@ public:
     F32                     getFrictionJointMaxTorque( const U32 jointId );
 
     /// Prismatic joint.
-    U32                     createPrismaticJoint(
+    S32                     createPrismaticJoint(
                                 const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
                                 const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
                                 const b2Vec2& worldAxis,
@@ -549,7 +547,7 @@ public:
                                 F32& maxMotorTorque );
 
     /// Pulley joint.
-    U32                     createPulleyJoint(
+    S32                     createPulleyJoint(
                                 const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
                                 const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
                                 const b2Vec2& worldGroundAnchorA, const b2Vec2& worldGroundAnchorB,
@@ -558,7 +556,7 @@ public:
                                 const bool collideConnected = false );
 
     /// Target (a.k.a Mouse) joint.
-    U32                     createTargetJoint(
+    S32                     createTargetJoint(
                                 const SceneObject* pSceneObject,
                                 const b2Vec2& worldTarget,
                                 const F32 maxForce,
@@ -592,7 +590,7 @@ public:
     F32                     getTargetJointDampingRatio( const U32 jointId );
 
     /// Motor Joint.
-    U32                     createMotorJoint(
+    S32                     createMotorJoint(
                                 const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
                                 const b2Vec2 linearOffset = b2Vec2_zero,
                                 const F32 angularOffset = 0.0f,
@@ -651,7 +649,9 @@ public:
 
     /// Destruction listeners.
     virtual                 void SayGoodbye( b2Joint* pJoint );
-    virtual                 void SayGoodbye( b2Fixture* pFixture );
+    virtual                 void SayGoodbye( b2Fixture* pFixture )      {}
+
+    virtual SceneObject*    create( const char* pType );
 
     /// Miscellaneous.
     inline void             setBatchingEnabled( const bool enabled )    { mBatchRenderer.setBatchEnabled( enabled ); }
@@ -688,8 +688,6 @@ protected:
     static bool writeGravity( void* obj, StringTableEntry pFieldName )              { return Vector2(static_cast<Scene*>(obj)->getGravity()).notEqual( Vector2::getZero() ); }
     static bool writeVelocityIterations( void* obj, StringTableEntry pFieldName )   { return static_cast<Scene*>(obj)->getVelocityIterations() != 8; }
     static bool writePositionIterations( void* obj, StringTableEntry pFieldName )   { return static_cast<Scene*>(obj)->getPositionIterations() != 3; }
-    static bool writeBackgroundColor( void* obj, StringTableEntry pFieldName )      { return static_cast<Scene*>(obj)->mUseBackgroundColor; }
-    static bool writeUseBackgroundColor( void* obj, StringTableEntry pFieldName )   { return static_cast<Scene*>(obj)->mUseBackgroundColor; }
 
     static bool writeLayerSortMode( void* obj, StringTableEntry pFieldName )
     {

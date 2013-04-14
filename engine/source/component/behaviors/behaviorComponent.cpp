@@ -35,17 +35,18 @@
 #include "persistence/taml/tamlCustom.h"
 #endif
 
+#ifndef _TAML_H_
+#include "persistence/Taml/taml.h"
+#endif
+
 // Script bindings.
 #include "behaviorComponent_ScriptBinding.h"
 
 //-----------------------------------------------------------------------------
 
-#define BEHAVIOR_FIELDNAME              "Behavior"
-#define BEHAVIOR_CONNECTION_FIELDNAME   "BehaviorConnection"
-
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_CONOBJECT( BehaviorComponent );
+#define BEHAVIOR_ID_FIELD_NAME                  "Id"
+#define BEHAVIOR_NODE_NAME                      "Behaviors"
+#define BEHAVIOR_CONNECTION_TYPE_NAME           "Connection"
 
 //-----------------------------------------------------------------------------
 
@@ -886,355 +887,6 @@ const BehaviorComponent::typePortConnectionVector* BehaviorComponent::getBehavio
 
 //-----------------------------------------------------------------------------
 
-void BehaviorComponent::onTamlCustomWrite( TamlCustomProperties& customProperties )
-{
-    // Call parent.
-    Parent::onTamlCustomWrite( customProperties );
-
-    // Fetch behavior count.
-    const U32 behaviorCount = (U32)mBehaviors.size();
-
-    // Finish if no behaviors.
-    if( behaviorCount == 0 )
-        return;
-
-    // Fetch behavior template asset field type.
-    StringTableEntry behaviorTemplateAssetFieldType = StringTable->insert( BEHAVIORTEMPLATE_ASSET_FIELDTYPE );
-
-    // Add behavior property.
-    TamlCustomProperty* pBehaviorProperty = customProperties.addProperty( BEHAVIOR_CUSTOMPROPERTY_NAME );
-
-    // Iterate behaviors.
-    for( SimSet::iterator behaviorItr = mBehaviors.begin(); behaviorItr != mBehaviors.end(); ++behaviorItr )
-    {
-        // Fetch behavior.
-        BehaviorInstance* pBehaviorInstance = dynamic_cast<BehaviorInstance*>( *behaviorItr );
-
-        // Fetch template.
-        BehaviorTemplate* pBehaviorTemplate = pBehaviorInstance->getTemplate();
-
-        // Add behavior alias.
-        TamlPropertyAlias* pBehaviorAlias = pBehaviorProperty->addAlias( pBehaviorInstance->getTemplateName() );
-
-        // Add behavior Id field.
-        pBehaviorAlias->addField( BEHAVIOR_ID_FIELD_NAME, pBehaviorInstance->getBehaviorId() );
-
-        // Fetch field count,
-        const U32 behaviorFieldCount = pBehaviorTemplate->getBehaviorFieldCount();
-
-        // Write out the fields which the behavior template knows about.
-        for( U32 fieldIndex = 0; fieldIndex < behaviorFieldCount; ++fieldIndex )
-        {
-            // Fetch field.
-            BehaviorTemplate::BehaviorField* pBehaviorField = pBehaviorTemplate->getBehaviorField( fieldIndex );
-                
-            // Set default field type.
-            S32 fieldType = -1;
-
-            // Is this an asset field type?
-            if ( pBehaviorField != NULL && pBehaviorField->mType == behaviorTemplateAssetFieldType )
-            {
-                // Yes, so update field type.
-                fieldType = TypeAssetId;
-            }
-
-            // Fetch field value.
-            const char* pFieldValue = pBehaviorInstance->getPrefixedDynamicDataField( pBehaviorField->mName, NULL, fieldType );
-
-            // Add behavior field.
-            pBehaviorAlias->addField( pBehaviorField->mName, pFieldValue );
-        }
-    }
-
-    // Fetch behavior connection count.
-    const U32 behaviorConnectionCount = (U32)mBehaviorConnections.size();
-
-    // Finish if no behavior connections.
-    if ( behaviorConnectionCount == 0 )
-        return;
-
-    // Add behavior connection property.
-    TamlCustomProperty* pConnectionProperty = customProperties.addProperty( BEHAVIOR_CONNECTION_CUSTOMPROPERTY_NAME );
-    
-    // Iterate instance connections.
-    for( typeInstanceConnectionHash::iterator instanceItr = mBehaviorConnections.begin(); instanceItr != mBehaviorConnections.end(); ++instanceItr )
-    {
-        // Fetch output name connection(s).
-        typeOutputNameConnectionHash* pOutputNameConnection = instanceItr->value;
-
-        // Iterate output name connections.
-        for( typeOutputNameConnectionHash::iterator outputItr = pOutputNameConnection->begin(); outputItr != pOutputNameConnection->end(); ++outputItr )
-        {
-            // Fetch port connection(s).
-            typePortConnectionVector* pPortConnections = outputItr->value;
-
-            // Iterate input connections.
-            for( typePortConnectionVector::iterator connectionItr = pPortConnections->begin(); connectionItr != pPortConnections->end(); ++connectionItr )
-            {
-                // Fetch connection.
-                BehaviorPortConnection* pConnection = connectionItr;
-
-                // Add connection alias.
-                TamlPropertyAlias* pConnectionAlias = pConnectionProperty->addAlias( BEHAVIOR_CONNECTION_TYPE_NAME );
-
-                // Add behavior field.
-                pConnectionAlias->addField( pConnection->mOutputName, pConnection->mOutputInstance->getBehaviorId() );
-                pConnectionAlias->addField( pConnection->mInputName, pConnection->mInputInstance->getBehaviorId() );
-            }
-        }
-    }
-}
-
-//-----------------------------------------------------------------------------
-
-void BehaviorComponent::onTamlCustomRead( const TamlCustomProperties& customProperties )
-{
-    // Call parent.
-    Parent::onTamlCustomRead( customProperties );
-
-    // Find behavior custom property name.
-    const TamlCustomProperty* pCustomProperty = customProperties.findProperty( BEHAVIOR_CUSTOMPROPERTY_NAME );
-
-    // Do we have the property?
-    if ( pCustomProperty != NULL )
-    {
-        // Yes, so reset maximum behavior Id.
-        S32 maximumBehaviorId = 0;
-
-        // Fetch behavior Id field name.
-        StringTableEntry behaviorFieldIdName = StringTable->insert( BEHAVIOR_ID_FIELD_NAME );
-
-        // Fetch behavior template asset field type.
-        StringTableEntry behaviorTemplateAssetFieldType = StringTable->insert( BEHAVIORTEMPLATE_ASSET_FIELDTYPE );
-
-        // Iterate property alias.
-        for( TamlCustomProperty::const_iterator propertyAliasItr = pCustomProperty->begin(); propertyAliasItr != pCustomProperty->end(); ++propertyAliasItr )
-        {
-            // Fetch property alias.
-            TamlPropertyAlias* pPropertyAlias = *propertyAliasItr;
-
-            // Fetch template.
-            BehaviorTemplate* pTemplate = dynamic_cast<BehaviorTemplate *>( Sim::findObject( pPropertyAlias->mAliasName ) );
-
-            // Find template?
-            if( pTemplate == NULL )
-            {
-                // No, so warn appropriately.
-                Con::warnf( "BehaviorComponent::onTamlCustomRead() - Missing Behavior '%s'", pPropertyAlias->mAliasName );
-
-                if( isMethod( "onBehaviorMissing" ) )
-                    Con::executef( this, 2, "onBehaviorMissing", pPropertyAlias->mAliasName );
-
-                // Skip it.
-                continue;
-            }
-
-            // Create an instance of the template.
-            BehaviorInstance* pBehaviorInstance = pTemplate->createInstance();
-
-            // Did we create a behavior instance?
-            if ( pBehaviorInstance == NULL )
-            {
-                // No, so warn appropriately.
-                Con::warnf( "BehaviorComponent::onTamlCustomRead() - Found behavior could not create an instance '%s'", pPropertyAlias->mAliasName );
-
-                if( isMethod( "onBehaviorMissing" ) )
-                    Con::executef( this, 2, "onBehaviorMissing", pPropertyAlias->mAliasName );
-
-                // Skip it.
-                continue;
-            }
-
-            S32 behaviorId = 0;
-
-            // Iterate property fields.
-            for ( TamlPropertyAlias::const_iterator propertyFieldItr = pPropertyAlias->begin(); propertyFieldItr != pPropertyAlias->end(); ++propertyFieldItr )
-            {
-                // Fetch property field.
-                TamlPropertyField* pPropertyField = *propertyFieldItr;
-
-                // Fetch field name.
-                const char* pFieldName = pPropertyField->getFieldName();
-
-                // Fetch field value.
-                const char* pFieldValue = pPropertyField->getFieldValue();
-
-                // Is this the behavior field Id name?
-                if ( pFieldName == behaviorFieldIdName )
-                {
-                    // Yes, so assign it.
-                    behaviorId = dAtoi( pFieldValue );
-
-                    // Is the behavior Id valid?
-                    if ( behaviorId < 1 )
-                    {
-                        // No, so warn.
-                        Con::warnf( "BehaviorComponent::onTamlCustomRead() - Encountered an invalid behavior Id of '%d' on behavior '%s'.",
-                            behaviorId,
-                            pPropertyAlias->mAliasName );
-                    }
-
-                    // Update maximum behavior Id found.
-                    if ( behaviorId > maximumBehaviorId )
-                        maximumBehaviorId = behaviorId;
-
-                    /// Skip it.
-                    continue;
-                }
-
-                // Fetch behavior field.
-                BehaviorTemplate::BehaviorField* pBehaviorField = pTemplate->getBehaviorField( pFieldName );
-
-                // Set default field type.
-                S32 fieldType = -1;
-
-                // Is this an asset field type?
-                if ( pBehaviorField != NULL && pBehaviorField->mType == behaviorTemplateAssetFieldType )
-                {
-                    // Yes, so update field type.
-                    fieldType = TypeAssetId;
-                }
-
-                // Set field.
-                pBehaviorInstance->setPrefixedDynamicDataField( pPropertyField->getFieldName(), NULL, pPropertyField->getFieldValue(), fieldType );
-            }
-
-            // Add behavior.
-            addBehavior( pBehaviorInstance );
-
-            // Override the automatically allocated behavior Id when adding the behavior.
-            // NOTE: This must be done after adding the behavior.
-            pBehaviorInstance->setBehaviorId( behaviorId );
-        }
-
-        // Set master as next behavior id.
-        mMasterBehaviorId = (U32)maximumBehaviorId+1;
-    }
-
-    // Find behavior connections custom property name.
-    const TamlCustomProperty* pConnectionProperty = customProperties.findProperty( BEHAVIOR_CONNECTION_CUSTOMPROPERTY_NAME );
-
-    // Do we have the property?
-    if ( pConnectionProperty != NULL )
-    {
-        // Yes, so insert connection alias.
-        StringTableEntry connectionAlias = StringTable->insert( BEHAVIOR_CONNECTION_TYPE_NAME );
-
-        // Iterate property alias.
-        for( TamlCustomProperty::const_iterator propertyAliasItr = pConnectionProperty->begin(); propertyAliasItr != pConnectionProperty->end(); ++propertyAliasItr )
-        {
-            // Fetch property alias.
-            TamlPropertyAlias* pPropertyAlias = *propertyAliasItr;
-
-            // Skip if the alias isn't a connection.
-            if ( pPropertyAlias->mAliasName != connectionAlias )
-                continue;
-
-            // Are there two properties?
-            if ( pPropertyAlias->size() != 2 )
-            {
-                // No, so warn.
-                Con::warnf( "BehaviorComponent::onTamlCustomRead() - Encountered a behavior connection with more than two connection fields." );
-                continue;
-            }
-
-            // Fetch property field #1.
-            TamlPropertyField* pPropertyField1 = *pPropertyAlias->begin();
-            TamlPropertyField* pPropertyField2 = *(pPropertyAlias->begin()+1);
-           
-            // Fetch behavior instances #1.
-            BehaviorInstance* pBehaviorInstance1 = getBehaviorByInstanceId( dAtoi( pPropertyField1->getFieldValue() ) );
-
-            // Did we find the behavior?
-            if ( pBehaviorInstance1 == NULL )
-            {
-                // No, so warn.
-                Con::warnf( "BehaviorComponent::onTamlCustomRead() - Could not find a behavior instance Id '%s=%s'.",
-                    pPropertyField1->getFieldName(), pPropertyField1->getFieldValue() );
-                continue;
-            }
-
-            // Fetch behavior instances #2.
-            BehaviorInstance* pBehaviorInstance2 = getBehaviorByInstanceId( dAtoi( pPropertyField2->getFieldValue() ) );
-
-            // Did we find the behavior?
-            if ( pBehaviorInstance2 == NULL )
-            {
-                // No, so warn.
-                Con::warnf( "BehaviorComponent::onTamlCustomRead() - Could not find a behavior instance Id '%s=%s'.",
-                    pPropertyField2->getFieldName(), pPropertyField2->getFieldValue() );
-                continue;
-            }
-
-            // Fetch behavior fields.
-            StringTableEntry behaviorFieldName1 = pPropertyField1->getFieldName();
-            StringTableEntry behaviorFieldName2 = pPropertyField2->getFieldName();
-
-            BehaviorInstance* pOutputInstance;
-            BehaviorInstance* pInputInstance;
-            StringTableEntry outputName;
-            StringTableEntry inputName;
-
-            // Is the output on behavior instance #1?
-            if ( pBehaviorInstance1->getTemplate()->hasBehaviorOutput( behaviorFieldName1 ) )
-            {
-                // Yes, so has behavior instance #2 got the input?
-                if ( !pBehaviorInstance2->getTemplate()->hasBehaviorInput( behaviorFieldName2 ) )
-                {
-                    // No, so warn.
-                    Con::warnf( "BehaviorComponent::onTamlCustomRead() - Could not find a behavior input '%s' on behavior '%s'.",
-                        behaviorFieldName2, pBehaviorInstance2->getTemplateName() );
-                    continue;
-                }
-
-                // Assign output/input appropriately.
-                pOutputInstance = pBehaviorInstance1;
-                pInputInstance = pBehaviorInstance2;
-                outputName = behaviorFieldName1;
-                inputName = behaviorFieldName2;
-            }
-            // Is the output on behavior instance #2?
-            else if ( pBehaviorInstance2->getTemplate()->hasBehaviorOutput( behaviorFieldName2 ) )
-            {
-                // Yes, so has behavior instance #1 got the input?
-                if ( !pBehaviorInstance1->getTemplate()->hasBehaviorInput( behaviorFieldName1 ) )
-                {
-                    // No, so warn.
-                    Con::warnf( "BehaviorComponent::onTamlCustomRead() - Could not find a behavior input '%s' on behavior '%s'.",
-                        behaviorFieldName1, pBehaviorInstance1->getTemplateName() );
-                    continue;
-                }
-
-                // Assign output/input appropriately.
-                pOutputInstance = pBehaviorInstance2;
-                pInputInstance = pBehaviorInstance1;
-                outputName = behaviorFieldName2;
-                inputName = behaviorFieldName1;
-            }
-            else
-            {
-                // Warn.
-                Con::warnf( "BehaviorComponent::onTamlCustomRead() - Invalid output/input on behavior connection '%s=%s' & '%s=%s''.",
-                    behaviorFieldName1, pBehaviorInstance1->getTemplateName(),
-                    behaviorFieldName2, pBehaviorInstance2->getTemplateName() );
-                continue;
-            }
-
-            // Can we connect?
-            if ( !connect( pOutputInstance, pInputInstance, outputName, inputName ) )
-            {
-                // No, so warn.
-                Con::warnf( "BehaviorComponent::onTamlCustomRead() - Failed to connect behaviors '%s=%s' & '%s=%s''.",
-                    behaviorFieldName1, pBehaviorInstance1->getTemplateName(),
-                    behaviorFieldName2, pBehaviorInstance2->getTemplateName() );
-                continue;
-            }
-        }
-    }
-}
-
-//-----------------------------------------------------------------------------
-
 void BehaviorComponent::write( Stream &stream, U32 tabStop, U32 flags /* = 0 */ )
 {
     // Export selected only?
@@ -1296,9 +948,7 @@ const char *BehaviorComponent::callOnBehaviors( U32 argc, const char *argv[] )
 {   
     if( mBehaviors.empty() )   
         return Parent::callOnBehaviors( argc, argv );
-   
-    const char *cbName = StringTable->insert(argv[0]);
-   
+      
     // Copy the arguments to avoid weird clobbery situations.
     FrameTemp<char *> argPtrs (argc);
    
@@ -1324,6 +974,7 @@ const char *BehaviorComponent::callOnBehaviors( U32 argc, const char *argv[] )
             continue;
 
         // Lookup the Callback Namespace entry and then splice callback
+        const char *cbName = StringTable->insert(argv[0]);
         Namespace::Entry *pNSEntry = pNamespace->lookup(cbName);
         if( pNSEntry )
         {
@@ -1361,9 +1012,7 @@ const char *BehaviorComponent::_callMethod( U32 argc, const char *argv[], bool c
 {   
     if( mBehaviors.empty() )   
         return Parent::_callMethod( argc, argv, callThis );
-   
-    const char *cbName = StringTable->insert(argv[0]);
-   
+     
     // Copy the arguments to avoid weird clobbery situations.
     FrameTemp<char *> argPtrs (argc);
    
@@ -1386,6 +1035,7 @@ const char *BehaviorComponent::_callMethod( U32 argc, const char *argv[], bool c
             continue;
 
         // Lookup the Callback Namespace entry and then splice callback
+        const char *cbName = StringTable->insert(argv[0]);
         Namespace::Entry *pNSEntry = pNamespace->lookup(cbName);
         if( pNSEntry )
         {
@@ -1411,3 +1061,358 @@ const char *BehaviorComponent::_callMethod( U32 argc, const char *argv[], bool c
 
     return fnRet;
 }
+
+//-----------------------------------------------------------------------------
+
+void BehaviorComponent::onTamlCustomWrite( TamlCustomNodes& customNodes )
+{
+    // Call parent.
+    Parent::onTamlCustomWrite( customNodes );
+
+    // Fetch behavior count.
+    const U32 behaviorCount = (U32)mBehaviors.size();
+
+    // Finish if no behaviors.
+    if( behaviorCount == 0 )
+        return;
+
+    // Fetch behavior template asset field type.
+    StringTableEntry behaviorTemplateAssetFieldType = StringTable->insert( BEHAVIORTEMPLATE_ASSET_FIELDTYPE );
+
+    // Add custom behaviors node.
+    TamlCustomNode* pCustomBehaviorNode = customNodes.addNode( BEHAVIOR_NODE_NAME );
+
+    // Iterate behaviors.
+    for( SimSet::iterator behaviorItr = mBehaviors.begin(); behaviorItr != mBehaviors.end(); ++behaviorItr )
+    {
+        // Fetch behavior.
+        BehaviorInstance* pBehaviorInstance = dynamic_cast<BehaviorInstance*>( *behaviorItr );
+
+        // Fetch template.
+        BehaviorTemplate* pBehaviorTemplate = pBehaviorInstance->getTemplate();
+
+        // Add behavior node.
+        TamlCustomNode* pBehaviorNode = pCustomBehaviorNode->addNode( pBehaviorInstance->getTemplateName() );
+
+        // Add behavior Id field.
+        pBehaviorNode->addField( BEHAVIOR_ID_FIELD_NAME, pBehaviorInstance->getBehaviorId() );
+
+        // Fetch field count,
+        const U32 behaviorFieldCount = pBehaviorTemplate->getBehaviorFieldCount();
+
+        // Write out the fields which the behavior template knows about.
+        for( U32 fieldIndex = 0; fieldIndex < behaviorFieldCount; ++fieldIndex )
+        {
+            // Fetch field.
+            BehaviorTemplate::BehaviorField* pBehaviorField = pBehaviorTemplate->getBehaviorField( fieldIndex );
+                
+            // Set default field type.
+            S32 fieldType = -1;
+
+            // Is this an asset field type?
+            if ( pBehaviorField != NULL && pBehaviorField->mType == behaviorTemplateAssetFieldType )
+            {
+                // Yes, so update field type.
+                fieldType = TypeAssetId;
+            }
+
+            // Fetch field value.
+            const char* pFieldValue = pBehaviorInstance->getPrefixedDynamicDataField( pBehaviorField->mName, NULL, fieldType );
+
+            // Add behavior field.
+            pBehaviorNode->addField( pBehaviorField->mName, pFieldValue );
+        }
+    }
+
+    // Fetch behavior connection count.
+    const U32 behaviorConnectionCount = (U32)mBehaviorConnections.size();
+
+    // Finish if no behavior connections.
+    if ( behaviorConnectionCount == 0 )
+        return;
+   
+    // Iterate instance connections.
+    for( typeInstanceConnectionHash::iterator instanceItr = mBehaviorConnections.begin(); instanceItr != mBehaviorConnections.end(); ++instanceItr )
+    {
+        // Fetch output name connection(s).
+        typeOutputNameConnectionHash* pOutputNameConnection = instanceItr->value;
+
+        // Iterate output name connections.
+        for( typeOutputNameConnectionHash::iterator outputItr = pOutputNameConnection->begin(); outputItr != pOutputNameConnection->end(); ++outputItr )
+        {
+            // Fetch port connection(s).
+            typePortConnectionVector* pPortConnections = outputItr->value;
+
+            // Iterate input connections.
+            for( typePortConnectionVector::iterator connectionItr = pPortConnections->begin(); connectionItr != pPortConnections->end(); ++connectionItr )
+            {
+                // Fetch connection.
+                BehaviorPortConnection* pConnection = connectionItr;
+
+                // Add connectionnode.
+                TamlCustomNode* pConnectionNode = pCustomBehaviorNode->addNode( BEHAVIOR_CONNECTION_TYPE_NAME );
+
+                // Add behavior field.
+                pConnectionNode->addField( pConnection->mOutputName, pConnection->mOutputInstance->getBehaviorId() );
+                pConnectionNode->addField( pConnection->mInputName, pConnection->mInputInstance->getBehaviorId() );
+            }
+        }
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
+{
+    // Call parent.
+    Parent::onTamlCustomRead( customNodes );
+
+    // Find custom behaviors node.
+    const TamlCustomNode* pCustomBehaviorNode = customNodes.findNode( BEHAVIOR_NODE_NAME );
+
+    // Do we have the property?
+    if ( pCustomBehaviorNode != NULL )
+    {
+        // Yes, so reset maximum behavior Id.
+        S32 maximumBehaviorId = 0;
+
+        // Fetch behavior Id field name.
+        StringTableEntry behaviorFieldIdName = StringTable->insert( BEHAVIOR_ID_FIELD_NAME );
+
+        // Fetch behavior template asset field type.
+        StringTableEntry behaviorTemplateAssetFieldType = StringTable->insert( BEHAVIORTEMPLATE_ASSET_FIELDTYPE );
+
+        // Fetch children behavior nodes.
+        const TamlCustomNodeVector& behaviorNodes = pCustomBehaviorNode->getChildren();
+
+        // Iterate behavior nodes.
+        for( TamlCustomNodeVector::const_iterator behaviorNodeItr = behaviorNodes.begin(); behaviorNodeItr != behaviorNodes.end(); ++behaviorNodeItr )
+        {
+            // Fetch behavior node.
+            TamlCustomNode* pBehaviorNode = *behaviorNodeItr;
+
+            if ( pBehaviorNode->getNodeName() == BEHAVIOR_CONNECTION_TYPE_NAME )
+            {
+                // Fetch field nodes.
+                const TamlCustomFieldVector& connectionFieldNodes = pBehaviorNode->getFields();
+
+                // Are there two properties?
+                if ( connectionFieldNodes.size() != 2 )
+                {
+                    // No, so warn.
+                    Con::warnf( "BehaviorComponent::onTamlCustomRead() - Encountered a behavior connection with more than two connection fields." );
+                    continue;
+                }
+
+                // Fetch property field #1.
+                TamlCustomField* pPropertyField1 = *connectionFieldNodes.begin();
+                TamlCustomField* pPropertyField2 = *(connectionFieldNodes.begin()+1);
+           
+                // Fetch behavior instances #1.
+                BehaviorInstance* pBehaviorInstance1 = getBehaviorByInstanceId( dAtoi( pPropertyField1->getFieldValue() ) );
+
+                // Did we find the behavior?
+                if ( pBehaviorInstance1 == NULL )
+                {
+                    // No, so warn.
+                    Con::warnf( "BehaviorComponent::onTamlCustomRead() - Could not find a behavior instance Id '%s=%s'.",
+                        pPropertyField1->getFieldName(), pPropertyField1->getFieldValue() );
+                    continue;
+                }
+
+                // Fetch behavior instances #2.
+                BehaviorInstance* pBehaviorInstance2 = getBehaviorByInstanceId( dAtoi( pPropertyField2->getFieldValue() ) );
+
+                // Did we find the behavior?
+                if ( pBehaviorInstance2 == NULL )
+                {
+                    // No, so warn.
+                    Con::warnf( "BehaviorComponent::onTamlCustomRead() - Could not find a behavior instance Id '%s=%s'.",
+                        pPropertyField2->getFieldName(), pPropertyField2->getFieldValue() );
+                    continue;
+                }
+
+                // Fetch behavior fields.
+                StringTableEntry behaviorFieldName1 = pPropertyField1->getFieldName();
+                StringTableEntry behaviorFieldName2 = pPropertyField2->getFieldName();
+
+                BehaviorInstance* pOutputInstance;
+                BehaviorInstance* pInputInstance;
+                StringTableEntry outputName;
+                StringTableEntry inputName;
+
+                // Is the output on behavior instance #1?
+                if ( pBehaviorInstance1->getTemplate()->hasBehaviorOutput( behaviorFieldName1 ) )
+                {
+                    // Yes, so has behavior instance #2 got the input?
+                    if ( !pBehaviorInstance2->getTemplate()->hasBehaviorInput( behaviorFieldName2 ) )
+                    {
+                        // No, so warn.
+                        Con::warnf( "BehaviorComponent::onTamlCustomRead() - Could not find a behavior input '%s' on behavior '%s'.",
+                            behaviorFieldName2, pBehaviorInstance2->getTemplateName() );
+                        continue;
+                    }
+
+                    // Assign output/input appropriately.
+                    pOutputInstance = pBehaviorInstance1;
+                    pInputInstance = pBehaviorInstance2;
+                    outputName = behaviorFieldName1;
+                    inputName = behaviorFieldName2;
+                }
+                // Is the output on behavior instance #2?
+                else if ( pBehaviorInstance2->getTemplate()->hasBehaviorOutput( behaviorFieldName2 ) )
+                {
+                    // Yes, so has behavior instance #1 got the input?
+                    if ( !pBehaviorInstance1->getTemplate()->hasBehaviorInput( behaviorFieldName1 ) )
+                    {
+                        // No, so warn.
+                        Con::warnf( "BehaviorComponent::onTamlCustomRead() - Could not find a behavior input '%s' on behavior '%s'.",
+                            behaviorFieldName1, pBehaviorInstance1->getTemplateName() );
+                        continue;
+                    }
+
+                    // Assign output/input appropriately.
+                    pOutputInstance = pBehaviorInstance2;
+                    pInputInstance = pBehaviorInstance1;
+                    outputName = behaviorFieldName2;
+                    inputName = behaviorFieldName1;
+                }
+                else
+                {
+                    // Warn.
+                    Con::warnf( "BehaviorComponent::onTamlCustomRead() - Invalid output/input on behavior connection '%s=%s' & '%s=%s''.",
+                        behaviorFieldName1, pBehaviorInstance1->getTemplateName(),
+                        behaviorFieldName2, pBehaviorInstance2->getTemplateName() );
+                    continue;
+                }
+
+                // Can we connect?
+                if ( !connect( pOutputInstance, pInputInstance, outputName, inputName ) )
+                {
+                    // No, so warn.
+                    Con::warnf( "BehaviorComponent::onTamlCustomRead() - Failed to connect behaviors '%s=%s' & '%s=%s''.",
+                        behaviorFieldName1, pBehaviorInstance1->getTemplateName(),
+                        behaviorFieldName2, pBehaviorInstance2->getTemplateName() );
+                    continue;
+                }
+            }
+            else
+            {
+                // Fetch template.
+                BehaviorTemplate* pTemplate = dynamic_cast<BehaviorTemplate *>( Sim::findObject( pBehaviorNode->getNodeName() ) );
+
+                // Find template?
+                if( pTemplate == NULL )
+                {
+                    // No, so warn appropriately.
+                    Con::warnf( "BehaviorComponent::onTamlCustomRead() - Missing Behavior '%s'", pBehaviorNode->getNodeName() );
+
+                    if( isMethod( "onBehaviorMissing" ) )
+                        Con::executef( this, 2, "onBehaviorMissing", pBehaviorNode->getNodeName() );
+
+                    // Skip it.
+                    continue;
+                }
+
+                // Create an instance of the template.
+                BehaviorInstance* pBehaviorInstance = pTemplate->createInstance();
+
+                // Did we create a behavior instance?
+                if ( pBehaviorInstance == NULL )
+                {
+                    // No, so warn appropriately.
+                    Con::warnf( "BehaviorComponent::onTamlCustomRead() - Found behavior could not create an instance '%s'", pBehaviorNode->getNodeName() );
+
+                    if( isMethod( "onBehaviorMissing" ) )
+                        Con::executef( this, 2, "onBehaviorMissing", pBehaviorNode->getNodeName() );
+
+                    // Skip it.
+                    continue;
+                }
+
+                S32 behaviorId = 0;
+
+                // Fetch field nodes.
+                const TamlCustomFieldVector& fields = pBehaviorNode->getFields();
+
+                // Iterate fields.
+                for ( TamlCustomFieldVector::const_iterator nodeFieldItr = fields.begin(); nodeFieldItr != fields.end(); ++nodeFieldItr )
+                {
+                    // Fetch field.
+                    TamlCustomField* pField = *nodeFieldItr;
+
+                    // Fetch field name.
+                    const char* pFieldName = pField->getFieldName();
+
+                    // Fetch field value.
+                    const char* pFieldValue = pField->getFieldValue();
+
+                    // Is this the behavior field Id name?
+                    if ( pFieldName == behaviorFieldIdName )
+                    {
+                        // Yes, so assign it.
+                        behaviorId = dAtoi( pFieldValue );
+
+                        // Is the behavior Id valid?
+                        if ( behaviorId < 1 )
+                        {
+                            // No, so warn.
+                            Con::warnf( "BehaviorComponent::onTamlCustomRead() - Encountered an invalid behavior Id of '%d' on behavior '%s'.",
+                                behaviorId,
+                                pBehaviorNode->getNodeName() );
+                        }
+
+                        // Update maximum behavior Id found.
+                        if ( behaviorId > maximumBehaviorId )
+                            maximumBehaviorId = behaviorId;
+
+                        /// Skip it.
+                        continue;
+                    }
+
+                    // Fetch behavior field.
+                    BehaviorTemplate::BehaviorField* pBehaviorField = pTemplate->getBehaviorField( pFieldName );
+
+                    // Set default field type.
+                    S32 fieldType = -1;
+
+                    // Is this an asset field type?
+                    if ( pBehaviorField != NULL && pBehaviorField->mType == behaviorTemplateAssetFieldType )
+                    {
+                        // Yes, so update field type.
+                        fieldType = TypeAssetId;
+                    }
+
+                    // Set field.
+                    pBehaviorInstance->setPrefixedDynamicDataField( pField->getFieldName(), NULL, pField->getFieldValue(), fieldType );
+                }
+
+                // Add behavior.
+                addBehavior( pBehaviorInstance );
+
+                // Override the automatically allocated behavior Id when adding the behavior.
+                // NOTE: This must be done after adding the behavior.
+                pBehaviorInstance->setBehaviorId( behaviorId );
+            }
+        }
+
+        // Set master as next behavior id.
+        mMasterBehaviorId = (U32)maximumBehaviorId+1;
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )
+{
+    // Sanity!
+    AssertFatal( pClassRep != NULL,  "BehaviorComponent::WriteCustomTamlSchema() - ClassRep cannot be NULL." );
+    AssertFatal( pParentElement != NULL,  "BehaviorComponent::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
+
+    // Write an unrestricted custom Taml schema.
+    Taml::WriteUnrestrictedCustomTamlSchema( BEHAVIOR_NODE_NAME, pClassRep, pParentElement );
+}
+
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_CONOBJECT_SCHEMA( BehaviorComponent, WriteCustomTamlSchema );

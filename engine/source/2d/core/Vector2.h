@@ -59,25 +59,7 @@ struct Vector2 : b2Vec2
     inline Vector2( const Point2I& point ) : b2Vec2( F32(point.x), F32(point.y) ) {}
     inline Vector2( const Point2F& point ) : b2Vec2( point.x, point.y ) {}
     inline Vector2( const Point2D& point ) : b2Vec2( F32(point.x), F32(point.y) ) {}
-    inline Vector2( const char* pString )
-    {
-        const U32 elementCount = Utility::mGetStringElementCount(pString);
-
-        if ( elementCount == 0 )
-        {
-            SetZero();
-            return;
-        }
-
-        if ( elementCount == 1 )
-        {
-            x = y = dAtof(Utility::mGetStringElement(pString,0));
-            return;
-        }
-
-        x = dAtof(Utility::mGetStringElement(pString,0));
-        y = dAtof(Utility::mGetStringElement(pString,1));
-    }
+    inline Vector2( const char* pString ) { setString( pString ); }
 
     /// Operators.
     inline Vector2& operator /= (const F32 s)                           { x /= s; y /= s; return *this; }
@@ -105,7 +87,26 @@ struct Vector2 : b2Vec2
 
     /// Utility.
     inline void setAngle(const F32 radians)                             { x = mSin(radians); y = mCos(radians); }
-    inline void setPolar(const F32 radians,F32 length)                  { x = mSin(radians)*length; y = mCos(radians*length); }
+    inline void setPolar(const F32 radians,F32 length)                  { x = mSin(radians)*length; y = mCos(radians)*length; }
+    inline void setString(const char* pString )
+    {
+        const U32 elementCount = Utility::mGetStringElementCount(pString);
+
+        if ( elementCount == 0 )
+        {
+            SetZero();
+            return;
+        }
+
+        if ( elementCount == 1 )
+        {
+            x = y = dAtof(Utility::mGetStringElement(pString,0));
+            return;
+        }
+
+        x = dAtof(Utility::mGetStringElement(pString,0));
+        y = dAtof(Utility::mGetStringElement(pString,1));
+    }
     inline const Vector2& setZero()                                     { (*this) = getZero(); return *this; }
     inline const Vector2& setOne()                                      { (*this) = getOne(); return *this; }
     inline static const Vector2& getZero()                              { static const Vector2 v(0.0f, 0.0f); return v; }
@@ -126,6 +127,7 @@ struct Vector2 : b2Vec2
     inline F32 Normalize(const F32 s)                                   { const F32 length = Length(); if ( length > 0.0f ) m_point2F_normalize_f((F32*)this, s); return length; }
     inline Vector2& absolute(void)                                      { if (x < 0.0f) x = -x; if (y < 0.0f) y = -y; return *this; }
     inline Vector2& receiprocate(void)                                  { x = 1.0f/x; y = 1.0f/y; return *this; }
+    inline Vector2 getReceiprocate(void) const                          { Vector2 temp = *this; temp.receiprocate();return temp; }
     inline Vector2& add(const Vector2& v)                               { x += v.x; y += v.y; return *this; }
     inline Vector2& sub(const Vector2& v)                               { x -= v.x; y -= v.y; return *this; }
     inline Vector2& mult(const Vector2& v)                              { x *= v.x; y *= v.y; return *this; }
@@ -144,7 +146,7 @@ struct Vector2 : b2Vec2
     inline Vector2& clampMin(const Vector2& min)                        { if (x < min.x) x = min.x; if (y < min.y) y = min.y;  return *this; }
     inline Vector2& clampMax(const Vector2& max)                        { if (x > max.x) x = max.x; if (y > max.y) y = max.y;  return *this; }
     inline void rand(const Vector2& min, const Vector2& max)            { x = CoreMath::mGetRandomF(min.x, max.x), y = CoreMath::mGetRandomF(min.y,max.y); }
-    inline void round(const F32 epsilon = FLT_EPSILON)                  { F32 recip = 1.0f/epsilon; x = mFloor(x * recip + 0.5f) * epsilon; y = mFloor(y * recip + 0.5f) * epsilon; }
+    inline void round(const F32 epsilon = FLT_EPSILON)                  { x = mRound(x, epsilon); y = mRound(y, epsilon); }
 
     inline StringTableEntry stringThis(void) const                      { char buffer[32]; dSprintf(buffer, 32, "%g %g", x, y ); return StringTable->insert(buffer); }
     inline const char* scriptThis(void) const                           { char* pBuffer = Con::getReturnBuffer(32); dSprintf(pBuffer, 32, "%.5g %.5g", x, y ); return pBuffer; }

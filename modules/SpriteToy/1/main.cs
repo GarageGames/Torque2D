@@ -32,7 +32,6 @@ function SpriteToy::create( %this )
     SpriteToy.reset();
 }
 
-
 //-----------------------------------------------------------------------------
 
 function SpriteToy::destroy( %this )
@@ -81,7 +80,7 @@ function SpriteToy::createBackground( %this )
     %object.Image = "ToyAssets:highlightBackground";
     
     // Set the blend color.
-    %object.BlendColor = Bisque;
+    %object.BlendColor = SlateGray;
             
     // Add the sprite to the scene.
     SandboxScene.add( %object );    

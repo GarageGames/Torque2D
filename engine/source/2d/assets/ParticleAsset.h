@@ -45,6 +45,7 @@ class ParticleAsset : public AssetBase, public TamlChildren
 {
 private:
     typedef AssetBase  Parent;
+    typedef ParticleAssetEmitter Children;
     typedef Vector<ParticleAssetEmitter*> typeEmitterVector;
 
 public:
@@ -160,8 +161,8 @@ public:
 protected:
     virtual void initializeAsset( void );
 
-    void onTamlCustomWrite( TamlCustomProperties& customProperties );
-    void onTamlCustomRead( const TamlCustomProperties& customProperties );
+    void onTamlCustomWrite( TamlCustomNodes& customNodes );
+    void onTamlCustomRead( const TamlCustomNodes& customNodes );
 
 protected:
     static bool setLifetime(void* obj, const char* data)                    { static_cast<ParticleAsset*>(obj)->setLifetime(dAtof(data)); return false; }

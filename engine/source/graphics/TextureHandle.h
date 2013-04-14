@@ -119,7 +119,7 @@ public:
         BitmapTexture = 100,
 
         /// Same as BitmapTexture except that the bitmap is kept which occupies main memory however
-        /// it does not required loading if textures need to be restored.
+        /// it does not require loading if textures need to be restored.
         BitmapKeepTexture = 200,
     };
 
@@ -186,5 +186,9 @@ private:
     TextureObject *object;
 
 };
+
+//-----------------------------------------------------------------------------
+
+extern TextureHandle BadTextureHandle;
 
 #endif // _TEXTURE_HANDLE_H_

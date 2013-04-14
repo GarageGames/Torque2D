@@ -21,6 +21,7 @@
 //-----------------------------------------------------------------------------
 
 #include "sim/simObject.h"
+#include "sim/simObjectTimerEvent.h"
 #include "console/consoleInternal.h"
 #include "console/codeBlock.h"
 #include "console/consoleInternal.h"
@@ -59,10 +60,11 @@ SimObject::SimObject( const U8 namespaceLinkMask ) : mNSLinkMask( namespaceLinkM
     mTypeMask                = 0;
     mScriptCallbackGuard     = 0;
     mFieldDictionary         = NULL;
-    mCanSaveFieldDictionary	=	true;
+    mCanSaveFieldDictionary	 = true;
     mClassName               = NULL;
     mSuperClassName          = NULL;
     mProgenitorFile          = CodeBlock::getCurrentCodeBlockFullPath();
+    mPeriodicTimerID         = 0;
 }
 
 //---------------------------------------------------------------------------
@@ -95,6 +97,10 @@ bool SimObject::registerObject()
       unregisterObject();
 
    AssertFatal(!ret || isProperlyAdded(), "Object did not call SimObject::onAdd()");
+
+    if ( isMethod( "onAdd" ) )
+        Con::executef( this, 1, "onAdd" );
+
    return ret;
 }
 
@@ -104,6 +110,9 @@ void SimObject::unregisterObject()
 {
     // Sanity!
     AssertISV( getScriptCallbackGuard() == 0, "SimObject::unregisterObject: Object is being unregistered whilst performing a script callback!" );
+
+    if ( isMethod( "onRemove" ) )
+        Con::executef( this, 1, "onRemove" );
 
    mFlags.set(Removed);
 
@@ -1471,6 +1480,8 @@ void SimObject::copyTo(SimObject* object)
    object->linkNamespaces();
 }
 
+//-----------------------------------------------------------------------------
+
 bool SimObject::setParentGroup(void* obj, const char* data)
 {
    SimGroup *parent = NULL;
@@ -1652,11 +1663,13 @@ void SimObject::unlinkNamespaces()
 void SimObject::setClassNamespace( const char *classNamespace )
 {
    mClassName = StringTable->insert( classNamespace );
+   linkNamespaces();
 }
 
 void SimObject::setSuperClassNamespace( const char *superClassNamespace )
 {  
    mSuperClassName = StringTable->insert( superClassNamespace );
+   linkNamespaces();
 }
 
 ConsoleMethod(SimObject, getClassNamespace, const char*, 2, 2, "")
@@ -1696,3 +1709,81 @@ ConsoleMethod(SimObject, getProgenitorFile, const char*, 2, 2,  "() Gets the pro
     return object->getProgenitorFile();
 }
 
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SimObject, startTimer, bool, 4, 5,    "(callbackFunction, float timePeriod, [repeat]) - Starts a periodic timer for this object.\n"
+                                                    "Sets a timer on the object that, when it expires, will cause the object to execute the onTimer() callback.\n"
+                                                    "The timer event will continue to occur at regular intervals until setTimerOff() is called.\n"
+                                                    "@param callbackFunction The name of the callback function to call for each timer repetition.\n"
+                                                    "@param timePeriod The period of time (in milliseconds) between each callback.\n"
+                                                    "@param repeat The number of times the timer should repeat.  If not specified or zero then it will run infinitely\n"
+                                                    "@return No return Value.")
+{
+    // Is the periodic timer running?
+    if ( object->getPeriodicTimerID() != 0 )
+    {
+        // Yes, so cancel it.
+        Sim::cancelEvent( object->getPeriodicTimerID() );
+
+        // Reset Timer ID.
+        object->setPeriodicTimerID( 0 );
+    }
+
+    // Fetch the callback function.
+    StringTableEntry callbackFunction = StringTable->insert( argv[2] );
+
+    // Does the function exist?
+    if ( !object->isMethod( callbackFunction ) )
+    {
+        // No, so warn.
+        Con::warnf("SimObject::startTimer() - The callback function of '%s' does not exist.", callbackFunction );
+        return false;
+    }
+
+    // Fetch the time period.
+    const S32 timePeriod = dAtoi(argv[3]);
+
+    // Is the time period valid?
+    if ( timePeriod < 1 )
+    {
+        // No, so warn.
+        Con::warnf("SimObject::startTimer() - The time period of '%d' is invalid.", timePeriod );
+        return false;
+    }        
+
+    // Fetch the repeat count.
+    const S32 repeat = argc >= 5 ? dAtoi(argv[4]) : 0;
+
+    // Create Timer Event.
+    SimObjectTimerEvent* pEvent = new SimObjectTimerEvent( callbackFunction, (U32)timePeriod, (U32)repeat );
+
+    // Post Event.
+    object->setPeriodicTimerID( Sim::postEvent( object, pEvent, Sim::getCurrentTime() + timePeriod ) );
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SimObject, stopTimer, void, 2, 2, "() - Stops the periodic timer for this object.\n"
+                                                "@return No return Value.")
+{
+    // Finish if the periodic timer isn't running.
+    if ( object->getPeriodicTimerID() == 0 )
+        return;
+
+    // Cancel It.
+    Sim::cancelEvent( object->getPeriodicTimerID() );
+
+    // Reset Timer ID.
+    object->setPeriodicTimerID( 0 );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SimObject, isTimerActive, bool, 2, 2, "() - Checks whether the periodic timer is active for this object or not.\n"
+                                                    "@return Whether the periodic timer is active for this object or not.")
+{
+    return object->isPeriodicTimerActive();
+}

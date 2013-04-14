@@ -65,7 +65,8 @@ function ToyCategorySelectList::initialize(%this)
      %this.toyCategories[$toyAllCategoryIndex+3] = "Stress Testing";
      %this.toyCategories[$toyAllCategoryIndex+4] = "Fun and Games";
      %this.toyCategories[$toyAllCategoryIndex+5] = "Custom";
-     %this.maxToyCategories = $toyAllCategoryIndex + 6;
+     %this.toyCategories[$toyAllCategoryIndex+6] = "Experiments";
+     %this.maxToyCategories = $toyAllCategoryIndex + 7;
 
      // Set the "All" category as the default.
      // NOTE:    This is important to use so that the user-configurable default toy
@@ -215,15 +216,15 @@ function toggleToolbox(%make)
 function BackgroundColorSelectList::onSelect(%this)
 {           
     // Fetch the index.
-    $activeSceneColor = %this.getSelected();
+    $activeBackgroundColor = %this.getSelected();
  
     // Finish if the sandbox scene is not available.
     if ( !isObject(SandboxScene) )
         return;
             
     // Set the scene color.
-    SandboxScene.BackgroundColor = getStockColorName($activeSceneColor);
-    SandboxScene.UseBackgroundColor = true;
+    Canvas.BackgroundColor = getStockColorName($activeBackgroundColor);
+    Canvas.UseBackgroundColor = true;
 }
 
 //-----------------------------------------------------------------------------
@@ -296,8 +297,8 @@ function updateToolboxOptions()
         return;
         
     // Set the scene color.
-    SandboxScene.BackgroundColor = getStockColorName($activeSceneColor);
-    SandboxScene.UseBackgroundColor = true;        
+    Canvas.BackgroundColor = getStockColorName($activeBackgroundColor);
+    Canvas.UseBackgroundColor = true;        
        
     // Set option.
     if ( $pref::Sandbox::metricsOption )
@@ -310,7 +311,13 @@ function updateToolboxOptions()
         SandboxScene.setDebugOn( "fps" );
     else
         SandboxScene.setDebugOff( "fps" );
-       
+
+    // Set option.
+    if ( $pref::Sandbox::controllersOption )
+        SandboxScene.setDebugOn( "controllers" );
+    else
+        SandboxScene.setDebugOff( "controllers" );
+                    
     // Set option.
     if ( $pref::Sandbox::jointsOption )
         SandboxScene.setDebugOn( "joints" );
@@ -362,6 +369,7 @@ function updateToolboxOptions()
     // Set the options check-boxe.
     MetricsOptionCheckBox.setStateOn( $pref::Sandbox::metricsOption );
     FpsMetricsOptionCheckBox.setStateOn( $pref::Sandbox::fpsmetricsOption );
+    ControllersOptionCheckBox.setStateOn( $pref::Sandbox::controllersOption );
     JointsOptionCheckBox.setStateOn( $pref::Sandbox::jointsOption );
     WireframeOptionCheckBox.setStateOn( $pref::Sandbox::wireframeOption );
     AABBOptionCheckBox.setStateOn( $pref::Sandbox::aabbOption );
@@ -414,6 +422,14 @@ function setFPSMetricsOption( %flag )
 function setMetricsOption( %flag )
 {
     $pref::Sandbox::metricsOption = %flag;
+    updateToolboxOptions();
+}
+
+//-----------------------------------------------------------------------------
+
+function setControllersOption( %flag )
+{
+    $pref::Sandbox::controllersOption = %flag;
     updateToolboxOptions();
 }
 
@@ -516,7 +532,7 @@ function ToyListArray::initialize(%this, %index)
     {
         // Fetch the toy module.
         %moduleDefinition = SandboxToys.getObject( %toyIndex );
-
+        
         // Skip the toy module if the "all" category is not selected and if the toy is not in the selected category.
         if ( %index != $toyAllCategoryIndex && %moduleDefinition.ToyCategoryIndex != %index )
             continue;

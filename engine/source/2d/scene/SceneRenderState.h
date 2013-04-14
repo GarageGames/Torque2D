@@ -23,8 +23,13 @@
 #ifndef _SCENE_RENDER_STATE_H_
 #define _SCENE_RENDER_STATE_H_
 
+#ifndef _VECTOR2_H_
+#include "2d/core/vector2.h"
+#endif
+
 //-----------------------------------------------------------------------------
 
+class GuiControl;
 class RectF;
 class DebugStats;
 struct b2AABB;
@@ -40,7 +45,8 @@ struct SceneRenderState
         U32 renderLayerMask,
         U32 renderGroupMask,
         const Vector2& renderScale,
-        DebugStats* pDebugStats )
+        DebugStats* pDebugStats,
+        SimObject* pRenderHost )
     {
         mRenderArea       = renderArea;
         mRenderAABB       = CoreMath::mRectFtoAABB( renderArea );
@@ -50,6 +56,7 @@ struct SceneRenderState
         mRenderLayerMask  = renderLayerMask;
         mRenderGroupMask  = renderGroupMask;
         mpDebugStats      = pDebugStats;
+        mpRenderHost      = pRenderHost;
     }
 
     RectF           mRenderArea;
@@ -60,6 +67,8 @@ struct SceneRenderState
     U32             mRenderGroupMask;
     Vector2         mRenderScale;
     DebugStats*     mpDebugStats;
+    SimObject*      mpRenderHost;
+
 
 };
 

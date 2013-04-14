@@ -47,11 +47,11 @@ static void *ThreadRunHandler(void * arg)
 {
    PlatformThreadData *mData = reinterpret_cast<PlatformThreadData*>(arg);
    Thread *thread = mData->mThread;
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-   mData->mThreadID = ThreadManager::getCurrentThreadId();
-   ThreadManager::addThread(thread);
-   thread->run(mData->mRunArg);
-   	[pool release];
+	@autoreleasepool {
+      mData->mThreadID = ThreadManager::getCurrentThreadId();
+      ThreadManager::addThread(thread);
+      thread->run(mData->mRunArg);
+   	}
 	mData->mGateway.release();
    // we could delete the Thread here, if it wants to be auto-deleted...
    if(thread->autoDelete)
