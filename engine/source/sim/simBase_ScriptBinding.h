@@ -26,7 +26,6 @@
 
 //-----------------------------------------------------------------------------
 
-/*! Functions relating to Sim. */
 ConsoleFunctionGroupBeginWithDocs( SimFunctions );
 
 //-----------------------------------------------------------------------------
@@ -77,10 +76,10 @@ ConsoleFunctionWithDocs(isObject, ConsoleBool, 2, 2, ( handle ) )
 /*! cancel a previously scheduled event
 	@param eventID The numeric ID of a previously scheduled event.
 	@return No return value.
-	@sa getEventTimeLeft, getScheduleDuration, getTimeSinceStart, isEventPending, schedule, obj.schedule
+	@sa getEventTimeLeft, getScheduleDuration, getTimeSinceStart, isEventPending, schedule, Class::SceneObject::schedule
 
 	@par From Engine
-	@copydoc Sim::cancelEvent
+	@sa Sim::cancelEvent
 */
 ConsoleFunctionWithDocs(cancel,ConsoleVoid,2,2, ( eventID ) )
 {
@@ -94,7 +93,7 @@ ConsoleFunctionWithDocs(cancel,ConsoleVoid,2,2, ( eventID ) )
 	@sa cancel, getEventTimeLeft, getScheduleDuration, getTimeSinceStart, schedule, obj.schedule
 
 	@par From Engine
-	@copydoc Sim::isEventPending
+	@sa Sim::isEventPending
 */
 ConsoleFunctionWithDocs(isEventPending, ConsoleBool, 2, 2, ( eventID ) )
 {
