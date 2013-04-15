@@ -258,6 +258,8 @@ public:
     static TextureFilterMode getFilterModeEnum(const char* label);
     static const char* getFilterModeDescription( TextureFilterMode filterMode );
 
+    inline void forceCalculation( void ) { calculateImage(); }
+
     /// Declare Console Object.
     DECLARE_CONOBJECT(ImageAsset);
 
