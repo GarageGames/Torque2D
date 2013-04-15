@@ -210,7 +210,7 @@ void SkeletonObject::generateComposition( void )
     for( S32 i = 0; i < mSkeleton->slotCount; ++i )
     {        
         // Get a valid slot. If there isn't one, move on
-        Slot* slot = mSkeleton->slots[0];
+        Slot* slot = mSkeleton->slots[i];
         if (!slot)
             continue;
 

@@ -306,6 +306,7 @@ void SkeletonAsset::buildAtlasData( void )
             currentRegion = currentRegion->next;
         }
 
+        mImageAsset->forceCalculation();
         currentPage = currentPage->next;
     }
 
