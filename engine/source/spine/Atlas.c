@@ -31,8 +31,14 @@
 namespace spine {
 #endif
 
-void _AtlasPage_init (AtlasPage* self, const char* name) {
+typedef struct _AtlasPageVtable {
+	void (*dispose) (AtlasPage* self);
+} _AtlasPageVtable;
+
+void _AtlasPage_init (AtlasPage* self, const char* name, /**/
+		void (*dispose) (AtlasPage* self)) {
 	CONST_CAST(_AtlasPageVtable*, self->vtable) = NEW(_AtlasPageVtable);
+	VTABLE(AtlasPage, self) ->dispose = dispose;
 	MALLOC_STR(self->name, name);
 }
 
@@ -86,9 +92,8 @@ static int readLine (const char* begin, const char* end, Str* str) {
 	str->begin = nextStart;
 
 	/* Find next delimiter. */
-	do {
+	while (nextStart != end && *nextStart != '\n')
 		nextStart++;
-	} while (nextStart != end && *nextStart != '\n');
 
 	str->end = nextStart;
 	trim(str);
@@ -278,11 +283,11 @@ Atlas* Atlas_readAtlas (const char* begin, int length, const char* dir) {
 Atlas* Atlas_readAtlasFile (const char* path) {
 	Atlas* atlas = 0;
 
-	// Get directory from atlas path.
+	/* Get directory from atlas path. */
 	const char* lastForwardSlash = strrchr(path, '/');
 	const char* lastBackwardSlash = strrchr(path, '\\');
 	const char* lastSlash = lastForwardSlash > lastBackwardSlash ? lastForwardSlash : lastBackwardSlash;
-	if (lastSlash == path) lastSlash++; // Never drop starting slash.
+	if (lastSlash == path) lastSlash++; /* Never drop starting slash. */
 	int dirLength = lastSlash ? lastSlash - path : 0;
 	char* dir = MALLOC(char, dirLength + 1);
 	memcpy(dir, path, dirLength);

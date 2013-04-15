@@ -50,8 +50,7 @@ void _Torque2DAtlasPage_dispose (AtlasPage* page) {
 
 AtlasPage* AtlasPage_create (const char* name, const char* path) {
 	Torque2DAtlasPage* self = NEW(Torque2DAtlasPage);
-	_AtlasPage_init(SUPER(self), name);
-	VTABLE(AtlasPage, self) ->dispose = _Torque2DAtlasPage_dispose;
+    _AtlasPage_init(SUPER(self), name, _Torque2DAtlasPage_dispose);
 
 	//
 
@@ -71,8 +70,7 @@ void _Torque2DSkeleton_dispose (Skeleton* skeleton) {
 
 Skeleton* _Torque2DSkeleton_create (SkeletonData* data, SkeletonObject* skeletonObject) {
 	Torque2DSkeleton* self = NEW(Torque2DSkeleton);
-	_Skeleton_init(SUPER(self), data);
-	VTABLE(Skeleton, self) ->dispose = _Torque2DSkeleton_dispose;
+    _Skeleton_init(SUPER(self), data, _Torque2DSkeleton_dispose);
 
 	self->skeletonObject = skeletonObject;
 
@@ -97,9 +95,7 @@ void _Torque2DRegionAttachment_draw (Attachment* attachment, Slot* slot) {
 
 RegionAttachment* RegionAttachment_create (const char* name, AtlasRegion* region) {
 	Torque2DRegionAttachment* self = NEW(Torque2DRegionAttachment);
-	_RegionAttachment_init(SUPER(self), name);
-	VTABLE(Attachment, self) ->dispose = _Torque2DRegionAttachment_dispose;
-	VTABLE(Attachment, self) ->draw = _Torque2DRegionAttachment_draw;
+    _RegionAttachment_init(SUPER(self), name, _Torque2DRegionAttachment_dispose, _Torque2DRegionAttachment_draw);
 
 	//
 
