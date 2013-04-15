@@ -22,7 +22,7 @@
 
 class Trigger;
 
-ConsoleMethodBeginWithDocs(Trigger)
+ConsoleMethodGroupBeginWithDocs(Trigger)
 
 /*! Set whether trigger checks onEnter events
 	@param setting Default is true.
@@ -102,4 +102,4 @@ ConsoleMethodWithDocs(Trigger, getLeaveCallback, ConsoleBool, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethodEndWithDocs(Trigger)
+ConsoleMethodGroupEndWithDocs(Trigger)

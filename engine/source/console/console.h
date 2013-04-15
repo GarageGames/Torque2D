@@ -820,8 +820,8 @@ public:
 #  define ConsoleNamespace(className, usage) \
       static ConsoleConstructor className##__Namespace(#className, usage);
 
-#  define ConsoleMethodBeginWithDocs(className)
-#  define ConsoleMethodEndWithDocs(className)
+#  define ConsoleMethodGroupBeginWithDocs(className)
+#  define ConsoleMethodGroupEndWithDocs(className)
 
 #  define ConsoleMethodGroupBegin(className, groupName, usage) \
       static ConsoleConstructor className##groupName##__GroupBegin(#className,#groupName,usage);
