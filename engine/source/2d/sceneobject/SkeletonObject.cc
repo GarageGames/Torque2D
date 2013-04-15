@@ -191,42 +191,51 @@ void SkeletonObject::generateComposition( void )
         return;
 
     // Generate visualization.  
-
-    /* // Get the ImageAsset used by the sprites
-    StringTableEntry assetId = (*mSkeletonAsset).mImageAsset.getAssetId();
-
-    if (*mSkeletonAsset).mImageAsset.isNull())
+    if ((*mSkeletonAsset).mImageAsset.isNull())
     {
         Con::warnf( "SkeletonObject::generateComposition() - Image asset was NULL, so nothing can be added to the composition.");
         return;
     }
-    */
+
+     // Get the ImageAsset used by the sprites
+    StringTableEntry assetId = (*mSkeletonAsset).mImageAsset.getAssetId();
+
 
     // BOZO - Is this the right place to load stuff based on the SkeletonAsset?
     // Mich - Yup. It's here we will create Sprite objects, so we need to start
     // grabbing data from the mSkeletonAsset
 	mSkeleton = _Torque2DSkeleton_create(mSkeletonAsset->mSkeletonData, this);
 	mState = AnimationState_create(mSkeletonAsset->mStateData);
+    
+    for( S32 i = 0; i < mSkeleton->slotCount; ++i )
+    {        
+        // Get a valid slot. If there isn't one, move on
+        Slot* slot = mSkeleton->slots[0];
+        if (!slot)
+            continue;
 
-    /*
-    for( U32 i = 0; i < mSkeleton->boneCount; ++i )
-    {
         // Create the sprite.
         SpriteBatchItem* pSprite = SpriteBatch::createSprite();
 
-        // Configure the sprite.
-        pSprite->setImage(assetId);
+        // Configure the sprite visual.
+        if (slot->attachment)
+        {           
+            const char* attachment = slot->attachment->name;
+            pSprite->setImage(assetId);
+            pSprite->setImageFrameByName(attachment);
+        }
 
-        // Mich - Slot name?
-        pSprite->setImageNameFrame();
+        // Set the size and orientation (what goes here?)
+        Point2F size(slot->data->boneData->scaleX, slot->data->boneData->scaleY);
+        Point2F position(slot->data->boneData->x, slot->data->boneData->y);
 
-        // scaleX and scaleY?
-        pSprite->setSize();
+        pSprite->setSize(size);
 
         // Store the sprite reference.
         mSkeletonSprites.push_back(pSprite);
-    }
-    */
+
+        pSprite->setLocalPosition(position);
+    }    
 }
 
 //-----------------------------------------------------------------------------
