@@ -3543,7 +3543,7 @@
 					../../lib/lpng,
 					../../lib/ljpeg,
 					../../lib/lungif,
-					../../source/persistence/rapidjson,
+					../../source/persistence/rapidjson/include,
 					../../source/testing/googleTest,
 					../../source/testing/googleTest/include,
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Versions/Current/Frameworks/QD.framework/Headers",
