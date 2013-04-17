@@ -559,6 +559,9 @@
 		2AF1C54816B439D900C1CF3A /* declaredAssets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = declaredAssets.h; sourceTree = "<group>"; };
 		2AF1C54916B439D900C1CF3A /* referencedAssets.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = referencedAssets.cc; sourceTree = "<group>"; };
 		2AF1C54A16B439D900C1CF3A /* referencedAssets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = referencedAssets.h; sourceTree = "<group>"; };
+		3085A09F171F21A100F7B7D5 /* mPoint2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mPoint2.h; sourceTree = "<group>"; };
+		3085A0A0171F21A100F7B7D5 /* mPoint3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mPoint3.h; sourceTree = "<group>"; };
+		3085A0A1171F21A100F7B7D5 /* mPoint4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mPoint4.h; sourceTree = "<group>"; };
 		332307DBC5B7EEEB22E5A736 /* guiSliderCtrl.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = guiSliderCtrl.cc; sourceTree = "<group>"; };
 		33230911303CCA4C673E1A22 /* guiSliderCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = guiSliderCtrl.h; sourceTree = "<group>"; };
 		8610F32D16AEEC670015BCEB /* main.cs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.cs; path = ../../../main.cs; sourceTree = "<group>"; };
@@ -2332,6 +2335,9 @@
 		867BAEF316AEC9050033868F /* math */ = {
 			isa = PBXGroup;
 			children = (
+				3085A09F171F21A100F7B7D5 /* mPoint2.h */,
+				3085A0A0171F21A100F7B7D5 /* mPoint3.h */,
+				3085A0A1171F21A100F7B7D5 /* mPoint4.h */,
 				867BAEF416AEC9050033868F /* mathIO.h */,
 				867BAEF516AEC9050033868F /* mathTypes.cc */,
 				867BAEF616AEC9050033868F /* mathTypes.h */,
