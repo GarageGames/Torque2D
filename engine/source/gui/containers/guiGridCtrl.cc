@@ -1,39 +1,51 @@
 #include "gui/containers/guiGridCtrl.h"
 
+//------------------------------------------------------------------------------
+
 IMPLEMENT_CONOBJECT(GuiGridControl);
+
+//------------------------------------------------------------------------------
 
 GuiGridControl::GuiGridControl()
 {
 	mIsContainer = true;
 }
 
+//------------------------------------------------------------------------------
+
 void GuiGridControl::initPersistFields()
 {
 	Parent::initPersistFields();
 
-	addField("Rows",		TypeStringTableEntryVector, Offset(mGridRows, GuiGridControl));
-	addField("Columns",     TypeStringTableEntryVector, Offset(mGridCols, GuiGridControl));
-
+	addField("Rows",		TypeStringTableEntryVector, Offset(mGridRows, GuiGridControl), "Number of rows in the grid");
+	addField("Columns",     TypeStringTableEntryVector, Offset(mGridCols, GuiGridControl), "Number of columns in the grid");
 }
+
+//------------------------------------------------------------------------------
 
 bool GuiGridControl::onWake()
 {
-	if ( !Parent::onWake() )
-		return false;
+	if (!Parent::onWake())
+        return false;
 
 	return true;
 }
+
+//------------------------------------------------------------------------------
 
 void GuiGridControl::onSleep()
 {
 	Parent::onSleep();
 }
 
+//------------------------------------------------------------------------------
 
 void GuiGridControl::inspectPostApply()
 {
-	resize(getPosition(), getExtent());
+    resize(getPosition(), getExtent());
 }
+
+//------------------------------------------------------------------------------
 
 bool GuiGridControl::IsPointInGridControl(GuiControl* ctrl, const Point2I& pt)
 {
@@ -45,16 +57,19 @@ bool GuiGridControl::IsPointInGridControl(GuiControl* ctrl, const Point2I& pt)
 		Point2I chkPt = gridRect.point + ctrlRect.point;
 		Point2I chkBound = chkPt + ctrlRect.extent;
 
-		if (pt.x >= chkPt.x && pt.x <= chkBound.x &&
-			pt.y >= chkPt.y && pt.y <= chkBound.y)
+		if (pt.x >= chkPt.x && pt.x <= chkBound.x && pt.y >= chkPt.y && pt.y <= chkBound.y)
 			return true;
 		else
 			return false;
 	}
 	else
+    {
 		return false;
+    }
 
 }
+
+//------------------------------------------------------------------------------
 
 void GuiGridControl::addObject(SimObject *obj)
 {
@@ -62,7 +77,8 @@ void GuiGridControl::addObject(SimObject *obj)
 		AdjustGrid(mBounds.extent);
 
 	GuiControl *ctrl = static_cast<GuiControl *>(obj);
-	if (ctrl)
+	
+    if (ctrl)
 	{
 		RectI ctrlRect = GetGridRect(ctrl);
 		if (ctrl->getExtent().isZero())
@@ -86,6 +102,8 @@ void GuiGridControl::addObject(SimObject *obj)
 	Parent::addObject(obj);
 }
 
+//------------------------------------------------------------------------------
+
 void GuiGridControl::removeObject(SimObject *obj)
 {
 	for(int idx =0; idx < objectList.size();idx++)
@@ -100,13 +118,13 @@ void GuiGridControl::removeObject(SimObject *obj)
 	Parent::removeObject(obj);
 }
 
+//------------------------------------------------------------------------------
 
 void GuiGridControl::resize(const Point2I &newPosition, const Point2I &newExtent)
 {
 	setUpdate();
 
-	Point2I actualNewExtent = Point2I(  getMax(mMinExtent.x, newExtent.x),
-		getMax(mMinExtent.y, newExtent.y));
+	Point2I actualNewExtent = Point2I(  getMax(mMinExtent.x, newExtent.x), getMax(mMinExtent.y, newExtent.y));
 	mBounds.set(newPosition, actualNewExtent);
 
 	bool bFirstResize = false;
@@ -134,7 +152,7 @@ void GuiGridControl::resize(const Point2I &newPosition, const Point2I &newExtent
 	AdjustGrid(mBounds.extent);
 
 	//resize and position all child controls.
-	int idx=0;
+	int idx = 0;
 	for(i = begin(); i != end(); i++)
 	{
 		GuiControl *ctrl = static_cast<GuiControl *>(*i);
@@ -159,12 +177,14 @@ void GuiGridControl::resize(const Point2I &newPosition, const Point2I &newExtent
 	}
 
 	GuiControl *parent = getParent();
+
 	if (parent)
 		parent->childResized(this);
 
 	setUpdate();
-
 }
+
+//------------------------------------------------------------------------------
 
 RectI GuiGridControl::GetGridRect(GuiControl* ctrl)
 {
@@ -176,8 +196,11 @@ RectI GuiGridControl::GetGridRect(GuiControl* ctrl)
 	AssertFatal (col < mColSizes.size(), "Col is out of bounds");
 	AssertFatal (row < mRowSizes.size(), "Row is out of bounds");
 
-	if (colSpan < 1) colSpan = 1;
-	if (rowSpan < 1) rowSpan = 1;
+	if (colSpan < 1)
+        colSpan = 1;
+
+	if (rowSpan < 1)
+        rowSpan = 1;
 
 	RectI newRect(0,0,0,0);
 
@@ -185,6 +208,7 @@ RectI GuiGridControl::GetGridRect(GuiControl* ctrl)
 	{
 		newRect.point.x += mColSizes[i];
 	}
+
 	for(int i =col; i < col+colSpan; i++)
 	{
 		newRect.extent.x += mColSizes[i];
@@ -194,6 +218,7 @@ RectI GuiGridControl::GetGridRect(GuiControl* ctrl)
 	{
 		newRect.point.y += mRowSizes[i];
 	}
+
 	for(int i =row; i < row+rowSpan; i++)
 	{
 		newRect.extent.y += mRowSizes[i];
@@ -201,6 +226,8 @@ RectI GuiGridControl::GetGridRect(GuiControl* ctrl)
 
 	return newRect;
 }
+
+//------------------------------------------------------------------------------
 
 void GuiGridControl::AdjustGrid(const Point2I& newExtent)
 {
@@ -210,6 +237,8 @@ void GuiGridControl::AdjustGrid(const Point2I& newExtent)
 	AdjustGridItems(newExtent.y, mGridRows, mRowSizes);
 }
 
+//------------------------------------------------------------------------------
+
 void GuiGridControl::AdjustGridItems(S32 size, Vector<StringTableEntry>& strItems, Vector<S32>& items)
 {
 	Vector<GridItem> GridItems;
@@ -217,7 +246,6 @@ void GuiGridControl::AdjustGridItems(S32 size, Vector<StringTableEntry>& strItem
 	S32 IndexRemaining = -1;
 	S32 totalSize = 0;
 	S32 idx =0;
-
 
 	//First step : Convert the string based column data into a GridItem vector.
 	for(auto col = strItems.begin(); col != strItems.end(); ++col, idx++)
@@ -268,7 +296,7 @@ void GuiGridControl::AdjustGridItems(S32 size, Vector<StringTableEntry>& strItem
 		}
 	}
 
-	//step two: iterate the grid columns again, and fill in any percentage based sizing, and setup the correct grid array.
+    //step two: iterate the grid columns again, and fill in any percentage based sizing, and setup the correct grid array.
 	int remainingSize = size - totalSize;
 	int sizeForPerc = remainingSize;
 	for(int i = 0; i < GridItems.size(); ++i)
@@ -282,7 +310,7 @@ void GuiGridControl::AdjustGridItems(S32 size, Vector<StringTableEntry>& strItem
 		else if (gi.IsPercentage)
 		{
 			F32 perc = gi.Size / 100.0f;
-			S32 realSize = sizeForPerc * perc;
+			S32 realSize = sizeForPerc * (S32)perc;
 			remainingSize -= realSize;
 			items.push_back(realSize);
 		}

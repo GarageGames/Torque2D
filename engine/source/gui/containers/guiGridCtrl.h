@@ -13,7 +13,7 @@ class GuiGridControl : public GuiControl
 {
 private:
 
-	struct GridItem
+    struct GridItem
 	{
 		int Size;
 		bool IsPercentage;
