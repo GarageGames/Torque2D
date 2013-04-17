@@ -365,6 +365,7 @@
     <ClCompile Include="..\..\source\graphics\TextureDictionary.cc" />
     <ClCompile Include="..\..\source\graphics\TextureHandle.cc" />
     <ClCompile Include="..\..\source\graphics\TextureManager.cc" />
+    <ClCompile Include="..\..\source\gui\containers\guiGridCtrl.cc" />
     <ClCompile Include="..\..\source\gui\guiArrayCtrl.cc" />
     <ClCompile Include="..\..\source\gui\guiBackgroundCtrl.cc" />
     <ClCompile Include="..\..\source\gui\guiBitmapBorderCtrl.cc" />
@@ -816,6 +817,7 @@
     <ClInclude Include="..\..\source\graphics\TextureHandle.h" />
     <ClInclude Include="..\..\source\graphics\TextureManager.h" />
     <ClInclude Include="..\..\source\graphics\TextureObject.h" />
+    <ClInclude Include="..\..\source\gui\containers\guiGridCtrl.h" />
     <ClInclude Include="..\..\source\gui\guiArrayCtrl.h" />
     <ClInclude Include="..\..\source\gui\guiBackgroundCtrl.h" />
     <ClInclude Include="..\..\source\gui\guiBitmapCtrl.h" />
