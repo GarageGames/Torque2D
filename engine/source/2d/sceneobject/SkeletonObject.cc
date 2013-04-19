@@ -24,8 +24,23 @@
 #include "2d/sceneobject/SkeletonObject.h"
 #endif
 
+#include "spine/extension.h"
+
 // Script bindings.
 #include "2d/sceneobject/SkeletonObject_ScriptBinding.h"
+
+namespace spine {
+
+void _AtlasPage_createTexture (AtlasPage* self, const char* path) {
+}
+void _AtlasPage_disposeTexture (AtlasPage* self) {
+}
+
+char* _Util_readFile (const char* path, int* length) {
+    return _readFile(path, length);
+}
+
+}
 
 using namespace spine;
 
@@ -37,7 +52,9 @@ IMPLEMENT_CONOBJECT(SkeletonObject);
 
 SkeletonObject::SkeletonObject() :
 mPreTickTime( 0.0f ),
-mPostTickTime( 0.0f )
+mPostTickTime( 0.0f ),
+mTimeScale(1),
+mLastFrameTime(0)
 {
     
 }
@@ -46,6 +63,14 @@ mPostTickTime( 0.0f )
 
 SkeletonObject::~SkeletonObject()
 {
+    if (mSkeleton) {
+        Skeleton_dispose(mSkeleton);
+        mSkeleton = NULL;
+    }
+    if (mState) {
+        AnimationState_dispose(mState);
+        mState = NULL;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -135,20 +160,13 @@ void SkeletonObject::copyTo(SimObject* object)
     
     // Copy state.
     pComposite->setSkeletonAsset( getSkeletonAsset() );
-	 // BOZO - Copy anything else?
+     // BOZO - Copy anything else?
 }
 
 //-----------------------------------------------------------------------------
 
 void SkeletonObject::scenePrepareRender( const SceneRenderState* pSceneRenderState, SceneRenderQueue* pSceneRenderQueue )
 {
-    // BOZO - Why would I do something here and not in sceneRender?
-    // Mich - Just how the system is basically set up. This is the last chance to
-    // make any adjustments to how things will render, before the actual rendering
-    // code is called. The most common work, like calculating AABB, sorting, and so
-    // on is handled in SpriteBatch::prepareRender. This function exists for additional
-    // massaging, which I don't think we'll be using for this task.
-
     // Prepare render.
     SpriteBatch::prepareRender( this, pSceneRenderState, pSceneRenderQueue );
 }
@@ -175,7 +193,7 @@ bool SkeletonObject::setSkeletonAsset( const char* pSkeletonAssetId )
     // Generate composition.
     generateComposition();
     
-	return true;
+    return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -197,82 +215,58 @@ void SkeletonObject::generateComposition( void )
         return;
     }
 
-     // Get the ImageAsset used by the sprites
-    StringTableEntry assetId = (*mSkeletonAsset).mImageAsset.getAssetId();
-
-
-    // BOZO - Is this the right place to load stuff based on the SkeletonAsset?
-    // Mich - Yup. It's here we will create Sprite objects, so we need to start
-    // grabbing data from the mSkeletonAsset
-	mSkeleton = _Torque2DSkeleton_create(mSkeletonAsset->mSkeletonData, this);
-	mState = AnimationState_create(mSkeletonAsset->mStateData);
-    
-    for( S32 i = 0; i < mSkeleton->slotCount; ++i )
-    {        
-        // Get a valid slot. If there isn't one, move on
-        Slot* slot = mSkeleton->slots[i];
-        if (!slot)
-            continue;
-
-        // Create the sprite.
-        SpriteBatchItem* pSprite = SpriteBatch::createSprite();
-
-        // Configure the sprite visual.
-        if (slot->attachment)
-        {           
-            const char* attachment = slot->attachment->name;
-            pSprite->setImage(assetId);
-            pSprite->setImageFrameByName(attachment);
-        }
-
-        // Set the size and orientation (what goes here?)
-        Point2F size(slot->data->boneData->scaleX, slot->data->boneData->scaleY);
-        Point2F position(slot->data->boneData->x, slot->data->boneData->y);
-
-        pSprite->setSize(size);
-
-        // Store the sprite reference.
-        mSkeletonSprites.push_back(pSprite);
-
-        pSprite->setLocalPosition(position);
-    }    
+    mSkeleton = Skeleton_create(mSkeletonAsset->mSkeletonData);
+    mState = AnimationState_create(mSkeletonAsset->mStateData);
+	 AnimationState_setAnimationByName(mState, "walk", true); // BOZO - For testing, not sure how to set the animation from a script.
 }
 
 //-----------------------------------------------------------------------------
-// time is the delta since the last update.
-// Note that this is called twice, once from ::preIntegrate, then
-// from ::interpolateObject. Check those functions out to see
-// the different timing values that will be passed in.
+
 void SkeletonObject::updateComposition( const F32 time )
 {
-    return;
-
-    // Scale time.
-    // Mich - This is a placeholder variable, just showing we can create
-    // additional data based on the time that has elapsed. It can be anything we want it to be
-    // This code was copied from WaveComposite, which needed the time to be scaled
-    // to interpolate a sin wave. Right now we don't use it, so it can just be deleted
-    //const F32 scaledTime = time * 100.0f; // BOZO - Why is time * 100?
-    
     // Update position/orientation/state of visualization
     
-    float deltaTime = 0.16f; // BOZO - Need time since last frame. What is "time"?
-    Skeleton_update(mSkeleton, deltaTime);
-    AnimationState_update(mState, deltaTime * mTimeScale);
+    float delta = (time - mLastFrameTime) * mTimeScale;
+	 mLastFrameTime = time;
+
+    Skeleton_update(mSkeleton, delta);
+    AnimationState_update(mState, delta);
     AnimationState_apply(mState, mSkeleton);
     Skeleton_updateWorldTransform(mSkeleton);
 
-    // Update sprites
-    for( typeSkeletonSpritesVector::iterator spriteItr = mSkeletonSprites.begin(); spriteItr < mSkeletonSprites.end(); ++spriteItr )
-    {
-        // Fetch sprite,
-        SpriteBatchItem* pSprite = *spriteItr;
+     // Get the ImageAsset used by the sprites
+    StringTableEntry assetId = (*mSkeletonAsset).mImageAsset.getAssetId();
 
-        // Update the local position
-        // Update the scale
-        // Update the rotation
-        // Set the explicit vertices
-        Vector2 vertices[4];
+	 clearSprites();
+
+	 Vector2 vertices[4];
+    for (int i = 0; i < mSkeleton->slotCount; ++i) {
+        Slot* slot = mSkeleton->slots[i];
+        Attachment* attachment = slot->attachment;
+        if (!attachment || attachment->type != ATTACHMENT_REGION) continue;
+        RegionAttachment* regionAttachment = (RegionAttachment*)attachment;
+        RegionAttachment_updateVertices(regionAttachment, slot);
+
+		  SpriteBatchItem* pSprite = SpriteBatch::createSprite();
+		  
+		  pSprite->setBlendColor(ColorF(
+			  mSkeleton->r * slot->r,
+			  mSkeleton->g * slot->g,
+			  mSkeleton->b * slot->b,
+			  mSkeleton->a * slot->a
+		  ));
+
+		  vertices[0].x = regionAttachment->vertices[VERTEX_X1];
+		  vertices[0].y = regionAttachment->vertices[VERTEX_Y1];
+		  vertices[1].x = regionAttachment->vertices[VERTEX_X4];
+		  vertices[1].y = regionAttachment->vertices[VERTEX_Y4];
+		  vertices[2].x = regionAttachment->vertices[VERTEX_X3];
+		  vertices[2].y = regionAttachment->vertices[VERTEX_Y3];
+		  vertices[3].x = regionAttachment->vertices[VERTEX_X2];
+		  vertices[3].y = regionAttachment->vertices[VERTEX_Y2];
         pSprite->setExplicitVertices(vertices);
+
+		  pSprite->setImage(assetId);
+        pSprite->setImageFrameByName(attachment->name);
     }
 }

@@ -12,8 +12,8 @@
 #include "2d/assets/imageAsset.h"
 #endif
 
-#ifndef _SPINE_TORQUE2D_H_
-#include "spine/spine-torque2d.h"
+#ifndef SPINE_SPINE_H_
+#include "spine/spine.h"
 #endif
 
 //-----------------------------------------------------------------------------

@@ -8,7 +8,7 @@
 	{ "name": "right upper leg", "parent": "hip", "length": 45.76, "x": -18.27, "rotation": -101.13 },
 	{ "name": "right lower leg", "parent": "right upper leg", "length": 58.52, "x": 50.21, "y": 0.6, "rotation": -10.7 },
 	{ "name": "right foot", "parent": "right lower leg", "length": 45.45, "x": 64.88, "y": 0.04, "rotation": 110.3 },
-	{ "name": "torso", "parent": "hip", "length": 85.82, "x": -6.42, "y": 1.97, "rotation": 76.38 },
+	{ "name": "torso", "parent": "hip", "length": 85.82, "x": -6.42, "y": 1.97, "rotation": 94.95 },
 	{ "name": "neck", "parent": "torso", "length": 18.38, "x": 83.64, "y": -1.78, "rotation": 0.9 },
 	{ "name": "head", "parent": "neck", "length": 68.28, "x": 19.09, "y": 6.97, "rotation": -8.94 },
 	{ "name": "right shoulder", "parent": "torso", "length": 49.95, "x": 81.9, "y": 6.79, "rotation": 130.6 },
@@ -20,7 +20,6 @@
 	{ "name": "pelvis", "parent": "hip", "x": 1.41, "y": -6.57 }
 ],
 "slots": [
-	{ "name": "template", "bone": "root", "color": "ff898c86" },
 	{ "name": "left shoulder", "bone": "left shoulder", "attachment": "left-shoulder" },
 	{ "name": "left arm", "bone": "left arm", "attachment": "left-arm" },
 	{ "name": "left hand", "bone": "left hand", "attachment": "left-hand" },
@@ -41,9 +40,6 @@
 ],
 "skins": {
 	"default": {
-		"template": {
-			"spineboy": { "y": 167.82, "width": 145, "height": 341 }
-		},
 		"left shoulder": {
 			"left-shoulder": { "x": 23.74, "y": 0.11, "rotation": 62.01, "width": 34, "height": 53 }
 		},

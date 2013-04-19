@@ -92,6 +92,15 @@ void AnimationState_setAnimation (AnimationState* self, Animation* newAnimation,
 	self->time = 0;
 }
 
+void AnimationState_clearAnimation (AnimationState* self) {
+	SUB_CAST(_Internal, self) ->previous = 0;
+	CONST_CAST(Animation*, self->animation) = 0;
+}
+
+int/*bool*/AnimationState_isComplete (AnimationState* self) {
+	return !self->animation || self->time >= self->animation->duration;
+}
+
 #ifdef __cplusplus
 }
 #endif

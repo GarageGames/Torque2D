@@ -597,7 +597,6 @@
     <ClCompile Include="..\..\source\spine\Skin.c" />
     <ClCompile Include="..\..\source\spine\Slot.c" />
     <ClCompile Include="..\..\source\spine\SlotData.c" />
-    <ClCompile Include="..\..\source\spine\spine-torque2d.cc" />
     <ClCompile Include="..\..\source\string\findMatch.cc" />
     <ClCompile Include="..\..\source\string\stringBuffer.cc" />
     <ClCompile Include="..\..\source\string\stringStack.cc" />
@@ -1100,7 +1099,6 @@
     <ClInclude Include="..\..\source\spine\Skin.h" />
     <ClInclude Include="..\..\source\spine\Slot.h" />
     <ClInclude Include="..\..\source\spine\SlotData.h" />
-    <ClInclude Include="..\..\source\spine\spine-torque2d.h" />
     <ClInclude Include="..\..\source\spine\spine.h" />
     <ClInclude Include="..\..\source\string\findMatch.h" />
     <ClInclude Include="..\..\source\string\stringBuffer.h" />

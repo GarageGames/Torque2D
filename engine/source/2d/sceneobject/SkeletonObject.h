@@ -31,6 +31,7 @@ private:
     spine::Skeleton*            mSkeleton;
     spine::AnimationState*      mState;
     float                       mTimeScale;
+	 float                       mLastFrameTime;
 
     typedef Vector<SpriteBatchItem*> typeSkeletonSpritesVector;
     typeSkeletonSpritesVector        mSkeletonSprites;

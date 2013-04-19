@@ -37,6 +37,23 @@
 
 namespace spine {
 
+void _AtlasPage_createTexture (AtlasPage* self, const char* path) {
+	Texture* texture = new Texture();
+	if (!texture->loadFromFile(path)) return;
+	self->texture = texture;
+	Vector2u size = texture->getSize();
+	self->width = size.x;
+	self->height = size.x;
+}
+
+void _AtlasPage_disposeTexture (AtlasPage* self) {
+	delete (Texture*)self->texture;
+}
+
+char* _Util_readFile (const char* path, int* length) {
+	return _readFile(path, length);
+}
+
 /**/
 
 void _Torque2DAtlasPage_dispose (AtlasPage* page) {

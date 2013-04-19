@@ -101,6 +101,7 @@ ConsoleSetType( TypeSkeletonAssetPtr )
 
 SkeletonAsset::SkeletonAsset() :  mSkeletonFile(StringTable->EmptyString),
                                   mAtlasFile(StringTable->EmptyString),
+											 mScale(1),
                                   mAtlasDirty(true),
                                   mAtlas(NULL),
                                   mSkeletonData(NULL),
@@ -112,9 +113,9 @@ SkeletonAsset::SkeletonAsset() :  mSkeletonFile(StringTable->EmptyString),
 
 SkeletonAsset::~SkeletonAsset()
 {
-	AnimationStateData_dispose(mStateData);
-	SkeletonData_dispose(mSkeletonData);
-	Atlas_dispose(mAtlas);
+    AnimationStateData_dispose(mStateData);
+    SkeletonData_dispose(mSkeletonData);
+    Atlas_dispose(mAtlas);
 }
 
 //------------------------------------------------------------------------------
@@ -269,7 +270,7 @@ void SkeletonAsset::buildAtlasData( void )
 {
     // If the atlas data was previously created, need to release it
     if (mAtlas)
-	    Atlas_dispose(mAtlas);
+        Atlas_dispose(mAtlas);
 
     // If we are using a .atlas file
     if (mAtlasFile != StringTable->EmptyString)
@@ -326,7 +327,7 @@ void SkeletonAsset::buildSkeletonData( void )
 
     // Clear skeleton data
     if (mSkeletonData)
-	    SkeletonData_dispose(mSkeletonData);
+        SkeletonData_dispose(mSkeletonData);
     
     SkeletonJson* json = SkeletonJson_create(mAtlas);
     json->scale = mScale;
@@ -335,13 +336,13 @@ void SkeletonAsset::buildSkeletonData( void )
     if (!mSkeletonData)
     {
         Atlas_dispose(mAtlas);
-		mAtlas = 0;
+        mAtlas = 0;
 
         // Report json->error message
         AssertFatal(mSkeletonData != NULL, "SkeletonAsset::buildSkeletonData() - Skeleton data was not valid.");
     }
 
-	SkeletonJson_dispose(json);
+    SkeletonJson_dispose(json);
 
     mStateData = AnimationStateData_create(mSkeletonData);
 }

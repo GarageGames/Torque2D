@@ -1392,9 +1392,6 @@
     <ClCompile Include="..\..\source\spine\AttachmentLoader.c">
       <Filter>spine</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\spine\spine-torque2d.cc">
-      <Filter>spine</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\audio\audio.h">
@@ -2884,9 +2881,6 @@
       <Filter>spine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\spine\AttachmentLoader.h">
-      <Filter>spine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\spine\spine-torque2d.h">
       <Filter>spine</Filter>
     </ClInclude>
   </ItemGroup>
