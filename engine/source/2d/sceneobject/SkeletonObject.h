@@ -31,7 +31,9 @@ private:
     spine::Skeleton*            mSkeleton;
     spine::AnimationState*      mState;
     float                       mTimeScale;
-	 float                       mLastFrameTime;
+    float                       mLastFrameTime;
+
+    StringTableEntry            mCurrentAnimation;
 
     typedef Vector<SpriteBatchItem*> typeSkeletonSpritesVector;
     typeSkeletonSpritesVector        mSkeletonSprites;
@@ -57,6 +59,9 @@ public:
     bool setSkeletonAsset( const char* pSkeletonAssetId );
     inline StringTableEntry getSkeletonAsset( void ) const { return mSkeletonAsset.getAssetId(); }
     
+    bool setCurrentAnimation( const char* pAnimation );
+    inline StringTableEntry getCurrentAnimation( void ) const { return mCurrentAnimation; }
+
     /// Declare Console Object.
     DECLARE_CONOBJECT( SkeletonObject );
     
@@ -68,6 +73,10 @@ protected:
     static bool setSkeletonAsset( void* obj, const char* data )                 { static_cast<SkeletonObject*>(obj)->setSkeletonAsset(data); return false; }
     static const char* getSkeletonAsset(void* obj, const char* data)            { return static_cast<SkeletonObject*>(obj)->getSkeletonAsset(); }
     static bool writeSkeletonAsset( void* obj, StringTableEntry pFieldName ) { return static_cast<SkeletonObject*>(obj)->mSkeletonAsset.notNull(); }
+
+    static bool setCurrentAnimation( void* obj, const char* data )              { static_cast<SkeletonObject*>(obj)->setCurrentAnimation(data); return false; }
+    static const char* getCurrentAnimation(void* obj, const char* data)         { return static_cast<SkeletonObject*>(obj)->getCurrentAnimation(); }
+    static bool writeCurrentAnimation( void*obj, StringTableEntry pAnimation )  { return static_cast<SkeletonObject*>(obj)->getCurrentAnimation() != StringTable->EmptyString; }
 };
 
 #endif // _SKELETON_OBJECT_H_

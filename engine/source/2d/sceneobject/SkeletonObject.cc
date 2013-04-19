@@ -54,9 +54,11 @@ SkeletonObject::SkeletonObject() :
 mPreTickTime( 0.0f ),
 mPostTickTime( 0.0f ),
 mTimeScale(1),
-mLastFrameTime(0)
+mLastFrameTime(0),
+mSkeleton(NULL),
+mState(NULL)
 {
-    
+    mCurrentAnimation = StringTable->insert("");
 }
 
 //------------------------------------------------------------------------------
@@ -81,6 +83,7 @@ void SkeletonObject::initPersistFields()
     Parent::initPersistFields();
     
     addProtectedField( "Asset", TypeSkeletonAssetPtr, Offset(mSkeletonAsset, SkeletonObject), &setSkeletonAsset, &getSkeletonAsset, &writeSkeletonAsset, "The skeleton asset ID used for the skeleton." );
+    addProtectedField( "Animation", TypeString, Offset(mCurrentAnimation, SkeletonObject), &setCurrentAnimation, &getCurrentAnimation, &writeCurrentAnimation, "The animation name to play." );
 }
 
 //-----------------------------------------------------------------------------
@@ -198,6 +201,23 @@ bool SkeletonObject::setSkeletonAsset( const char* pSkeletonAssetId )
 
 //-----------------------------------------------------------------------------
 
+bool SkeletonObject::setCurrentAnimation( const char* pAnimation )
+{
+    // Make sure an asset was loaded.
+    if (mSkeletonAsset.isNull())
+        return false;
+
+    // Set the animation.
+    mCurrentAnimation = StringTable->insert(pAnimation);
+
+    // Generate composition.
+    generateComposition();
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
 void SkeletonObject::generateComposition( void )
 {
     // Clear existing visualization
@@ -215,9 +235,14 @@ void SkeletonObject::generateComposition( void )
         return;
     }
 
-    mSkeleton = Skeleton_create(mSkeletonAsset->mSkeletonData);
-    mState = AnimationState_create(mSkeletonAsset->mStateData);
-	 AnimationState_setAnimationByName(mState, "walk", true); // BOZO - For testing, not sure how to set the animation from a script.
+    if (!mSkeleton)
+        mSkeleton = Skeleton_create(mSkeletonAsset->mSkeletonData);
+
+    if (!mState)
+        mState = AnimationState_create(mSkeletonAsset->mStateData);
+
+    if (mCurrentAnimation != StringTable->EmptyString)
+        AnimationState_setAnimationByName(mState, mCurrentAnimation, true);
 }
 
 //-----------------------------------------------------------------------------

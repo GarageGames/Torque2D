@@ -20,6 +20,11 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(SkeletonObject, setAnimation, void, 3, 3, "(animationName) - Sets the animation for the object.\n")
+{
+    object->setCurrentAnimation(argv[2]);
+}
+
 // BOZO - What goes here?
 // This file is reserved for creating functions that will expose
 // For example, how the CompositeSprite::clearSprites function is
