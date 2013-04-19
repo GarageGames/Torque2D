@@ -1,6 +1,0 @@
-<AnimationAsset
-    AssetName="TestAnimation"
-    Image="@asset=SpineToy:Test"
-    NamedCellsMode="true"
-    NamedAnimationFrames="TD_Bones_03 TD_Bones_04 TD_Bones_05 Trail_Leaf brick_01 brick_02 brick_03"
-    AnimationTime="5" />

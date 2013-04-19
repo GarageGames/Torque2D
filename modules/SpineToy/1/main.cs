@@ -48,47 +48,15 @@ function SpineToy::reset(%this)
     // Clear the scene.
     SandboxScene.clear();
 
+    // Create the skeleton object
     %spineSkeletonObject = new SkeletonObject();
+    
+    // Assign it an asset
     %spineSkeletonObject.Asset = "SpineToy:TestSkeleton";
-    //%spineSkeletonObject.Animation = "walk";
+    
+    // Set the animation name
+    %spineSkeletonObject.Animation = "walk";    
+    
+    // Add it to the scene
     SandboxScene.add(%spineSkeletonObject);
-    
-    %spineSkeletonObject.setAnimation("walk");
-        
-    // BEGIN: This code is just for testing name based frames
-    //%this.createStaticSprite();
-    //%this.createAnimatedSprite();
-    //%this.createParticlePlayer();
 }
-
-function SpineToy::createStaticSprite(%this)
-{
-    %this.testSprite = new Sprite();
-    %this.testSprite.Size = "10 10";
-    %this.testSprite.Position = "0 0";
-    %this.testSprite.Image = "SpineToy:Test";
-    %this.testSprite.NameFrame = "Trail_Leaf";
-    SandboxScene.add(%this.testSprite);
-}
-
-function SpineToy::createAnimatedSprite(%this)
-{
-    %this.testSprite = new Sprite();
-    %this.testSprite.Size = "10 10";
-    %this.testSprite.Position = "0 0";
-    %this.testSprite.Animation = "SpineToy:TestAnimation";
-    
-    SandboxScene.add(%this.testSprite);
-}
-
-function SpineToy::createParticlePlayer(%this)
-{
-    // Create planetoid bubble.
-    %player = new ParticlePlayer();
-    %player.BodyType = static;
-    %player.Position = %position;
-    %player.Particle = "SpineToy:TestParticleAsset";
-    %player.SceneLayer = 0;
-    SandboxScene.add( %player );
-}
-// END: This code is just for testing name based frames    
