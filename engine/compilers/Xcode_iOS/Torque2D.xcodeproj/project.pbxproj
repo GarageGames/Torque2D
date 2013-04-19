@@ -501,7 +501,6 @@
 		86C473C2170DAAB000242E95 /* Skin.c in Sources */ = {isa = PBXBuildFile; fileRef = 86C473AA170DAAB000242E95 /* Skin.c */; };
 		86C473C3170DAAB000242E95 /* Slot.c in Sources */ = {isa = PBXBuildFile; fileRef = 86C473AC170DAAB000242E95 /* Slot.c */; };
 		86C473C4170DAAB000242E95 /* SlotData.c in Sources */ = {isa = PBXBuildFile; fileRef = 86C473AE170DAAB000242E95 /* SlotData.c */; };
-		86C473C5170DAAB000242E95 /* spine-torque2d.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86C473B0170DAAB000242E95 /* spine-torque2d.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1504,8 +1503,6 @@
 		86C473AD170DAAB000242E95 /* Slot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Slot.h; sourceTree = "<group>"; };
 		86C473AE170DAAB000242E95 /* SlotData.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SlotData.c; sourceTree = "<group>"; };
 		86C473AF170DAAB000242E95 /* SlotData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlotData.h; sourceTree = "<group>"; };
-		86C473B0170DAAB000242E95 /* spine-torque2d.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "spine-torque2d.cc"; sourceTree = "<group>"; };
-		86C473B1170DAAB000242E95 /* spine-torque2d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "spine-torque2d.h"; sourceTree = "<group>"; };
 		86C473B2170DAAB000242E95 /* spine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spine.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -3117,8 +3114,6 @@
 				86C473AD170DAAB000242E95 /* Slot.h */,
 				86C473AE170DAAB000242E95 /* SlotData.c */,
 				86C473AF170DAAB000242E95 /* SlotData.h */,
-				86C473B0170DAAB000242E95 /* spine-torque2d.cc */,
-				86C473B1170DAAB000242E95 /* spine-torque2d.h */,
 				86C473B2170DAAB000242E95 /* spine.h */,
 			);
 			name = spine;
@@ -3662,7 +3657,6 @@
 				86C473C2170DAAB000242E95 /* Skin.c in Sources */,
 				86C473C3170DAAB000242E95 /* Slot.c in Sources */,
 				86C473C4170DAAB000242E95 /* SlotData.c in Sources */,
-				86C473C5170DAAB000242E95 /* spine-torque2d.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
