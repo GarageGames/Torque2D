@@ -238,8 +238,6 @@ void SkeletonObject::updateComposition( const F32 time )
     StringTableEntry assetId = (*mSkeletonAsset).mImageAsset.getAssetId();
 
 	 clearSprites();
-	 setSpriteSrcBlendFactor(GL_ONE);
-	 setSpriteDstBlendFactor(GL_ONE_MINUS_SRC_ALPHA);
 
 	 Vector2 vertices[4];
     for (int i = 0; i < mSkeleton->slotCount; ++i) {
@@ -251,6 +249,9 @@ void SkeletonObject::updateComposition( const F32 time )
 
 		  SpriteBatchItem* pSprite = SpriteBatch::createSprite();
 		  
+		  pSprite->setSrcBlendFactor(GL_ONE);
+		  pSprite->setDstBlendFactor(GL_ONE_MINUS_SRC_ALPHA);
+
 		  pSprite->setBlendColor(ColorF(
 			  mSkeleton->r * slot->r,
 			  mSkeleton->g * slot->g,
