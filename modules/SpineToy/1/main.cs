@@ -50,8 +50,11 @@ function SpineToy::reset(%this)
 
     %spineSkeletonObject = new SkeletonObject();
     %spineSkeletonObject.Asset = "SpineToy:TestSkeleton";
+    //%spineSkeletonObject.Animation = "walk";
     SandboxScene.add(%spineSkeletonObject);
     
+    %spineSkeletonObject.setAnimation("walk");
+        
     // BEGIN: This code is just for testing name based frames
     //%this.createStaticSprite();
     //%this.createAnimatedSprite();
