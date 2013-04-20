@@ -138,7 +138,11 @@ public:
         // This should be as unique as possible as it is used for hashing.
         operator const U32() const
         {
+#ifdef TORQUE_64
+            return (U64)(mArgString) * (U32)2654435761;
+#else
             return (U32)(mArgString) * (U32)2654435761;
+#endif
         }
 
         /// Value equality check for hashing.
