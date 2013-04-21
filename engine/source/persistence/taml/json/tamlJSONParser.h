@@ -33,6 +33,8 @@
 
 //-----------------------------------------------------------------------------
 
+/// @ingroup tamlGroup
+/// @see tamlGroup
 class TamlJSONParser : public TamlParser
 {
 public:

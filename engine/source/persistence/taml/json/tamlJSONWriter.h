@@ -38,6 +38,8 @@ extern StringTableEntry JSON_RFC4627_NAME_MANGLING_FORMAT;
 
 //-----------------------------------------------------------------------------
 
+/// @ingroup tamlGroup
+/// @see tamlGroup
 class TamlJSONWriter
 {
 public:

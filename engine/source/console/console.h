@@ -129,7 +129,11 @@ struct EnumTable
 
 typedef const char *StringTableEntry;
 
+/// @defgroup tsScripting TorqueScript Bindings
+/// TorqueScrit bindings
+
 /// @defgroup console_callbacks Scripting Engine Callbacks
+/// @ingroup tsScripting
 ///
 /// The scripting engine makes heavy use of callbacks to represent
 /// function exposed to the scripting language. StringCallback,
@@ -157,6 +161,7 @@ typedef void (*ConsumerCallback)(ConsoleLogEntry::Level level, const char *conso
 /// @}
 
 /// @defgroup console_types Scripting Engine Type Functions
+/// @ingroup tsScripting
 ///
 /// @see Con::registerType
 /// @{
@@ -807,7 +812,7 @@ public:
 
 #  define ConsoleFunctionWithDocs(name,returnType,minArgs,maxArgs,argString)              \
       static returnType c##name(SimObject *, S32, const char **argv);                     \
-      static ConsoleConstructor g##name##obj(NULL,#name,c##name,"",minArgs,maxArgs);      \
+	  static ConsoleConstructor g##name##obj(NULL,#name,c##name,#argString,minArgs,maxArgs);      \
       static returnType c##name(SimObject *, S32 argc, const char **argv)
 
 #  define ConsoleFunctionGroupEnd(groupName) \
@@ -841,7 +846,7 @@ public:
          AssertFatal( dynamic_cast<className*>( object ), "Object passed to " #name " is not a " #className "!" );    \
          conmethod_return_##returnType ) c##className##name(static_cast<className*>(object),argc,argv);               \
       };                                                                                                              \
-      static ConsoleConstructor className##name##obj(#className,#name,c##className##name##caster,"",minArgs,maxArgs); \
+	  static ConsoleConstructor className##name##obj(#className,#name,c##className##name##caster,#argString,minArgs,maxArgs); \
       static inline returnType c##className##name(className *object, S32 argc, const char **argv)
 
 #  define ConsoleStaticMethod(className,name,returnType,minArgs,maxArgs,usage1)                       \
@@ -859,7 +864,7 @@ public:
          conmethod_return_##returnType ) c##className##name(argc,argv);                               \
       };                                                                                              \
       static ConsoleConstructor                                                                       \
-         className##name##obj(#className,#name,c##className##name##caster,"",minArgs,maxArgs);        \
+	  className##name##obj(#className,#name,c##className##name##caster,#argString,minArgs,maxArgs);        \
       static inline returnType c##className##name(S32 argc, const char **argv)
 
 #  define ConsoleMethodGroupEnd(className, groupName) \
