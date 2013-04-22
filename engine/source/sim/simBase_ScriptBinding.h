@@ -26,74 +26,53 @@
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunctionGroupBeginWithDocs( SimFunctions );
+ConsoleFunctionGroupBeginWithDocs( EventScheduleFunctions );
 
 //-----------------------------------------------------------------------------
 
-/*! Use the getSimTime function to get the time, in ticks, that has elapsed since the engine started executing.
-    @return Returns the time in ticks since the engine was started.
+/*! get the time, in ticks, that has elapsed since the engine started executing.
+
+    @return the time in ticks since the engine was started.
     @sa getRealTime
 
-	\par From Engine
-	@copydoc Sim::getCurrentTime
+	@boundto
+	Sim::getCurrentTime
 */
 ConsoleFunctionWithDocs( getSimTime, ConsoleInt, 1, 1, () )
 {
    return Sim::getCurrentTime();
 }
 
-//-----------------------------------------------------------------------------
-
-/*! Use the nameToID function to convert an object name into an object ID.
-    This function is a helper for those odd cases where a string will not covert properly, but generally this can be replaced with a statement like: (\"someName\")
-    @param objectName A string containing the name of an object.
-    @return Returns a positive non-zero value if the name corresponds to an object, or a -1 if it does not.
-
-	\par From Engine
-	@copydoc Sim::findObject
-*/
-ConsoleFunctionWithDocs( nameToID, ConsoleInt, 2, 2, ( string objectName ) )
-{
-   SimObject *obj = Sim::findObject(argv[1]);
-   if(obj)
-      return obj->getId();
-   else
-      return -1;
-}
-
-/*! Use the isObject function to check if the name or ID specified in handle is a valid object.
-    @param handle A name or ID of a possible object.
-    @return Returns true if handle refers to a valid object, false otherwise
-*/
-ConsoleFunctionWithDocs(isObject, ConsoleBool, 2, 2, ( handle ) )
-{
-   if (!dStrcmp(argv[1], "0") || !dStrcmp(argv[1], ""))
-      return false;
-   else
-      return (Sim::findObject(argv[1]) != NULL);
-}
-
 /*! cancel a previously scheduled event
+
 	@param eventID The numeric ID of a previously scheduled event.
 	@return No return value.
-	@sa getEventTimeLeft, getScheduleDuration, getTimeSinceStart, isEventPending, schedule, Class::SceneObject::schedule
+	@sa getEventTimeLeft, getScheduleDuration, getTimeSinceStart, isEventPending, schedule, SimObject::schedule
 
-	@par From Engine
-	@sa Sim::cancelEvent
+	@boundto
+	Sim::cancelEvent
 */
 ConsoleFunctionWithDocs(cancel,ConsoleVoid,2,2, ( eventID ) )
 {
    Sim::cancelEvent(dAtoi(argv[1]));
 }
 
-/*!	Use the isEventPending function to see if the event associated with eventID is still pending.
+/*!	See if the event associated with eventID is still pending.
+
 	When an event passes, the eventID is removed from the event queue, becoming invalid, so there is no discnerable difference between a completed event and a bad event ID.
 	@param eventID The numeric ID of a previously scheduled event.
-	@return Returns true if this event is still outstanding and false if it has passed or eventID is invalid.
-	@sa cancel, getEventTimeLeft, getScheduleDuration, getTimeSinceStart, schedule, obj.schedule
+	@return true if this event is still outstanding and false if it has passed or eventID is invalid.
 
-	@par From Engine
-	@sa Sim::isEventPending
+	@par Example
+	@code
+	$Game::Schedule = schedule($Game::EndGamePause * 1000, 0, "onCyclePauseEnd");
+	if( isEventPending($Game::Schedule) )  echo("got a pending event");
+	@endcode
+
+	@sa cancel, getEventTimeLeft, getScheduleDuration, getTimeSinceStart, schedule, SimObject::schedule
+
+	@boundto
+	Sim::isEventPending
 */
 ConsoleFunctionWithDocs(isEventPending, ConsoleBool, 2, 2, ( eventID ) )
 {
@@ -101,13 +80,14 @@ ConsoleFunctionWithDocs(isEventPending, ConsoleBool, 2, 2, ( eventID ) )
 }
 
 /*!
-	Use the getEventTimeLeft function to determine how much time remains until the event specified by eventID occurs.
-    @param eventID The numeric ID of a previously scheduled event.
-    @return Returns a non-zero integer value equal to the milliseconds until the event specified by eventID will occur. However, if eventID is invalid, or the event has passed, this function will return zero.
-    @sa cancel, getScheduleDuration, getTimeSinceStart, isEventPending, schedule, obj.schedule
+	Determines how much time remains until the event specified by eventID occurs.
 
-	@par From Engine
-	@copydoc Sim::getEventTimeLeft
+    @param eventID The numeric ID of a previously scheduled event.
+    @return a non-zero integer value equal to the milliseconds until the event specified by eventID will occur. However, if eventID is invalid, or the event has passed, this function will return zero.
+    @sa cancel, getScheduleDuration, getTimeSinceStart, isEventPending, schedule, SimObject::schedule
+
+	@boundto
+	Sim::getEventTimeLeft
 */
 ConsoleFunctionWithDocs(getEventTimeLeft, ConsoleInt, 2, 2, ( eventID ) )
 {
@@ -115,13 +95,14 @@ ConsoleFunctionWithDocs(getEventTimeLeft, ConsoleInt, 2, 2, ( eventID ) )
 }
 
 /*!
-	Use the getScheduleDuration function to determine how long the event associated with eventID was scheduled for.
-	@param eventID The numeric ID of a previously scheduled event.
-	@return Returns a non-zero integer value equal to the milliseconds used in the schedule call that created this event. However, if eventID is invalid, this function will return zero.
-	@sa cancel, getEventTimeLeft, getTimeSinceStart, isEventPending, schedule, obj.schedule
+	Determines how long the event associated with eventID was scheduled for.
 
-	@par From Engine
-	@copydoc Sim::getScheduleDuration
+	@param eventID The numeric ID of a previously scheduled event.
+	@return a non-zero integer value equal to the milliseconds used in the schedule call that created this event. However, if eventID is invalid, this function will return zero.
+	@sa cancel, getEventTimeLeft, getTimeSinceStart, isEventPending, schedule, SimObject::schedule
+
+	@boundto
+	Sim::getScheduleDuration
 */
 ConsoleFunctionWithDocs(getScheduleDuration, ConsoleInt, 2, 2, ( eventID ) )
 {
@@ -130,13 +111,14 @@ ConsoleFunctionWithDocs(getScheduleDuration, ConsoleInt, 2, 2, ( eventID ) )
 }
 
 /*!
-	Use the getTimeSinceStart function to determine how much time has passed since the event specified by eventID was scheduled.
-    @param eventID The numeric ID of a previously scheduled event.
-    @return Returns a non-zero integer value equal to the milliseconds that have passed since this event was scheduled. However, if eventID is invalid, or the event has passed, this function will return zero.
-    @sa cancel, getEventTimeLeft, getScheduleDuration, isEventPending, schedule, obj.schedule
+	Determines how much time has passed since the event specified by eventID was scheduled.
 
-	@par From Engine
-	@copydoc Sim::getTimeSinceStart
+    @param eventID The numeric ID of a previously scheduled event.
+    @return a non-zero integer value equal to the milliseconds that have passed since this event was scheduled. However, if eventID is invalid, or the event has passed, this function will return zero.
+    @sa cancel, getEventTimeLeft, getScheduleDuration, isEventPending, schedule, SimObject::schedule
+
+	@boundto
+	Sim::getTimeSinceStart
 */
 ConsoleFunctionWithDocs(getTimeSinceStart, ConsoleInt, 2, 2, ( eventID ) )
 {
@@ -145,16 +127,24 @@ ConsoleFunctionWithDocs(getTimeSinceStart, ConsoleInt, 2, 2, ( eventID ) )
 }
 
 /*!
-	Use the schedule function to schedule functionName to be executed with optional arguments at time t (specified in milliseconds) in the future. This function may be associated with an object ID or not. If it is associated with an object ID and the object is deleted prior to this event occurring, the event is automatically canceled.
+	Schedule "functionName" to be executed with optional arguments at time t (specified in milliseconds) in the future.
+	
+	This function may be associated with an object ID or not. If it is associated with an object ID and the object is deleted prior to this event occurring, the event is automatically canceled.
     @param t The time to wait (in milliseconds) before executing functionName.
     @param objID An optional ID to associate this event with.
     @param functionName An unadorned (flat) function name.
     @param arg0, .. , argN - Any number of optional arguments to be passed to functionName.
-    @return Returns a non-zero integer representing the event ID for the scheduled event.
-    @sa cancel, getEventTimeLeft, getScheduleDuration, getTimeSinceStart, isEventPending, obj.schedule
+    @return a non-zero integer representing the event ID for the scheduled event.
 
-	@par From Engine
-	@copydoc Sim::postEvent
+	@par Example
+	@code
+	$Game::Schedule = schedule($Game::EndGamePause * 1000, 0, "onCyclePauseEnd");
+	@endcode
+
+    @sa cancel, getEventTimeLeft, getScheduleDuration, getTimeSinceStart, isEventPending, SimObject::schedule
+
+	@boundto
+	Sim::postEvent
 */
 ConsoleFunctionWithDocs(schedule, ConsoleInt, 4, 0, ( t , objID || 0 , functionName, arg0, ... , argN ) )
 {
@@ -179,4 +169,46 @@ ConsoleFunctionWithDocs(schedule, ConsoleInt, 4, 0, ( t , objID || 0 , functionN
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunctionGroupEndWithDocs( SimFunctions );
+ConsoleFunctionGroupEndWithDocs( EventScheduleFunctions );
+
+ConsoleFunctionGroupBeginWithDocs( ObjectFunctions );
+
+//-----------------------------------------------------------------------------
+
+/*! Use the nameToID function to convert an object name into an object ID.
+
+    Helper function for those odd cases where a string will not covert properly, but generally this can be replaced with a statement like: ("someName")
+    @param objectName A string containing the name of an object.
+    @return a positive non-zero value if the name corresponds to an object, or a -1 if it does not.
+
+	@boundto
+	Sim::findObject
+*/
+ConsoleFunctionWithDocs( nameToID, ConsoleInt, 2, 2, ( string objectName ) )
+{
+   SimObject *obj = Sim::findObject(argv[1]);
+   if(obj)
+      return obj->getId();
+   else
+      return -1;
+}
+
+/*! check if the name or ID specified is a valid object.
+
+    @param handle A name or ID of a possible object.
+    @return true if handle refers to a valid object, false otherwise
+
+	@boundto
+	Sim::findObject
+*/
+ConsoleFunctionWithDocs(isObject, ConsoleBool, 2, 2, ( handle ) )
+{
+   if (!dStrcmp(argv[1], "0") || !dStrcmp(argv[1], ""))
+      return false;
+   else
+      return (Sim::findObject(argv[1]) != NULL);
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleFunctionGroupEndWithDocs( ObjectFunctions );
