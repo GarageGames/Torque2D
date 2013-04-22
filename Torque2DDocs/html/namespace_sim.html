@@ -14,6 +14,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="t2d-stylesheet-extra.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -404,6 +405,9 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>get the time, in ticks, that has elapsed since the engine started executing.</p>
+<dl class="section return"><dt>Returns</dt><dd>the time in ticks since the engine was started. </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd>getRealTime </dd></dl>
 
 </div>
 </div>
@@ -430,11 +434,20 @@ Variables</h2></td></tr>
           <td class="memname">U32 getEventTimeLeft </td>
           <td>(</td>
           <td class="paramtype">U32&#160;</td>
-          <td class="paramname"><em>eventId</em></td><td>)</td>
+          <td class="paramname"><em>eventSequence</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>determines how much time remains until the event specified by eventID occurs.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">eventID</td><td>The numeric ID of a previously scheduled event. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a non-zero integer value equal to the milliseconds until the event specified by eventID will occur. However, if eventID is invalid, or the event has passed, this function will return zero. </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd>cancel, <a class="el" href="namespace_sim.html#adbfec8abe21f7bba0d98eaa0efac21f9">getScheduleDuration</a>, <a class="el" href="namespace_sim.html#a904d9f6fd2b0539fd569cad4c941b547">getTimeSinceStart</a>, <a class="el" href="namespace_sim.html#a13671cb262fdb9dea2de6b70d8201cbb">isEventPending</a>, schedule, SimObject::schedule </dd></dl>
 
 </div>
 </div>
@@ -461,11 +474,20 @@ Variables</h2></td></tr>
           <td class="memname">U32 getScheduleDuration </td>
           <td>(</td>
           <td class="paramtype">U32&#160;</td>
-          <td class="paramname"><em>eventId</em></td><td>)</td>
+          <td class="paramname"><em>eventSequence</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Determines how long the event associated with eventID was scheduled for.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">eventID</td><td>The numeric ID of a previously scheduled event. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a non-zero integer value equal to the milliseconds used in the schedule call that created this event. However, if eventID is invalid, this function will return zero. </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd>cancel, <a class="el" href="namespace_sim.html#a7d5e393f52b295452c2b6d302986133a">getEventTimeLeft</a>, <a class="el" href="namespace_sim.html#a904d9f6fd2b0539fd569cad4c941b547">getTimeSinceStart</a>, <a class="el" href="namespace_sim.html#a13671cb262fdb9dea2de6b70d8201cbb">isEventPending</a>, schedule, SimObject::schedule </dd></dl>
 
 </div>
 </div>
@@ -492,11 +514,20 @@ Variables</h2></td></tr>
           <td class="memname">U32 getTimeSinceStart </td>
           <td>(</td>
           <td class="paramtype">U32&#160;</td>
-          <td class="paramname"><em>eventId</em></td><td>)</td>
+          <td class="paramname"><em>eventSequence</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Determines how much time has passed since the event specified by eventID was scheduled.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">eventID</td><td>The numeric ID of a previously scheduled event. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a non-zero integer value equal to the milliseconds that have passed since this event was scheduled. However, if eventID is invalid, or the event has passed, this function will return zero. </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd>cancel, <a class="el" href="namespace_sim.html#a7d5e393f52b295452c2b6d302986133a">getEventTimeLeft</a>, <a class="el" href="namespace_sim.html#adbfec8abe21f7bba0d98eaa0efac21f9">getScheduleDuration</a>, <a class="el" href="namespace_sim.html#a13671cb262fdb9dea2de6b70d8201cbb">isEventPending</a>, schedule, SimObject::schedule </dd></dl>
 
 </div>
 </div>
@@ -569,11 +600,21 @@ Variables</h2></td></tr>
           <td class="memname">bool isEventPending </td>
           <td>(</td>
           <td class="paramtype">U32&#160;</td>
-          <td class="paramname"><em>eventId</em></td><td>)</td>
+          <td class="paramname"><em>eventSequence</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>see if the event associated with eventID is still pending.</p>
+<p>When an event passes, the eventID is removed from the event queue, becoming invalid, so there is no discernable difference between a completed event and a bad event ID. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">eventID</td><td>The numeric ID of a previously scheduled event. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if this event is still outstanding and false if it has passed or eventID is invalid.</dd></dl>
+<dl class="section see"><dt>See Also</dt><dd>cancel, <a class="el" href="namespace_sim.html#a7d5e393f52b295452c2b6d302986133a">getEventTimeLeft</a>, <a class="el" href="namespace_sim.html#adbfec8abe21f7bba0d98eaa0efac21f9">getScheduleDuration</a>, <a class="el" href="namespace_sim.html#a904d9f6fd2b0539fd569cad4c941b547">getTimeSinceStart</a>, schedule, obj.schedule </dd></dl>
 
 </div>
 </div>
@@ -1046,7 +1087,7 @@ Variables</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Apr 15 2013 09:02:42 for Torque2D Reference by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Apr 22 2013 13:48:38 for Torque2D Reference by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

@@ -1,0 +1,27 @@
+/* the symbol listing at the top of the page would normally have bold symbol names
+   let's try removing the boldness */
+a.el {
+	font-weight: normal;
+}
+
+/* in the description section, function/method parameters are one to a line.
+   let's combine them on a line */
+.memname tr {
+	float: left;
+}
+
+/* parameter names are bright, dark red.
+   would prefer something that doesn't look like a warning */
+.paramname {
+	color: #8080C0;
+}
+
+/* not only were our parameter names "warning" red colored,
+   they were bold.  let's go to normal */
+/* note that we change several classes here since they were lumped together
+   in doxygen.css as well.  by the same point, the color was specific to the
+   paramname class
+*/
+.params .paramname, .retval .paramname {
+		font-weight: normal;
+}

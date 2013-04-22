@@ -267,8 +267,8 @@ var searchData=
   ['connectrequest',['ConnectRequest',['../class_net_interface.html#a7945a8e6177433dca4f81ae3b04443cda2e350bfd593679e0f52b005c4a20ab4f',1,'NetInterface']]],
   ['connectretrycount',['ConnectRetryCount',['../class_net_interface.html#a27bfc507001342233e169e5543023d80a23038596e0552dde9d6c1b030831d735',1,'NetInterface']]],
   ['connectretrytime',['ConnectRetryTime',['../class_net_interface.html#a27bfc507001342233e169e5543023d80ace1bd3f8b5cfa6f57e21e93b8af82e4a',1,'NetInterface']]],
-  ['conprinfthreadedevent',['ConPrinfThreadedEvent',['../class_con_1_1_con_prinf_threaded_event.html',1,'Con']]],
   ['conprinfthreadedevent',['ConPrinfThreadedEvent',['../class_con_1_1_con_prinf_threaded_event.html#af7cec344d6fd25402126840c9c8265f3',1,'Con::ConPrinfThreadedEvent']]],
+  ['conprinfthreadedevent',['ConPrinfThreadedEvent',['../class_con_1_1_con_prinf_threaded_event.html',1,'Con']]],
   ['console_20auto_2ddocumentation',['Console Auto-Documentation',['../console_autodoc.html',1,'']]],
   ['consolealloc',['consoleAlloc',['../namespace_compiler.html#a75bedc8e385912f2992d3139f2237454',1,'Compiler']]],
   ['consoleallocreset',['consoleAllocReset',['../namespace_compiler.html#a1c3b01b5debc3449ef3e3d72569a0497',1,'Compiler']]],
@@ -408,6 +408,7 @@ var searchData=
   ['custom_5flayout',['CUSTOM_LAYOUT',['../class_composite_sprite.html#a70babddba5db5661c8f6c4a0e5fb3c1ba7f929ec9a154f8d703537baeb3f93492',1,'CompositeSprite']]],
   ['cut',['cut',['../class_string_buffer.html#a77a7b59ebe7bd666ad9378f5f38b9aba',1,'StringBuffer']]],
   ['cycle',['CYCLE',['../class_particle_asset.html#ab2f806176a47fc8d4ee941dcc9e98e29a2903bd4e01525b1817de64231fa3dcde',1,'ParticleAsset']]],
+  ['cross_2dplatform_20opengl_20support',['Cross-Platform OpenGL Support',['../group__dgl.html',1,'']]],
   ['camera_20functions',['Camera functions',['../group__dgl__camera__func.html',1,'']]],
   ['containers',['Containers',['../group__gui__container__group.html',1,'']]],
   ['core',['Core',['../group__gui__core__group.html',1,'']]]
