@@ -1,0 +1,144 @@
+GoblinBoy.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+undie-straps
+  rotate: false
+  xy: 79, 138
+  size: 55, 19
+  orig: 55, 19
+  offset: 0, 0
+  index: -1
+undies
+  rotate: false
+  xy: 26, 127
+  size: 36, 29
+  orig: 36, 29
+  offset: 0, 0
+  index: -1
+left-lower-leg
+  rotate: false
+  xy: 217, 121
+  size: 33, 70
+  orig: 33, 70
+  offset: 0, 0
+  index: -1
+right-shoulder
+  rotate: false
+  xy: 26, 2
+  size: 39, 45
+  orig: 39, 45
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 79, 2
+  size: 103, 66
+  orig: 103, 66
+  offset: 0, 0
+  index: -1
+torso
+  rotate: false
+  xy: 2, 372
+  size: 68, 96
+  orig: 68, 96
+  offset: 0, 0
+  index: -1
+right-foot
+  rotate: false
+  xy: 79, 103
+  size: 63, 33
+  orig: 63, 33
+  offset: 0, 0
+  index: -1
+left-foot
+  rotate: false
+  xy: 79, 70
+  size: 65, 31
+  orig: 65, 31
+  offset: 0, 0
+  index: -1
+neck
+  rotate: false
+  xy: 146, 70
+  size: 36, 41
+  orig: 36, 41
+  offset: 0, 0
+  index: -1
+right-upper-leg
+  rotate: false
+  xy: 26, 158
+  size: 34, 63
+  orig: 34, 63
+  offset: 0, 0
+  index: -1
+left-shoulder
+  rotate: false
+  xy: 217, 193
+  size: 29, 44
+  orig: 29, 44
+  offset: 0, 0
+  index: -1
+spear
+  rotate: false
+  xy: 2, 2
+  size: 22, 368
+  orig: 22, 368
+  offset: 0, 0
+  index: -1
+left-arm
+  rotate: false
+  xy: 40, 470
+  size: 37, 35
+  orig: 37, 35
+  offset: 0, 0
+  index: -1
+left-hand
+  rotate: false
+  xy: 144, 113
+  size: 36, 41
+  orig: 36, 41
+  offset: 0, 0
+  index: -1
+right-arm
+  rotate: false
+  xy: 136, 156
+  size: 23, 50
+  orig: 23, 50
+  offset: 0, 0
+  index: -1
+right-lower-leg
+  rotate: false
+  xy: 26, 49
+  size: 36, 76
+  orig: 36, 76
+  offset: 0, 0
+  index: -1
+shield
+  rotate: false
+  xy: 184, 2
+  size: 70, 72
+  orig: 70, 72
+  offset: 0, 0
+  index: -1
+pelvis
+  rotate: false
+  xy: 184, 76
+  size: 62, 43
+  orig: 62, 43
+  offset: 0, 0
+  index: -1
+left-upper-leg
+  rotate: false
+  xy: 182, 121
+  size: 33, 73
+  orig: 33, 73
+  offset: 0, 0
+  index: -1
+right-hand
+  rotate: false
+  xy: 2, 470
+  size: 36, 37
+  orig: 36, 37
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,4 @@
+<SkeletonAsset
+        AssetName="GoblinGirl"
+		AtlasFile="GoblinGirl.atlas"
+        SkeletonFile="GoblinGirl.json" />

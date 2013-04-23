@@ -1,0 +1,144 @@
+GoblinGirl.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+undie-straps
+  rotate: false
+  xy: 30, 85
+  size: 55, 19
+  orig: 55, 19
+  offset: 0, 0
+  index: -1
+undies
+  rotate: false
+  xy: 179, 107
+  size: 36, 29
+  orig: 36, 29
+  offset: 0, 0
+  index: -1
+left-lower-leg
+  rotate: false
+  xy: 110, 85
+  size: 33, 70
+  orig: 33, 70
+  offset: 0, 0
+  index: -1
+right-shoulder
+  rotate: false
+  xy: 138, 209
+  size: 39, 45
+  orig: 39, 45
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 30, 2
+  size: 103, 81
+  orig: 103, 81
+  offset: 0, 0
+  index: -1
+torso
+  rotate: false
+  xy: 2, 112
+  size: 68, 96
+  orig: 68, 96
+  offset: 0, 0
+  index: -1
+dagger
+  rotate: false
+  xy: 2, 2
+  size: 26, 108
+  orig: 26, 108
+  offset: 0, 0
+  index: -1
+right-foot
+  rotate: false
+  xy: 171, 35
+  size: 63, 33
+  orig: 63, 33
+  offset: 0, 0
+  index: -1
+left-foot
+  rotate: false
+  xy: 171, 2
+  size: 65, 31
+  orig: 65, 31
+  offset: 0, 0
+  index: -1
+neck
+  rotate: false
+  xy: 66, 210
+  size: 35, 41
+  orig: 35, 41
+  offset: 0, 0
+  index: -1
+right-upper-leg
+  rotate: false
+  xy: 135, 2
+  size: 34, 63
+  orig: 34, 63
+  offset: 0, 0
+  index: -1
+left-shoulder
+  rotate: false
+  xy: 145, 109
+  size: 28, 46
+  orig: 28, 46
+  offset: 0, 0
+  index: -1
+dagger-tip
+  rotate: false
+  xy: 87, 85
+  size: 17, 17
+  orig: 17, 17
+  offset: 0, 0
+  index: -1
+left-arm
+  rotate: false
+  xy: 179, 70
+  size: 37, 35
+  orig: 37, 35
+  offset: 0, 0
+  index: -1
+left-hand
+  rotate: false
+  xy: 217, 109
+  size: 35, 40
+  orig: 35, 40
+  offset: 0, 0
+  index: -1
+right-arm
+  rotate: false
+  xy: 138, 157
+  size: 28, 50
+  orig: 28, 50
+  offset: 0, 0
+  index: -1
+right-lower-leg
+  rotate: false
+  xy: 72, 106
+  size: 36, 76
+  orig: 36, 76
+  offset: 0, 0
+  index: -1
+pelvis
+  rotate: false
+  xy: 2, 210
+  size: 62, 43
+  orig: 62, 43
+  offset: 0, 0
+  index: -1
+left-upper-leg
+  rotate: false
+  xy: 103, 184
+  size: 33, 70
+  orig: 33, 70
+  offset: 0, 0
+  index: -1
+right-hand
+  rotate: false
+  xy: 218, 70
+  size: 36, 37
+  orig: 36, 37
+  offset: 0, 0
+  index: -1
