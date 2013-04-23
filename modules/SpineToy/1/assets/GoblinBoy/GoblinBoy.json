@@ -46,26 +46,26 @@
 "skins": {
 	"goblin": {
 		"neck": {
-			"neck": { "name": "goblin/neck", "x": 10.1, "y": 0.42, "rotation": -93.69, "width": 36, "height": 41 }
+			"neck": { "name": "neck", "x": 10.1, "y": 0.42, "rotation": -93.69, "width": 36, "height": 41 }
 		},
 		"undies": {
-			"undies": { "name": "goblin/undies", "x": 6.3, "y": 0.12, "rotation": 0.91, "width": 36, "height": 29 }
+			"undies": { "name": "undies", "x": 6.3, "y": 0.12, "rotation": 0.91, "width": 36, "height": 29 }
 		},
 		"right hand": {
-			"right hand": { "name": "goblin/right-hand", "x": 7.88, "y": 2.78, "rotation": 91.96, "width": 36, "height": 37 }
+			"right hand": { "name": "right-hand", "x": 7.88, "y": 2.78, "rotation": 91.96, "width": 36, "height": 37 }
 		},
 		"right arm": {
-			"right arm": { "name": "goblin/right-arm", "x": 16.44, "y": -1.04, "rotation": 94.32, "width": 23, "height": 50 }
+			"right arm": { "name": "right-arm", "x": 16.44, "y": -1.04, "rotation": 94.32, "width": 23, "height": 50 }
 		},
 		"head": {
-			"head": { "name": "goblin/head", "x": 25.73, "y": 2.33, "rotation": -92.29, "width": 103, "height": 66 }
+			"head": { "name": "head", "x": 25.73, "y": 2.33, "rotation": -92.29, "width": 103, "height": 66 }
 		},
 		"left shoulder": {
-			"left shoulder": { "name": "goblin/left-shoulder", "x": 15.56, "y": -2.26, "rotation": 62.01, "width": 29, "height": 44 }
+			"left shoulder": { "name": "left-shoulder", "x": 15.56, "y": -2.26, "rotation": 62.01, "width": 29, "height": 44 }
 		},
 		"left arm": {
 			"left arm": {
-				"name": "goblin/left-arm",
+				"name": "left-arm",
 				"x": 16.7,
 				"y": -1.69,
 				"scaleX": 1.057,
@@ -77,7 +77,7 @@
 		},
 		"left hand": {
 			"left hand": {
-				"name": "goblin/left-hand",
+				"name": "left-hand",
 				"x": 3.47,
 				"y": 3.41,
 				"scaleX": 0.892,
@@ -88,40 +88,40 @@
 			}
 		},
 		"right lower leg": {
-			"right lower leg": { "name": "goblin/right-lower-leg", "x": 25.68, "y": -3.15, "rotation": 111.83, "width": 36, "height": 76 }
+			"right lower leg": { "name": "right-lower-leg", "x": 25.68, "y": -3.15, "rotation": 111.83, "width": 36, "height": 76 }
 		},
 		"right upper leg": {
-			"right upper leg": { "name": "goblin/right-upper-leg", "x": 20.35, "y": 1.47, "rotation": 97.49, "width": 34, "height": 63 }
+			"right upper leg": { "name": "right-upper-leg", "x": 20.35, "y": 1.47, "rotation": 97.49, "width": 34, "height": 63 }
 		},
 		"pelvis": {
-			"pelvis": { "name": "goblin/pelvis", "x": -5.61, "y": 0.76, "width": 62, "height": 43 }
+			"pelvis": { "name": "pelvis", "x": -5.61, "y": 0.76, "width": 62, "height": 43 }
 		},
 		"left lower leg": {
-			"left lower leg": { "name": "goblin/left-lower-leg", "x": 23.58, "y": -2.06, "rotation": 105.75, "width": 33, "height": 70 }
+			"left lower leg": { "name": "left-lower-leg", "x": 23.58, "y": -2.06, "rotation": 105.75, "width": 33, "height": 70 }
 		},
 		"left upper leg": {
-			"left upper leg": { "name": "goblin/left-upper-leg", "x": 29.68, "y": -3.87, "rotation": 89.09, "width": 33, "height": 73 }
+			"left upper leg": { "name": "left-upper-leg", "x": 29.68, "y": -3.87, "rotation": 89.09, "width": 33, "height": 73 }
 		},
 		"torso": {
-			"torso": { "name": "goblin/torso", "x": 38.09, "y": -3.87, "rotation": -94.95, "width": 68, "height": 96 }
+			"torso": { "name": "torso", "x": 38.09, "y": -3.87, "rotation": -94.95, "width": 68, "height": 96 }
 		},
 		"right shoulder": {
-			"right shoulder": { "name": "goblin/right-shoulder", "x": 15.68, "y": -1.03, "rotation": 130.65, "width": 39, "height": 45 }
+			"right shoulder": { "name": "right-shoulder", "x": 15.68, "y": -1.03, "rotation": 130.65, "width": 39, "height": 45 }
 		},
 		"right foot": {
-			"right foot": { "name": "goblin/right-foot", "x": 23.56, "y": 9.8, "rotation": 1.52, "width": 63, "height": 33 }
+			"right foot": { "name": "right-foot", "x": 23.56, "y": 9.8, "rotation": 1.52, "width": 63, "height": 33 }
 		},
 		"left foot": {
-			"left foot": { "name": "goblin/left-foot", "x": 24.85, "y": 8.74, "rotation": 3.32, "width": 65, "height": 31 }
+			"left foot": { "name": "left-foot", "x": 24.85, "y": 8.74, "rotation": 3.32, "width": 65, "height": 31 }
 		},
 		"right hand item": {
-			"right hand item": { "name": "goblin/shield", "x": -0.47, "y": 1.1, "rotation": 91.16, "width": 70, "height": 72 }
+			"right hand item": { "name": "shield", "x": -0.47, "y": 1.1, "rotation": 91.16, "width": 70, "height": 72 }
 		},
 		"left hand item": {
-			"left hand item": { "name": "goblin/spear", "x": -4.55, "y": 39.2, "rotation": 13.04, "width": 22, "height": 368 }
+			"left hand item": { "name": "spear", "x": -4.55, "y": 39.2, "rotation": 13.04, "width": 22, "height": 368 }
 		},
 		"undie straps": {
-			"undie straps": { "name": "goblin/undie-straps", "x": -3.87, "y": 13.1, "scaleX": 1.089, "width": 55, "height": 19 }
+			"undie straps": { "name": "undie-straps", "x": -3.87, "y": 13.1, "scaleX": 1.089, "width": 55, "height": 19 }
 		}
 	}
 },

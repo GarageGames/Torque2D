@@ -627,7 +627,7 @@ bool ImageAsset::addExplicitCell( const S32 cellOffsetX, const S32 cellOffsetY, 
     }
 
     // The Cell Offset Y needs to be within the image.
-    if ( cellOffsetY < 0 || cellOffsetY >= imageWidth )
+    if ( cellOffsetY < 0 || cellOffsetY >= imageHeight )
     {
         // Warn.
         Con::warnf( "ImageAsset::addCell() - Invalid Cell OffsetY of %d.", cellOffsetY );

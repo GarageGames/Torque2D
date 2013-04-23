@@ -57,7 +57,7 @@ function SpineToy::reset(%this)
     //%spineSkeletonObject.Asset = "SpineToy:GoblinGirl";
     
     // Set the animation name
-    //%spineSkeletonObject.Animation = "walk";    
+    %spineSkeletonObject.Animation = "walk";    
     
     // Add it to the scene
     SandboxScene.add(%spineSkeletonObject);
