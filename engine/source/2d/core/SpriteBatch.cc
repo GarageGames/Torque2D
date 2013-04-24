@@ -1376,7 +1376,7 @@ void SpriteBatch::onTamlCustomRead( const TamlCustomNodes& customNodes )
         if ( spriteName != StringTable->EmptyString )
         {
             // Yes, so insert into sprite names if it doesn't already exist.
-            if ( mSpriteNames.find( spriteName ) != mSpriteNames.end() ) 
+            if ( mSpriteNames.find( spriteName ) == mSpriteNames.end() ) 
                 mSpriteNames.insert( spriteName, mSelectedSprite );
         }
     }
