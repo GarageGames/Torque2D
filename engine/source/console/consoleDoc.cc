@@ -167,7 +167,7 @@ void printClassHeader(const char* usage, const char * className, const char * su
    if(superClassName)
       Con::printf("class  %s : public %s {", className, superClassName ? superClassName : "");
    else if(!className)
-   { /* nothing to print */ }
+      Con::printf("namespace Global {");
    else
       Con::printf("class  %s {", className);
 
@@ -180,30 +180,10 @@ void printClassMethod(const bool isVirtual, const char *retType, const char *met
 {
    if(usage && usage[0] != ';' && usage[0] != 0)
       Con::printf("   /*! %s */", usage);
-
-   // no longer want to see "virtual" attribute for each "built-in" function.
-   // (they are all built-in if you dump before loading scripts.)
-   Con::printf("   %s%s %s(%s) {}", /* isVirtual */ false ? "virtual " : "", retType, methodName, args);
+   Con::printf("   %s%s %s(%s) {}", isVirtual ? "virtual " : "", retType, methodName, args);
 }
 
-// a doxygen "group" or "module" declaration to organize collections arbitrarily
-// (doxygen uses the terms "group" and "module" interchangeably)
 void printGroupStart(const char * aName, const char * aDocs)
-{
-   Con::printf("");
-   Con::printf("   /*! @defgroup %s", aName);
-
-   if(aDocs)
-   {
-      Con::printf("   ");
-      Con::printf("   %s", aDocs);
-   }
-
-   Con::printf("   @{ */");
-}
-
-// a doxygen "member group" declaration, for use within a class to organize methods and variables
-void printMemberGroupStart(const char * aName, const char * aDocs)
 {
    Con::printf("");
    Con::printf("   /*! @name %s", aName);
@@ -235,15 +215,7 @@ void printClassMember(const bool isDeprec, const char * aType, const char * aNam
    Con::printf("   %s %s;", isDeprec ? "deprecated" : aType, aName);
 }
 
-// see printGroupStart
 void printGroupEnd()
-{
-   Con::printf("   /// @}");
-   Con::printf("");
-}
-
-// see printMemberGroupStart
-void printMemberGroupEnd()
 {
    Con::printf("   /// @}");
    Con::printf("");
@@ -500,10 +472,10 @@ void Namespace::dumpClasses( bool dumpScript, bool dumpEngine )
             switch((*fieldList)[j].type)
             {
             case AbstractClassRep::StartGroupFieldType:
-               printMemberGroupStart((*fieldList)[j].pGroupname, (*fieldList)[j].pFieldDocs);
+               printGroupStart((*fieldList)[j].pGroupname, (*fieldList)[j].pFieldDocs);
                break;
             case AbstractClassRep::EndGroupFieldType:
-               printMemberGroupEnd();
+               printGroupEnd();
                break;
             default:
             case AbstractClassRep::DepricatedFieldType:
@@ -628,9 +600,13 @@ void Namespace::dumpFunctions( bool dumpScript, bool dumpEngine )
    // Get the global namespace.
    Namespace* g = find(NULL); //->mParent;
 
+   printClassHeader(NULL, NULL,NULL, false);
+
    while(g) 
    {
       printNamespaceEntries(g, dumpScript, dumpEngine );
       g = g->mParent;
    }
+
+   printClassFooter();
 }
