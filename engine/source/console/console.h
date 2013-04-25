@@ -825,7 +825,7 @@ public:
 #  define ConsoleNamespace(className, usage) \
       static ConsoleConstructor className##__Namespace(#className, usage);
 
-#  define ConsoleMethodGroupBeginWithDocs(className)
+#  define ConsoleMethodGroupBeginWithDocs(className, superclassName)
 #  define ConsoleMethodGroupEndWithDocs(className)
 
 #  define ConsoleMethodGroupBegin(className, groupName, usage) \

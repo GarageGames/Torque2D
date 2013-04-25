@@ -22,13 +22,13 @@
 
 class Trigger;
 
-ConsoleMethodGroupBeginWithDocs(Trigger)
+ConsoleMethodGroupBeginWithDocs(Trigger, SceneObject)
 
 /*! Set whether trigger checks onEnter events
 	@param setting Default is true.
 	@return No return value.
 */
-ConsoleMethodWithDocs(Trigger, setEnterCallback, void, 2, 3, ([setting]))
+ConsoleMethodWithDocs(Trigger, setEnterCallback, ConsoleVoid, 2, 3, ([setting]?))
 {
    // If the value isn't specified, the default is true.
    bool callback = true;
@@ -44,7 +44,7 @@ ConsoleMethodWithDocs(Trigger, setEnterCallback, void, 2, 3, ([setting]))
 	@param setting Default is true.
 	@return No return value.
 */
-ConsoleMethodWithDocs(Trigger, setStayCallback, ConsoleVoid, 2, 3, ([setting]))
+ConsoleMethodWithDocs(Trigger, setStayCallback, ConsoleVoid, 2, 3, ([setting]?))
 {
    // If the value isn't specified, the default is true.
    bool callback = true;
@@ -60,7 +60,7 @@ ConsoleMethodWithDocs(Trigger, setStayCallback, ConsoleVoid, 2, 3, ([setting]))
     @param setting Default is true.
     @return No return value.
 */
-ConsoleMethodWithDocs(Trigger, setLeaveCallback, ConsoleVoid, 2, 3, ([setting]))
+ConsoleMethodWithDocs(Trigger, setLeaveCallback, ConsoleVoid, 2, 3, ([setting]?))
 {
    // If the value isn't specified, the default is true.
    bool callback = true;
