@@ -802,9 +802,6 @@ public:
 #  define ConsoleFunctionGroupBegin(groupName, usage) \
       static ConsoleConstructor gConsoleFunctionGroup##groupName##__GroupBegin(NULL,#groupName,usage);
 
-#  define ConsoleFunctionGroupBeginWithDocs(groupName) \
-      static ConsoleConstructor gConsoleFunctionGroup##groupName##__GroupBegin(NULL,#groupName,"");
-
 #  define ConsoleFunction(name,returnType,minArgs,maxArgs,usage1)                         \
       static returnType c##name(SimObject *, S32, const char **argv);                     \
       static ConsoleConstructor g##name##obj(NULL,#name,c##name,usage1,minArgs,maxArgs);  \
@@ -816,9 +813,6 @@ public:
       static returnType c##name(SimObject *, S32 argc, const char **argv)
 
 #  define ConsoleFunctionGroupEnd(groupName) \
-      static ConsoleConstructor gConsoleFunctionGroup##groupName##__GroupEnd(NULL,#groupName,NULL);
-
-#  define ConsoleFunctionGroupEndWithDocs(groupName) \
       static ConsoleConstructor gConsoleFunctionGroup##groupName##__GroupEnd(NULL,#groupName,NULL);
 
 // Console method macros

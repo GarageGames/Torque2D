@@ -26,7 +26,11 @@
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunctionGroupBeginWithDocs( EventScheduleFunctions );
+/*!
+   @defgroup EventScheduleFunctions
+      @ingroup TorqueScriptFunctions
+      @{
+*/
 
 //-----------------------------------------------------------------------------
 
@@ -169,9 +173,13 @@ ConsoleFunctionWithDocs(schedule, ConsoleInt, 4, 0, ( t , objID || 0 , functionN
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunctionGroupEndWithDocs( EventScheduleFunctions );
+/*! @} */
 
-ConsoleFunctionGroupBeginWithDocs( ObjectFunctions );
+/*!
+   @defgroup ObjectFunctions
+      @ingroup TorqueScriptFunctions
+      @{
+*/
 
 //-----------------------------------------------------------------------------
 
@@ -211,4 +219,4 @@ ConsoleFunctionWithDocs(isObject, ConsoleBool, 2, 2, ( handle ) )
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunctionGroupEndWithDocs( ObjectFunctions );
+/*! @} */

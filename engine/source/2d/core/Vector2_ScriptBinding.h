@@ -30,7 +30,11 @@
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunctionGroupBeginWithDocs(Vector2Math)
+/*!
+   @defgroup Vector2Math
+      @ingroup TorqueScriptFunctions
+      @{
+*/
 
 //-----------------------------------------------------------------------------
 
@@ -410,4 +414,4 @@ ConsoleFunctionWithDocs( Vector2AreaNormalize, ConsoleString, 3, 3, (Vector2 v1,
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunctionGroupEndWithDocs( Vector2Math );
+/*! @} */
