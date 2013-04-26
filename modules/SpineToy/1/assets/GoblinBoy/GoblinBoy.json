@@ -44,7 +44,7 @@
 	{ "name": "right hand item", "bone": "right hand", "attachment": "right hand item" }
 ],
 "skins": {
-	"goblin": {
+	"default": {
 		"neck": {
 			"neck": { "name": "neck", "x": 10.1, "y": 0.42, "rotation": -93.69, "width": 36, "height": 41 }
 		},

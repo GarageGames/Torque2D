@@ -44,7 +44,7 @@
 	{ "name": "right hand item", "bone": "right hand", "attachment": "right hand item" }
 ],
 "skins": {
-	"goblingirl": {
+	"default": {
 		"left upper leg": {
 			"left upper leg": { "name": "left-upper-leg", "x": 30.21, "y": -2.95, "rotation": 89.09, "width": 33, "height": 70 }
 		},
