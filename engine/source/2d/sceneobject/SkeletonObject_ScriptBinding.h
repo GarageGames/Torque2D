@@ -25,6 +25,13 @@ ConsoleMethod(SkeletonObject, setAnimation, void, 3, 3, "(animationName) - Sets 
     object->setCurrentAnimation(argv[2]);
 }
 
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SkeletonObject, setSkin, void, 3, 3, "(skinName) - Sets the skin for the skeleton.\n")
+{
+    object->setCurrentSkin(argv[2]);
+}
+
 // BOZO - What goes here?
 // This file is reserved for creating functions that will expose
 // For example, how the CompositeSprite::clearSprites function is

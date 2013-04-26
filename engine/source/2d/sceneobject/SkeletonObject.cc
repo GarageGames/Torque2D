@@ -84,6 +84,7 @@ void SkeletonObject::initPersistFields()
     
     addProtectedField( "Asset", TypeSkeletonAssetPtr, Offset(mSkeletonAsset, SkeletonObject), &setSkeletonAsset, &getSkeletonAsset, &writeSkeletonAsset, "The skeleton asset ID used for the skeleton." );
     addProtectedField( "Animation", TypeString, Offset(mCurrentAnimation, SkeletonObject), &setCurrentAnimation, &getCurrentAnimation, &writeCurrentAnimation, "The animation name to play." );
+    addProtectedField( "Skin", TypeString, Offset(mCurrentSkin, SkeletonObject), &setCurrentSkin, &getCurrentSkin, &writeCurrentSkin, "The skin to use." );
 }
 
 //-----------------------------------------------------------------------------
@@ -214,6 +215,29 @@ bool SkeletonObject::setCurrentAnimation( const char* pAnimation )
     generateComposition();
 
     return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool SkeletonObject::setCurrentSkin( const char* pSkin )
+{
+    if (mSkeletonAsset.isNull() || !mSkeleton)
+    {
+        Con::errorf("SkeletonObject::setCurrentSkin() - Skeleton Asset was null or skeleton was not built");
+        return false;
+    }
+
+    S32 result = Skeleton_setSkinByName(mSkeleton, pSkin);
+    if (result)
+    {
+        Skeleton_setSlotsToBindPose(mSkeleton);
+        return true;
+    }
+    else
+    {
+        Con::errorf("SkeletonObject::setCurrentSkin() - Skin %s not found", pSkin);
+        return false;
+    }
 }
 
 //-----------------------------------------------------------------------------
