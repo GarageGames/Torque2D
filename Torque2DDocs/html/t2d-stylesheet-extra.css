@@ -13,7 +13,7 @@ a.el {
 /* parameter names are bright, dark red.
    would prefer something that doesn't look like a warning */
 .paramname {
-	color: #8080C0;
+	color: #707070;
 }
 
 /* not only were our parameter names "warning" red colored,
