@@ -57,6 +57,12 @@ function SpineToy::reset(%this)
     // Clear the scene.
     SandboxScene.clear();
 
+    // Set the camera size.
+    SandboxWindow.setCameraSize( 40, 30 );
+    
+    %this.createBackground();
+    %this.createGround();
+       
     // Create the skeleton object
     %spineSkeletonObject = new SkeletonObject();
     
@@ -66,6 +72,57 @@ function SpineToy::reset(%this)
     // Set the animation name
     %spineSkeletonObject.Animation = "walk";
     
+    %spineSkeletonObject.position = "0 -9";
+    
+    echo(%spineSkeletonObject.size);
     // Add it to the scene
     SandboxScene.add(%spineSkeletonObject);
+}
+
+// Create a background.
+function SpineToy::createBackground()
+{
+    // Create the sprite.
+    %object = new Sprite();
+    
+    // Set the sprite as "static" so it is not affected by gravity.
+    %object.setBodyType( static );
+       
+    // Always try to configure a scene-object prior to adding it to a scene for best performance.
+
+    // Set the position.
+    %object.Position = "0 0";
+
+    // Set the size.        
+    %object.Size = "40 30";
+    
+    // Set to the furthest background layer.
+    %object.SceneLayer = 31;
+    
+    // Set an image.
+    %object.Image = "ToyAssets:jungleSky";
+            
+    // Add the sprite to the scene.
+    SandboxScene.add( %object );
+}
+
+function SpineToy::createGround( %this )
+{
+    // Create the ground
+    %ground = new Scroller();
+    %ground.setBodyType("static");
+    %ground.Image = "ToyAssets:dirtGround";
+    %ground.setPosition(0, -12);
+    %ground.setSize(40, 6);
+    %ground.setRepeatX(40 / 60);   
+    %ground.createEdgeCollisionShape(40/-2, 3, 40/2, 3);
+    SandboxScene.add(%ground);  
+    
+    // Create the grass.
+    %grass = new Sprite();
+    %grass.setBodyType("static");
+    %grass.Image = "ToyAssets:grassForeground";
+    %grass.setPosition(0, -8.5);
+    %grass.setSize(40, 2); 
+    SandboxScene.add(%grass);       
 }
