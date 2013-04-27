@@ -77,7 +77,7 @@
 	}
 },
 "animations": {
-	"animation": {
+	"Animation": {
 		"bones": {
 			"powerup": {
 				"translate": [
