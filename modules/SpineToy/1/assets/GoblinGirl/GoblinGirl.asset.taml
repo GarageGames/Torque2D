@@ -1,5 +1,0 @@
-<SkeletonAsset
-        AssetName="GoblinGirl"
-		AtlasFile="GoblinGirl.atlas"
-        SkeletonFile="GoblinGirl.json"
-		Scale="0.025"/>

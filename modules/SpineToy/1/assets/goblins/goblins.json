@@ -36,7 +36,7 @@
 	{ "name": "undies", "bone": "pelvis", "attachment": "undies" },
 	{ "name": "right upper leg", "bone": "right upper leg", "attachment": "right upper leg" },
 	{ "name": "head", "bone": "head", "attachment": "head" },
-	{ "name": "eyes", "bone": "head", "attachment": "eyes open" },
+	{ "name": "eyes", "bone": "head" },
 	{ "name": "right shoulder", "bone": "right shoulder", "attachment": "right shoulder" },
 	{ "name": "right arm", "bone": "right arm", "attachment": "right arm" },
 	{ "name": "right hand item 2", "bone": "right hand", "attachment": "right hand item 2" },
@@ -44,12 +44,12 @@
 	{ "name": "right hand item", "bone": "right hand", "attachment": "right hand item" }
 ],
 "skins": {
-	"default": {
+	"goblin": {
 		"neck": {
-			"neck": { "name": "neck", "x": 10.1, "y": 0.42, "rotation": -93.69, "width": 36, "height": 41 }
+			"neck": { "x": 10.1, "y": 0.42, "rotation": -93.69, "width": 36, "height": 41 }
 		},
 		"undies": {
-			"undies": { "name": "undies", "x": 6.3, "y": 0.12, "rotation": 0.91, "width": 36, "height": 29 }
+			"undies": { "x": 6.3, "y": 0.12, "rotation": 1.27, "width": 36, "height": 29 }
 		},
 		"right hand": {
 			"right hand": { "name": "right-hand", "x": 7.88, "y": 2.78, "rotation": 91.96, "width": 36, "height": 37 }
@@ -58,34 +58,16 @@
 			"right arm": { "name": "right-arm", "x": 16.44, "y": -1.04, "rotation": 94.32, "width": 23, "height": 50 }
 		},
 		"head": {
-			"head": { "name": "head", "x": 25.73, "y": 2.33, "rotation": -92.29, "width": 103, "height": 66 }
+			"head": { "x": 25.73, "y": 2.33, "rotation": -92.29, "width": 103, "height": 66 }
 		},
 		"left shoulder": {
 			"left shoulder": { "name": "left-shoulder", "x": 15.56, "y": -2.26, "rotation": 62.01, "width": 29, "height": 44 }
 		},
 		"left arm": {
-			"left arm": {
-				"name": "left-arm",
-				"x": 16.7,
-				"y": -1.69,
-				"scaleX": 1.057,
-				"scaleY": 1.057,
-				"rotation": 33.84,
-				"width": 37,
-				"height": 35
-			}
+			"left arm": { "name": "left-arm", "x": 16.7, "y": -1.69, "scaleX": 1.057, "scaleY": 1.057, "rotation": 33.84, "width": 37, "height": 35 }
 		},
 		"left hand": {
-			"left hand": {
-				"name": "left-hand",
-				"x": 3.47,
-				"y": 3.41,
-				"scaleX": 0.892,
-				"scaleY": 0.892,
-				"rotation": 31.14,
-				"width": 36,
-				"height": 41
-			}
+			"left hand": { "name": "left-hand", "x": 3.47, "y": 3.41, "scaleX": 0.892, "scaleY": 0.892, "rotation": 31.14, "width": 36, "height": 41 }
 		},
 		"right lower leg": {
 			"right lower leg": { "name": "right-lower-leg", "x": 25.68, "y": -3.15, "rotation": 111.83, "width": 36, "height": 76 }
@@ -94,7 +76,7 @@
 			"right upper leg": { "name": "right-upper-leg", "x": 20.35, "y": 1.47, "rotation": 97.49, "width": 34, "height": 63 }
 		},
 		"pelvis": {
-			"pelvis": { "name": "pelvis", "x": -5.61, "y": 0.76, "width": 62, "height": 43 }
+			"pelvis": { "x": -5.61, "y": 0.76, "width": 62, "height": 43 }
 		},
 		"left lower leg": {
 			"left lower leg": { "name": "left-lower-leg", "x": 23.58, "y": -2.06, "rotation": 105.75, "width": 33, "height": 70 }
@@ -103,7 +85,7 @@
 			"left upper leg": { "name": "left-upper-leg", "x": 29.68, "y": -3.87, "rotation": 89.09, "width": 33, "height": 73 }
 		},
 		"torso": {
-			"torso": { "name": "torso", "x": 38.09, "y": -3.87, "rotation": -94.95, "width": 68, "height": 96 }
+			"torso": { "x": 38.09, "y": -3.87, "rotation": -94.95, "width": 68, "height": 96 }
 		},
 		"right shoulder": {
 			"right shoulder": { "name": "right-shoulder", "x": 15.68, "y": -1.03, "rotation": 130.65, "width": 39, "height": 45 }
@@ -122,6 +104,71 @@
 		},
 		"undie straps": {
 			"undie straps": { "name": "undie-straps", "x": -3.87, "y": 13.1, "scaleX": 1.089, "width": 55, "height": 19 }
+		}
+	},
+	"goblingirl": {
+		"left upper leg": {
+			"left upper leg": { "name": "gg-left-upper-leg", "x": 30.21, "y": -2.95, "rotation": 89.09, "width": 33, "height": 70 }
+		},
+		"left lower leg": {
+			"left lower leg": { "name": "gg-left-lower-leg", "x": 25.02, "y": -0.6, "rotation": 105.75, "width": 33, "height": 70 }
+		},
+		"left foot": {
+			"left foot": { "name": "gg-left-foot", "x": 25.17, "y": 7.92, "rotation": 3.32, "width": 65, "height": 31 }
+		},
+		"right upper leg": {
+			"right upper leg": { "name": "gg-right-upper-leg", "x": 19.69, "y": 2.13, "rotation": 97.49, "width": 34, "height": 63 }
+		},
+		"right lower leg": {
+			"right lower leg": { "name": "gg-right-lower-leg", "x": 26.15, "y": -3.27, "rotation": 111.83, "width": 36, "height": 76 }
+		},
+		"right foot": {
+			"right foot": { "name": "gg-right-foot", "x": 23.46, "y": 9.66, "rotation": 1.52, "width": 63, "height": 33 }
+		},
+		"torso": {
+			"torso": { "name": "gg-torso", "x": 36.28, "y": -5.14, "rotation": -95.74, "width": 68, "height": 96 }
+		},
+		"left shoulder": {
+			"left shoulder": { "name": "gg-left-shoulder", "x": 19.8, "y": -0.42, "rotation": 61.21, "width": 28, "height": 46 }
+		},
+		"left arm": {
+			"left arm": { "name": "gg-left-arm", "x": 19.64, "y": -2.42, "rotation": 33.05, "width": 37, "height": 35 }
+		},
+		"left hand": {
+			"left hand": { "name": "gg-left-hand", "x": 4.34, "y": 2.39, "scaleX": 0.896, "scaleY": 0.896, "rotation": 30.34, "width": 35, "height": 40 }
+		},
+		"neck": {
+			"neck": { "name": "gg-neck", "x": 6.16, "y": -3.14, "rotation": -98.86, "width": 35, "height": 41 }
+		},
+		"head": {
+			"head": { "name": "gg-head", "x": 27.71, "y": -4.32, "rotation": -85.58, "width": 103, "height": 81 }
+		},
+		"right shoulder": {
+			"right shoulder": { "name": "gg-right-shoulder", "x": 14.46, "y": 0.45, "rotation": 129.85, "width": 39, "height": 45 }
+		},
+		"right arm": {
+			"right arm": { "name": "gg-right-arm", "x": 16.85, "y": -0.66, "rotation": 93.52, "width": 28, "height": 50 }
+		},
+		"right hand": {
+			"right hand": { "name": "gg-right-hand", "x": 7.21, "y": 3.43, "rotation": 91.16, "width": 36, "height": 37 }
+		},
+		"pelvis": {
+			"pelvis": { "name": "gg-pelvis", "x": -3.87, "y": 3.18, "width": 62, "height": 43 }
+		},
+		"undie straps": {
+			"undie straps": { "name": "gg-undie-straps", "x": -1.51, "y": 14.18, "width": 55, "height": 19 }
+		},
+		"undies": {
+			"undies": { "name": "gg-undies", "x": 5.4, "y": 1.7, "width": 36, "height": 29 }
+		},
+		"left hand item": {
+			"left hand item": { "name": "gg-dagger", "x": 7.88, "y": -23.45, "rotation": 10.47, "width": 26, "height": 108 }
+		},
+		"right hand item 2": {
+			"right hand item 2": { "name": "gg-dagger", "x": 7.17, "y": -22.38, "rotation": -5.27, "width": 26, "height": 108 }
+		},
+		"right hand item": {
+			"right hand item": { "name": "gg-dagger-tip", "x": 13.45, "y": 22.07, "rotation": -3.23, "width": 17, "height": 17 }
 		}
 	}
 },

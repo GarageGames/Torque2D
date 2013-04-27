@@ -33,8 +33,10 @@ function SpineToy::create(%this)
     Sandbox.useManipulation( pan );
 
     %this.asset = "SpineToy:TestSkeleton";
+    %this.skin = "default";
     
-    addSelectionOption( "SpineToy:TestSkeleton,SpineToy:GoblinBoy,SpineToy:GoblinGirl", "Select Animation", 4, "setAnimation", true, "Picks the skeleton asset for the object." );
+    addSelectionOption( "SpineToy:TestSkeleton,SpineToy:goblins", "Select Skeleton", 4, "setSkeleton", true, "Picks the skeleton asset for the object." );
+    addSelectionOption( "default,goblin,goblingirl", "Select Skin", 4, "setSkin", true, "Sets the skin for the skeleton object." );
     
     // Reset the toy.
     SpineToy.reset();
@@ -45,9 +47,18 @@ function SpineToy::destroy(%this)
 {
 }
 
-function SpineToy::setAnimation(%this, %value)
+function SpineToy::setSkeleton(%this, %value)
 {
-    %this.asset = %value;    
+    %this.asset = %value;
+    if (%value $= "SpineToy:TestSkeleton")
+        %this.setSkin("default");
+    else
+        %this.setSkin("goblin");
+}
+
+function SpineToy::setSkin(%this, %value)
+{
+    %this.skin = %value;
 }
 
 // This can be used to reset the state of a module,
@@ -62,19 +73,19 @@ function SpineToy::reset(%this)
     
     %this.createBackground();
     %this.createGround();
-       
+    
     // Create the skeleton object
     %spineSkeletonObject = new SkeletonObject();
     
     // Assign it an asset
     %spineSkeletonObject.Asset = %this.asset;
+    %spineSkeletonObject.Skin = %this.skin;
     
     // Set the animation name
     %spineSkeletonObject.Animation = "walk";
     
     %spineSkeletonObject.position = "0 -9";
-    
-    echo(%spineSkeletonObject.size);
+        
     // Add it to the scene
     SandboxScene.add(%spineSkeletonObject);
 }

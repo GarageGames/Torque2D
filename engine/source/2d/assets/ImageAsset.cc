@@ -646,7 +646,7 @@ bool ImageAsset::addExplicitCell( const S32 cellOffsetX, const S32 cellOffsetY, 
     if ( cellHeight <= 0 || (cellOffsetY+cellHeight) > imageHeight )
     {
         // Warn.
-        Con::warnf( "ImageAsset::addCell() - Invalid Cell Width of %d.", cellHeight );
+        Con::warnf( "ImageAsset::addCell() - Invalid Cell Height of %d.", cellHeight );
         return false;
     }
 
