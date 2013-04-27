@@ -32,8 +32,8 @@ function SpineToy::create(%this)
     // Set the manipulation mode.
     Sandbox.useManipulation( pan );
 
-    %this.asset = "SpineToy:goblins";
-    %this.skin = "goblin";
+    %this.asset = "SpineToy:powerup";
+    %this.skin = "default";
     
     addSelectionOption( "SpineToy:TestSkeleton,SpineToy:goblins", "Select Skeleton", 4, "setSkeleton", true, "Picks the skeleton asset for the object." );
     addSelectionOption( "default,goblin,goblingirl", "Select Skin", 4, "setSkin", true, "Sets the skin for the skeleton object." );
@@ -49,11 +49,11 @@ function SpineToy::destroy(%this)
 
 function SpineToy::setSkeleton(%this, %value)
 {
-    %this.asset = %value;
+    /*%this.asset = %value;
     if (%value $= "SpineToy:TestSkeleton")
         %this.setSkin("default");
     else
-        %this.setSkin("goblin");
+        %this.setSkin("goblin");*/
 }
 
 function SpineToy::setSkin(%this, %value)
@@ -82,7 +82,7 @@ function SpineToy::reset(%this)
     %spineSkeletonObject.Skin = %this.skin;
     
     // Set the animation name
-    %spineSkeletonObject.Animation = "walk";
+    %spineSkeletonObject.setAnimation("animation");
     
     %spineSkeletonObject.position = "0 -6.3";
     %spineSkeletonObject.SceneLayer = 29;
