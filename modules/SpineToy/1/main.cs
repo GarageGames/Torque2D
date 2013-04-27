@@ -32,8 +32,8 @@ function SpineToy::create(%this)
     // Set the manipulation mode.
     Sandbox.useManipulation( pan );
 
-    %this.asset = "SpineToy:TestSkeleton";
-    %this.skin = "default";
+    %this.asset = "SpineToy:goblins";
+    %this.skin = "goblin";
     
     addSelectionOption( "SpineToy:TestSkeleton,SpineToy:goblins", "Select Skeleton", 4, "setSkeleton", true, "Picks the skeleton asset for the object." );
     addSelectionOption( "default,goblin,goblingirl", "Select Skin", 4, "setSkin", true, "Sets the skin for the skeleton object." );
@@ -84,8 +84,9 @@ function SpineToy::reset(%this)
     // Set the animation name
     %spineSkeletonObject.Animation = "walk";
     
-    %spineSkeletonObject.position = "0 -9";
-        
+    %spineSkeletonObject.position = "0 -6.3";
+    %spineSkeletonObject.SceneLayer = 29;
+    
     // Add it to the scene
     SandboxScene.add(%spineSkeletonObject);
 }
@@ -127,6 +128,7 @@ function SpineToy::createGround( %this )
     %ground.setSize(40, 6);
     %ground.setRepeatX(40 / 60);   
     %ground.createEdgeCollisionShape(40/-2, 3, 40/2, 3);
+    %ground.SceneLayer = 30;
     SandboxScene.add(%ground);  
     
     // Create the grass.
@@ -135,5 +137,6 @@ function SpineToy::createGround( %this )
     %grass.Image = "ToyAssets:grassForeground";
     %grass.setPosition(0, -8.5);
     %grass.setSize(40, 2); 
+    %grass.SceneLayer = 28;
     SandboxScene.add(%grass);       
 }

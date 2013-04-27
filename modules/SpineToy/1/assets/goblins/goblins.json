@@ -1,6 +1,6 @@
 {
 "bones": [
-	{ "name": "root" },
+	{ "name": "root", "y": -107.99 },
 	{ "name": "hip", "parent": "root", "x": 0.64, "y": 114.41 },
 	{ "name": "left upper leg", "parent": "hip", "length": 50.39, "x": 14.45, "y": 2.81, "rotation": -89.09 },
 	{ "name": "left lower leg", "parent": "left upper leg", "length": 49.89, "x": 56.34, "y": 0.98, "rotation": -16.65 },
