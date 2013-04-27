@@ -32,12 +32,12 @@ function SpineToy::create(%this)
     // Set the manipulation mode.
     Sandbox.useManipulation( pan );
 
-    %this.asset = "SpineToy:TestSkeleton";
-    %this.skin = "default";
+    %this.asset = "SpineToy:goblins";
+    %this.skin = "goblin";
     %this.animation = "walk";
-    
-    addSelectionOption( "SpineToy:TestSkeleton,SpineToy:goblins,SpineToy:powerup", "Select Skeleton", 4, "setSkeleton", true, "Picks the skeleton asset for the object." );
-    addSelectionOption( "default,goblin,goblingirl", "Select Skin", 4, "setSkin", true, "Sets the skin for the skeleton object." );
+    %assets = "SpineToy:TestSkeleton,SpineToy:goblins";
+    addSelectionOption( %assets, "Select Skeleton", 4, "setSkeleton", true, "Picks the skeleton asset for the object." );
+    addSelectionOption( "default,goblin,goblingirl", "Select Skin", 4, "setSkin", false, "Sets the skin for the skeleton object." );
     
     // Reset the toy.
     SpineToy.reset();
@@ -56,11 +56,6 @@ function SpineToy::setSkeleton(%this, %value)
         %this.setSkin("goblin");
     else
         %this.setSkin("default");
-        
-    if (%value $= "SpineToy:powerup")
-        %this.animation = "Animation";
-    else
-        %this.animation = "walk";
 }
 
 function SpineToy::setSkin(%this, %value)
@@ -75,11 +70,14 @@ function SpineToy::reset(%this)
     // Clear the scene.
     SandboxScene.clear();
 
+    if (%this.resetSchedule !$= "")
+        cancel(%this.resetSchedule);
+        
     // Set the camera size.
     SandboxWindow.setCameraSize( 40, 30 );
     
     %this.createBackground();
-    %this.createGround();
+    //%this.createGround();
     
     // Create the skeleton object
     %spineSkeletonObject = new SkeletonObject();
@@ -91,15 +89,26 @@ function SpineToy::reset(%this)
     // Set the animation name
     %spineSkeletonObject.setAnimation(%this.animation);
     
-    %spineSkeletonObject.position = "0 -6.3";
+    %spineSkeletonObject.position = "-25 -12";
     %spineSkeletonObject.SceneLayer = 29;
+    %spineSkeletonObject.setLinearVelocity(7.5, 0);
     
+    %this.walker = %spineSkeletonObject;
+    
+    %this.resetSchedule = %this.schedule(8000, resetWalker);
+
     // Add it to the scene
     SandboxScene.add(%spineSkeletonObject);
 }
 
+function SpineToy::resetWalker(%this)
+{
+    %this.walker.setPosition("-25 -12");
+    %this.resetSchedule = %this.schedule(8000, resetWalker);
+}
+
 // Create a background.
-function SpineToy::createBackground()
+function SpineToy::createBackground(%this)
 {
     // Create the sprite.
     %object = new Sprite();
@@ -119,10 +128,44 @@ function SpineToy::createBackground()
     %object.SceneLayer = 31;
     
     // Set an image.
-    %object.Image = "ToyAssets:jungleSky";
+    %object.Image = "SpineToy:background";
             
     // Add the sprite to the scene.
     SandboxScene.add( %object );
+    
+    // Create the skeleton object
+    %animatedMenu = new SkeletonObject();
+    
+    // Assign it an asset
+    %animatedMenu.Asset = "SpineToy:spinosaurus";
+
+    // Set properties    
+    %animatedMenu.setAnimation("Animation");    
+    %animatedMenu.position = "0 4";
+    %animatedMenu.SceneLayer = 30;
+    
+    // Add it to the scene
+    SandboxScene.add(%animatedMenu);
+    
+    %this.createPowerup(-15, 4);
+    %this.createPowerup(15, 4);
+}
+
+function SpineToy::createPowerup(%this, %xPos, %yPos)
+{
+    // Create the skeleton object
+    %powerup = new SkeletonObject();
+    
+    // Assign it an asset
+    %powerup.Asset = "SpineToy:powerup";
+
+    // Set properties    
+    %powerup.setAnimation("Animation");    
+    %powerup.position = %xPos SPC %yPos;
+    %powerup.SceneLayer = 30;
+    
+    // Add it to the scene
+    SandboxScene.add(%powerup);
 }
 
 function SpineToy::createGround( %this )
