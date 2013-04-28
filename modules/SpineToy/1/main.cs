@@ -61,6 +61,7 @@ function SpineToy::setSkeleton(%this, %value)
 function SpineToy::setSkin(%this, %value)
 {
     %this.skin = %value;
+    %this.walker.Skin = %this.skin;
 }
 
 // This can be used to reset the state of a module,
