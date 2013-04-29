@@ -86,14 +86,17 @@ function SpineToy::reset(%this)
     // Assign it an asset
     %spineSkeletonObject.Asset = %this.asset;
     %spineSkeletonObject.Skin = %this.skin;
-    
+        
     // Set the animation name
     %spineSkeletonObject.setAnimation(%this.animation);
     
-    %spineSkeletonObject.position = "-25 -12";
+    %spineSkeletonObject.SkeletonScale = 0.025;
+    %spineSkeletonObject.setSkeletonOffset(0, -5);
+    
+    %spineSkeletonObject.position = "-25 -8";
     %spineSkeletonObject.SceneLayer = 29;
     %spineSkeletonObject.setLinearVelocity(7.5, 0);
-    
+        
     %this.walker = %spineSkeletonObject;
     
     %this.resetSchedule = %this.schedule(8000, resetWalker);
@@ -104,7 +107,7 @@ function SpineToy::reset(%this)
 
 function SpineToy::resetWalker(%this)
 {
-    %this.walker.setPosition("-25 -12");
+    %this.walker.setPosition("-25 -8");
     %this.resetSchedule = %this.schedule(8000, resetWalker);
 }
 
@@ -134,6 +137,9 @@ function SpineToy::createBackground(%this)
     // Add the sprite to the scene.
     SandboxScene.add( %object );
     
+    %this.createPowerup(-13, 6);
+    %this.createPowerup(13, 6);
+    
     // Create the skeleton object
     %animatedMenu = new SkeletonObject();
     
@@ -144,12 +150,11 @@ function SpineToy::createBackground(%this)
     %animatedMenu.setAnimation("Animation");    
     %animatedMenu.position = "0 4";
     %animatedMenu.SceneLayer = 30;
+    %animatedMenu.SkeletonScale = 0.025;
+    %animatedMenu.setSkeletonOffset(0, -10);
     
     // Add it to the scene
     SandboxScene.add(%animatedMenu);
-    
-    %this.createPowerup(-15, 4);
-    %this.createPowerup(15, 4);
 }
 
 function SpineToy::createPowerup(%this, %xPos, %yPos)
@@ -164,6 +169,9 @@ function SpineToy::createPowerup(%this, %xPos, %yPos)
     %powerup.setAnimation("Animation");    
     %powerup.position = %xPos SPC %yPos;
     %powerup.SceneLayer = 30;
+    
+    %powerup.SkeletonScale = 0.025;
+    %powerup.setSkeletonOffset(0, -5);
     
     // Add it to the scene
     SandboxScene.add(%powerup);

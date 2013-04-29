@@ -32,6 +32,102 @@ ConsoleMethod(SkeletonObject, setSkin, void, 3, 3, "(skinName) - Sets the skin f
     object->setCurrentSkin(argv[2]);
 }
 
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SkeletonObject, setSkeletonScale, void, 3, 4, "(float scaleX, float scaleY) Sets scaling of the skeleton's root bone.\n"
+                                                            "@param scaleX Base x coordinate scale.\n"
+                                                            "@param scaleY Base y coordinate scale.\n"
+                                                            "@return No return value.")
+{
+    F32 scaleX, scaleY;
+
+    const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+
+    // ("width height")
+    if ((elementCount == 2) && (argc == 3))
+    {
+        scaleX = dAtof(Utility::mGetStringElement(argv[2], 0));
+        scaleY = dAtof(Utility::mGetStringElement(argv[2], 1));
+    }
+
+    // (width, [height])
+    else if (elementCount == 1)
+    {
+        scaleX = dAtof(argv[2]);
+
+        if (argc > 3)
+            scaleY = dAtof(argv[3]);
+        else
+            scaleY = scaleX;
+    }
+
+    // Invalid
+    else
+    {
+        Con::warnf("SkeletonObject::setSkeletonScale() - Invalid number of parameters!");
+        return;
+    }
+    
+    // Set Size.
+    object->setSkeletonScale(Vector2(scaleX, scaleY));
+}  
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SkeletonObject, getSkeletonScale, const char*, 2, 2, "() Gets the skeleton's root bone scale.\n"
+                                                                   "@return (float x/y height) The x and y scale of the object's root bone.")
+{
+    return object->getSkeletonScale().scriptThis();
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SkeletonObject, setSkeletonOffset, void, 3, 4, "(float x, float y) Sets local offset of the skeleton's root bone.\n"
+                                                            "@param x Base x coordinate.\n"
+                                                            "@param y Base y coordinate.\n"
+                                                            "@return No return value.")
+{
+    F32 x, y;
+
+    const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+
+    // ("x y")
+    if ((elementCount == 2) && (argc == 3))
+    {
+        x = dAtof(Utility::mGetStringElement(argv[2], 0));
+        y = dAtof(Utility::mGetStringElement(argv[2], 1));
+    }
+
+    // (x, [y])
+    else if (elementCount == 1)
+    {
+        x = dAtof(argv[2]);
+
+        if (argc > 3)
+            y = dAtof(argv[3]);
+        else
+            y = x;
+    }
+
+    // Invalid
+    else
+    {
+        Con::warnf("SkeletonObject::setSkeletonOffset() - Invalid number of parameters!");
+        return;
+    }
+    
+    // Set Size.
+    object->setSkeletonOffset(Vector2(x, y));
+}  
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SkeletonObject, getSkeletonOffset, const char*, 2, 2, "() Gets the skeleton's root bone offset.\n"
+                                                                   "@return (float x/y) The x and y offset of the object's root bone.")
+{
+    return object->getSkeletonOffset().scriptThis();
+}
+
 // BOZO - What goes here?
 // This file is reserved for creating functions that will expose
 // For example, how the CompositeSprite::clearSprites function is

@@ -1,5 +1,4 @@
 <SkeletonAsset
         AssetName="powerup"
 		AtlasFile="powerup.atlas"
-        SkeletonFile="powerup.json"
-		Scale="0.025"/>
+        SkeletonFile="powerup.json"/>

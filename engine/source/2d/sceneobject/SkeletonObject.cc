@@ -59,6 +59,8 @@ mSkeleton(NULL),
 mState(NULL)
 {
     mCurrentAnimation = StringTable->insert("");
+    mSkeletonScale.SetZero();
+    mSkeletonOffset.SetZero();
 }
 
 //------------------------------------------------------------------------------
@@ -82,9 +84,11 @@ void SkeletonObject::initPersistFields()
     // Call parent.
     Parent::initPersistFields();
     
-    addProtectedField( "Asset", TypeSkeletonAssetPtr, Offset(mSkeletonAsset, SkeletonObject), &setSkeletonAsset, &getSkeletonAsset, &writeSkeletonAsset, "The skeleton asset ID used for the skeleton." );
-    addProtectedField( "Animation", TypeString, Offset(mCurrentAnimation, SkeletonObject), &setCurrentAnimation, &getCurrentAnimation, &writeCurrentAnimation, "The animation name to play." );
-    addProtectedField( "Skin", TypeString, Offset(mCurrentSkin, SkeletonObject), &setCurrentSkin, &getCurrentSkin, &writeCurrentSkin, "The skin to use." );
+    addProtectedField("Asset", TypeSkeletonAssetPtr, Offset(mSkeletonAsset, SkeletonObject), &setSkeletonAsset, &getSkeletonAsset, &writeSkeletonAsset, "The skeleton asset ID used for the skeleton.");
+    addProtectedField("Animation", TypeString, Offset(mCurrentAnimation, SkeletonObject), &setCurrentAnimation, &getCurrentAnimation, &writeCurrentAnimation, "The animation name to play.");
+    addProtectedField("Skin", TypeString, Offset(mCurrentSkin, SkeletonObject), &setCurrentSkin, &getCurrentSkin, &writeCurrentSkin, "The skin to use.");
+    addProtectedField("SkeletonScale", TypeVector2, NULL, &setSkeletonScale, &getSkeletonScale, &writeSkeletonScale, "Scaling of the skeleton's root bone");
+    addProtectedField("SkeletonOffset", TypeVector2, NULL, &setSkeletonOffset, &getSkeletonOffset, &writeSkeletonOffset, "X/Y offset of the skeleton's root bone");
 }
 
 //-----------------------------------------------------------------------------
@@ -242,6 +246,40 @@ bool SkeletonObject::setCurrentSkin( const char* pSkin )
 
 //-----------------------------------------------------------------------------
 
+void SkeletonObject::setSkeletonScale(const Vector2& scale)
+{
+    mSkeletonScale = scale;
+
+    if (!mSkeleton)
+        return;
+
+    if (mSkeletonScale.notZero())
+    {
+        Bone* rootBone = mSkeleton->root;
+        rootBone->scaleX = mSkeletonScale.x;
+        rootBone->scaleY = mSkeletonScale.y;
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void SkeletonObject::setSkeletonOffset(const Vector2& offset)
+{
+    mSkeletonOffset = offset;
+
+     if (!mSkeleton)
+        return;
+
+    if (mSkeletonOffset.notZero())
+    {
+        Bone* rootBone = mSkeleton->root;
+        rootBone->x = mSkeletonOffset.x;
+        rootBone->y = mSkeletonOffset.y;
+    }
+}
+
+//-----------------------------------------------------------------------------
+
 void SkeletonObject::generateComposition( void )
 {
     // Clear existing visualization
@@ -261,6 +299,20 @@ void SkeletonObject::generateComposition( void )
 
     if (!mSkeleton)
         mSkeleton = Skeleton_create(mSkeletonAsset->mSkeletonData);
+
+    if (mSkeletonScale.notZero())
+    {
+        Bone* rootBone = mSkeleton->root;
+        rootBone->scaleX = mSkeletonScale.x;
+        rootBone->scaleY = mSkeletonScale.y;
+    }
+
+    if (mSkeletonOffset.notZero())
+    {
+        Bone* rootBone = mSkeleton->root;
+        rootBone->x = mSkeletonOffset.x;
+        rootBone->y = mSkeletonOffset.y;
+    }
 
     if (!mState)
         mState = AnimationState_create(mSkeletonAsset->mStateData);

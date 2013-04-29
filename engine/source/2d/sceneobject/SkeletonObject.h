@@ -33,6 +33,9 @@ private:
     float                       mTimeScale;
     float                       mLastFrameTime;
 
+    Vector2                     mSkeletonScale;
+    Vector2                     mSkeletonOffset;
+
     StringTableEntry            mCurrentAnimation;
     StringTableEntry            mCurrentSkin;
 
@@ -65,6 +68,15 @@ public:
 
     bool setCurrentSkin( const char* pSkin );
     inline StringTableEntry getCurrentSkin( void ) const { return mCurrentSkin; }
+
+    void setSkeletonScale( const Vector2& scale );
+    inline void setSkeletonScale( const F32 x, const F32 y ){ setSkeletonScale( Vector2(x, y) ); }
+    inline Vector2 getSkeletonScale( void ) const { return mSkeletonScale; }
+
+    void setSkeletonOffset( const Vector2& scale );
+    inline void setSkeletonOffset( const F32 x, const F32 y ){ setSkeletonOffset( Vector2(x, y) ); }
+    inline Vector2 getSkeletonOffset( void ) const { return mSkeletonOffset; }
+
     /// Declare Console Object.
     DECLARE_CONOBJECT( SkeletonObject );
     
@@ -75,15 +87,23 @@ protected:
 protected:
     static bool setSkeletonAsset( void* obj, const char* data )                 { static_cast<SkeletonObject*>(obj)->setSkeletonAsset(data); return false; }
     static const char* getSkeletonAsset(void* obj, const char* data)            { return static_cast<SkeletonObject*>(obj)->getSkeletonAsset(); }
-    static bool writeSkeletonAsset( void* obj, StringTableEntry pFieldName ) { return static_cast<SkeletonObject*>(obj)->mSkeletonAsset.notNull(); }
+    static bool writeSkeletonAsset( void* obj, StringTableEntry pFieldName )    { return static_cast<SkeletonObject*>(obj)->mSkeletonAsset.notNull(); }
 
     static bool setCurrentAnimation( void* obj, const char* data )              { static_cast<SkeletonObject*>(obj)->setCurrentAnimation(data); return false; }
     static const char* getCurrentAnimation(void* obj, const char* data)         { return static_cast<SkeletonObject*>(obj)->getCurrentAnimation(); }
     static bool writeCurrentAnimation( void*obj, StringTableEntry pAnimation )  { return static_cast<SkeletonObject*>(obj)->getCurrentAnimation() != StringTable->EmptyString; }
 
-    static bool setCurrentSkin( void* obj, const char* data )              { static_cast<SkeletonObject*>(obj)->setCurrentSkin(data); return false; }
-    static const char* getCurrentSkin(void* obj, const char* data)         { return static_cast<SkeletonObject*>(obj)->getCurrentSkin(); }
-    static bool writeCurrentSkin( void*obj, StringTableEntry pSkin )  { return static_cast<SkeletonObject*>(obj)->getCurrentSkin() != StringTable->EmptyString; }
+    static bool setCurrentSkin( void* obj, const char* data )                   { static_cast<SkeletonObject*>(obj)->setCurrentSkin(data); return false; }
+    static const char* getCurrentSkin(void* obj, const char* data)              { return static_cast<SkeletonObject*>(obj)->getCurrentSkin(); }
+    static bool writeCurrentSkin( void*obj, StringTableEntry pSkin )            { return static_cast<SkeletonObject*>(obj)->getCurrentSkin() != StringTable->EmptyString; }
+
+    static bool setSkeletonScale(void* obj, const char* data)                   { static_cast<SkeletonObject*>(obj)->setSkeletonScale(Vector2(data)); return false; }
+    static const char* getSkeletonScale(void* obj, const char* data)            { return static_cast<SkeletonObject*>(obj)->getSkeletonScale().scriptThis(); }
+    static bool writeSkeletonScale( void* obj, StringTableEntry pFieldName )    { return static_cast<SkeletonObject*>(obj)->getSkeletonScale().notZero(); }
+
+    static bool setSkeletonOffset(void* obj, const char* data)                   { static_cast<SkeletonObject*>(obj)->setSkeletonOffset(Vector2(data)); return false; }
+    static const char* getSkeletonOffset(void* obj, const char* data)            { return static_cast<SkeletonObject*>(obj)->getSkeletonOffset().scriptThis(); }
+    static bool writeSkeletonOffset( void* obj, StringTableEntry pFieldName )    { return static_cast<SkeletonObject*>(obj)->getSkeletonOffset().notZero(); }
 };
 
 #endif // _SKELETON_OBJECT_H_
