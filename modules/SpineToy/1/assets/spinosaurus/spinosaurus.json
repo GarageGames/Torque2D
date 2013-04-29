@@ -1,15 +1,15 @@
 {
 "bones": [
 	{ "name": "root", "y": -526.31 },
-	{ "name": "logo", "parent": "root", "y": 1372.82, "scaleX": 0.342, "scaleY": 0.342 },
+	{ "name": "logo", "parent": "root", "y": 1332.02 },
 	{ "name": "play", "parent": "root", "x": 3.02, "y": -83.61 },
 	{ "name": "settings", "parent": "root", "x": 3.02, "y": -144.37 },
 	{ "name": "quit", "parent": "root", "x": -2.85, "y": -201.21 },
-	{ "name": "leaves", "parent": "root", "x": -0.16, "y": 1310.1, "scaleX": 0.34, "scaleY": 0.34 }
+	{ "name": "leaves", "parent": "root", "x": -0.16, "y": 1310.1 }
 ],
 "slots": [
-	{ "name": "leaves", "bone": "leaves", "color": "ffffff00", "attachment": "leaves" },
-	{ "name": "logo", "bone": "logo", "color": "ffffff00", "attachment": "logo" },
+	{ "name": "leaves", "bone": "leaves", "attachment": "leaves" },
+	{ "name": "logo", "bone": "logo", "attachment": "logo" },
 	{ "name": "play", "bone": "play", "color": "fff99dff", "attachment": "play" },
 	{ "name": "quit", "bone": "quit", "color": "fff99dff", "attachment": "quit" },
 	{ "name": "settings", "bone": "settings", "color": "fff99dff", "attachment": "settings" }

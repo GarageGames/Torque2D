@@ -137,8 +137,8 @@ function SpineToy::createBackground(%this)
     // Add the sprite to the scene.
     SandboxScene.add( %object );
     
-    %this.createPowerup(-13, 6);
-    %this.createPowerup(13, 6);
+    %this.createPowerup(-14, 6);
+    %this.createPowerup(14, 6);
     
     // Create the skeleton object
     %animatedMenu = new SkeletonObject();
@@ -148,7 +148,7 @@ function SpineToy::createBackground(%this)
 
     // Set properties    
     %animatedMenu.setAnimation("Animation");    
-    %animatedMenu.position = "0 4";
+    %animatedMenu.position = "0 0";
     %animatedMenu.SceneLayer = 30;
     %animatedMenu.SkeletonScale = 0.025;
     %animatedMenu.setSkeletonOffset(0, -10);
