@@ -50,17 +50,19 @@ IMPLEMENT_CONOBJECT(SkeletonObject);
 
 //------------------------------------------------------------------------------
 
-SkeletonObject::SkeletonObject() :
-mPreTickTime( 0.0f ),
-mPostTickTime( 0.0f ),
-mTimeScale(1),
-mLastFrameTime(0),
-mSkeleton(NULL),
-mState(NULL)
+SkeletonObject::SkeletonObject() : mPreTickTime( 0.0f ),
+                                   mPostTickTime( 0.0f ),
+                                   mTimeScale(1),
+                                   mLastFrameTime(0),
+                                   mSkeleton(NULL),
+                                   mState(NULL),
+                                   mIsLoopingAnimation(false),
+                                   mAnimationFinished(true),
+                                   mAnimationDuration(0.0)
 {
     mCurrentAnimation = StringTable->insert("");
     mSkeletonScale.SetZero();
-    mSkeletonOffset.SetZero();
+    mSkeletonOffset.SetZero();    
 }
 
 //------------------------------------------------------------------------------
@@ -89,6 +91,7 @@ void SkeletonObject::initPersistFields()
     addProtectedField("Skin", TypeString, Offset(mCurrentSkin, SkeletonObject), &setCurrentSkin, &getCurrentSkin, &writeCurrentSkin, "The skin to use.");
     addProtectedField("SkeletonScale", TypeVector2, NULL, &setSkeletonScale, &getSkeletonScale, &writeSkeletonScale, "Scaling of the skeleton's root bone");
     addProtectedField("SkeletonOffset", TypeVector2, NULL, &setSkeletonOffset, &getSkeletonOffset, &writeSkeletonOffset, "X/Y offset of the skeleton's root bone");
+    addProtectedField("IsLoopingAnimation", TypeBool, Offset(mIsLoopingAnimation, SkeletonObject), &setIsLoopingAnimation, &defaultProtectedGetFn, &writeIsLoopingAnimation, "");
 }
 
 //-----------------------------------------------------------------------------
@@ -206,7 +209,7 @@ bool SkeletonObject::setSkeletonAsset( const char* pSkeletonAssetId )
 
 //-----------------------------------------------------------------------------
 
-bool SkeletonObject::setCurrentAnimation( const char* pAnimation )
+bool SkeletonObject::setCurrentAnimation( const char* pAnimation, const bool isLooping )
 {
     // Make sure an asset was loaded.
     if (mSkeletonAsset.isNull())
@@ -214,6 +217,8 @@ bool SkeletonObject::setCurrentAnimation( const char* pAnimation )
 
     // Set the animation.
     mCurrentAnimation = StringTable->insert(pAnimation);
+
+    mIsLoopingAnimation = isLooping;
 
     // Generate composition.
     generateComposition();
@@ -318,7 +323,11 @@ void SkeletonObject::generateComposition( void )
         mState = AnimationState_create(mSkeletonAsset->mStateData);
 
     if (mCurrentAnimation != StringTable->EmptyString)
-        AnimationState_setAnimationByName(mState, mCurrentAnimation, true);
+    {
+        AnimationState_setAnimationByName(mState, mCurrentAnimation, mIsLoopingAnimation);
+        mAnimationDuration = mState->animation->duration;
+        mAnimationFinished = false;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -328,49 +337,71 @@ void SkeletonObject::updateComposition( const F32 time )
     // Update position/orientation/state of visualization
     
     float delta = (time - mLastFrameTime) * mTimeScale;
-	 mLastFrameTime = time;
+    mLastFrameTime = time;
 
     Skeleton_update(mSkeleton, delta);
-    AnimationState_update(mState, delta);
-    AnimationState_apply(mState, mSkeleton);
+    
+    if (!mAnimationFinished)
+    {
+        AnimationState_update(mState, delta);
+        AnimationState_apply(mState, mSkeleton);
+    }
+
     Skeleton_updateWorldTransform(mSkeleton);
 
-     // Get the ImageAsset used by the sprites
+    // Get the ImageAsset used by the sprites
     StringTableEntry assetId = (*mSkeletonAsset).mImageAsset.getAssetId();
 
-	 clearSprites();
+    clearSprites();
 
-	 Vector2 vertices[4];
-    for (int i = 0; i < mSkeleton->slotCount; ++i) {
+    Vector2 vertices[4];
+
+    for (int i = 0; i < mSkeleton->slotCount; ++i)
+    {
         Slot* slot = mSkeleton->slots[i];
         Attachment* attachment = slot->attachment;
-        if (!attachment || attachment->type != ATTACHMENT_REGION) continue;
+        
+        if (!attachment || attachment->type != ATTACHMENT_REGION)
+            continue;
+        
         RegionAttachment* regionAttachment = (RegionAttachment*)attachment;
         RegionAttachment_updateVertices(regionAttachment, slot);
 
-		  SpriteBatchItem* pSprite = SpriteBatch::createSprite();
+        SpriteBatchItem* pSprite = SpriteBatch::createSprite();
 		  
-		  pSprite->setSrcBlendFactor(GL_ONE);
-		  pSprite->setDstBlendFactor(GL_ONE_MINUS_SRC_ALPHA);
+        pSprite->setSrcBlendFactor(GL_ONE);
+        pSprite->setDstBlendFactor(GL_ONE_MINUS_SRC_ALPHA);
 
-		  pSprite->setBlendColor(ColorF(
-			  mSkeleton->r * slot->r,
-			  mSkeleton->g * slot->g,
-			  mSkeleton->b * slot->b,
-			  mSkeleton->a * slot->a
-		  ));
+        pSprite->setBlendColor(ColorF(
+        mSkeleton->r * slot->r,
+        mSkeleton->g * slot->g,
+        mSkeleton->b * slot->b,
+        mSkeleton->a * slot->a
+        ));
 
-		  vertices[0].x = regionAttachment->vertices[VERTEX_X1];
-		  vertices[0].y = regionAttachment->vertices[VERTEX_Y1];
-		  vertices[1].x = regionAttachment->vertices[VERTEX_X4];
-		  vertices[1].y = regionAttachment->vertices[VERTEX_Y4];
-		  vertices[2].x = regionAttachment->vertices[VERTEX_X3];
-		  vertices[2].y = regionAttachment->vertices[VERTEX_Y3];
-		  vertices[3].x = regionAttachment->vertices[VERTEX_X2];
-		  vertices[3].y = regionAttachment->vertices[VERTEX_Y2];
+        vertices[0].x = regionAttachment->vertices[VERTEX_X1];
+        vertices[0].y = regionAttachment->vertices[VERTEX_Y1];
+        vertices[1].x = regionAttachment->vertices[VERTEX_X4];
+        vertices[1].y = regionAttachment->vertices[VERTEX_Y4];
+        vertices[2].x = regionAttachment->vertices[VERTEX_X3];
+        vertices[2].y = regionAttachment->vertices[VERTEX_Y3];
+        vertices[3].x = regionAttachment->vertices[VERTEX_X2];
+        vertices[3].y = regionAttachment->vertices[VERTEX_Y2];
         pSprite->setExplicitVertices(vertices);
 
-		  pSprite->setImage(assetId);
+        pSprite->setImage(assetId);
         pSprite->setImageFrameByName(attachment->name);
     }
+
+    if (!mAnimationFinished && !mIsLoopingAnimation && mLastFrameTime >= mAnimationDuration)
+    {
+        mAnimationFinished = true;
+        onAnimationFinished();
+    }
+}
+
+void SkeletonObject::onAnimationFinished()
+{
+    // Do script callback.
+    Con::executef( this, 1, "onAnimationEnd" );
 }

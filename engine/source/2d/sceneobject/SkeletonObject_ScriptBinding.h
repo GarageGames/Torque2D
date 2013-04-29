@@ -20,9 +20,23 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SkeletonObject, setAnimation, void, 3, 3, "(animationName) - Sets the animation for the object.\n")
+ConsoleMethod(SkeletonObject, setAnimation, bool, 3, 4, "(animationName, [isLooping]) - Sets the animation for the object.\n"
+                                                        "@param animationName String containing animation name\n"
+                                                        "@param isLooping Optional bool to determine whether the animation should loop\n"
+                                                        "@return Returns true on success.")
 {
-    object->setCurrentAnimation(argv[2]);
+    // Determine looping
+    bool shouldLoop = argc >= 4 ? dAtob(argv[3]) : false;
+    
+    return object->setCurrentAnimation(argv[2], shouldLoop);
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SkeletonObject, getAnimation, const char*, 2, 2, "() - Gets the name of the current animation.\n"
+                                                               "@return String containing the animation name")
+{
+    return object->getCurrentAnimation();
 }
 
 //-----------------------------------------------------------------------------
@@ -30,6 +44,14 @@ ConsoleMethod(SkeletonObject, setAnimation, void, 3, 3, "(animationName) - Sets 
 ConsoleMethod(SkeletonObject, setSkin, void, 3, 3, "(skinName) - Sets the skin for the skeleton.\n")
 {
     object->setCurrentSkin(argv[2]);
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SkeletonObject, getSkin, const char*, 2, 2, "() - Gets the name of the current skin.\n"
+                                                               "@return String containing the skin name")
+{
+    return object->getCurrentSkin();
 }
 
 //-----------------------------------------------------------------------------
@@ -126,6 +148,12 @@ ConsoleMethod(SkeletonObject, getSkeletonOffset, const char*, 2, 2, "() Gets the
                                                                    "@return (float x/y) The x and y offset of the object's root bone.")
 {
     return object->getSkeletonOffset().scriptThis();
+}
+
+ConsoleMethod(SkeletonObject, getAnimationDuration, F32, 2, 2, "() Gets the duration of the current animation.\n"
+                                                               "@return Duration of the animation in seconds.\n")
+{
+    return object->getAnimationDuration();
 }
 
 // BOZO - What goes here?

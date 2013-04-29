@@ -25,22 +25,28 @@ protected:
     typedef SceneObject Parent;
     
 private:
+    typedef Vector<SpriteBatchItem*> typeSkeletonSpritesVector;
+    typeSkeletonSpritesVector   mSkeletonSprites;
+
     AssetPtr<SkeletonAsset>     mSkeletonAsset;
-    F32                         mPreTickTime;
-    F32                         mPostTickTime;
     spine::Skeleton*            mSkeleton;
     spine::AnimationState*      mState;
-    float                       mTimeScale;
-    float                       mLastFrameTime;
+    
+    F32                         mPreTickTime;
+    F32                         mPostTickTime;    
+    F32                         mTimeScale;
+    F32                         mLastFrameTime;
+    F32                         mAnimationDuration;
 
+    bool                        mAnimationFinished;
+    bool                        mIsLoopingAnimation;
     Vector2                     mSkeletonScale;
     Vector2                     mSkeletonOffset;
 
     StringTableEntry            mCurrentAnimation;
     StringTableEntry            mCurrentSkin;
 
-    typedef Vector<SpriteBatchItem*> typeSkeletonSpritesVector;
-    typeSkeletonSpritesVector        mSkeletonSprites;
+    
     
 public:
     SkeletonObject();
@@ -63,7 +69,8 @@ public:
     bool setSkeletonAsset( const char* pSkeletonAssetId );
     inline StringTableEntry getSkeletonAsset( void ) const { return mSkeletonAsset.getAssetId(); }
     
-    bool setCurrentAnimation( const char* pAnimation );
+    inline bool setCurrentAnimation( const char* pAnimation ) { return setCurrentAnimation( pAnimation, mIsLoopingAnimation ); }
+    bool setCurrentAnimation( const char* pAnimation, const bool isLooping = false);
     inline StringTableEntry getCurrentAnimation( void ) const { return mCurrentAnimation; }
 
     bool setCurrentSkin( const char* pSkin );
@@ -77,6 +84,14 @@ public:
     inline void setSkeletonOffset( const F32 x, const F32 y ){ setSkeletonOffset( Vector2(x, y) ); }
     inline Vector2 getSkeletonOffset( void ) const { return mSkeletonOffset; }
 
+    inline F32 getAnimationDuration( void ) const { return mAnimationDuration; }
+    inline bool isAnimationFinished( void ) const { return mAnimationFinished; };
+
+    inline void setIsLoopingAnimation( const bool isLooping ) { mIsLoopingAnimation = isLooping; }
+    inline bool getIsLoopingAnimation( void ) const {return mIsLoopingAnimation; };
+
+    void onAnimationFinished();
+
     /// Declare Console Object.
     DECLARE_CONOBJECT( SkeletonObject );
     
@@ -85,25 +100,28 @@ protected:
     void updateComposition( const F32 time );
     
 protected:
-    static bool setSkeletonAsset( void* obj, const char* data )                 { static_cast<SkeletonObject*>(obj)->setSkeletonAsset(data); return false; }
-    static const char* getSkeletonAsset(void* obj, const char* data)            { return static_cast<SkeletonObject*>(obj)->getSkeletonAsset(); }
-    static bool writeSkeletonAsset( void* obj, StringTableEntry pFieldName )    { return static_cast<SkeletonObject*>(obj)->mSkeletonAsset.notNull(); }
+    static bool setSkeletonAsset( void* obj, const char* data )                  { static_cast<SkeletonObject*>(obj)->setSkeletonAsset(data); return false; }
+    static const char* getSkeletonAsset(void* obj, const char* data)             { return static_cast<SkeletonObject*>(obj)->getSkeletonAsset(); }
+    static bool writeSkeletonAsset( void* obj, StringTableEntry pFieldName )     { return static_cast<SkeletonObject*>(obj)->mSkeletonAsset.notNull(); }
 
-    static bool setCurrentAnimation( void* obj, const char* data )              { static_cast<SkeletonObject*>(obj)->setCurrentAnimation(data); return false; }
-    static const char* getCurrentAnimation(void* obj, const char* data)         { return static_cast<SkeletonObject*>(obj)->getCurrentAnimation(); }
-    static bool writeCurrentAnimation( void*obj, StringTableEntry pAnimation )  { return static_cast<SkeletonObject*>(obj)->getCurrentAnimation() != StringTable->EmptyString; }
+    static bool setCurrentAnimation( void* obj, const char* data )               { static_cast<SkeletonObject*>(obj)->setCurrentAnimation(data, static_cast<SkeletonObject*>(obj)->getIsLoopingAnimation()); return false; }
+    static const char* getCurrentAnimation(void* obj, const char* data)          { return static_cast<SkeletonObject*>(obj)->getCurrentAnimation(); }
+    static bool writeCurrentAnimation( void*obj, StringTableEntry pAnimation )   { return static_cast<SkeletonObject*>(obj)->getCurrentAnimation() != StringTable->EmptyString; }
 
-    static bool setCurrentSkin( void* obj, const char* data )                   { static_cast<SkeletonObject*>(obj)->setCurrentSkin(data); return false; }
-    static const char* getCurrentSkin(void* obj, const char* data)              { return static_cast<SkeletonObject*>(obj)->getCurrentSkin(); }
-    static bool writeCurrentSkin( void*obj, StringTableEntry pSkin )            { return static_cast<SkeletonObject*>(obj)->getCurrentSkin() != StringTable->EmptyString; }
+    static bool setCurrentSkin( void* obj, const char* data )                    { static_cast<SkeletonObject*>(obj)->setCurrentSkin(data); return false; }
+    static const char* getCurrentSkin(void* obj, const char* data)               { return static_cast<SkeletonObject*>(obj)->getCurrentSkin(); }
+    static bool writeCurrentSkin( void*obj, StringTableEntry pSkin )             { return static_cast<SkeletonObject*>(obj)->getCurrentSkin() != StringTable->EmptyString; }
 
-    static bool setSkeletonScale(void* obj, const char* data)                   { static_cast<SkeletonObject*>(obj)->setSkeletonScale(Vector2(data)); return false; }
-    static const char* getSkeletonScale(void* obj, const char* data)            { return static_cast<SkeletonObject*>(obj)->getSkeletonScale().scriptThis(); }
-    static bool writeSkeletonScale( void* obj, StringTableEntry pFieldName )    { return static_cast<SkeletonObject*>(obj)->getSkeletonScale().notZero(); }
+    static bool setSkeletonScale(void* obj, const char* data)                    { static_cast<SkeletonObject*>(obj)->setSkeletonScale(Vector2(data)); return false; }
+    static const char* getSkeletonScale(void* obj, const char* data)             { return static_cast<SkeletonObject*>(obj)->getSkeletonScale().scriptThis(); }
+    static bool writeSkeletonScale( void* obj, StringTableEntry pFieldName )     { return static_cast<SkeletonObject*>(obj)->getSkeletonScale().notZero(); }
 
     static bool setSkeletonOffset(void* obj, const char* data)                   { static_cast<SkeletonObject*>(obj)->setSkeletonOffset(Vector2(data)); return false; }
     static const char* getSkeletonOffset(void* obj, const char* data)            { return static_cast<SkeletonObject*>(obj)->getSkeletonOffset().scriptThis(); }
     static bool writeSkeletonOffset( void* obj, StringTableEntry pFieldName )    { return static_cast<SkeletonObject*>(obj)->getSkeletonOffset().notZero(); }
+
+    static bool setIsLoopingAnimation( void* obj, const char* data )             { static_cast<SkeletonObject*>(obj)->setIsLoopingAnimation( dAtob(data) ); return false; }    
+    static bool writeIsLoopingAnimation( void* obj, StringTableEntry pFieldName ){ return static_cast<SkeletonObject*>(obj)->getIsLoopingAnimation() == false; }
 };
 
 #endif // _SKELETON_OBJECT_H_

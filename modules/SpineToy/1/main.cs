@@ -88,7 +88,7 @@ function SpineToy::reset(%this)
     %spineSkeletonObject.Skin = %this.skin;
         
     // Set the animation name
-    %spineSkeletonObject.setAnimation(%this.animation);
+    %spineSkeletonObject.setAnimation(%this.animation, true);
     
     %spineSkeletonObject.SkeletonScale = 0.025;
     %spineSkeletonObject.setSkeletonOffset(0, -5);
@@ -147,8 +147,9 @@ function SpineToy::createBackground(%this)
     %animatedMenu.Asset = "SpineToy:spinosaurus";
 
     // Set properties    
-    %animatedMenu.setAnimation("Animation");
-    %animatedMenu.schedule(3000, "setAnimation", "loop");
+    %animatedMenu.setAnimation("Animation", false);
+    %duration = %animatedMenu.getAnimationDuration();
+    %animatedMenu.schedule(%duration*1000, "setAnimation", "loop", true);
     %animatedMenu.position = "0 0";
     %animatedMenu.SceneLayer = 30;
     %animatedMenu.SkeletonScale = 0.025;
@@ -167,7 +168,7 @@ function SpineToy::createPowerup(%this, %xPos, %yPos)
     %powerup.Asset = "SpineToy:powerup";
 
     // Set properties    
-    %powerup.setAnimation("Animation");    
+    %powerup.setAnimation("Animation", true);    
     %powerup.position = %xPos SPC %yPos;
     %powerup.SceneLayer = 30;
     
