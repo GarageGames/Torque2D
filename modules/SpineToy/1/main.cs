@@ -147,7 +147,8 @@ function SpineToy::createBackground(%this)
     %animatedMenu.Asset = "SpineToy:spinosaurus";
 
     // Set properties    
-    %animatedMenu.setAnimation("Animation");    
+    %animatedMenu.setAnimation("Animation");
+    %animatedMenu.schedule(3000, "setAnimation", "loop");
     %animatedMenu.position = "0 0";
     %animatedMenu.SceneLayer = 30;
     %animatedMenu.SkeletonScale = 0.025;
