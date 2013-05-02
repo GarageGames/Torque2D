@@ -75,7 +75,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../Source;../../source/testing/googleTest;../../source/testing/googleTest/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../Source;../../Source/persistence/rapidjson/include;../../Source/persistence/libjson;../../source/testing/googleTest;../../source/testing/googleTest/include;../../source/testing/googleTest;../../source/testing/googleTest/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>TORQUE_DEBUG;TORQUE_DEBUG_GUARD;_CRT_SECURE_NO_DEPRECATE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -124,7 +124,7 @@
     <ClCompile>
       <Optimization>MinSpace</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../Source;../../source/testing/googleTest;../../source/testing/googleTest/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../Source;../../Source/persistence/rapidjson/include;../../Source/persistence/libjson;../../source/testing/googleTest;../../source/testing/googleTest/include;../../source/testing/googleTest;../../source/testing/googleTest/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>UNICODE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -184,7 +184,7 @@
     <ClCompile>
       <Optimization>MinSpace</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../Source;../../Source/persistence/rapidjson/include;../../Source/persistence/libjson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>TORQUE_SHIPPING;UNICODE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -372,6 +372,7 @@
     <ClCompile Include="..\..\source\graphics\TextureDictionary.cc" />
     <ClCompile Include="..\..\source\graphics\TextureHandle.cc" />
     <ClCompile Include="..\..\source\graphics\TextureManager.cc" />
+    <ClCompile Include="..\..\source\gui\containers\guiGridCtrl.cc" />
     <ClCompile Include="..\..\source\gui\guiArrayCtrl.cc" />
     <ClCompile Include="..\..\source\gui\guiBackgroundCtrl.cc" />
     <ClCompile Include="..\..\source\gui\guiBitmapBorderCtrl.cc" />
@@ -458,14 +459,17 @@
     <ClCompile Include="..\..\source\network\serverQuery.cc" />
     <ClCompile Include="..\..\source\network\tcpObject.cc" />
     <ClCompile Include="..\..\source\network\telnetConsole.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\binary\tamlBinaryReader.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\binary\tamlBinaryWriter.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\json\tamlJSONParser.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\json\tamlJSONReader.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\json\tamlJSONWriter.cc" />
     <ClCompile Include="..\..\source\persistence\taml\taml.cc" />
-    <ClCompile Include="..\..\source\persistence\taml\tamlBinaryReader.cc" />
-    <ClCompile Include="..\..\source\persistence\taml\tamlBinaryWriter.cc" />
     <ClCompile Include="..\..\source\persistence\taml\tamlCustom.cc" />
     <ClCompile Include="..\..\source\persistence\taml\tamlWriteNode.cc" />
-    <ClCompile Include="..\..\source\persistence\taml\tamlXmlParser.cc" />
-    <ClCompile Include="..\..\source\persistence\taml\tamlXmlReader.cc" />
-    <ClCompile Include="..\..\source\persistence\taml\tamlXmlWriter.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\xml\tamlXmlParser.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\xml\tamlXmlReader.cc" />
+    <ClCompile Include="..\..\source\persistence\taml\xml\tamlXmlWriter.cc" />
     <ClCompile Include="..\..\source\persistence\tinyXML\tinystr.cpp" />
     <ClCompile Include="..\..\source\persistence\tinyXML\tinyxml.cpp" />
     <ClCompile Include="..\..\source\persistence\tinyXML\tinyxmlerror.cpp" />
@@ -718,7 +722,6 @@
     <ClInclude Include="..\..\source\assets\tamlAssetDeclaredVisitor.h" />
     <ClInclude Include="..\..\source\assets\tamlAssetReferencedUpdateVisitor.h" />
     <ClInclude Include="..\..\source\assets\tamlAssetReferencedVisitor.h" />
-    <ClInclude Include="..\..\source\assets\tamlAssetUpdateVisitor.h" />
     <ClInclude Include="..\..\source\audio\AudioAsset.h" />
     <ClInclude Include="..\..\source\box2d\Box2D.h" />
     <ClInclude Include="..\..\source\box2d\Collision\b2BroadPhase.h" />
@@ -820,6 +823,7 @@
     <ClInclude Include="..\..\source\graphics\TextureHandle.h" />
     <ClInclude Include="..\..\source\graphics\TextureManager.h" />
     <ClInclude Include="..\..\source\graphics\TextureObject.h" />
+    <ClInclude Include="..\..\source\gui\containers\guiGridCtrl.h" />
     <ClInclude Include="..\..\source\gui\guiArrayCtrl.h" />
     <ClInclude Include="..\..\source\gui\guiBackgroundCtrl.h" />
     <ClInclude Include="..\..\source\gui\guiBitmapCtrl.h" />
@@ -903,18 +907,37 @@
     <ClInclude Include="..\..\source\network\serverQuery.h" />
     <ClInclude Include="..\..\source\network\tcpObject.h" />
     <ClInclude Include="..\..\source\network\telnetConsole.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\allocators.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\document.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\encodedstream.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\encodings.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\filereadstream.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\filestream.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\filewritestream.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\internal\pow10.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\internal\stack.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\internal\strfunc.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\prettywriter.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\rapidjson.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\reader.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\stringbuffer.h" />
+    <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\writer.h" />
+    <ClInclude Include="..\..\source\persistence\taml\binary\tamlBinaryReader.h" />
+    <ClInclude Include="..\..\source\persistence\taml\binary\tamlBinaryWriter.h" />
+    <ClInclude Include="..\..\source\persistence\taml\json\tamlJSONParser.h" />
+    <ClInclude Include="..\..\source\persistence\taml\json\tamlJSONReader.h" />
+    <ClInclude Include="..\..\source\persistence\taml\json\tamlJSONWriter.h" />
     <ClInclude Include="..\..\source\persistence\taml\taml.h" />
-    <ClInclude Include="..\..\source\persistence\taml\tamlBinaryReader.h" />
-    <ClInclude Include="..\..\source\persistence\taml\tamlBinaryWriter.h" />
     <ClInclude Include="..\..\source\persistence\taml\tamlCallbacks.h" />
     <ClInclude Include="..\..\source\persistence\taml\tamlChildren.h" />
     <ClInclude Include="..\..\source\persistence\taml\tamlCustom.h" />
+    <ClInclude Include="..\..\source\persistence\taml\tamlParser.h" />
+    <ClInclude Include="..\..\source\persistence\taml\tamlVisitor.h" />
     <ClInclude Include="..\..\source\persistence\taml\tamlWriteNode.h" />
-    <ClInclude Include="..\..\source\persistence\taml\tamlXmlParser.h" />
-    <ClInclude Include="..\..\source\persistence\taml\tamlXmlReader.h" />
-    <ClInclude Include="..\..\source\persistence\taml\tamlXmlVisitor.h" />
-    <ClInclude Include="..\..\source\persistence\taml\tamlXmlWriter.h" />
     <ClInclude Include="..\..\source\persistence\taml\taml_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\persistence\taml\xml\tamlXmlParser.h" />
+    <ClInclude Include="..\..\source\persistence\taml\xml\tamlXmlReader.h" />
+    <ClInclude Include="..\..\source\persistence\taml\xml\tamlXmlWriter.h" />
     <ClInclude Include="..\..\source\persistence\tinyXML\tinystr.h" />
     <ClInclude Include="..\..\source\persistence\tinyXML\tinyxml.h" />
     <ClInclude Include="..\..\source\audio\audio.h" />
