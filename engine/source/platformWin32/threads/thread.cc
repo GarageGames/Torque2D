@@ -38,7 +38,7 @@ struct PlatformThreadData
    Thread*                 mThread;
    HANDLE                  mThreadHnd;
    Semaphore               mGateway;
-   U32                     mThreadID;
+   ThreadIdent             mThreadID;
 
    PlatformThreadData()
    {
@@ -139,17 +139,17 @@ bool Thread::isAlive()
    return res != WAIT_OBJECT_0 && res != WAIT_FAILED;
 }
 
-U32 Thread::getId()
+ThreadIdent Thread::getId()
 {
    return mData->mThreadID;
 }
 
-U32 ThreadManager::getCurrentThreadId()
+ThreadIdent ThreadManager::getCurrentThreadId()
 {
    return GetCurrentThreadId();
 }
 
-bool ThreadManager::compare(U32 threadId_1, U32 threadId_2)
+bool ThreadManager::compare(ThreadIdent threadId_1, ThreadIdent threadId_2)
 {
    return (threadId_1 == threadId_2);
 }

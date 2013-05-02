@@ -39,7 +39,7 @@ struct PlatformThreadData
     void*                   mRunArg;
     Thread*                 mThread;
     Semaphore               mGateway; // default count is 1
-    U32                     mThreadID;
+    ThreadIdent             mThreadID;
 };
 
 //-----------------------------------------------------------------------------
@@ -160,7 +160,7 @@ bool Thread::isAlive()
 
 //-----------------------------------------------------------------------------
 
-U32 Thread::getId()
+ThreadIdent Thread::getId()
 {
    return mData->mThreadID;
 }
@@ -169,14 +169,14 @@ U32 Thread::getId()
 
 //-----------------------------------------------------------------------------
 
-U32 ThreadManager::getCurrentThreadId()
+ThreadIdent ThreadManager::getCurrentThreadId()
 {
-   return (U32)pthread_self();
+   return (ThreadIdent)pthread_self();
 }
 
 //-----------------------------------------------------------------------------
 
-bool ThreadManager::compare( U32 threadId_1, U32 threadId_2 )
+bool ThreadManager::compare( ThreadIdent threadId_1, ThreadIdent threadId_2 )
 {
    return (bool)pthread_equal((pthread_t)threadId_1, (pthread_t)threadId_2);
 }
