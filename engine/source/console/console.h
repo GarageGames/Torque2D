@@ -783,11 +783,11 @@ public:
 #define conmethod_nullify(val)
 #define conmethod_return_void               conmethod_nullify(void
 #define conmethod_return_bool               return (bool
-#define conmethod_return_ConsoleConst       conmethod_return_const
 #define conmethod_return_ConsoleInt         conmethod_return_S32
 #define conmethod_return_ConsoleFloat       conmethod_return_F32
 #define conmethod_return_ConsoleVoid        conmethod_return_void
 #define conmethod_return_ConsoleBool        conmethod_return_bool
+#define conmethod_return_ConsoleString		conmethod_return_const char*
 
 #if !defined(TORQUE_SHIPPING)
 
@@ -819,11 +819,12 @@ public:
 #  define ConsoleNamespace(className, usage) \
       static ConsoleConstructor className##__Namespace(#className, usage);
 
-#  define ConsoleMethodGroupBeginWithDocs(className, superclassName)
-#  define ConsoleMethodGroupEndWithDocs(className)
-
 #  define ConsoleMethodGroupBegin(className, groupName, usage) \
       static ConsoleConstructor className##groupName##__GroupBegin(#className,#groupName,usage);
+
+// note: we would want to expand the following macro into (Doxygen) comments!
+// we can not do that with a macro.  these are here just as a reminder until completion
+#  define ConsoleMethodGroupBeginWithDocs(className, superclassName)
 
 #  define ConsoleMethod(className,name,returnType,minArgs,maxArgs,usage1)                                                 \
       static inline returnType c##className##name(className *, S32, const char **argv);                                   \

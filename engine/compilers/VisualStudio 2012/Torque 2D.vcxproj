@@ -797,7 +797,6 @@
     <ClInclude Include="..\..\source\console\consoleInternal.h" />
     <ClInclude Include="..\..\source\console\consoleNamespace.h" />
     <ClInclude Include="..\..\source\console\ConsoleTypeValidators.h" />
-    <ClInclude Include="..\..\source\console\scriptBinding.h" />
     <ClInclude Include="..\..\source\debug\profiler.h" />
     <ClInclude Include="..\..\source\debug\remote\RemoteDebugger1.h" />
     <ClInclude Include="..\..\source\debug\remote\RemoteDebugger1_ScriptBinding.h" />

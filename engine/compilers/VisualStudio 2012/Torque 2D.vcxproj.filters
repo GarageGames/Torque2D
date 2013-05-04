@@ -2760,9 +2760,6 @@
     <ClInclude Include="..\..\source\sim\simBase_ScriptBinding.h">
       <Filter>sim</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\console\scriptBinding.h">
-      <Filter>console</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\math\mMath_ASM.asm">
