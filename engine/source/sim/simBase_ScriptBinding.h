@@ -27,7 +27,7 @@
 //-----------------------------------------------------------------------------
 
 /*!
-   @defgroup EventScheduleFunctions
+   @defgroup EventScheduleFunctions Event Scheduling
       @ingroup TorqueScriptFunctions
       @{
 */
@@ -176,7 +176,7 @@ ConsoleFunctionWithDocs(schedule, ConsoleInt, 4, 0, ( t , objID || 0 , functionN
 /*! @} */
 
 /*!
-   @defgroup ObjectFunctions
+   @defgroup ObjectFunctions Object
       @ingroup TorqueScriptFunctions
       @{
 */

@@ -798,6 +798,7 @@
     <ClInclude Include="..\..\source\console\consoleInternal.h" />
     <ClInclude Include="..\..\source\console\consoleNamespace.h" />
     <ClInclude Include="..\..\source\console\ConsoleTypeValidators.h" />
+    <ClInclude Include="..\..\source\console\expando_ScriptBinding.h" />
     <ClInclude Include="..\..\source\console\output_ScriptBinding.h" />
     <ClInclude Include="..\..\source\debug\profiler.h" />
     <ClInclude Include="..\..\source\debug\remote\RemoteDebugger1.h" />
@@ -813,7 +814,9 @@
     <ClInclude Include="..\..\source\game\defaultGame.h" />
     <ClInclude Include="..\..\source\game\gameInterface.h" />
     <ClInclude Include="..\..\source\game\gameInterface_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\game\version_ScriptBinding.h" />
     <ClInclude Include="..\..\source\graphics\color.h" />
+    <ClInclude Include="..\..\source\graphics\color_ScriptBinding.h" />
     <ClInclude Include="..\..\source\graphics\dgl.h" />
     <ClInclude Include="..\..\source\graphics\DynamicTexture.h" />
     <ClInclude Include="..\..\source\graphics\gBitmap.h" />

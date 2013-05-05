@@ -31,7 +31,7 @@
 //-----------------------------------------------------------------------------
 
 /*!
-   @defgroup Vector2Math
+   @defgroup Vector2Math Vector2 Math
       @ingroup TorqueScriptFunctions
       @{
 */

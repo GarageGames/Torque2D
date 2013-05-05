@@ -2781,6 +2781,15 @@
     <ClInclude Include="..\..\source\platform\platformVideo_ScriptBinding.h">
       <Filter>platform</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\game\version_ScriptBinding.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\expando_ScriptBinding.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\graphics\color_ScriptBinding.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\math\mMath_ASM.asm">
