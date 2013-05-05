@@ -53,7 +53,7 @@ var searchData=
   ['executionstopped',['executionStopped',['../class_remote_debugger_base.html#ad6e73ec23de831e823650f0ef8169521',1,'RemoteDebuggerBase::executionStopped()'],['../class_telnet_debugger.html#addd89a2434c57e5703741b6e8359e5af',1,'TelnetDebugger::executionStopped()']]],
   ['expand',['expand',['../class_gui_rollout_ctrl.html#abba907f9ff1c67082fba469156a9b30a',1,'GuiRolloutCtrl']]],
   ['expandassetfilepath',['expandAssetFilePath',['../class_asset_base.html#a5d0bddae796f35ea9f7b676ee6503e8c',1,'AssetBase']]],
-  ['expandpath',['expandPath',['../class_h_t_t_p_object.html#aca7335700108c72366d1e957d1d5beae',1,'HTTPObject::expandPath()'],['../namespace_con.html#ade40cc27b73661f1d997107a00baae6b',1,'Con::expandPath(char *pDstPath, U32 size, const char *pSrcPath, const char *pWorkingDirectoryHint, const bool ensureTrailingSlash)'],['../namespace_con.html#aa59cb93c8a64f7eab9345bc15b3c42dc',1,'Con::expandPath(...)']]],
+  ['expandpath',['expandPath',['../class_h_t_t_p_object.html#aca7335700108c72366d1e957d1d5beae',1,'HTTPObject::expandPath()'],['../namespace_con.html#ade40cc27b73661f1d997107a00baae6b',1,'Con::expandPath()']]],
   ['expandstring',['expandString',['../class_net_string_table.html#ae5663f939125ab92636f163bd8d393b1',1,'NetStringTable']]],
   ['exportstrip',['exportStrip',['../class_g_font.html#a323a2d8f579a0e142764264bc87d3324',1,'GFont']]],
   ['exportvariables',['exportVariables',['../class_dictionary.html#aba2cf2377cd45cbaad1a5b80a66e9202',1,'Dictionary']]],

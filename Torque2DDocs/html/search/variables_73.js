@@ -4,7 +4,7 @@ var searchData=
   ['sampleperiod',['samplePeriod',['../struct_w_a_v_smpl_hdr.html#a8a0bcc6d6eec1171fd546577d59b8918',1,'WAVSmplHdr']]],
   ['samplerdata',['samplerData',['../struct_w_a_v_smpl_hdr.html#abe728c355c09610b7b51b7aec0ae461b',1,'WAVSmplHdr']]],
   ['samplesperblock',['samplesPerBlock',['../struct_w_a_v_fmt_ex_hdr.html#a6c10220f828ecc905e662ab30063b4ee',1,'WAVFmtExHdr']]],
-  ['samplespersec',['SamplesPerSec',['../struct_w_a_v_e___struct.html#a785087f3a3100c677a0e6a812b558268',1,'WAVE_Struct::SamplesPerSec()'],['../struct_w_a_v_fmt_hdr.html#a27b9c9ae1d05ffab256ed7356da8d8b6',1,'WAVFmtHdr::samplesPerSec()']]],
+  ['samplespersec',['samplesPerSec',['../struct_w_a_v_fmt_hdr.html#a27b9c9ae1d05ffab256ed7356da8d8b6',1,'WAVFmtHdr::samplesPerSec()'],['../struct_w_a_v_e___struct.html#a785087f3a3100c677a0e6a812b558268',1,'WAVE_Struct::SamplesPerSec()']]],
   ['sbitmapidsource',['sBitmapIdSource',['../class_g_bitmap.html#a932023f1222c46d916b7dce2caf0c101',1,'GBitmap']]],
   ['sc',['sc',['../class_console_constructor.html#a58d259b59730d65a5b3585c629c61a59',1,'ConsoleConstructor']]],
   ['scalefactor',['scaleFactor',['../struct_action_map_1_1_node.html#ae6c14e69ab0a57661ee2838fa1a6daff',1,'ActionMap::Node::scaleFactor()'],['../struct_action_map_1_1_break_entry.html#ae6c14e69ab0a57661ee2838fa1a6daff',1,'ActionMap::BreakEntry::scaleFactor()']]],

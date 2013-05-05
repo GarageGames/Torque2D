@@ -44,6 +44,7 @@ var searchData=
   ['guiformctrl',['GuiFormCtrl',['../class_gui_form_ctrl.html',1,'']]],
   ['guiframesetctrl',['GuiFrameSetCtrl',['../class_gui_frame_set_ctrl.html',1,'']]],
   ['guigraphctrl',['GuiGraphCtrl',['../class_gui_graph_ctrl.html',1,'']]],
+  ['guigridcontrol',['GuiGridControl',['../class_gui_grid_control.html',1,'']]],
   ['guiiconbuttonctrl',['GuiIconButtonCtrl',['../class_gui_icon_button_ctrl.html',1,'']]],
   ['guiimagebuttonctrl',['GuiImageButtonCtrl',['../class_gui_image_button_ctrl.html',1,'']]],
   ['guiimagelist',['GuiImageList',['../class_gui_image_list.html',1,'']]],

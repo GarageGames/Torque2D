@@ -125,26 +125,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <area href="class_gui_form_ctrl.html" alt="GuiFormCtrl" shape="rect" coords="368,1064,542,1088"/>
 <area href="class_gui_frame_set_ctrl.html" alt="GuiFrameSetCtrl" shape="rect" coords="368,1120,542,1144"/>
 <area href="class_gui_graph_ctrl.html" alt="GuiGraphCtrl" shape="rect" coords="368,1176,542,1200"/>
-<area href="class_gui_input_ctrl.html" alt="GuiInputCtrl" shape="rect" coords="368,1232,542,1256"/>
-<area href="class_gui_inspector_field.html" alt="GuiInspectorField" shape="rect" coords="368,1288,542,1312"/>
-<area href="class_gui_list_box_ctrl.html" alt="GuiListBoxCtrl" shape="rect" coords="368,1344,542,1368"/>
-<area href="class_gui_menu_background_ctrl.html" alt="GuiMenuBackgroundCtrl" shape="rect" coords="368,1400,542,1424"/>
-<area href="class_gui_message_vector_ctrl.html" alt="GuiMessageVectorCtrl" shape="rect" coords="368,1456,542,1480"/>
-<area href="class_gui_m_l_text_ctrl.html" alt="GuiMLTextCtrl" shape="rect" coords="368,1512,542,1536"/>
-<area href="class_gui_mouse_event_ctrl.html" alt="GuiMouseEventCtrl" shape="rect" coords="368,1568,542,1592"/>
-<area href="class_gui_pane_control.html" alt="GuiPaneControl" shape="rect" coords="368,1624,542,1648"/>
-<area href="class_gui_pop_up_background_ctrl.html" alt="GuiPopUpBackgroundCtrl" shape="rect" coords="368,1680,542,1704"/>
-<area href="class_gui_pop_up_background_ctrl_ex.html" alt="GuiPopUpBackgroundCtrlEx" shape="rect" coords="368,1736,542,1760"/>
-<area href="class_gui_script_notify_ctrl.html" alt="GuiScriptNotifyCtrl" shape="rect" coords="368,1792,542,1816"/>
-<area href="class_gui_scroll_ctrl.html" alt="GuiScrollCtrl" shape="rect" coords="368,1848,542,1872"/>
-<area href="class_gui_separator_ctrl.html" title="Renders a separator line with optional text." alt="GuiSeparatorCtrl" shape="rect" coords="368,1904,542,1928"/>
-<area href="class_gui_slider_ctrl.html" alt="GuiSliderCtrl" shape="rect" coords="368,1960,542,1984"/>
-<area href="class_gui_sprite_ctrl.html" alt="GuiSpriteCtrl" shape="rect" coords="368,2016,542,2040"/>
-<area href="class_gui_stack_control.html" alt="GuiStackControl" shape="rect" coords="368,2072,542,2096"/>
-<area href="class_gui_tab_book_ctrl.html" alt="GuiTabBookCtrl" shape="rect" coords="368,2128,542,2152"/>
-<area href="class_gui_text_ctrl.html" alt="GuiTextCtrl" shape="rect" coords="368,2184,542,2208"/>
-<area href="class_gui_tick_ctrl.html" alt="GuiTickCtrl" shape="rect" coords="368,2240,542,2264"/>
-<area href="class_scene_window.html" alt="SceneWindow" shape="rect" coords="368,2296,542,2320"/>
+<area href="class_gui_grid_control.html" alt="GuiGridControl" shape="rect" coords="368,1232,542,1256"/>
+<area href="class_gui_input_ctrl.html" alt="GuiInputCtrl" shape="rect" coords="368,1288,542,1312"/>
+<area href="class_gui_inspector_field.html" alt="GuiInspectorField" shape="rect" coords="368,1344,542,1368"/>
+<area href="class_gui_list_box_ctrl.html" alt="GuiListBoxCtrl" shape="rect" coords="368,1400,542,1424"/>
+<area href="class_gui_menu_background_ctrl.html" alt="GuiMenuBackgroundCtrl" shape="rect" coords="368,1456,542,1480"/>
+<area href="class_gui_message_vector_ctrl.html" alt="GuiMessageVectorCtrl" shape="rect" coords="368,1512,542,1536"/>
+<area href="class_gui_m_l_text_ctrl.html" alt="GuiMLTextCtrl" shape="rect" coords="368,1568,542,1592"/>
+<area href="class_gui_mouse_event_ctrl.html" alt="GuiMouseEventCtrl" shape="rect" coords="368,1624,542,1648"/>
+<area href="class_gui_pane_control.html" alt="GuiPaneControl" shape="rect" coords="368,1680,542,1704"/>
+<area href="class_gui_pop_up_background_ctrl.html" alt="GuiPopUpBackgroundCtrl" shape="rect" coords="368,1736,542,1760"/>
+<area href="class_gui_pop_up_background_ctrl_ex.html" alt="GuiPopUpBackgroundCtrlEx" shape="rect" coords="368,1792,542,1816"/>
+<area href="class_gui_script_notify_ctrl.html" alt="GuiScriptNotifyCtrl" shape="rect" coords="368,1848,542,1872"/>
+<area href="class_gui_scroll_ctrl.html" alt="GuiScrollCtrl" shape="rect" coords="368,1904,542,1928"/>
+<area href="class_gui_separator_ctrl.html" title="Renders a separator line with optional text." alt="GuiSeparatorCtrl" shape="rect" coords="368,1960,542,1984"/>
+<area href="class_gui_slider_ctrl.html" alt="GuiSliderCtrl" shape="rect" coords="368,2016,542,2040"/>
+<area href="class_gui_sprite_ctrl.html" alt="GuiSpriteCtrl" shape="rect" coords="368,2072,542,2096"/>
+<area href="class_gui_stack_control.html" alt="GuiStackControl" shape="rect" coords="368,2128,542,2152"/>
+<area href="class_gui_tab_book_ctrl.html" alt="GuiTabBookCtrl" shape="rect" coords="368,2184,542,2208"/>
+<area href="class_gui_text_ctrl.html" alt="GuiTextCtrl" shape="rect" coords="368,2240,542,2264"/>
+<area href="class_gui_tick_ctrl.html" alt="GuiTickCtrl" shape="rect" coords="368,2296,542,2320"/>
+<area href="class_scene_window.html" alt="SceneWindow" shape="rect" coords="368,2352,542,2376"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -220,18 +221,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ab9ca7ce6545bea51b7fe7a70486338eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns boolean as to whether any parent of this control has the 'no serialization' flag set.  <a href="#ab9ca7ce6545bea51b7fe7a70486338eb">More...</a><br/></td></tr>
 <tr class="separator:ab9ca7ce6545bea51b7fe7a70486338eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Accessors</div></td></tr>
-<tr class="memitem:aafcf691c8a5e6a6fbe0ea5bea9341814"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_point2_i.html">Point2I</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui_control.html#aafcf691c8a5e6a6fbe0ea5bea9341814">getPosition</a> ()</td></tr>
-<tr class="memdesc:aafcf691c8a5e6a6fbe0ea5bea9341814"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns position of the control.  <a href="#aafcf691c8a5e6a6fbe0ea5bea9341814">More...</a><br/></td></tr>
-<tr class="separator:aafcf691c8a5e6a6fbe0ea5bea9341814"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3fc6e13c7017ba24730a836d56968aa8"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_point2_i.html">Point2I</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui_control.html#a3fc6e13c7017ba24730a836d56968aa8">getExtent</a> ()</td></tr>
-<tr class="memdesc:a3fc6e13c7017ba24730a836d56968aa8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns extents of the control.  <a href="#a3fc6e13c7017ba24730a836d56968aa8">More...</a><br/></td></tr>
-<tr class="separator:a3fc6e13c7017ba24730a836d56968aa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a329f8ae84ea71634e11bada66b65a3d4"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_point2_i.html">Point2I</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui_control.html#a329f8ae84ea71634e11bada66b65a3d4">getPosition</a> ()</td></tr>
+<tr class="memdesc:a329f8ae84ea71634e11bada66b65a3d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns position of the control.  <a href="#a329f8ae84ea71634e11bada66b65a3d4">More...</a><br/></td></tr>
+<tr class="separator:a329f8ae84ea71634e11bada66b65a3d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a372acde82e813204d86a5b080643d40d"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_point2_i.html">Point2I</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui_control.html#a372acde82e813204d86a5b080643d40d">getExtent</a> ()</td></tr>
+<tr class="memdesc:a372acde82e813204d86a5b080643d40d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns extents of the control.  <a href="#a372acde82e813204d86a5b080643d40d">More...</a><br/></td></tr>
+<tr class="separator:a372acde82e813204d86a5b080643d40d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedb3edb220371d36500ebc7ed6df73e1"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_rect_i.html">RectI</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui_control.html#aedb3edb220371d36500ebc7ed6df73e1">getBounds</a> ()</td></tr>
 <tr class="memdesc:aedb3edb220371d36500ebc7ed6df73e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the bounds of the control.  <a href="#aedb3edb220371d36500ebc7ed6df73e1">More...</a><br/></td></tr>
 <tr class="separator:aedb3edb220371d36500ebc7ed6df73e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad04bc7332417982d5017ae5e454eea7f"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_point2_i.html">Point2I</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui_control.html#ad04bc7332417982d5017ae5e454eea7f">getMinExtent</a> ()</td></tr>
-<tr class="memdesc:ad04bc7332417982d5017ae5e454eea7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns minimum size the control can be.  <a href="#ad04bc7332417982d5017ae5e454eea7f">More...</a><br/></td></tr>
-<tr class="separator:ad04bc7332417982d5017ae5e454eea7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0316fcce2bc57b1aa85235e7b5a82d24"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_point2_i.html">Point2I</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui_control.html#a0316fcce2bc57b1aa85235e7b5a82d24">getMinExtent</a> ()</td></tr>
+<tr class="memdesc:a0316fcce2bc57b1aa85235e7b5a82d24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns minimum size the control can be.  <a href="#a0316fcce2bc57b1aa85235e7b5a82d24">More...</a><br/></td></tr>
+<tr class="separator:a0316fcce2bc57b1aa85235e7b5a82d24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f4c084ba9db02db3b7c2c43a86dc30a"><td class="memItemLeft" align="right" valign="top">const S32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui_control.html#a5f4c084ba9db02db3b7c2c43a86dc30a">getLeft</a> ()</td></tr>
 <tr class="memdesc:a5f4c084ba9db02db3b7c2c43a86dc30a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the X position of the control.  <a href="#a5f4c084ba9db02db3b7c2c43a86dc30a">More...</a><br/></td></tr>
 <tr class="separator:a5f4c084ba9db02db3b7c2c43a86dc30a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -263,9 +264,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a45f7e0ee713c5ef4a3aa4fb1a08fcea5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af54986487b1347f728f32012f1b7b741"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui_control.html#af54986487b1347f728f32012f1b7b741">removeObject</a> (<a class="el" href="class_sim_object.html">SimObject</a> *obj)</td></tr>
 <tr class="separator:af54986487b1347f728f32012f1b7b741"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f1236daed796f783b9a8162c3cdd5ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_gui_control.html">GuiControl</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui_control.html#a3f1236daed796f783b9a8162c3cdd5ff">getParent</a> ()</td></tr>
-<tr class="memdesc:a3f1236daed796f783b9a8162c3cdd5ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the control which owns this one.  <a href="#a3f1236daed796f783b9a8162c3cdd5ff">More...</a><br/></td></tr>
-<tr class="separator:a3f1236daed796f783b9a8162c3cdd5ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e7fc35067035a86adee413c2453ab70"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_gui_control.html">GuiControl</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui_control.html#a3e7fc35067035a86adee413c2453ab70">getParent</a> ()</td></tr>
+<tr class="memdesc:a3e7fc35067035a86adee413c2453ab70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the control which owns this one.  <a href="#a3e7fc35067035a86adee413c2453ab70">More...</a><br/></td></tr>
+<tr class="separator:a3e7fc35067035a86adee413c2453ab70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96faf5971f2ab3623d8e5cd14ed3cb87"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_gui_canvas.html">GuiCanvas</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gui_control.html#a96faf5971f2ab3623d8e5cd14ed3cb87">getRoot</a> ()</td></tr>
 <tr class="separator:a96faf5971f2ab3623d8e5cd14ed3cb87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Coordinates</div></td></tr>
@@ -1677,7 +1678,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3fc6e13c7017ba24730a836d56968aa8"></a>
+<a class="anchor" id="a372acde82e813204d86a5b080643d40d"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1685,7 +1686,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const char * getExtent </td>
+          <td class="memname">const <a class="el" href="class_point2_i.html">Point2I</a>&amp; getExtent </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1859,7 +1860,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ad04bc7332417982d5017ae5e454eea7f"></a>
+<a class="anchor" id="a0316fcce2bc57b1aa85235e7b5a82d24"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1867,7 +1868,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const char * getMinExtent </td>
+          <td class="memname">const <a class="el" href="class_point2_i.html">Point2I</a>&amp; getMinExtent </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1884,12 +1885,12 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3f1236daed796f783b9a8162c3cdd5ff"></a>
+<a class="anchor" id="a3e7fc35067035a86adee413c2453ab70"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">S32 getParent </td>
+          <td class="memname"><a class="el" href="class_gui_control.html">GuiControl</a> * getParent </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1901,7 +1902,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aafcf691c8a5e6a6fbe0ea5bea9341814"></a>
+<a class="anchor" id="a329f8ae84ea71634e11bada66b65a3d4"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1909,7 +1910,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const char * getPosition </td>
+          <td class="memname">const <a class="el" href="class_point2_i.html">Point2I</a>&amp; getPosition </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -3447,7 +3448,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Called when this object is asked to sleep. </p>
 
-<p>Reimplemented in <a class="el" href="class_gui_tree_view_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiTreeViewCtrl</a>, <a class="el" href="class_gui_m_l_text_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiMLTextCtrl</a>, <a class="el" href="class_gui_scroll_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiScrollCtrl</a>, <a class="el" href="class_gui_menu_bar.html#aec2aecc166c36fdcc928398be60b8824">GuiMenuBar</a>, <a class="el" href="class_gui_pop_up_menu_ctrl_ex.html#aec2aecc166c36fdcc928398be60b8824">GuiPopUpMenuCtrlEx</a>, <a class="el" href="class_gui_pop_up_menu_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiPopUpMenuCtrl</a>, <a class="el" href="class_gui_tab_book_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiTabBookCtrl</a>, <a class="el" href="class_gui_window_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiWindowCtrl</a>, <a class="el" href="class_gui_form_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiFormCtrl</a>, <a class="el" href="class_gui_text_edit_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiTextEditCtrl</a>, <a class="el" href="class_gui_icon_button_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiIconButtonCtrl</a>, <a class="el" href="class_gui_image_button_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiImageButtonCtrl</a>, <a class="el" href="class_gui_scene_object_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiSceneObjectCtrl</a>, <a class="el" href="class_gui_stack_control.html#aec2aecc166c36fdcc928398be60b8824">GuiStackControl</a>, <a class="el" href="class_gui_pane_control.html#aec2aecc166c36fdcc928398be60b8824">GuiPaneControl</a>, <a class="el" href="class_gui_message_vector_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiMessageVectorCtrl</a>, <a class="el" href="class_gui_bitmap_button_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiBitmapButtonCtrl</a>, <a class="el" href="class_gui_edit_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiEditCtrl</a>, <a class="el" href="class_gui_text_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiTextCtrl</a>, <a class="el" href="class_gui_bitmap_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiBitmapCtrl</a>, <a class="el" href="class_gui_toolbox_button_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiToolboxButtonCtrl</a>, <a class="el" href="class_gui_array_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiArrayCtrl</a>, <a class="el" href="class_gui_console_text_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiConsoleTextCtrl</a>, <a class="el" href="class_gui_control_array_control.html#aec2aecc166c36fdcc928398be60b8824">GuiControlArrayControl</a>, <a class="el" href="class_gui_bitmap_border_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiBitmapBorderCtrl</a>, <a class="el" href="class_gui_sprite_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiSpriteCtrl</a>, <a class="el" href="class_gui_tab_page_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiTabPageCtrl</a>, and <a class="el" href="class_gui_input_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiInputCtrl</a>.</p>
+<p>Reimplemented in <a class="el" href="class_gui_tree_view_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiTreeViewCtrl</a>, <a class="el" href="class_gui_m_l_text_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiMLTextCtrl</a>, <a class="el" href="class_gui_scroll_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiScrollCtrl</a>, <a class="el" href="class_gui_menu_bar.html#aec2aecc166c36fdcc928398be60b8824">GuiMenuBar</a>, <a class="el" href="class_gui_pop_up_menu_ctrl_ex.html#aec2aecc166c36fdcc928398be60b8824">GuiPopUpMenuCtrlEx</a>, <a class="el" href="class_gui_pop_up_menu_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiPopUpMenuCtrl</a>, <a class="el" href="class_gui_tab_book_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiTabBookCtrl</a>, <a class="el" href="class_gui_window_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiWindowCtrl</a>, <a class="el" href="class_gui_form_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiFormCtrl</a>, <a class="el" href="class_gui_text_edit_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiTextEditCtrl</a>, <a class="el" href="class_gui_icon_button_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiIconButtonCtrl</a>, <a class="el" href="class_gui_image_button_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiImageButtonCtrl</a>, <a class="el" href="class_gui_scene_object_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiSceneObjectCtrl</a>, <a class="el" href="class_gui_stack_control.html#aec2aecc166c36fdcc928398be60b8824">GuiStackControl</a>, <a class="el" href="class_gui_pane_control.html#aec2aecc166c36fdcc928398be60b8824">GuiPaneControl</a>, <a class="el" href="class_gui_message_vector_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiMessageVectorCtrl</a>, <a class="el" href="class_gui_bitmap_button_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiBitmapButtonCtrl</a>, <a class="el" href="class_gui_edit_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiEditCtrl</a>, <a class="el" href="class_gui_text_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiTextCtrl</a>, <a class="el" href="class_gui_bitmap_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiBitmapCtrl</a>, <a class="el" href="class_gui_toolbox_button_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiToolboxButtonCtrl</a>, <a class="el" href="class_gui_array_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiArrayCtrl</a>, <a class="el" href="class_gui_console_text_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiConsoleTextCtrl</a>, <a class="el" href="class_gui_control_array_control.html#aec2aecc166c36fdcc928398be60b8824">GuiControlArrayControl</a>, <a class="el" href="class_gui_grid_control.html#aec2aecc166c36fdcc928398be60b8824">GuiGridControl</a>, <a class="el" href="class_gui_bitmap_border_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiBitmapBorderCtrl</a>, <a class="el" href="class_gui_sprite_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiSpriteCtrl</a>, <a class="el" href="class_gui_tab_page_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiTabPageCtrl</a>, and <a class="el" href="class_gui_input_ctrl.html#aec2aecc166c36fdcc928398be60b8824">GuiInputCtrl</a>.</p>
 
 </div>
 </div>
@@ -3474,7 +3475,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Called when this object is asked to wake up returns true if it's actually awake at the end. </p>
 
-<p>Reimplemented in <a class="el" href="class_gui_tree_view_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiTreeViewCtrl</a>, <a class="el" href="class_gui_m_l_text_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiMLTextCtrl</a>, <a class="el" href="class_gui_scroll_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiScrollCtrl</a>, <a class="el" href="class_gui_frame_set_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiFrameSetCtrl</a>, <a class="el" href="class_gui_menu_bar.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiMenuBar</a>, <a class="el" href="class_gui_pop_up_menu_ctrl_ex.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiPopUpMenuCtrlEx</a>, <a class="el" href="class_gui_pop_up_menu_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiPopUpMenuCtrl</a>, <a class="el" href="class_gui_tab_book_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiTabBookCtrl</a>, <a class="el" href="class_gui_window_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiWindowCtrl</a>, <a class="el" href="class_gui_list_box_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiListBoxCtrl</a>, <a class="el" href="class_gui_form_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiFormCtrl</a>, <a class="el" href="class_gui_text_edit_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiTextEditCtrl</a>, <a class="el" href="class_gui_icon_button_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiIconButtonCtrl</a>, <a class="el" href="class_gui_rollout_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiRolloutCtrl</a>, <a class="el" href="class_gui_text_list_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiTextListCtrl</a>, <a class="el" href="class_dbg_file_view.html#a9e181f3432e66261f03ccf45ab8b5e9e">DbgFileView</a>, <a class="el" href="class_gui_image_button_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiImageButtonCtrl</a>, <a class="el" href="class_gui_scene_object_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiSceneObjectCtrl</a>, <a class="el" href="class_gui_stack_control.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiStackControl</a>, <a class="el" href="class_gui_pane_control.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiPaneControl</a>, <a class="el" href="class_gui_graph_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiGraphCtrl</a>, <a class="el" href="class_gui_message_vector_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiMessageVectorCtrl</a>, <a class="el" href="class_gui_bitmap_button_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiBitmapButtonCtrl</a>, <a class="el" href="class_gui_edit_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiEditCtrl</a>, <a class="el" href="class_gui_text_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiTextCtrl</a>, <a class="el" href="class_gui_slider_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiSliderCtrl</a>, <a class="el" href="class_gui_fadein_bitmap_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiFadeinBitmapCtrl</a>, <a class="el" href="class_gui_filter_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiFilterCtrl</a>, <a class="el" href="class_gui_bitmap_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiBitmapCtrl</a>, <a class="el" href="class_gui_toolbox_button_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiToolboxButtonCtrl</a>, <a class="el" href="class_gui_button_base_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiButtonBaseCtrl</a>, <a class="el" href="class_gui_array_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiArrayCtrl</a>, <a class="el" href="class_gui_console_text_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiConsoleTextCtrl</a>, <a class="el" href="class_gui_control_array_control.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiControlArrayControl</a>, <a class="el" href="class_gui_check_box_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiCheckBoxCtrl</a>, <a class="el" href="class_gui_bitmap_border_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiBitmapBorderCtrl</a>, <a class="el" href="class_gui_sprite_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiSpriteCtrl</a>, <a class="el" href="class_gui_console.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiConsole</a>, <a class="el" href="class_gui_tab_page_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiTabPageCtrl</a>, <a class="el" href="class_gui_input_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiInputCtrl</a>, and <a class="el" href="class_gui_button_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiButtonCtrl</a>.</p>
+<p>Reimplemented in <a class="el" href="class_gui_tree_view_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiTreeViewCtrl</a>, <a class="el" href="class_gui_m_l_text_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiMLTextCtrl</a>, <a class="el" href="class_gui_scroll_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiScrollCtrl</a>, <a class="el" href="class_gui_frame_set_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiFrameSetCtrl</a>, <a class="el" href="class_gui_menu_bar.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiMenuBar</a>, <a class="el" href="class_gui_pop_up_menu_ctrl_ex.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiPopUpMenuCtrlEx</a>, <a class="el" href="class_gui_pop_up_menu_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiPopUpMenuCtrl</a>, <a class="el" href="class_gui_tab_book_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiTabBookCtrl</a>, <a class="el" href="class_gui_window_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiWindowCtrl</a>, <a class="el" href="class_gui_list_box_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiListBoxCtrl</a>, <a class="el" href="class_gui_form_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiFormCtrl</a>, <a class="el" href="class_gui_text_edit_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiTextEditCtrl</a>, <a class="el" href="class_gui_icon_button_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiIconButtonCtrl</a>, <a class="el" href="class_gui_rollout_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiRolloutCtrl</a>, <a class="el" href="class_gui_text_list_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiTextListCtrl</a>, <a class="el" href="class_dbg_file_view.html#a9e181f3432e66261f03ccf45ab8b5e9e">DbgFileView</a>, <a class="el" href="class_gui_image_button_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiImageButtonCtrl</a>, <a class="el" href="class_gui_scene_object_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiSceneObjectCtrl</a>, <a class="el" href="class_gui_stack_control.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiStackControl</a>, <a class="el" href="class_gui_pane_control.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiPaneControl</a>, <a class="el" href="class_gui_graph_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiGraphCtrl</a>, <a class="el" href="class_gui_message_vector_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiMessageVectorCtrl</a>, <a class="el" href="class_gui_bitmap_button_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiBitmapButtonCtrl</a>, <a class="el" href="class_gui_edit_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiEditCtrl</a>, <a class="el" href="class_gui_text_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiTextCtrl</a>, <a class="el" href="class_gui_slider_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiSliderCtrl</a>, <a class="el" href="class_gui_fadein_bitmap_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiFadeinBitmapCtrl</a>, <a class="el" href="class_gui_filter_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiFilterCtrl</a>, <a class="el" href="class_gui_bitmap_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiBitmapCtrl</a>, <a class="el" href="class_gui_toolbox_button_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiToolboxButtonCtrl</a>, <a class="el" href="class_gui_button_base_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiButtonBaseCtrl</a>, <a class="el" href="class_gui_array_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiArrayCtrl</a>, <a class="el" href="class_gui_console_text_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiConsoleTextCtrl</a>, <a class="el" href="class_gui_control_array_control.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiControlArrayControl</a>, <a class="el" href="class_gui_check_box_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiCheckBoxCtrl</a>, <a class="el" href="class_gui_grid_control.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiGridControl</a>, <a class="el" href="class_gui_bitmap_border_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiBitmapBorderCtrl</a>, <a class="el" href="class_gui_sprite_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiSpriteCtrl</a>, <a class="el" href="class_gui_console.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiConsole</a>, <a class="el" href="class_gui_tab_page_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiTabPageCtrl</a>, <a class="el" href="class_gui_input_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiInputCtrl</a>, and <a class="el" href="class_gui_button_ctrl.html#a9e181f3432e66261f03ccf45ab8b5e9e">GuiButtonCtrl</a>.</p>
 
 </div>
 </div>
@@ -3755,7 +3756,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="class_scene_window.html#a29edd1ad230baa2abc99f7f670d8be47">SceneWindow</a>, <a class="el" href="class_gui_m_l_text_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiMLTextCtrl</a>, <a class="el" href="class_gui_tab_book_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiTabBookCtrl</a>, <a class="el" href="class_gui_inspector_dynamic_field.html#a29edd1ad230baa2abc99f7f670d8be47">GuiInspectorDynamicField</a>, <a class="el" href="class_gui_scroll_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiScrollCtrl</a>, <a class="el" href="class_gui_inspector_type_color.html#a29edd1ad230baa2abc99f7f670d8be47">GuiInspectorTypeColor</a>, <a class="el" href="class_gui_inspector_field.html#a29edd1ad230baa2abc99f7f670d8be47">GuiInspectorField</a>, <a class="el" href="class_gui_window_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiWindowCtrl</a>, <a class="el" href="class_gui_inspector_type_file_name.html#a29edd1ad230baa2abc99f7f670d8be47">GuiInspectorTypeFileName</a>, <a class="el" href="class_gui_frame_set_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiFrameSetCtrl</a>, <a class="el" href="class_gui_rollout_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiRolloutCtrl</a>, <a class="el" href="class_gui_form_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiFormCtrl</a>, <a class="el" href="class_gui_stack_control.html#a29edd1ad230baa2abc99f7f670d8be47">GuiStackControl</a>, <a class="el" href="class_gui_pane_control.html#a29edd1ad230baa2abc99f7f670d8be47">GuiPaneControl</a>, <a class="el" href="class_gui_auto_scroll_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiAutoScrollCtrl</a>, <a class="el" href="class_gui_script_notify_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiScriptNotifyCtrl</a>, <a class="el" href="class_gui_m_l_text_edit_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiMLTextEditCtrl</a>, <a class="el" href="class_gui_dynamic_ctrl_array_control.html#a29edd1ad230baa2abc99f7f670d8be47">GuiDynamicCtrlArrayControl</a>, and <a class="el" href="class_gui_control_array_control.html#a29edd1ad230baa2abc99f7f670d8be47">GuiControlArrayControl</a>.</p>
+<p>Reimplemented in <a class="el" href="class_scene_window.html#a29edd1ad230baa2abc99f7f670d8be47">SceneWindow</a>, <a class="el" href="class_gui_m_l_text_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiMLTextCtrl</a>, <a class="el" href="class_gui_tab_book_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiTabBookCtrl</a>, <a class="el" href="class_gui_inspector_dynamic_field.html#a29edd1ad230baa2abc99f7f670d8be47">GuiInspectorDynamicField</a>, <a class="el" href="class_gui_scroll_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiScrollCtrl</a>, <a class="el" href="class_gui_inspector_type_color.html#a29edd1ad230baa2abc99f7f670d8be47">GuiInspectorTypeColor</a>, <a class="el" href="class_gui_inspector_field.html#a29edd1ad230baa2abc99f7f670d8be47">GuiInspectorField</a>, <a class="el" href="class_gui_window_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiWindowCtrl</a>, <a class="el" href="class_gui_inspector_type_file_name.html#a29edd1ad230baa2abc99f7f670d8be47">GuiInspectorTypeFileName</a>, <a class="el" href="class_gui_frame_set_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiFrameSetCtrl</a>, <a class="el" href="class_gui_rollout_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiRolloutCtrl</a>, <a class="el" href="class_gui_form_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiFormCtrl</a>, <a class="el" href="class_gui_stack_control.html#a29edd1ad230baa2abc99f7f670d8be47">GuiStackControl</a>, <a class="el" href="class_gui_pane_control.html#a29edd1ad230baa2abc99f7f670d8be47">GuiPaneControl</a>, <a class="el" href="class_gui_auto_scroll_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiAutoScrollCtrl</a>, <a class="el" href="class_gui_script_notify_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiScriptNotifyCtrl</a>, <a class="el" href="class_gui_m_l_text_edit_ctrl.html#a29edd1ad230baa2abc99f7f670d8be47">GuiMLTextEditCtrl</a>, <a class="el" href="class_gui_dynamic_ctrl_array_control.html#a29edd1ad230baa2abc99f7f670d8be47">GuiDynamicCtrlArrayControl</a>, <a class="el" href="class_gui_control_array_control.html#a29edd1ad230baa2abc99f7f670d8be47">GuiControlArrayControl</a>, and <a class="el" href="class_gui_grid_control.html#a29edd1ad230baa2abc99f7f670d8be47">GuiGridControl</a>.</p>
 
 </div>
 </div>

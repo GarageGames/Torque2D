@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.3.1"/>
-<title>TorqueScript Reference: EventScheduleFunctions</title>
+<title>TorqueScript Reference: Event Scheduling</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -30,6 +30,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
     </ul>
@@ -39,7 +40,7 @@
   <div class="summary">
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">EventScheduleFunctions<div class="ingroups"><a class="el" href="group__TorqueScriptFunctions.html">Function Categories</a></div></div>  </div>
+<div class="title">Event Scheduling<div class="ingroups"><a class="el" href="group__TorqueScriptFunctions.html">Function Categories</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
@@ -154,7 +155,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>get the time, in ticks, that has elapsed since the engine started executing.</p>
 <dl class="section return"><dt>Returns</dt><dd>the time in ticks since the engine was started. </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd>getRealTime</dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="group__PlatformFunctions.html#ga7922bd8b3983a13d7bc2bb3d3a6e646b">getRealTime</a></dd></dl>
 <dl class="section user"><dt>See Engine Function/Method</dt><dd>Sim::getCurrentTime </dd></dl>
 
 </div>
@@ -208,7 +209,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if this event is still outstanding and false if it has passed or eventID is invalid.</dd></dl>
 <dl class="section user"><dt>Example</dt><dd><div class="fragment"><div class="line">$Game::Schedule = <a class="code" href="group__EventScheduleFunctions.html#ga9c2bfbe7ae47e7983dd01bbe0580ee81">schedule</a>($Game::EndGamePause * 1000, 0, <span class="stringliteral">&quot;onCyclePauseEnd&quot;</span>);</div>
-<div class="line"><span class="keywordflow">if</span>( <a class="code" href="group__EventScheduleFunctions.html#ga0a1e562e6a308fbe5c2691e040515184">isEventPending</a>($Game::Schedule) )  echo(<span class="stringliteral">&quot;got a pending event&quot;</span>);</div>
+<div class="line"><span class="keywordflow">if</span>( <a class="code" href="group__EventScheduleFunctions.html#ga0a1e562e6a308fbe5c2691e040515184">isEventPending</a>($Game::Schedule) )  <a class="code" href="group__ConsoleOutputFunctions.html#ga530570e5951963de5e7ae349e996691c">echo</a>(<span class="stringliteral">&quot;got a pending event&quot;</span>);</div>
 </div><!-- fragment --></dd></dl>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="group__EventScheduleFunctions.html#ga45d07b5f39fce7a2785d9484fee492e5">cancel</a>, <a class="el" href="group__EventScheduleFunctions.html#gaa157c3ab693195e86bf728b68d05ac5e">getEventTimeLeft</a>, <a class="el" href="group__EventScheduleFunctions.html#ga6f6b39f56219985ed36d393d6c450367">getScheduleDuration</a>, <a class="el" href="group__EventScheduleFunctions.html#ga65a284f7a9bb9fafe441ee48fbf2e415">getTimeSinceStart</a>, <a class="el" href="group__EventScheduleFunctions.html#ga9c2bfbe7ae47e7983dd01bbe0580ee81">schedule</a>, SimObject::schedule</dd></dl>
 <dl class="section user"><dt>See Engine Function/Method</dt><dd>Sim::isEventPending </dd></dl>
