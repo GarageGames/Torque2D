@@ -20,3 +20,6 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
+ConsoleMethodGroupBeginWithDocs(WaveComposite, SceneObject)
+
+ConsoleMethodGroupEndWithDocs(WaveComposite)

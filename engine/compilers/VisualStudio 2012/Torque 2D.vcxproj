@@ -293,6 +293,7 @@
     <ClCompile Include="..\..\source\assets\declaredAssets.cc" />
     <ClCompile Include="..\..\source\assets\referencedAssets.cc" />
     <ClCompile Include="..\..\source\audio\AudioAsset.cc" />
+    <ClCompile Include="..\..\source\audio\audio_ScriptBinding.cc" />
     <ClCompile Include="..\..\source\box2d\Collision\b2BroadPhase.cpp" />
     <ClCompile Include="..\..\source\box2d\Collision\b2CollideCircle.cpp" />
     <ClCompile Include="..\..\source\box2d\Collision\b2CollideEdge.cpp" />
@@ -349,6 +350,7 @@
     <ClCompile Include="..\..\source\console\consoleExprEvalState.cc" />
     <ClCompile Include="..\..\source\console\consoleNamespace.cc" />
     <ClCompile Include="..\..\source\console\ConsoleTypeValidators.cc" />
+    <ClCompile Include="..\..\source\console\metaScripting_ScriptBinding.cc" />
     <ClCompile Include="..\..\source\debug\profiler.cc" />
     <ClCompile Include="..\..\source\debug\remote\RemoteDebugger1.cc" />
     <ClCompile Include="..\..\source\debug\remote\RemoteDebuggerBase.cc" />
@@ -413,7 +415,7 @@
     <ClCompile Include="..\..\source\io\fileObject.cc" />
     <ClCompile Include="..\..\source\io\fileStream.cc" />
     <ClCompile Include="..\..\source\io\fileStreamObject.cc" />
-    <ClCompile Include="..\..\source\io\fileSystemFunctions.cpp" />
+    <ClCompile Include="..\..\source\io\fileSystem_ScriptBinding.cc" />
     <ClCompile Include="..\..\source\io\filterStream.cc" />
     <ClCompile Include="..\..\source\io\memStream.cc" />
     <ClCompile Include="..\..\source\io\nStream.cc" />
@@ -432,6 +434,7 @@
     <ClCompile Include="..\..\source\io\zip\zipObject.cc" />
     <ClCompile Include="..\..\source\io\zip\zipSubStream.cc" />
     <ClCompile Include="..\..\source\io\zip\zipTempStream.cc" />
+    <ClCompile Include="..\..\source\math\math_ScriptBinding.cc" />
     <ClCompile Include="..\..\source\math\rectClipper.cpp" />
     <ClCompile Include="..\..\source\memory\dataChunker.cc" />
     <ClCompile Include="..\..\source\memory\frameAllocator.cc" />
@@ -477,7 +480,6 @@
     <ClCompile Include="..\..\source\audio\audio.cc" />
     <ClCompile Include="..\..\source\audio\audioBuffer.cc" />
     <ClCompile Include="..\..\source\audio\audioDataBlock.cc" />
-    <ClCompile Include="..\..\source\audio\audioFunctions.cc" />
     <ClCompile Include="..\..\source\audio\audioStreamSourceFactory.cc" />
     <ClCompile Include="..\..\source\audio\wavStreamSource.cc" />
     <ClCompile Include="..\..\source\component\dynamicConsoleMethodComponent.cpp" />
@@ -504,7 +506,6 @@
     <ClCompile Include="..\..\source\math\mathTypes.cc" />
     <ClCompile Include="..\..\source\math\mathUtils.cc" />
     <ClCompile Include="..\..\source\math\mBox.cc" />
-    <ClCompile Include="..\..\source\math\mConsoleFunctions.cc" />
     <ClCompile Include="..\..\source\math\mMath_C.cc" />
     <ClCompile Include="..\..\source\math\mMathAltivec.cc" />
     <ClCompile Include="..\..\source\math\mMathAMD.cc" />
@@ -797,6 +798,7 @@
     <ClInclude Include="..\..\source\console\consoleInternal.h" />
     <ClInclude Include="..\..\source\console\consoleNamespace.h" />
     <ClInclude Include="..\..\source\console\ConsoleTypeValidators.h" />
+    <ClInclude Include="..\..\source\console\output_ScriptBinding.h" />
     <ClInclude Include="..\..\source\debug\profiler.h" />
     <ClInclude Include="..\..\source\debug\remote\RemoteDebugger1.h" />
     <ClInclude Include="..\..\source\debug\remote\RemoteDebugger1_ScriptBinding.h" />
@@ -829,6 +831,7 @@
     <ClInclude Include="..\..\source\gui\guiBitmapCtrl.h" />
     <ClInclude Include="..\..\source\gui\guiBubbleTextCtrl.h" />
     <ClInclude Include="..\..\source\gui\guiCanvas.h" />
+    <ClInclude Include="..\..\source\gui\guiCanvas_ScriptBinding.h" />
     <ClInclude Include="..\..\source\gui\guiColorPicker.h" />
     <ClInclude Include="..\..\source\gui\guiConsole.h" />
     <ClInclude Include="..\..\source\gui\guiConsoleEditCtrl.h" />
@@ -857,6 +860,7 @@
     <ClInclude Include="..\..\source\gui\language\lang.h" />
     <ClInclude Include="..\..\source\gui\messageVector.h" />
     <ClInclude Include="..\..\source\input\actionMap.h" />
+    <ClInclude Include="..\..\source\input\actionMap_ScriptBinding.h" />
     <ClInclude Include="..\..\source\io\bitStream.h" />
     <ClInclude Include="..\..\source\io\bufferStream.h" />
     <ClInclude Include="..\..\source\io\fileio.h" />
@@ -1004,10 +1008,12 @@
     <ClInclude Include="..\..\source\platform\platformNetwork.h" />
     <ClInclude Include="..\..\source\platform\platformSemaphore.h" />
     <ClInclude Include="..\..\source\platform\platformString.h" />
+    <ClInclude Include="..\..\source\platform\platformString_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platform\platformTimeManager.h" />
     <ClInclude Include="..\..\source\platform\platformTLS.h" />
     <ClInclude Include="..\..\source\platform\platformVFS.h" />
     <ClInclude Include="..\..\source\platform\platformVideo.h" />
+    <ClInclude Include="..\..\source\platform\platformVideo_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platform\platform_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platform\Tickable.h" />
     <ClInclude Include="..\..\source\platform\types.codewarrior.h" />
@@ -1065,6 +1071,7 @@
     <ClInclude Include="..\..\source\string\stringStack.h" />
     <ClInclude Include="..\..\source\string\stringTable.h" />
     <ClInclude Include="..\..\source\string\stringUnit.h" />
+    <ClInclude Include="..\..\source\string\stringUnit_ScriptBinding.h" />
     <ClInclude Include="..\..\source\string\unicode.h" />
     <ClInclude Include="..\..\source\gui\buttons\guiBitmapButtonCtrl.h" />
     <ClInclude Include="..\..\source\gui\buttons\guiButtonBaseCtrl.h" />

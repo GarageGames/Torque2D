@@ -513,6 +513,9 @@ namespace Con
    /// @see Con::errorf()
    void errorf(ConsoleLogEntry::Type type, const char *_format, ...);
 
+   /// clear the console log
+   void cls( void );
+
    /// Prints a separator to the console.
    inline void printSeparator( void ) { printf("--------------------------------------------------------------------------------"); }
 
@@ -825,6 +828,7 @@ public:
 // note: we would want to expand the following macro into (Doxygen) comments!
 // we can not do that with a macro.  these are here just as a reminder until completion
 #  define ConsoleMethodGroupBeginWithDocs(className, superclassName)
+#  define ConsoleMethodGroupEndWithDocs(className)
 
 #  define ConsoleMethod(className,name,returnType,minArgs,maxArgs,usage1)                                                 \
       static inline returnType c##className##name(className *, S32, const char **argv);                                   \

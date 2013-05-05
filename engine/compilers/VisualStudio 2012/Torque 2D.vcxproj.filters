@@ -204,9 +204,6 @@
     <ClCompile Include="..\..\source\audio\audioDataBlock.cc">
       <Filter>audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\audio\audioFunctions.cc">
-      <Filter>audio</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\audio\audioStreamSourceFactory.cc">
       <Filter>audio</Filter>
     </ClCompile>
@@ -283,9 +280,6 @@
       <Filter>math</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\math\mBox.cc">
-      <Filter>math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\math\mConsoleFunctions.cc">
       <Filter>math</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\math\mMath_C.cc">
@@ -1014,9 +1008,6 @@
     <ClCompile Include="..\..\source\network\tcpObject.cc">
       <Filter>network</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\io\fileSystemFunctions.cpp">
-      <Filter>io</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\string\stringBuffer.cc">
       <Filter>string</Filter>
     </ClCompile>
@@ -1331,6 +1322,18 @@
     </ClCompile>
     <ClCompile Include="..\..\source\gui\containers\guiGridCtrl.cc">
       <Filter>gui\containers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\console\metaScripting_ScriptBinding.cc">
+      <Filter>console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\audio\audio_ScriptBinding.cc">
+      <Filter>audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\io\fileSystem_ScriptBinding.cc">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\math\math_ScriptBinding.cc">
+      <Filter>math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2759,6 +2762,24 @@
     </ClInclude>
     <ClInclude Include="..\..\source\sim\simBase_ScriptBinding.h">
       <Filter>sim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\input\actionMap_ScriptBinding.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\gui\guiCanvas_ScriptBinding.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platform\platformString_ScriptBinding.h">
+      <Filter>platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\string\stringUnit_ScriptBinding.h">
+      <Filter>string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\output_ScriptBinding.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platform\platformVideo_ScriptBinding.h">
+      <Filter>platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

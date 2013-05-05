@@ -29,6 +29,9 @@
 #include "io/fileStream.h"
 #include "io/resource/resourceManager.h"
 
+// Script bindings.
+#include "actionMap_ScriptBinding.h"
+
 IMPLEMENT_CONOBJECT(ActionMap);
 
 // This is used for determing keys that have ascii codes for the foreign keyboards. IsAlpha doesn't work on foreign keys.
@@ -1555,159 +1558,6 @@ bool ActionMap::handleEventGlobal(const InputEvent* pEvent)
 
    return ((ActionMap*)pActionMapSet->first())->processAction(pEvent);
 }
-
-//------------------------------------------------------------------------------
-//-------------------------------------- Console stuff
-
-//------------------------------------------------------------------------------
-ConsoleMethod( ActionMap, bind, void, 5, 10, "( device , action , [ modifier , mod... ] , command ) Use the bind method to associate a function to a keystroke or other device input.\n"
-                                                                "The command bound via the bind function must be specified as a flat name with no elipses or semi-colon termination and will be called on make and break events (i.e. key press and release for a mapped key). Args: Warning: When a function is bound to a keystroke or other device input, and no other versions of the binding are provided, the function will be called even if a modifier key like CTRL, ALT, or SHIFT is also pressed.\n"
-                                                                "@param device Name of the device to bind the command to.\n"
-                                                                "@param action Name of the action to watch for.\n"
-                                                                "@param modifier Special modifiers (mouse only), such as dead spot, etc.\n"
-                                                                "@param command The function to be called on make and break.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa bindCmd, getBinding, unbind")
-{
-   object->processBind( argc - 2, argv + 2, NULL );
-}
-
-ConsoleMethod( ActionMap, bindObj, void, 6, 11, "(device, action, [modifier spec, mod...], command, object) Use the bindObj method to associate a function to a keystroke or other device input.\n"
-                                                                "The command bound via the bind function must be specified as a flat name with no elipses or semi-colon termination and will be called on make and break events (i.e. key press and release for a mapped key). Args: Warning: When a function is bound to a keystroke or other device input, and no other versions of the binding are provided, the function will be called even if a modifier key like CTRL, ALT, or SHIFT is also pressed.\n"
-                                                                "@param device Name of the device to bind the command to.\n"
-                                                                "@param action Name of the action to watch for.\n"
-                                                                "@param modifier Special modifiers (mouse only), such as dead spot, etc.\n"
-                                                                "@param command The function to be called on make and break.\n"
-                                                                "@param object The explicit object (it defaults to NULL when you call bind() )\n"
-                                                                "@return No return value.\n"
-                                                                "@sa bindCmd, getBinding, unbind")
-{
-   SimObject* obj = Sim::findObject(argv[argc - 1]);
-   object->processBind( argc - 3, argv + 2, obj );
-}
-
-//------------------------------------------------------------------------------
-ConsoleMethod( ActionMap, bindCmd, void, 6, 6, "( device , action , makeCmd , breakCmd ) Use the bindCmd method to associate up to two functions to a keystroke or other device input.\n"
-                                                                "The makeCmd is bound to the make event and the breakCmd is bound to the break event and in both cases, the commands are specified as complete scripts, with all arguments, elipses, and the terminating semi-colon. Either of these commands may be non-specified (NULL strings). For clarification, see 'Bind Sample' example below.\n"
-                                                                "@param device Name of the device to bind the command to (see 'Device Table' below).\n"
-                                                                "@param action Name of the action to watch for(see 'Action Table' below).\n"
-                                                                "@param makeCmd The function to be called on make event.\n"
-                                                                "@param breakCmd The function to be called on break event.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa bind, getBinding, unbind")
-{
-   object->processBindCmd( argv[2], argv[3], argv[4], argv[5] );
-}
-
-//------------------------------------------------------------------------------
-ConsoleMethod( ActionMap, unbind, void, 4, 4, "( device , action ) Use the unbind method to remove a previosly specified device + action pair from the action map.\n"
-                                                                "@param device Name of the device to bound to a command (see 'Device Table' below).\n"
-                                                                "@param action Name of the action to watch for (see 'Action Table' below).\n"
-                                                                "@return No return value.\n"
-                                                                "@sa bind, bindCmd")
-{
-   object->processUnbind( argv[2], argv[3] );
-}
-ConsoleMethod( ActionMap, unbindObj, void, 5, 5, "(device, action, object) Use the unbind method to remove a previosly specified device + action pair from the action map.\n"
-                                                                "@param device Name of the device to bound to a command (see 'Device Table' below).\n"
-                                                                "@param action Name of the action to watch for (see 'Action Table' below).\n"
-                                                                "@param object Explicit object (it defaults to NULL when you call unbind() )."
-                                                                "@return No return value.\n"
-                                                                "@sa bind, bindCmd")
-{
-   SimObject* obj = Sim::findObject(argv[4]);
-   object->processUnbind( argv[2], argv[3], obj );
-}
-
-
-//------------------------------------------------------------------------------
-ConsoleMethod( ActionMap, save, void, 2, 4, "( [ fileName ] [ , append ] ) Use the save method to save an entire action map specification to a file. If append is not specified, or specified as false, fileName will be overwritten, otherwise the action map will be appended to the file.\n"
-                                                                "@param fileName Full path to file in which to store action map definition.\n"
-                                                                "@param append If true, do not overwrite the file, else start from scratch.\n"
-                                                                "@return No return value")
-{
-   const char* fileName = argc > 2 ? argv[2]        : NULL;
-   bool append          = argc > 3 ? dAtob(argv[3]) : false;
-
-   char buffer[1024];
-
-   if(fileName)
-   {
-      if(Con::expandPath(buffer, sizeof(buffer), fileName))       
-         fileName = buffer;
-   }
-
-   object->dumpActionMap( fileName, append );
-}
-
-//------------------------------------------------------------------------------
-ConsoleMethod( ActionMap, push, void, 2, 2, "() Use the push method to activate an ActionMap and place it at the top of the non-global ActionMap stack.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa pop")
-{
-   SimSet* pActionMapSet = Sim::getActiveActionMapSet();
-   pActionMapSet->pushObject( object );
-}
-
-//------------------------------------------------------------------------------
-ConsoleMethod( ActionMap, pop, void, 2, 2, "() Use the pop method to de-activate an ActionMap and remove it from non-global ActionMap stack.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa push")
-{
-   SimSet* pActionMapSet = Sim::getActiveActionMapSet();
-   pActionMapSet->removeObject( object );
-}
-
-//------------------------------------------------------------------------------
-ConsoleMethod( ActionMap, getBinding, const char*, 3, 3, "( command ) Use the getBinding method to get the binding for a specified command.\n"
-                                                                "@param command The function to seek a binding for.\n"
-                                                                "@return Returns a string containing the binding as a field (TAB separated string), or a NULL string meaning 'no binding found'.\n"
-                                                                "@sa bind, bindCmd")
-{
-    return( object->getBinding( argv[2] ) );	
-}
-
-//------------------------------------------------------------------------------
-ConsoleMethod( ActionMap, getCommand, const char*, 4, 4, "( device , action ) Use the getCommand method to get the function associated with a specific device + action pair.\n"
-                                                                "@param device Name of the device to bound to a command (see 'Device Table' below).\n"
-                                                                "@param action Name of the action to watch for (see 'Action Table' below).\n"
-                                                                "@return Returns the function name or specification associated with the specified device + action pair, or a NULL-string meaning 'no binding found'.\n"
-                                                                "@sa bind, bindCmd, getBinding")
-{
-    return( object->getCommand( argv[2], argv[3] ) );	
-}
-
-//------------------------------------------------------------------------------
-ConsoleMethod( ActionMap, isInverted, bool, 4, 4, "( device , action ) Use the Purpose method to determine if a specific device + action pair in inverted.\n"
-                                                                "This only applies to scrolling devices.\n"
-                                                                "@param device Name of the device to bound to a command (see 'Device Table' below).\n"
-                                                                "@param action Name of the action to watch for (see 'Action Table' below).\n"
-                                                                "@return Returns 1 if the mouse (or other scrolling device) is inverted, 0 otherwise.\n"
-                                                                "@sa bind, bindCmd")
-{
-    return( object->isInverted( argv[2], argv[3] ) );
-}
-
-//------------------------------------------------------------------------------
-ConsoleMethod( ActionMap, getScale, F32, 4, 4, "( device , action ) Use the getScale method to get the scale associated with a specific device + action pair.\n"
-                                                                "@param device Name of the device to bound to a command (see 'Device Table' below).\n"
-                                                                "@param action Name of the action to watch for (see 'Action Table' below).\n"
-                                                                "@return Returns 1 if no scale is associated with the specified device + action pair, or the mapping was not found.\n"
-                                                                "@sa bind, bindCmd")
-{
-    return( object->getScale( argv[2], argv[3] ) );
-}
-
-//------------------------------------------------------------------------------
-ConsoleMethod( ActionMap, getDeadZone, const char*, 4, 4, "( device , action ) Use the getDeadZone method to get the dead-zone associated with a specific device + action pair.\n"
-                                                                "@param device Name of the device to bound to a command (see 'Device Table' below).\n"
-                                                                "@param action Name of the action to watch for (see 'Action Table' below).\n"
-                                                                "@return Returns a dead-zone specification, or \"0 0\" meaning that there is no dead-zone, or a NULL string meaning the mapping was not found.\n"
-                                                                "@sa bind, bindCmd")
-{
-    return( object->getDeadZone( argv[2], argv[3] ) );
-}
-
 
 //------------------------------------------------------------------------------
 //-------------------------------------- Key code to string mapping
