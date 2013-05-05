@@ -2790,6 +2790,24 @@
     <ClInclude Include="..\..\source\graphics\color_ScriptBinding.h">
       <Filter>graphics</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\sim\simObject_ScriptBinding.h">
+      <Filter>sim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\sim\simSet_ScriptBinding.h">
+      <Filter>sim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\persistence\SimXMLDocument_ScriptBinding.h">
+      <Filter>persistence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\messaging\eventManager_ScriptBinding.h">
+      <Filter>messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\io\fileObject_ScriptBinding.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platform\nativeDialogs\fileDialog_ScriptBinding.h">
+      <Filter>platform\nativeDialogs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\math\mMath_ASM.asm">

@@ -868,6 +868,7 @@
     <ClInclude Include="..\..\source\io\bufferStream.h" />
     <ClInclude Include="..\..\source\io\fileio.h" />
     <ClInclude Include="..\..\source\io\fileObject.h" />
+    <ClInclude Include="..\..\source\io\fileObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\io\fileStream.h" />
     <ClInclude Include="..\..\source\io\fileStreamObject.h" />
     <ClInclude Include="..\..\source\io\filterStream.h" />
@@ -893,6 +894,7 @@
     <ClInclude Include="..\..\source\memory\safeDelete.h" />
     <ClInclude Include="..\..\source\messaging\dispatcher.h" />
     <ClInclude Include="..\..\source\messaging\eventManager.h" />
+    <ClInclude Include="..\..\source\messaging\eventManager_ScriptBinding.h" />
     <ClInclude Include="..\..\source\messaging\message.h" />
     <ClInclude Include="..\..\source\messaging\messageForwarder.h" />
     <ClInclude Include="..\..\source\messaging\scriptMsgListener.h" />
@@ -929,6 +931,7 @@
     <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\reader.h" />
     <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\stringbuffer.h" />
     <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\writer.h" />
+    <ClInclude Include="..\..\source\persistence\SimXMLDocument_ScriptBinding.h" />
     <ClInclude Include="..\..\source\persistence\taml\binary\tamlBinaryReader.h" />
     <ClInclude Include="..\..\source\persistence\taml\binary\tamlBinaryWriter.h" />
     <ClInclude Include="..\..\source\persistence\taml\json\tamlJSONParser.h" />
@@ -995,6 +998,7 @@
     <ClInclude Include="..\..\source\platform\GLCoreFunc.h" />
     <ClInclude Include="..\..\source\platform\GLExtFunc.h" />
     <ClInclude Include="..\..\source\platform\GLUFunc.h" />
+    <ClInclude Include="..\..\source\platform\nativeDialogs\fileDialog_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platform\platform.h" />
     <ClInclude Include="..\..\source\platform\platformAL.h" />
     <ClInclude Include="..\..\source\platform\platformAssert.h" />
@@ -1068,7 +1072,9 @@
     <ClInclude Include="..\..\source\sim\SimObjectList.h" />
     <ClInclude Include="..\..\source\sim\simObjectPtr.h" />
     <ClInclude Include="..\..\source\sim\simObjectTimerEvent.h" />
+    <ClInclude Include="..\..\source\sim\simObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\sim\simSet.h" />
+    <ClInclude Include="..\..\source\sim\simSet_ScriptBinding.h" />
     <ClInclude Include="..\..\source\string\findMatch.h" />
     <ClInclude Include="..\..\source\string\stringBuffer.h" />
     <ClInclude Include="..\..\source\string\stringStack.h" />
