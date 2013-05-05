@@ -1,1 +1,10 @@
+/Torque2D.exe
+/Torque2D_DEBUG.exe
+/Torque2D_DEBUG.ilk
 /console.log
+/preferences.cs
+/*.torsion.exports
+/*.torsion.opt
+
+/engine/*
+/tools/*
