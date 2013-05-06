@@ -372,11 +372,12 @@ void SkeletonObject::updateComposition( const F32 time )
         pSprite->setSrcBlendFactor(GL_ONE);
         pSprite->setDstBlendFactor(GL_ONE_MINUS_SRC_ALPHA);
 
+		  float alpha = mSkeleton->a * slot->a;
         pSprite->setBlendColor(ColorF(
-        mSkeleton->r * slot->r,
-        mSkeleton->g * slot->g,
-        mSkeleton->b * slot->b,
-        mSkeleton->a * slot->a
+            mSkeleton->r * slot->r * alpha,
+            mSkeleton->g * slot->g * alpha,
+            mSkeleton->b * slot->b * alpha,
+            alpha
         ));
 
         vertices[0].x = regionAttachment->vertices[VERTEX_X1];
