@@ -239,7 +239,7 @@ bool SkeletonObject::setCurrentSkin( const char* pSkin )
     S32 result = Skeleton_setSkinByName(mSkeleton, pSkin);
     if (result)
     {
-        Skeleton_setSlotsToBindPose(mSkeleton);
+        Skeleton_setSlotsToSetupPose(mSkeleton);
         return true;
     }
     else
@@ -355,7 +355,7 @@ void SkeletonObject::updateComposition( const F32 time )
     clearSprites();
 
     Vector2 vertices[4];
-
+	 float vertexPositions[8];
     for (int i = 0; i < mSkeleton->slotCount; ++i)
     {
         Slot* slot = mSkeleton->slots[i];
@@ -365,7 +365,7 @@ void SkeletonObject::updateComposition( const F32 time )
             continue;
         
         RegionAttachment* regionAttachment = (RegionAttachment*)attachment;
-        RegionAttachment_updateVertices(regionAttachment, slot);
+		  RegionAttachment_computeVertices(regionAttachment, slot, vertexPositions);
 
         SpriteBatchItem* pSprite = SpriteBatch::createSprite();
 		  
@@ -380,14 +380,14 @@ void SkeletonObject::updateComposition( const F32 time )
             alpha
         ));
 
-        vertices[0].x = regionAttachment->vertices[VERTEX_X1];
-        vertices[0].y = regionAttachment->vertices[VERTEX_Y1];
-        vertices[1].x = regionAttachment->vertices[VERTEX_X4];
-        vertices[1].y = regionAttachment->vertices[VERTEX_Y4];
-        vertices[2].x = regionAttachment->vertices[VERTEX_X3];
-        vertices[2].y = regionAttachment->vertices[VERTEX_Y3];
-        vertices[3].x = regionAttachment->vertices[VERTEX_X2];
-        vertices[3].y = regionAttachment->vertices[VERTEX_Y2];
+        vertices[0].x = vertexPositions[VERTEX_X1];
+        vertices[0].y = vertexPositions[VERTEX_Y1];
+        vertices[1].x = vertexPositions[VERTEX_X4];
+        vertices[1].y = vertexPositions[VERTEX_Y4];
+        vertices[2].x = vertexPositions[VERTEX_X3];
+        vertices[2].y = vertexPositions[VERTEX_Y3];
+        vertices[3].x = vertexPositions[VERTEX_X2];
+        vertices[3].y = vertexPositions[VERTEX_Y2];
         pSprite->setExplicitVertices(vertices);
 
         pSprite->setImage(assetId);
