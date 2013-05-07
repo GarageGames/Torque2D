@@ -45,12 +45,798 @@
   </div>
 </div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="classSimObject-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">SimObject Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Inherited by <a class="el" href="classActionMap.html">ActionMap</a>, <a class="el" href="classAssetBase.html">AssetBase</a>, <a class="el" href="classAssetManager.html">AssetManager</a>, <a class="el" href="classAssetTagsManifest.html">AssetTagsManifest</a>, <a class="el" href="classBehaviorInstance.html">BehaviorInstance</a>, <a class="el" href="classBehaviorTemplate.html">BehaviorTemplate</a>, <a class="el" href="classFileDialog.html">FileDialog</a>, <a class="el" href="classModuleManager.html">ModuleManager</a>, <a class="el" href="classParticleAssetEmitter.html">ParticleAssetEmitter</a>, <a class="el" href="classPickingSceneController.html">PickingSceneController</a>, <a class="el" href="classRemoteDebuggerBase.html">RemoteDebuggerBase</a>, <a class="el" href="classRenderProxy.html">RenderProxy</a>, <a class="el" href="classSceneObjectSet.html">SceneObjectSet</a>, and <a class="el" href="classTaml.html">Taml</a>.</p>
+<p>Inherits <a class="el" href="classConsoleObject.html">ConsoleObject</a>.</p>
+
+<p>Inherited by <a class="el" href="classActionMap.html">ActionMap</a>, <a class="el" href="classAssetBase.html">AssetBase</a>, <a class="el" href="classAssetManager.html">AssetManager</a>, <a class="el" href="classAssetQuery.html">AssetQuery</a>, <a class="el" href="classAssetTagsManifest.html">AssetTagsManifest</a>, <a class="el" href="classBehaviorInstance.html">BehaviorInstance</a>, <a class="el" href="classBehaviorTemplate.html">BehaviorTemplate</a>, <a class="el" href="classConsoleLogger.html">ConsoleLogger</a>, <a class="el" href="classEventManager.html">EventManager</a>, <a class="el" href="classFileDialog.html">FileDialog</a>, <a class="el" href="classFileObject.html">FileObject</a>, <a class="el" href="classModuleManager.html">ModuleManager</a>, <a class="el" href="classParticleAssetEmitter.html">ParticleAssetEmitter</a>, <a class="el" href="classPickingSceneController.html">PickingSceneController</a>, <a class="el" href="classPopupMenu.html">PopupMenu</a>, <a class="el" href="classRemoteDebuggerBase.html">RemoteDebuggerBase</a>, <a class="el" href="classRenderProxy.html">RenderProxy</a>, <a class="el" href="classSceneObjectSet.html">SceneObjectSet</a>, <a class="el" href="classSimComponent.html">SimComponent</a>, <a class="el" href="classSimSet.html">SimSet</a>, <a class="el" href="classSimXMLDocument.html">SimXMLDocument</a>, <a class="el" href="classStreamObject.html">StreamObject</a>, <a class="el" href="classTaml.html">Taml</a>, <a class="el" href="classUndoManager.html">UndoManager</a>, and <a class="el" href="classZipObject.html">ZipObject</a>.</p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a1c1f9babb145bfdf63e60223663dff3c"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a1c1f9babb145bfdf63e60223663dff3c">call</a> (functionName,[args]*)</td></tr>
+<tr class="separator:a1c1f9babb145bfdf63e60223663dff3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b4f0f3ccdfa27b8008f8559a83539bc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a3b4f0f3ccdfa27b8008f8559a83539bc">clone</a> ([bool copyDynamicFields?=false]?)</td></tr>
+<tr class="separator:a3b4f0f3ccdfa27b8008f8559a83539bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a4721d0a51e952c211e9b0fea4d8090"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a7a4721d0a51e952c211e9b0fea4d8090">delete</a> ()</td></tr>
+<tr class="separator:a7a4721d0a51e952c211e9b0fea4d8090"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accd2600060dbaee3a3b41aed4034c63c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#accd2600060dbaee3a3b41aed4034c63c">dump</a> ()</td></tr>
+<tr class="separator:accd2600060dbaee3a3b41aed4034c63c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1810f5aba25efd242c24232c2c2bbd1a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a1810f5aba25efd242c24232c2c2bbd1a">dumpClassHierarchy</a> ()</td></tr>
+<tr class="separator:a1810f5aba25efd242c24232c2c2bbd1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adeaebc2111072105cbb6961df917d223"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#adeaebc2111072105cbb6961df917d223">getClassName</a> ()</td></tr>
+<tr class="separator:adeaebc2111072105cbb6961df917d223"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbb3b5d0356df264b7343d135b697bcf"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#afbb3b5d0356df264b7343d135b697bcf">getClassNamespace</a> ()</td></tr>
+<tr class="separator:afbb3b5d0356df264b7343d135b697bcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a771f0adf4c566c3ac2f7c5c32e75d43c"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a771f0adf4c566c3ac2f7c5c32e75d43c">getDynamicField</a> (index)</td></tr>
+<tr class="separator:a771f0adf4c566c3ac2f7c5c32e75d43c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affd866a31305bc1e70c572b2be76069b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#affd866a31305bc1e70c572b2be76069b">getDynamicFieldCount</a> ()</td></tr>
+<tr class="separator:affd866a31305bc1e70c572b2be76069b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af219f6b5498fbd8671e298303c28b1dc"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#af219f6b5498fbd8671e298303c28b1dc">getField</a> (int index)</td></tr>
+<tr class="separator:af219f6b5498fbd8671e298303c28b1dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d14fc4334b31b14e243de86cc1609a4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a0d14fc4334b31b14e243de86cc1609a4">getFieldCount</a> ()</td></tr>
+<tr class="separator:a0d14fc4334b31b14e243de86cc1609a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c87209e1a998d8b35e1cde74839bfcc"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a6c87209e1a998d8b35e1cde74839bfcc">getFieldType</a> (fieldName)</td></tr>
+<tr class="separator:a6c87209e1a998d8b35e1cde74839bfcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf03af9303912906eada72ccf10115e8"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#adf03af9303912906eada72ccf10115e8">getFieldValue</a> (fieldName)</td></tr>
+<tr class="separator:adf03af9303912906eada72ccf10115e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad35d7fe358fa34d2eba803c7506791f3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#ad35d7fe358fa34d2eba803c7506791f3">getGroup</a> ()</td></tr>
+<tr class="separator:ad35d7fe358fa34d2eba803c7506791f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67283be3f45257d1e0c474c563ebb6b6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a67283be3f45257d1e0c474c563ebb6b6">getId</a> ()</td></tr>
+<tr class="separator:a67283be3f45257d1e0c474c563ebb6b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a137797d39611f3f3108b30852d28622c"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a137797d39611f3f3108b30852d28622c">getInternalName</a> ()</td></tr>
+<tr class="separator:a137797d39611f3f3108b30852d28622c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a510119ff902e4e96165a7475370be836"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a510119ff902e4e96165a7475370be836">getName</a> ()</td></tr>
+<tr class="separator:a510119ff902e4e96165a7475370be836"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa71cf6ba84b0de85019204261a9136b7"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#aa71cf6ba84b0de85019204261a9136b7">getProgenitorFile</a> ()</td></tr>
+<tr class="separator:aa71cf6ba84b0de85019204261a9136b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f693104a44b07db870d4e54f2db4c08"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a0f693104a44b07db870d4e54f2db4c08">getSuperClassNamespace</a> ()</td></tr>
+<tr class="separator:a0f693104a44b07db870d4e54f2db4c08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec389cbe6ac7aff8ce7196e7dbc007df"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#aec389cbe6ac7aff8ce7196e7dbc007df">getType</a> ()</td></tr>
+<tr class="separator:aec389cbe6ac7aff8ce7196e7dbc007df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4da33de69819e293d90cf52fcbda6da"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#af4da33de69819e293d90cf52fcbda6da">isChildOfGroup</a> ()</td></tr>
+<tr class="separator:af4da33de69819e293d90cf52fcbda6da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35273f559aecabece437c22ee8aee443"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a35273f559aecabece437c22ee8aee443">isMemberOfClass</a> (string classname)</td></tr>
+<tr class="separator:a35273f559aecabece437c22ee8aee443"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a1d5ac5403526378c7abb0916c55c3c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a8a1d5ac5403526378c7abb0916c55c3c">isMethod</a> (const char *methodName)</td></tr>
+<tr class="separator:a8a1d5ac5403526378c7abb0916c55c3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ca0e6f21ff100da6bcd59f51d34fb8e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a8ca0e6f21ff100da6bcd59f51d34fb8e">isMethod</a> (string method name)</td></tr>
+<tr class="separator:a8ca0e6f21ff100da6bcd59f51d34fb8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fed7ee24702928365ad45e6eaba4d12"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a9fed7ee24702928365ad45e6eaba4d12">isTimerActive</a> ()</td></tr>
+<tr class="separator:a9fed7ee24702928365ad45e6eaba4d12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa92c3478d4ff5780f0f027598480d772"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#aa92c3478d4ff5780f0f027598480d772">save</a> (<a class="el" href="group__FileSystemFunctions.html#ga71bebb057a0d6ad1c522cd19584b51d9">fileName</a>,[selectedOnly]?)</td></tr>
+<tr class="separator:aa92c3478d4ff5780f0f027598480d772"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabc265010a7a59dcec211ddd8f0ac5a7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#aabc265010a7a59dcec211ddd8f0ac5a7">schedule</a> (time, command,[arg]*)</td></tr>
+<tr class="separator:aabc265010a7a59dcec211ddd8f0ac5a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3e15ecdee7ab3ece234913bc4e783c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#aa3e15ecdee7ab3ece234913bc4e783c0">setClassNamespace</a> ()</td></tr>
+<tr class="separator:aa3e15ecdee7ab3ece234913bc4e783c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae099b2a1810ca2e23ac11d239ae0197e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#ae099b2a1810ca2e23ac11d239ae0197e">setFieldValue</a> (fieldName, value)</td></tr>
+<tr class="separator:ae099b2a1810ca2e23ac11d239ae0197e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5aaca360a719feabae0e4e57b921deae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a5aaca360a719feabae0e4e57b921deae">setInternalName</a> (string InternalName)</td></tr>
+<tr class="separator:a5aaca360a719feabae0e4e57b921deae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f673cd959711ae09927e7c44dae5fdb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a4f673cd959711ae09927e7c44dae5fdb">setName</a> (newName)</td></tr>
+<tr class="separator:a4f673cd959711ae09927e7c44dae5fdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8f68d1e6d8c6601c39b3f676f0e9c70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#aa8f68d1e6d8c6601c39b3f676f0e9c70">setProgenitorFile</a> (file)</td></tr>
+<tr class="separator:aa8f68d1e6d8c6601c39b3f676f0e9c70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cbf471b97387d5bdefb88f92094ad54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a9cbf471b97387d5bdefb88f92094ad54">setSuperClassNamespace</a> ()</td></tr>
+<tr class="separator:a9cbf471b97387d5bdefb88f92094ad54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5447439ba5620b2ac00dc0ef97ef2142"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#a5447439ba5620b2ac00dc0ef97ef2142">startTimer</a> (callbackFunction, float timePeriod,[repeat]?)</td></tr>
+<tr class="separator:a5447439ba5620b2ac00dc0ef97ef2142"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6f6bfef028c7b053444cbd48567d286"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#aa6f6bfef028c7b053444cbd48567d286">stopTimer</a> ()</td></tr>
+<tr class="separator:aa6f6bfef028c7b053444cbd48567d286"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ac7926551c6df020f767d8d87f5a3d575"><td class="memItemLeft" align="right" valign="top">static S32 QSORT_CALLBACK&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimObject.html#ac7926551c6df020f767d8d87f5a3d575">compareFields</a> (const void *a, const void *b)</td></tr>
+<tr class="separator:ac7926551c6df020f767d8d87f5a3d575"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a1c1f9babb145bfdf63e60223663dff3c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string call </td>
+          <td>(</td>
+          <td class="paramtype">functionName&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">[args] *&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Dynamically call a method on an object. </p>
+
+</div>
+</div>
+<a class="anchor" id="a3b4f0f3ccdfa27b8008f8559a83539bc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int clone </td>
+          <td>(</td>
+          <td class="paramtype">[bool copyDynamicFields? = false] ?&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Clones the object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">copyDynamicFields</td><td>Whether the dynamic fields should be copied to the cloned object or not. Optional: Defaults to false. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>(newObjectID) The newly cloned object's id if successful, otherwise a 0. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ac7926551c6df020f767d8d87f5a3d575"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static S32 QSORT_CALLBACK compareFields </td>
+          <td>(</td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7a4721d0a51e952c211e9b0fea4d8090"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void delete </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Use the delete method to delete this object. When an object is deleted, it automatically: Unregisters its ID and name (if it has one) with the engine. Removes itself from any <a class="el" href="classSimGroup.html">SimGroup</a> or <a class="el" href="classSimSet.html">SimSet</a> it may be a member of. (eventually) returns the memory associated with itself and its non-dynamic members. Cancels all pending obj.schedule() events. For objects in the GameBase, ScriptObject, or GUIControl hierarchies, an object will first: Call the onRemove() method for the object's namespace </p>
+<dl class="section return"><dt>Returns</dt><dd>No return value. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="accd2600060dbaee3a3b41aed4034c63c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void dump </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Use the dump method to display the following information about this object: All engine and script registered console methods (including parent methods) for this object, all Non-Dynamic Fields AND all Dynamic Fields </p>
+<dl class="section return"><dt>Returns</dt><dd>No return value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a1810f5aba25efd242c24232c2c2bbd1a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void dumpClassHierarchy </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="adeaebc2111072105cbb6961df917d223"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* getClassName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="afbb3b5d0356df264b7343d135b697bcf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string getClassNamespace </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a771f0adf4c566c3ac2f7c5c32e75d43c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string getDynamicField </td>
+          <td>(</td>
+          <td class="paramtype">index&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="affd866a31305bc1e70c572b2be76069b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int getDynamicFieldCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af219f6b5498fbd8671e298303c28b1dc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string getField </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the name of the field at the given index. </p>
+
+</div>
+</div>
+<a class="anchor" id="a0d14fc4334b31b14e243de86cc1609a4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int getFieldCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the number of persistent fields on the object. </p>
+
+</div>
+</div>
+<a class="anchor" id="a6c87209e1a998d8b35e1cde74839bfcc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* getFieldType </td>
+          <td>(</td>
+          <td class="paramtype">fieldName&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="adf03af9303912906eada72ccf10115e8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* getFieldValue </td>
+          <td>(</td>
+          <td class="paramtype">fieldName&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad35d7fe358fa34d2eba803c7506791f3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int getGroup </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Use the getGroup method to determine if this object is contained in a <a class="el" href="classSimGroup.html">SimGroup</a> and if so, which one. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns the ID of the <a class="el" href="classSimGroup.html">SimGroup</a> this shape is in or zero if the shape is not contained in a <a class="el" href="classSimGroup.html">SimGroup</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a67283be3f45257d1e0c474c563ebb6b6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int getId </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Use the getId method to get the numeric ID of this shape. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns the unique numeric ID of this shape. </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="classSimObject.html#a510119ff902e4e96165a7475370be836">getName</a>, <a class="el" href="classSimObject.html#a4f673cd959711ae09927e7c44dae5fdb">setName</a> </dd></dl>
+
+<p>Referenced by <a class="el" href="group__ObjectFunctions.html#gaa56504cf2d744a3f3728ddbf698def07">nameToID()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a137797d39611f3f3108b30852d28622c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string getInternalName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>returns the objects internal name </p>
+
+</div>
+</div>
+<a class="anchor" id="a510119ff902e4e96165a7475370be836"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* getName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa71cf6ba84b0de85019204261a9136b7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string getProgenitorFile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the progenitor file responsible for this instances creation. </p>
+<dl class="section return"><dt>Returns</dt><dd>The progenitor file responsible for this instances creation. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a0f693104a44b07db870d4e54f2db4c08"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string getSuperClassNamespace </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aec389cbe6ac7aff8ce7196e7dbc007df"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int getType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Use the getType method to get the type for this object. This type is an integer value composed of bitmasks. For simplicity, these bitmasks are defined in the engine and exposed for our use as global variables. To simplify the writing of scripts, a set of globals has been provided containing the bit setting for each class corresponding to a particular type. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns a bit mask containing one or more set bits. </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="classSimObject.html#adeaebc2111072105cbb6961df917d223">getClassName</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af4da33de69819e293d90cf52fcbda6da"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool isChildOfGroup </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>returns true, if we are in the specified simgroup - or a subgroup thereof </p>
+
+</div>
+</div>
+<a class="anchor" id="a35273f559aecabece437c22ee8aee443"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool isMemberOfClass </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>classname</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>returns true if this object is a member of the specified class </p>
+
+</div>
+</div>
+<a class="anchor" id="a8a1d5ac5403526378c7abb0916c55c3c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool isMethod </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>methodName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8ca0e6f21ff100da6bcd59f51d34fb8e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool isMethod </td>
+          <td>(</td>
+          <td class="paramtype">string method&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9fed7ee24702928365ad45e6eaba4d12"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool isTimerActive </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Checks whether the periodic timer is active for this object or not. </p>
+<dl class="section return"><dt>Returns</dt><dd>Whether the periodic timer is active for this object or not. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa92c3478d4ff5780f0f027598480d772"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool save </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__FileSystemFunctions.html#ga71bebb057a0d6ad1c522cd19584b51d9">fileName</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">[selectedOnly] ?&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aabc265010a7a59dcec211ddd8f0ac5a7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int schedule </td>
+          <td>(</td>
+          <td class="paramtype">time&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">command&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">[arg] *&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Use the schedule method to schedule an action to be executed upon this object time milliseconds in the future. The major difference between this and the schedule console function is that if this object is deleted prior to the scheduled event, the event is automatically canceled. times should not be treated as exact since some 'simulation delay' is to be expected. The minimum resolution for a scheduled event is \32 ms, or one tick. schedule does not validate the existence of command. i.e. If you pass an invalid console method name, the <a class="el" href="classSimObject.html#aabc265010a7a59dcec211ddd8f0ac5a7">schedule()</a> method will still return a schedule ID, but the subsequent event will fail silently. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>Time in milliseconds till action is scheduled to occur. </td></tr>
+    <tr><td class="paramname">command</td><td>Name of the command to execute. This command must be scoped to this object (i.e. It must exist in the namespace of the object), otherwise the schedule call will fail. </td></tr>
+    <tr><td class="paramname">arg1...argN</td><td>These are optional arguments which will be passed to command. This version of schedule automatically passes the ID of obj as arg0 to command. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns an integer schedule ID. </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd>See the <a class="el" href="classSimObject.html#aabc265010a7a59dcec211ddd8f0ac5a7">schedule</a> console function and its corresponding helper functions. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa3e15ecdee7ab3ece234913bc4e783c0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setClassNamespace </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae099b2a1810ca2e23ac11d239ae0197e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool setFieldValue </td>
+          <td>(</td>
+          <td class="paramtype">fieldName&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">value&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5aaca360a719feabae0e4e57b921deae"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setInternalName </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>InternalName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4f673cd959711ae09927e7c44dae5fdb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setName </td>
+          <td>(</td>
+          <td class="paramtype">newName&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa8f68d1e6d8c6601c39b3f676f0e9c70"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setProgenitorFile </td>
+          <td>(</td>
+          <td class="paramtype">file&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets the progenitor file responsible for this instances creation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file</td><td>The progenitor file responsible for this instances creation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>No return value. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a9cbf471b97387d5bdefb88f92094ad54"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setSuperClassNamespace </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5447439ba5620b2ac00dc0ef97ef2142"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool startTimer </td>
+          <td>(</td>
+          <td class="paramtype">callbackFunction&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>timePeriod</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">[repeat] ?&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Starts a periodic timer for this object. Sets a timer on the object that, when it expires, will cause the object to execute the onTimer() callback. The timer event will continue to occur at regular intervals until setTimerOff() is called. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">callbackFunction</td><td>The name of the callback function to call for each timer repetition. </td></tr>
+    <tr><td class="paramname">timePeriod</td><td>The period of time (in milliseconds) between each callback. </td></tr>
+    <tr><td class="paramname">repeat</td><td>The number of times the timer should repeat. If not specified or zero then it will run infinitely </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>No return Value. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa6f6bfef028c7b053444cbd48567d286"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stopTimer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Stops the periodic timer for this object. </p>
+<dl class="section return"><dt>Returns</dt><dd>No return Value. </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
