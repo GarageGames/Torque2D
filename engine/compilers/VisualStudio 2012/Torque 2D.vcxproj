@@ -784,6 +784,7 @@
     <ClInclude Include="..\..\source\collection\simpleHashTable.h" />
     <ClInclude Include="..\..\source\collection\sparseArray.h" />
     <ClInclude Include="..\..\source\collection\undo.h" />
+    <ClInclude Include="..\..\source\collection\undo_ScriptBinding.h" />
     <ClInclude Include="..\..\source\collection\vector.h" />
     <ClInclude Include="..\..\source\collection\vector2d.h" />
     <ClInclude Include="..\..\source\collection\vectorHeap.h" />
@@ -792,10 +793,13 @@
     <ClInclude Include="..\..\source\component\behaviors\behaviorComponent_ScriptBinding.h" />
     <ClInclude Include="..\..\source\component\behaviors\behaviorInstance_ScriptBinding.h" />
     <ClInclude Include="..\..\source\component\behaviors\behaviorTemplate_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\component\simComponent_ScriptBinding.h" />
     <ClInclude Include="..\..\source\console\consoleBaseType.h" />
     <ClInclude Include="..\..\source\console\consoleDictionary.h" />
+    <ClInclude Include="..\..\source\console\consoleDoc_ScriptBinding.h" />
     <ClInclude Include="..\..\source\console\consoleExprEvalState.h" />
     <ClInclude Include="..\..\source\console\consoleInternal.h" />
+    <ClInclude Include="..\..\source\console\consoleLogger_ScriptBinding.h" />
     <ClInclude Include="..\..\source\console\consoleNamespace.h" />
     <ClInclude Include="..\..\source\console\ConsoleTypeValidators.h" />
     <ClInclude Include="..\..\source\console\expando_ScriptBinding.h" />
@@ -812,6 +816,7 @@
     <ClInclude Include="..\..\source\delegates\delegateSignal.h" />
     <ClInclude Include="..\..\source\delegates\FastDelegate.h" />
     <ClInclude Include="..\..\source\game\defaultGame.h" />
+    <ClInclude Include="..\..\source\game\gameConnection_ScriptBinding.h" />
     <ClInclude Include="..\..\source\game\gameInterface.h" />
     <ClInclude Include="..\..\source\game\gameInterface_ScriptBinding.h" />
     <ClInclude Include="..\..\source\game\version_ScriptBinding.h" />
@@ -877,6 +882,7 @@
     <ClInclude Include="..\..\source\io\resource\resourceManager.h" />
     <ClInclude Include="..\..\source\io\stream.h" />
     <ClInclude Include="..\..\source\io\streamObject.h" />
+    <ClInclude Include="..\..\source\io\streamObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\io\zip\centralDir.h" />
     <ClInclude Include="..\..\source\io\zip\compressor.h" />
     <ClInclude Include="..\..\source\io\zip\extraField.h" />
@@ -887,12 +893,17 @@
     <ClInclude Include="..\..\source\io\zip\zipStatFilter.h" />
     <ClInclude Include="..\..\source\io\zip\zipSubStream.h" />
     <ClInclude Include="..\..\source\io\zip\zipTempStream.h" />
+    <ClInclude Include="..\..\source\math\box_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\math\matrix_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\math\random_ScriptBinding.h" />
     <ClInclude Include="..\..\source\math\rectClipper.h" />
+    <ClInclude Include="..\..\source\math\vector_ScriptBinding.h" />
     <ClInclude Include="..\..\source\memory\dataChunker.h" />
     <ClInclude Include="..\..\source\memory\factoryCache.h" />
     <ClInclude Include="..\..\source\memory\frameAllocator.h" />
     <ClInclude Include="..\..\source\memory\safeDelete.h" />
     <ClInclude Include="..\..\source\messaging\dispatcher.h" />
+    <ClInclude Include="..\..\source\messaging\dispatcher_ScriptBinding.h" />
     <ClInclude Include="..\..\source\messaging\eventManager.h" />
     <ClInclude Include="..\..\source\messaging\eventManager_ScriptBinding.h" />
     <ClInclude Include="..\..\source\messaging\message.h" />
@@ -909,6 +920,7 @@
     <ClInclude Include="..\..\source\network\connectionStringTable.h" />
     <ClInclude Include="..\..\source\network\httpObject.h" />
     <ClInclude Include="..\..\source\network\netConnection.h" />
+    <ClInclude Include="..\..\source\network\netConnection_ScriptBinding.h" />
     <ClInclude Include="..\..\source\network\netInterface.h" />
     <ClInclude Include="..\..\source\network\netObject.h" />
     <ClInclude Include="..\..\source\network\netStringTable.h" />
@@ -998,6 +1010,7 @@
     <ClInclude Include="..\..\source\platform\GLCoreFunc.h" />
     <ClInclude Include="..\..\source\platform\GLExtFunc.h" />
     <ClInclude Include="..\..\source\platform\GLUFunc.h" />
+    <ClInclude Include="..\..\source\platform\menus\popupMenu_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platform\nativeDialogs\fileDialog_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platform\platform.h" />
     <ClInclude Include="..\..\source\platform\platformAL.h" />

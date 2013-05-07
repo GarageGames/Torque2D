@@ -2808,6 +2808,45 @@
     <ClInclude Include="..\..\source\platform\nativeDialogs\fileDialog_ScriptBinding.h">
       <Filter>platform\nativeDialogs</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\console\consoleLogger_ScriptBinding.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\netConnection_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\gameConnection_ScriptBinding.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platform\menus\popupMenu_ScriptBinding.h">
+      <Filter>platform\menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\io\streamObject_ScriptBinding.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\collection\undo_ScriptBinding.h">
+      <Filter>collection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\consoleDoc_ScriptBinding.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\messaging\dispatcher_ScriptBinding.h">
+      <Filter>messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\math\random_ScriptBinding.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\math\matrix_ScriptBinding.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\math\vector_ScriptBinding.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\math\box_ScriptBinding.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\component\simComponent_ScriptBinding.h">
+      <Filter>component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\math\mMath_ASM.asm">
