@@ -793,6 +793,7 @@
     <ClInclude Include="..\..\source\component\behaviors\behaviorComponent_ScriptBinding.h" />
     <ClInclude Include="..\..\source\component\behaviors\behaviorInstance_ScriptBinding.h" />
     <ClInclude Include="..\..\source\component\behaviors\behaviorTemplate_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\component\dynamicConsoleMethodComponent_ScriptBinding.h" />
     <ClInclude Include="..\..\source\component\simComponent_ScriptBinding.h" />
     <ClInclude Include="..\..\source\console\consoleBaseType.h" />
     <ClInclude Include="..\..\source\console\consoleDictionary.h" />
@@ -801,10 +802,12 @@
     <ClInclude Include="..\..\source\console\consoleInternal.h" />
     <ClInclude Include="..\..\source\console\consoleLogger_ScriptBinding.h" />
     <ClInclude Include="..\..\source\console\consoleNamespace.h" />
+    <ClInclude Include="..\..\source\console\consoleNamespace_ScriptBinding.h" />
     <ClInclude Include="..\..\source\console\ConsoleTypeValidators.h" />
     <ClInclude Include="..\..\source\console\expando_ScriptBinding.h" />
     <ClInclude Include="..\..\source\console\output_ScriptBinding.h" />
     <ClInclude Include="..\..\source\debug\profiler.h" />
+    <ClInclude Include="..\..\source\debug\profiler_ScriptBinding.h" />
     <ClInclude Include="..\..\source\debug\remote\RemoteDebugger1.h" />
     <ClInclude Include="..\..\source\debug\remote\RemoteDebugger1_ScriptBinding.h" />
     <ClInclude Include="..\..\source\debug\remote\RemoteDebuggerBase.h" />
@@ -812,6 +815,7 @@
     <ClInclude Include="..\..\source\debug\remote\RemoteDebuggerBridge.h" />
     <ClInclude Include="..\..\source\debug\remote\RemoteDebuggerBridge_ScriptBinding.h" />
     <ClInclude Include="..\..\source\debug\telnetDebugger.h" />
+    <ClInclude Include="..\..\source\debug\telnetDebugger_ScriptBinding.h" />
     <ClInclude Include="..\..\source\delegates\delegate.h" />
     <ClInclude Include="..\..\source\delegates\delegateSignal.h" />
     <ClInclude Include="..\..\source\delegates\FastDelegate.h" />
@@ -826,8 +830,10 @@
     <ClInclude Include="..\..\source\graphics\DynamicTexture.h" />
     <ClInclude Include="..\..\source\graphics\gBitmap.h" />
     <ClInclude Include="..\..\source\graphics\gFont.h" />
+    <ClInclude Include="..\..\source\graphics\gFont_ScriptBinding.h" />
     <ClInclude Include="..\..\source\graphics\gPalette.h" />
     <ClInclude Include="..\..\source\graphics\PNGImage.h" />
+    <ClInclude Include="..\..\source\graphics\PNGImage_ScriptBinding.h" />
     <ClInclude Include="..\..\source\graphics\splineUtil.h" />
     <ClInclude Include="..\..\source\graphics\TextureDictionary.h" />
     <ClInclude Include="..\..\source\graphics\TextureHandle.h" />
@@ -876,6 +882,7 @@
     <ClInclude Include="..\..\source\io\fileObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\io\fileStream.h" />
     <ClInclude Include="..\..\source\io\fileStreamObject.h" />
+    <ClInclude Include="..\..\source\io\fileStreamObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\io\filterStream.h" />
     <ClInclude Include="..\..\source\io\memstream.h" />
     <ClInclude Include="..\..\source\io\resizeStream.h" />
@@ -908,6 +915,7 @@
     <ClInclude Include="..\..\source\messaging\eventManager_ScriptBinding.h" />
     <ClInclude Include="..\..\source\messaging\message.h" />
     <ClInclude Include="..\..\source\messaging\messageForwarder.h" />
+    <ClInclude Include="..\..\source\messaging\message_ScriptBinding.h" />
     <ClInclude Include="..\..\source\messaging\scriptMsgListener.h" />
     <ClInclude Include="..\..\source\module\moduleCallbacks.h" />
     <ClInclude Include="..\..\source\module\moduleDefinition.h" />
@@ -919,14 +927,18 @@
     <ClInclude Include="..\..\source\network\connectionProtocol.h" />
     <ClInclude Include="..\..\source\network\connectionStringTable.h" />
     <ClInclude Include="..\..\source\network\httpObject.h" />
+    <ClInclude Include="..\..\source\network\httpObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\network\netConnection.h" />
     <ClInclude Include="..\..\source\network\netConnection_ScriptBinding.h" />
     <ClInclude Include="..\..\source\network\netInterface.h" />
     <ClInclude Include="..\..\source\network\netObject.h" />
+    <ClInclude Include="..\..\source\network\netObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\network\netStringTable.h" />
     <ClInclude Include="..\..\source\network\networkProcessList.h" />
     <ClInclude Include="..\..\source\network\serverQuery.h" />
+    <ClInclude Include="..\..\source\network\serverQuery_ScriptBinding.h" />
     <ClInclude Include="..\..\source\network\tcpObject.h" />
+    <ClInclude Include="..\..\source\network\tcpObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\network\telnetConsole.h" />
     <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\allocators.h" />
     <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\document.h" />
@@ -1015,10 +1027,12 @@
     <ClInclude Include="..\..\source\platform\platform.h" />
     <ClInclude Include="..\..\source\platform\platformAL.h" />
     <ClInclude Include="..\..\source\platform\platformAssert.h" />
+    <ClInclude Include="..\..\source\platform\platformAssert_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platform\platformAudio.h" />
     <ClInclude Include="..\..\source\platform\platformCPU.h" />
     <ClInclude Include="..\..\source\platform\platformEndian.h" />
     <ClInclude Include="..\..\source\platform\platformFileIO.h" />
+    <ClInclude Include="..\..\source\platform\platformFileIO_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platform\platformFont.h" />
     <ClInclude Include="..\..\source\platform\platformGL.h" />
     <ClInclude Include="..\..\source\platform\platformInput.h" />
@@ -1086,6 +1100,7 @@
     <ClInclude Include="..\..\source\sim\simObjectPtr.h" />
     <ClInclude Include="..\..\source\sim\simObjectTimerEvent.h" />
     <ClInclude Include="..\..\source\sim\simObject_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\sim\simSerialize_ScriptBinding.h" />
     <ClInclude Include="..\..\source\sim\simSet.h" />
     <ClInclude Include="..\..\source\sim\simSet_ScriptBinding.h" />
     <ClInclude Include="..\..\source\string\findMatch.h" />

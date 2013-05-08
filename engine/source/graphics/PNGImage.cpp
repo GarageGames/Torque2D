@@ -25,6 +25,8 @@
 #include "platform/platformGL.h"
 #include "platform/platform.h"
 
+#include "PNGImage_ScriptBinding.h"
+
 #define min(a,b) (a <= b ? a : b)
 
 IMPLEMENT_CONOBJECT(PNGImage);
@@ -516,69 +518,6 @@ ConsoleFunction(CaptureScreenArea, bool, 7, 7, "(posX, posY, width, height, file
 
     delete [] pixels;
     delete bitmap;
-
-    return true;
-}
-
-ConsoleMethod(PNGImage, CreateBaseImage, bool, 5, 5, "(width, height, imageType) Create the base image to merge onto ")
-{
-    U32 width = dAtoi(argv[2]);
-    U32 height = dAtoi(argv[3]);
-
-    return object->Create(width, height, (PNGImageType)dAtoi(argv[4]));
-}
-
-ConsoleMethod(PNGImage, MergeOn, bool, 5, 5, "(x, y, imageFile) Add an image to the spritesheet")
-{
-    U32 width = dAtoi(argv[2]);
-    U32 height = dAtoi(argv[3]);
-
-    // File name is argv[4]
-    FileStream fStream;
-
-    if(!fStream.open(argv[4], FileStream::Read))
-    { 
-        Con::printf("Failed to open file '%s'.", argv[4]);
-        return false;
-    }
-
-    PNGImage* newImage = new PNGImage();
-
-    bool didReadImage = newImage->Read(argv[4]);
-
-    if(!didReadImage)
-    {
-        newImage->CleanMemoryUsage();
-
-        delete newImage;
-        return false;
-    }
-
-    fStream.close();
-
-    bool didMergeOn = object->MergeOn(width, height, newImage);
-
-    newImage->CleanMemoryUsage();
-    delete newImage;
-
-    return didMergeOn;
-}
-
-ConsoleMethod(PNGImage, SaveImage, bool, 3, 3, "(fileName) Save the new spritesheet to a file")
-{
-    FileStream fStream;
-
-    if(!fStream.open(argv[2], FileStream::Write))
-    { 
-        Con::printf("Failed to open file '%s'.", argv[2]);
-        return false;
-    }
-
-    fStream.close();
-
-    object->Write(argv[2]);
-
-    object->CleanMemoryUsage();
 
     return true;
 }

@@ -20,52 +20,20 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#include "console/console.h"
-#include "fileStreamObject.h"
+/*! @defgroup AssertFunctions Assert
+	@ingroup TorqueScriptFunctions
+	@{
+*/
 
-#include "fileStreamObject_ScriptBinding.h"
+/*!  Fatal Script Assertion
+	@param condition if false, exit the program
+	@param message message to print on assertion
+*/
 
-//////////////////////////////////////////////////////////////////////////
-// Constructor/Destructor
-//////////////////////////////////////////////////////////////////////////
-
-FileStreamObject::FileStreamObject()
+ConsoleFunctionWithDocs( Assert, void, 3, 3, (condition, message) )
 {
+    // Process Assertion.
+    AssertISV( dAtob(argv[1]), argv[2] );
 }
 
-FileStreamObject::~FileStreamObject()
-{
-   close();
-}
-
-IMPLEMENT_CONOBJECT(FileStreamObject);
-
-//////////////////////////////////////////////////////////////////////////
-
-bool FileStreamObject::onAdd()
-{
-   // [tom, 2/12/2007] Skip over StreamObject's onAdd() so that we can
-   // be instantiated from script.
-   return SimObject::onAdd();
-}
-
-//////////////////////////////////////////////////////////////////////////
-// Public Methods
-//////////////////////////////////////////////////////////////////////////
-
-bool FileStreamObject::open(const char *filename, FileStream::AccessMode mode)
-{
-   close();
-
-   if(! mFileStream.open(filename, mode))
-      return false;
-
-   mStream = &mFileStream;
-   return true;
-}
-
-void FileStreamObject::close()
-{
-   mFileStream.close();
-   mStream = NULL;
-}
+/*! @} */ // AssertFunctions

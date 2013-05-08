@@ -2847,6 +2847,51 @@
     <ClInclude Include="..\..\source\component\simComponent_ScriptBinding.h">
       <Filter>component</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\component\dynamicConsoleMethodComponent_ScriptBinding.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\io\fileStreamObject_ScriptBinding.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\httpObject_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\messaging\message_ScriptBinding.h">
+      <Filter>messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\tcpObject_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\netObject_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\sim\simSerialize_ScriptBinding.h">
+      <Filter>sim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\graphics\PNGImage_ScriptBinding.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\consoleNamespace_ScriptBinding.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\graphics\gFont_ScriptBinding.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\serverQuery_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platform\platformAssert_ScriptBinding.h">
+      <Filter>platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platform\platformFileIO_ScriptBinding.h">
+      <Filter>platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\debug\profiler_ScriptBinding.h">
+      <Filter>debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\debug\telnetDebugger_ScriptBinding.h">
+      <Filter>debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\math\mMath_ASM.asm">
