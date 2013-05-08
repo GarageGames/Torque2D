@@ -23,8 +23,16 @@
 		2ABF5C8F16569A0C00BBBF1D /* osxMutex.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2ABF5C8E16569A0C00BBBF1D /* osxMutex.mm */; };
 		2AC4404516B0142B00FC4091 /* ImageFont.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AC4404316B0142B00FC4091 /* ImageFont.cc */; };
 		2AC5C7E81667C85700A0D046 /* platformStringTests.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AC5C7E71667C85700A0D046 /* platformStringTests.cc */; };
+		2ACAFD4A1705CF4A0022601C /* tamlJSONParser.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ACAFD481705CF4A0022601C /* tamlJSONParser.cc */; };
 		2ACF5A2816E52D4B00F838D9 /* SpriteBatchQuery.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ACF5A2516E52D4B00F838D9 /* SpriteBatchQuery.cc */; };
 		2ACFC0A8166CE1AB00FE7370 /* platformMemoryTests.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ACFC0A7166CE1AB00FE7370 /* platformMemoryTests.cc */; };
+		2AD42140170433FE005BB8AD /* tamlXmlParser.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AD42139170433FE005BB8AD /* tamlXmlParser.cc */; };
+		2AD42141170433FE005BB8AD /* tamlXmlReader.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AD4213B170433FE005BB8AD /* tamlXmlReader.cc */; };
+		2AD42142170433FE005BB8AD /* tamlXmlWriter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AD4213E170433FE005BB8AD /* tamlXmlWriter.cc */; };
+		2AD4214717043408005BB8AD /* tamlJSONReader.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AD4214317043408005BB8AD /* tamlJSONReader.cc */; };
+		2AD4214817043408005BB8AD /* tamlJSONWriter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AD4214517043408005BB8AD /* tamlJSONWriter.cc */; };
+		2AD4214D17043413005BB8AD /* tamlBinaryReader.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AD4214917043413005BB8AD /* tamlBinaryReader.cc */; };
+		2AD4214E17043413005BB8AD /* tamlBinaryWriter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AD4214B17043413005BB8AD /* tamlBinaryWriter.cc */; };
 		2ADCAC1516A41E5500E07619 /* ParticleAsset.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ADCAC1116A41E5500E07619 /* ParticleAsset.cc */; };
 		2ADCAC1716A41E5500E07619 /* ParticleAssetField.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ADCAC1316A41E5500E07619 /* ParticleAssetField.cc */; };
 		2AE2938516EF4C220015E200 /* WaveComposite.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AE2938316EF4C220015E200 /* WaveComposite.cc */; };
@@ -401,12 +409,7 @@
 		86D7707E1656873C0046D71F /* telnetConsole.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC80ED16518D4600D96ADF /* telnetConsole.cc */; };
 		86D7707F1656873C0046D71F /* SimXMLDocument.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86BC80F016518D4600D96ADF /* SimXMLDocument.cpp */; };
 		86D770801656873C0046D71F /* taml.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC80F316518D4600D96ADF /* taml.cc */; };
-		86D770811656873C0046D71F /* tamlBinaryReader.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC80F616518D4600D96ADF /* tamlBinaryReader.cc */; };
-		86D770821656873C0046D71F /* tamlBinaryWriter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC80F816518D4600D96ADF /* tamlBinaryWriter.cc */; };
 		86D770841656873C0046D71F /* tamlWriteNode.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC80FD16518D4600D96ADF /* tamlWriteNode.cc */; };
-		86D770851656873C0046D71F /* tamlXmlParser.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC80FF16518D4600D96ADF /* tamlXmlParser.cc */; };
-		86D770861656873C0046D71F /* tamlXmlReader.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC810116518D4600D96ADF /* tamlXmlReader.cc */; };
-		86D770871656873C0046D71F /* tamlXmlWriter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 86BC810416518D4600D96ADF /* tamlXmlWriter.cc */; };
 		86D770881656873C0046D71F /* tinystr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86BC810716518D4600D96ADF /* tinystr.cpp */; };
 		86D770891656873C0046D71F /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86BC810916518D4600D96ADF /* tinyxml.cpp */; };
 		86D7708A1656873C0046D71F /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86BC810B16518D4600D96ADF /* tinyxmlerror.cpp */; };
@@ -471,6 +474,8 @@
 		2AB14A0216D7CDC200EABBF2 /* PointForceController_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PointForceController_ScriptBinding.h; path = controllers/PointForceController_ScriptBinding.h; sourceTree = "<group>"; };
 		2AB14A0316D7CDC200EABBF2 /* PointForceController.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PointForceController.cc; path = controllers/PointForceController.cc; sourceTree = "<group>"; };
 		2AB14A0416D7CDC300EABBF2 /* PointForceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PointForceController.h; path = controllers/PointForceController.h; sourceTree = "<group>"; };
+		2AB4A5221705A84D0043CBAA /* tamlParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlParser.h; sourceTree = "<group>"; };
+		2AB4A5231705A84D0043CBAA /* tamlVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlVisitor.h; sourceTree = "<group>"; };
 		2AB4C19716DE9F0600B02479 /* GroupedSceneController_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupedSceneController_ScriptBinding.h; path = controllers/core/GroupedSceneController_ScriptBinding.h; sourceTree = "<group>"; };
 		2AB4C19816DE9F0600B02479 /* GroupedSceneController.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GroupedSceneController.cc; path = controllers/core/GroupedSceneController.cc; sourceTree = "<group>"; };
 		2AB4C19916DE9F0600B02479 /* GroupedSceneController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupedSceneController.h; path = controllers/core/GroupedSceneController.h; sourceTree = "<group>"; };
@@ -488,12 +493,43 @@
 		2AC4404316B0142B00FC4091 /* ImageFont.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageFont.cc; sourceTree = "<group>"; };
 		2AC4404416B0142B00FC4091 /* ImageFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFont.h; sourceTree = "<group>"; };
 		2AC5C7E71667C85700A0D046 /* platformStringTests.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = platformStringTests.cc; path = ../../../source/testing/tests/platformStringTests.cc; sourceTree = "<group>"; };
+		2ACAFD481705CF4A0022601C /* tamlJSONParser.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tamlJSONParser.cc; path = json/tamlJSONParser.cc; sourceTree = "<group>"; };
+		2ACAFD491705CF4A0022601C /* tamlJSONParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tamlJSONParser.h; path = json/tamlJSONParser.h; sourceTree = "<group>"; };
 		2ACF5A2516E52D4B00F838D9 /* SpriteBatchQuery.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpriteBatchQuery.cc; sourceTree = "<group>"; };
 		2ACF5A2616E52D4B00F838D9 /* SpriteBatchQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteBatchQuery.h; sourceTree = "<group>"; };
 		2ACF5A2716E52D4B00F838D9 /* SpriteBatchQueryResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteBatchQueryResult.h; sourceTree = "<group>"; };
 		2ACFC0A7166CE1AB00FE7370 /* platformMemoryTests.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = platformMemoryTests.cc; path = ../../../source/testing/tests/platformMemoryTests.cc; sourceTree = "<group>"; };
 		2AD07B2616D15F5A0070DC79 /* simObjectTimerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simObjectTimerEvent.h; sourceTree = "<group>"; };
 		2AD35A541663608E00C75F30 /* platformFileIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platformFileIO.h; sourceTree = "<group>"; };
+		2AD42126170433B3005BB8AD /* allocators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = allocators.h; path = rapidjson/include/rapidjson/allocators.h; sourceTree = "<group>"; };
+		2AD42127170433B3005BB8AD /* document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = document.h; path = rapidjson/include/rapidjson/document.h; sourceTree = "<group>"; };
+		2AD42128170433B3005BB8AD /* encodedstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = encodedstream.h; path = rapidjson/include/rapidjson/encodedstream.h; sourceTree = "<group>"; };
+		2AD42129170433B3005BB8AD /* encodings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = encodings.h; path = rapidjson/include/rapidjson/encodings.h; sourceTree = "<group>"; };
+		2AD4212A170433B3005BB8AD /* filereadstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = filereadstream.h; path = rapidjson/include/rapidjson/filereadstream.h; sourceTree = "<group>"; };
+		2AD4212B170433B3005BB8AD /* filestream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = filestream.h; path = rapidjson/include/rapidjson/filestream.h; sourceTree = "<group>"; };
+		2AD4212C170433B3005BB8AD /* filewritestream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = filewritestream.h; path = rapidjson/include/rapidjson/filewritestream.h; sourceTree = "<group>"; };
+		2AD4212D170433B3005BB8AD /* prettywriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = prettywriter.h; path = rapidjson/include/rapidjson/prettywriter.h; sourceTree = "<group>"; };
+		2AD4212E170433B3005BB8AD /* rapidjson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rapidjson.h; path = rapidjson/include/rapidjson/rapidjson.h; sourceTree = "<group>"; };
+		2AD4212F170433B3005BB8AD /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reader.h; path = rapidjson/include/rapidjson/reader.h; sourceTree = "<group>"; };
+		2AD42130170433B3005BB8AD /* stringbuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stringbuffer.h; path = rapidjson/include/rapidjson/stringbuffer.h; sourceTree = "<group>"; };
+		2AD42131170433B3005BB8AD /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = writer.h; path = rapidjson/include/rapidjson/writer.h; sourceTree = "<group>"; };
+		2AD42133170433C7005BB8AD /* pow10.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pow10.h; path = rapidjson/include/rapidjson/internal/pow10.h; sourceTree = "<group>"; };
+		2AD42134170433C7005BB8AD /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stack.h; path = rapidjson/include/rapidjson/internal/stack.h; sourceTree = "<group>"; };
+		2AD42135170433C7005BB8AD /* strfunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = strfunc.h; path = rapidjson/include/rapidjson/internal/strfunc.h; sourceTree = "<group>"; };
+		2AD42139170433FE005BB8AD /* tamlXmlParser.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tamlXmlParser.cc; path = xml/tamlXmlParser.cc; sourceTree = "<group>"; };
+		2AD4213A170433FE005BB8AD /* tamlXmlParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tamlXmlParser.h; path = xml/tamlXmlParser.h; sourceTree = "<group>"; };
+		2AD4213B170433FE005BB8AD /* tamlXmlReader.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tamlXmlReader.cc; path = xml/tamlXmlReader.cc; sourceTree = "<group>"; };
+		2AD4213C170433FE005BB8AD /* tamlXmlReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tamlXmlReader.h; path = xml/tamlXmlReader.h; sourceTree = "<group>"; };
+		2AD4213E170433FE005BB8AD /* tamlXmlWriter.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tamlXmlWriter.cc; path = xml/tamlXmlWriter.cc; sourceTree = "<group>"; };
+		2AD4213F170433FE005BB8AD /* tamlXmlWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tamlXmlWriter.h; path = xml/tamlXmlWriter.h; sourceTree = "<group>"; };
+		2AD4214317043408005BB8AD /* tamlJSONReader.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tamlJSONReader.cc; path = json/tamlJSONReader.cc; sourceTree = "<group>"; };
+		2AD4214417043408005BB8AD /* tamlJSONReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tamlJSONReader.h; path = json/tamlJSONReader.h; sourceTree = "<group>"; };
+		2AD4214517043408005BB8AD /* tamlJSONWriter.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tamlJSONWriter.cc; path = json/tamlJSONWriter.cc; sourceTree = "<group>"; };
+		2AD4214617043408005BB8AD /* tamlJSONWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tamlJSONWriter.h; path = json/tamlJSONWriter.h; sourceTree = "<group>"; };
+		2AD4214917043413005BB8AD /* tamlBinaryReader.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tamlBinaryReader.cc; path = binary/tamlBinaryReader.cc; sourceTree = "<group>"; };
+		2AD4214A17043413005BB8AD /* tamlBinaryReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tamlBinaryReader.h; path = binary/tamlBinaryReader.h; sourceTree = "<group>"; };
+		2AD4214B17043413005BB8AD /* tamlBinaryWriter.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tamlBinaryWriter.cc; path = binary/tamlBinaryWriter.cc; sourceTree = "<group>"; };
+		2AD4214C17043413005BB8AD /* tamlBinaryWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tamlBinaryWriter.h; path = binary/tamlBinaryWriter.h; sourceTree = "<group>"; };
 		2ADCAC0E16A41E4400E07619 /* tamlChildren.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlChildren.h; sourceTree = "<group>"; };
 		2ADCAC1016A41E5500E07619 /* ParticleAsset_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleAsset_ScriptBinding.h; sourceTree = "<group>"; };
 		2ADCAC1116A41E5500E07619 /* ParticleAsset.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleAsset.cc; sourceTree = "<group>"; };
@@ -1183,20 +1219,9 @@
 		86BC80F316518D4600D96ADF /* taml.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = taml.cc; sourceTree = "<group>"; };
 		86BC80F416518D4600D96ADF /* taml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = taml.h; sourceTree = "<group>"; };
 		86BC80F516518D4600D96ADF /* taml_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = taml_ScriptBinding.h; sourceTree = "<group>"; };
-		86BC80F616518D4600D96ADF /* tamlBinaryReader.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tamlBinaryReader.cc; sourceTree = "<group>"; };
-		86BC80F716518D4600D96ADF /* tamlBinaryReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlBinaryReader.h; sourceTree = "<group>"; };
-		86BC80F816518D4600D96ADF /* tamlBinaryWriter.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tamlBinaryWriter.cc; sourceTree = "<group>"; };
-		86BC80F916518D4600D96ADF /* tamlBinaryWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlBinaryWriter.h; sourceTree = "<group>"; };
 		86BC80FA16518D4600D96ADF /* tamlCallbacks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlCallbacks.h; sourceTree = "<group>"; };
 		86BC80FD16518D4600D96ADF /* tamlWriteNode.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tamlWriteNode.cc; sourceTree = "<group>"; };
 		86BC80FE16518D4600D96ADF /* tamlWriteNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlWriteNode.h; sourceTree = "<group>"; };
-		86BC80FF16518D4600D96ADF /* tamlXmlParser.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tamlXmlParser.cc; sourceTree = "<group>"; };
-		86BC810016518D4600D96ADF /* tamlXmlParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlXmlParser.h; sourceTree = "<group>"; };
-		86BC810116518D4600D96ADF /* tamlXmlReader.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tamlXmlReader.cc; sourceTree = "<group>"; };
-		86BC810216518D4600D96ADF /* tamlXmlReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlXmlReader.h; sourceTree = "<group>"; };
-		86BC810316518D4600D96ADF /* tamlXmlVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlXmlVisitor.h; sourceTree = "<group>"; };
-		86BC810416518D4600D96ADF /* tamlXmlWriter.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tamlXmlWriter.cc; sourceTree = "<group>"; };
-		86BC810516518D4600D96ADF /* tamlXmlWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlXmlWriter.h; sourceTree = "<group>"; };
 		86BC810716518D4600D96ADF /* tinystr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinystr.cpp; sourceTree = "<group>"; };
 		86BC810816518D4600D96ADF /* tinystr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinystr.h; sourceTree = "<group>"; };
 		86BC810916518D4600D96ADF /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxml.cpp; sourceTree = "<group>"; };
@@ -1406,6 +1431,73 @@
 				2AE2F55C16D6B08800B6A058 /* BuoyancyController.h */,
 			);
 			name = controllers;
+			sourceTree = "<group>";
+		};
+		2AD4212517043387005BB8AD /* rapidjson */ = {
+			isa = PBXGroup;
+			children = (
+				2AD42132170433B7005BB8AD /* internal */,
+				2AD42126170433B3005BB8AD /* allocators.h */,
+				2AD42127170433B3005BB8AD /* document.h */,
+				2AD42128170433B3005BB8AD /* encodedstream.h */,
+				2AD42129170433B3005BB8AD /* encodings.h */,
+				2AD4212A170433B3005BB8AD /* filereadstream.h */,
+				2AD4212B170433B3005BB8AD /* filestream.h */,
+				2AD4212C170433B3005BB8AD /* filewritestream.h */,
+				2AD4212D170433B3005BB8AD /* prettywriter.h */,
+				2AD4212E170433B3005BB8AD /* rapidjson.h */,
+				2AD4212F170433B3005BB8AD /* reader.h */,
+				2AD42130170433B3005BB8AD /* stringbuffer.h */,
+				2AD42131170433B3005BB8AD /* writer.h */,
+			);
+			name = rapidjson;
+			sourceTree = "<group>";
+		};
+		2AD42132170433B7005BB8AD /* internal */ = {
+			isa = PBXGroup;
+			children = (
+				2AD42133170433C7005BB8AD /* pow10.h */,
+				2AD42134170433C7005BB8AD /* stack.h */,
+				2AD42135170433C7005BB8AD /* strfunc.h */,
+			);
+			name = internal;
+			sourceTree = "<group>";
+		};
+		2AD42136170433E4005BB8AD /* binary */ = {
+			isa = PBXGroup;
+			children = (
+				2AD4214917043413005BB8AD /* tamlBinaryReader.cc */,
+				2AD4214A17043413005BB8AD /* tamlBinaryReader.h */,
+				2AD4214B17043413005BB8AD /* tamlBinaryWriter.cc */,
+				2AD4214C17043413005BB8AD /* tamlBinaryWriter.h */,
+			);
+			name = binary;
+			sourceTree = "<group>";
+		};
+		2AD42137170433EA005BB8AD /* json */ = {
+			isa = PBXGroup;
+			children = (
+				2ACAFD481705CF4A0022601C /* tamlJSONParser.cc */,
+				2ACAFD491705CF4A0022601C /* tamlJSONParser.h */,
+				2AD4214317043408005BB8AD /* tamlJSONReader.cc */,
+				2AD4214417043408005BB8AD /* tamlJSONReader.h */,
+				2AD4214517043408005BB8AD /* tamlJSONWriter.cc */,
+				2AD4214617043408005BB8AD /* tamlJSONWriter.h */,
+			);
+			name = json;
+			sourceTree = "<group>";
+		};
+		2AD42138170433F3005BB8AD /* xml */ = {
+			isa = PBXGroup;
+			children = (
+				2AD42139170433FE005BB8AD /* tamlXmlParser.cc */,
+				2AD4213A170433FE005BB8AD /* tamlXmlParser.h */,
+				2AD4213B170433FE005BB8AD /* tamlXmlReader.cc */,
+				2AD4213C170433FE005BB8AD /* tamlXmlReader.h */,
+				2AD4213E170433FE005BB8AD /* tamlXmlWriter.cc */,
+				2AD4213F170433FE005BB8AD /* tamlXmlWriter.h */,
+			);
+			name = xml;
 			sourceTree = "<group>";
 		};
 		2AE2938016EF4BFA0015E200 /* experimental */ = {
@@ -2617,6 +2709,7 @@
 		86BC80EF16518D4600D96ADF /* persistence */ = {
 			isa = PBXGroup;
 			children = (
+				2AD4212517043387005BB8AD /* rapidjson */,
 				86BC80F016518D4600D96ADF /* SimXMLDocument.cpp */,
 				86BC80F116518D4600D96ADF /* SimXMLDocument.h */,
 				86BC80F216518D4600D96ADF /* taml */,
@@ -2629,26 +2722,20 @@
 		86BC80F216518D4600D96ADF /* taml */ = {
 			isa = PBXGroup;
 			children = (
+				2AB4A5221705A84D0043CBAA /* tamlParser.h */,
+				2AB4A5231705A84D0043CBAA /* tamlVisitor.h */,
+				2AD42138170433F3005BB8AD /* xml */,
+				2AD42137170433EA005BB8AD /* json */,
+				2AD42136170433E4005BB8AD /* binary */,
 				2AB97A1B16B66BC70080F940 /* tamlCustom.cc */,
 				2AB97A1C16B66BC70080F940 /* tamlCustom.h */,
 				2ADCAC0E16A41E4400E07619 /* tamlChildren.h */,
 				86BC80F316518D4600D96ADF /* taml.cc */,
 				86BC80F416518D4600D96ADF /* taml.h */,
 				86BC80F516518D4600D96ADF /* taml_ScriptBinding.h */,
-				86BC80F616518D4600D96ADF /* tamlBinaryReader.cc */,
-				86BC80F716518D4600D96ADF /* tamlBinaryReader.h */,
-				86BC80F816518D4600D96ADF /* tamlBinaryWriter.cc */,
-				86BC80F916518D4600D96ADF /* tamlBinaryWriter.h */,
 				86BC80FA16518D4600D96ADF /* tamlCallbacks.h */,
 				86BC80FD16518D4600D96ADF /* tamlWriteNode.cc */,
 				86BC80FE16518D4600D96ADF /* tamlWriteNode.h */,
-				86BC80FF16518D4600D96ADF /* tamlXmlParser.cc */,
-				86BC810016518D4600D96ADF /* tamlXmlParser.h */,
-				86BC810116518D4600D96ADF /* tamlXmlReader.cc */,
-				86BC810216518D4600D96ADF /* tamlXmlReader.h */,
-				86BC810316518D4600D96ADF /* tamlXmlVisitor.h */,
-				86BC810416518D4600D96ADF /* tamlXmlWriter.cc */,
-				86BC810516518D4600D96ADF /* tamlXmlWriter.h */,
 			);
 			path = taml;
 			sourceTree = "<group>";
@@ -2909,12 +2996,7 @@
 				86D7707E1656873C0046D71F /* telnetConsole.cc in Sources */,
 				86D7707F1656873C0046D71F /* SimXMLDocument.cpp in Sources */,
 				86D770801656873C0046D71F /* taml.cc in Sources */,
-				86D770811656873C0046D71F /* tamlBinaryReader.cc in Sources */,
-				86D770821656873C0046D71F /* tamlBinaryWriter.cc in Sources */,
 				86D770841656873C0046D71F /* tamlWriteNode.cc in Sources */,
-				86D770851656873C0046D71F /* tamlXmlParser.cc in Sources */,
-				86D770861656873C0046D71F /* tamlXmlReader.cc in Sources */,
-				86D770871656873C0046D71F /* tamlXmlWriter.cc in Sources */,
 				86D770881656873C0046D71F /* tinystr.cpp in Sources */,
 				86D770891656873C0046D71F /* tinyxml.cpp in Sources */,
 				86D7708A1656873C0046D71F /* tinyxmlerror.cpp in Sources */,
@@ -3296,6 +3378,14 @@
 				2AE2938516EF4C220015E200 /* WaveComposite.cc in Sources */,
 				2AA3655916F3552200E7A900 /* ImageFrameProvider.cc in Sources */,
 				2AA3655A16F3552200E7A900 /* ImageFrameProviderCore.cc in Sources */,
+				2AD42140170433FE005BB8AD /* tamlXmlParser.cc in Sources */,
+				2AD42141170433FE005BB8AD /* tamlXmlReader.cc in Sources */,
+				2AD42142170433FE005BB8AD /* tamlXmlWriter.cc in Sources */,
+				2AD4214717043408005BB8AD /* tamlJSONReader.cc in Sources */,
+				2AD4214817043408005BB8AD /* tamlJSONWriter.cc in Sources */,
+				2AD4214D17043413005BB8AD /* tamlBinaryReader.cc in Sources */,
+				2AD4214E17043413005BB8AD /* tamlBinaryWriter.cc in Sources */,
+				2ACAFD4A1705CF4A0022601C /* tamlJSONParser.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3358,10 +3448,9 @@
 					../../lib/lpng,
 					../../lib/ljpeg,
 					../../lib/lungif,
+					../../source/persistence/rapidjson/include,
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Versions/Current/Frameworks/QD.framework/Headers",
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/OpenGL.framework/Headers",
-					../../source/testing/googleTest,
-					../../source/testing/googleTest/include,
 				);
 				INFOPLIST_FILE = "Torque2D/Torque2D-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -3454,10 +3543,11 @@
 					../../lib/lpng,
 					../../lib/ljpeg,
 					../../lib/lungif,
-					"$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Versions/Current/Frameworks/QD.framework/Headers",
-					"$(SYSTEM_LIBRARY_DIR)/Frameworks/OpenGL.framework/Headers",
+					../../source/persistence/rapidjson/include,
 					../../source/testing/googleTest,
 					../../source/testing/googleTest/include,
+					"$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Versions/Current/Frameworks/QD.framework/Headers",
+					"$(SYSTEM_LIBRARY_DIR)/Frameworks/OpenGL.framework/Headers",
 				);
 				INFOPLIST_FILE = "Torque2D/Torque2D-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -3487,10 +3577,11 @@
 					../../lib/lpng,
 					../../lib/ljpeg,
 					../../lib/lungif,
-					"$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Versions/Current/Frameworks/QD.framework/Headers",
-					"$(SYSTEM_LIBRARY_DIR)/Frameworks/OpenGL.framework/Headers",
+					../../source/persistence/rapidjson/include,
 					../../source/testing/googleTest,
 					../../source/testing/googleTest/include,
+					"$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Versions/Current/Frameworks/QD.framework/Headers",
+					"$(SYSTEM_LIBRARY_DIR)/Frameworks/OpenGL.framework/Headers",
 				);
 				INFOPLIST_FILE = "Torque2D/Torque2D-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";

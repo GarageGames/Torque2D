@@ -954,8 +954,7 @@ void Scene::sceneRender( const SceneRenderState* pSceneRenderState )
     pDebugStats->renderRequests                 = 0;
     pDebugStats->renderFallbacks                = 0;
     pDebugStats->batchTrianglesSubmitted        = 0;
-    pDebugStats->batchDrawCallsStrictSingle     = 0;
-    pDebugStats->batchDrawCallsStrictMultiple   = 0;
+    pDebugStats->batchDrawCallsStrict           = 0;
     pDebugStats->batchDrawCallsSorted           = 0;
     pDebugStats->batchFlushes                   = 0;
     pDebugStats->batchBlendStateFlush           = 0;

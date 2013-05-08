@@ -155,6 +155,24 @@ ConsoleMethod(Taml, getBinaryCompression, bool, 2, 2,  "() - Gets whether ZIP co
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(Taml, setJSONStrict, void, 3, 3,   "(jsonStrict) - Sets whether to write JSON that is strictly compatible with RFC4627 or not.\n"
+                                                "@param jsonStrict Whether to write JSON that is strictly compatible with RFC4627 or not.\n"
+                                                "@return No return value.")
+{
+    // Set JSON Strict.
+    object->setJSONStrict( dAtob(argv[2]) );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(Taml, getJSONStrict, bool, 2, 2,  "() - Gets whether to write JSON that is strictly compatible with RFC4627 or not.\n"
+                                                "@return whether to write JSON that is strictly compatible with RFC4627 or not.")
+{
+    // Get RFC strict.
+    return object->getJSONStrict();
+}
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(Taml, write, bool, 4, 4,  "(object, filename) - Writes an object to a file using Taml.\n"
                                         "@param object The object to write.\n"
                                         "@param filename The filename to write to.\n"

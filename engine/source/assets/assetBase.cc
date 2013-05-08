@@ -44,6 +44,15 @@ IMPLEMENT_CONOBJECT( AssetBase );
 
 //-----------------------------------------------------------------------------
 
+StringTableEntry assetNameField = StringTable->insert( "AssetName" );
+StringTableEntry assetDescriptionField = StringTable->insert( "AssetDescription" );
+StringTableEntry assetCategoryField = StringTable->insert( "AssetCategory" );
+StringTableEntry assetAutoUnloadField = StringTable->insert( "AssetAutoUnload" );
+StringTableEntry assetInternalField = StringTable->insert( "AssetInternal" );
+StringTableEntry assetPrivateField = StringTable->insert( "AssetPrivate" );
+
+//-----------------------------------------------------------------------------
+
 AssetBase::AssetBase() :
     mAcquireReferenceCount( 0 ),
     mpOwningAssetManager( NULL ),
@@ -71,12 +80,12 @@ void AssetBase::initPersistFields()
     Parent::initPersistFields();
 
     // Asset configuration.
-    addProtectedField( ASSET_BASE_ASSETNAME_FIELD, TypeString, 0, &setAssetName, &getAssetName, &writeAssetName, "The name of the asset.  The is not a unique identification like an asset Id." );
-    addProtectedField( ASSET_BASE_ASSETDESCRIPTION_FIELD, TypeString, 0, &setAssetDescription, &getAssetDescription, &writeAssetDescription, "The simple description of the asset contents." );
-    addProtectedField( ASSET_BASE_CATEGORY_FIELD, TypeString, 0, &setAssetCategory, &getAssetCategory, &writeAssetCategory, "An arbitrary category that can be used to categorized assets." );
-    addProtectedField( ASSET_BASE_AUTOUNLOAD_FIELD, TypeBool, 0, &setAssetAutoUnload, &getAssetAutoUnload, &writeAssetAutoUnload, "Whether the asset is automatically unloaded when an asset is released and has no other acquisitions or not." );
-    addProtectedField( ASSET_BASE_ASSETINTERNAL_FIELD, TypeBool, 0, &setAssetInternal, &getAssetInternal, &writeAssetInternal, "Whether the asset is used internally only or not." );
-    addProtectedField( ASSET_BASE_ASSETPRIVATE_FIELD, TypeBool, 0, &defaultProtectedNotSetFn, &getAssetPrivate, &defaultProtectedNotWriteFn, "Whether the asset is private or not." );
+    addProtectedField( assetNameField, TypeString, 0, &setAssetName, &getAssetName, &writeAssetName, "The name of the asset.  The is not a unique identification like an asset Id." );
+    addProtectedField( assetDescriptionField, TypeString, 0, &setAssetDescription, &getAssetDescription, &writeAssetDescription, "The simple description of the asset contents." );
+    addProtectedField( assetCategoryField, TypeString, 0, &setAssetCategory, &getAssetCategory, &writeAssetCategory, "An arbitrary category that can be used to categorized assets." );
+    addProtectedField( assetAutoUnloadField, TypeBool, 0, &setAssetAutoUnload, &getAssetAutoUnload, &writeAssetAutoUnload, "Whether the asset is automatically unloaded when an asset is released and has no other acquisitions or not." );
+    addProtectedField( assetInternalField, TypeBool, 0, &setAssetInternal, &getAssetInternal, &writeAssetInternal, "Whether the asset is used internally only or not." );
+    addProtectedField( assetPrivateField, TypeBool, 0, &defaultProtectedNotSetFn, &getAssetPrivate, &defaultProtectedNotWriteFn, "Whether the asset is private or not." );
 }
 
 //------------------------------------------------------------------------------

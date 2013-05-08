@@ -145,6 +145,7 @@ bool initializeLibraries()
     ResourceManager->registerExtension(".jpeg", constructBitmapJPEG);
     ResourceManager->registerExtension(".png", constructBitmapPNG);
     ResourceManager->registerExtension(".uft", constructNewFont);
+    ResourceManager->registerExtension(".fnt", constructBMFont);
 
 #ifdef TORQUE_OS_IOS
     ResourceManager->registerExtension(".pvr", constructBitmapPVR);
