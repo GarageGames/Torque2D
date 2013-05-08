@@ -1107,12 +1107,16 @@ ConsoleMethod(SceneObject, setCollisionAgainst, void, 3, 4, "(SceneObject object
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setCollisionLayers, void, 3, 2 + MASK_BITCOUNT, "(layers$) - Sets the collision layers(s).\n"
-                                                                                  "@param layers A list of layers to collide with.\n"
-                                                      "@return No return value.")
+ConsoleMethod(SceneObject, setCollisionLayers, void, 2, 2 + MASK_BITCOUNT,  "(layers) - Sets the collision layers(s).\n"
+                                                                            "@param layers A list of layers to collide with.\n"
+                                                                            "@return No return value.")
 {
-    // The mask.
-    U32 mask = 0;
+    // Set to all if no arguments.
+    if ( argc == 2 )
+    {
+        object->setCollisionLayerMask(MASK_ALL);
+        return;
+    }
 
     // Grab the element count of the first parameter.
     const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
@@ -1123,6 +1127,24 @@ ConsoleMethod(SceneObject, setCollisionLayers, void, 3, 2 + MASK_BITCOUNT, "(lay
         object->setCollisionLayerMask(MASK_ALL);
         return;
     }
+    else if ( elementCount == 1 )
+    {
+        if ( dStricmp( argv[2], "all" ) == 0 )
+        {
+            object->setCollisionLayerMask(MASK_ALL);
+            return;
+        }
+        else if ( dStricmp( argv[2], "none" ) == 0 || dStricmp( argv[2], "off" ) == 0 )
+        {
+            object->setCollisionLayerMask(0);
+            return;
+        }
+
+        return;
+    }
+
+    // The mask.
+    U32 mask = 0;
 
     // Space separated list.
     if (argc == 3)
@@ -1167,12 +1189,16 @@ ConsoleMethod(SceneObject, setCollisionLayers, void, 3, 2 + MASK_BITCOUNT, "(lay
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setCollisionGroups, void, 3, 2 + MASK_BITCOUNT, "(groups$) - Sets the collision group(s).\n"
-                                                                                  "@param groups A list of collision groups to collide with.\n"
-                                                                                "@return No return value.")
+ConsoleMethod(SceneObject, setCollisionGroups, void, 2, 2 + MASK_BITCOUNT,  "(groups) - Sets the collision group(s).\n"
+                                                                            "@param groups A list of collision groups to collide with.\n"
+                                                                            "@return No return value.")
 {
-    // The mask.
-    U32 mask = 0;
+    // Set to all if no arguments.
+    if ( argc == 2 )
+    {
+        object->setCollisionGroupMask(MASK_ALL);
+        return;
+    }
 
     // Grab the element count of the first parameter.
     const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
@@ -1183,6 +1209,22 @@ ConsoleMethod(SceneObject, setCollisionGroups, void, 3, 2 + MASK_BITCOUNT, "(gro
         object->setCollisionGroupMask(MASK_ALL);
         return;
     }
+    else if ( elementCount == 1 )
+    {
+        if ( dStricmp( argv[2], "all" ) == 0 )
+        {
+            object->setCollisionGroupMask(MASK_ALL);
+            return;
+        }
+        else if ( dStricmp( argv[2], "none" ) == 0 || dStricmp( argv[2], "off" ) == 0 )
+        {
+            object->setCollisionGroupMask(0);
+            return;
+        }
+    }
+
+    // The mask.
+    U32 mask = 0;
 
     // Space separated list.
     if (argc == 3)
@@ -3273,14 +3315,25 @@ ConsoleMethod(SceneObject, setBlendColor, void, 3, 6,   "(float red, float green
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getBlendColor, const char*, 2, 2, "Gets the Rendering Blend Colour.\n"
+ConsoleMethod(SceneObject, getBlendColor, const char*, 2, 3,    "(allowColorNames) Gets the Rendering Blend color.\n"
+                                                                "@param allowColorNames Whether to allow stock color names to be returned or not.  Optional: Defaults to false.\n"
                                                                 "@return (float red / float green / float blue / float alpha) The sprite blend color.")
 {
-    // Get Blend Colour.
+    // Get Blend color.
     ColorF blendColor = object->getBlendColor();
 
-    // Fetch the field value.
-    return Con::getData( TypeColorF, &blendColor, 0 );
+    // Fetch allow color names flag.
+    const bool allowColorNames = (argc > 2) ? dAtob(argv[2] ) : false;
+
+    // Are color names allowed?
+    if ( allowColorNames )
+    {
+        // Yes, so fetch the field value.
+        return Con::getData( TypeColorF, &blendColor, 0 );
+    }
+
+    // No, so fetch the raw color values.
+    return blendColor.scriptThis();
 }
 
 //-----------------------------------------------------------------------------

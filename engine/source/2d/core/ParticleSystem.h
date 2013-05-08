@@ -23,8 +23,8 @@
 #ifndef _PARTICLE_SYSTEM_H_
 #define _PARTICLE_SYSTEM_H_
 
-#ifndef _ANIMATION_CONTROLLER_H_
-#include "2d/assets/AnimationController.h"
+#ifndef _IMAGE_FRAME_PROVIDER_H
+#include "2d/core/imageFrameProvider.h"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -49,9 +49,8 @@ public:
         Vector2                 mVelocity;
         F32                     mOrientationAngle;
         Vector2                 mRenderOOBB[4];
-        U32                     mImageFrame;
         b2Transform             mTransform;
-        AnimationController     mAnimationController;
+        ImageFrameProviderCore  mFrameProvider;
 
         /// Render Properties.
         Vector2                 mRenderSize;
@@ -73,9 +72,11 @@ public:
         Vector2                 mPostTickPosition;
         Vector2                 mRenderTickPosition;
 
+        ParticleNode() { constructInPlace<ImageFrameProviderCore>(&mFrameProvider); resetState(); }
+
         virtual void resetState( void )
         {
-            mAnimationController.resetState();
+            mFrameProvider.resetState();
         }
     };
 

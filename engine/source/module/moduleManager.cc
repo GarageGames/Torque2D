@@ -183,7 +183,7 @@ bool ModuleManager::scanModules( const char* pPath, const bool rootOnly )
     Vector<StringTableEntry> directories;
 
     // Find directories.
-    if ( !Platform::dumpDirectories( pathBuffer, directories, 1 ) )
+    if ( !Platform::dumpDirectories( pathBuffer, directories, rootOnly ? 1 : -1 ) )
     {
         // Failed so warn.
         Con::warnf( "Module Manager: Failed to scan module directories in path '%s'.", pathBuffer );
@@ -1263,8 +1263,8 @@ StringTableEntry ModuleManager::copyModule( ModuleDefinition* pSourceModuleDefin
             char parseFileBuffer[1024];
             dSprintf( parseFileBuffer, sizeof(parseFileBuffer), "%s/%s", pFileInfo->pFullPath, pFilename );
 
-            // Parse file.
-            if ( !moduleIdUpdateVisitor.parse( parseFileBuffer ) )
+            // Parse file.            
+            if ( !mTaml.parse( parseFileBuffer, moduleIdUpdateVisitor ) )
             {
                 // Warn.
                 Con::warnf("Module Manager: Failed to parse file '%s' whilst copying module Id '%s' using target directory '%s'.",

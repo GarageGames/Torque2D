@@ -36,6 +36,7 @@
 DefineConsoleType( TypeColorI )
 DefineConsoleType( TypeColorF )
 
+
 //-----------------------------------------------------------------------------
 
 class ColorI;
@@ -110,6 +111,9 @@ class ColorF
                                       (blue  >= 0.0f && blue  <= 1.0f) &&
                                       (alpha >= 0.0f && alpha <= 1.0f); }
    void clamp();
+
+   inline StringTableEntry stringThis(void) const   { char buffer[64]; dSprintf(buffer, 64, "%f %f %f %f", red, green, blue, alpha ); return StringTable->insert(buffer); }
+   inline const char* scriptThis(void) const        { char* pBuffer = Con::getReturnBuffer(64); dSprintf(pBuffer, 32, "%.5f %.5f %.5f %.5f", red, green, blue, alpha ); return pBuffer; }
 };
 
 //-----------------------------------------------------------------------------
@@ -174,6 +178,39 @@ class ColorI
 
    U16 get565()  const;
    U16 get4444() const;
+
+   inline StringTableEntry stringThis(void) const   { char buffer[64]; dSprintf(buffer, 64, "%d %d %d %d", red, green, blue, alpha ); return StringTable->insert(buffer); }
+   inline const char* scriptThis(void) const        { char* pBuffer = Con::getReturnBuffer(64); dSprintf(pBuffer, 32, "%d %d %d %d", red, green, blue, alpha ); return pBuffer; }
+};
+
+
+//-----------------------------------------------------------------------------
+
+class StockColorItem
+{
+private:
+    StockColorItem() {}
+
+public:
+    StockColorItem( const char* pName, const U8 red, const U8 green, const U8 blue, const U8 alpha = 255 )
+    {
+        // Sanity!
+        AssertFatal( pName != NULL, "Stock color name cannot be NULL." );
+
+        // Set stock color.
+        // NOTE:-   We'll use the char pointer here.  We can yet use the string-table unfortunately.
+        mColorName = pName;
+        mColorI.set( red, green, blue, alpha );
+        mColorF = mColorI;
+    }
+
+    inline const char*      getColorName( void ) const { return mColorName; }
+    inline const ColorF&    getColorF( void ) const { return mColorF; }
+    inline const ColorI&    getColorI( void ) const { return mColorI; }
+
+    const char*         mColorName;
+    ColorF              mColorF;
+    ColorI              mColorI;
 };
 
 //-----------------------------------------------------------------------------
@@ -186,6 +223,9 @@ public:
     static const ColorI& colorI( const char* pStockColorName );
     static StringTableEntry name( const ColorF& color );
     static StringTableEntry name( const ColorI& color );
+
+    static S32 getCount( void );
+    static const StockColorItem* getColorItem( const S32 index );
 
     static void create( void );
     static void destroy( void );

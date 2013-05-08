@@ -48,4 +48,9 @@ DefineConsoleType( TypeAssetLooseFilePath )
 #define ASSET_LOOSEFILE_SIGNATURE       "@assetFile"
 #define ASSET_LOOSE_FILE_FIELD_PREFIX   "@assetFile="
 
+//-----------------------------------------------------------------------------
+
+extern StringTableEntry assetLooseIdSignature;
+extern StringTableEntry assetLooseFileSignature;
+
 #endif // _ASSET_FIELD_TYPES_H_

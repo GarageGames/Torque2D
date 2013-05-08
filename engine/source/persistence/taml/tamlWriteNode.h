@@ -67,7 +67,6 @@ public:
     {
         // NOTE: This MUST be done before the state is reset otherwise we'll be touching uninitialized stuff.
         mRefToNode = NULL;
-        mChildren = NULL;
         mpSimObject = NULL;
         mpTamlCallbacks = NULL;
         mpObjectName = NULL;

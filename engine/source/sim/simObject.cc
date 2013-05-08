@@ -97,6 +97,10 @@ bool SimObject::registerObject()
       unregisterObject();
 
    AssertFatal(!ret || isProperlyAdded(), "Object did not call SimObject::onAdd()");
+
+    if ( isMethod( "onAdd" ) )
+        Con::executef( this, 1, "onAdd" );
+
    return ret;
 }
 
@@ -106,6 +110,9 @@ void SimObject::unregisterObject()
 {
     // Sanity!
     AssertISV( getScriptCallbackGuard() == 0, "SimObject::unregisterObject: Object is being unregistered whilst performing a script callback!" );
+
+    if ( isMethod( "onRemove" ) )
+        Con::executef( this, 1, "onRemove" );
 
    mFlags.set(Removed);
 
@@ -1473,6 +1480,8 @@ void SimObject::copyTo(SimObject* object)
    object->linkNamespaces();
 }
 
+//-----------------------------------------------------------------------------
+
 bool SimObject::setParentGroup(void* obj, const char* data)
 {
    SimGroup *parent = NULL;
@@ -1654,11 +1663,13 @@ void SimObject::unlinkNamespaces()
 void SimObject::setClassNamespace( const char *classNamespace )
 {
    mClassName = StringTable->insert( classNamespace );
+   linkNamespaces();
 }
 
 void SimObject::setSuperClassNamespace( const char *superClassNamespace )
 {  
    mSuperClassName = StringTable->insert( superClassNamespace );
+   linkNamespaces();
 }
 
 ConsoleMethod(SimObject, getClassNamespace, const char*, 2, 2, "")

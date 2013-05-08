@@ -22,9 +22,6 @@
 
 function ScrollerToy::create( %this )
 {
-    // Activate the package.
-    activatePackage( ScrollerToyPackage );  
-    
     // Reset the toy.
     ScrollerToy.reset();
 }
@@ -33,8 +30,6 @@ function ScrollerToy::create( %this )
 
 function ScrollerToy::destroy( %this )
 {
-    // Deactivate the package.
-    deactivatePackage( ScrollerToyPackage );    
 }
 
 //-----------------------------------------------------------------------------
@@ -151,14 +146,8 @@ function ScrollerToy::createNearScroller( %this )
 
 //-----------------------------------------------------------------------------
 
-package ScrollerToyPackage
+function ScrollerToy::onTouchDown(%this, %touchID, %worldPosition)
 {
-
-function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
-{
-    // Call parent.
-    Parent::onTouchDown(%this, %touchID, %worldPosition );
-
     // Set the scrollers speed to be the distance from the farground scrollers origin.
     // Also use the sign to control the direction of scrolling.
     %scrollerSpeed = %worldPosition.x - ScrollerToy.FarScroller.Position.x;
@@ -167,6 +156,3 @@ function SandboxWindow::onTouchDown(%this, %touchID, %worldPosition)
     ScrollerToy.FarScroller.ScrollX = %scrollerSpeed;
     ScrollerToy.NearScroller.ScrollX = %scrollerSpeed * 1.5;
 }
-    
-};
-

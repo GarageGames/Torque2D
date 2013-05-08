@@ -33,8 +33,6 @@ SimComponent::SimComponent() : mOwner( NULL )
    mMutex = Mutex::createMutex();
    
    mEnabled = true;
-
-   mNSLinkMask = LinkSuperClassName | LinkClassName;
 }
 
 SimComponent::~SimComponent()
