@@ -2892,6 +2892,18 @@
     <ClInclude Include="..\..\source\debug\telnetDebugger_ScriptBinding.h">
       <Filter>debug</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\network\RemoteCommandEvent_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\RemoteCommandEvent.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\io\resource\resourceManager_ScriptBinding.h">
+      <Filter>io\resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\graphics\TextureManager_ScriptBinding.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\math\mMath_ASM.asm">

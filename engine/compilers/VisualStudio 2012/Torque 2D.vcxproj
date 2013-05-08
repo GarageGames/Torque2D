@@ -838,6 +838,7 @@
     <ClInclude Include="..\..\source\graphics\TextureDictionary.h" />
     <ClInclude Include="..\..\source\graphics\TextureHandle.h" />
     <ClInclude Include="..\..\source\graphics\TextureManager.h" />
+    <ClInclude Include="..\..\source\graphics\TextureManager_ScriptBinding.h" />
     <ClInclude Include="..\..\source\graphics\TextureObject.h" />
     <ClInclude Include="..\..\source\gui\containers\guiGridCtrl.h" />
     <ClInclude Include="..\..\source\gui\guiArrayCtrl.h" />
@@ -887,6 +888,7 @@
     <ClInclude Include="..\..\source\io\memstream.h" />
     <ClInclude Include="..\..\source\io\resizeStream.h" />
     <ClInclude Include="..\..\source\io\resource\resourceManager.h" />
+    <ClInclude Include="..\..\source\io\resource\resourceManager_ScriptBinding.h" />
     <ClInclude Include="..\..\source\io\stream.h" />
     <ClInclude Include="..\..\source\io\streamObject.h" />
     <ClInclude Include="..\..\source\io\streamObject_ScriptBinding.h" />
@@ -935,6 +937,8 @@
     <ClInclude Include="..\..\source\network\netObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\network\netStringTable.h" />
     <ClInclude Include="..\..\source\network\networkProcessList.h" />
+    <ClInclude Include="..\..\source\network\RemoteCommandEvent.h" />
+    <ClInclude Include="..\..\source\network\RemoteCommandEvent_ScriptBinding.h" />
     <ClInclude Include="..\..\source\network\serverQuery.h" />
     <ClInclude Include="..\..\source\network\serverQuery_ScriptBinding.h" />
     <ClInclude Include="..\..\source\network\tcpObject.h" />
