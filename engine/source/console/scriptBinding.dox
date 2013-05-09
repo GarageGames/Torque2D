@@ -1,10 +1,59 @@
-// Warning!  This file is not real C++ code!  It is designed to provide types and operators, etc.
-// that are needed by Doxygen to create a TorqueScript reference.  As long as the
-// #define PSEUDOCODE_FOR_DOXYGEN is not set while compiling, there will be no issues.
+//-----------------------------------------------------------------------------
+// Copyright (c) 2013 GarageGames, LLC
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
+//-----------------------------------------------------------------------------
 
-// Define a doxygen group for all TorqueScript functions to live within
-// Clusters of functions -- such as vector functions or event schedule functions --
-// should be kept within a subgroup of the TorqueScriptFunction umbrella group
+// Warning!  This file is not real C++ code!
+// It is designed to provide types, operators, and more that are needed by Doxygen
+// to create a TorqueScript reference.
+
+// As long as this file ends in .dox, compilers should ignore it, but Doxygen won't.
+// This means the psuedo-code in here will not be seen by your compiler but it will
+// be seen by the Doxygen code parser.
+
+// Add any constructs here that you want to use to "fake-out" Doxygen while creating
+// the Torquescript doc.
+
+//-----------------------------------------------------
+// TorqueScript Functions
+//-----------------------------------------------
+
+// Most functions will be defined in _ScriptBinding.h files.
+// Here we are only defining a doxygen group, called TorqueScriptFunctions,
+// for all functions to live within.  This is necessary as Doxygen ignores global
+// functions unless they in a group.  But it also helps organize the "modules" page of
+// the Doxygen output.
+// Clusters of functions -- such as vector functions or event scheduling functions --
+// should be kept within a subgroup of the TorqueScriptFunction umbrella group.
+// As groups are created, in various _ScriptBinding.h files, they should be marked as
+// @ingroup TorqueScriptFunctions like so:
+//
+// /*! @defgroup VectorMathFunctions Vector Math
+//    @ingroup TorqueScriptFunctions
+//    @{
+// */
+//
+// <functions, functions, functions!>
+//
+// /*! @} */ // group VectorMathFunctions
+
 /*!
    @defgroup TorqueScriptFunctions Function Categories
 */
@@ -13,6 +62,12 @@
 // TorqueScript Data Types
 //-----------------------------------------------
 
+// "Define" and document generic data types here.  Doxygen does not really understand
+// how to define a language, so we need to fake it out with some C++ concept.  We will
+// use "typedef" as it seems the most innocuous.  Of course, typedef requires two arguments
+// so use "typedef type" then your data type.
+
+// Wrap all data types in a group.  This will help organize Doxygen's output "module" page.
 /*!
    @defgroup TorqueScriptTypes Data Types
       @{
@@ -121,6 +176,9 @@ typedef type Vector2;
 */
 typedef type Vector;
 
+/*! Void is actually not a real type.  It simply represents the absense of a type.
+*/
+typedef type Void;
 
 /*! @} */ // data types
 //-----------------------------------------------
@@ -131,6 +189,12 @@ typedef type Vector;
 // TorqueScript Operators
 //-----------------------------------------------
 
+// "Define" and document TorqueScript operators here.  Doxygen does not really understand
+// how to define a language, so we need to fake it out with some C++ concept.  As with
+// data types (above), we will use "typedef" as it seems the most innocuous.  Of course,
+// typedef requires two arguments so use "typedef type" then your operator.
+
+// Wrap all operators in a group.  This will help organize Doxygen's output "module" page.
 /*!
    @defgroup Operators Operators
    @{
@@ -205,6 +269,47 @@ typedef type NL;
 
 
 /*! @} */ // arithmetic operators
+
+/*! @defgroup constructionOperators Construction Operators
+	@{
+*/
+
+/*!	create a new object
+
+	@par Format
+	@code
+	%myID = new class([name])
+	{
+		[field = value;]
+		...
+	};
+	@endcode
+
+	@par Where
+	+ *myID* is the return ID that can be used to access the object in the form `%%myID.myFunction`.\n
+	+ `new` is the keyword telling the engine to create an instance of the following *class*.\n
+	+ *class* is any class declared in the engine or in script that has been derived from SimObject.\n
+	+ *name* (optional) is the object's name for referencing in the form `name.myFunction` (without % or $ before it).\n
+	+ *field* - You may initialize static or dynamic class fields here, one at a time.\n
+
+	@par Example
+	@code
+	// An SceneObject named 'Truck'
+	// with two static fields and one dynamic field to define
+	new SceneObject(Truck) 
+	{
+	   position = "0 0";
+	   size = "5 5";
+	   myField = 100;
+	};
+	
+	// A nameless object (tracked by a variable), with no fields to set
+	%myObject = new SimSet();
+	@endcode
+*/
+typedef type new;
+
+/*! @} */ // constructionOperators operators
 
 /*! @} */ // all operators
 //-----------------------------------------------

@@ -71,6 +71,21 @@ SimObject::SimObject( const U8 namespaceLinkMask ) : mNSLinkMask( namespaceLinkM
 
 //---------------------------------------------------------------------------
 
+bool SimObject::isMethod( const char* methodName )
+{
+   if( !methodName || !methodName[0] )
+      return false;
+
+   StringTableEntry stname = StringTable->insert( methodName );
+
+   if( getNamespace() )
+      return ( getNamespace()->lookup( stname ) != NULL );
+
+   return false;
+}
+
+//---------------------------------------------------------------------------
+
 bool SimObject::registerObject()
 {
     AssertFatal( !mFlags.test( Added ), "reigsterObject - Object already registered!");
@@ -1310,4 +1325,66 @@ void SimObject::setSuperClassNamespace( const char *superClassNamespace )
 {  
    mSuperClassName = StringTable->insert( superClassNamespace );
    linkNamespaces();
+}
+
+static S32 QSORT_CALLBACK compareFields(const void* a,const void* b)
+{
+   const AbstractClassRep::Field* fa = *((const AbstractClassRep::Field**)a);
+   const AbstractClassRep::Field* fb = *((const AbstractClassRep::Field**)b);
+
+   return dStricmp(fa->pFieldname, fb->pFieldname);
+}
+
+void SimObject::dump()
+{
+   const AbstractClassRep::FieldList &list = getFieldList();
+   char expandedBuffer[4096];
+
+   Con::printf("Static Fields:");
+   Vector<const AbstractClassRep::Field *> flist(__FILE__, __LINE__);
+
+   for(U32 i = 0; i < (U32)list.size(); i++)
+      flist.push_back(&list[i]);
+
+   dQsort(flist.address(),flist.size(),sizeof(AbstractClassRep::Field *),compareFields);
+
+   for(Vector<const AbstractClassRep::Field *>::iterator itr = flist.begin(); itr != flist.end(); itr++)
+   {
+      const AbstractClassRep::Field* f = *itr;
+      if( f->type == AbstractClassRep::DepricatedFieldType ||
+          f->type == AbstractClassRep::StartGroupFieldType ||
+          f->type == AbstractClassRep::EndGroupFieldType) continue;
+
+      for(U32 j = 0; S32(j) < f->elementCount; j++)
+      {
+         // [neo, 07/05/2007 - #3000]
+         // Some objects use dummy vars and projected fields so make sure we call the get functions 
+         //const char *val = Con::getData(f->type, (void *) (((const char *)object) + f->offset), j, f->table, f->flag);                          
+         const char *val = (*f->getDataFn)( this, Con::getData(f->type, (void *) (((const char *)this) + f->offset), j, f->table, f->flag) );// + typeSizes[fld.type] * array1));
+
+         if(!val /*|| !*val*/)
+            continue;
+         if(f->elementCount == 1)
+            dSprintf(expandedBuffer, sizeof(expandedBuffer), "  %s = \"", f->pFieldname);
+         else
+            dSprintf(expandedBuffer, sizeof(expandedBuffer), "  %s[%d] = \"", f->pFieldname, j);
+         expandEscape(expandedBuffer + dStrlen(expandedBuffer), val);
+         Con::printf("%s\"", expandedBuffer);
+      }
+   }
+
+   Con::printf("Dynamic Fields:");
+   if(getFieldDictionary())
+      getFieldDictionary()->printFields(this);
+
+   Con::printf("Methods:");
+   Namespace *ns = getNamespace();
+   Vector<Namespace::Entry *> vec(__FILE__, __LINE__);
+
+   if(ns)
+      ns->getEntryList(&vec);
+
+   for(Vector<Namespace::Entry *>::iterator j = vec.begin(); j != vec.end(); j++)
+      Con::printf("  %s() - %s", (*j)->mFunctionName, (*j)->mUsage ? (*j)->mUsage : "");
+
 }

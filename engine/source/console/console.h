@@ -827,8 +827,8 @@ public:
 
 // note: we would want to expand the following macro into (Doxygen) comments!
 // we can not do that with a macro.  these are here just as a reminder until completion
+#  define ConsoleMethodRootGroupBeginWithDocs(className)
 #  define ConsoleMethodGroupBeginWithDocs(className, superclassName)
-#  define ConsoleMethodGroupEndWithDocs(className)
 
 #  define ConsoleMethod(className,name,returnType,minArgs,maxArgs,usage1)                                                 \
       static inline returnType c##className##name(className *, S32, const char **argv);                                   \
@@ -868,6 +868,9 @@ public:
 
 #  define ConsoleMethodGroupEnd(className, groupName) \
       static ConsoleConstructor className##groupName##__GroupEnd(#className,#groupName,NULL);
+
+#  define ConsoleMethodRootGroupEndWithDocs(className)
+#  define ConsoleMethodGroupEndWithDocs(className)
 
 #else
 
