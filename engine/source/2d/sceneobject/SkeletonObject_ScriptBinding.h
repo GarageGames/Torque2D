@@ -150,52 +150,22 @@ ConsoleMethod(SkeletonObject, getSkeletonOffset, const char*, 2, 2, "() Gets the
     return object->getSkeletonOffset().scriptThis();
 }
 
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(SkeletonObject, getAnimationDuration, F32, 2, 2, "() Gets the duration of the current animation.\n"
                                                                "@return Duration of the animation in seconds.\n")
 {
     return object->getAnimationDuration();
 }
 
-// BOZO - What goes here?
-// This file is reserved for creating functions that will expose
-// For example, how the CompositeSprite::clearSprites function is
-// exposed to script:
-/*
-ConsoleMethod(CompositeSprite, clearSprites, void, 2, 2,    "() - Removes all sprites.\n"
-                                                            "@return No return value." )
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SkeletonObject, setMix, bool, 5, 5, "(fromAnimation, toAnimatino, time) Mixes the current animation with another.\n"
+                                                "@param animation The name of the animation to mix.\n"
+                                                "@param time The time to start mixing.")
 {
-    return object->clearSprites();
+    Con::printf("Mixing %s with %s at %f", argv[2], argv[3], dAtof(argv[4]));
+    
+    return object->setMix(argv[2], argv[3], dAtof(argv[4]));
+    
 }
-*/
-
-// The ConsoleMethod has a strict format
-/*
-ConsoleMethod(Class, function, returnType, minimumParameters, maxParameters, "Usage String")
-{
-   // Access parameters via argv[n]. They are always strings, so you will have to
-   // convert acordingly (dAtob to conver to bool, dAtof to conver to float, etc)
-   // argv will always have contents for index 0 and index 1
-
-   // The class string
-   argv[0];
-
-   // The function string
-   argv[1];
-
-   // Optional passed parameters
-   argv[2-n];
-
-   // Access the instance using "object"
-   object->function();
-}
-*/
-
-// For our purposes, we might want to allow a user to change the skin of their object
-// So it might be something like this:
-/*
-ConsoleMethod(SkeletonObject, setSkin, void, 3, 3,    "(skinName) - Changes the skin of the object.\n"
-                                                            "@return No return value." )
-{
-    object->setSkin(argv[2]);
-}
-*/

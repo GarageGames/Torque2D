@@ -37,6 +37,7 @@ private:
     F32                         mTimeScale;
     F32                         mLastFrameTime;
     F32                         mAnimationDuration;
+    F32                         mTotalAnimationTime;
 
     bool                        mAnimationFinished;
     bool                        mIsLoopingAnimation;
@@ -73,6 +74,8 @@ public:
     bool setCurrentAnimation( const char* pAnimation, const bool isLooping = false);
     inline StringTableEntry getCurrentAnimation( void ) const { return mCurrentAnimation; }
 
+    bool setMix( const char* pFromAnimation, const char* pToAnimation, float time);
+    
     bool setCurrentSkin( const char* pSkin );
     inline StringTableEntry getCurrentSkin( void ) const { return mCurrentSkin; }
 

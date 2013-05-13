@@ -76,7 +76,28 @@ function SpineToy::reset(%this)
         
     // Set the camera size.
     SandboxWindow.setCameraSize( 40, 30 );
-    
+
+    // Create the skeleton object
+    %object = new SkeletonObject()
+    {
+        class = "SpineBoy";
+    };
+
+    %object.Asset = "SpineToy:TestSkeleton";
+    %object.setAnimation("walk", true);
+    %object.SkeletonScale = 0.025;
+
+    %object.SceneLayer = 29;
+    %object.Position = 0;
+    %object.setMix("walk", "jump", 0.2);
+    %object.setMix("jump", "walk", 0.4);
+
+    SandboxScene.add(%object);
+
+    %object.schedule(4000, "doJump");
+
+return;
+
     %this.createBackground();
     //%this.createGround();
     
@@ -103,6 +124,20 @@ function SpineToy::reset(%this)
 
     // Add it to the scene
     SandboxScene.add(%spineSkeletonObject);
+}
+
+function SpineBoy::onAnimationFinished(%this, %animationName)
+{
+    if (%animationName == "jump")
+    {
+        %this.setAnimation("walk", true);
+        %this.schedule(4000, "doJump");
+    }
+}
+
+function SpineBoy::doJump(%this)
+{
+    %this.setAnimation("jump", false);
 }
 
 function SpineToy::resetWalker(%this)

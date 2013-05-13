@@ -645,9 +645,6 @@ bool ImageFrameProviderCore::updateAnimation( const F32 elapsedTime )
     // Calculate Current Frame.
     mCurrentFrameIndex = (S32)(mCurrentModTime / mFrameIntegrationTime);
 
-    // Fetch image frame count.
-    const S32 imageFrameCount = (*mpAnimationAsset)->getImage()->getFrameCount();
-
     // Calculate if frame has changed.
     bool frameChanged = (mCurrentFrameIndex != mLastFrameIndex);
 

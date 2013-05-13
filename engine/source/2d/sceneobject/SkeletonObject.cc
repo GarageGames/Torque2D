@@ -54,6 +54,7 @@ SkeletonObject::SkeletonObject() : mPreTickTime( 0.0f ),
                                    mPostTickTime( 0.0f ),
                                    mTimeScale(1),
                                    mLastFrameTime(0),
+                                   mTotalAnimationTime(0),
                                    mSkeleton(NULL),
                                    mState(NULL),
                                    mIsLoopingAnimation(false),
@@ -62,7 +63,7 @@ SkeletonObject::SkeletonObject() : mPreTickTime( 0.0f ),
 {
     mCurrentAnimation = StringTable->insert("");
     mSkeletonScale.SetZero();
-    mSkeletonOffset.SetZero();    
+    mSkeletonOffset.SetZero();
 }
 
 //------------------------------------------------------------------------------
@@ -219,10 +220,52 @@ bool SkeletonObject::setCurrentAnimation( const char* pAnimation, const bool isL
     mCurrentAnimation = StringTable->insert(pAnimation);
 
     mIsLoopingAnimation = isLooping;
-
+    
     // Generate composition.
     generateComposition();
 
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool SkeletonObject::setMix( const char* pFromAnimation, const char* pToAnimation, float time)
+{
+    if (mSkeletonAsset.isNull())
+    {
+        Con::warnf("SkeletonObject::setMix() - Cannot mix. No asset assigned");
+        return false;
+    }
+    
+    // Check for valid animation state data
+    AssertFatal( mSkeletonAsset->mStateData != NULL, "SkeletonObject::setMix() - Animation state data invalid" );
+    
+    // Check to see if the "from animation" is valid
+    Animation* from = SkeletonData_findAnimation(mSkeleton->data, pFromAnimation);
+    
+    if (!from)
+    {
+        Con::warnf("SkeletonObject::setMix() - Animation %s does not exist.", pFromAnimation);
+        return false;
+    }
+    
+    // Check to see if the "to animation" is valid
+	Animation* to = SkeletonData_findAnimation(mSkeleton->data, pToAnimation);
+	
+    if (!to)
+    {
+        Con::warnf("SkeletonObject::setMix() - Animation %s does not exist.", pToAnimation);
+        return false;
+    }
+    
+    // Check to see if a valid mix time was passsed
+    if (time < 0.0f)
+    {
+        Con::warnf("SkeletonObject::setMix() - Invalid time set, %f", time);
+        return false;
+    }
+    
+    AnimationStateData_setMixByName(mSkeletonAsset->mStateData, pFromAnimation, pToAnimation, time);
     return true;
 }
 
@@ -305,20 +348,6 @@ void SkeletonObject::generateComposition( void )
     if (!mSkeleton)
         mSkeleton = Skeleton_create(mSkeletonAsset->mSkeletonData);
 
-    if (mSkeletonScale.notZero())
-    {
-        Bone* rootBone = mSkeleton->root;
-        rootBone->scaleX = mSkeletonScale.x;
-        rootBone->scaleY = mSkeletonScale.y;
-    }
-
-    if (mSkeletonOffset.notZero())
-    {
-        Bone* rootBone = mSkeleton->root;
-        rootBone->x = mSkeletonOffset.x;
-        rootBone->y = mSkeletonOffset.y;
-    }
-
     if (!mState)
         mState = AnimationState_create(mSkeletonAsset->mStateData);
 
@@ -327,6 +356,21 @@ void SkeletonObject::generateComposition( void )
         AnimationState_setAnimationByName(mState, mCurrentAnimation, mIsLoopingAnimation);
         mAnimationDuration = mState->animation->duration;
         mAnimationFinished = false;
+        mTotalAnimationTime = mLastFrameTime + mAnimationDuration;
+    }
+    
+    if (mSkeletonScale.notZero())
+    {
+        Bone* rootBone = mSkeleton->root;
+        rootBone->scaleX = mSkeletonScale.x;
+        rootBone->scaleY = mSkeletonScale.y;
+    }
+    
+    if (mSkeletonOffset.notZero())
+    {
+        Bone* rootBone = mSkeleton->root;
+        rootBone->x = mSkeletonOffset.x;
+        rootBone->y = mSkeletonOffset.y;
     }
 }
 
@@ -335,7 +379,6 @@ void SkeletonObject::generateComposition( void )
 void SkeletonObject::updateComposition( const F32 time )
 {
     // Update position/orientation/state of visualization
-    
     float delta = (time - mLastFrameTime) * mTimeScale;
     mLastFrameTime = time;
 
@@ -355,7 +398,8 @@ void SkeletonObject::updateComposition( const F32 time )
     clearSprites();
 
     Vector2 vertices[4];
-	 float vertexPositions[8];
+
+    float vertexPositions[8];
     for (int i = 0; i < mSkeleton->slotCount; ++i)
     {
         Slot* slot = mSkeleton->slots[i];
@@ -372,7 +416,7 @@ void SkeletonObject::updateComposition( const F32 time )
         pSprite->setSrcBlendFactor(GL_ONE);
         pSprite->setDstBlendFactor(GL_ONE_MINUS_SRC_ALPHA);
 
-		  float alpha = mSkeleton->a * slot->a;
+        float alpha = mSkeleton->a * slot->a;
         pSprite->setBlendColor(ColorF(
             mSkeleton->r * slot->r * alpha,
             mSkeleton->g * slot->g * alpha,
@@ -394,15 +438,22 @@ void SkeletonObject::updateComposition( const F32 time )
         pSprite->setImageFrameByName(attachment->name);
     }
 
-    if (!mAnimationFinished && !mIsLoopingAnimation && mLastFrameTime >= mAnimationDuration)
+    if (mLastFrameTime >= mTotalAnimationTime)
+        mAnimationFinished = true;
+    
+    if (mAnimationFinished && !mIsLoopingAnimation)
     {
         mAnimationFinished = true;
         onAnimationFinished();
+    }
+    else
+    {
+        mAnimationFinished = false;
     }
 }
 
 void SkeletonObject::onAnimationFinished()
 {
     // Do script callback.
-    Con::executef( this, 1, "onAnimationEnd" );
+    Con::executef( this, 2, "onAnimationFinished", mCurrentAnimation );
 }

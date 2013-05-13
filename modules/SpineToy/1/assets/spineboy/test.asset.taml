@@ -1,5 +1,4 @@
 <SkeletonAsset
         AssetName="TestSkeleton"
 		AtlasFile="spineboy.atlas"
-        SkeletonFile="spineboy.json"
-		Scale="0.025"/>
+        SkeletonFile="spineboy.json" />
