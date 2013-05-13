@@ -1,0 +1,330 @@
+# Documenting TorqueScript
+
+## Introduction
+
+This references describes how to document TorqueScript.  It covers the tool used, the location of the docs, and
+the process of adding or editing docs.  The end goal is a single manual that can be referenced on-line or downloaded.
+The manual created contains information about classes and functions, and also information about operators, sub-systems,
+general information, etc.
+
+TorqueScript is a scripting language written specifically for Torque.  The compiling and running of the script code
+is a part of the engine itself.
+
+The manual is created using [Doxygen](doxygen.org), so its helpful to get some experience with that tool and
+to also to refer to its manual for documenting features.  This reference only covers Doxygen lightly but possibly
+enough to get started.
+
+Normally, Doxygen is used to create a cross-referenced document for a C++ code base, even though that's not
+quite what the TorqueScript manual is.  That is, you normally document the system you've built in C++, not
+a language and API bindings to an engine!  But Doxygen is so useful and capable that it was worth working out
+a way to use it for our purposes.  As a matter of fact, we can also produce a Torque2D engine document
+from the same code base!
+
+The docs can be output in an HTML form, among many others including pdf or chm.
+
+## Documentation As an Ongoing Project
+
+First, thanks in advance for any contribution to our collective knowledge to the TorqueScript docs!
+Besides our collective wisdom, there are also fertile bits of information over at the
+[Torque Developer Network](http://tdn.garagegames.com/wiki/TDN_Home) (free login required) that could be yanked
+over.
+
+While many of the basics are done, there is always more to cover.  Whether you know of tricks for creating better
+game loops with less, gotchas to avoid, or mistake in the docs that should be corrected, we could use your help.  The goal
+of this project is to collect great information about Torque2D and get it into the source itself,
+where it will live with the code.  The docs should include classes, functions, and even architectural design.
+
+## How to "Compile" the Torque2D Manual
+
+If we want to see our docs as you go, the first thing you'll need is the ability to see the output from Doxygen as
+you make edits.  Once you know how, this can be done in less than 10 seconds.  Here are the steps:
+
+1. Go to the directory `Torque2D/tools/documentation`
+     You should see, among files and directories
+     + `config` - a directory containing a few files that are used to tell Doxygen how to proceed.
+     + `output` - a directory where the results will go.  If it doesn't exist for you, simple make a new `output` directory.
+	 (If you run `doxygen` without this directory, it will fail.)
+     + `doxygen.exe` - currently Torque2D comes with a Windows copy of Doxygen.  But you can download a newer version or a
+	 version for almost any platform, which you may need to do now.  It's free!
+2. Start a command line tool in the `documentation` directory.
+    I use Windows PowerShell (which I open by clicking the Window's Start menu and typing "powershell" into the search box).
+3. Run Doxgyen from a command line feeding it the `config\torqueScriptReference.cfg` file.  I also like to pipe the output
+to a file, as you see below.  Doxygen is very verbose!
+	@code
+	> .\doxygen.exe .\config\torqueScriptReference.cfg > .\output\info-ts.log
+	@endcode
+4. Afterwards, the directory `output/torqueScriptDocs` should have been produced, and inside of it, you should
+have both `html` and `xml` output.  To see the results, click `html/index.html` to open it in a browser.
+Click around and get accusomted to the manual if you haven't already.  As you make changes, "recompile" the manual
+and simply refresh in your browser to see the results.
+
+## About Doxygen "Compounds"
+
+There are three Doxygen concepts -- called "compounds" in Doxygen vernacular -- that we use to document TorqueScript.
+These are symbols, modules, and pages.  For us, "symbol" documents are materials attached directly to classes, member functions,
+and global functions.  Here is SimSet as an example of documented class methods that roll-up into a class page.  The
+[list of classes](classes.html) is built by Doxygen as well.
+This is the most common type of documentation by far.  You write them in command-laced comments directly above the symbol.
+
+Then we use "module" documents -- interchangeably called "group" documents in Doxygen vernacular -- to keep together clusters
+of related global function, like vector math, string functions, or even string operators.  Within each grouping, the bulk
+of the actual function documentation is also symbol documentation.  If you go to the [modules](modules.html) page, you will
+see all of the groups listed.  Note that they mostly cover global functions, but also operators, data types, etc.
+
+Module documents are nice because they are a bit more free-form.  You can also add any amount of extra documentation for
+the entire group.  For instance, in the engine manual (not the TorqueScript one in this case), all the classes than form
+the %Taml subsystem are kept in a group.  But more importantly, a lengthy white paper on using the %Taml module of Torque2D
+is kept within the group document as the "detailed description".  The point is that module/group docs
+can have lots of connective information about a sub-sytem and still cross-reference with any symbols in your code.
+
+Finally, most rare of all we use Doxygen "pages" to write up information.  Pages are the best bet when their content isn't really
+connected to the software architecture or any particular class or functions.  This very document is an example.  All the "loose"
+pages are kept under the ["related pages"](pages.html) tab by Doxygen.
+Even though the pages aren't related to any one symbol of grouping, mentioning particular functions and other symbols will
+create cross references to those symbols.
+
+## About ScriptBinding and ScriptPage Files
+
+In order to have Doxygen create two kinds of documents with only one code base, some cleverness was required.  Without
+getting too deep here, documenting TorqueScript "the language binding" isn't the natural purpose of Doxygen!
+However, we were able to achieve a pretty strong manual just by using a few techniques.  To keep you from getting
+confused -- we hope it's not a problem, but better safe than sorry -- this short section is a quick-and-dirty
+view of some of those techniques used.  If something doesn't seem to work like you expected, this section may help.
+
+The main rule to follow here is that most TorqueScript documentation is in the ScriptBinding.h files.  For instance, comments
+in `SimObject_ScriptBinding.h` are gleened by Doxygen, 
+but not comments in `SimObject.h` or `SimObject.cpp`.  Other docs may
+be in ScriptBinding.* or ScripPage.* files.  
+Because the ScriptBinding.h files contain the TorqueScript binding functions and not the engine code, this is an ideal
+place to focus Doxygen to get only TorqueScript information.  (Otherwise, it would try to add reference docs to engine-specific
+code as well.  We show Doxygen the opposite docs when building a manual for the engine.)
+
+You may notice a few binding functions (ConsoleMethod(), ConsoleFunction(), etc.) not in the ScriptBindings.  You may also
+notice that these don't produce docs yet.  This is for the reason stated above.  (The code is actively being re-arranged and is
+almost complete.  For what it's worth, the idea of the ScriptBbinding files preceeds the new documentation.)
+
+The next rule is that .dox files are not read by C++ compilers but are read as if code files by Doxygen.  The extension is
+specific to Doxygen as a matter of fact.  Code and comments in these files are read (by Doxygen) as if live code, however.
+Hence they are a great place to put module/group documents that don't fit neatly in any one class or function group.
+The .dox files are often kept in the directory with the code they relate to.  They will be found and read, wherever they are, by Doxgyen.
+If the .dox file is for TorqueScript it should contain `_ScriptPage.` in its name.  Otherwise, it will be assumed to be a page
+for the engine instead.
+
+
+A second use of the .dox file was to create pseudo-code for TorqueScript -- code that isn't really part of building the 
+TorqueScript interpreter nor the engine but that Doxygen picks up and parses as if real code.  Look at the file
+`Torque2D\engine\source\console\core_scriptBinding.dox` for a great place to create a list of
+TorqueScript operators (new, SPC, TAB, etc) and TorqueScript types (Integer, Boolean, String, Vector) that aren't real
+code but that help create a complete manual for TorqueScript.
+
+
+Finally, the "page" files are often kept as markdown (extension .md).  Because a page file isn't related to any classes,
+functions, or whatever, its text does not need to be wrapped into a comment.  Put differently, there is no need for doxygen
+commands (@@param, @@see, @@defgroup, etc.)  The text is pure markdown with a few exceptions which are probably Doxygen bugs, and some
+of those are listed at the end of this doc.  By being pure markdown -- that is without requiring a surrounding comment block --
+they are a little easier to manipulate.
+These pages can only show as single pages in the "Related Pages" tab of a Doxygen manual, so they are limited.  And
+even though they aren't connected to any code symbols, they will link (automatically usually) to any symbols mentions.
+
+## Documenting Classes and Methods
+
+As mentioned above, documenting symbols is by far the bulk of the good documentation. Each class, method, or function can have a 
+description as complex as you want.  (Also as stated above, the global functions will ultimately end up in a "module" section of
+the manual but the functions themselves are documented as symbols.)  For methods and functions, 
+you can (and should) explicitly state the parameters and return type.  You can put example code with each symbol if it helps.  
+Finally, we should probably keep a "see also" section for related methods and functions.
+
+Here is an edited version of comments for SimObject::getId() as an example of how to accomplish several of these practices:
+
+@verbatim
+/*! get the unique numeric ID -- or "handle" -- of this object.
+
+	@param param1 a pretend param for this call since there wasn't one :)
+	@return Returns the numeric ID.
+
+	The id is provided for you by the simulator upon object creation.  You can not change it
+	and it likely will not be reused by any other object after this object is deleted.
+
+	@par Example
+	@code
+	new SimObject(example);
+	echo(example.getId());
+	> 1752
+	@endcode
+
+	@par Caveat
+	You can not access the id directly.  That is, you can not access `%%object.id`.
+	If you do set `%%object.id` you will only succeed in creating a dynamic field named
+	`id` -- an unrelated field to the actual object's id.
+
+	@par Example
+	@code
+	%example = SimObject();
+	echo(%example.getId());
+	> 1753
+
+	... 
+
+	I'm pretending I need one more paragraph here to show off lists.  I can use
+	+ a list symbol such as "+" here on each line of a list
+	+ a second element in my list
+
+	@see getName, setName
+*/
+ConsoleMethodWithDocs(SimObject, getId, ConsoleInt, 2, 2, ())
+{
+   return object->getId();
+}
+@endverbatim
+
+Knowing a bit about Doxygen does help, but you can get pretty far just trying the ideas above and experimenting.  The following
+are several notes about the above example:
+
++ The entire doxygen comment section is surrounded by `/*!` and `*/` comment enclosings.  There are
+other options, but this author prefers to set these at beginning and end and then not have to decorate every line.
++ We have a `@param`, `@return`, and `@see` (for "see also" sections). Those are easy.
++ Any other text is just part of the detailed description.
++ We can create "sections" just like the "param" and "return" sections by using `@par <section>` like we did with "@par Caveat".  Just remember to start the paragraph immediately after that line.
++ We also wanted to create a couple of examples so we start each one with "@par Example" and follow that with a block of code between "@code" and "@endcode".
++ We can also use backticks "`" around a phrase to make it represent in-line code.
++ Now in *real* code sections between "@code" and "@endcode" any text goes.  But in regular text
+or even in in-line code sections, we have to use two percent signs to create one.
+This is because Doxygen sees percent as a "meta-character" and swallows it.  To show a single percent,
+"escape" percent with two in a row.
++ Note that I'm using "+" to start a list.  You can use "*" or "-" just like in markdown.  However, because
+some people like to have a "*" at the beginning of every line of comments, Doxygen likes to eat those up, so
+it's best to just avoid them.  This author just prefers "+" to "-" for lists also.
++ Obvious function names and class names will be automatically cross-referenced.  They are "obvious"
+when they have a camel case letter in them somewhere.  If your function does not, try putting "::" in front of it
+or "()" after it.  To reference something in another class, you have to use className::methodName.  Doxygen explains
+all this in its docs.  One last point though: let's suppose you want to avoid a link.  Use "%" in front of the camel
+cased word that happens to be another class or function.
+
+## Documenting Global Function Groups
+
+All of the global functions in TorqueScript are being documented into "groups." 
+We also take advantage of Doxygen's ability to have subgroups here.  All of the function groups are
+a subgroup of the TorqueScriptFunctions main group.  (There are other main groups not related to global functions.)
+
+To document a group of functions, let's suppose they are in the same file together.  If they are not, we can
+modify the following formulas.  Go to that file, say the console output functions in `output_ScriptBinding.h`.
+Near the top of the file, before any functions, tell Doxygen this will be a group as follows:
+
+@verbatim
+/*! @defgroup ConsoleOutputFunctions Console Output
+	@ingroup TorqueScriptFunctions
+	@{
+*/
+@endverbatim
+
+What this does is start a new group `ConsoleOutputFunctions` and also gives it the more human-readable name "Console Output".
+Then it puts this group within the `TorqueScriptFunctions` main group.  And finally it starts the grou with `@{`.
+
+Now go to the bottom of the file, somewhere after all the functions and put the following:
+
+@verbatim
+/*! @} */ // group ConsoleOutputFunctions
+@endverbatim
+
+This line ends the group with "@}".  The comment after that is just to be friendly.
+
+This should effectively put all the documented functions between "@{" and "@}" into a group together.
+
+## Documenting Operations, Types, etc.
+
+Another type of module documentation is for non-functions.  This includes TorqueScript types (String, Boolean, etc.) and
+operators (SPC, new, etc.).
+
+To do this, we are playing a bit of a trick.  Remember that Doxygen was not created to document your language that you created
+(such as TorqueScript).  What we will do is make a psuedo-code file full of pretend C++ constructs, called
+`Torque2D\engine\source\console\core_ScriptBinding.dox`  The C++ compiler won't be interested, but when Doxygen sees
+the file it will parse it as real code.
+
+The solution we have employed is to have one special file located in the same directory as the TorqueScript interpreter code.
+C++ compilers will not bother to compile a .dox file but doxygen will read it.  For all practical purposes, though,
+this is a C++ file in form.
+
+We will not go into the details here, but read that file and add to it to create lists of operators or
+types in groups.
+
+## Documenting Sub-Systems
+
+Our final module type is sub-systems of the engine, such as %Taml or the Module Manager, etc.  Because these
+are not related to one specific class, they were placed in individual files with the .dox extension.
+
+While there are no examples of TorqueScript sub-systems documented yet, we can see an example of Torque2D engine
+docs for a sub-system.  Check out `Torque2D\engine\source\persistence\taml\taml.dox` as an example.
+
+Note that the docs are currently kept close to the classes that form the system, if possible.  Specifically,
+they are put in the same directory as the classes.  The compiler will ignore files ending in .dox
+but Doxygen won't.  In the case of the taml file, it is a mostly markdown formatted file.  Section headers,
+URLs and other markdown data is present in standard form.  However, the entire file (of markdown) is placed
+in a Doxygen comment block with `/*!` at the top and `*/` at the bottom.  Then the block was marked as
+creating a "group" known as "tamlGroup" like so:
+
+@code
+/*! @defgroup tamlGroup TAML Reference
+  ... the entire contents in markdown
+*/
+@endcode
+
+For a little cross-referencing sweetness, classes related to this sub-system were marked with the following
+comment
+
+@code
+/// @ingroup tamlGroup
+/// @see tamlGroup
+@endcode
+
+This will bring a reference to the marked class into the module document.
+
+Again, this was done for an engine subsytem, but the same *could* be done for TorqueScript systems or modules.
+
+## Documenting General Information
+
+
+
+## Appendix A: Doxygen Markup Caveats
+1. lists have trouble starting with `*` because it seems like the line is part of a long comment.  So change `*` lists to `-`
+
+    - if you use regular expressions, search for `^\*_` and manually replace with `-_` (where `_` represents a space).  note that a manual replace may not be necessary but I'm not sure that all lines that begin with a single * are necessarily lists!
+
+1. doxygen understands "fencepost" code blocks (~~~) but is confused in the case of c++.  Specifically, doxygen will eat // comments within them!
+However the form `@code{.cpp}` will work.  For consistency change all code blocks from ~~~ to @code.
+
+    - if you use regular expressions, search for \`\`\`(.+) and replace it with  `@code{\1}`.  after that, you can match the end fence posts easily also.  replace \`\`\` with `@endcode`
+ 
+  %variable in line dos not work.  (docs say use \% but does not work)  use %%variable to get %variable.
+ -- required \--
+ numbers 1.2.3. must be correct
+ 
+## Appendix B.  How Documenting TorqueScript Works
+
+*You can skip this section unless you are curious.*
+
+For several years, Torque2D produced a TorqueScript manual in a different way.  Realize, that we want to be able to produce a 
+manual for Torque2D's C++ engine as well as produce a manual for TorqueScript.  So running Doxygen on the code produced only the 
+Torque2D manual.  This is as it should be.  Doxygen simply cross-references C++ symbols like classes, namespaces, and functions.
+
+Then, to create a TorqueScript manual -- not actually document code mind you -- something has to give.  Remember, this is not 
+Doxygen's purpose, but since it is an excellent tool for creating cross-referenced docs a way was devised!  One would compile the 
+Torque2D, and run it.  From within the program one would call dumpConsoleFunctions() and other functions to produce a "psuedo-code" 
+output file.  The file was suspiciously like a program itself, complete with documentation of the "functions" and "classes".  This 
+file would then be run through Doxygen and viola!, a second reference manual was produced.
+
+The problem with using the above method had two specific drawbacks worth removing if possible.  First, it required several steps -- 
+compiling the code, running it with some script calls, running Doxygen on the output of the dump -- and so it was impractical to 
+add and modify new docs as easily as Doxygen is designed to do.  Second, the documents had to be hidden from Doxygen on the normal 
+pass that creates an engine reference!  To do so, the docs appeared in a string for each TorqueScript call or class.  This was also 
+harder to work with than would be nice.  A less important issue, but still a real one, was the possibility that all these strings, 
+compiled into the engine, could be expensive in space.  (Though the strings could be skipped at compile time if TORQUE_SHIPPING was 
+defined.)
+
+Now, the TorqueScript function bindings are documented just like any other code -- in comment sections with the code.  And 
+"compiling" the documents is no harder than running Doxygen on the code base with a special config file designed for TorqueScript 
+output.
+
+There are always trade-offs to slight-of-hand however.  The way we get Doxygen to pick between documenting the engine or  
+TorqueScript is that TorqueScript functions are in special files ending with _ScriptBinding.h.  These files are skipped when 
+creating docs for the engine.  Likewise, they are the only files used when creating the script reference.  There are other files 
+and cases that are specific to TorqueScript -- this is the main way we can get both manuals from one code base!

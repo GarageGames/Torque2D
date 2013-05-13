@@ -2603,7 +2603,6 @@
     <ClInclude Include="..\..\source\2d\core\ParticleSystem.h">
       <Filter>2d\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\torqueConfig.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\ImageFont.h">
       <Filter>2d\sceneobject</Filter>
     </ClInclude>
@@ -2904,6 +2903,7 @@
     <ClInclude Include="..\..\source\graphics\TextureManager_ScriptBinding.h">
       <Filter>graphics</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\torqueConfig.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\math\mMath_ASM.asm">
