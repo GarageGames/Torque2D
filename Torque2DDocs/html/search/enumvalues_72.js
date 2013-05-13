@@ -30,7 +30,7 @@ var searchData=
   ['reservedpkware3',['ReservedPKWARE3',['../group__zipint__group.html#ggae40fd93446e95a734d8074301e7744ada20fefeb250124d28a36d346c0eca963e',1,'Zip']]],
   ['reservedtokenized',['ReservedTokenized',['../group__zipint__group.html#gga2d1c84f42aba1a9a70afe0d6f30ca91caf203966dbeab6a6f7391612e62430713',1,'Zip']]],
   ['resurrecting',['Resurrecting',['../class_texture_manager.html#accf3352e7656cb155abd0b2c76d96ca3a13854e158c922d4f5b82971a3b469b24',1,'TextureManager']]],
-  ['returnbufferspace',['ReturnBufferSpace',['../struct_string_stack.html#af715e26dfffd1f8de1c18449e2770cffa7e2fbe9904cecd74a1b0117450205c39',1,'StringStack']]],
+  ['returnbufferspace',['ReturnBufferSpace',['../struct_string_stack.html#af3520ff6d43011872bab77edd27d4de3a7e2fbe9904cecd74a1b0117450205c39',1,'StringStack']]],
   ['rgb',['RGB',['../class_g_bitmap.html#a23d1a7c7cf0f6da45ca389904e644d55a30447e9f6efa4afdd251f9afc1d5fb44',1,'GBitmap::RGB()'],['../class_g_palette.html#a4d04a13fb5a0373d42428b0800d145fea30447e9f6efa4afdd251f9afc1d5fb44',1,'GPalette::RGB()']]],
   ['rgb5551',['RGB5551',['../class_g_bitmap.html#a23d1a7c7cf0f6da45ca389904e644d55aea48c802b201532db5504f819e06e6e3',1,'GBitmap']]],
   ['rgb565',['RGB565',['../class_g_bitmap.html#a23d1a7c7cf0f6da45ca389904e644d55a183737a1f19f772782bc5e24cfd662e7',1,'GBitmap']]],

@@ -162,11 +162,11 @@ Implementation Details</h2></td></tr>
 <tr class="separator:a1e0795748452eb5b129b64b8702a8ab1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c8400b45a6ad24baa1182a08aaabd1f"><td class="memItemLeft" align="right" valign="top">S32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_event.html#a7c8400b45a6ad24baa1182a08aaabd1f">mRefCount</a></td></tr>
 <tr class="separator:a7c8400b45a6ad24baa1182a08aaabd1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af73255357855a4d08f543c98c32cdda3"><td class="memItemLeft" >enum NetEvent::{ <a class="el" href="class_net_event.html#aac34dfe6c6b73b43a4656c9dce041034a5eaab1c95dbff635ad3b83dae5b46c67">GuaranteedOrdered</a> = 0, 
-<a class="el" href="class_net_event.html#aac34dfe6c6b73b43a4656c9dce041034aa113d8ae2d03b9d8e6def2088d0ae545">Guaranteed</a> = 1, 
-<a class="el" href="class_net_event.html#aac34dfe6c6b73b43a4656c9dce041034a2f0eec7e64f3ece2ced3fbef438c9f29">Unguaranteed</a> = 2
- }&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_event.html#af73255357855a4d08f543c98c32cdda3">mGuaranteeType</a></td></tr>
-<tr class="separator:af73255357855a4d08f543c98c32cdda3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad60617958b76fe255681098106b63261"><td class="memItemLeft" >enum NetEvent::{ <a class="el" href="class_net_event.html#aabfcbcb5ac86a1edac4035264bc7d2b8a5eaab1c95dbff635ad3b83dae5b46c67">GuaranteedOrdered</a> = 0, 
+<a class="el" href="class_net_event.html#aabfcbcb5ac86a1edac4035264bc7d2b8aa113d8ae2d03b9d8e6def2088d0ae545">Guaranteed</a> = 1, 
+<a class="el" href="class_net_event.html#aabfcbcb5ac86a1edac4035264bc7d2b8a2f0eec7e64f3ece2ced3fbef438c9f29">Unguaranteed</a> = 2
+ }&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_event.html#ad60617958b76fe255681098106b63261">mGuaranteeType</a></td></tr>
+<tr class="separator:ad60617958b76fe255681098106b63261"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cbf59d68c21a8f8264f3d67d7b23623"><td class="memItemLeft" align="right" valign="top">NetConnectionId&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_event.html#a2cbf59d68c21a8f8264f3d67d7b23623">mSourceId</a></td></tr>
 <tr class="separator:a2cbf59d68c21a8f8264f3d67d7b23623"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e4d24aed92fabda0a38134779ceb0e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_net_event.html#a8e4d24aed92fabda0a38134779ceb0e5">incRef</a> ()</td></tr>
@@ -292,7 +292,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="line"><span class="comment">// SimpleMessageEvent, which saves us a bit of effort.</span></div>
 <div class="line"><span class="keywordtype">void</span> <a class="code" href="class_simple_message_event.html#aa9225bcd24da2453d29817ab4ca6907e">SimpleMessageEvent::unpack</a>(<a class="code" href="class_net_connection.html">NetConnection</a> *conn, <a class="code" href="class_bit_stream.html">BitStream</a> *bstream)</div>
 <div class="line">{</div>
-<div class="line">  <span class="keywordtype">char</span> buf[256];</div>
+<div class="line">  <span class="keywordtype">char</span> <a class="code" href="group___network_functions.html#ga697ec28a7a5a5a7cf7290eb063b7c4ac">buf</a>[256];</div>
 <div class="line">  bstream-&gt;<a class="code" href="class_bit_stream.html#a2fbd4b3661401a422e85c500f5abd29b" title="Reads a string of maximum 255 characters long.">readString</a>(buf);</div>
 <div class="line">  msg = dStrdup(buf);</div>
 <div class="line">}</div>
@@ -330,7 +330,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
-<a class="anchor" id="aac34dfe6c6b73b43a4656c9dce041034"></a>
+<a class="anchor" id="aabfcbcb5ac86a1edac4035264bc7d2b8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -340,11 +340,11 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="aac34dfe6c6b73b43a4656c9dce041034a5eaab1c95dbff635ad3b83dae5b46c67"></a>GuaranteedOrdered</em>&nbsp;</td><td class="fielddoc">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="aabfcbcb5ac86a1edac4035264bc7d2b8a5eaab1c95dbff635ad3b83dae5b46c67"></a>GuaranteedOrdered</em>&nbsp;</td><td class="fielddoc">
 </td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="aac34dfe6c6b73b43a4656c9dce041034aa113d8ae2d03b9d8e6def2088d0ae545"></a>Guaranteed</em>&nbsp;</td><td class="fielddoc">
+<tr><td class="fieldname"><em><a class="anchor" id="aabfcbcb5ac86a1edac4035264bc7d2b8aa113d8ae2d03b9d8e6def2088d0ae545"></a>Guaranteed</em>&nbsp;</td><td class="fielddoc">
 </td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="aac34dfe6c6b73b43a4656c9dce041034a2f0eec7e64f3ece2ced3fbef438c9f29"></a>Unguaranteed</em>&nbsp;</td><td class="fielddoc">
+<tr><td class="fieldname"><em><a class="anchor" id="aabfcbcb5ac86a1edac4035264bc7d2b8a2f0eec7e64f3ece2ced3fbef438c9f29"></a>Unguaranteed</em>&nbsp;</td><td class="fielddoc">
 </td></tr>
 </table>
 
@@ -562,7 +562,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_file_chunk_event.html#a14e27026a563318c89eaff9084fddd8f">FileChunkEvent</a>, <a class="el" href="class_remote_command_event.html#ae9cc930cc7438addaa3f01b627741056">RemoteCommandEvent</a>, <a class="el" href="class_ghost_always_object_event.html#aa0c2a6f1f9481803b8067a17b9918c5c">GhostAlwaysObjectEvent</a>, <a class="el" href="class_file_download_request_event.html#a14e27026a563318c89eaff9084fddd8f">FileDownloadRequestEvent</a>, <a class="el" href="class_connection_message_event.html#aa0c2a6f1f9481803b8067a17b9918c5c">ConnectionMessageEvent</a>, <a class="el" href="class_net_string_event.html#a14e27026a563318c89eaff9084fddd8f">NetStringEvent</a>, and <a class="el" href="class_simple_message_event.html#a5b1c12ace5e5d0e3f02e78e1986f7f1c">SimpleMessageEvent</a>.</p>
+<p>Implemented in <a class="el" href="class_file_chunk_event.html#a14e27026a563318c89eaff9084fddd8f">FileChunkEvent</a>, <a class="el" href="class_ghost_always_object_event.html#aa0c2a6f1f9481803b8067a17b9918c5c">GhostAlwaysObjectEvent</a>, <a class="el" href="class_remote_command_event.html#ae9cc930cc7438addaa3f01b627741056">RemoteCommandEvent</a>, <a class="el" href="class_file_download_request_event.html#a14e27026a563318c89eaff9084fddd8f">FileDownloadRequestEvent</a>, <a class="el" href="class_connection_message_event.html#aa0c2a6f1f9481803b8067a17b9918c5c">ConnectionMessageEvent</a>, <a class="el" href="class_net_string_event.html#a14e27026a563318c89eaff9084fddd8f">NetStringEvent</a>, and <a class="el" href="class_simple_message_event.html#a5b1c12ace5e5d0e3f02e78e1986f7f1c">SimpleMessageEvent</a>.</p>
 
 </div>
 </div>
@@ -598,7 +598,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_file_chunk_event.html#aa9225bcd24da2453d29817ab4ca6907e">FileChunkEvent</a>, <a class="el" href="class_remote_command_event.html#a1cb78e77ea2a3b11697b7f4b3f17bc07">RemoteCommandEvent</a>, <a class="el" href="class_ghost_always_object_event.html#a0e3151e50eb3b2de658093dc3c580f49">GhostAlwaysObjectEvent</a>, <a class="el" href="class_file_download_request_event.html#aa9225bcd24da2453d29817ab4ca6907e">FileDownloadRequestEvent</a>, <a class="el" href="class_connection_message_event.html#a60260bf7f30d0983c95cd452f03b7e55">ConnectionMessageEvent</a>, <a class="el" href="class_net_string_event.html#aa9225bcd24da2453d29817ab4ca6907e">NetStringEvent</a>, and <a class="el" href="class_simple_message_event.html#aa9225bcd24da2453d29817ab4ca6907e">SimpleMessageEvent</a>.</p>
+<p>Implemented in <a class="el" href="class_file_chunk_event.html#aa9225bcd24da2453d29817ab4ca6907e">FileChunkEvent</a>, <a class="el" href="class_remote_command_event.html#a1cb78e77ea2a3b11697b7f4b3f17bc07">RemoteCommandEvent</a>, <a class="el" href="class_ghost_always_object_event.html#a0e3151e50eb3b2de658093dc3c580f49">GhostAlwaysObjectEvent</a>, <a class="el" href="class_connection_message_event.html#a60260bf7f30d0983c95cd452f03b7e55">ConnectionMessageEvent</a>, <a class="el" href="class_file_download_request_event.html#aa9225bcd24da2453d29817ab4ca6907e">FileDownloadRequestEvent</a>, <a class="el" href="class_net_string_event.html#aa9225bcd24da2453d29817ab4ca6907e">NetStringEvent</a>, and <a class="el" href="class_simple_message_event.html#aa9225bcd24da2453d29817ab4ca6907e">SimpleMessageEvent</a>.</p>
 
 </div>
 </div>
@@ -634,12 +634,12 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_file_chunk_event.html#a3323c7657fcc24d36adcd36032fac056">FileChunkEvent</a>, <a class="el" href="class_remote_command_event.html#a1a3acd950994febea923af0d5b6849c7">RemoteCommandEvent</a>, <a class="el" href="class_ghost_always_object_event.html#a84445768099405cd75ff155a88c6dbd6">GhostAlwaysObjectEvent</a>, <a class="el" href="class_file_download_request_event.html#a3323c7657fcc24d36adcd36032fac056">FileDownloadRequestEvent</a>, <a class="el" href="class_connection_message_event.html#a034ab7d148852210380b90ffe3daf5c9">ConnectionMessageEvent</a>, <a class="el" href="class_simple_message_event.html#a3323c7657fcc24d36adcd36032fac056">SimpleMessageEvent</a>, and <a class="el" href="class_net_string_event.html#a3323c7657fcc24d36adcd36032fac056">NetStringEvent</a>.</p>
+<p>Implemented in <a class="el" href="class_file_chunk_event.html#a3323c7657fcc24d36adcd36032fac056">FileChunkEvent</a>, <a class="el" href="class_remote_command_event.html#a1a3acd950994febea923af0d5b6849c7">RemoteCommandEvent</a>, <a class="el" href="class_connection_message_event.html#a034ab7d148852210380b90ffe3daf5c9">ConnectionMessageEvent</a>, <a class="el" href="class_ghost_always_object_event.html#a84445768099405cd75ff155a88c6dbd6">GhostAlwaysObjectEvent</a>, <a class="el" href="class_file_download_request_event.html#a3323c7657fcc24d36adcd36032fac056">FileDownloadRequestEvent</a>, <a class="el" href="class_simple_message_event.html#a3323c7657fcc24d36adcd36032fac056">SimpleMessageEvent</a>, and <a class="el" href="class_net_string_event.html#a3323c7657fcc24d36adcd36032fac056">NetStringEvent</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="af73255357855a4d08f543c98c32cdda3"></a>
+<a class="anchor" id="ad60617958b76fe255681098106b63261"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">

@@ -121,10 +121,10 @@ Message Queue Management</h2></td></tr>
 <tr class="memitem:ga20cc5c36744cd94eca902c6acb2229fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__msgsys.html#ga20cc5c36744cd94eca902c6acb2229fd">unregisterMessageQueue</a> (const char *name)</td></tr>
 <tr class="memdesc:ga20cc5c36744cd94eca902c6acb2229fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unregister a message queue.  <a href="#ga20cc5c36744cd94eca902c6acb2229fd">More...</a><br/></td></tr>
 <tr class="separator:ga20cc5c36744cd94eca902c6acb2229fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga127b637fdd313e225e4343dd463aa3a1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__msgsys.html#ga127b637fdd313e225e4343dd463aa3a1">registerMessageListener</a> (const char *queue, <a class="el" href="class_dispatcher_1_1_i_message_listener.html">IMessageListener</a> *listener)</td></tr>
+<tr class="memitem:ga127b637fdd313e225e4343dd463aa3a1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__msgsys.html#ga127b637fdd313e225e4343dd463aa3a1">registerMessageListener</a> (const char *queue, IMessageListener *listener)</td></tr>
 <tr class="memdesc:ga127b637fdd313e225e4343dd463aa3a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a listener with a queue to receive messages.  <a href="#ga127b637fdd313e225e4343dd463aa3a1">More...</a><br/></td></tr>
 <tr class="separator:ga127b637fdd313e225e4343dd463aa3a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga755f0ac1a6c41778ab98a0226cd74bd6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__msgsys.html#ga755f0ac1a6c41778ab98a0226cd74bd6">unregisterMessageListener</a> (const char *queue, <a class="el" href="class_dispatcher_1_1_i_message_listener.html">IMessageListener</a> *listener)</td></tr>
+<tr class="memitem:ga755f0ac1a6c41778ab98a0226cd74bd6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__msgsys.html#ga755f0ac1a6c41778ab98a0226cd74bd6">unregisterMessageListener</a> (const char *queue, IMessageListener *listener)</td></tr>
 <tr class="memdesc:ga755f0ac1a6c41778ab98a0226cd74bd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unregister a listener with a queue.  <a href="#ga755f0ac1a6c41778ab98a0226cd74bd6">More...</a><br/></td></tr>
 <tr class="separator:ga755f0ac1a6c41778ab98a0226cd74bd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -145,7 +145,7 @@ Internal Functions</h2></td></tr>
 <tr class="memitem:ga418d1a0f7116a1018baab4559f73361d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__msgsys.html#ga418d1a0f7116a1018baab4559f73361d">unlockDispatcherMutex</a> ()</td></tr>
 <tr class="memdesc:ga418d1a0f7116a1018baab4559f73361d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal function: Unlock the dispatcher mutex.  <a href="#ga418d1a0f7116a1018baab4559f73361d">More...</a><br/></td></tr>
 <tr class="separator:ga418d1a0f7116a1018baab4559f73361d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gacca04c368d0821de2c0c2e88a5e38b1d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_dispatcher_1_1_message_queue.html">MessageQueue</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__msgsys.html#gacca04c368d0821de2c0c2e88a5e38b1d">getMessageQueue</a> (const char *name)</td></tr>
+<tr class="memitem:gacca04c368d0821de2c0c2e88a5e38b1d"><td class="memItemLeft" align="right" valign="top">MessageQueue *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__msgsys.html#gacca04c368d0821de2c0c2e88a5e38b1d">getMessageQueue</a> (const char *name)</td></tr>
 <tr class="memdesc:gacca04c368d0821de2c0c2e88a5e38b1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal function: obtain message queue. <a class="el" href="namespace_dispatcher.html" title="Namespace for the message dispatcher functions.">Dispatcher</a> mutex must be locked.  <a href="#gacca04c368d0821de2c0c2e88a5e38b1d">More...</a><br/></td></tr>
 <tr class="separator:gacca04c368d0821de2c0c2e88a5e38b1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -238,7 +238,7 @@ Internal Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_dispatcher_1_1_message_queue.html">MessageQueue</a> * getMessageQueue </td>
+          <td class="memname">MessageQueue * getMessageQueue </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em></td><td>)</td>
@@ -317,7 +317,7 @@ Internal Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="class_dispatcher_1_1_i_message_listener.html">IMessageListener</a> *&#160;</td>
+          <td class="paramtype">IMessageListener *&#160;</td>
           <td class="paramname"><em>listener</em>&#160;</td>
         </tr>
         <tr>
@@ -397,7 +397,7 @@ Internal Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="class_dispatcher_1_1_i_message_listener.html">IMessageListener</a> *&#160;</td>
+          <td class="paramtype">IMessageListener *&#160;</td>
           <td class="paramname"><em>listener</em>&#160;</td>
         </tr>
         <tr>

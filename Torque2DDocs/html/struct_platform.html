@@ -161,8 +161,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a0d7673b7bdd539ae0bcf82e737bf627a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01195b3b09df0e08c5044393ad720c4d"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_platform.html#a01195b3b09df0e08c5044393ad720c4d">AlertYesNo</a> (const char *windowTitle, const char *message)</td></tr>
 <tr class="separator:a01195b3b09df0e08c5044393ad720c4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85ccf9908e82adbbcba00398be264e2e"><td class="memItemLeft" align="right" valign="top">static S32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_platform.html#a85ccf9908e82adbbcba00398be264e2e">messageBox</a> (const UTF8 *title, const UTF8 *message, MBButtons buttons=MBOkCancel, MBIcons icon=MIInformation)</td></tr>
-<tr class="separator:a85ccf9908e82adbbcba00398be264e2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef06f89b678e6fe013312c9db06c3576"><td class="memItemLeft" align="right" valign="top">static S32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_platform.html#aef06f89b678e6fe013312c9db06c3576">messageBox</a> (const UTF8 *title, const UTF8 *message, MBButtons buttons=MBOkCancel, MBIcons icon=MIInformation)</td></tr>
+<tr class="separator:aef06f89b678e6fe013312c9db06c3576"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1e6cbe0848ab367a3ab68fc48fe3bb5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_platform.html#ac1e6cbe0848ab367a3ab68fc48fe3bb5">enableKeyboardTranslation</a> (void)</td></tr>
 <tr class="memdesc:ac1e6cbe0848ab367a3ab68fc48fe3bb5"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_input.html">Input</a>.  <a href="#ac1e6cbe0848ab367a3ab68fc48fe3bb5">More...</a><br/></td></tr>
 <tr class="separator:ac1e6cbe0848ab367a3ab68fc48fe3bb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1692,7 +1692,9 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">{</div>
+<div class="line">   <span class="keywordtype">char</span>* argBuffer = <a class="code" href="namespace_con.html#a561915e6ebb649c6bac00b80f8b42cc3">Con::getArgBuffer</a>( 512 )</div>
+</div><!-- fragment -->
 </div>
 </div>
 <a class="anchor" id="ae27ac36766dcf595e2d8ca612903a79f"></a>
@@ -1729,7 +1731,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a85ccf9908e82adbbcba00398be264e2e"></a>
+<a class="anchor" id="aef06f89b678e6fe013312c9db06c3576"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1737,7 +1739,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static S32 messageBox </td>
+          <td class="memname">return messageBox </td>
           <td>(</td>
           <td class="paramtype">const UTF8 *&#160;</td>
           <td class="paramname"><em>title</em>, </td>
@@ -2253,6 +2255,8 @@ Static Public Member Functions</h2></td></tr>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
 <li>platform/platform.h</li>
+<li>gui/buttons/guiIconButtonCtrl.cc</li>
+<li>platform/nativeDialogs/msgBox.cpp</li>
 <li>platform/platform.cc</li>
 <li>platform/platformFileIO.cc</li>
 </ul>

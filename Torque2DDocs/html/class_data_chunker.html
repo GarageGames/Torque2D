@@ -111,9 +111,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a5d76b81b0ad4c19007a781d4edb8181f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="class_data_chunker.html#a5d76b81b0ad4c19007a781d4edb8181fa17e1ab25153a0fabd539711c47c597d8">ChunkSize</a> = 16376
+<tr class="memitem:a7ff5f2dff38e7639981794c43dc9167b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="class_data_chunker.html#a7ff5f2dff38e7639981794c43dc9167ba17e1ab25153a0fabd539711c47c597d8">ChunkSize</a> = 16376
  }</td></tr>
-<tr class="separator:a5d76b81b0ad4c19007a781d4edb8181f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a7ff5f2dff38e7639981794c43dc9167b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -121,7 +121,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a99e47e550f3480716bd55ed1a753d122"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a989f98a1855675d2eba4f0dbb22a83ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_data_chunker.html#a989f98a1855675d2eba4f0dbb22a83ec">freeBlocks</a> ()</td></tr>
 <tr class="separator:a989f98a1855675d2eba4f0dbb22a83ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad387eebcb0aa7a6286a5c0058c57ed47"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_data_chunker.html#ad387eebcb0aa7a6286a5c0058c57ed47">DataChunker</a> (S32 size=<a class="el" href="class_data_chunker.html#a5d76b81b0ad4c19007a781d4edb8181fa17e1ab25153a0fabd539711c47c597d8">ChunkSize</a>)</td></tr>
+<tr class="memitem:ad387eebcb0aa7a6286a5c0058c57ed47"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_data_chunker.html#ad387eebcb0aa7a6286a5c0058c57ed47">DataChunker</a> (S32 size=<a class="el" href="class_data_chunker.html#a7ff5f2dff38e7639981794c43dc9167ba17e1ab25153a0fabd539711c47c597d8">ChunkSize</a>)</td></tr>
 <tr class="separator:ad387eebcb0aa7a6286a5c0058c57ed47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7520d8bae2ccbcc5243bb3cbde2b7ef2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_data_chunker.html#a7520d8bae2ccbcc5243bb3cbde2b7ef2">~DataChunker</a> ()</td></tr>
 <tr class="separator:a7520d8bae2ccbcc5243bb3cbde2b7ef2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,7 +132,7 @@ Public Member Functions</h2></td></tr>
 <p>It will assert if you try to get more than ChunkSize bytes at a time, and it deals with the logic of allocating new blocks and giving out word-aligned chunks.</p>
 <p>Note that new/free/realloc WILL NOT WORK on memory gotten from the <a class="el" href="class_data_chunker.html">DataChunker</a>. This also only grows (you can call freeBlocks to deallocate and reset things). </p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
-<a class="anchor" id="a5d76b81b0ad4c19007a781d4edb8181f"></a>
+<a class="anchor" id="a7ff5f2dff38e7639981794c43dc9167b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -142,7 +142,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a5d76b81b0ad4c19007a781d4edb8181fa17e1ab25153a0fabd539711c47c597d8"></a>ChunkSize</em>&nbsp;</td><td class="fielddoc">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a7ff5f2dff38e7639981794c43dc9167ba17e1ab25153a0fabd539711c47c597d8"></a>ChunkSize</em>&nbsp;</td><td class="fielddoc">
 <p>Default size for chunks. </p>
 </td></tr>
 </table>
@@ -158,7 +158,7 @@ Public Member Functions</h2></td></tr>
           <td class="memname"><a class="el" href="class_data_chunker.html">DataChunker</a> </td>
           <td>(</td>
           <td class="paramtype">S32&#160;</td>
-          <td class="paramname"><em>size</em> = <code><a class="el" href="class_data_chunker.html#a5d76b81b0ad4c19007a781d4edb8181fa17e1ab25153a0fabd539711c47c597d8">ChunkSize</a></code></td><td>)</td>
+          <td class="paramname"><em>size</em> = <code><a class="el" href="class_data_chunker.html#a7ff5f2dff38e7639981794c43dc9167ba17e1ab25153a0fabd539711c47c597d8">ChunkSize</a></code></td><td>)</td>
           <td></td>
         </tr>
       </table>

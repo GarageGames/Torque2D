@@ -26,7 +26,7 @@ var searchData=
   ['mergeon',['MergeOn',['../class_p_n_g_image.html#a7f1cde6cd0e3881da2628184e2007296',1,'PNGImage']]],
   ['mergescene',['mergeScene',['../class_scene.html#afad59f1be8affd7422852b95c892fbf4',1,'Scene']]],
   ['message',['message',['../class_platform_assert.html#a1d36b5340bc144ef87407a88c90f2136',1,'PlatformAssert::message()'],['../class_message.html#af1991e0448f9277f0939d142e4aa2c94',1,'Message::Message()']]],
-  ['messagebox',['messageBox',['../struct_platform.html#a85ccf9908e82adbbcba00398be264e2e',1,'Platform']]],
+  ['messagebox',['messageBox',['../struct_platform.html#aef06f89b678e6fe013312c9db06c3576',1,'Platform']]],
   ['messageforwarder',['MessageForwarder',['../class_message_forwarder.html#a8e5d3124e01147ee26c7cb63ed6a9c0b',1,'MessageForwarder']]],
   ['messagequeue',['MessageQueue',['../struct_dispatcher_1_1_message_queue.html#abac5e32a48752ef04c0ed2a836026733',1,'Dispatcher::MessageQueue']]],
   ['messagesiblings',['messageSiblings',['../class_gui_control.html#ac3d86386daa1ce2c573292a7f7c19b60',1,'GuiControl']]],

@@ -111,7 +111,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><span class="keywordtype">bool</span> read(type* out_read) {                     \</div>
-<div class="line">      type temp;                                   \</div>
+<div class="line">      type <a class="code" href="group___network_functions.html#ga5a270ab4e9852d44cee9879187469a51">temp</a>;                                   \</div>
 <div class="line">      bool success = read(<span class="keyword">sizeof</span>(type), &amp;temp);    \</div>
 <div class="line">      *out_read = convertLEndianToHost(temp);      \</div>
 <div class="line">      return success;                              \</div>
@@ -133,7 +133,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><span class="keywordtype">bool</span> write(type in_write) {                     \</div>
-<div class="line">      type temp = convertHostToLEndian(in_write);  \</div>
+<div class="line">      type <a class="code" href="group___network_functions.html#ga5a270ab4e9852d44cee9879187469a51">temp</a> = convertHostToLEndian(in_write);  \</div>
 <div class="line">      return write(<span class="keyword">sizeof</span>(type), &amp;temp);           \</div>
 <div class="line">   }</div>
 </div><!-- fragment -->

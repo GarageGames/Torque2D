@@ -2,7 +2,7 @@ var searchData=
 [
   ['datecompression',['DateCompression',['../group__zipint__group.html#gga2d1c84f42aba1a9a70afe0d6f30ca91ca73f255796fc1b24652126aab1eab6024',1,'Zip']]],
   ['dead',['Dead',['../class_texture_manager.html#accf3352e7656cb155abd0b2c76d96ca3a2f872369e520d046b46b7cd0b49b1882',1,'TextureManager']]],
-  ['dedicated',['Dedicated',['../struct_server_filter.html#a96a58e29e8dbf2b5bdeb775cba46556ea6e32e8ef9a95c3a15c82f1918b465e6a',1,'ServerFilter']]],
+  ['dedicated',['Dedicated',['../struct_server_filter.html#a4790f45dcc812c1b00184a2edccdddf5a6e32e8ef9a95c3a15c82f1918b465e6a',1,'ServerFilter']]],
   ['default',['Default',['../class_gui_tree_view_ctrl.html#a8ae68d9ad47833a98bc33ab36897040fa79935518a3889663d8688b6b01fff051',1,'GuiTreeViewCtrl']]],
   ['default1',['Default1',['../class_gui_tree_view_ctrl.html#a8ae68d9ad47833a98bc33ab36897040fabbda4e985602cb75b610a99767963adb',1,'GuiTreeViewCtrl']]],
   ['default_5fborder_5fwidth',['DEFAULT_BORDER_WIDTH',['../class_gui_frame_set_ctrl.html#ac36f475ca5b446f4fde4c9b90bec77c8a137b1f8b3b63d6ca9715e71b36228365',1,'GuiFrameSetCtrl']]],

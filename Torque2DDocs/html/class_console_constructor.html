@@ -148,9 +148,9 @@ ConsoleConstructer Innards</h2></td></tr>
 <div class="line">ConsoleFunction(ExpandPath, <span class="keyword">const</span> <span class="keywordtype">char</span>*, 2, 2, <span class="stringliteral">&quot;(string filePath)&quot;</span>)</div>
 <div class="line">{</div>
 <div class="line">   argc;</div>
-<div class="line">   <span class="keywordtype">char</span>* ret = <a class="code" href="namespace_con.html#ab0583ba59217e586cf79446c95bbed3a">Con::getReturnBuffer</a>( 1024 );</div>
+<div class="line">   <span class="keywordtype">char</span>* <a class="code" href="group___telnet_debugger_functions.html#ga339672ff94e6199019102f50d317c3d7">ret</a> = <a class="code" href="namespace_con.html#ab0583ba59217e586cf79446c95bbed3a">Con::getReturnBuffer</a>( 1024 );</div>
 <div class="line">   <a class="code" href="namespace_con.html#ade40cc27b73661f1d997107a00baae6b">Con::expandPath</a>(ret, 1024, argv[1]);</div>
-<div class="line">   <span class="keywordflow">return</span> ret;</div>
+<div class="line">   <span class="keywordflow">return</span> <a class="code" href="group___telnet_debugger_functions.html#ga339672ff94e6199019102f50d317c3d7">ret</a>;</div>
 <div class="line">}</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Resulting code</span></div>
@@ -161,9 +161,9 @@ ConsoleConstructer Innards</h2></td></tr>
 <div class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* cExpandPath(<a class="code" href="class_sim_object.html">SimObject</a> *, S32 argc, <span class="keyword">const</span> <span class="keywordtype">char</span> **argv)</div>
 <div class="line">{</div>
 <div class="line">   argc;</div>
-<div class="line">   <span class="keywordtype">char</span>* ret = <a class="code" href="namespace_con.html#ab0583ba59217e586cf79446c95bbed3a">Con::getReturnBuffer</a>( 1024 );</div>
+<div class="line">   <span class="keywordtype">char</span>* <a class="code" href="group___telnet_debugger_functions.html#ga339672ff94e6199019102f50d317c3d7">ret</a> = <a class="code" href="namespace_con.html#ab0583ba59217e586cf79446c95bbed3a">Con::getReturnBuffer</a>( 1024 );</div>
 <div class="line">   <a class="code" href="namespace_con.html#ade40cc27b73661f1d997107a00baae6b">Con::expandPath</a>(ret, 1024, argv[1]);</div>
-<div class="line">   <span class="keywordflow">return</span> ret;</div>
+<div class="line">   <span class="keywordflow">return</span> <a class="code" href="group___telnet_debugger_functions.html#ga339672ff94e6199019102f50d317c3d7">ret</a>;</div>
 <div class="line">}</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// A similar thing happens when you do a ConsoleMethod.</span></div>
