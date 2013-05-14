@@ -80,7 +80,7 @@ bool SpriteBatchQuery::update( SpriteBatchItem* pSpriteBatchItem, const b2AABB& 
 }
 
 //-----------------------------------------------------------------------------
-
+	
 U32 SpriteBatchQuery::queryArea( const b2AABB& aabb, const bool targetOOBB )
 {
     // Debug Profiling.
@@ -98,6 +98,7 @@ U32 SpriteBatchQuery::queryArea( const b2AABB& aabb, const bool targetOOBB )
     verts[2].Set( aabb.upperBound.x, aabb.upperBound.y );
     verts[3].Set( aabb.lowerBound.x, aabb.upperBound.y );
     mComparePolygonShape.Set( verts, 4 );
+
     mCompareTransform.SetIdentity();
     mCheckOOBB = targetOOBB;
     Query( this, aabb );
@@ -195,7 +196,7 @@ bool SpriteBatchQuery::QueryCallback( S32 proxyId )
     {
             // Fetch the shapes render OOBB.
         b2PolygonShape oobb;
-        oobb.Set( pSpriteBatchItem->getRenderOOBB(), 4);
+		oobb.Set( pSpriteBatchItem->getLocalOOBB(), 4);
 
         if ( mCheckPoint )
         {
@@ -203,8 +204,8 @@ bool SpriteBatchQuery::QueryCallback( S32 proxyId )
                 return true;
         }
         else
-        {
-            if ( !b2TestOverlap( &mComparePolygonShape, 0, &oobb, 0, mCompareTransform, mCompareTransform ) )
+        {			
+			if ( !b2TestOverlap( &mComparePolygonShape, 0, &oobb, 0, mCompareTransform, mCompareTransform ) )
                 return true;
         }
     }

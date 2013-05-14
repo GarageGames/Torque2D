@@ -1036,10 +1036,18 @@ ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y )
     aabb.upperBound.y = getMax( v1.y, v2.y );
 
     // Rotate the AABB into local space.
-    CoreMath::mRotateAABB( aabb, -renderTransform.q.GetAngle(), aabb );
 
-    // Perform query.
-    pSpriteBatchQuery->queryArea( aabb, true );
+    // Convert to an OOBB with the specified offset.
+    b2Vec2 localOOBB[4];
+	CoreMath::mAABBtoOOBB( aabb, localOOBB );
+
+	// Rotate the OOBB.
+	CoreMath::mCalculateOOBB( localOOBB, b2Transform(-renderTransform.p, b2Rot(-renderTransform.q.GetAngle())), localOOBB );
+	
+	// Perform query.	
+	//pSpriteBatchQuery->queryRotatedArea(aabb, true, poly, renderTransform);
+	pSpriteBatchQuery->queryArea(aabb, true);
+	/////////////////////////////////////////
 
     // Fetch result count.
     const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
@@ -1151,6 +1159,7 @@ ConsoleMethod(CompositeSprite, pickRay, const char*, 4, 6,  "(startx/y, endx/y) 
     // Transform into local space.
     v1 = b2MulT( renderTransform, v1 );
     v2 = b2MulT( renderTransform, v2 );
+
 
     // Perform query.
     pSpriteBatchQuery->queryRay( v1, v2, true );

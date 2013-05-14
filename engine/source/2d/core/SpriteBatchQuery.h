@@ -49,7 +49,7 @@ public:
     bool            update( SpriteBatchItem* pSpriteBatchItem, const b2AABB& aabb, const b2Vec2& displacement );
 
     //// Spatial queries.
-    U32             queryArea( const b2AABB& aabb, const bool targetOOBB );
+    U32             queryArea( const b2AABB& aabb, const bool targetOOBB );	
     U32             queryRay( const Vector2& point1, const Vector2& point2, const bool targetOOBB );
     U32             queryPoint( const Vector2& point, const bool targetOOBB );
  
