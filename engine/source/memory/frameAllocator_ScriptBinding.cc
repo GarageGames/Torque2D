@@ -20,56 +20,27 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#include "consoleExprEvalState.h"
-#include "consoleNamespace.h"
-
-#include "platform/platform.h"
+#include "frameAllocator.h"
 #include "console/console.h"
 
-#include "console/ast.h"
-#include "collection/findIterator.h"
-#include "io/resource/resourceManager.h"
+U8*   FrameAllocator::smBuffer = NULL;
+U32   FrameAllocator::smWaterMark = 0;
+U32   FrameAllocator::smHighWaterMark = 0;
 
-#include "string/findMatch.h"
-#include "io/fileStream.h"
-#include "console/compiler.h"
+#if defined(TORQUE_DEBUG)
 
-#include "consoleExprEvalState_ScriptBinding.h"
+/*! @defgroup MemoryFrameAllocation Memory Frames
+	@ingroup TorqueScriptFunctions
+	@{
+*/
 
-extern ExprEvalState gEvalState;
-
-void ExprEvalState::pushFrame(StringTableEntry frameName, Namespace *ns)
+/*!
+*/
+ConsoleFunctionWithDocs(getMaxFrameAllocation, S32, 1,1, ())
 {
-   Dictionary *newFrame = new Dictionary(this);
-   newFrame->scopeName = frameName;
-   newFrame->scopeNamespace = ns;
-   stack.push_back(newFrame);
+   return sgMaxFrameAllocation;
 }
 
-void ExprEvalState::popFrame()
-{
-   Dictionary *last = stack.last();
-   stack.pop_back();
-   delete last;
-}
+/*! @} */ // end group MemoryFrameAllocation
 
-void ExprEvalState::pushFrameRef(S32 stackIndex)
-{
-   AssertFatal( stackIndex >= 0 && stackIndex < stack.size(), "You must be asking for a valid frame!" );
-   Dictionary *newFrame = new Dictionary(this, stack[stackIndex]);
-   stack.push_back(newFrame);
-}
-
-ExprEvalState::ExprEvalState()
-{
-   VECTOR_SET_ASSOCIATION(stack);
-   globalVars.setState(this);
-   thisObject = NULL;
-   traceOn = false;
-}
-
-ExprEvalState::~ExprEvalState()
-{
-   while(stack.size())
-      popFrame();
-}
+#endif

@@ -28,6 +28,8 @@
 #include "math/mRandom.h"
 #include "game/gameInterface.h"
 
+#include "netInterface_ScriptBinding.h"
+
 NetInterface *GNet = NULL;
 
 NetInterface::NetInterface()
@@ -627,15 +629,3 @@ void NetInterface::computeNetMD5(const NetAddress *address, U32 connectSequence,
     digest[2]+=c;
     digest[3]+=d;
 }
-
-ConsoleFunctionGroupBegin(NetInterface, "Global control functions for the netInterfaces.");
-
-ConsoleFunction(allowConnections,void,2,2,"( enable ) Use the allowConnections to enable (or disable) remote connections to the local game server.\n"
-                                                                "@param enable A boolean value enabling, or disabling connections to the local server.\n"
-                                                                "@return No return value")
-{
-   GNet->setAllowsConnections(dAtob(argv[1]));
-}
-
-ConsoleFunctionGroupEnd(NetInterface);
-

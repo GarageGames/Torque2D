@@ -20,29 +20,18 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _CONSOLE_H_
-#include "console/console.h"
-#endif
+extern bool gLogToConsole;
 
-#ifndef _PLATFORM_NETWORK_H_
-#include "platformNetwork.h"
-#endif
+/*! @defgroup NetLogging Network Logging
+	@ingroup TorqueScriptFunctions
+	@{
+*/
 
-//-----------------------------------------------------------------------------
-
-ConsoleFunction( setNetPort, bool, 2, 2, "(int port)"
-                "Set the network port for the game to use.\n"
-                "@param The requested port as an integer\n"
-                "@return Returns true on success, false on fail")
+/*!
+*/
+ConsoleFunctionWithDocs(DNetSetLogging, void, 2, 2, (bool enabled))
 {
-    return Net::openPort(dAtoi(argv[1]));
+   gLogToConsole = dAtob(argv[1]);
 }
 
-//-----------------------------------------------------------------------------
-
-ConsoleFunction( closeNetPort, void, 1, 1, "()"
-   "@brief Closes the current network port\n\n"
-   "@ingroup Networking")
-{
-   Net::closePort();
-}
+/*! @} */ // group NetLogging

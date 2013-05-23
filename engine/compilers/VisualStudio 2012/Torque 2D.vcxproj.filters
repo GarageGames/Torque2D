@@ -945,9 +945,6 @@
     <ClCompile Include="..\..\source\memory\dataChunker.cc">
       <Filter>memory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\memory\frameAllocator.cc">
-      <Filter>memory</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\algorithm\crc.cc">
       <Filter>algorithm</Filter>
     </ClCompile>
@@ -1206,9 +1203,6 @@
     <ClCompile Include="..\..\source\platform\platformFont.cc">
       <Filter>platform</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\platform\platformNetwork.cc">
-      <Filter>platform</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\network\networkProcessList.cc">
       <Filter>network</Filter>
     </ClCompile>
@@ -1334,6 +1328,12 @@
     </ClCompile>
     <ClCompile Include="..\..\source\math\math_ScriptBinding.cc">
       <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\platform\platformNetwork_ScriptBinding.cc">
+      <Filter>platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\memory\frameAllocator_ScriptBinding.cc">
+      <Filter>memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2904,6 +2904,66 @@
       <Filter>graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\torqueConfig.h" />
+    <ClInclude Include="..\..\source\platformWin32\cardProfile_ScriptBinding.h">
+      <Filter>platformWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\connectionProtocol_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\consoleExprEvalState_ScriptBinding.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\taggedStrings_ScriptBinding.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\inputManagement_ScriptBinding.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platform\CursorManager_ScriptBinding.h">
+      <Filter>platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\graphics\dgl_ScriptBinding.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\graphics\dglMac_Scriptbinding.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platformWin32\winOGLVideo_ScriptBinding.h">
+      <Filter>platformWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platformWin32\winInput_ScriptBinding.h">
+      <Filter>platformWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\core\Utility_ScriptBinding.h">
+      <Filter>2d\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platformWin32\winExec_ScriptBinding.h">
+      <Filter>platformWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platformWin32\winGLSpecial_ScriptBinding.h">
+      <Filter>platformWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platformWin32\winConsole_ScriptBinding.h">
+      <Filter>platformWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\netInterface_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\netStringTable_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\telnetConsole_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\testing\unitTesting_ScriptBinding.h">
+      <Filter>testing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platform\nativeDialogs\msgBox_ScriptBinding.h">
+      <Filter>platform\nativeDialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\sim\simDatablock_ScriptBinding.h">
+      <Filter>sim</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\math\mMath_ASM.asm">

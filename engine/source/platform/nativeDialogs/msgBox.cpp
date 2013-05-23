@@ -25,6 +25,8 @@
 
 #include "platform/nativeDialogs/msgBox.h"
 
+#include "msgBox_ScriptBinding.h"
+
 // these are the return values for message box dialog buttons
 void initMessageBoxVars()
 {
@@ -66,24 +68,4 @@ static S32 getIDFromName(EnumTable::Enums *table, const char *name, S32 def = -1
    }
    AssertWarn(false,"getIDFromName(): didn't find that name" );
    return def;
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-ConsoleFunction(messageBox, S32, 3, 5, "(title, message[, buttons[, icon]]) Pops up a message box\n"
-				"@param title The message box's title to display\n"
-				"@param message The message to display in the box\n"
-				"@param buttons The buttons to include on box (default MBOkCancel)\n"
-				"@param icon The displayed icon (default MIInformation)\n"
-				"@return Returns the ID of the box")
-{
-   S32 btns = MBOkCancel;
-   S32 icns = MIInformation;
-   
-   if(argc > 3)
-      btns = getIDFromName(sgButtonEnums, argv[3], btns);
-   if(argc > 4)
-      icns = getIDFromName(sgIconEnums, argv[4], icns);
-
-   return Platform::messageBox(argv[1], argv[2], (MBButtons)btns, (MBIcons)icns);
 }

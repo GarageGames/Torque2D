@@ -20,18 +20,51 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#include "frameAllocator.h"
-#include "console/console.h"
+#ifndef TORQUE_SHIPPING
 
-U8*   FrameAllocator::smBuffer = NULL;
-U32   FrameAllocator::smWaterMark = 0;
-U32   FrameAllocator::smHighWaterMark = 0;
+/*! @defgroup UnitTesting Unit Testing
+	@ingroup TorqueScriptFunctions
+	@{
+*/
 
-#if defined(TORQUE_DEBUG)
-
-ConsoleFunction(getMaxFrameAllocation, S32, 1,1, "getMaxFrameAllocation();")
+/*! Runs all the registered unit tests.
+*/
+ConsoleFunctionWithDocs( runAllUnitTests, S32, 1, 1, () )
 {
-   return sgMaxFrameAllocation;
+    // Set-up some empty arguments.
+    S32 testArgc = 0;
+    char** testArgv = NULL;
+
+    // Initialize Google Test.
+    testing::InitGoogleTest( &testArgc, testArgv );
+
+    // Fetch the unit test instance.
+    testing::UnitTest& unitTest = *testing::UnitTest::GetInstance();
+
+    // Fetch the unit test event listeners.
+    testing::TestEventListeners& listeners = unitTest.listeners();
+
+    // Release the default listener.
+    delete listeners.Release( listeners.default_result_printer() );
+
+    // Add the Torque unit test listener.
+    listeners.Append( new TorqueUnitTestListener );
+
+    Con::printBlankLine();
+    Con::printSeparator();
+    Con::printf( "Unit Tests Starting..." );
+    Con::printBlankLine();
+
+    const S32 result RUN_ALL_TESTS();
+
+    Con::printBlankLine();
+    Con::printf( "... Unit Tests Ended." );
+    Con::printSeparator();
+    Con::printBlankLine();
+
+    return result;
 }
 
-#endif
+/*! @} */ // end group UnitTesting
+
+#endif // TORQUE_SHIPPING

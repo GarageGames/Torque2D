@@ -437,7 +437,7 @@
     <ClCompile Include="..\..\source\math\math_ScriptBinding.cc" />
     <ClCompile Include="..\..\source\math\rectClipper.cpp" />
     <ClCompile Include="..\..\source\memory\dataChunker.cc" />
-    <ClCompile Include="..\..\source\memory\frameAllocator.cc" />
+    <ClCompile Include="..\..\source\memory\frameAllocator_ScriptBinding.cc" />
     <ClCompile Include="..\..\source\messaging\dispatcher.cc" />
     <ClCompile Include="..\..\source\messaging\eventManager.cc" />
     <ClCompile Include="..\..\source\messaging\message.cc" />
@@ -528,7 +528,7 @@
     <ClCompile Include="..\..\source\platform\platformFileIO.cc" />
     <ClCompile Include="..\..\source\platform\platformFont.cc" />
     <ClCompile Include="..\..\source\platform\platformMemory.cc" />
-    <ClCompile Include="..\..\source\platform\platformNetwork.cc" />
+    <ClCompile Include="..\..\source\platform\platformNetwork_ScriptBinding.cc" />
     <ClCompile Include="..\..\source\platform\platformString.cc" />
     <ClCompile Include="..\..\source\platform\platformVideo.cc" />
     <ClCompile Include="..\..\source\platform\menus\popupMenu.cc" />
@@ -656,6 +656,7 @@
     <ClInclude Include="..\..\source\2d\core\SpriteBatchQuery.h" />
     <ClInclude Include="..\..\source\2d\core\SpriteBatchQueryResult.h" />
     <ClInclude Include="..\..\source\2d\core\Utility.h" />
+    <ClInclude Include="..\..\source\2d\core\Utility_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\core\Vector2.h" />
     <ClInclude Include="..\..\source\2d\core\Vector2_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\experimental\composites\WaveComposite.h" />
@@ -799,13 +800,16 @@
     <ClInclude Include="..\..\source\console\consoleDictionary.h" />
     <ClInclude Include="..\..\source\console\consoleDoc_ScriptBinding.h" />
     <ClInclude Include="..\..\source\console\consoleExprEvalState.h" />
+    <ClInclude Include="..\..\source\console\consoleExprEvalState_ScriptBinding.h" />
     <ClInclude Include="..\..\source\console\consoleInternal.h" />
     <ClInclude Include="..\..\source\console\consoleLogger_ScriptBinding.h" />
     <ClInclude Include="..\..\source\console\consoleNamespace.h" />
     <ClInclude Include="..\..\source\console\consoleNamespace_ScriptBinding.h" />
     <ClInclude Include="..\..\source\console\ConsoleTypeValidators.h" />
     <ClInclude Include="..\..\source\console\expando_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\console\inputManagement_ScriptBinding.h" />
     <ClInclude Include="..\..\source\console\output_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\console\taggedStrings_ScriptBinding.h" />
     <ClInclude Include="..\..\source\debug\profiler.h" />
     <ClInclude Include="..\..\source\debug\profiler_ScriptBinding.h" />
     <ClInclude Include="..\..\source\debug\remote\RemoteDebugger1.h" />
@@ -827,6 +831,8 @@
     <ClInclude Include="..\..\source\graphics\color.h" />
     <ClInclude Include="..\..\source\graphics\color_ScriptBinding.h" />
     <ClInclude Include="..\..\source\graphics\dgl.h" />
+    <ClInclude Include="..\..\source\graphics\dglMac_Scriptbinding.h" />
+    <ClInclude Include="..\..\source\graphics\dgl_ScriptBinding.h" />
     <ClInclude Include="..\..\source\graphics\DynamicTexture.h" />
     <ClInclude Include="..\..\source\graphics\gBitmap.h" />
     <ClInclude Include="..\..\source\graphics\gFont.h" />
@@ -927,15 +933,18 @@
     <ClInclude Include="..\..\source\module\moduleMergeDefinition.h" />
     <ClInclude Include="..\..\source\module\tamlModuleIdUpdateVisitor.h" />
     <ClInclude Include="..\..\source\network\connectionProtocol.h" />
+    <ClInclude Include="..\..\source\network\connectionProtocol_ScriptBinding.h" />
     <ClInclude Include="..\..\source\network\connectionStringTable.h" />
     <ClInclude Include="..\..\source\network\httpObject.h" />
     <ClInclude Include="..\..\source\network\httpObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\network\netConnection.h" />
     <ClInclude Include="..\..\source\network\netConnection_ScriptBinding.h" />
     <ClInclude Include="..\..\source\network\netInterface.h" />
+    <ClInclude Include="..\..\source\network\netInterface_ScriptBinding.h" />
     <ClInclude Include="..\..\source\network\netObject.h" />
     <ClInclude Include="..\..\source\network\netObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\network\netStringTable.h" />
+    <ClInclude Include="..\..\source\network\netStringTable_ScriptBinding.h" />
     <ClInclude Include="..\..\source\network\networkProcessList.h" />
     <ClInclude Include="..\..\source\network\RemoteCommandEvent.h" />
     <ClInclude Include="..\..\source\network\RemoteCommandEvent_ScriptBinding.h" />
@@ -944,6 +953,7 @@
     <ClInclude Include="..\..\source\network\tcpObject.h" />
     <ClInclude Include="..\..\source\network\tcpObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\network\telnetConsole.h" />
+    <ClInclude Include="..\..\source\network\telnetConsole_ScriptBinding.h" />
     <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\allocators.h" />
     <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\document.h" />
     <ClInclude Include="..\..\source\persistence\rapidjson\include\rapidjson\encodedstream.h" />
@@ -1021,13 +1031,21 @@
     <ClInclude Include="..\..\source\math\mSphere.h" />
     <ClInclude Include="..\..\source\math\mSplinePatch.h" />
     <ClInclude Include="..\..\source\persistence\SimXMLDocument.h" />
+    <ClInclude Include="..\..\source\platformWin32\cardProfile_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\platformWin32\winConsole_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\platformWin32\winExec_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\platformWin32\winGLSpecial_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\platformWin32\winInput_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\platformWin32\winOGLVideo_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platformWin32\winWindow.h" />
+    <ClInclude Include="..\..\source\platform\CursorManager_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platform\event.h" />
     <ClInclude Include="..\..\source\platform\GLCoreFunc.h" />
     <ClInclude Include="..\..\source\platform\GLExtFunc.h" />
     <ClInclude Include="..\..\source\platform\GLUFunc.h" />
     <ClInclude Include="..\..\source\platform\menus\popupMenu_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platform\nativeDialogs\fileDialog_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\platform\nativeDialogs\msgBox_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platform\platform.h" />
     <ClInclude Include="..\..\source\platform\platformAL.h" />
     <ClInclude Include="..\..\source\platform\platformAssert.h" />
@@ -1096,6 +1114,7 @@
     <ClInclude Include="..\..\source\sim\simConsoleThreadExecEvent.h" />
     <ClInclude Include="..\..\source\sim\simDatablock.h" />
     <ClInclude Include="..\..\source\sim\simDatablockGroup.h" />
+    <ClInclude Include="..\..\source\sim\simDatablock_ScriptBinding.h" />
     <ClInclude Include="..\..\source\sim\simDictionary.h" />
     <ClInclude Include="..\..\source\sim\simEvent.h" />
     <ClInclude Include="..\..\source\sim\simFieldDictionary.h" />
@@ -1143,6 +1162,7 @@
     <ClInclude Include="..\..\source\gui\editor\guiMenuBar.h" />
     <ClInclude Include="..\..\source\gui\editor\guiSeparatorCtrl.h" />
     <ClInclude Include="..\..\source\testing\unitTesting.h" />
+    <ClInclude Include="..\..\source\testing\unitTesting_ScriptBinding.h" />
     <ClInclude Include="..\..\source\torqueConfig.h" />
   </ItemGroup>
   <ItemGroup>

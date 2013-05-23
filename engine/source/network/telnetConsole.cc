@@ -25,6 +25,8 @@
 #include "network/telnetConsole.h"
 #include "game/gameInterface.h"
 
+#include "telnetConsole_ScriptBinding.h"
+
 TelnetConsole *TelConsole = NULL;
 
 void TelnetConsole::create()
@@ -36,23 +38,6 @@ void TelnetConsole::destroy()
 {
    delete TelConsole;
    TelConsole = NULL;
-}
-
-ConsoleFunction( telnetSetParameters, void, 4, 5, "(int port, string consolePass, string listenPass)"
-                "Initialize and open the telnet console.\n\n"
-                "@param port        Port to listen on for console connections (0 will shut down listening).\n"
-                "@param consolePass Password for read/write access to console.\n"
-                "@param listenPass  Password for read access to console.\n"
-                "@param remoteEcho  [optional] Enable echoing back to the client, off by default.\n"
-        "@return No return value")
-{
-   if (TelConsole)
-   {
-      bool remoteEcho = false;
-      if( argc == 5 )
-         remoteEcho = dAtob( argv[4] );
-       TelConsole->setTelnetParameters(dAtoi(argv[1]), argv[2], argv[3], remoteEcho);
-   }
 }
 
 static void telnetCallback(ConsoleLogEntry::Level level, const char *consoleLine)
