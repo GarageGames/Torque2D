@@ -22,7 +22,7 @@
 
 extern bool gLogToConsole;
 
-/*! @defgroup NetLogging Network Logging
+/*! @addtogroup Network Network
 	@ingroup TorqueScriptFunctions
 	@{
 */
@@ -34,4 +34,4 @@ ConsoleFunctionWithDocs(DNetSetLogging, void, 2, 2, (bool enabled))
    gLogToConsole = dAtob(argv[1]);
 }
 
-/*! @} */ // group NetLogging
+/*! @} */ // group Network

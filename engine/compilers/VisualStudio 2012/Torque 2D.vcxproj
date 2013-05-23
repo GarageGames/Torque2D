@@ -1036,6 +1036,7 @@
     <ClInclude Include="..\..\source\platformWin32\winExec_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platformWin32\winGLSpecial_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platformWin32\winInput_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\platformWin32\winMath_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platformWin32\winOGLVideo_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platformWin32\winWindow.h" />
     <ClInclude Include="..\..\source\platform\CursorManager_ScriptBinding.h" />
@@ -1128,6 +1129,7 @@
     <ClInclude Include="..\..\source\sim\simSet_ScriptBinding.h" />
     <ClInclude Include="..\..\source\string\findMatch.h" />
     <ClInclude Include="..\..\source\string\stringBuffer.h" />
+    <ClInclude Include="..\..\source\string\stringBuffer_ScriptBinding.h" />
     <ClInclude Include="..\..\source\string\stringStack.h" />
     <ClInclude Include="..\..\source\string\stringTable.h" />
     <ClInclude Include="..\..\source\string\stringUnit.h" />

@@ -31,7 +31,7 @@
 	@return Returns a vector containing a three-element floating-point position vector equal to the centroid of the area defined by box
 */
 
-ConsoleFunctionWithDocs( getBoxCenter, const char*, 2, 2, (box) )
+ConsoleFunctionWithDocs( getBoxCenter, ConsoleString, 2, 2, (box) )
 {
    Box3F box;
    box.mMin.set(0,0,0);

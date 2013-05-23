@@ -20,7 +20,7 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-/*! @defgroup AssertFunctions Assert
+/*! @addtogroup ConsoleOutput Console Output
 	@ingroup TorqueScriptFunctions
 	@{
 */
@@ -36,4 +36,4 @@ ConsoleFunctionWithDocs( Assert, void, 3, 3, (condition, message) )
     AssertISV( dAtob(argv[1]), argv[2] );
 }
 
-/*! @} */ // AssertFunctions
+/*! @} */ // group ConsoleOutput
