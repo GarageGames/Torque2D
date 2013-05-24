@@ -154,6 +154,4 @@ public:
    DECLARE_CONOBJECT(RemoteCommandEvent);
 };
 
-void sendRemoteCommand(NetConnection *conn, S32 argc, const char **argv);
-
 #endif

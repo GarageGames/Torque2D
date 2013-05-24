@@ -25,8 +25,6 @@
 
 #include "platform/nativeDialogs/msgBox.h"
 
-#include "msgBox_ScriptBinding.h"
-
 // these are the return values for message box dialog buttons
 void initMessageBoxVars()
 {
@@ -69,3 +67,8 @@ static S32 getIDFromName(EnumTable::Enums *table, const char *name, S32 def = -1
    AssertWarn(false,"getIDFromName(): didn't find that name" );
    return def;
 }
+
+//-------------------------------------------------------------------------
+
+#include "msgBox_ScriptBinding.h"
+

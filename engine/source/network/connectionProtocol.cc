@@ -25,9 +25,9 @@
 #include "io/bitStream.h"
 #include "console/consoleTypes.h"
 
-#include "connectionProtocol_ScriptBinding.h"
-
 static bool gLogToConsole = false;
+
+#include "connectionProtocol_ScriptBinding.h"
 
 S32 gNetBitsReceived = 0;
 

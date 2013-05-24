@@ -20,8 +20,6 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-extern bool gLogToConsole;
-
 /*! @addtogroup Network Network
 	@ingroup TorqueScriptFunctions
 	@{

@@ -25,8 +25,6 @@
 #include "platform/event.h"
 #include "console/console.h"
 
-#include "CursorManager_ScriptBinding.h"
-
 //------------------------------------------------------------------------------
 //*** DAW: Cursor Manager Methods
 CursorManager* Input::getCursorManager()
@@ -83,3 +81,7 @@ static EnumTable::Enums curManagerShapesEnums[] =
 };
       
 static EnumTable gCurManagerShapesTable(8, &curManagerShapesEnums[0]); 
+
+//------------------------------------------------------------------------------
+
+#include "CursorManager_ScriptBinding.h"
