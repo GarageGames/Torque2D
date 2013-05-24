@@ -80,7 +80,7 @@ bool SpriteBatchQuery::update( SpriteBatchItem* pSpriteBatchItem, const b2AABB& 
 }
 
 //-----------------------------------------------------------------------------
-	
+
 U32 SpriteBatchQuery::queryArea( const b2AABB& aabb, const bool targetOOBB )
 {
     // Debug Profiling.
@@ -98,12 +98,32 @@ U32 SpriteBatchQuery::queryArea( const b2AABB& aabb, const bool targetOOBB )
     verts[2].Set( aabb.upperBound.x, aabb.upperBound.y );
     verts[3].Set( aabb.lowerBound.x, aabb.upperBound.y );
     mComparePolygonShape.Set( verts, 4 );
-
     mCompareTransform.SetIdentity();
     mCheckOOBB = targetOOBB;
     Query( this, aabb );
     mCheckOOBB = false;
 
+    return getQueryResultsCount();
+}
+
+U32 SpriteBatchQuery::queryPickedArea( b2Vec2 center, F32 angle, const b2AABB& aabb, const bool targetOOBB )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(SpriteBatchQuery_QueryArea);
+    
+    mMasterQueryKey++;
+    
+    // Flag as not a ray-cast query result.
+    mIsRaycastQueryResult = false;
+    
+    // Query.
+    mComparePolygonShape.SetAsBox(aabb.GetExtents().x/2, aabb.GetExtents().y/2, center, angle); // hax!
+    
+    mCompareTransform.SetIdentity();
+    mCheckOOBB = targetOOBB;
+    Query( this, aabb );
+    mCheckOOBB = false;
+    
     return getQueryResultsCount();
 }
 
@@ -194,9 +214,9 @@ bool SpriteBatchQuery::QueryCallback( S32 proxyId )
     // Check OOBB.
     if ( mCheckOOBB )
     {
-            // Fetch the shapes render OOBB.
+        // Fetch the shapes local OOBB.
         b2PolygonShape oobb;
-		oobb.Set( pSpriteBatchItem->getLocalOOBB(), 4);
+        oobb.Set( pSpriteBatchItem->getLocalOOBB(), 4);
 
         if ( mCheckPoint )
         {
@@ -204,8 +224,8 @@ bool SpriteBatchQuery::QueryCallback( S32 proxyId )
                 return true;
         }
         else
-        {			
-			if ( !b2TestOverlap( &mComparePolygonShape, 0, &oobb, 0, mCompareTransform, mCompareTransform ) )
+        {
+            if ( !b2TestOverlap( &mComparePolygonShape, 0, &oobb, 0, mCompareTransform, mCompareTransform ) )
                 return true;
         }
     }
@@ -236,9 +256,9 @@ F32 SpriteBatchQuery::RayCastCallback( const b2RayCastInput& input, S32 proxyId 
     // Check OOBB.
     if ( mCheckOOBB )
     {
-        // Fetch the shapes render OOBB.
+        // Fetch the shapes local OOBB.
         b2PolygonShape oobb;
-        oobb.Set( pSpriteBatchItem->getRenderOOBB(), 4);
+        oobb.Set( pSpriteBatchItem->getLocalOOBB(), 4);
         b2RayCastOutput rayOutput;
         if ( !oobb.RayCast( &rayOutput, mCompareRay, mCompareTransform, 0 ) )
             return true;

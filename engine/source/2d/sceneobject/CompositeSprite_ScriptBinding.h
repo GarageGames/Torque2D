@@ -1021,33 +1021,28 @@ ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y )
         return NULL;
     }
 
-    // Fetch the render transform.
-    const b2Transform& renderTransform = object->getRenderTransform();
-    
-    // Translate into local space.
-    v1 -= renderTransform.p;
-    v2 -= renderTransform.p;
-
     // Calculate normalized AABB.
     b2AABB aabb;
     aabb.lowerBound.x = getMin( v1.x, v2.x );
     aabb.lowerBound.y = getMin( v1.y, v2.y );
     aabb.upperBound.x = getMax( v1.x, v2.x );
     aabb.upperBound.y = getMax( v1.y, v2.y );
-
-    // Rotate the AABB into local space.
-
-    // Convert to an OOBB with the specified offset.
-    b2Vec2 localOOBB[4];
-	CoreMath::mAABBtoOOBB( aabb, localOOBB );
-
-	// Rotate the OOBB.
-	CoreMath::mCalculateOOBB( localOOBB, b2Transform(-renderTransform.p, b2Rot(-renderTransform.q.GetAngle())), localOOBB );
 	
-	// Perform query.	
-	//pSpriteBatchQuery->queryRotatedArea(aabb, true, poly, renderTransform);
-	pSpriteBatchQuery->queryArea(aabb, true);
-	/////////////////////////////////////////
+	b2Vec2 center = aabb.GetCenter();
+
+	// Calculate local OOBB.
+	b2Vec2 localOOBB[4];
+	CoreMath::mAABBtoOOBB( aabb, localOOBB );
+	CoreMath::mCalculateInverseOOBB( localOOBB, object->getRenderTransform(), localOOBB );
+
+	// Calculate local AABB.
+	b2AABB localAABB;
+	CoreMath::mOOBBtoAABB( localOOBB, localAABB );
+
+    // Perform query.
+    //pSpriteBatchQuery->queryArea( localAABB, true );
+
+	pSpriteBatchQuery->queryPickedArea( localAABB.GetCenter(), object->getRenderAngle(), localAABB, true );
 
     // Fetch result count.
     const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
@@ -1159,7 +1154,6 @@ ConsoleMethod(CompositeSprite, pickRay, const char*, 4, 6,  "(startx/y, endx/y) 
     // Transform into local space.
     v1 = b2MulT( renderTransform, v1 );
     v2 = b2MulT( renderTransform, v2 );
-
 
     // Perform query.
     pSpriteBatchQuery->queryRay( v1, v2, true );
