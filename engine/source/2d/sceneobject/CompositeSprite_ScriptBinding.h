@@ -960,9 +960,9 @@ ConsoleMethod(CompositeSprite, pickPoint, const char*, 3, 4,    "(x / y ) Picks 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y ) Picks sprites intersecting the specified area with optional group/layer masks.\n"
-                                                            "@param startx/y The coordinates of the start point as either (\"x y\") or (x,y)\n"
-                                                            "@param endx/y The coordinates of the end point as either (\"x y\") or (x,y)\n"
+ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y ) Picks sprites intersecting the specified area \n"
+                                                            "@param startx/y The world space coordinates of the start point as either (\"x y\") or (x,y)\n"
+                                                            "@param endx/y The world space coordinates of the end point as either (\"x y\") or (x,y)\n"
                                                             "@return Returns list of sprite Ids.")
 {
     // Fetch sprite batch query and clear results.
@@ -1027,8 +1027,6 @@ ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y )
     aabb.lowerBound.y = getMin( v1.y, v2.y );
     aabb.upperBound.x = getMax( v1.x, v2.x );
     aabb.upperBound.y = getMax( v1.y, v2.y );
-	
-	b2Vec2 center = aabb.GetCenter();
 
 	// Calculate local OOBB.
 	b2Vec2 localOOBB[4];
@@ -1038,11 +1036,13 @@ ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y )
 	// Calculate local AABB.
 	b2AABB localAABB;
 	CoreMath::mOOBBtoAABB( localOOBB, localAABB );
+	
+	// Convert OOBB to a PolygonShape
+	b2PolygonShape oobb_polygon;
+	oobb_polygon.Set(localOOBB, 4);
 
     // Perform query.
-    //pSpriteBatchQuery->queryArea( localAABB, true );
-
-	pSpriteBatchQuery->queryPickedArea( localAABB.GetCenter(), object->getRenderAngle(), localAABB, true );
+	pSpriteBatchQuery->queryOOBB( localAABB, oobb_polygon, true );
 
     // Fetch result count.
     const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
