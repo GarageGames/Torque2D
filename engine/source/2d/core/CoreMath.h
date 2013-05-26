@@ -161,6 +161,8 @@ inline void mRotateAABB( const b2AABB& aabb, const F32& angle, b2AABB& transform
     transformedAABB.upperBound += centerPosition;
 }
 
+
+
 /// Returns a point on the given line AB that is closest to 'point'.
 Vector2 mGetClosestPointOnLine( Vector2 &a, Vector2 &b, Vector2 &point);
 
