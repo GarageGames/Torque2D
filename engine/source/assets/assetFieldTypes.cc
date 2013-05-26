@@ -50,6 +50,11 @@
 
 //-----------------------------------------------------------------------------
 
+StringTableEntry assetLooseIdSignature = StringTable->insert( ASSET_ID_SIGNATURE );
+StringTableEntry assetLooseFileSignature = StringTable->insert( ASSET_LOOSEFILE_SIGNATURE );
+
+//-----------------------------------------------------------------------------
+
 ConsoleType( assetLooseFilePath, TypeAssetLooseFilePath, sizeof(StringTableEntry), ASSET_LOOSE_FILE_FIELD_PREFIX )
 ConsoleType( assetIdString, TypeAssetId, sizeof(StringTableEntry), ASSET_ID_FIELD_PREFIX )
 

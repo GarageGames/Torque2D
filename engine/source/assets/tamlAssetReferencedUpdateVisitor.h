@@ -23,8 +23,12 @@
 #ifndef _TAML_ASSET_REFERENCED_UPDATE_VISITOR_H_
 #define _TAML_ASSET_REFERENCED_UPDATE_VISITOR_H_
 
-#ifndef _TAML_XMLPARSER_H_
-#include "persistence//taml/tamlXmlParser.h"
+#ifndef _TAML_VISITOR_H_
+#include "persistence/taml/tamlVisitor.h"
+#endif
+
+#ifndef _TAML_PARSER_H_
+#include "persistence\/taml/tamlParser.h"
 #endif
 
 #ifndef _STRINGUNIT_H_
@@ -44,64 +48,15 @@
 
 //-----------------------------------------------------------------------------
 
-class TamlAssetReferencedUpdateVisitor : public TamlXmlVisitor
+class TamlAssetReferencedUpdateVisitor : public TamlVisitor
 {
-protected:
-    virtual bool visit( TiXmlElement* pXmlElement, TamlXmlParser& xmlParser ) { return true; }
-
-    virtual bool visit( TiXmlAttribute* pAttribute, TamlXmlParser& xmlParser )
-    {
-        // Debug Profiling.
-        PROFILE_SCOPE(TamlAssetReferencedUpdateVisitor_VisitAttribute);
-
-        // Fetch attribute value.
-        const char* pAttributeValue = pAttribute->Value();
-
-        // Fetch attribute value word count.
-        const U32 valueWordCount = StringUnit::getUnitCount( pAttributeValue, ASSET_ASSIGNMENT_TOKEN );
-
-        // Finish if not two words.
-        if ( valueWordCount != 2 )
-            return true;
-
-        // Skip if this is not an asset signature.
-        if ( dStricmp( StringUnit::getUnit( pAttributeValue, 0, ASSET_ASSIGNMENT_TOKEN), ASSET_ID_SIGNATURE ) != 0 )
-            return true;
-
-        // Get the asset value.
-        const char* pAssetValue = StringUnit::getUnit( pAttributeValue, 1, ASSET_ASSIGNMENT_TOKEN );
-
-        // Finish if not the asset Id we're looking for.
-        if ( dStricmp( pAssetValue, mAssetIdFrom ) != 0 )
-            return true;
-
-        // Is the target asset empty?
-        if ( mAssetIdTo == StringTable->EmptyString )
-        {
-            // Yes, so set the attribute as empty.
-            pAttribute->SetValue( StringTable->EmptyString );
-            return true;
-        }
-
-        // Format asset.
-        char assetBuffer[1024];
-        dSprintf( assetBuffer, sizeof(assetBuffer), "%s%s%s", ASSET_ID_SIGNATURE, ASSET_ASSIGNMENT_TOKEN, mAssetIdTo );
-
-        // Assign new value.
-        pAttribute->SetValue( assetBuffer );
-
-        return true;
-    }
+private:    
+    StringTableEntry mAssetIdFrom;
+    StringTableEntry mAssetIdTo;
 
 public:
     TamlAssetReferencedUpdateVisitor() {}
     virtual ~TamlAssetReferencedUpdateVisitor() {}
-
-    bool parse( const char* pFilename )
-    {
-        TamlXmlParser parser;
-        return parser.parse( pFilename, *this, true );
-    }
 
     void setAssetIdFrom( const char* pAssetIdFrom )
     {
@@ -121,9 +76,52 @@ public:
     }
     const char* getAssetIdTo( void ) const { return mAssetIdTo; }
 
-private:    
-    StringTableEntry mAssetIdFrom;
-    StringTableEntry mAssetIdTo;
+    virtual bool wantsPropertyChanges( void ) { return true; }
+    virtual bool wantsRootOnly( void ) { return false; }
+
+    virtual bool visit( const TamlParser& parser, TamlVisitor::PropertyState& propertyState )
+    {
+        // Debug Profiling.
+        PROFILE_SCOPE(TamlAssetReferencedUpdateVisitor_Visit);
+
+        // Fetch the property value.
+        const char* pPropertyValue = propertyState.getPropertyValue();
+
+        // Fetch property value word count.
+        const U32 valueWordCount = StringUnit::getUnitCount( pPropertyValue, ASSET_ASSIGNMENT_TOKEN );
+
+        // Finish if not two words.
+        if ( valueWordCount != 2 )
+            return true;
+
+        // Finish if this is not an asset signature.
+        if ( dStricmp( StringUnit::getUnit( pPropertyValue, 0, ASSET_ASSIGNMENT_TOKEN), assetLooseIdSignature ) != 0 )
+            return true;
+
+        // Get the asset value.
+        const char* pAssetValue = StringUnit::getUnit( pPropertyValue, 1, ASSET_ASSIGNMENT_TOKEN );
+
+        // Finish if not the asset Id we're looking for.
+        if ( dStricmp( pAssetValue, mAssetIdFrom ) != 0 )
+            return true;
+
+        // Is the target asset empty?
+        if ( mAssetIdTo == StringTable->EmptyString )
+        {
+            // Yes, so update the property as empty.
+            propertyState.updatePropertyValue( StringTable->EmptyString );
+            return true;
+        }
+
+        // Format asset.
+        char assetBuffer[1024];
+        dSprintf( assetBuffer, sizeof(assetBuffer), "%s%s%s", assetLooseIdSignature, ASSET_ASSIGNMENT_TOKEN, mAssetIdTo );
+
+        // Assign new value.
+        propertyState.updatePropertyValue( assetBuffer );
+
+        return true;
+    }
 };
 
 #endif // _TAML_ASSET_REFERENCED_UPDATE_VISITOR_H_
