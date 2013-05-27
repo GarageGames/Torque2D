@@ -325,6 +325,11 @@ inline F32 mFabs(const F32 val)
    return (F32) fabs(val);
 }
 
+inline F32 mFsign(const F32 val)
+{
+   return (F32) (val > 0 ? 1 : val < 0 ? -1 : 0);
+}
+
 inline F32 mFmod(const F32 val, const F32 mod)
 {
    return (F32) fmod(val, mod);

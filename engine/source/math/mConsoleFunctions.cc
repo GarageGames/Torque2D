@@ -115,6 +115,13 @@ ConsoleFunction( mAbs, F32, 2, 2, "( val ) Use the mAbs function to get the magn
    return(mFabs(dAtof(argv[1])));
 }
 
+ConsoleFunction( mSign, F32, 2, 2, "( val ) Use the mSign function to get the signum of a number.\n"
+                                                                "@param val An integer or a floating-point value.\n"
+                                                                "@return Returns +1 if the number is >= 0, or -1 if it's < 0")
+{
+   return(mFsign(dAtof(argv[1])));
+}
+
 ConsoleFunction( mSqrt, F32, 2, 2, "( val ) Use the mSqrt function to calculated the square root of val.\n"
                                                                 "@param val A numeric value.\n"
                                                                 "@return Returns the the squareroot of val")
