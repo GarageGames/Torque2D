@@ -1021,13 +1021,6 @@ ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y )
         return NULL;
     }
 
-    // Fetch the render transform.
-    const b2Transform& renderTransform = object->getRenderTransform();
-    
-    // Translate into local space.
-    v1 -= renderTransform.p;
-    v2 -= renderTransform.p;
-
     // Calculate normalized AABB.
     b2AABB aabb;
     aabb.lowerBound.x = getMin( v1.x, v2.x );
@@ -1035,11 +1028,22 @@ ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y )
     aabb.upperBound.x = getMax( v1.x, v2.x );
     aabb.upperBound.y = getMax( v1.y, v2.y );
 
-    // Rotate the AABB into local space.
-    CoreMath::mRotateAABB( aabb, -renderTransform.q.GetAngle(), aabb );
+	// Calculate local OOBB.
+    b2Vec2 localOOBB[4];
+    CoreMath::mAABBtoOOBB( aabb, localOOBB );
+    CoreMath::mCalculateInverseOOBB( localOOBB, object->getRenderTransform(), localOOBB );
+
+	// Calculate local AABB.
+    b2AABB localAABB;
+    CoreMath::mOOBBtoAABB( localOOBB, localAABB );
+  
+	// Convert OOBB to a PolygonShape
+    b2PolygonShape oobb_polygon;
+    oobb_polygon.Set(localOOBB, 4);
 
     // Perform query.
-    pSpriteBatchQuery->queryArea( aabb, true );
+    pSpriteBatchQuery->queryOOBB( localAABB, oobb_polygon, true );
+
 
     // Fetch result count.
     const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
