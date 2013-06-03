@@ -420,6 +420,60 @@ void CompositeSprite::onTamlCustomRead( const TamlCustomNodes& customNodes )
     SpriteBatch::onTamlCustomRead( customNodes );
 }
 
+//------------------------------------------------------------------------------
+
+const Vector2 CompositeSprite::getLocalPosition( const Vector2& worldPosition ) const
+ {
+	const b2Transform& renderTransform = getRenderTransform();
+    return b2MulT( renderTransform, worldPosition );
+ }
+
+//------------------------------------------------------------------------------
+
+const Vector2 CompositeSprite::getLogicalPosition( const Vector2& worldPosition ) const
+ {
+	const b2Transform& renderTransform = getRenderTransform();
+    const Vector2 localPosition = b2MulT( renderTransform, worldPosition );
+    
+	Vector2 logicalPosition;
+
+    switch( mBatchLayoutType )
+    {
+        case NO_LAYOUT:
+			return localPosition;
+
+        case RECTILINEAR_LAYOUT:
+			{
+				const Vector2 spriteStride = getDefaultSpriteStride();
+				
+				if(localPosition.x < 0)
+					logicalPosition.x = (localPosition.x / spriteStride.x) - (mFmod(localPosition.x, spriteStride.x) != 0 ? 1 : 0);
+				else
+					logicalPosition.x = (localPosition.x / spriteStride.x) + (mFmod(localPosition.x, spriteStride.x) != 0 ? 1 : 0);
+
+				if(localPosition.x < 0)
+					logicalPosition.y = (localPosition.y / spriteStride.y) - (mFmod(localPosition.y, spriteStride.y) > 0 ? 1 : 0);
+				else
+					logicalPosition.y = (localPosition.y / spriteStride.y) + (mFmod(localPosition.y, spriteStride.y) > 0 ? 1 : 0);
+
+
+				return logicalPosition;
+			}
+
+        case ISOMETRIC_LAYOUT:
+			//TODO
+            break;
+
+        case CUSTOM_LAYOUT:
+			//TODO
+            break;
+
+        default:
+            Con::warnf( "CompositeSprite::getLocalPosition() - Unknown layout type encountered." );
+    }	
+	
+}
+
 //-----------------------------------------------------------------------------
 
 static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlElement* pParentElement )

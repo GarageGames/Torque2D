@@ -861,6 +861,62 @@ ConsoleMethod(CompositeSprite, getSpriteName, const char*, 2, 2,    "() - Gets t
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(CompositeSprite, getLocalPosition, const char*, 3, 4,    "() - Get the local position from a world position.\n"
+																	"@param x/y The world position as either (\"x y\") or (x,y)\n"
+                                                                    "@return Local position on the composite of the specified world position.")
+{
+    Vector2 position;
+    U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+
+    // ("x y")
+    if ((elementCount == 2) && (argc < 8))
+    {
+        position = Utility::mGetStringElementVector(argv[2]);
+    }   
+    // (x, y)
+    else if ((elementCount == 1) && (argc > 3))
+    {
+        position = Vector2(dAtof(argv[2]), dAtof(argv[3]));
+    }   
+    // Invalid
+    else
+    {
+        Con::warnf("CompositeSprite::getLocalPosition() - Invalid number of parameters!");
+        return NULL;
+    }
+
+	return object->getLocalPosition(position).scriptThis();
+}
+
+ConsoleMethod(CompositeSprite, getLogicalPosition, const char*, 3, 4,    "() - Gets a logical position from a world position.\n"
+																	"@param x/y The world position as either (\"x y\") or (x,y)\n"
+                                                                    "@return Logical position on the composite of the specified world position.")
+{
+    Vector2 position;
+    U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+
+    // ("x y")
+    if ((elementCount == 2) && (argc < 8))
+    {
+        position = Utility::mGetStringElementVector(argv[2]);
+    }   
+    // (x, y)
+    else if ((elementCount == 1) && (argc > 3))
+    {
+        position = Vector2(dAtof(argv[2]), dAtof(argv[3]));
+    }   
+    // Invalid
+    else
+    {
+        Con::warnf("CompositeSprite::getLogicalPosition() - Invalid number of parameters!");
+        return NULL;
+    }
+
+	return object->getLogicalPosition(position).scriptThis();
+}
+
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(CompositeSprite, pickPoint, const char*, 3, 4,    "(x / y ) Picks sprites intersecting the specified point with optional group/layer masks.\n"
                                                                 "@param x/y The coordinate of the point as either (\"x y\") or (x,y)\n"
                                                                 "@return Returns list of sprite Ids.")
@@ -908,11 +964,8 @@ ConsoleMethod(CompositeSprite, pickPoint, const char*, 3, 4,    "(x / y ) Picks 
         return NULL;
     }
 
-    // Fetch the render transform.
-    const b2Transform& renderTransform = object->getRenderTransform();
-
     // Transform into local space.
-    point = b2MulT( renderTransform, point );
+	point = object->getLocalPosition(point);
 
     // Perform query.
     pSpriteBatchQuery->queryPoint( point, true );
@@ -1043,7 +1096,6 @@ ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y )
 
     // Perform query.
     pSpriteBatchQuery->queryOOBB( localAABB, oobb_polygon, true );
-
 
     // Fetch result count.
     const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();

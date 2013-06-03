@@ -73,6 +73,9 @@ public:
 
     virtual void copyTo( SimObject* object );
 
+    const Vector2 getLocalPosition( const Vector2& worldPosition ) const;
+	const Vector2 getLogicalPosition( const Vector2& worldPosition ) const;
+
     void setBatchLayout( const BatchLayoutType& batchLayoutType );
     BatchLayoutType getBatchLayout( void ) const { return mBatchLayoutType; }
 
