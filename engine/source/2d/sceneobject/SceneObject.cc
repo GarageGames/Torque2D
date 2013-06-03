@@ -79,10 +79,10 @@
 // Scene-Object counter.
 static U32 sGlobalSceneObjectCount = 0;
 static U32 sSceneObjectMasterSerialId = 0;
+static U32 sCollisionShapeMasterSerialId = 0;
 
 // Collision shapes custom node names.
 static StringTableEntry shapeCustomNodeName     = StringTable->insert( "CollisionShapes" );
-
 static StringTableEntry shapeDensityName        = StringTable->insert( "Density" );
 static StringTableEntry shapeFrictionName       = StringTable->insert( "Friction" );
 static StringTableEntry shapeRestitutionName    = StringTable->insert( "Restitution" );
@@ -390,16 +390,16 @@ void SceneObject::OnRegisterScene( Scene* pScene )
     if ( !isEnabled() ) mpBody->SetActive( false );
 
     // Create fixtures.
-    for( typeCollisionFixtureDefVector::iterator itr = mCollisionFixtureDefs.begin(); itr != mCollisionFixtureDefs.end(); itr++ )
+	for( typeCollisionFixtureDefMap::iterator itr = mCollisionFixtureDefs.begin(); itr != mCollisionFixtureDefs.end(); itr++ )
     {
         // Fetch fixture definition.
-        b2FixtureDef* pFixtureDef = (*itr);
+		const b2FixtureDef* pFixtureDef = itr->value;
 
         // Create fixture.
         b2Fixture* pFixture = mpBody->CreateFixture( pFixtureDef );
 
         // Push fixture.
-        mCollisionFixtures.push_back( pFixture );
+		mCollisionFixtures.insert(itr->key, pFixture);
 
         // Destroy fixture shape.
         delete pFixtureDef->shape;
@@ -436,10 +436,10 @@ void SceneObject::OnUnregisterScene( Scene* pScene )
     notifyComponentsRemoveFromScene();
 
     // Copy fixtures to fixture definitions.
-    for( typeCollisionFixtureVector::iterator itr = mCollisionFixtures.begin(); itr != mCollisionFixtures.end(); itr++ )
+	for( typeCollisionFixtureMap::iterator itr = mCollisionFixtures.begin(); itr != mCollisionFixtures.end(); itr++ )
     {
         // Fetch fixture.
-        b2Fixture* pFixture = (*itr);
+		const b2Fixture* pFixture = itr->value;
 
         // Create fixture definition.
         b2FixtureDef* pFixtureDef = new b2FixtureDef();
@@ -451,7 +451,7 @@ void SceneObject::OnUnregisterScene( Scene* pScene )
         pFixtureDef->shape        = pFixture->GetShape()->Clone( pScene->getBlockAllocator() );
 
         // Push fixture definition.
-        mCollisionFixtureDefs.push_back( pFixtureDef );
+		mCollisionFixtureDefs.insert(itr->key, pFixtureDef);
     }
 
     // Clear our fixture references.
@@ -1291,10 +1291,10 @@ bool SceneObject::getIsPointInOOBB( const Vector2& worldPoint )
 
 //-----------------------------------------------------------------------------
 
-bool SceneObject::getIsPointInCollisionShape( const U32 shapeIndex, const Vector2& worldPoint )
+bool SceneObject::getIsPointInCollisionShape( const U32 shapeId, const Vector2& worldPoint )
 {
-    // Sanity!
-    AssertFatal( shapeIndex < getCollisionShapeCount(), "SceneObject::getIsPointInCollisionShape() - Invalid shape index." );
+	// Sanity!
+	AssertFatal( mCollisionFixtures.contains(shapeId), "SceneObject::getIsPointInCollisionShape() - Invalid shape id." );
 
     // Sanity!
     if ( !mpScene )
@@ -1304,7 +1304,7 @@ bool SceneObject::getIsPointInCollisionShape( const U32 shapeIndex, const Vector
     }
 
     // Fetch fixture.
-    b2Fixture* pFixture = mCollisionFixtures[shapeIndex];
+    const b2Fixture* pFixture = mCollisionFixtures[shapeId];
 
     // Fetch local point.
     const Vector2 localPoint = getLocalPoint( worldPoint );
@@ -1330,7 +1330,6 @@ void SceneObject::setBodyType( const b2BodyType type )
         mBodyDefinition.type = type;
     }
 }
-
 
 //-----------------------------------------------------------------------------
 
@@ -1430,9 +1429,9 @@ void SceneObject::setDefaultDensity( const F32 density, const bool updateShapes 
     if ( mpScene )
     {
         // Update live fixtures.
-        for( U32 index = 0; index < (U32)mCollisionFixtures.size(); ++index )
+		for( typeCollisionFixtureMap::iterator itr = mCollisionFixtures.begin(); itr != mCollisionFixtures.end(); itr++ )
         {
-            mCollisionFixtures[index]->SetDensity( density );
+            itr->value->SetDensity( density );
         }
 
         // Update the body mass data.
@@ -1442,9 +1441,9 @@ void SceneObject::setDefaultDensity( const F32 density, const bool updateShapes 
     }
 
     // Update offline fixture definitions.
-    for( U32 index = 0; index < (U32)mCollisionFixtureDefs.size(); ++index )
+	for( typeCollisionFixtureDefMap::iterator itr = mCollisionFixtureDefs.begin(); itr != mCollisionFixtureDefs.end(); itr++ )
     {
-        mCollisionFixtureDefs[index]->density = density;
+        itr->value->density = density;
     }
 }
 
@@ -1461,17 +1460,17 @@ void SceneObject::setDefaultFriction( const F32 friction, const bool updateShape
     if ( mpScene )
     {
         // Update live fixtures.
-        for( U32 index = 0; index < (U32)mCollisionFixtures.size(); ++index )
+		for( typeCollisionFixtureMap::iterator itr = mCollisionFixtures.begin(); itr != mCollisionFixtures.end(); itr++ )
         {
-            mCollisionFixtures[index]->SetFriction( friction );
+            itr->value->SetFriction( friction );
         }
         return;
     }
 
     // Update offline fixture definitions.
-    for( U32 index = 0; index < (U32)mCollisionFixtureDefs.size(); ++index )
+	for( typeCollisionFixtureDefMap::iterator itr = mCollisionFixtureDefs.begin(); itr != mCollisionFixtureDefs.end(); itr++ )
     {
-        mCollisionFixtureDefs[index]->friction = friction;
+        itr->value->friction = friction;
     }
 }
 
@@ -1488,17 +1487,17 @@ void SceneObject::setDefaultRestitution( const F32 restitution, const bool updat
     if ( mpScene )
     {
         // Update live fixtures.
-        for( U32 index = 0; index < (U32)mCollisionFixtures.size(); ++index )
+		for( typeCollisionFixtureMap::iterator itr = mCollisionFixtures.begin(); itr != mCollisionFixtures.end(); itr++ )
         {
-            mCollisionFixtures[index]->SetRestitution( restitution );
+            itr->value->SetRestitution( restitution );
         }
         return;
     }
 
     // Update offline fixture definitions.
-    for( U32 index = 0; index < (U32)mCollisionFixtureDefs.size(); ++index )
+	for( typeCollisionFixtureDefMap::iterator itr = mCollisionFixtureDefs.begin(); itr != mCollisionFixtureDefs.end(); itr++ )
     {
-        mCollisionFixtureDefs[index]->restitution = restitution;
+        itr->value->restitution = restitution;
     }
 }
 
@@ -1711,58 +1710,53 @@ void SceneObject::cancelRotateTo( const bool autoStop )
 
 //-----------------------------------------------------------------------------
 
-b2Shape::Type SceneObject::getCollisionShapeType( U32 shapeIndex ) const
+b2Shape::Type SceneObject::getCollisionShapeType( const U32 shapeId ) const
 {
     // Sanity!
-    AssertFatal( shapeIndex < getCollisionShapeCount(), "SceneObject::getCollisionShapeType() - Invalid shape index." );
+	AssertFatal( mCollisionFixtures.contains(shapeId), "SceneObject::getCollisionShapeType() - Invalid shape id." );
 
-    if ( mpScene )
+    if(mpScene)
     {
-        return mCollisionFixtures[shapeIndex]->GetType();
+		return mCollisionFixtures[shapeId]->GetType();
     }
 
-    return mCollisionFixtureDefs[shapeIndex]->shape->GetType();
+    return mCollisionFixtureDefs[shapeId]->shape->GetType();
 }
 
 //-----------------------------------------------------------------------------
 
-S32 SceneObject::getCollisionShapeIndex( const b2Fixture* pFixture ) const
+S32 SceneObject::getCollisionShapeId( const b2Fixture* pFixture ) const
 {
-    // Iterate collision shapes.
-    S32 collisionShapeIndex = 0;
-    for( typeCollisionFixtureVector::const_iterator collisionShapeItr = mCollisionFixtures.begin(); collisionShapeItr != mCollisionFixtures.end(); ++collisionShapeItr, ++collisionShapeIndex )
+	// Iterate collision shapes.
+	for( typeCollisionFixtureMap::const_iterator itr = mCollisionFixtures.begin(); itr != mCollisionFixtures.end(); itr++ )
     {
         // Return index if this is the collision shape we are searching for.
-        if ( pFixture == *collisionShapeItr )
-            return collisionShapeIndex;
+		if(pFixture == itr->value)
+			return itr->key;
     }
 
-    // Not found.
-    return -1;
+	return INVALID_COLLISION_SHAPE_ID;
 }
 
 //-----------------------------------------------------------------------------
 
-void SceneObject::setCollisionShapeDefinition( const U32 shapeIndex, const b2FixtureDef& fixtureDef )
+void SceneObject::setCollisionShapeDefinition( const U32 shapeId, const b2FixtureDef& fixtureDef )
 {
     // We only set specific features of a fixture definition here.
-    setCollisionShapeDensity( shapeIndex, fixtureDef.density );
-    setCollisionShapeFriction( shapeIndex, fixtureDef.friction );
-    setCollisionShapeRestitution( shapeIndex, fixtureDef.restitution );
-    setCollisionShapeIsSensor( shapeIndex, fixtureDef.isSensor );
+    setCollisionShapeDensity( shapeId, fixtureDef.density );
+    setCollisionShapeFriction( shapeId, fixtureDef.friction );
+    setCollisionShapeRestitution( shapeId, fixtureDef.restitution );
+    setCollisionShapeIsSensor( shapeId, fixtureDef.isSensor );
 }
 
 //-----------------------------------------------------------------------------
 
-b2FixtureDef SceneObject::getCollisionShapeDefinition( const U32 shapeIndex ) const
+const b2FixtureDef SceneObject::getCollisionShapeDefinition( const U32 shapeId ) const
 {
-    // Sanity!
-    AssertFatal( shapeIndex < getCollisionShapeCount(), "SceneObject::getCollisionShapeDefinition() - Invalid shape index." );
-
     if ( mpScene )
     {       
         // Fetch fixture.
-        const b2Fixture* pFixture = mCollisionFixtures[shapeIndex];
+        const b2Fixture* pFixture = mCollisionFixtures[shapeId];
 
         b2FixtureDef fixtureDef;
         fixtureDef.density     = pFixture->GetDensity();
@@ -1775,18 +1769,18 @@ b2FixtureDef SceneObject::getCollisionShapeDefinition( const U32 shapeIndex ) co
         return fixtureDef;
     }
 
-    return *mCollisionFixtureDefs[shapeIndex];
+    return *mCollisionFixtureDefs[shapeId];
 }
 
 //-----------------------------------------------------------------------------
 
-const b2CircleShape* SceneObject::getCollisionCircleShape( const U32 shapeIndex ) const
+const b2CircleShape* SceneObject::getCollisionCircleShape( const U32 shapeId ) const
 {
     // Sanity!
-    AssertFatal( shapeIndex < getCollisionShapeCount(), "SceneObject::getCollisionCircleShape() - Invalid shape index." );
+    AssertFatal( mCollisionFixtures.contains(shapeId), "SceneObject::getCollisionCircleShape() - Invalid shape id." );
 
     // Fetch shape definition.
-    const b2FixtureDef fixtureDef = getCollisionShapeDefinition( shapeIndex );
+    const b2FixtureDef fixtureDef = getCollisionShapeDefinition(shapeId);
 
     // Sanity!
     AssertFatal( fixtureDef.shape->GetType() == b2Shape::e_circle, "SceneObject::getCollisionCircleShape() - Shape is not a circle shape." );
@@ -1802,13 +1796,13 @@ const b2CircleShape* SceneObject::getCollisionCircleShape( const U32 shapeIndex 
 
 //-----------------------------------------------------------------------------
 
-const b2PolygonShape* SceneObject::getCollisionPolygonShape( const U32 shapeIndex ) const
+const b2PolygonShape* SceneObject::getCollisionPolygonShape( const U32 shapeId ) const
 {
     // Sanity!
-    AssertFatal( shapeIndex < getCollisionShapeCount(), "SceneObject::getCollisionPolygonShape() - Invalid shape index." );
+    AssertFatal( mCollisionFixtures.contains(shapeId), "SceneObject::getCollisionPolygonShape() - Invalid shape id." );
 
     // Fetch shape definition.
-    const b2FixtureDef fixtureDef = getCollisionShapeDefinition( shapeIndex );
+    const b2FixtureDef fixtureDef = getCollisionShapeDefinition(shapeId);
 
     // Sanity!
     AssertFatal( fixtureDef.shape->GetType() == b2Shape::e_polygon, "SceneObject::getCollisionPolygonShape() - Shape is not a polygon shape." );
@@ -1824,13 +1818,13 @@ const b2PolygonShape* SceneObject::getCollisionPolygonShape( const U32 shapeInde
 
 //-----------------------------------------------------------------------------
 
-const b2ChainShape* SceneObject::getCollisionChainShape( const U32 shapeIndex ) const
+const b2ChainShape* SceneObject::getCollisionChainShape( const U32 shapeId ) const
 {
     // Sanity!
-    AssertFatal( shapeIndex < getCollisionShapeCount(), "SceneObject::getCollisionChainShape() - Invalid shape index." );
+    AssertFatal( mCollisionFixtures.contains(shapeId), "SceneObject::getCollisionChainShape() - Invalid shape id." );
 
     // Fetch shape definition.
-    const b2FixtureDef fixtureDef = getCollisionShapeDefinition( shapeIndex );
+    const b2FixtureDef fixtureDef = getCollisionShapeDefinition(shapeId);
 
     // Sanity!
     AssertFatal( fixtureDef.shape->GetType() == b2Shape::e_chain, "SceneObject::getCollisionChainShape() - Shape is not a chain shape." );
@@ -1846,13 +1840,13 @@ const b2ChainShape* SceneObject::getCollisionChainShape( const U32 shapeIndex ) 
 
 //-----------------------------------------------------------------------------
 
-const b2EdgeShape* SceneObject::getCollisionEdgeShape( const U32 shapeIndex ) const
+const b2EdgeShape* SceneObject::getCollisionEdgeShape( const U32 shapeId ) const
 {
     // Sanity!
-    AssertFatal( shapeIndex < getCollisionShapeCount(), "SceneObject::getCollisionEdgeShape() - Invalid shape index." );
+    AssertFatal( mCollisionFixtures.contains(shapeId), "SceneObject::getCollisionEdgeShape() - Invalid shape id." );
 
     // Fetch shape definition.
-    const b2FixtureDef fixtureDef = getCollisionShapeDefinition( shapeIndex );
+    const b2FixtureDef fixtureDef = getCollisionShapeDefinition(shapeId);
 
     // Sanity!
     AssertFatal( fixtureDef.shape->GetType() == b2Shape::e_edge, "SceneObject::getCollisionEdgeShape() - Shape is not a edge shape." );
@@ -1868,15 +1862,15 @@ const b2EdgeShape* SceneObject::getCollisionEdgeShape( const U32 shapeIndex ) co
 
 //-----------------------------------------------------------------------------
 
-void SceneObject::setCollisionShapeDensity( const U32 shapeIndex, const F32 density )
+void SceneObject::setCollisionShapeDensity( const U32 shapeId, const F32 density )
 {
     // Sanity!
-    AssertFatal( shapeIndex < getCollisionShapeCount(), "SceneObject::setCollisionShapeDensity() - Invalid shape index." );
+    AssertFatal( mCollisionFixtures.contains(shapeId), "SceneObject::setCollisionShapeDensity() - Invalid shape id." );
 
     if ( mpScene )
     {
         // Update live fixture.
-        mCollisionFixtures[shapeIndex]->SetDensity( density );
+        mCollisionFixtures[shapeId]->SetDensity( density );
 
         // Update the body mass data.
         mpBody->ResetMassData();
@@ -1885,37 +1879,37 @@ void SceneObject::setCollisionShapeDensity( const U32 shapeIndex, const F32 dens
     }
 
     // Update offline fixture definition.
-    mCollisionFixtureDefs[shapeIndex]->density = density;
+    mCollisionFixtureDefs[shapeId]->density = density;
 }
 
 //-----------------------------------------------------------------------------
 
-F32 SceneObject::getCollisionShapeDensity( const U32 shapeIndex ) const
+F32 SceneObject::getCollisionShapeDensity( const U32 shapeId ) const
 {
     // Sanity!
-    AssertFatal( shapeIndex < getCollisionShapeCount(), "SceneObject::getCollisionShapeDensity() - Invalid shape index." );
+    AssertFatal( mCollisionFixtures.contains(shapeId), "SceneObject::getCollisionShapeDensity() - Invalid shape id." );
 
     if ( mpScene )
     {
         // Use live fixture.
-        return mCollisionFixtures[shapeIndex]->GetDensity();
+        return mCollisionFixtures[shapeId]->GetDensity();
     }
 
     // Use offline fixture definition.
-    return mCollisionFixtureDefs[shapeIndex]->density;
+    return mCollisionFixtureDefs[shapeId]->density;
 }
 
 //-----------------------------------------------------------------------------
 
-void SceneObject::setCollisionShapeFriction( const U32 shapeIndex, const F32 friction )
+void SceneObject::setCollisionShapeFriction( const U32 shapeId, const F32 friction )
 {
     // Sanity!
-    AssertFatal( shapeIndex < getCollisionShapeCount(), "SceneObject::setCollisionShapeFriction() - Invalid shape index." );
+    AssertFatal( mCollisionFixtures.contains(shapeId), "SceneObject::setCollisionShapeFriction() - Invalid shape id." );
 
     if ( mpScene )
     {
         // Fetch the fixture.
-        b2Fixture* pFixture = mCollisionFixtures[shapeIndex];
+        b2Fixture* pFixture = mCollisionFixtures[shapeId];
 
         // Update live fixture.
         pFixture->SetFriction( friction );
@@ -1927,37 +1921,37 @@ void SceneObject::setCollisionShapeFriction( const U32 shapeIndex, const F32 fri
     }
 
     // Update offline fixture definition.
-    mCollisionFixtureDefs[shapeIndex]->friction = friction;
+    mCollisionFixtureDefs[shapeId]->friction = friction;
 }
 
 //-----------------------------------------------------------------------------
 
-F32 SceneObject::getCollisionShapeFriction( const U32 shapeIndex ) const
+F32 SceneObject::getCollisionShapeFriction( const U32 shapeId ) const
 {
     // Sanity!
-    AssertFatal( shapeIndex < getCollisionShapeCount(), "SceneObject::getCollisionShapeFriction() - Invalid shape index." );
+    AssertFatal( mCollisionFixtures.contains(shapeId), "SceneObject::getCollisionShapeFriction() - Invalid shape id." );
 
     if ( mpScene )
     {
         // Use live fixture.
-        return mCollisionFixtures[shapeIndex]->GetFriction();
+        return mCollisionFixtures[shapeId]->GetFriction();
     }
 
     // Use offline fixture definition.
-    return mCollisionFixtureDefs[shapeIndex]->friction;
+    return mCollisionFixtureDefs[shapeId]->friction;
 }
 
 //-----------------------------------------------------------------------------
 
-void SceneObject::setCollisionShapeRestitution( const U32 shapeIndex, const F32 restitution )
+void SceneObject::setCollisionShapeRestitution( const U32 shapeId, const F32 restitution )
 {
     // Sanity!
-    AssertFatal( shapeIndex < getCollisionShapeCount(), "SceneObject::setCollisionShapeRestitution() - Invalid shape index." );
+    AssertFatal( mCollisionFixtures.contains(shapeId), "SceneObject::setCollisionShapeRestitution() - Invalid shape id." );
 
     if ( mpScene )
     {
         // Fetch the fixture.
-        b2Fixture* pFixture = mCollisionFixtures[shapeIndex];
+        b2Fixture* pFixture = mCollisionFixtures[shapeId];
 
         // Update live fixture.
         pFixture->SetRestitution( restitution );
@@ -1969,37 +1963,37 @@ void SceneObject::setCollisionShapeRestitution( const U32 shapeIndex, const F32 
     }
 
     // Update offline fixture definition.
-    mCollisionFixtureDefs[shapeIndex]->restitution = restitution;
+    mCollisionFixtureDefs[shapeId]->restitution = restitution;
 }
 
 //-----------------------------------------------------------------------------
 
-F32 SceneObject::getCollisionShapeRestitution( const U32 shapeIndex ) const
+F32 SceneObject::getCollisionShapeRestitution( const U32 shapeId ) const
 {
     // Sanity!
-    AssertFatal( shapeIndex < getCollisionShapeCount(), "SceneObject::getCollisionShapeRestitution() - Invalid shape index." );
+    AssertFatal( mCollisionFixtures.contains(shapeId), "SceneObject::getCollisionShapeRestitution() - Invalid shape id." );
 
     if ( mpScene )
     {
         // Use live fixture.
-        return mCollisionFixtures[shapeIndex]->GetRestitution();
+        return mCollisionFixtures[shapeId]->GetRestitution();
     }
 
     // Use offline fixture definition.
-    return mCollisionFixtureDefs[shapeIndex]->restitution;
+    return mCollisionFixtureDefs[shapeId]->restitution;
 }
 
 //-----------------------------------------------------------------------------
 
-void SceneObject::setCollisionShapeIsSensor( const U32 shapeIndex, const bool isSensor )
+void SceneObject::setCollisionShapeIsSensor( const U32 shapeId, const bool isSensor )
 {
     // Sanity!
-    AssertFatal( shapeIndex < getCollisionShapeCount(), "SceneObject::setCollisionShapeIsSensor() - Invalid shape index." );
+    AssertFatal( mCollisionFixtures.contains(shapeId), "SceneObject::setCollisionShapeIsSensor() - Invalid shape id." );
 
     if ( mpScene )
     {
         // Fetch the fixture.
-        b2Fixture* pFixture = mCollisionFixtures[shapeIndex];
+        b2Fixture* pFixture = mCollisionFixtures[shapeId];
 
         // Update live fixture.
         pFixture->SetSensor( isSensor );
@@ -2011,41 +2005,41 @@ void SceneObject::setCollisionShapeIsSensor( const U32 shapeIndex, const bool is
     }
 
     // Update offline fixture definition.
-    mCollisionFixtureDefs[shapeIndex]->isSensor = isSensor;
+    mCollisionFixtureDefs[shapeId]->isSensor = isSensor;
 }
 
 //-----------------------------------------------------------------------------
 
-bool SceneObject::getCollisionShapeIsSensor( const U32 shapeIndex ) const
+bool SceneObject::getCollisionShapeIsSensor( const U32 shapeId ) const
 {
     // Sanity!
-    AssertFatal( shapeIndex < getCollisionShapeCount(), "SceneObject::getCollisionShapeIsSensor() - Invalid shape index." );
+    AssertFatal( mCollisionFixtures.contains(shapeId), "SceneObject::getCollisionShapeIsSensor() - Invalid shape id." );
 
     if ( mpScene )
     {
         // Use live fixture.
-        return mCollisionFixtures[shapeIndex]->IsSensor();
+        return mCollisionFixtures[shapeId]->IsSensor();
     }
 
     // Use offline fixture definition.
-    return mCollisionFixtureDefs[shapeIndex]->isSensor;
+    return mCollisionFixtureDefs[shapeId]->isSensor;
 }
 
 //-----------------------------------------------------------------------------
 
-void SceneObject::deleteCollisionShape( const U32 shapeIndex )
+void SceneObject::deleteCollisionShape( const U32 shapeId )
 {
     // Sanity!
-    AssertFatal( shapeIndex < getCollisionShapeCount(), "SceneObject::deleteCollisionShape() - Invalid shape index." );
+    AssertFatal( mCollisionFixtures.contains(shapeId), "SceneObject::deleteCollisionShape() - Invalid shape id." );
 
-    if ( mpScene )
+    if(mpScene)
     {
-        mpBody->DestroyFixture( mCollisionFixtures[ shapeIndex ] );
-        mCollisionFixtures.erase_fast( shapeIndex );
+        mpBody->DestroyFixture(mCollisionFixtures[shapeId]);
+		mCollisionFixtures.erase(shapeId);
         return;
     }
 
-    mCollisionFixtureDefs.erase_fast( shapeIndex );
+    mCollisionFixtureDefs.erase(shapeId);
 }
 
 //-----------------------------------------------------------------------------
@@ -2087,40 +2081,42 @@ S32 SceneObject::createCircleCollisionShape( const F32 radius, const b2Vec2& loc
     pShape->m_radius = radius;
     pFixtureDef->shape = pShape;
 
-    if ( mpScene )
-    {
-        // Create and push fixture.
-        mCollisionFixtures.push_back( mpBody->CreateFixture( pFixtureDef ) );
+	const U32 lID = ++sCollisionShapeMasterSerialId;
+
+    if(mpScene)
+    {    
+		// Create and push fixture.
+		mCollisionFixtures.insert(lID, mpBody->CreateFixture(pFixtureDef));
 
         // Destroy shape and fixture.
         delete pShape;
         delete pFixtureDef;
 
-        return mCollisionFixtures.size()-1;
+		return lID;
     }
 
     // Push fixture definition.
-    mCollisionFixtureDefs.push_back( pFixtureDef );
-
-    return mCollisionFixtureDefs.size()-1;
+    mCollisionFixtureDefs.insert( lID, pFixtureDef );
+	
+	return lID;
 }
 
 //-----------------------------------------------------------------------------
 
-F32 SceneObject::getCircleCollisionShapeRadius( const U32 shapeIndex ) const
+F32 SceneObject::getCircleCollisionShapeRadius( const U32 shapeId ) const
 {
     // Fetch shape.
-    const b2CircleShape* pShape = getCollisionCircleShape( shapeIndex );
+    const b2CircleShape* pShape = getCollisionCircleShape( shapeId );
 
     return pShape->m_radius;
 }
 
 //-----------------------------------------------------------------------------
 
-Vector2 SceneObject::getCircleCollisionShapeLocalPosition( const U32 shapeIndex ) const
+Vector2 SceneObject::getCircleCollisionShapeLocalPosition( const U32 shapeId ) const
 {
     // Fetch shape.
-    const b2CircleShape* pShape = getCollisionCircleShape( shapeIndex );
+    const b2CircleShape* pShape = getCollisionCircleShape( shapeId );
 
     return pShape->m_p;
 }
@@ -2145,22 +2141,24 @@ S32 SceneObject::createPolygonCollisionShape( const U32 pointCount, const b2Vec2
     pShape->Set( localPoints, pointCount );
     pFixtureDef->shape = pShape;
 
+	const U32 lID = ++sCollisionShapeMasterSerialId;
+
     if ( mpScene )
     {
         // Create and push fixture.
-        mCollisionFixtures.push_back( mpBody->CreateFixture( pFixtureDef ) );
+		mCollisionFixtures.insert(lID, mpBody->CreateFixture(pFixtureDef));
 
         // Destroy shape and fixture.
         delete pShape;
         delete pFixtureDef;
 
-        return mCollisionFixtures.size()-1;
+		return lID;
     }
 
     // Push fixture definition.
-    mCollisionFixtureDefs.push_back( pFixtureDef );
+	mCollisionFixtureDefs.insert( lID, pFixtureDef );
 
-    return mCollisionFixtureDefs.size()-1;
+	return lID;
 }
 
 //-----------------------------------------------------------------------------
@@ -2188,22 +2186,24 @@ S32 SceneObject::createPolygonBoxCollisionShape( const F32 width, const F32 heig
     pShape->SetAsBox( width * 0.5f, height * 0.5f );
     pFixtureDef->shape = pShape;
 
+	const U32 lID = ++sCollisionShapeMasterSerialId;
+
     if ( mpScene )
     {
         // Create and push fixture.
-        mCollisionFixtures.push_back( mpBody->CreateFixture( pFixtureDef ) );
+		mCollisionFixtures.insert(lID, mpBody->CreateFixture(pFixtureDef));
 
         // Destroy shape and fixture.
         delete pShape;
         delete pFixtureDef;
 
-        return mCollisionFixtures.size()-1;
+		return lID;
     }
 
     // Push fixture definition.
-    mCollisionFixtureDefs.push_back( pFixtureDef );
+	mCollisionFixtureDefs.insert( lID, pFixtureDef );
 
-    return mCollisionFixtureDefs.size()-1;
+	return lID;
 }
 
 //-----------------------------------------------------------------------------
@@ -2231,22 +2231,24 @@ S32 SceneObject::createPolygonBoxCollisionShape( const F32 width, const F32 heig
     pShape->SetAsBox( width * 0.5f, height * 0.5f, localCentroid, 0.0f );
     pFixtureDef->shape = pShape;
 
+	const U32 lID = ++sCollisionShapeMasterSerialId;
+
     if ( mpScene )
     {
         // Create and push fixture.
-        mCollisionFixtures.push_back( mpBody->CreateFixture( pFixtureDef ) );
+		mCollisionFixtures.insert(lID, mpBody->CreateFixture(pFixtureDef));
 
         // Destroy shape and fixture.
         delete pShape;
         delete pFixtureDef;
 
-        return mCollisionFixtures.size()-1;
+		return lID;
     }
 
     // Push fixture definition.
-    mCollisionFixtureDefs.push_back( pFixtureDef );
+	mCollisionFixtureDefs.insert( lID, pFixtureDef );
 
-    return mCollisionFixtureDefs.size()-1;
+	return lID;
 }
 
 //-----------------------------------------------------------------------------
@@ -2274,40 +2276,42 @@ S32 SceneObject::createPolygonBoxCollisionShape( const F32 width, const F32 heig
     pShape->SetAsBox( width * 0.5f, height * 0.5f, localCentroid, rotation );
     pFixtureDef->shape = pShape;
 
+	const U32 lID = ++sCollisionShapeMasterSerialId;
+
     if ( mpScene )
     {
         // Create and push fixture.
-        mCollisionFixtures.push_back( mpBody->CreateFixture( pFixtureDef ) );
+		mCollisionFixtures.insert(lID, mpBody->CreateFixture(pFixtureDef));
 
         // Destroy shape and fixture.
         delete pShape;
         delete pFixtureDef;
 
-        return mCollisionFixtures.size()-1;
+		return lID;
     }
 
     // Push fixture definition.
-    mCollisionFixtureDefs.push_back( pFixtureDef );
+	mCollisionFixtureDefs.insert( lID, pFixtureDef );
 
-    return mCollisionFixtureDefs.size()-1;
+	return lID;
 }
 
 //-----------------------------------------------------------------------------
 
-U32 SceneObject::getPolygonCollisionShapePointCount( const U32 shapeIndex ) const
+U32 SceneObject::getPolygonCollisionShapePointCount( const U32 shapeId ) const
 {
     // Fetch shape.
-    const b2PolygonShape* pShape = getCollisionPolygonShape( shapeIndex );
+    const b2PolygonShape* pShape = getCollisionPolygonShape( shapeId );
 
     return pShape->GetVertexCount();
 }
 
 //-----------------------------------------------------------------------------
 
-Vector2 SceneObject::getPolygonCollisionShapeLocalPoint( const U32 shapeIndex, const U32 pointIndex ) const
+Vector2 SceneObject::getPolygonCollisionShapeLocalPoint( const U32 shapeId, const U32 pointIndex ) const
 {
     // Fetch shape.
-    const b2PolygonShape* pShape = getCollisionPolygonShape( shapeIndex );
+    const b2PolygonShape* pShape = getCollisionPolygonShape( shapeId );
 
     // Sanity!
     AssertFatal( pointIndex < (U32)pShape->GetVertexCount(), "SceneObject::getPolygonCollisionShapeLocalPoint() - Invalid local point index." );
@@ -2335,22 +2339,24 @@ S32 SceneObject::createChainCollisionShape( const U32 pointCount, const b2Vec2* 
     pShape->CreateChain( localPoints, pointCount );
     pFixtureDef->shape = pShape;
 
+	const U32 lID = ++sCollisionShapeMasterSerialId;
+
     if ( mpScene )
     {
         // Create and push fixture.
-        mCollisionFixtures.push_back( mpBody->CreateFixture( pFixtureDef ) );
+		mCollisionFixtures.insert(lID, mpBody->CreateFixture(pFixtureDef));
 
         // Destroy shape and fixture.
         delete pShape;
         delete pFixtureDef;
 
-        return mCollisionFixtures.size()-1;
+		return lID;
     }
 
     // Push fixture definition.
-    mCollisionFixtureDefs.push_back( pFixtureDef );
+	mCollisionFixtureDefs.insert( lID, pFixtureDef );
 
-    return mCollisionFixtureDefs.size()-1;
+	return lID;
 }
 
 //-----------------------------------------------------------------------------
@@ -2382,40 +2388,42 @@ S32 SceneObject::createChainCollisionShape(  const U32 pointCount, const b2Vec2*
 
     pFixtureDef->shape = pShape;
 
+	const U32 lID = ++sCollisionShapeMasterSerialId;
+
     if ( mpScene )
     {
         // Create and push fixture.
-        mCollisionFixtures.push_back( mpBody->CreateFixture( pFixtureDef ) );
+		mCollisionFixtures.insert(lID, mpBody->CreateFixture(pFixtureDef));
 
         // Destroy shape and fixture.
         delete pShape;
         delete pFixtureDef;
 
-        return mCollisionFixtures.size()-1;
+		return lID;
     }
 
     // Push fixture definition.
-    mCollisionFixtureDefs.push_back( pFixtureDef );
+	mCollisionFixtureDefs.insert( lID, pFixtureDef );
 
-    return mCollisionFixtureDefs.size()-1;
+	return lID;
 }
 
 //-----------------------------------------------------------------------------
 
-U32 SceneObject::getChainCollisionShapePointCount( const U32 shapeIndex ) const
+U32 SceneObject::getChainCollisionShapePointCount( const U32 shapeId ) const
 {
     // Fetch shape.
-    const b2ChainShape* pShape = getCollisionChainShape( shapeIndex );
+    const b2ChainShape* pShape = getCollisionChainShape( shapeId );
 
     return pShape->m_count;
 }
 
 //-----------------------------------------------------------------------------
 
-Vector2 SceneObject::getChainCollisionShapeLocalPoint( const U32 shapeIndex, const U32 pointIndex ) const
+Vector2 SceneObject::getChainCollisionShapeLocalPoint( const U32 shapeId, const U32 pointIndex ) const
 {
     // Fetch shape.
-    const b2ChainShape* pShape = getCollisionChainShape( shapeIndex );
+    const b2ChainShape* pShape = getCollisionChainShape( shapeId );
 
     // Sanity!
     AssertFatal( pointIndex < (U32)pShape->m_count, "SceneObject::getChainCollisionShapeLocalPoint() - Invalid local point index." );
@@ -2425,40 +2433,40 @@ Vector2 SceneObject::getChainCollisionShapeLocalPoint( const U32 shapeIndex, con
 
 //-----------------------------------------------------------------------------
 
-bool SceneObject::getChainCollisionShapeHasAdjacentStart( const U32 shapeIndex ) const
+bool SceneObject::getChainCollisionShapeHasAdjacentStart( const U32 shapeId ) const
 {
     // Fetch shape.
-    const b2ChainShape* pShape = getCollisionChainShape( shapeIndex );
+    const b2ChainShape* pShape = getCollisionChainShape( shapeId );
 
     return pShape->m_hasPrevVertex;
 }
 
 //-----------------------------------------------------------------------------
 
-bool SceneObject::getChainCollisionShapeHasAdjacentEnd( const U32 shapeIndex ) const
+bool SceneObject::getChainCollisionShapeHasAdjacentEnd( const U32 shapeId ) const
 {
     // Fetch shape.
-    const b2ChainShape* pShape = getCollisionChainShape( shapeIndex );
+    const b2ChainShape* pShape = getCollisionChainShape( shapeId );
 
     return pShape->m_hasNextVertex;
 }
 
 //-----------------------------------------------------------------------------
 
-Vector2 SceneObject::getChainCollisionShapeAdjacentStart( const U32 shapeIndex ) const
+Vector2 SceneObject::getChainCollisionShapeAdjacentStart( const U32 shapeId ) const
 {
     // Fetch shape.
-    const b2ChainShape* pShape = getCollisionChainShape( shapeIndex );
+    const b2ChainShape* pShape = getCollisionChainShape( shapeId );
 
     return pShape->m_prevVertex;
 }
 
 //-----------------------------------------------------------------------------
 
-Vector2 SceneObject::getChainCollisionShapeAdjacentEnd( const U32 shapeIndex ) const
+Vector2 SceneObject::getChainCollisionShapeAdjacentEnd( const U32 shapeId ) const
 {
     // Fetch shape.
-    const b2ChainShape* pShape = getCollisionChainShape( shapeIndex );
+    const b2ChainShape* pShape = getCollisionChainShape( shapeId );
 
     return pShape->m_nextVertex;
 }
@@ -2476,22 +2484,24 @@ S32 SceneObject::createEdgeCollisionShape( const b2Vec2& localPositionStart, con
     pShape->Set( localPositionStart, localPositionEnd );
     pFixtureDef->shape = pShape;
 
+	const U32 lID = ++sCollisionShapeMasterSerialId;
+
     if ( mpScene )
     {
         // Create and push fixture.
-        mCollisionFixtures.push_back( mpBody->CreateFixture( pFixtureDef ) );
+		mCollisionFixtures.insert(lID, mpBody->CreateFixture(pFixtureDef));
 
         // Destroy shape and fixture.
         delete pShape;
         delete pFixtureDef;
 
-        return mCollisionFixtures.size()-1;
+		return lID;
     }
 
     // Push fixture definition.
-    mCollisionFixtureDefs.push_back( pFixtureDef );
+	mCollisionFixtureDefs.insert( lID, pFixtureDef );
 
-    return mCollisionFixtureDefs.size()-1;
+	return lID;
 }
 
 //-----------------------------------------------------------------------------
@@ -2513,80 +2523,82 @@ S32 SceneObject::createEdgeCollisionShape(   const b2Vec2& localPositionStart, c
     pShape->m_vertex3         = adjacentLocalPositionEnd;
     pFixtureDef->shape        = pShape;
 
+	const U32 lID = ++sCollisionShapeMasterSerialId;
+
     if ( mpScene )
     {
         // Create and push fixture.
-        mCollisionFixtures.push_back( mpBody->CreateFixture( pFixtureDef ) );
+		mCollisionFixtures.insert(lID, mpBody->CreateFixture(pFixtureDef));
 
         // Destroy shape and fixture.
         delete pShape;
         delete pFixtureDef;
 
-        return mCollisionFixtures.size()-1;
+		return lID;
     }
 
     // Push fixture definition.
-    mCollisionFixtureDefs.push_back( pFixtureDef );
+	mCollisionFixtureDefs.insert( lID, pFixtureDef );
 
-    return mCollisionFixtureDefs.size()-1;
+	return lID;
 }
 
 //-----------------------------------------------------------------------------
 
-Vector2 SceneObject::getEdgeCollisionShapeLocalPositionStart( const U32 shapeIndex ) const
+Vector2 SceneObject::getEdgeCollisionShapeLocalPositionStart( const U32 shapeId ) const
 {
     // Fetch shape.
-    const b2EdgeShape* pShape = getCollisionEdgeShape( shapeIndex );
+    const b2EdgeShape* pShape = getCollisionEdgeShape( shapeId );
 
     return pShape->m_vertex1;
 }
 
 //-----------------------------------------------------------------------------
 
-Vector2 SceneObject::getEdgeCollisionShapeLocalPositionEnd( const U32 shapeIndex ) const
+Vector2 SceneObject::getEdgeCollisionShapeLocalPositionEnd( const U32 shapeId ) const
 {
     // Fetch shape.
-    const b2EdgeShape* pShape = getCollisionEdgeShape( shapeIndex );
+    const b2EdgeShape* pShape = getCollisionEdgeShape( shapeId );
 
     return pShape->m_vertex2;
 }
 
 //-----------------------------------------------------------------------------
 
-bool SceneObject::getEdgeCollisionShapeHasAdjacentStart( const U32 shapeIndex ) const
+bool SceneObject::getEdgeCollisionShapeHasAdjacentStart( const U32 shapeId ) const
 {
     // Fetch shape.
-    const b2EdgeShape* pShape = getCollisionEdgeShape( shapeIndex );
+    const b2EdgeShape* pShape = getCollisionEdgeShape( shapeId );
 
     return pShape->m_hasVertex0;
 }
 
 //-----------------------------------------------------------------------------
 
-bool SceneObject::getEdgeCollisionShapeHasAdjacentEnd( const U32 shapeIndex ) const
+bool SceneObject::getEdgeCollisionShapeHasAdjacentEnd( const U32 shapeId ) const
 {
     // Fetch shape.
-    const b2EdgeShape* pShape = getCollisionEdgeShape( shapeIndex );
+    const b2EdgeShape* pShape = getCollisionEdgeShape( shapeId );
 
     return pShape->m_hasVertex3;
 }
 
 //-----------------------------------------------------------------------------
 
-Vector2 SceneObject::getEdgeCollisionShapeAdjacentStart( const U32 shapeIndex ) const
+Vector2 SceneObject::getEdgeCollisionShapeAdjacentStart( const U32 shapeId ) const
 {
     // Fetch shape.
-    const b2EdgeShape* pShape = getCollisionEdgeShape( shapeIndex );
+    const b2EdgeShape* pShape = getCollisionEdgeShape( shapeId );
 
     return pShape->m_vertex0;
 }
 
 //-----------------------------------------------------------------------------
 
-Vector2 SceneObject::getEdgeCollisionShapeAdjacentEnd( const U32 shapeIndex ) const
+Vector2 SceneObject::getEdgeCollisionShapeAdjacentEnd( const U32 shapeId ) const
 {
     // Fetch shape.
-    const b2EdgeShape* pShape = getCollisionEdgeShape( shapeIndex );
+    const b2EdgeShape* pShape = getCollisionEdgeShape( shapeId );
 
     return pShape->m_vertex3;
 }
@@ -2884,7 +2896,7 @@ void SceneObject::copyTo( SimObject* obj )
 
 //-----------------------------------------------------------------------------
 
-S32 SceneObject::copyCollisionShapes( SceneObject* pSceneObject, const bool clearTargetShapes, const S32 shapeIndex )
+S32 SceneObject::copyCollisionShapes( SceneObject* pSceneObject, const bool clearTargetShapes, const S32 shapeId )
 {
     // Sanity!
     AssertFatal( pSceneObject != NULL, "SceneObject::copyCollisionShapes() - Cannot copy to a NULL scene object." );
@@ -2897,106 +2909,132 @@ S32 SceneObject::copyCollisionShapes( SceneObject* pSceneObject, const bool clea
     const U32 collisionShapeCount = getCollisionShapeCount();
 
     // If a shape index is specified, is it valid?
-    if ( shapeIndex != INVALID_COLLISION_SHAPE_INDEX && shapeIndex >= (S32)collisionShapeCount )
+	if(shapeId != INVALID_COLLISION_SHAPE_ID && ((mpScene && !mCollisionFixtures.contains(shapeId)) || (!mpScene &&  !mCollisionFixtureDefs.contains(shapeId))))
     {
         // No, so warn.
-        Con::warnf( "SceneObject::copyCollisionShapes() - Invalid shape index '%d'.", shapeIndex );
-        return INVALID_COLLISION_SHAPE_INDEX;
+        Con::warnf( "SceneObject::copyCollisionShapes() - Invalid shape index '%d'.", shapeId );
+        return INVALID_COLLISION_SHAPE_ID;
     }
 
     // Finish if there are no collision shapes.
     if ( collisionShapeCount == 0 )
-        return INVALID_COLLISION_SHAPE_INDEX;
+        return INVALID_COLLISION_SHAPE_ID;
 
-    // Calculate shape range.
-    const U32 startShapeIndex = shapeIndex >= 0 ? shapeIndex : 0;
-    const U32 endShapeIndex = shapeIndex >= 0 ? shapeIndex : collisionShapeCount -1;
+    Vector<b2FixtureDef> fixtureDefs;
 
-    // Iterate collision shapes.
-    for ( U32 index = startShapeIndex; index <= endShapeIndex; ++index )
+	if(shapeId >= 0)
+	{
+		if ( mpScene )
+		{
+			const b2Fixture* pFixture = mCollisionFixtures[shapeId];
+
+			// Fetch common details.
+			b2FixtureDef fixtureDef;
+			fixtureDef.density     = pFixture->GetDensity();
+			fixtureDef.friction    = pFixture->GetFriction();
+			fixtureDef.restitution = pFixture->GetRestitution();
+			fixtureDef.isSensor    = pFixture->IsSensor();
+			fixtureDef.shape       = pFixture->GetShape();
+
+			fixtureDefs.push_back(fixtureDef);
+		}
+		else
+		{
+			fixtureDefs.push_back(*mCollisionFixtureDefs[shapeId]);
+		}
+	}
+	else
     {
-        b2FixtureDef fixtureDef;
+		if ( mpScene )
+		{
+			for( typeCollisionFixtureMap::iterator itr = mCollisionFixtures.begin(); itr != mCollisionFixtures.end(); itr++ )
+			{
+				// Fetch fixture.
+				const b2Fixture* pFixture = itr->value;
 
-        if ( mpScene )
-        {
-            // Fetch fixture.
-            b2Fixture* pFixture = mCollisionFixtures[index];
+				// Fetch common details.
+				b2FixtureDef fixtureDef;
+				fixtureDef.density     = pFixture->GetDensity();
+				fixtureDef.friction    = pFixture->GetFriction();
+				fixtureDef.restitution = pFixture->GetRestitution();
+				fixtureDef.isSensor    = pFixture->IsSensor();
+				fixtureDef.shape       = pFixture->GetShape();
 
-            // Fetch common details.
-            fixtureDef.density     = pFixture->GetDensity();
-            fixtureDef.friction    = pFixture->GetFriction();
-            fixtureDef.restitution = pFixture->GetRestitution();
-            fixtureDef.isSensor    = pFixture->IsSensor();
-            fixtureDef.shape       = pFixture->GetShape();
-        }
-        else
-        {
-            // Fetch fixture def.
-            b2FixtureDef* pFixtureDef = mCollisionFixtureDefs[index];
+				fixtureDefs.push_back(fixtureDef);
+			}
+		}
+		else
+		{
+			for( typeCollisionFixtureDefMap::iterator itr = mCollisionFixtureDefs.begin(); itr != mCollisionFixtureDefs.end(); itr++ )
+			{
+				// Fetch fixture def.
+				fixtureDefs.push_back(*itr->value);
+			}
+		}
 
-            // Fetch common details.
-            fixtureDef = *pFixtureDef;
-        }
+	}
 
-        S32 newShapeIndex;
+	U32 newshapeId;
 
-        // Fetch shape type.
-        const b2Shape::Type shapeType = fixtureDef.shape->GetType();
+	for(Vector<b2FixtureDef>::const_iterator itr = fixtureDefs.begin(); itr != fixtureDefs.end(); itr++ )
+	{
+		// Fetch shape type.
+		const b2Shape::Type shapeType = itr->shape->GetType();
 
-        // Copy appropriate shape type.
-        switch( shapeType )
-        {
-            case b2Shape::e_circle:
-                newShapeIndex = copyCircleCollisionShapeTo( pSceneObject, fixtureDef );
+		// Copy appropriate shape type.
+		switch( shapeType )
+		{
+			case b2Shape::e_circle:
+				newshapeId = copyCircleCollisionShapeTo( pSceneObject, *itr );
 
-                // Return the new shape if we're copying a specific index.
-                if ( shapeIndex >= 0 )
-                    return newShapeIndex;
+				// Return the new shape if we're copying a specific index.
+				if ( shapeId >= 0 )
+					return newshapeId;
 
-                continue;
+				continue;
 
-            case b2Shape::e_polygon:
-                newShapeIndex = copyPolygonCollisionShapeTo( pSceneObject, fixtureDef );
+			case b2Shape::e_polygon:
+				newshapeId = copyPolygonCollisionShapeTo( pSceneObject, *itr );
 
-                // Return the new shape if we're copying a specific index.
-                if ( shapeIndex >= 0 )
-                    return newShapeIndex;
+				// Return the new shape if we're copying a specific index.
+				if ( shapeId >= 0 )
+					return newshapeId;
 
-                continue;
+				continue;
 
-            case b2Shape::e_chain:
-                newShapeIndex = copyChainCollisionShapeTo( pSceneObject, fixtureDef );
+			case b2Shape::e_chain:
+				newshapeId = copyChainCollisionShapeTo( pSceneObject, *itr );
 
-                // Return the new shape if we're copying a specific index.
-                if ( shapeIndex >= 0 )
-                    return newShapeIndex;
+				// Return the new shape if we're copying a specific index.
+				if ( shapeId >= 0 )
+					return newshapeId;
 
-                continue;
+				continue;
 
-            case b2Shape::e_edge:
-                newShapeIndex = copyEdgeCollisionShapeTo( pSceneObject, fixtureDef );
+			case b2Shape::e_edge:
+				newshapeId = copyEdgeCollisionShapeTo( pSceneObject, *itr );
 
-                // Return the new shape if we're copying a specific index.
-                if ( shapeIndex >= 0 )
-                    return newShapeIndex;
+				// Return the new shape if we're copying a specific index.
+				if ( shapeId >= 0 )
+					return newshapeId;
 
-                continue;
+				continue;
 
-            default:
-                AssertFatal( false, "SceneObject::copyCollisionShapes() - Unsupported collision shape type encountered." );
-        }
-    }
+			default:
+				AssertFatal( false, "SceneObject::copyCollisionShapes() - Unsupported collision shape type encountered." );
+		}
+	}
 
-    // Return the first index if we're copying all the shapes.
-    if ( shapeIndex < 0 )
-        return 0;
+	// Return the first (last?) index if we're copying all the shapes.
+    if( shapeId < 0)
+        return newshapeId;
 
-    return INVALID_COLLISION_SHAPE_INDEX;
+    return INVALID_COLLISION_SHAPE_ID;
 }
 
 //-----------------------------------------------------------------------------
 
-S32 SceneObject::copyCircleCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const
+U32 SceneObject::copyCircleCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const
 {
     // Fetch shape.
     const b2CircleShape* pShape = dynamic_cast<const b2CircleShape*>( fixtureDef.shape );
@@ -3005,7 +3043,7 @@ S32 SceneObject::copyCircleCollisionShapeTo( SceneObject* pSceneObject, const b2
     if ( !pShape )
     {
         Con::errorf("SceneObject::copyCircleCollisionShapeTo() - Invalid shape.");
-        return INVALID_COLLISION_SHAPE_INDEX;
+        return INVALID_COLLISION_SHAPE_ID;
     }
 
     // Fetch shape details.
@@ -3013,21 +3051,21 @@ S32 SceneObject::copyCircleCollisionShapeTo( SceneObject* pSceneObject, const b2
     const b2Vec2 localPosition = pShape->m_p;
 
     // Copy shape.
-    const S32 shapeIndex = pSceneObject->createCircleCollisionShape( radius, localPosition );
+    const U32 shapeId = pSceneObject->createCircleCollisionShape( radius, localPosition );
 
     // Was shape created.
-    if ( shapeIndex != -1 )
+    if ( shapeId != INVALID_COLLISION_SHAPE_ID )
     {
         // Yes, so configure shape.
-        pSceneObject->setCollisionShapeDefinition( shapeIndex, fixtureDef );
+        pSceneObject->setCollisionShapeDefinition( shapeId, fixtureDef );
     }
 
-    return shapeIndex;
+    return shapeId;
 }
 
 //-----------------------------------------------------------------------------
 
-S32 SceneObject::copyPolygonCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const
+U32 SceneObject::copyPolygonCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const
 {
     // Fetch shape.
     const b2PolygonShape* pShape = dynamic_cast<const b2PolygonShape*>( fixtureDef.shape );
@@ -3036,7 +3074,7 @@ S32 SceneObject::copyPolygonCollisionShapeTo( SceneObject* pSceneObject, const b
     if ( !pShape )
     {
         Con::errorf("SceneObject::copyPolygonCollisionShapeTo() - Invalid shape.");
-        return INVALID_COLLISION_SHAPE_INDEX;
+        return INVALID_COLLISION_SHAPE_ID;
     }
 
     // Fetch point count.
@@ -3046,21 +3084,21 @@ S32 SceneObject::copyPolygonCollisionShapeTo( SceneObject* pSceneObject, const b
     const b2Vec2* plocalPoints = pShape->m_vertices;
 
     // Copy shape.
-    const S32 shapeIndex = pSceneObject->createPolygonCollisionShape( pointCount, plocalPoints );
+    const U32 shapeId = pSceneObject->createPolygonCollisionShape( pointCount, plocalPoints );
 
     // Was shape created.
-    if ( shapeIndex != -1 )
+    if ( shapeId != INVALID_COLLISION_SHAPE_ID )
     {
         // Yes, so configure shape.
-        pSceneObject->setCollisionShapeDefinition( shapeIndex, fixtureDef );
+        pSceneObject->setCollisionShapeDefinition( shapeId, fixtureDef );
     }
 
-    return shapeIndex;
+    return shapeId;
 }
 
 //-----------------------------------------------------------------------------
 
-S32 SceneObject::copyChainCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const
+U32 SceneObject::copyChainCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const
 {
     // Fetch shape.
     const b2ChainShape* pShape = dynamic_cast<const b2ChainShape*>( fixtureDef.shape );
@@ -3069,7 +3107,7 @@ S32 SceneObject::copyChainCollisionShapeTo( SceneObject* pSceneObject, const b2F
     if ( !pShape )
     {
         Con::errorf("SceneObject::copyChainCollisionShapeTo() - Invalid shape.");
-        return INVALID_COLLISION_SHAPE_INDEX;
+        return INVALID_COLLISION_SHAPE_ID;
     }
 
     // Fetch point count.
@@ -3085,24 +3123,24 @@ S32 SceneObject::copyChainCollisionShapeTo( SceneObject* pSceneObject, const b2F
     const b2Vec2 adjacentLocalPositionEnd    = pShape->m_nextVertex;
 
     // Create shape.
-    const S32 shapeIndex = pSceneObject->createChainCollisionShape(
+    const S32 shapeId = pSceneObject->createChainCollisionShape(
         pointCount, localPoints,
         hasAdjacentLocalPositionStart, hasAdjacentLocalPositionEnd,
         adjacentLocalPositionStart, adjacentLocalPositionEnd);
 
     // Was shape created.
-    if ( shapeIndex != -1 )
+    if ( shapeId != INVALID_COLLISION_SHAPE_ID )
     {
         // Yes, so configure shape.
-        pSceneObject->setCollisionShapeDefinition( shapeIndex, fixtureDef );
+        pSceneObject->setCollisionShapeDefinition( shapeId, fixtureDef );
     }
 
-    return shapeIndex;
+    return shapeId;
 }
 
 //-----------------------------------------------------------------------------
 
-S32 SceneObject::copyEdgeCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const
+U32 SceneObject::copyEdgeCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const
 {
     // Fetch shape.
     const b2EdgeShape* pShape = dynamic_cast<const b2EdgeShape*>( fixtureDef.shape );
@@ -3111,7 +3149,7 @@ S32 SceneObject::copyEdgeCollisionShapeTo( SceneObject* pSceneObject, const b2Fi
     if ( !pShape )
     {
         Con::errorf("SceneObject::copyEdgeCollisionShapeTo() - Invalid shape.");
-        return INVALID_COLLISION_SHAPE_INDEX;
+        return INVALID_COLLISION_SHAPE_ID;
     }
 
     // Fetch positions.
@@ -3123,19 +3161,19 @@ S32 SceneObject::copyEdgeCollisionShapeTo( SceneObject* pSceneObject, const b2Fi
     const b2Vec2 adjacentLocalPosition2  = pShape->m_vertex3;
 
     // Create shape.
-    const S32 shapeIndex = pSceneObject->createEdgeCollisionShape(
+    const S32 shapeId = pSceneObject->createEdgeCollisionShape(
         localPosition1, localPosition2,
         hasAdjacentLocalPosition1, hasAdjacentLocalPosition2,
         adjacentLocalPosition1, adjacentLocalPosition2 );
 
     // Was shape created.
-    if ( shapeIndex != -1 )
+    if ( shapeId != INVALID_COLLISION_SHAPE_ID )
     {
         // Yes, so configure shape.
-        pSceneObject->setCollisionShapeDefinition( shapeIndex, fixtureDef );
+        pSceneObject->setCollisionShapeDefinition( shapeId, fixtureDef );
     }
 
-    return shapeIndex;
+    return shapeId;
 }
 
 //-----------------------------------------------------------------------------
@@ -3304,10 +3342,12 @@ void SceneObject::onTamlCustomWrite( TamlCustomNodes& customNodes )
     TamlCustomNode* pCustomCollisionShapes = customNodes.addNode( shapeCustomNodeName );
 
     // Iterate collision shapes.
-    for ( U32 shapeIndex = 0; shapeIndex < collisionShapeCount; ++shapeIndex )
+	for( typeCollisionFixtureMap::iterator itr = mCollisionFixtures.begin(); itr != mCollisionFixtures.end(); itr++ )
     {
+		const U32 shapeId = itr->key;
+
         // Fetch collision shape definition.
-        b2FixtureDef fixtureDef = getCollisionShapeDefinition( shapeIndex );
+        b2FixtureDef fixtureDef = getCollisionShapeDefinition(shapeId);
 
         // Add collision shape node.
         // NOTE:    The name of the node will get updated shortly.
@@ -3495,7 +3535,7 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
         F32 shapeRestitution = getDefaultRestitution();
         bool shapeSensor     = false;
 
-        S32 shapeIndex;
+        U32 shapeId;
 
         // Is this a circle shape?
         if ( shapeName == circleTypeName )
@@ -3555,7 +3595,7 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             }
 
             // Create shape.
-            shapeIndex = createCircleCollisionShape( radius, offset );
+            shapeId = createCircleCollisionShape( radius, offset );
         }
         // Is this a polygon shape?
         else if ( shapeName == polygonTypeName )
@@ -3634,7 +3674,7 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             }
 
             // Create shape.
-            shapeIndex = createPolygonCollisionShape( pointCount, points );
+            shapeId = createPolygonCollisionShape( pointCount, points );
         }
         // Is this a chain shape?
         else if ( shapeName == chainTypeName )
@@ -3735,7 +3775,7 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             }
 
             // Create shape.
-            shapeIndex = createChainCollisionShape( points.size(), points.address(), hasAdjacentStartPoint, hasAdjacentEndPoint, adjacentStartPoint, adjacentEndPoint );
+            shapeId = createChainCollisionShape( points.size(), points.address(), hasAdjacentStartPoint, hasAdjacentEndPoint, adjacentStartPoint, adjacentEndPoint );
         }
         // Is this an edge shape?
         else if ( shapeName == edgeTypeName )
@@ -3844,7 +3884,7 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
             }
 
             // Create shape.
-            shapeIndex = createEdgeCollisionShape( point0, point1, hasAdjacentStartPoint, hasAdjacentEndPoint, adjacentStartPoint, adjacentEndPoint );
+            shapeId = createEdgeCollisionShape( point0, point1, hasAdjacentStartPoint, hasAdjacentEndPoint, adjacentStartPoint, adjacentEndPoint );
         }
         // Unknown shape type!
         else
@@ -3859,10 +3899,10 @@ void SceneObject::onTamlCustomRead( const TamlCustomNodes& customNodes )
         }
 
         // Set common properties.
-        setCollisionShapeDensity( shapeIndex, shapeDensity );
-        setCollisionShapeFriction( shapeIndex, shapeFriction );
-        setCollisionShapeRestitution( shapeIndex, shapeRestitution );
-        setCollisionShapeIsSensor( shapeIndex, shapeSensor );
+        setCollisionShapeDensity( shapeId, shapeDensity );
+        setCollisionShapeFriction( shapeId, shapeFriction );
+        setCollisionShapeRestitution( shapeId, shapeRestitution );
+        setCollisionShapeIsSensor( shapeId, shapeSensor );
     }        
 }
 

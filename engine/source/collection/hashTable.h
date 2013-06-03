@@ -197,19 +197,19 @@ public:
 
    // HashTable lookup
    iterator findOrInsert(const Key& key);
+   //const_iterator findOrInsert(const Key& key) const;
    iterator find(const Key&);          ///< Find the first entry for the given key
    const_iterator find(const Key&) const;    ///< Find the first entry for the given key
-   S32 count(const Key&);              ///< Count the number of matching keys in the table
+   S32 count(const Key&) const ; ///< Count the number of matching keys in the table
 
    // Forward iterator access
    iterator       begin();             ///< iterator to first element
-   const_iterator begin() const;        ///< iterator to first element
+   const_iterator begin() const;       ///< iterator to first element
    iterator       end();               ///< iterator to last element + 1
-   const_iterator end() const;          ///< iterator to last element + 1
+   const_iterator end() const;         ///< iterator to last element + 1
 
    void operator=(const HashTable& p);
 };
-
 
 template<typename Key, typename Value> HashTable<Key,Value>::HashTable()
 {
@@ -230,7 +230,6 @@ template<typename Key, typename Value> HashTable<Key,Value>::~HashTable()
 {
    _destroy();
 }
-
 
 //-----------------------------------------------------------------------------
 
@@ -297,7 +296,6 @@ void HashTable<Key,Value>::_destroy()
    mTable = NULL;
 }
 
-
 //-----------------------------------------------------------------------------
 // management
 
@@ -349,7 +347,6 @@ inline F32 HashTable<Key,Value>::collisions() const
          chains++;
    return F32(mSize) / chains;
 }
-
 
 //-----------------------------------------------------------------------------
 // add & remove elements
@@ -424,7 +421,6 @@ void HashTable<Key,Value>::erase(iterator node)
       }
 }
 
-
 //-----------------------------------------------------------------------------
 
 /// Find the key, or insert a one if it doesn't exist.
@@ -444,6 +440,22 @@ typename HashTable<Key,Value>::iterator HashTable<Key,Value>::findOrInsert(const
    return iterator(this,*table);
 }
 
+/*
+template<typename Key, typename Value>
+typename HashTable<Key,Value>::const_iterator HashTable<Key,Value>::findOrInsert(const Key& key) const
+{
+   if (mSize >= (U32)mTableSize)
+      _resize(mSize + 1);
+   Node** table = &mTable[_index(key)];
+   for (Node* itr = *table; itr; itr = itr->mNext)
+      if ( tKeyCompare::equals<Key>( itr->mPair.key, key ) )
+         return const_iterator(this,itr);
+   mSize++;
+   *table = new Node(Pair(key,Value()),*table);
+   return const_iterator(this,*table);
+}
+*/
+
 template<typename Key, typename Value>
 typename HashTable<Key,Value>::iterator HashTable<Key,Value>::find(const Key& key)
 {
@@ -455,7 +467,17 @@ typename HashTable<Key,Value>::iterator HashTable<Key,Value>::find(const Key& ke
 }
 
 template<typename Key, typename Value>
-S32 HashTable<Key,Value>::count(const Key& key)
+typename HashTable<Key,Value>::const_iterator HashTable<Key,Value>::find(const Key& key) const
+{
+   if (mTableSize)
+      for (Node* itr = mTable[_index(key)]; itr; itr = itr->mNext)
+         if ( tKeyCompare::equals<Key>( itr->mPair.key, key ) )
+            return const_iterator(this,itr);
+   return const_iterator(this,0);
+}
+
+template<typename Key, typename Value>
+S32 HashTable<Key,Value>::count(const Key& key) const
 {
    S32 count = 0;
    if (mTableSize)
@@ -470,7 +492,6 @@ S32 HashTable<Key,Value>::count(const Key& key)
          }
    return count;
 }
-
 
 //-----------------------------------------------------------------------------
 // iterator access
@@ -498,7 +519,6 @@ inline typename HashTable<Key,Value>::const_iterator HashTable<Key,Value>::end()
 {
    return const_iterator(this,0);
 }
-
 
 //-----------------------------------------------------------------------------
 // operators
@@ -572,7 +592,8 @@ public:
    // HashMap lookup
    iterator find(const Key&);          ///< Find entry for the given key
    const_iterator find(const Key&) const;    ///< Find entry for the given key
-   bool contains(const Key&a)
+
+   bool contains(const Key& a) const
    {
       return mHashMap.count(a) > 0;
    }
@@ -585,13 +606,13 @@ public:
 
    // operators
    Value& operator[](const Key&);      ///< Index using the given key. If the key is not currently in the map it is added.
+   const Value& operator[](const Key&) const;      ///< Index using the given key.
 };
 
 template<typename Key, typename Value, class Sequence> HashMap<Key,Value,Sequence>::HashMap(const HashMap& p)
 {
    *this = p;
 }
-
 
 //-----------------------------------------------------------------------------
 // management
@@ -613,7 +634,6 @@ inline bool HashMap<Key,Value,Sequence>::isEmpty() const
 {
    return mHashMap.isEmpty();
 }
-
 
 //-----------------------------------------------------------------------------
 // add & remove elements
@@ -639,12 +659,17 @@ void HashMap<Key,Value,Sequence>::erase(iterator node)
    mHashMap.erase(node);
 }
 
-
 //-----------------------------------------------------------------------------
 // Searching
 
 template<typename Key, typename Value, class Sequence>
 typename HashMap<Key,Value,Sequence>::iterator HashMap<Key,Value,Sequence>::find(const Key& key)
+{
+   return mHashMap.find(key);
+}
+
+template<typename Key, typename Value, class Sequence>
+typename HashMap<Key,Value,Sequence>::const_iterator HashMap<Key,Value,Sequence>::find(const Key& key) const
 {
    return mHashMap.find(key);
 }
@@ -676,7 +701,6 @@ inline typename HashMap<Key,Value,Sequence>::const_iterator HashMap<Key,Value,Se
    return mHashMap.end();
 }
 
-
 //-----------------------------------------------------------------------------
 // operators
 
@@ -686,11 +710,10 @@ inline Value& HashMap<Key,Value,Sequence>::operator[](const Key& key)
    return mHashMap.findOrInsert(key)->value;
 }
 
-
-
-
-
-
-
+template<typename Key, typename Value, class Sequence>
+inline const Value& HashMap<Key,Value,Sequence>::operator[](const Key& key) const
+{
+	return mHashMap.find(key)->value;
+}
 
 #endif// _HASHTABLE_H
