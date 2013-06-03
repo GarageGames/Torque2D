@@ -446,16 +446,8 @@ const Vector2 CompositeSprite::getLogicalPosition( const Vector2& worldPosition 
 			{
 				const Vector2 spriteStride = getDefaultSpriteStride();
 				
-				if(localPosition.x < 0)
-					logicalPosition.x = (localPosition.x / spriteStride.x) - (mFmod(localPosition.x, spriteStride.x) != 0 ? 1 : 0);
-				else
-					logicalPosition.x = (localPosition.x / spriteStride.x) + (mFmod(localPosition.x, spriteStride.x) != 0 ? 1 : 0);
-
-				if(localPosition.x < 0)
-					logicalPosition.y = (localPosition.y / spriteStride.y) - (mFmod(localPosition.y, spriteStride.y) > 0 ? 1 : 0);
-				else
-					logicalPosition.y = (localPosition.y / spriteStride.y) + (mFmod(localPosition.y, spriteStride.y) > 0 ? 1 : 0);
-
+				logicalPosition.x = static_cast<int>((localPosition.x + 0.5f) / spriteStride.x);
+				logicalPosition.y = static_cast<int>((localPosition.y + 0.5f) / spriteStride.y);
 
 				return logicalPosition;
 			}
@@ -470,8 +462,9 @@ const Vector2 CompositeSprite::getLogicalPosition( const Vector2& worldPosition 
 
         default:
             Con::warnf( "CompositeSprite::getLocalPosition() - Unknown layout type encountered." );
-    }	
-	
+    }
+
+	return localPosition;
 }
 
 //-----------------------------------------------------------------------------
