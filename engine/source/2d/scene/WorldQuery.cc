@@ -677,15 +677,15 @@ F32 WorldQuery::ReportFixture( b2Fixture* fixture, const b2Vec2& point, const b2
     const U32 sceneGroupMask = pSceneObject->getSceneGroupMask();
 
     // Fetch collision shape index.
-    const S32 shapeIndex = pSceneObject->getCollisionShapeIndex( fixture );
+    const S32 shapeId = pSceneObject->getCollisionShapeId( fixture );
 
     // Sanity!
-    AssertFatal( shapeIndex >= 0, "WorldQuery::ReportFixture() - Cannot find shape index reported on physics proxy of a fixture." );
+    AssertFatal( shapeId >= 0, "WorldQuery::ReportFixture() - Cannot find shape index reported on physics proxy of a fixture." );
 
     // Compare masks and report.
     if ( (mQueryFilter.mSceneLayerMask & sceneLayerMask) != 0 && (mQueryFilter.mSceneGroupMask & sceneGroupMask) != 0 )
     {
-        WorldQueryResult queryResult( pSceneObject, point, normal, fraction, (U32)shapeIndex );
+        WorldQueryResult queryResult( pSceneObject, point, normal, fraction, (U32)shapeId );
         mLayeredQueryResults[pSceneObject->getSceneLayer()].push_back( queryResult );
         mQueryResults.push_back( queryResult );
 

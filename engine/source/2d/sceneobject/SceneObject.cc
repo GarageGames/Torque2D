@@ -1725,7 +1725,7 @@ b2Shape::Type SceneObject::getCollisionShapeType( const U32 shapeId ) const
 
 //-----------------------------------------------------------------------------
 
-S32 SceneObject::getCollisionshapeId( const b2Fixture* pFixture ) const
+S32 SceneObject::getCollisionShapeId( const b2Fixture* pFixture ) const
 {
 	// Iterate collision shapes.
 	for( typeCollisionFixtureMap::const_iterator itr = mCollisionFixtures.begin(); itr != mCollisionFixtures.end(); itr++ )
@@ -2896,7 +2896,7 @@ void SceneObject::copyTo( SimObject* obj )
 
 //-----------------------------------------------------------------------------
 
-S32 SceneObject::copyCollisionShapes( SceneObject* pSceneObject, const bool clearTargetShapes, const U32 shapeId )
+S32 SceneObject::copyCollisionShapes( SceneObject* pSceneObject, const bool clearTargetShapes, const S32 shapeId )
 {
     // Sanity!
     AssertFatal( pSceneObject != NULL, "SceneObject::copyCollisionShapes() - Cannot copy to a NULL scene object." );

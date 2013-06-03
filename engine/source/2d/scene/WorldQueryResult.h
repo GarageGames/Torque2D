@@ -37,7 +37,7 @@ struct WorldQueryResult
 {
     WorldQueryResult() :
         mpSceneObject( NULL ),
-        mShapeIndex( 0 ),
+        mshapeId( 0 ),
         mPoint( 0.0f, 0.0f ),
         mNormal( 0.0f, 0.0f ),
         mFraction( 0.0f )
@@ -47,7 +47,7 @@ struct WorldQueryResult
     /// Initialize a non-ray-cast result.
     WorldQueryResult( SceneObject* pSceneObject ) :
         mpSceneObject( pSceneObject ),
-        mShapeIndex( 0 ),
+        mshapeId( 0 ),
         mPoint( 0.0f, 0.0f ),
         mNormal( 0.0f, 0.0f ),
         mFraction( 0.0f )
@@ -55,9 +55,9 @@ struct WorldQueryResult
     }
 
     /// Initialize a ray-cast result.    
-    WorldQueryResult( SceneObject* pSceneObject, const b2Vec2& point, const b2Vec2& normal, const F32 fraction, const U32 shapeIndex ) :
+    WorldQueryResult( SceneObject* pSceneObject, const b2Vec2& point, const b2Vec2& normal, const F32 fraction, const U32 shapeId ) :
         mpSceneObject( pSceneObject ),
-        mShapeIndex( shapeIndex ),
+        mshapeId( shapeId ),
         mPoint( point ),
         mNormal( normal ),
         mFraction( fraction )
@@ -68,7 +68,7 @@ struct WorldQueryResult
     b2Vec2          mNormal;
     F32             mFraction;
     SceneObject*    mpSceneObject;
-    U32             mShapeIndex;
+    U32             mshapeId;
 };
 
 ///-----------------------------------------------------------------------------

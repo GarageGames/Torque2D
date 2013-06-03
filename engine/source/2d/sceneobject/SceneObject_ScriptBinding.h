@@ -973,15 +973,15 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
     {
         pSceneObjectThis = tickContact.mpSceneObjectA;
         pSceneObjectCollider = tickContact.mpSceneObjectB;
-        shapeIdThis = pSceneObjectThis->getCollisionshapeId( tickContact.mpFixtureA );
-        shapeIdCollider = pSceneObjectCollider->getCollisionshapeId( tickContact.mpFixtureB );
+        shapeIdThis = pSceneObjectThis->getCollisionShapeId( tickContact.mpFixtureA );
+        shapeIdCollider = pSceneObjectCollider->getCollisionShapeId( tickContact.mpFixtureB );
     }
     else
     {
         pSceneObjectThis = tickContact.mpSceneObjectB;
         pSceneObjectCollider = tickContact.mpSceneObjectA;
-        shapeIdThis = pSceneObjectThis->getCollisionshapeId( tickContact.mpFixtureB );
-        shapeIdCollider = pSceneObjectCollider->getCollisionshapeId( tickContact.mpFixtureA );
+        shapeIdThis = pSceneObjectThis->getCollisionShapeId( tickContact.mpFixtureB );
+        shapeIdCollider = pSceneObjectCollider->getCollisionShapeId( tickContact.mpFixtureA );
     }
 
     // Sanity!

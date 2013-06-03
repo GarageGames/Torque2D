@@ -410,7 +410,7 @@ public:
     void                    clearCollisionShapes( void );
     inline U32              getCollisionShapeCount( void )        { if ( mpScene ) return mCollisionFixtures.size(); else return mCollisionFixtureDefs.size(); }
     b2Shape::Type           getCollisionShapeType( const U32 shapeId ) const;
-    S32                     getCollisionshapeId( const b2Fixture* pFixture ) const;
+    S32                     getCollisionShapeId( const b2Fixture* pFixture ) const;
     void                    setCollisionShapeDefinition( const U32 shapeId, const b2FixtureDef& fixtureDef );
     const b2FixtureDef      getCollisionShapeDefinition( const U32 shapeId ) const;
     const b2CircleShape*    getCollisionCircleShape( const U32 shapeId ) const;
@@ -533,7 +533,7 @@ public:
     /// Cloning.
     virtual void            copyFrom( SceneObject* pSceneObject, const bool copyDynamicFields );
     virtual void            copyTo( SimObject* object );
-    S32                     copyCollisionShapes( SceneObject* pSceneObject, const bool clearTargetShapes = true, const U32 shapeId = -1 );
+    S32                     copyCollisionShapes( SceneObject* pSceneObject, const bool clearTargetShapes = true, const S32 shapeId = -1 );
 
     /// Safe deletion.
     inline void             setSafeDelete( const bool status )          { mSafeDeleteReady = status; }
