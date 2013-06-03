@@ -752,23 +752,13 @@ ConsoleMethod(SceneObject, getIsPointInOOBB, bool, 3, 4,     "(worldPointX/Y) - 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getIsPointInCollisionShape, bool, 4, 5,   "(int shapeIndex, worldPointX/Y) - Returns whether the world point intersects with the specified collision shape or not.\n"
+ConsoleMethod(SceneObject, getIsPointInCollisionShape, bool, 4, 5,   "(int shapeId, worldPointX/Y) - Returns whether the world point intersects with the specified collision shape or not.\n"
                                                                         "@param worldPointX/Y The world point to check.\n"
-                                                                        "@param shapeIndex - The index of the collision shape."
+                                                                        "@param shapeId - The id of the collision shape."
                                                                         "@return (bool isInside) Whether the world point intersects with the specified collision shape or not.")
 {
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
-
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Sanity!
-    if ( shapeIndex >= shapeCount )
-    {
-        Con::warnf("SceneObject::getIsPointInCollisionShape() - Invalid shape index of %d.", shapeIndex);
-        return false;
-    }
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Fetch shape index.
     Vector2 worldPoint;
@@ -791,7 +781,7 @@ ConsoleMethod(SceneObject, getIsPointInCollisionShape, bool, 4, 5,   "(int shape
     }
 
     // Calculate if point intersects the collision shape.
-    return object->getIsPointInCollisionShape( shapeIndex, worldPoint );
+    return object->getIsPointInCollisionShape( shapeId, worldPoint );
 }
 
 //-----------------------------------------------------------------------------
@@ -975,28 +965,28 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
     // Fetch scene objects.
     SceneObject* pSceneObjectThis;
     SceneObject* pSceneObjectCollider;
-    S32 shapeIndexThis;
-    S32 shapeIndexCollider;
+    S32 shapeIdThis;
+    S32 shapeIdCollider;
 
     // Calculate the respective colliding objects.
     if ( tickContact.mpSceneObjectA == object )
     {
         pSceneObjectThis = tickContact.mpSceneObjectA;
         pSceneObjectCollider = tickContact.mpSceneObjectB;
-        shapeIndexThis = pSceneObjectThis->getCollisionShapeIndex( tickContact.mpFixtureA );
-        shapeIndexCollider = pSceneObjectCollider->getCollisionShapeIndex( tickContact.mpFixtureB );
+        shapeIdThis = pSceneObjectThis->getCollisionshapeId( tickContact.mpFixtureA );
+        shapeIdCollider = pSceneObjectCollider->getCollisionshapeId( tickContact.mpFixtureB );
     }
     else
     {
         pSceneObjectThis = tickContact.mpSceneObjectB;
         pSceneObjectCollider = tickContact.mpSceneObjectA;
-        shapeIndexThis = pSceneObjectThis->getCollisionShapeIndex( tickContact.mpFixtureB );
-        shapeIndexCollider = pSceneObjectCollider->getCollisionShapeIndex( tickContact.mpFixtureA );
+        shapeIdThis = pSceneObjectThis->getCollisionshapeId( tickContact.mpFixtureB );
+        shapeIdCollider = pSceneObjectCollider->getCollisionshapeId( tickContact.mpFixtureA );
     }
 
     // Sanity!
-    AssertFatal( shapeIndexThis >= 0, "SceneObject::getContact() - Cannot find shape index reported on physics proxy of a fixture." );
-    AssertFatal( shapeIndexCollider >= 0, "SceneObject::getContact() - Cannot find shape index reported on physics proxy of a fixture." );
+    AssertFatal( shapeIdThis >= 0, "SceneObject::getContact() - Cannot find shape index reported on physics proxy of a fixture." );
+    AssertFatal( shapeIdCollider >= 0, "SceneObject::getContact() - Cannot find shape index reported on physics proxy of a fixture." );
 
     // Fetch normal and contact points.
     const U32& pointCount = tickContact.mPointCount;
@@ -1017,7 +1007,7 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
         dSprintf(pReturnBuffer, 128,
             "%d %d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
             pSceneObjectCollider,
-            shapeIndexThis, shapeIndexCollider,
+            shapeIdThis, shapeIdCollider,
             normal.x, normal.y,
             point1.x, point1.y,
             normalImpulse1,
@@ -1031,7 +1021,7 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
         dSprintf(pReturnBuffer, 128,
             "%d %d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
             pSceneObjectCollider,
-            shapeIndexThis, shapeIndexCollider,
+            shapeIdThis, shapeIdCollider,
             normal.x, normal.y,
             point1.x, point1.y,
             normalImpulse1,
@@ -1042,7 +1032,7 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
         dSprintf(pReturnBuffer, 64,
             "%d %d %d",
             pSceneObjectCollider,
-            shapeIndexThis, shapeIndexCollider );
+            shapeIdThis, shapeIdCollider );
 	}
 
     return pReturnBuffer;
@@ -1784,7 +1774,7 @@ ConsoleMethod(SceneObject, isRotateToComplete, bool, 2, 2,   "() - Gets whether 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, applyForce, void, 3, 6,       "(worldForce X/Y, [worldPoint X/Y]) - Applies a force at a world point.\n"
+ConsoleMethod(SceneObject, applyForce, void, 4, 6,       "(worldForce X/Y, [worldPoint X/Y]) - Applies a force at a world point.\n"
                                                             "If the force is not applied at the center of mass, it will generate a torque and affect the angular velocity.\n"
                                                             "@param worldForceX/Y - The world force vector in Newtons (N)."
                                                             "@param worldPointX/Y - The world point where the force is applied.  If world point is not specified, the center of mass is used."
@@ -1816,7 +1806,6 @@ ConsoleMethod(SceneObject, applyForce, void, 3, 6,       "(worldForce X/Y, [worl
     {
         // Apply force.
         object->applyForce( worldForce );
-		return;
     }
 
     // World point.
@@ -1836,7 +1825,7 @@ ConsoleMethod(SceneObject, applyForce, void, 3, 6,       "(worldForce X/Y, [worl
     // Invalid
     else
     {
-		Con::warnf("Scene::applyForce() - Invalid number of parameters!");
+        Con::warnf("Scene::applyForce() - Invalid number of parameters!");
         return;
     }
 
@@ -1860,7 +1849,7 @@ ConsoleMethod(SceneObject, applyTorque, void, 3, 3,      "(torque) - Applies a t
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, applyLinearImpulse, void, 3, 6,   "(worldImpulse X/Y, [worldPoint X/Y]) - Applies an impulse at a world point.\n"
+ConsoleMethod(SceneObject, applyLinearImpulse, void, 4, 6,   "(worldImpulse X/Y, [worldPoint X/Y]) - Applies an impulse at a world point.\n"
                                                                 "This immediately modifies the linear velocity.  It also modifies the angular velocity if the point of application is not the center of mass.\n"
                                                                 "@param worldImpulse/Y - The world impulse vector in Newtons (N-seconds) or Kg-m/s."
                                                                 "@param worldPointX/Y - The world point where the force is applied.  If world point is not specified, the center of mass is used."
@@ -1892,7 +1881,6 @@ ConsoleMethod(SceneObject, applyLinearImpulse, void, 3, 6,   "(worldImpulse X/Y,
     {
         // Apply force.
         object->applyForce( worldImpulse );
-		return;
     }
 
     // World point.
@@ -1954,25 +1942,15 @@ ConsoleMethod(SceneObject, getGravityScale, F32,2, 2,    "() - Gets the gravity 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, deleteCollisionShape, bool, 3, 3,        "(int shapeIndex) - Deletes the specified collision shape.\n"
-                                                                        "@param shapeIndex - The index of the collision shape."
+ConsoleMethod( SceneObject, deleteCollisionShape, bool, 3, 3,        "(int shapeId) - Deletes the specified collision shape.\n"
+                                                                        "@param shapeId - The id of the collision shape."
                                                                         "@return Whether the collision shape was successfully deleted or not." )
 {
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
-
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Sanity!
-    if (  shapeIndex >= shapeCount )
-    {
-        Con::warnf("SceneObject::deleteCollisionShape() - Invalid shape index of %d.", shapeIndex);
-        return false;
-    }
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Delete collision shape.
-    object->deleteCollisionShape( shapeIndex );
+    object->deleteCollisionShape( shapeId );
 
     return true;
 }
@@ -1996,59 +1974,39 @@ ConsoleMethod(SceneObject, getCollisionShapeCount, S32, 2, 2,    "() - Gets the 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getCollisionShapeType, const char*, 3, 3, "(int shapeIndex) - Gets the type of collision shape at the specified index.\n"
-                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                        "@return (type) The type of collision shape at the specified index.")
+ConsoleMethod(SceneObject, getCollisionShapeType, const char*, 3, 3, "(int shapeId) - Gets the type of collision shape with the specified id.\n"
+                                                                        "@param shapeId - The id of the collision shape."
+                                                                        "@return (type) The type of collision shape with the specified id.")
 {
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
-
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
+    const U32 shapeId = dAtoi(argv[2]);
 
-    // Sanity!
-    if ( shapeIndex >= shapeCount )
-    {
-        Con::warnf("SceneObject::getCollisionShapeType() - Invalid shape index of %d.", shapeIndex);
-        return NULL;
-    }
-
-    return SceneObject::getCollisionShapeTypeDescription( object->getCollisionShapeType( shapeIndex ) );
+    return SceneObject::getCollisionShapeTypeDescription( object->getCollisionShapeType( shapeId ) );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getCollisionShapeArea, F32, 3, 3,    "(int shapeIndex) - Gets the area of collision shape at the specified index.\n"
-                                                                "@param shapeIndex - The index of the collision shape."
-                                                                "@return (area) The area of collision shape at the specified index.")
+ConsoleMethod(SceneObject, getCollisionShapeArea, F32, 3, 3,    "(int shapeId) - Gets the area of collision shape with the specified id.\n"
+                                                                "@param shapeId - The id of the collision shape."
+                                                                "@return (area) The area of collision shape with the specified id.")
 {
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
-
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Sanity!
-    if ( shapeIndex >= shapeCount )
-    {
-        Con::warnf("SceneObject::getCollisionShapeArea() - Invalid shape index of %d.", shapeIndex);
-        return NULL;
-    }
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Calculate area if the shape type is circle
-    if (object->getCollisionShapeType( shapeIndex ) == b2Shape::e_circle)
+    if (object->getCollisionShapeType( shapeId ) == b2Shape::e_circle)
     {
         // Get the radius
-        const F32 radius = object->getCircleCollisionShapeRadius( shapeIndex );
+        const F32 radius = object->getCircleCollisionShapeRadius( shapeId );
 
         // Return the area
         return b2_pi * radius * radius;
     }
 
     // Calculate area if the shape type is polygon
-    if (object->getCollisionShapeType( shapeIndex ) == b2Shape::e_polygon)
+    if (object->getCollisionShapeType( shapeId ) == b2Shape::e_polygon)
     {
-        const b2PolygonShape* pShape = object->getCollisionPolygonShape( shapeIndex );
+        const b2PolygonShape* pShape = object->getCollisionPolygonShape( shapeId );
 
         // Sanity
         if ( pShape->GetVertexCount() < 3 )
@@ -2081,23 +2039,13 @@ ConsoleMethod(SceneObject, getCollisionShapeArea, F32, 3, 3,    "(int shapeIndex
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, setCollisionShapeDensity, void, 4, 4,    "(int shapeIndex, float density) - Sets the density of the collision shape at the specified index.\n"
-                                                                        "@param shapeIndex - The index of the collision shape."
+ConsoleMethod( SceneObject, setCollisionShapeDensity, void, 4, 4,    "(int shapeId, float density) - Sets the density of the collision shape with the specified id.\n"
+                                                                        "@param shapeId - The id of the collision shape."
                                                                         "@param density - The collision shape density."
                                                                         "@return No return value." )
 {
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
-
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Sanity!
-    if (  shapeIndex >= shapeCount )
-    {
-        Con::warnf("SceneObject::setCollisionShapeDensity() - Invalid shape index of %d.", shapeIndex);
-        return;
-    }
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Fetch density.
     const F32 density = dAtof(argv[3]);
@@ -2107,51 +2055,31 @@ ConsoleMethod( SceneObject, setCollisionShapeDensity, void, 4, 4,    "(int shape
     }
 
     // Set density.
-    object->setCollisionShapeDensity( shapeIndex, density );
+    object->setCollisionShapeDensity( shapeId, density );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getCollisionShapeDensity, F32, 3, 3, "(int shapeIndex) - Gets the density of the collision shape at the specified index.\n"
-                                                                    "@param shapeIndex - The index of the collision shape."
-                                                                    "@return The density of the collision shape at the specified index (-1 if error)." )
+ConsoleMethod( SceneObject, getCollisionShapeDensity, F32, 3, 3, "(int shapeId) - Gets the density of the collision shape with the specified id.\n"
+                                                                    "@param shapeId - The id of the collision shape."
+                                                                    "@return The density of the collision shape with the specified id (-1 if error)." )
 {
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
-
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Sanity!
-    if (  shapeIndex >= shapeCount )
-    {
-        Con::warnf("SceneObject::getCollisionShapeDensity() - Invalid shape index of %d.", shapeIndex);
-        return -1.0f;
-    }
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Get density.
-    return object->getCollisionShapeDensity( shapeIndex );
+    return object->getCollisionShapeDensity( shapeId );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, setCollisionShapeFriction, void, 4, 4,   "(int shapeIndex, float friction) - Sets the friction of the collision shape at the specified index.\n"
-                                                                        "@param shapeIndex - The index of the collision shape."
+ConsoleMethod( SceneObject, setCollisionShapeFriction, void, 4, 4,   "(int shapeId, float friction) - Sets the friction of the collision shape with the specified id.\n"
+                                                                        "@param shapeId - The id of the collision shape."
                                                                         "@param friction - The collision shape friction."
                                                                         "@return No return value." )
 {
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
-
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Sanity!
-    if (  shapeIndex >= shapeCount )
-    {
-        Con::warnf("SceneObject::setCollisionShapeFriction() - Invalid shape index of %d.", shapeIndex);
-        return;
-    }
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Fetch friction.
     const F32 friction = dAtof(argv[3]);
@@ -2161,51 +2089,31 @@ ConsoleMethod( SceneObject, setCollisionShapeFriction, void, 4, 4,   "(int shape
     }
 
     // Set friction.
-    object->setCollisionShapeFriction( shapeIndex, friction );
+    object->setCollisionShapeFriction( shapeId, friction );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getCollisionShapeFriction, F32, 3, 3, "(int shapeIndex) - Gets the friction of the collision shape at the specified index.\n"
-                                                                    "@param shapeIndex - The index of the collision shape."
-                                                                    "@return The friction of the collision shape at the specified index (-1 if error)." )
+ConsoleMethod( SceneObject, getCollisionShapeFriction, F32, 3, 3, "(int shapeId) - Gets the friction of the collision shape with the specified id.\n"
+                                                                    "@param shapeId - The id of the collision shape."
+                                                                    "@return The friction of the collision shape with the specified id (-1 if error)." )
 {
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
-
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Sanity!
-    if (  shapeIndex >= shapeCount )
-    {
-        Con::warnf("SceneObject::getCollisionShapeFriction() - Invalid shape index of %d.", shapeIndex);
-        return -1.0f;
-    }
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Get friction.
-    return object->getCollisionShapeFriction( shapeIndex );
+    return object->getCollisionShapeFriction( shapeId );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, setCollisionShapeRestitution, void, 4, 4,    "(int shapeIndex, float restitution) - Sets the restitution of the collision shape at the specified index.\n"
-                                                                            "@param shapeIndex - The index of the collision shape."
+ConsoleMethod( SceneObject, setCollisionShapeRestitution, void, 4, 4,    "(int shapeId, float restitution) - Sets the restitution of the collision shape with the specified id.\n"
+                                                                            "@param shapeId - The id of the collision shape."
                                                                             "@param density - The collision shape restitution."
                                                                             "@return No return value." )
 {
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
-
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Sanity!
-    if (  shapeIndex >= shapeCount )
-    {
-        Con::warnf("SceneObject::setCollisionShapeRestitution() - Invalid shape index of %d.", shapeIndex);
-        return;
-    }
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Fetch restitution.
     const F32 restitution = dAtof(argv[3]);
@@ -2215,83 +2123,54 @@ ConsoleMethod( SceneObject, setCollisionShapeRestitution, void, 4, 4,    "(int s
     }
 
     // Set restitution.
-    object->setCollisionShapeRestitution( shapeIndex, restitution );
+    object->setCollisionShapeRestitution( shapeId, restitution );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getCollisionShapeRestitution, F32, 3, 3, "(int shapeIndex) - Gets the restitution of the collision shape at the specified index.\n"
-                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                        "@return The restitution of the collision shape at the specified index (-1 if error)." )
+ConsoleMethod( SceneObject, getCollisionShapeRestitution, F32, 3, 3, "(int shapeId) - Gets the restitution of the collision shape with the specified id.\n"
+                                                                        "@param shapeId - The id of the collision shape."
+                                                                        "@return The restitution of the collision shape with the specified id (-1 if error)." )
 {
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
-
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Sanity!
-    if (  shapeIndex >= shapeCount )
-    {
-        Con::warnf("SceneObject::getCollisionShapeRestitution() - Invalid shape index of %d.", shapeIndex);
-        return -1.0f;
-    }
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Get restitution.
-    return object->getCollisionShapeRestitution( shapeIndex );
+    return object->getCollisionShapeRestitution( shapeId );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, setCollisionShapeIsSensor, void, 4, 4,   "(int shapeIndex, bool status ) - Sets whether the collision shape at the specified index is a sensor or not.\n"
-                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                        "@param status - Whether the collision shape at the specified index is a sensor or not."
+ConsoleMethod( SceneObject, setCollisionShapeIsSensor, void, 4, 4,   "(int shapeId, bool status ) - Sets whether the collision shape with the specified id is a sensor or not.\n"
+                                                                        "@param shapeId - The id of the collision shape."
+                                                                        "@param status - Whether the collision shape with the specified id is a sensor or not."
                                                                         "@return No return value." )
 {
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
-
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Sanity!
-    if (  shapeIndex >= shapeCount )
-    {
-        Con::warnf("SceneObject::setCollisionShapeIsSensor() - Invalid shape index of %d.", shapeIndex);
-        return;
-    }
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Set is sensor.
-    object->setCollisionShapeIsSensor( shapeIndex, dAtob(argv[3]) );
+    object->setCollisionShapeIsSensor( shapeId, dAtob(argv[3]) );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getCollisionShapeIsSensor, bool, 3, 3,   "(int shapeIndex) - Gets whether the collision shape at the specified index is a sensor or not.\n"
-                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                        "@return Whether the collision shape at the specified index is a sensor or not." )
+ConsoleMethod( SceneObject, getCollisionShapeIsSensor, bool, 3, 3,   "(int shapeId) - Gets whether the collision shape with the specified id is a sensor or not.\n"
+                                                                        "@param shapeId - The id of the collision shape."
+                                                                        "@return Whether the collision shape with the specified id is a sensor or not." )
 {
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
-
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Sanity!
-    if (  shapeIndex >= shapeCount )
-    {
-        Con::warnf("SceneObject::getCollisionShapeIsSensor() - Invalid shape index of %d.", shapeIndex);
-        return false;
-    }
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Get is sensor.
-    return object->getCollisionShapeIsSensor( shapeIndex );
+    return object->getCollisionShapeIsSensor( shapeId );
 }
 
 //-----------------------------------------------------------------------------
+
 ConsoleMethod( SceneObject, createCircleCollisionShape, S32, 3, 5,   "(radius, [localPositionX, localPositionY]) Creates a circle collision shape.\n"
                                                                         "@param radius The radius of the circle."
-                                                                        "@return (int shapeIndex) The index of the collision shape or (-1) if not created.")
+                                                                        "@return (int shapeId) The id of the collision shape or (-1) if not created.")
 {
     const F32 radius = dAtof(argv[2]);
 
@@ -2324,67 +2203,47 @@ ConsoleMethod( SceneObject, createCircleCollisionShape, S32, 3, 5,   "(radius, [
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getCircleCollisionShapeRadius, F32, 3, 3,    "(int shapeIndex) - Gets the radius of a circle collision shape at the specified index.\n"
-                                                                            "@param shapeIndex - The index of the collision shape."
-                                                                            "@return (F32 radius) The radius of a circle collision shape at the specified index or (0) if an invalid shape." )
+ConsoleMethod( SceneObject, getCircleCollisionShapeRadius, F32, 3, 3,    "(int shapeId) - Gets the radius of a circle collision shape with the specified id.\n"
+                                                                            "@param shapeId - The id of the collision shape."
+                                                                            "@return (F32 radius) The radius of a circle collision shape with the specified id or (0) if an invalid shape." )
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Sanity!
-    if ( shapeIndex >= shapeCount )
+    if ( object->getCollisionShapeType( shapeId ) != b2Shape::e_circle )
     {
-        Con::warnf("SceneObject::getCircleCollisionShapeRadius() - Invalid shape index of %d.", shapeIndex);
+        Con::warnf("SceneObject::getCircleCollisionShapeRadius() - Not a circle shape with id of %d.", shapeId);
         return 0.0f;
     }
 
-    // Sanity!
-    if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_circle )
-    {
-        Con::warnf("SceneObject::getCircleCollisionShapeRadius() - Not a circle shape at index of %d.", shapeIndex);
-        return 0.0f;
-    }
-
-    return object->getCircleCollisionShapeRadius( shapeIndex );
+    return object->getCircleCollisionShapeRadius( shapeId );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getCircleCollisionShapeLocalPosition, const char*, 3, 3,     "(int shapeIndex) - Gets the local position of a circle collision shape at the specified index.\n"
-                                                                                            "@param shapeIndex - The index of the collision shape."
-                                                                                            "@return (localPositionXY) The local position of a circle collision shape at the specified index." )
+ConsoleMethod( SceneObject, getCircleCollisionShapeLocalPosition, const char*, 3, 3,     "(int shapeId) - Gets the local position of a circle collision shape with the specified id.\n"
+                                                                                            "@param shapeId - The id of the collision shape."
+                                                                                            "@return (localPositionXY) The local position of a circle collision shape with the specified id." )
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Sanity!
-    if ( shapeIndex >= shapeCount )
+    if ( object->getCollisionShapeType( shapeId ) != b2Shape::e_circle )
     {
-        Con::warnf("SceneObject::getCircleCollisionShapeLocalPosition() - Invalid shape index of %d.", shapeIndex);
+        Con::warnf("SceneObject::getCircleCollisionShapeLocalPosition() - Not a circle shape with id of %d.", shapeId);
         return Vector2::getZero().scriptThis();
     }
 
-    // Sanity!
-    if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_circle )
-    {
-        Con::warnf("SceneObject::getCircleCollisionShapeLocalPosition() - Not a circle shape at index of %d.", shapeIndex);
-        return Vector2::getZero().scriptThis();
-    }
-
-    return object->getCircleCollisionShapeLocalPosition( shapeIndex ).scriptThis();
+    return object->getCircleCollisionShapeLocalPosition( shapeId ).scriptThis();
 }
 
 //-----------------------------------------------------------------------------
 
 ConsoleMethod( SceneObject, createPolygonCollisionShape, S32, 3, 3,  "(localPointsX/Y) Creates a convex polygon collision shape.\n"
                                                                         "@param localPointsX/Y A space separated list of local points for the convex polygon collision shape (must be at least three points)."
-                                                                        "@return (int shapeIndex) The index of the collision shape or (-1) if not created.")
+                                                                        "@return (int shapeId) The id of the collision shape or (-1) if not created.")
 {
     const U32 pointElements = Utility::mGetStringElementCount(argv[2]);
 
@@ -2412,7 +2271,7 @@ ConsoleMethod( SceneObject, createPolygonBoxCollisionShape, S32, 2, 7,  "(width,
                                                                             "@param height The height of the box."
                                                                             "@param localCentroidX/Y The local position of the box centroid."
                                                                             "@param angle The angle of the box."
-                                                                            "@return (int shapeIndex) The index of the collision shape or (-1) if not created.")
+                                                                            "@return (int shapeId) The id of the collision shape or (-1) if not created.")
 {
     // Were any dimensions specified?
     if( argc == 2 )
@@ -2488,74 +2347,54 @@ ConsoleMethod( SceneObject, createPolygonBoxCollisionShape, S32, 2, 7,  "(width,
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getPolygonCollisionShapePointCount, S32, 3, 3,   "(int shapeIndex) - Gets the point count of a polygon collision shape at the specified index.\n"
-                                                                                "@param shapeIndex - The index of the collision shape."
-                                                                                "@return (int pointCount) The point count of a polygon collision shape at the specified index or (0) if an invalid shape." )
+ConsoleMethod( SceneObject, getPolygonCollisionShapePointCount, S32, 3, 3,   "(int shapeId) - Gets the point count of a polygon collision shape with the specified id.\n"
+                                                                                "@param shapeId - The id of the collision shape."
+                                                                                "@return (int pointCount) The point count of a polygon collision shape with the specified id or (0) if an invalid shape." )
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Sanity!
-    if ( shapeIndex >= shapeCount )
+    if ( object->getCollisionShapeType( shapeId ) != b2Shape::e_polygon )
     {
-        Con::warnf("SceneObject::getPolygonCollisionShapePointCount() - Invalid shape index of %d.", shapeIndex);
+        Con::warnf("SceneObject::getPolygonCollisionShapePointCount() - Not a polygon shape with id of %d.", shapeId);
         return 0;
     }
 
-    // Sanity!
-    if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_polygon )
-    {
-        Con::warnf("SceneObject::getPolygonCollisionShapePointCount() - Not a polygon shape at index of %d.", shapeIndex);
-        return 0;
-    }
-
-    return object->getPolygonCollisionShapePointCount( shapeIndex );
+    return object->getPolygonCollisionShapePointCount( shapeId );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getPolygonCollisionShapeLocalPoint, const char*, 4, 4,   "(int shapeIndex, int pointIndex) - Gets the local point of a polygon collision shape at the specified index.\n"
-                                                                                        "@param shapeIndex - The index of the collision shape."
+ConsoleMethod( SceneObject, getPolygonCollisionShapeLocalPoint, const char*, 4, 4,   "(int shapeId, int pointIndex) - Gets the local point of a polygon collision shape with the specified id.\n"
+                                                                                        "@param shapeId - The id of the collision shape."
                                                                                         "@param pointIndex - The index of the local point."
-                                                                                        "@return (localPointXY) The local point of a polygon collision shape at the specified index." )
+                                                                                        "@return (localPointXY) The local point of a polygon collision shape with the specified id." )
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Fetch point index.
     const U32 pointIndex = dAtoi(argv[3]);
 
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
-
     // Sanity!
-    if ( shapeIndex >= shapeCount )
+    if ( object->getCollisionShapeType( shapeId ) != b2Shape::e_polygon )
     {
-        Con::warnf("SceneObject::getPolygonCollisionShapeLocalPoint() - Invalid shape index of %d.", shapeIndex);
-        return Vector2::getZero().scriptThis();
-    }
-
-    // Sanity!
-    if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_polygon )
-    {
-        Con::warnf("SceneObject::getPolygonCollisionShapeLocalPoint() - Not a polygon shape at index of %d.", shapeIndex);
+        Con::warnf("SceneObject::getPolygonCollisionShapeLocalPoint() - Not a polygon shape with id of %d.", shapeId);
         return Vector2::getZero().scriptThis();
     }
 
     // Fetch point count.
-    const U32 pointCount = object->getPolygonCollisionShapePointCount( shapeIndex );
+    const U32 pointCount = object->getPolygonCollisionShapePointCount( shapeId );
 
     // Sanity!
     if ( pointIndex >= pointCount )
     {
-        Con::warnf("SceneObject::getPolygonCollisionShapeLocalPoint() - Invalid point index of %d (only %d available) on shape index of %d.", pointIndex, pointCount, shapeIndex);
+        Con::warnf("SceneObject::getPolygonCollisionShapeLocalPoint() - Invalid point index of %d (only %d available) on shape id of %d.", pointIndex, pointCount, shapeId);
         return Vector2::getZero().scriptThis();
     }
 
-    return object->getPolygonCollisionShapeLocalPoint( shapeIndex, pointIndex ).scriptThis();
+    return object->getPolygonCollisionShapeLocalPoint( shapeId, pointIndex ).scriptThis();
 }
 
 //-----------------------------------------------------------------------------
@@ -2564,7 +2403,7 @@ ConsoleMethod( SceneObject, createChainCollisionShape, S32, 3, 7,    "(localPoin
                                                                         "@param localPointsX/Y A space separated list of local points for the chain collision shape (must be at least two points)."
                                                                         "@param adjacentLocalPositionStartXY The adjacent local position of the start of the edge."
                                                                         "@param adjacentLocalPositionEndXY The adjacent local position of the end of the edge."
-                                                                        "@return (int shapeIndex) The index of the collision shape or (-1) if not created.")
+                                                                        "@return (int shapeId) The id of the collision shape or (-1) if not created.")
 {
     const U32 pointElements = Utility::mGetStringElementCount(argv[2]);
 
@@ -2641,190 +2480,130 @@ ConsoleMethod( SceneObject, createChainCollisionShape, S32, 3, 7,    "(localPoin
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getChainCollisionShapePointCount, S32, 3, 3,     "(int shapeIndex) - Gets the point count of a chain collision shape at the specified index.\n"
-                                                                                "@param shapeIndex - The index of the collision shape."
-                                                                                "@return (int pointCount) The point count of a chain collision shape at the specified index or (0) if an invalid shape." )
+ConsoleMethod( SceneObject, getChainCollisionShapePointCount, S32, 3, 3,     "(int shapeId) - Gets the point count of a chain collision shape with the specified id.\n"
+                                                                                "@param shapeId - The id of the collision shape."
+                                                                                "@return (int pointCount) The point count of a chain collision shape with the specified id or (0) if an invalid shape." )
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Sanity!
-    if ( shapeIndex >= shapeCount )
+    if ( object->getCollisionShapeType( shapeId ) != b2Shape::e_chain )
     {
-        Con::warnf("SceneObject::getChainCollisionShapePointCount() - Invalid shape index of %d.", shapeIndex);
+        Con::warnf("SceneObject::getChainCollisionShapePointCount() - Not a chain shape with id of %d.", shapeId);
         return 0;
     }
 
-    // Sanity!
-    if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_chain )
-    {
-        Con::warnf("SceneObject::getChainCollisionShapePointCount() - Not a chain shape at index of %d.", shapeIndex);
-        return 0;
-    }
-
-    return object->getChainCollisionShapePointCount( shapeIndex );
+    return object->getChainCollisionShapePointCount( shapeId );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getChainCollisionShapeLocalPoint, const char*, 4, 4,   "(int shapeIndex, int pointIndex) - Gets the local point of a polygon collision shape at the specified index.\n"
-                                                                                        "@param shapeIndex - The index of the collision shape."
+ConsoleMethod( SceneObject, getChainCollisionShapeLocalPoint, const char*, 4, 4,   "(int shapeId, int pointIndex) - Gets the local point of a polygon collision shape with the specified id.\n"
+                                                                                        "@param shapeId - The id of the collision shape."
                                                                                         "@param pointIndex - The index of the local point."
-                                                                                        "@return (localPointXY) The local point of a polygon collision shape at the specified index." )
+                                                                                        "@return (localPointXY) The local point of a polygon collision shape with the specified id." )
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Fetch point index.
     const U32 pointIndex = dAtoi(argv[3]);
 
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
-
     // Sanity!
-    if ( shapeIndex >= shapeCount )
+    if ( object->getCollisionShapeType( shapeId ) != b2Shape::e_chain )
     {
-        Con::warnf("SceneObject::getChainCollisionShapeLocalPoint() - Invalid shape index of %d.", shapeIndex);
-        return Vector2::getZero().scriptThis();
-    }
-
-    // Sanity!
-    if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_chain )
-    {
-        Con::warnf("SceneObject::getChainCollisionShapeLocalPoint() - Not a chain shape at index of %d.", shapeIndex);
+        Con::warnf("SceneObject::getChainCollisionShapeLocalPoint() - Not a chain shape with id of %d.", shapeId);
         return Vector2::getZero().scriptThis();
     }
 
     // Fetch point count.
-    const U32 pointCount = object->getPolygonCollisionShapePointCount( shapeIndex );
+    const U32 pointCount = object->getPolygonCollisionShapePointCount( shapeId );
 
     // Sanity!
     if ( pointIndex >= pointCount )
     {
-        Con::warnf("SceneObject::getPolygonCollisionShapeLocalPoint() - Invalid point index of %d (only %d available) on shape index of %d.", pointIndex, pointCount, shapeIndex);
+        Con::warnf("SceneObject::getPolygonCollisionShapeLocalPoint() - Invalid point index of %d (only %d available) on shape id of %d.", pointIndex, pointCount, shapeId);
         return Vector2::getZero().scriptThis();
     }
 
-    return object->getChainCollisionShapeLocalPoint( shapeIndex, pointIndex ).scriptThis();
+    return object->getChainCollisionShapeLocalPoint( shapeId, pointIndex ).scriptThis();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getChainCollisionShapeHasAdjacentStart, bool, 3, 3,  "(int shapeIndex) - Gets whether the chain collision shape at the specified index has an adjacent start point or not.\n"
-                                                                                    "@param shapeIndex - The index of the collision shape."
-                                                                                    "@return (bool adjacentStart) Whether the chain collision shape at the specified index has an adjacent start point or not." )
+ConsoleMethod( SceneObject, getChainCollisionShapeHasAdjacentStart, bool, 3, 3,  "(int shapeId) - Gets whether the chain collision shape with the specified id has an adjacent start point or not.\n"
+                                                                                    "@param shapeId - The id of the collision shape."
+                                                                                    "@return (bool adjacentStart) Whether the chain collision shape with the specified id has an adjacent start point or not." )
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Sanity!
-    if ( shapeIndex >= shapeCount )
+    if ( object->getCollisionShapeType( shapeId ) != b2Shape::e_chain )
     {
-        Con::warnf("SceneObject::getChainCollisionShapeHasAdjacentStart() - Invalid shape index of %d.", shapeIndex);
+        Con::warnf("SceneObject::getChainCollisionShapeHasAdjacentStart() - Not a chain shape with id of %d.", shapeId);
         return false;
     }
 
-    // Sanity!
-    if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_chain )
-    {
-        Con::warnf("SceneObject::getChainCollisionShapeHasAdjacentStart() - Not a chain shape at index of %d.", shapeIndex);
-        return false;
-    }
-
-    return object->getChainCollisionShapeHasAdjacentStart( shapeIndex );
+    return object->getChainCollisionShapeHasAdjacentStart( shapeId );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getChainCollisionShapeHasAdjacentEnd, bool, 3, 3,    "(int shapeIndex) - Gets whether the chain collision shape at the specified index has an adjacent end point or not.\n"
-                                                                                    "@param shapeIndex - The index of the collision shape."
-                                                                                    "@return (bool adjacentEnd) Whether the chain collision shape at the specified index has an adjacent end point or not." )
+ConsoleMethod( SceneObject, getChainCollisionShapeHasAdjacentEnd, bool, 3, 3,    "(int shapeId) - Gets whether the chain collision shape with the specified id has an adjacent end point or not.\n"
+                                                                                    "@param shapeId - The id of the collision shape."
+                                                                                    "@return (bool adjacentEnd) Whether the chain collision shape with the specified id has an adjacent end point or not." )
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Sanity!
-    if ( shapeIndex >= shapeCount )
+    if ( object->getCollisionShapeType( shapeId ) != b2Shape::e_chain )
     {
-        Con::warnf("SceneObject::getChainCollisionShapeHasAdjacentEnd() - Invalid shape index of %d.", shapeIndex);
+        Con::warnf("SceneObject::getChainCollisionShapeHasAdjacentEnd() - Not a chain shape with id of %d.", shapeId);
         return false;
     }
 
-    // Sanity!
-    if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_chain )
-    {
-        Con::warnf("SceneObject::getChainCollisionShapeHasAdjacentEnd() - Not a chain shape at index of %d.", shapeIndex);
-        return false;
-    }
-
-    return object->getChainCollisionShapeHasAdjacentEnd( shapeIndex );
+    return object->getChainCollisionShapeHasAdjacentEnd( shapeId );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getChainCollisionShapeAdjacentStart, const char*, 3, 3,  "(int shapeIndex) - Gets the adjacent start point of the chain collision shape at the specified index.\n"
-                                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                                        "@return (adjacentStartPointXY) The adjacent start point of the chain collision shape at the specified index." )
+ConsoleMethod( SceneObject, getChainCollisionShapeAdjacentStart, const char*, 3, 3,  "(int shapeId) - Gets the adjacent start point of the chain collision shape with the specified id.\n"
+                                                                                        "@param shapeId - The id of the collision shape."
+                                                                                        "@return (adjacentStartPointXY) The adjacent start point of the chain collision shape with the specified id." )
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Sanity!
-    if ( shapeIndex >= shapeCount )
+    if ( object->getCollisionShapeType( shapeId ) != b2Shape::e_chain )
     {
-        Con::warnf("SceneObject::getChainCollisionShapeAdjacentStart() - Invalid shape index of %d.", shapeIndex);
+        Con::warnf("SceneObject::getChainCollisionShapeAdjacentStart() - Not a chain shape with id of %d.", shapeId);
         return false;
     }
 
-    // Sanity!
-    if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_chain )
-    {
-        Con::warnf("SceneObject::getChainCollisionShapeAdjacentStart() - Not a chain shape at index of %d.", shapeIndex);
-        return false;
-    }
-
-    return object->getChainCollisionShapeAdjacentStart( shapeIndex ).scriptThis();
+    return object->getChainCollisionShapeAdjacentStart( shapeId ).scriptThis();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getChainCollisionShapeAdjacentEnd, const char*, 3, 3,    "(int shapeIndex) - Gets whether the chain collision shape at the specified index has an adjacent end point or not.\n"
-                                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                                        "@return (bool adjacentEnd) Whether the chain collision shape at the specified index has an adjacent end point or not." )
+ConsoleMethod( SceneObject, getChainCollisionShapeAdjacentEnd, const char*, 3, 3,    "(int shapeId) - Gets whether the chain collision shape with the specified id has an adjacent end point or not.\n"
+                                                                                        "@param shapeId - The id of the collision shape."
+                                                                                        "@return (bool adjacentEnd) Whether the chain collision shape with the specified id has an adjacent end point or not." )
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Sanity!
-    if ( shapeIndex >= shapeCount )
+    if ( object->getCollisionShapeType( shapeId ) != b2Shape::e_chain )
     {
-        Con::warnf("SceneObject::getChainCollisionShapeAdjacentEnd() - Invalid shape index of %d.", shapeIndex);
+        Con::warnf("SceneObject::getChainCollisionShapeAdjacentEnd() - Not a chain shape with id of %d.", shapeId);
         return false;
     }
 
-    // Sanity!
-    if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_chain )
-    {
-        Con::warnf("SceneObject::getChainCollisionShapeAdjacentEnd() - Not a chain shape at index of %d.", shapeIndex);
-        return false;
-    }
-
-    return object->getChainCollisionShapeAdjacentEnd( shapeIndex ).scriptThis();
+    return object->getChainCollisionShapeAdjacentEnd( shapeId ).scriptThis();
 }
 
 //-----------------------------------------------------------------------------
@@ -2834,7 +2613,7 @@ ConsoleMethod(SceneObject, createEdgeCollisionShape, S32, 4, 10, "(localPosition
                                                                     "@param localPositionEndXY The local position of the end of the edge."
                                                                     "@param adjacentLocalPositionStartXY The adjacent local position of the start of the edge."
                                                                     "@param adjacentLocalPositionEndXY The adjacent local position of the end of the edge."
-                                                                    "@return (int shapeIndex) The index of the collision shape or (-1) if not created.")
+                                                                    "@return (int shapeId) The id of the collision shape or (-1) if not created.")
 {
     // Local position start.
     const U32 localPositionStartElementCount = Utility::mGetStringElementCount(argv[2]);
@@ -2933,176 +2712,116 @@ ConsoleMethod(SceneObject, createEdgeCollisionShape, S32, 4, 10, "(localPosition
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getEdgeCollisionShapeLocalPositionStart, const char*, 3, 3,  "(int shapeIndex) - Gets the local position start of the edge collision shape at the specified index.\n"
-                                                                                            "@param shapeIndex - The index of the collision shape."
-                                                                                            "@return (localPositionStartXY) The local position start of the edge collision shape at the specified index." )
+ConsoleMethod( SceneObject, getEdgeCollisionShapeLocalPositionStart, const char*, 3, 3,  "(int shapeId) - Gets the local position start of the edge collision shape with the specified id.\n"
+                                                                                            "@param shapeId - The id of the collision shape."
+                                                                                            "@return (localPositionStartXY) The local position start of the edge collision shape with the specified id." )
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Sanity!
-    if ( shapeIndex >= shapeCount )
+    if ( object->getCollisionShapeType( shapeId ) != b2Shape::e_edge )
     {
-        Con::warnf("SceneObject::getEdgeCollisionShapeLocalPositionStart() - Invalid shape index of %d.", shapeIndex);
+        Con::warnf("SceneObject::getEdgeCollisionShapeLocalPositionStart() - Not an edge shape with id of %d.", shapeId);
         return false;
     }
 
-    // Sanity!
-    if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_edge )
-    {
-        Con::warnf("SceneObject::getEdgeCollisionShapeLocalPositionStart() - Not an edge shape at index of %d.", shapeIndex);
-        return false;
-    }
-
-    return object->getEdgeCollisionShapeLocalPositionStart( shapeIndex ).scriptThis();
+    return object->getEdgeCollisionShapeLocalPositionStart( shapeId ).scriptThis();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getEdgeCollisionShapeLocalPositionEnd, const char*, 3, 3,    "(int shapeIndex) - Gets the local position end of the edge collision shape at the specified index.\n"
-                                                                                            "@param shapeIndex - The index of the collision shape."
-                                                                                            "@return (localPositionEndXY) The local position end of the edge collision shape at the specified index." )
+ConsoleMethod( SceneObject, getEdgeCollisionShapeLocalPositionEnd, const char*, 3, 3,    "(int shapeId) - Gets the local position end of the edge collision shape with the specified id.\n"
+                                                                                            "@param shapeId - The id of the collision shape."
+                                                                                            "@return (localPositionEndXY) The local position end of the edge collision shape with the specified id." )
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Sanity!
-    if ( shapeIndex >= shapeCount )
+    if ( object->getCollisionShapeType( shapeId ) != b2Shape::e_edge )
     {
-        Con::warnf("SceneObject::getEdgeCollisionShapeLocalPositionEnd() - Invalid shape index of %d.", shapeIndex);
+        Con::warnf("SceneObject::getEdgeCollisionShapeLocalPositionEnd() - Not an edge shape with id of %d.", shapeId);
         return false;
     }
 
-    // Sanity!
-    if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_edge )
-    {
-        Con::warnf("SceneObject::getEdgeCollisionShapeLocalPositionEnd() - Not an edge shape at index of %d.", shapeIndex);
-        return false;
-    }
-
-    return object->getEdgeCollisionShapeLocalPositionEnd( shapeIndex ).scriptThis();
+    return object->getEdgeCollisionShapeLocalPositionEnd( shapeId ).scriptThis();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getEdgeCollisionShapeHasAdjacentStart, bool, 3, 3,  "(int shapeIndex) - Gets whether the chain collision shape at the specified index has an adjacent start point or not.\n"
-                                                                                    "@param shapeIndex - The index of the collision shape."
-                                                                                    "@return (bool adjacentStart) Whether the chain collision shape at the specified index has an adjacent start point or not." )
+ConsoleMethod( SceneObject, getEdgeCollisionShapeHasAdjacentStart, bool, 3, 3,  "(int shapeId) - Gets whether the chain collision shape with the specified id has an adjacent start point or not.\n"
+                                                                                    "@param shapeId - The id of the collision shape."
+                                                                                    "@return (bool adjacentStart) Whether the chain collision shape with the specified id has an adjacent start point or not." )
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Sanity!
-    if ( shapeIndex >= shapeCount )
+    if ( object->getCollisionShapeType( shapeId ) != b2Shape::e_edge )
     {
-        Con::warnf("SceneObject::getEdgeCollisionShapeHasAdjacentStart() - Invalid shape index of %d.", shapeIndex);
+        Con::warnf("SceneObject::getEdgeCollisionShapeHasAdjacentStart() - Not an edge shape with id of %d.", shapeId);
         return false;
     }
 
-    // Sanity!
-    if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_edge )
-    {
-        Con::warnf("SceneObject::getEdgeCollisionShapeHasAdjacentStart() - Not an edge shape at index of %d.", shapeIndex);
-        return false;
-    }
-
-    return object->getEdgeCollisionShapeHasAdjacentStart( shapeIndex );
+    return object->getEdgeCollisionShapeHasAdjacentStart( shapeId );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getEdgeCollisionShapeHasAdjacentEnd, bool, 3, 3,    "(int shapeIndex) - Gets whether the edge collision shape at the specified index has an adjacent end point or not.\n"
-                                                                                    "@param shapeIndex - The index of the collision shape."
-                                                                                    "@return (bool adjacentEnd) Whether the edge collision shape at the specified index has an adjacent end point or not." )
+ConsoleMethod( SceneObject, getEdgeCollisionShapeHasAdjacentEnd, bool, 3, 3,    "(int shapeId) - Gets whether the edge collision shape with the specified id has an adjacent end point or not.\n"
+                                                                                    "@param shapeId - The id of the collision shape."
+                                                                                    "@return (bool adjacentEnd) Whether the edge collision shape with the specified id has an adjacent end point or not." )
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Sanity!
-    if ( shapeIndex >= shapeCount )
+    if ( object->getCollisionShapeType( shapeId ) != b2Shape::e_edge )
     {
-        Con::warnf("SceneObject::getEdgeCollisionShapeHasAdjacentEnd() - Invalid shape index of %d.", shapeIndex);
+        Con::warnf("SceneObject::getEdgeCollisionShapeHasAdjacentEnd() - Not an edge shape with id of %d.", shapeId);
         return false;
     }
 
-    // Sanity!
-    if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_edge )
-    {
-        Con::warnf("SceneObject::getEdgeCollisionShapeHasAdjacentEnd() - Not an edge shape at index of %d.", shapeIndex);
-        return false;
-    }
-
-    return object->getEdgeCollisionShapeHasAdjacentEnd( shapeIndex );
+    return object->getEdgeCollisionShapeHasAdjacentEnd( shapeId );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getEdgeCollisionShapeAdjacentStart, const char*, 3, 3,  "(int shapeIndex) - Gets the adjacent start point of the edge collision shape at the specified index.\n"
-                                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                                        "@return (adjacentStartPointXY) The adjacent start point of the edge collision shape at the specified index." )
+ConsoleMethod( SceneObject, getEdgeCollisionShapeAdjacentStart, const char*, 3, 3,  "(int shapeId) - Gets the adjacent start point of the edge collision shape with the specified id.\n"
+                                                                                        "@param shapeId - The id of the collision shape."
+                                                                                        "@return (adjacentStartPointXY) The adjacent start point of the edge collision shape with the specified id." )
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Sanity!
-    if ( shapeIndex >= shapeCount )
+    if ( object->getCollisionShapeType( shapeId ) != b2Shape::e_edge )
     {
-        Con::warnf("SceneObject::getEdgeCollisionShapeAdjacentStart() - Invalid shape index of %d.", shapeIndex);
+        Con::warnf("SceneObject::getEdgeCollisionShapeAdjacentStart() - Not an edge shape with id of %d.", shapeId);
         return false;
     }
 
-    // Sanity!
-    if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_edge )
-    {
-        Con::warnf("SceneObject::getEdgeCollisionShapeAdjacentStart() - Not an edge shape at index of %d.", shapeIndex);
-        return false;
-    }
-
-    return object->getEdgeCollisionShapeAdjacentStart( shapeIndex ).scriptThis();
+    return object->getEdgeCollisionShapeAdjacentStart( shapeId ).scriptThis();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getEdgeCollisionShapeAdjacentEnd, const char*, 3, 3,    "(int shapeIndex) - Gets whether the edge collision shape at the specified index has an adjacent end point or not.\n"
-                                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                                        "@return (bool adjacentEnd) Whether the edge collision shape at the specified index has an adjacent end point or not." )
+ConsoleMethod( SceneObject, getEdgeCollisionShapeAdjacentEnd, const char*, 3, 3,    "(int shapeId) - Gets whether the edge collision shape with the specified id has an adjacent end point or not.\n"
+                                                                                        "@param shapeId - The id of the collision shape."
+                                                                                        "@return (bool adjacentEnd) Whether the edge collision shape with the specified id has an adjacent end point or not." )
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Sanity!
-    if ( shapeIndex >= shapeCount )
+    if ( object->getCollisionShapeType( shapeId ) != b2Shape::e_edge )
     {
-        Con::warnf("SceneObject::getEdgeCollisionShapeAdjacentEnd() - Invalid shape index of %d.", shapeIndex);
+        Con::warnf("SceneObject::getEdgeCollisionShapeAdjacentEnd() - Not an edge shape with id of %d.", shapeId);
         return false;
     }
 
-    // Sanity!
-    if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_edge )
-    {
-        Con::warnf("SceneObject::getEdgeCollisionShapeAdjacentEnd() - Not an edge shape at index of %d.", shapeIndex);
-        return false;
-    }
-
-    return object->getEdgeCollisionShapeAdjacentEnd( shapeIndex ).scriptThis();
+    return object->getEdgeCollisionShapeAdjacentEnd( shapeId ).scriptThis();
 }
 
 //-----------------------------------------------------------------------------
@@ -3131,23 +2850,13 @@ ConsoleMethod(SceneObject, copyAllCollisionShapes, void, 3, 4,  "(targetObject [
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, copyCollisionShape, S32, 4, 4,   "(int shapeIndex, targetObject) - Copies a collision shape at the specified index to the target object.\n"
-                                                            "@param shapeIndex - The index of the collision shape.\n"
+ConsoleMethod(SceneObject, copyCollisionShape, S32, 4, 4,   "(int shapeId, targetObject) - Copies a collision shape with the specified id to the target object.\n"
+                                                            "@param shapeId - The id of the collision shape.\n"
                                                             "@param targetObject - The target object to receive the collision shape copy.\n"
-                                                            "@return The shape index of the copied collision shape on the target object or (-1) if not copied.")
+                                                            "@return The shape id of the copied collision shape on the target object or (-1) if not copied.")
 {
     // Fetch shape index.
-    const U32 shapeIndex = dAtoi(argv[2]);
-
-    // Fetch shape count.
-    const U32 shapeCount = object->getCollisionShapeCount();
-
-    // Sanity!
-    if ( shapeIndex >= shapeCount )
-    {
-        Con::warnf( "SceneObject::copyCollisionShape() - Invalid shape index of %d.", shapeIndex );
-        return INVALID_COLLISION_SHAPE_INDEX;
-    }
+    const U32 shapeId = dAtoi(argv[2]);
 
     // Fetch target object.
     SceneObject* pSceneObject = Sim::findObject<SceneObject>( argv[3] );
@@ -3156,11 +2865,11 @@ ConsoleMethod(SceneObject, copyCollisionShape, S32, 4, 4,   "(int shapeIndex, ta
     if ( pSceneObject == NULL )
     {
         Con::warnf( "SceneObject::copyCollisionShape() - Invalid target object." );
-        return INVALID_COLLISION_SHAPE_INDEX;
+        return INVALID_COLLISION_SHAPE_ID;
     }
     
     // Copy collision shape.
-    return object->copyCollisionShapes( pSceneObject, false, shapeIndex );
+    return object->copyCollisionShapes( pSceneObject, false, shapeId );
 }
 
 //-----------------------------------------------------------------------------
@@ -3780,4 +3489,3 @@ ConsoleMethod(SceneObject, safeDelete, void, 2, 2, "() - Safely deletes object.\
     // Script Delete.
     object->safeDelete();
 }
-
