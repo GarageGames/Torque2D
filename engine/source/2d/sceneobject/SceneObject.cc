@@ -187,11 +187,6 @@ SceneObject::SceneObject() :
     mSerialId(0),
     mRenderGroup( StringTable->EmptyString )
 {
-    // Set Vector Associations.
-    VECTOR_SET_ASSOCIATION( mDestroyNotifyList );
-    VECTOR_SET_ASSOCIATION( mCollisionFixtureDefs );
-    VECTOR_SET_ASSOCIATION( mCollisionFixtures );
-
     // Assign scene-object index.
     mSerialId = ++sSceneObjectMasterSerialId;
     sGlobalSceneObjectCount++;

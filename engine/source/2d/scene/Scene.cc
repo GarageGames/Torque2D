@@ -484,8 +484,8 @@ void Scene::dispatchBeginContactCallbacks( void )
         const b2Vec2& normal = tickContact.mWorldManifold.normal;
         const b2Vec2& point1 = tickContact.mWorldManifold.points[0];
         const b2Vec2& point2 = tickContact.mWorldManifold.points[1];
-        const S32 shapeIndexA = pSceneObjectA->getCollisionShapeIndex( tickContact.mpFixtureA );
-        const S32 shapeIndexB = pSceneObjectB->getCollisionShapeIndex( tickContact.mpFixtureB );
+        const S32 shapeIndexA = pSceneObjectA->getCollisionShapeId( tickContact.mpFixtureA );
+        const S32 shapeIndexB = pSceneObjectB->getCollisionShapeId( tickContact.mpFixtureB );
 
         // Sanity!
         AssertFatal( shapeIndexA >= 0, "Scene::dispatchBeginContactCallbacks() - Cannot find shape index reported on physics proxy of a fixture." );
@@ -630,8 +630,8 @@ void Scene::dispatchEndContactCallbacks( void )
             continue;
 
         // Fetch shape index.
-        const S32 shapeIndexA = pSceneObjectA->getCollisionShapeIndex( tickContact.mpFixtureA );
-        const S32 shapeIndexB = pSceneObjectB->getCollisionShapeIndex( tickContact.mpFixtureB );
+        const S32 shapeIndexA = pSceneObjectA->getCollisionShapeId( tickContact.mpFixtureA );
+        const S32 shapeIndexB = pSceneObjectB->getCollisionShapeId( tickContact.mpFixtureB );
 
         // Sanity!
         AssertFatal( shapeIndexA >= 0, "Scene::dispatchEndContactCallbacks() - Cannot find shape index reported on physics proxy of a fixture." );

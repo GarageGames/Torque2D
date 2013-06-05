@@ -3047,7 +3047,7 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
             queryResult.mPoint.x, queryResult.mPoint.y,
             queryResult.mNormal.x, queryResult.mNormal.y,
             queryResult.mFraction,
-            queryResult.mShapeIndex );
+			queryResult.mshapeId );
 
         // Finish early if we run out of buffer space.
         if ( bufferCount >= maxBufferSize )
