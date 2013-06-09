@@ -715,12 +715,21 @@ bool Platform::getFileTimes(const char *filePath, FileTime *createTime, FileTime
 }
 
 //--------------------------------------
-bool Platform::createPath(const char *file)
+bool Platform::createPath(const char *infile)
 {
+   char fixedFile[1024];
+   const char *file = fixedFile;
    char pathbuf[1024];
    const char *dir;
    pathbuf[0] = 0;
    U32 pathLen = 0;
+
+   // make sure the infile always ends with '/'.  this will
+   // simplify the loop below.  create this condition by copying
+   // the infile to a new buffer and possibly appending '/' to it.
+   dStrcpy(fixedFile, infile);
+   if (fixedFile[dStrlen(file)-1] != '/')
+      dStrcat(fixedFile, "/");
 
    while((dir = dStrchr(file, '/')) != NULL)
    {
