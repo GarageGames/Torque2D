@@ -1391,6 +1391,7 @@
     </ClCompile>
     <ClCompile Include="..\..\source\spine\AttachmentLoader.c">
       <Filter>spine</Filter>
+	</ClCompile>
     <ClCompile Include="..\..\source\gui\containers\guiGridCtrl.cc">
       <Filter>gui\containers</Filter>
     </ClCompile>
@@ -2884,6 +2885,7 @@
     </ClInclude>
     <ClInclude Include="..\..\source\spine\AttachmentLoader.h">
       <Filter>spine</Filter>
+	</ClInclude>
     <ClInclude Include="..\..\source\gui\containers\guiGridCtrl.h">
       <Filter>gui\containers</Filter>
     </ClInclude>
