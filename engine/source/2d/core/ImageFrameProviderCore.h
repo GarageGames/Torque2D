@@ -63,7 +63,10 @@ protected:
 
     bool                                    mStaticProvider;
 
+    bool                                    mUsingNameFrame;
+
     U32                                     mImageFrame;
+    StringTableEntry                        mImageNameFrame;
     AssetPtr<ImageAsset>*                   mpImageAsset;
     AssetPtr<AnimationAsset>*               mpAnimationAsset;
 
@@ -112,10 +115,14 @@ public:
     /// Static-Image Frame.
     inline bool setImage( const char* pImageAssetId ) { return setImage( pImageAssetId, mImageFrame ); }
     virtual bool setImage( const char* pImageAssetId, const U32 frame );
+    virtual bool setImage( const char* pImageAssetId, const char* pNameFrame );
     inline StringTableEntry getImage( void ) const{ return mpImageAsset->getAssetId(); }
     virtual bool setImageFrame( const U32 frame );
     inline U32 getImageFrame( void ) const { return mImageFrame; }
+    virtual bool setImageFrameByName( const char* frame );
+    inline StringTableEntry getImageFrameByName( void ) const { return mImageNameFrame; }
 
+    
     /// Animated-Image Frame.
     virtual bool setAnimation( const char* pAnimationAssetId );
     inline StringTableEntry getAnimation( void ) const { return mpAnimationAsset->getAssetId(); }
@@ -132,12 +139,13 @@ public:
 
     /// Frame provision.
     inline bool isStaticFrameProvider( void ) const { return mStaticProvider; }
-    inline TextureHandle& getProviderTexture( void ) const { return !validRender() ? BadTextureHandle : isStaticFrameProvider() ? (*mpImageAsset)->getImageTexture() : (*mpAnimationAsset)->getImage()->getImageTexture(); };
-    inline const ImageAsset::FrameArea& getProviderImageFrameArea( void ) const  { return !validRender() ? BadFrameArea : isStaticFrameProvider() ? (*mpImageAsset)->getImageFrameArea(mImageFrame) : (*mpAnimationAsset)->getImage()->getImageFrameArea(getCurrentAnimationFrame()); };
-
+    inline bool isUsingNamedImageFrame( void ) const { return mUsingNameFrame; }
+    inline TextureHandle& getProviderTexture( void ) const { return !validRender() ? BadTextureHandle : isStaticFrameProvider() ? (*mpImageAsset)->getImageTexture() : (*mpAnimationAsset)->getImage()->getImageTexture(); };    
+    const ImageAsset::FrameArea& getProviderImageFrameArea( void ) const;
     inline const AnimationAsset* getCurrentAnimation( void ) const { return mpAnimationAsset->notNull() ? *mpAnimationAsset : NULL; };
     inline const StringTableEntry getCurrentAnimationAssetId( void ) const { return mpAnimationAsset->getAssetId(); };
     const U32 getCurrentAnimationFrame( void ) const;
+    const char* getCurrentAnimationNameFrame( void ) const;
     inline const F32 getCurrentAnimationTime( void ) const { return mCurrentTime; };
 
     void clearAssets( void );

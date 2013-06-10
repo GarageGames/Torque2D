@@ -1272,7 +1272,10 @@ void ParticlePlayer::configureParticle( EmitterNode* pEmitterNode, ParticleSyste
         else
         {
             // No, so set the emitter image frame.
-            frameProvider.setImageFrame( pParticleAssetEmitter->getImageFrame() );
+            if (frameProvider.isUsingNamedImageFrame())
+                frameProvider.setImageFrameByName( pParticleAssetEmitter->getImageFrameName() );
+            else
+                frameProvider.setImageFrame( pParticleAssetEmitter->getImageFrame() );
         }
     }
     else
@@ -1534,7 +1537,7 @@ void ParticlePlayer::initializeParticleAsset( void )
 
         // Skip if the emitter does not have a valid assigned asset to render.
         if (( pParticleAssetEmitter->isStaticFrameProvider() && (imageAsset.isNull() || imageAsset->getFrameCount() == 0 ) ) ||
-            ( !pParticleAssetEmitter->isStaticFrameProvider() && (animationAsset.isNull() || animationAsset->getValidatedAnimationFrames().size() == 0 ) ) )
+            ( !pParticleAssetEmitter->isStaticFrameProvider() && (animationAsset.isNull() || (animationAsset->getValidatedAnimationFrames().size() == 0 && animationAsset->getValidatedNamedAnimationFrames().size() == 0)) ) )
             continue;
 
         // Create a new emitter node.

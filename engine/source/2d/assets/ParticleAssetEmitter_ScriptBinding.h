@@ -431,10 +431,28 @@ ConsoleMethod(ParticleAssetEmitter, setImage, bool, 3, 4,   "(imageAssetId, [fra
                                                             "@param frame The frame of the image asset Id to use.  Optional.\n"
                                                             "@return Whether the operation was successful or not." )
 {
-    // Fetch the frame.
-    const U32 frame = argc >= 4 ? dAtoi(argv[3]) : 0;
-
-    return object->setImage( argv[2], frame );
+    // Was a frame specified?
+    if (argc >= 4)
+    {
+        // Was it a number or a string?
+        if (!dIsalpha(*argv[3]))
+        {
+            // Fetch the numerical frame and set the image
+            const U32 frame = argc >= 4 ? dAtoi(argv[3]) : 0;
+            return object->setImage(argv[2], frame);
+        }
+        else
+        {
+            // Set the image and pass the named frame string
+            return object->setImage(argv[2], argv[3]);
+        }
+    }
+    else
+    {
+        // Frame was not specified, use default 0 and set the image
+        const U32 frame = 0;
+        return object->setImage( argv[2], frame);
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -479,7 +497,24 @@ ConsoleMethod(ParticleAssetEmitter, getRandomImageFrame, bool, 2, 2,    "() Gets
     return object->getRandomImageFrame();
 }
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+
+ConsoleMethod(ParticleAssetEmitter, setImageFrameName, bool, 3, 3,  "(frame) Sets the emitter to use the specified image frame by name.\n"
+                                                                    "@param frame String containing the name of the frame in the image to use..\n"
+                                                                    "@return Whether the operation was successful or not." )
+{
+    return object->setImageFrameName( argv[2] );
+}
+
+//------------------------------------------------------------------------------
+
+ConsoleMethod(ParticleAssetEmitter, getImageFrameName, const char*, 2, 2, "() Gets the asset Id of the image asset assigned to the emitter.\n"
+                                                                          "@return The asset Id of the image asset assigned to the emitter or nothing if no image is assigned." )
+{
+    return object->getImageFrameName();
+}
+
+//------------------------------------------------------------------------------
 
 ConsoleMethod(ParticleAssetEmitter, setAnimation, bool, 3, 3,   "(animationAssetId) Sets the emitter to use the specified animation asset Id.\n"
                                                                 "@param animationAssetId The animation asset Id to use.\n"

@@ -124,3 +124,20 @@ ConsoleMethod(AnimationAsset, getAnimationCycle, bool, 2, 2,     "() Gets whethe
 {
     return object->getAnimationCycle();
 }
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(AnimationAsset, setNamedCellsMode, void, 3, 3,     "(bool namedCellsMode) Sets whether the animation uses names for cells, instead of numerical index.\n"
+                                                                        "@param namedCellsMode True if it should be using named cells.\n"
+                                                                        "@return No return value.")
+{
+    object->setNamedCellsMode( dAtob(argv[2] ) );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(AnimationAsset, getNamedCellsMode, bool, 2, 2,     "() Gets whether the animation is using names for its cells.\n"
+                                                                        "@return True if the animation is using named cells.")
+{
+    return object->getNamedCellsMode();
+}

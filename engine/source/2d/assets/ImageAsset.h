@@ -73,17 +73,28 @@ public:
             {
                 setArea( pixelFrameOffsetX, pixelFrameOffsetY, pixelFrameWidth, pixelFrameHeight );
             }
-
+            PixelArea( const S32 pixelFrameOffsetX, const S32 pixelFrameOffsetY, const U32 pixelFrameWidth, const U32 pixelFrameHeight, const char* regionName )
+            {
+                setArea( pixelFrameOffsetX, pixelFrameOffsetY, pixelFrameWidth, pixelFrameHeight, regionName );
+            }
             inline void setArea( const S32 pixelFrameOffsetX, const S32 pixelFrameOffsetY, const U32 pixelFrameWidth, const U32 pixelFrameHeight )
             {
                 mPixelOffset.set( pixelFrameOffsetX, pixelFrameOffsetY );
                 mPixelWidth = pixelFrameWidth;
                 mPixelHeight = pixelFrameHeight;
             };
+            inline void setArea( const S32 pixelFrameOffsetX, const S32 pixelFrameOffsetY, const U32 pixelFrameWidth, const U32 pixelFrameHeight, const char* regionName )
+            {
+                mPixelOffset.set( pixelFrameOffsetX, pixelFrameOffsetY );
+                mPixelWidth = pixelFrameWidth;
+                mPixelHeight = pixelFrameHeight;
+                mRegionName = StringTable->insert(regionName);
+            };
 
             Point2I mPixelOffset;
             U32 mPixelWidth;
             U32 mPixelHeight;
+            StringTableEntry mRegionName; 
         };
 
 
@@ -120,7 +131,15 @@ public:
     public:
         FrameArea( const S32 pixelFrameOffsetX, const S32 pixelFrameOffsetY, const U32 pixelFrameWidth, const U32 pixelFrameHeight, const F32 texelWidthScale, const F32 texelHeightScale )
         {
-            setArea( pixelFrameOffsetX, pixelFrameOffsetY, pixelFrameWidth, pixelFrameHeight, texelWidthScale, texelHeightScale );
+            setArea( pixelFrameOffsetX, pixelFrameOffsetY, pixelFrameWidth, pixelFrameHeight, texelWidthScale, texelHeightScale);
+        }
+        FrameArea( const S32 pixelFrameOffsetX, const S32 pixelFrameOffsetY, const U32 pixelFrameWidth, const U32 pixelFrameHeight, const F32 texelWidthScale, const F32 texelHeightScale, const char* regionName )
+        {
+            setArea( pixelFrameOffsetX, pixelFrameOffsetY, pixelFrameWidth, pixelFrameHeight, texelWidthScale, texelHeightScale, regionName);
+        }
+        FrameArea()
+        {
+            setArea(0, 0, 0, 0, 0.0f, 0.0f);
         }
 
         void setArea( const S32 pixelFrameOffsetX, const S32 pixelFrameOffsetY, const U32 pixelFrameWidth, const U32 pixelFrameHeight, const F32 texelWidthScale, const F32 texelHeightScale )
@@ -128,9 +147,14 @@ public:
             mPixelArea.setArea( pixelFrameOffsetX, pixelFrameOffsetY, pixelFrameWidth, pixelFrameHeight );
             mTexelArea.setArea( mPixelArea, texelWidthScale, texelHeightScale );
         }
-
+        void setArea( const S32 pixelFrameOffsetX, const S32 pixelFrameOffsetY, const U32 pixelFrameWidth, const U32 pixelFrameHeight, const F32 texelWidthScale, const F32 texelHeightScale, const char* regionName )
+        {
+            mPixelArea.setArea( pixelFrameOffsetX, pixelFrameOffsetY, pixelFrameWidth, pixelFrameHeight, regionName );
+            mTexelArea.setArea( mPixelArea, texelWidthScale, texelHeightScale );
+        }
         PixelArea mPixelArea;
         TexelArea mTexelArea;
+        
     };
 
 private:
@@ -206,26 +230,35 @@ public:
     void                    setCellHeight( const S32 cellheight );
     S32                     getCellHeight( void) const						{ return mCellHeight; }
 
+    bool                    containsNamedRegion(const char* regionName);
+
     inline TextureHandle&   getImageTexture( void )                         { return mImageTextureHandle; }
     inline S32              getImageWidth( void ) const                     { return mImageTextureHandle.getWidth(); }
     inline S32              getImageHeight( void ) const                    { return mImageTextureHandle.getHeight(); }
     inline U32              getFrameCount( void ) const                     { return (U32)mFrames.size(); };
+    inline bool             containsFrame( const char* namedFrame )         { return containsNamedRegion(namedFrame); };
+
+    FrameArea&              getCellByName(const char* cellName);
 
     inline const FrameArea& getImageFrameArea( U32 frame ) const            { clampFrame(frame); return mFrames[frame]; };
+    inline const FrameArea& getImageFrameArea( const char* namedFrame)      { return getCellByName(namedFrame); };
     inline const void       bindImageTexture( void)                         { glBindTexture( GL_TEXTURE_2D, getImageTexture().getGLName() ); };
     
     virtual bool            isAssetValid( void ) const                      { return !mImageTextureHandle.IsNull(); }
 
     /// Explicit cell control.
     bool                    clearExplicitCells( void );
-    bool                    addExplicitCell( const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight );
-    bool                    insertExplicitCell( const S32 cellIndex, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight );
+    bool                    addExplicitCell( const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight, const char* regionName );
+    bool                    insertExplicitCell( const S32 cellIndex, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight, const char* regionName );
     bool                    removeExplicitCell( const S32 cellIndex );
-    bool                    setExplicitCell( const S32 cellIndex, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight );
+    bool                    removeExplicitCell( const char* regionName );
+    bool                    setExplicitCell( const S32 cellIndex, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight, const char* regionName );
     inline S32              getExplicitCellCount( void ) const              { return mExplicitFrames.size(); }
-    
+        
     static TextureFilterMode getFilterModeEnum(const char* label);
     static const char* getFilterModeDescription( TextureFilterMode filterMode );
+
+    inline void forceCalculation( void ) { calculateImage(); }
 
     /// Declare Console Object.
     DECLARE_CONOBJECT(ImageAsset);
@@ -262,7 +295,7 @@ protected:
     static bool writeFilterMode( void* obj, StringTableEntry pFieldName )   { return static_cast<ImageAsset*>(obj)->getFilterMode() != FILTER_BILINEAR; }
 
     static bool setExplicitMode( void* obj, const char* data )              { static_cast<ImageAsset*>(obj)->setExplicitMode(dAtob(data)); return false; }
-
+    
     static bool setCellRowOrder( void* obj, const char* data )              { static_cast<ImageAsset*>(obj)->setCellRowOrder(dAtob(data)); return false; }
     static bool writeCellRowOrder( void* obj, StringTableEntry pFieldName ) { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && !pImageAsset->getCellRowOrder(); }
 

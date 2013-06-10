@@ -75,6 +75,22 @@ ConsoleMethod(SpriteBase, setImageFrame, bool, 3, 3,    "(frame) - Sets the imag
     return static_cast<ImageFrameProvider*>(object)->setImageFrame( dAtoi(argv[2]) );
 }
 
+ConsoleMethod(SpriteBase, setImageFrameByName, bool, 3, 3,  "(frame) - Sets the image frame using a string.\n"
+                                                            "@param frame - The name of the frame\n"
+                                                            "@return True on success.")
+{
+    // Are we in static mode?
+    if ( !object->isStaticFrameProvider() )
+    {
+        // No, so warn.
+        Con::warnf( "SpriteBase::setImageFrameByName() - Method invalid, not in static mode." );
+        return false;
+    }
+
+    // Set image Frame.
+    return static_cast<ImageFrameProvider*>(object)->setImageFrameByName( argv[2] );
+}
+
 //------------------------------------------------------------------------------
 
 ConsoleMethod(SpriteBase, getImageFrame, S32, 2, 2, "() - Gets the current image Frame.\n"

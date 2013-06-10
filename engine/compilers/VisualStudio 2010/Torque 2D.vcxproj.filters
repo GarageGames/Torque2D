@@ -193,6 +193,9 @@
     <Filter Include="persistence\taml\xml">
       <UniqueIdentifier>{e8f11d4b-6a54-4467-ae13-794ed56063f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="spine">
+      <UniqueIdentifier>{57a25dbd-1378-433e-81ad-83db17a717e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\audio\audio.cc">
@@ -1331,6 +1334,69 @@
     </ClCompile>
     <ClCompile Include="..\..\source\persistence\taml\json\tamlJSONParser.cc">
       <Filter>persistence\taml\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\assets\SkeletonAsset.cc">
+      <Filter>2d\assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\sceneobject\SkeletonObject.cc">
+      <Filter>2d\sceneobject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\Animation.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\AnimationState.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\AnimationStateData.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\Atlas.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\AtlasAttachmentLoader.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\Attachment.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\AttachmentLoader.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\Bone.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\BoneData.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\extension.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\Json.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\RegionAttachment.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\Skeleton.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\SkeletonData.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\SkeletonJson.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\Skin.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\Slot.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\SlotData.c">
+      <Filter>spine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\spine\spine-torque2d.cc">
+      <Filter>spine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2759,6 +2825,78 @@
     </ClInclude>
     <ClInclude Include="..\..\source\persistence\taml\json\tamlJSONParser.h">
       <Filter>persistence\taml\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\assets\SkeletonAsset.h">
+      <Filter>2d\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\assets\SkeletonAsset_ScriptBinding.h">
+      <Filter>2d\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\SkeletonObject.h">
+      <Filter>2d\sceneobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\SkeletonObject_ScriptBinding.h">
+      <Filter>2d\sceneobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\Animation.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\AnimationState.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\AnimationStateData.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\Atlas.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\AtlasAttachmentLoader.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\Attachment.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\AttachmentLoader.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\Bone.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\BoneData.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\extension.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\Json.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\RegionAttachment.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\Skeleton.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\SkeletonData.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\SkeletonJson.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\Skin.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\Slot.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\SlotData.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\spine.h">
+      <Filter>spine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\spine\spine-torque2d.h">
+      <Filter>spine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
