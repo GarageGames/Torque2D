@@ -54,6 +54,22 @@ ConsoleMethod(ParticlePlayer, getCameraIdleDistance, F32, 2, 2,     "() Gets the
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(ParticlePlayer, setParticleInterpolation, void, 3, 3,     "(bool status) Sets whether the intermediate world position, rotation, and size data points of particles between ticks are calculated.\n"
+                                                                        "@return No return value.")
+{
+    object->setParticleInterpolation( dAtof(argv[2]) );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(ParticlePlayer, getParticleInterpolation, F32, 2, 2,  "() Gets whether the intermediate world position, rotation, and size data points of particles between ticks are calculated.\n"
+                                                                    "@return (bool status) Whether interpolation is calculated or not.")
+{
+    return object->getParticleInterpolation();
+}
+
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(ParticlePlayer, setEmissionRateScale, void, 3, 3,     "(scale) Sets the scale for the particle player emission rate.\n"
                                                                     "@param scale The scale for the particle player emission rate.\n"
                                                                     "@return No return value.")
@@ -101,6 +117,22 @@ ConsoleMethod(ParticlePlayer, getForceScale, F32, 2, 2,     "() Gets the scale f
                                                             "@return The scale for the particle player forces.")
 {
     return object->getForceScale();
+}
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(ParticlePlayer, setTimeScale, void, 3, 3,     "(scale) Sets the scale for the particle player particle lifetimes.\n"
+                                                            "@param scale The scale for the particle player particle lifetimes.\n"
+                                                            "@return No return value.")
+{
+    object->setTimeScale( dAtof(argv[2]) );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(ParticlePlayer, getTimeScale, F32, 2, 2,  "() Gets the scale for the particle player particle lifetimes.\n"
+                                                        "@return The scale for the particle player particle lifetimes.")
+{
+    return object->getTimeScale();
 }
 //-----------------------------------------------------------------------------
 

@@ -1109,7 +1109,7 @@ void ImageAsset::calculateImplicitMode( void )
     }
 
     // The cell height needs to be at maximum the image height!
-    if ( mCellHeight < 1 || mCellHeight > imageWidth )
+    if ( mCellHeight < 1 || mCellHeight > imageHeight )
     {
         // Warn.
         Con::warnf( "ImageAsset::calculateImage() - Invalid Cell Height of %d.", mCellHeight );
@@ -1125,7 +1125,7 @@ void ImageAsset::calculateImplicitMode( void )
     }
 
     // The Cell Offset Y needs to be within the image.
-    if ( mCellOffsetY < 0 || mCellOffsetY >= imageWidth )
+    if ( mCellOffsetY < 0 || mCellOffsetY >= imageHeight )
     {
         // Warn.
         Con::warnf( "ImageAsset::calculateImage() - Invalid Cell OffsetY of %d.", mCellOffsetY );
