@@ -844,20 +844,11 @@ bool dPathCopy(const char *fromName, const char *toName, bool nooverwrite)
  //-----------------------------------------------------------------------------
  bool Platform::createPath(const char *file)
  {
-    char fixedFile[1024];
-    const char *file = fixedFile;
     char pathbuf[MaxPath];
     const char *dir;
     pathbuf[0] = 0;
     U32 pathLen = 0;
  
-   // make sure the infile always ends with '/'.  this will
-   // simplify the loop below.  create this condition by copying
-   // the infile to a new buffer and possibly appending '/' to it.
-   dStrcpy(fixedFile, infile);
-   if (fixedFile[dStrlen(file)-1] != '/')
-      dStrcat(fixedFile, "/");
-
     // all paths should be created in home directory
     char prefPathName[MaxPath];
     MungePath(prefPathName, MaxPath, file, GetPrefDir());
