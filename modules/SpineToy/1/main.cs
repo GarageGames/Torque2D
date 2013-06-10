@@ -35,9 +35,8 @@ function SpineToy::create(%this)
     %this.asset = "SpineToy:goblins";
     %this.skin = "goblin";
     %this.animation = "walk";
-    %assets = "SpineToy:TestSkeleton,SpineToy:goblins";
-    addSelectionOption( %assets, "Select Skeleton", 4, "setSkeleton", true, "Picks the skeleton asset for the object." );
-    addSelectionOption( "default,goblin,goblingirl", "Select Skin", 4, "setSkin", false, "Sets the skin for the skeleton object." );
+    
+    addSelectionOption( "goblin,goblingirl", "Select Skin", 4, "setSkin", false, "Sets the skin for the skeleton object." );
     
     // Reset the toy.
     SpineToy.reset();
@@ -77,6 +76,8 @@ function SpineToy::reset(%this)
     // Set the camera size.
     SandboxWindow.setCameraSize( 40, 30 );
 
+/*
+// Uncomment this block to test mixing (WIP)
     // Create the skeleton object
     %object = new SkeletonObject()
     {
@@ -97,6 +98,7 @@ function SpineToy::reset(%this)
     %object.schedule(4000, "doJump");
 
 return;
+*/
 
     %this.createBackground();
     //%this.createGround();
@@ -128,7 +130,7 @@ return;
 
 function SpineBoy::onAnimationFinished(%this, %animationName)
 {
-    if (%animationName == "jump")
+    if (%animationName $= "jump")
     {
         %this.setAnimation("walk", true);
         %this.schedule(4000, "doJump");
