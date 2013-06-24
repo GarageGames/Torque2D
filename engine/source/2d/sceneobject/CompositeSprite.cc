@@ -24,10 +24,6 @@
 #include "2d/sceneobject/CompositeSprite.h"
 #endif
 
-#ifndef _SPRITE_BATCH_QUERY_H_
-#include "2d/core/spriteBatchQuery.h"
-#endif
-
 #ifndef _RENDER_PROXY_H_
 #include "2d/core/RenderProxy.h"
 #endif
@@ -418,6 +414,195 @@ void CompositeSprite::onTamlCustomRead( const TamlCustomNodes& customNodes )
 
     // Read node with sprite batch.
     SpriteBatch::onTamlCustomRead( customNodes );
+}
+
+//------------------------------------------------------------------------------
+
+const Vector2 CompositeSprite::getLocalPosition( const Vector2& worldPosition ) const
+ {
+	const b2Transform& renderTransform = getRenderTransform();
+    return b2MulT( renderTransform, worldPosition );
+ }
+
+//------------------------------------------------------------------------------
+
+const Vector2 CompositeSprite::getLogicalPosition( const Vector2& worldPosition ) const
+ {
+	const b2Transform& renderTransform = getRenderTransform();
+    const Vector2 localPosition = b2MulT( renderTransform, worldPosition );
+    
+	Vector2 logicalPosition;
+
+    switch( mBatchLayoutType )
+    {
+        case NO_LAYOUT:
+			return localPosition;
+
+        case RECTILINEAR_LAYOUT:
+			{
+				const Vector2 spriteStride = getDefaultSpriteStride();
+				
+				if(logicalPosition.x > 0)
+					logicalPosition.x = mFloor(localPosition.x / spriteStride.x);
+				else
+					logicalPosition.x = mCeil(localPosition.x / spriteStride.x);
+
+				if(logicalPosition.y > 0)
+					logicalPosition.y = mCeil(localPosition.y / spriteStride.y);
+				else
+					logicalPosition.y = mFloor(localPosition.y / spriteStride.y);
+
+				return logicalPosition;
+			}
+
+        case ISOMETRIC_LAYOUT:
+			//TODO
+            break;
+
+        case CUSTOM_LAYOUT:
+			//TODO
+            break;
+
+        default:
+            Con::warnf( "CompositeSprite::getLocalPosition() - Unknown layout type encountered." );
+    }
+
+	return localPosition;
+}
+
+//-----------------------------------------------------------------------------
+
+typeSpriteBatchQueryResultVector CompositeSprite::pickArea(const Vector2& worldStartPosition, const Vector2& worldEndPosition)
+{
+	// Fetch sprite batch query and clear results.
+    SpriteBatchQuery* pSpriteBatchQuery = getSpriteBatchQuery( true );
+
+    // Is the sprite batch query available?
+    if ( pSpriteBatchQuery == NULL )
+    {
+        // No, so warn.
+        Con::warnf( "CompositeSprite::pickArea() - Cannot pick sprites if clipping mode is off." );
+
+        // Return nothing.
+        return NULL;
+    }
+
+	pSpriteBatchQuery->clearQuery();
+
+    // Calculate normalized AABB.
+    b2AABB aabb;
+    aabb.lowerBound.x = getMin( worldStartPosition.x, worldEndPosition.x );
+    aabb.lowerBound.y = getMin( worldStartPosition.y, worldEndPosition.y );
+    aabb.upperBound.x = getMax( worldStartPosition.x, worldEndPosition.x );
+    aabb.upperBound.y = getMax( worldStartPosition.y, worldEndPosition.y );
+
+	// Calculate local OOBB.
+    b2Vec2 localOOBB[4];
+    CoreMath::mAABBtoOOBB( aabb, localOOBB );
+    CoreMath::mCalculateInverseOOBB( localOOBB, getRenderTransform(), localOOBB );
+
+	// Calculate local AABB.
+    b2AABB localAABB;
+    CoreMath::mOOBBtoAABB( localOOBB, localAABB );
+  
+	// Convert OOBB to a PolygonShape
+    b2PolygonShape oobb_polygon;
+    oobb_polygon.Set(localOOBB, 4);
+
+    // Perform query.
+    pSpriteBatchQuery->queryOOBB( localAABB, oobb_polygon, true );
+
+    // Fetch result count.
+    const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
+
+    // Finish if no results.
+    if (resultCount == 0 )
+        return NULL;
+
+    // Fetch results.
+    return pSpriteBatchQuery->getQueryResults();
+}
+
+//-----------------------------------------------------------------------------
+
+typeSpriteBatchQueryResultVector CompositeSprite::pickRay(const Vector2& worldStartPosition, const Vector2& worldEndPosition)
+{
+    // Fetch sprite batch query and clear results.
+    SpriteBatchQuery* pSpriteBatchQuery = getSpriteBatchQuery( true );
+
+    // Is the sprite batch query available?
+    if ( pSpriteBatchQuery == NULL )
+    {
+        // No, so warn.
+        Con::warnf( "CompositeSprite::pickRay() - Cannot pick sprites if clipping mode is off." );
+
+        // Return nothing.
+        return NULL;
+    }
+
+	pSpriteBatchQuery->clearQuery();
+	
+    // Fetch the render transform.
+    const b2Transform& renderTransform = getRenderTransform();
+
+    // Transform into local space.
+    const Vector2 v1 = b2MulT( renderTransform, worldStartPosition );
+    const Vector2 v2 = b2MulT( renderTransform, worldEndPosition );
+
+    // Perform query.
+    pSpriteBatchQuery->queryRay( v1, v2, true );
+
+    // Sanity!
+    AssertFatal( pSpriteBatchQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );
+
+    // Fetch result count.
+    const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
+
+    // Finish if no results.
+    if (resultCount == 0 )
+        return NULL;
+
+    // Sort ray-cast result.
+    pSpriteBatchQuery->sortRaycastQueryResult();
+
+    // Fetch results.
+    return pSpriteBatchQuery->getQueryResults();
+}
+
+//-----------------------------------------------------------------------------
+
+typeSpriteBatchQueryResultVector CompositeSprite::pickPoint(const Vector2& worldPosition)
+{
+    // Fetch sprite batch query and clear results.
+    SpriteBatchQuery* pSpriteBatchQuery = getSpriteBatchQuery( true );
+
+    // Is the sprite batch query available?
+    if ( pSpriteBatchQuery == NULL )
+    {
+        // No, so warn.
+        Con::warnf( "CompositeSprite::pickPoint() - Cannot pick sprites if clipping mode is off." );
+
+        // Return nothing.
+        return NULL;
+    }
+
+	pSpriteBatchQuery->clearQuery();
+
+    // Transform into local space.
+	const Vector2 point = getLocalPosition(worldPosition);
+
+    // Perform query.
+    pSpriteBatchQuery->queryPoint( point, true );
+
+    // Fetch result count.
+    const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
+
+    // Finish if no results.
+    if (resultCount == 0 )
+        return NULL;
+
+    // Fetch results.
+    return pSpriteBatchQuery->getQueryResults();
 }
 
 //-----------------------------------------------------------------------------

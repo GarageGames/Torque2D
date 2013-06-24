@@ -484,12 +484,12 @@ void Scene::dispatchBeginContactCallbacks( void )
         const b2Vec2& normal = tickContact.mWorldManifold.normal;
         const b2Vec2& point1 = tickContact.mWorldManifold.points[0];
         const b2Vec2& point2 = tickContact.mWorldManifold.points[1];
-        const S32 shapeIndexA = pSceneObjectA->getCollisionShapeIndex( tickContact.mpFixtureA );
-        const S32 shapeIndexB = pSceneObjectB->getCollisionShapeIndex( tickContact.mpFixtureB );
+        const S32 shapeIdA = pSceneObjectA->getCollisionShapeId( tickContact.mpFixtureA );
+        const S32 shapeIdB = pSceneObjectB->getCollisionShapeId( tickContact.mpFixtureB );
 
         // Sanity!
-        AssertFatal( shapeIndexA >= 0, "Scene::dispatchBeginContactCallbacks() - Cannot find shape index reported on physics proxy of a fixture." );
-        AssertFatal( shapeIndexB >= 0, "Scene::dispatchBeginContactCallbacks() - Cannot find shape index reported on physics proxy of a fixture." );
+        AssertFatal( shapeIdA >= 0, "Scene::dispatchBeginContactCallbacks() - Cannot find shape index reported on physics proxy of a fixture." );
+        AssertFatal( shapeIdB >= 0, "Scene::dispatchBeginContactCallbacks() - Cannot find shape index reported on physics proxy of a fixture." );
 
         // Fetch collision impulse information
         const F32 normalImpulse1 = tickContact.mNormalImpulses[0];
@@ -509,7 +509,7 @@ void Scene::dispatchBeginContactCallbacks( void )
         {
             dSprintf(miscInfoBuffer, sizeof(miscInfoBuffer),
                 "%d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
-                shapeIndexA, shapeIndexB,
+                shapeIdA, shapeIdB,
                 normal.x, normal.y,
                 point1.x, point1.y,
                 normalImpulse1,
@@ -522,7 +522,7 @@ void Scene::dispatchBeginContactCallbacks( void )
         {
             dSprintf(miscInfoBuffer, sizeof(miscInfoBuffer),
                 "%d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
-                shapeIndexA, shapeIndexB,
+                shapeIdA, shapeIdB,
                 normal.x, normal.y,
                 point1.x, point1.y,
                 normalImpulse1,
@@ -532,7 +532,7 @@ void Scene::dispatchBeginContactCallbacks( void )
         {
             dSprintf(miscInfoBuffer, sizeof(miscInfoBuffer),
                 "%d %d",
-                shapeIndexA, shapeIndexB );
+                shapeIdA, shapeIdB );
         }
 
         // Does the scene handle the collision callback?
@@ -630,12 +630,12 @@ void Scene::dispatchEndContactCallbacks( void )
             continue;
 
         // Fetch shape index.
-        const S32 shapeIndexA = pSceneObjectA->getCollisionShapeIndex( tickContact.mpFixtureA );
-        const S32 shapeIndexB = pSceneObjectB->getCollisionShapeIndex( tickContact.mpFixtureB );
+        const S32 shapeIdA = pSceneObjectA->getCollisionShapeId( tickContact.mpFixtureA );
+        const S32 shapeIdB = pSceneObjectB->getCollisionShapeId( tickContact.mpFixtureB );
 
         // Sanity!
-        AssertFatal( shapeIndexA >= 0, "Scene::dispatchEndContactCallbacks() - Cannot find shape index reported on physics proxy of a fixture." );
-        AssertFatal( shapeIndexB >= 0, "Scene::dispatchEndContactCallbacks() - Cannot find shape index reported on physics proxy of a fixture." );
+        AssertFatal( shapeIdA >= 0, "Scene::dispatchEndContactCallbacks() - Cannot find shape index reported on physics proxy of a fixture." );
+        AssertFatal( shapeIdB >= 0, "Scene::dispatchEndContactCallbacks() - Cannot find shape index reported on physics proxy of a fixture." );
 
         // Format objects.
         char sceneObjectABuffer[16];
@@ -645,7 +645,7 @@ void Scene::dispatchEndContactCallbacks( void )
 
         // Format miscellaneous information.
         char miscInfoBuffer[32];
-        dSprintf(miscInfoBuffer, sizeof(miscInfoBuffer), "%d %d", shapeIndexA, shapeIndexB );
+        dSprintf(miscInfoBuffer, sizeof(miscInfoBuffer), "%d %d", shapeIdA, shapeIdB );
 
         // Does the scene handle the collision callback?
         Namespace* pNamespace = getNamespace();
@@ -753,7 +753,7 @@ void Scene::processTick( void )
         mTickedSceneObjects.clear();
 
         // Iterate scene objects.
-        for( S32 n = 0; n < mSceneObjects.size(); ++n )
+        for( U32 n = 0; n < mSceneObjects.size(); ++n )
         {
             // Fetch scene object.
             SceneObject* pSceneObject = mSceneObjects[n];
@@ -1319,7 +1319,7 @@ void Scene::addToScene( SceneObject* pSceneObject )
 
 #if defined(TORQUE_DEBUG)
     // Sanity!
-    for ( S32 n = 0; n < mSceneObjects.size(); ++n )
+    for ( U32 n = 0; n < mSceneObjects.size(); ++n )
     {
         AssertFatal( mSceneObjects[n] != pSceneObject, "A scene object has become corrupt." );
     }
@@ -1384,7 +1384,7 @@ void Scene::removeFromScene( SceneObject* pSceneObject )
     pSceneObject->OnUnregisterScene( this );
 
     // Find scene object and remove it quickly.
-    for ( S32 n = 0; n < mSceneObjects.size(); ++n )
+    for ( U32 n = 0; n < mSceneObjects.size(); ++n )
     {
         if ( mSceneObjects[n] == pSceneObject )
         {
@@ -1433,7 +1433,7 @@ U32 Scene::getSceneObjects( typeSceneObjectVector& objects, const U32 sceneLayer
     U32 count = 0;
 
     // Iterate scene objects.
-    for( S32 n = 0; n < mSceneObjects.size(); ++n )
+    for( U32 n = 0; n < mSceneObjects.size(); ++n )
     {
         // Fetch scene object.
         SceneObject* pSceneObject = mSceneObjects[n];
@@ -1454,7 +1454,7 @@ U32 Scene::getSceneObjects( typeSceneObjectVector& objects, const U32 sceneLayer
 
 //-----------------------------------------------------------------------------
 
-const AssetPtr<AssetBase>* Scene::getAssetPreload( const S32 index ) const
+const AssetPtr<AssetBase>* Scene::getAssetPreload( const U32 index ) const
 {
     // Is the index valid?
     if ( index < 0 || index >= mAssetPreloads.size() )
@@ -1716,9 +1716,7 @@ S32 Scene::createDistanceJoint(
 
 //-----------------------------------------------------------------------------
 
-void Scene::setDistanceJointLength(
-        const U32 jointId,
-        const F32 length )
+void Scene::setDistanceJointLength( const U32 jointId, const F32 length )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -1772,9 +1770,7 @@ F32 Scene::getDistanceJointLength( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-void Scene::setDistanceJointFrequency(
-        const U32 jointId,
-        const F32 frequency )
+void Scene::setDistanceJointFrequency( const U32 jointId, const F32 frequency )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -1828,9 +1824,7 @@ F32 Scene::getDistanceJointFrequency( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-void Scene::setDistanceJointDampingRatio(
-        const U32 jointId,
-        const F32 dampingRatio )
+void Scene::setDistanceJointDampingRatio( const U32 jointId, const F32 dampingRatio )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -1926,9 +1920,7 @@ S32 Scene::createRopeJoint(
 
 //-----------------------------------------------------------------------------
 
-void Scene::setRopeJointMaxLength(
-        const U32 jointId,
-        const F32 maxLength )
+void Scene::setRopeJointMaxLength( const U32 jointId, const F32 maxLength )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2023,10 +2015,7 @@ S32 Scene::createRevoluteJoint(
 
 //-----------------------------------------------------------------------------
 
-void Scene::setRevoluteJointLimit(
-        const U32 jointId,
-        const bool enableLimit,
-        const F32 lowerAngle, const F32 upperAngle )
+void Scene::setRevoluteJointLimit( const U32 jointId, const bool enableLimit, const F32 lowerAngle, const F32 upperAngle )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2054,10 +2043,7 @@ void Scene::setRevoluteJointLimit(
 
 //-----------------------------------------------------------------------------
 
-bool Scene::getRevoluteJointLimit(
-        const U32 jointId,
-        bool& enableLimit,
-        F32& lowerAngle, F32& upperAngle )
+bool Scene::getRevoluteJointLimit( const U32 jointId, bool& enableLimit, F32& lowerAngle, F32& upperAngle )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2088,11 +2074,7 @@ bool Scene::getRevoluteJointLimit(
 
 //-----------------------------------------------------------------------------
 
-void Scene::setRevoluteJointMotor(
-        const U32 jointId,
-        const bool enableMotor,
-        const F32 motorSpeed,
-        const F32 maxMotorTorque )
+void Scene::setRevoluteJointMotor( const U32 jointId, const bool enableMotor, const F32 motorSpeed, const F32 maxMotorTorque )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2121,11 +2103,7 @@ void Scene::setRevoluteJointMotor(
 
 //-----------------------------------------------------------------------------
 
-bool Scene::getRevoluteJointMotor(
-        const U32 jointId,
-        bool& enableMotor,
-        F32& motorSpeed,
-        F32& maxMotorTorque )
+bool Scene::getRevoluteJointMotor( const U32 jointId, bool& enableMotor, F32& motorSpeed, F32& maxMotorTorque )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2213,8 +2191,7 @@ F32	Scene::getRevoluteJointSpeed( const U32 jointId )
 S32 Scene::createWeldJoint(
         const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
         const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
-        const F32 frequency,
-        const F32 dampingRatio,
+        const F32 frequency, const F32 dampingRatio,
         const bool collideConnected )
 {
     // Sanity!
@@ -2255,9 +2232,7 @@ S32 Scene::createWeldJoint(
 
 //-----------------------------------------------------------------------------
 
-void Scene::setWeldJointFrequency(
-        const U32 jointId,
-        const F32 frequency )
+void Scene::setWeldJointFrequency( const U32 jointId, const F32 frequency )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2281,7 +2256,6 @@ void Scene::setWeldJointFrequency(
     // Access joint.
     pRealJoint->SetFrequency( frequency );
 }
-
 
 //-----------------------------------------------------------------------------
 
@@ -2312,9 +2286,7 @@ F32 Scene::getWeldJointFrequency( const U32 jointId  )
 
 //-----------------------------------------------------------------------------
 
-void Scene::setWeldJointDampingRatio(
-        const U32 jointId,
-        const F32 dampingRatio )
+void Scene::setWeldJointDampingRatio( const U32 jointId, const F32 dampingRatio )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2410,11 +2382,7 @@ S32 Scene::createWheelJoint(
 
 //-----------------------------------------------------------------------------
 
-void Scene::setWheelJointMotor(
-        const U32 jointId,
-        const bool enableMotor,
-        const F32 motorSpeed,
-        const F32 maxMotorTorque )
+void Scene::setWheelJointMotor( const U32 jointId, const bool enableMotor, const F32 motorSpeed, const F32 maxMotorTorque )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2443,11 +2411,7 @@ void Scene::setWheelJointMotor(
 
 //-----------------------------------------------------------------------------
 
-bool Scene::getWheelJointMotor(
-        const U32 jointId,
-        bool& enableMotor,
-        F32& motorSpeed,
-        F32& maxMotorTorque )
+bool Scene::getWheelJointMotor( const U32 jointId, bool& enableMotor, F32& motorSpeed, F32& maxMotorTorque )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2478,9 +2442,7 @@ bool Scene::getWheelJointMotor(
 
 //-----------------------------------------------------------------------------
 
-void Scene::setWheelJointFrequency(
-        const U32 jointId,
-        const F32 frequency )
+void Scene::setWheelJointFrequency( const U32 jointId, const F32 frequency )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2534,9 +2496,7 @@ F32 Scene::getWheelJointFrequency( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-void Scene::setWheelJointDampingRatio(
-        const U32 jointId,
-        const F32 dampingRatio )
+void Scene::setWheelJointDampingRatio( const U32 jointId, const F32 dampingRatio )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2593,8 +2553,7 @@ F32 Scene::getWheelJointDampingRatio( const U32 jointId )
 S32 Scene::createFrictionJoint(
         const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
         const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
-        const F32 maxForce,
-        const F32 maxTorque,
+        const F32 maxForce, const F32 maxTorque,
         const bool collideConnected )
 {
     // Sanity!
@@ -2634,9 +2593,7 @@ S32 Scene::createFrictionJoint(
 
 //-----------------------------------------------------------------------------
 
-void Scene::setFrictionJointMaxForce(
-        const U32 jointId,
-        const F32 maxForce )
+void Scene::setFrictionJointMaxForce( const U32 jointId, const F32 maxForce )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2690,9 +2647,7 @@ F32 Scene::getFrictionJointMaxForce( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-void Scene::setFrictionJointMaxTorque(
-        const U32 jointId,
-        const F32 maxTorque )
+void Scene::setFrictionJointMaxTorque( const U32 jointId, const F32 maxTorque )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2716,7 +2671,6 @@ void Scene::setFrictionJointMaxTorque(
     // Access joint.
     pRealJoint->SetMaxTorque( maxTorque );
 }
-
 
 //-----------------------------------------------------------------------------
 
@@ -2790,10 +2744,7 @@ S32 Scene::createPrismaticJoint(
 
 //-----------------------------------------------------------------------------
 
-void Scene::setPrismaticJointLimit(
-        const U32 jointId,
-        const bool enableLimit,
-        const F32 lowerTranslation, const F32 upperTranslation )
+void Scene::setPrismaticJointLimit( const U32 jointId, const bool enableLimit, const F32 lowerTranslation, const F32 upperTranslation )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2821,10 +2772,7 @@ void Scene::setPrismaticJointLimit(
 
 //-----------------------------------------------------------------------------
 
-bool Scene::getPrismaticJointLimit(
-        const U32 jointId,
-        bool& enableLimit,
-        F32& lowerTranslation, F32& upperTranslation )
+bool Scene::getPrismaticJointLimit( const U32 jointId, bool& enableLimit, F32& lowerTranslation, F32& upperTranslation )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2855,11 +2803,7 @@ bool Scene::getPrismaticJointLimit(
 
 //-----------------------------------------------------------------------------
 
-void Scene::setPrismaticJointMotor(
-        const U32 jointId,
-        const bool enableMotor,
-        const F32 motorSpeed,
-        const F32 maxMotorForce )
+void Scene::setPrismaticJointMotor( const U32 jointId, const bool enableMotor, const F32 motorSpeed, const F32 maxMotorForce )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2888,11 +2832,7 @@ void Scene::setPrismaticJointMotor(
 
 //-----------------------------------------------------------------------------
 
-bool Scene::getPrismaticJointMotor(
-        const U32 jointId,
-        bool& enableMotor,
-        F32& motorSpeed,
-        F32& maxMotorForce )
+bool Scene::getPrismaticJointMotor( const U32 jointId, bool& enableMotor, F32& motorSpeed, F32& maxMotorForce )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -2976,8 +2916,7 @@ S32 Scene::createTargetJoint(
         const b2Vec2& worldTarget,
         const F32 maxForce,
         const bool useCenterOfMass,
-        const F32 frequency,
-        const F32 dampingRatio,
+        const F32 frequency, const F32 dampingRatio,
         const bool collideConnected )
 {
     // Sanity!
@@ -3029,9 +2968,7 @@ S32 Scene::createTargetJoint(
 
 //-----------------------------------------------------------------------------
 
-void Scene::setTargetJointTarget(
-        const U32 jointId,
-        const b2Vec2& worldTarget )
+void Scene::setTargetJointTarget( const U32 jointId, const b2Vec2& worldTarget )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -3057,6 +2994,7 @@ void Scene::setTargetJointTarget(
 }
 
 //-----------------------------------------------------------------------------
+
 b2Vec2 Scene::getTargetJointTarget( const U32 jointId )
 {
     // Fetch joint.
@@ -3084,9 +3022,7 @@ b2Vec2 Scene::getTargetJointTarget( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-void Scene::setTargetJointMaxForce(
-        const U32 jointId,
-        const F32 maxForce )
+void Scene::setTargetJointMaxForce( const U32 jointId, const F32 maxForce )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -3140,9 +3076,7 @@ F32 Scene::getTargetJointMaxForce( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-void Scene::setTargetJointFrequency(
-        const U32 jointId,
-        const F32 frequency )
+void Scene::setTargetJointFrequency( const U32 jointId, const F32 frequency )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -3196,9 +3130,7 @@ F32 Scene::getTargetJointFrequency( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-void Scene::setTargetJointDampingRatio(
-        const U32 jointId,
-        const F32 dampingRatio )
+void Scene::setTargetJointDampingRatio( const U32 jointId, const F32 dampingRatio )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -3254,10 +3186,8 @@ F32 Scene::getTargetJointDampingRatio( const U32 jointId )
 
 S32 Scene::createMotorJoint(
             const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
-            const b2Vec2 linearOffset,
-            const F32 angularOffset,
-            const F32 maxForce,
-            const F32 maxTorque,
+            const b2Vec2 linearOffset, const F32 angularOffset,
+            const F32 maxForce, const F32 maxTorque,
             const F32 correctionFactor,
             const bool collideConnected )
 {
@@ -3299,9 +3229,7 @@ S32 Scene::createMotorJoint(
 
 //-----------------------------------------------------------------------------
 
-void Scene::setMotorJointLinearOffset(
-        const U32 jointId,
-        const b2Vec2& linearOffset )
+void Scene::setMotorJointLinearOffset( const U32 jointId, const b2Vec2& linearOffset )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -3355,9 +3283,7 @@ b2Vec2 Scene::getMotorJointLinearOffset( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-void Scene::setMotorJointAngularOffset(
-        const U32 jointId,
-        const F32 angularOffset )
+void Scene::setMotorJointAngularOffset( const U32 jointId, const F32 angularOffset )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -3411,9 +3337,7 @@ F32 Scene::getMotorJointAngularOffset( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-void Scene::setMotorJointMaxForce(
-        const U32 jointId,
-        const F32 maxForce )
+void Scene::setMotorJointMaxForce( const U32 jointId, const F32 maxForce )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -3467,9 +3391,7 @@ F32 Scene::getMotorJointMaxForce( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-void Scene::setMotorJointMaxTorque(
-        const U32 jointId,
-        const F32 maxTorque )
+void Scene::setMotorJointMaxTorque( const U32 jointId, const F32 maxTorque )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -3493,7 +3415,6 @@ void Scene::setMotorJointMaxTorque(
     // Access joint.
     pRealJoint->SetMaxTorque( maxTorque );
 }
-
 
 //-----------------------------------------------------------------------------
 
@@ -3520,6 +3441,231 @@ F32 Scene::getMotorJointMaxTorque( const U32 jointId )
 
     // Access joint.
     return pRealJoint->GetMaxTorque();
+}
+
+//-----------------------------------------------------------------------------
+
+typeWorldQueryResultVector Scene::pickArea(const Vector2& worldStartPosition, const Vector2& worldEndPosition, const U32& sceneGroupMask, const U32& sceneLayerMask, const PickMode& pickMode)
+{
+    // Fetch world query and clear results.
+    WorldQuery* pWorldQuery = getWorldQuery( true );
+    pWorldQuery->clearQuery();
+
+    // Set filter.
+    WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
+    pWorldQuery->setQueryFilter( queryFilter );
+
+    // Calculate normalized AABB.
+    b2AABB aabb;
+    aabb.lowerBound.x = getMin( worldStartPosition.x, worldEndPosition.x );
+    aabb.lowerBound.y = getMin( worldStartPosition.y, worldEndPosition.y );
+    aabb.upperBound.x = getMax( worldStartPosition.x, worldEndPosition.x );
+    aabb.upperBound.y = getMax( worldStartPosition.y, worldEndPosition.y );
+
+    // Perform query.
+    if ( pickMode == Scene::PICK_ANY )
+    {
+        pWorldQuery->anyQueryAABB( aabb );    
+    }
+    else if ( pickMode == Scene::PICK_AABB )
+    {
+        pWorldQuery->aabbQueryAABB( aabb );    
+    }
+    else if ( pickMode == Scene::PICK_OOBB )
+    {
+        pWorldQuery->oobbQueryAABB( aabb );    
+    }
+    else if ( pickMode == Scene::PICK_COLLISION )
+    {
+        pWorldQuery->collisionQueryAABB( aabb );    
+    }
+    else
+    {
+        AssertFatal( false, "Unsupported pick mode." );
+    }
+
+    // Fetch result count.
+    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+
+    // Finish if no results.
+    if ( resultCount == 0 )
+        return NULL;
+
+    // Fetch results.
+    return pWorldQuery->getQueryResults();
+};
+
+//-----------------------------------------------------------------------------
+
+typeWorldQueryResultVector Scene::pickRay(const Vector2& worldStartPosition, const Vector2& worldEndPosition, const U32& sceneGroupMask, const U32& sceneLayerMask, const PickMode& pickMode)
+{
+    // Fetch world query and clear results.
+    WorldQuery* pWorldQuery = getWorldQuery( true );
+    pWorldQuery->clearQuery();
+
+    // Set filter.
+    WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
+    pWorldQuery->setQueryFilter( queryFilter );
+
+    // Perform query.
+    if ( pickMode == Scene::PICK_ANY )
+    {
+        pWorldQuery->anyQueryRay( worldStartPosition, worldEndPosition );    
+    }
+    else if ( pickMode == Scene::PICK_AABB )
+    {
+        pWorldQuery->aabbQueryRay( worldStartPosition, worldEndPosition );    
+    }
+    else if ( pickMode == Scene::PICK_OOBB )
+    {
+        pWorldQuery->oobbQueryRay( worldStartPosition, worldEndPosition );    
+    }
+    else if ( pickMode == Scene::PICK_COLLISION )
+    {
+        pWorldQuery->collisionQueryRay( worldStartPosition, worldEndPosition );    
+    }
+    else
+    {
+        AssertFatal( false, "Unsupported pick mode." );
+    }
+
+    // Sanity!
+    AssertFatal( pWorldQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );
+
+    // Fetch result count.
+    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+
+    // Finish if no results.
+    if ( resultCount == 0 )
+        return NULL;
+
+    // Sort ray-cast result.
+    pWorldQuery->sortRaycastQueryResult();
+
+    // Fetch results.
+    return pWorldQuery->getQueryResults();
+};
+
+//-----------------------------------------------------------------------------
+
+typeWorldQueryResultVector Scene::pickPoint(const Vector2& worldPosition, const U32& sceneGroupMask, const U32& sceneLayerMask, const PickMode& pickMode)
+{
+    // Fetch world query and clear results.
+    WorldQuery* pWorldQuery = getWorldQuery( true );
+    pWorldQuery->clearQuery();
+
+    // Set filter.
+    WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
+    pWorldQuery->setQueryFilter( queryFilter );
+
+    // Perform query.
+    if ( pickMode == Scene::PICK_ANY )
+    {
+        pWorldQuery->anyQueryPoint( worldPosition );    
+    }
+    else if ( pickMode == Scene::PICK_AABB )
+    {
+        pWorldQuery->aabbQueryPoint( worldPosition );    
+    }
+    else if ( pickMode == Scene::PICK_OOBB )
+    {
+        pWorldQuery->oobbQueryPoint( worldPosition );    
+    }
+    else if ( pickMode == Scene::PICK_COLLISION )
+    {
+        pWorldQuery->collisionQueryPoint( worldPosition );    
+    }
+    else
+    {
+        AssertFatal( false, "Unsupported pick mode." );
+    }
+
+    // Fetch result count.
+    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+
+    // Finish if no results.
+    if ( resultCount == 0 )
+        return NULL;
+
+    // Fetch results.
+    return pWorldQuery->getQueryResults();
+};
+
+//-----------------------------------------------------------------------------
+
+typeWorldQueryResultVector Scene::pickCircle(const Vector2& worldPosition, const F32& radius, const U32& sceneGroupMask, const U32& sceneLayerMask, const PickMode& pickMode)
+{
+    // Fetch world query and clear results.
+    WorldQuery* pWorldQuery = getWorldQuery( true );
+    pWorldQuery->clearQuery();
+
+    // Set filter.
+    WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
+    pWorldQuery->setQueryFilter( queryFilter );
+
+    // Perform query.
+    if ( pickMode == Scene::PICK_ANY )
+    {
+        pWorldQuery->anyQueryCircle( worldPosition, radius );    
+    }
+    else if ( pickMode == Scene::PICK_AABB )
+    {
+        pWorldQuery->aabbQueryCircle( worldPosition, radius );    
+    }
+    else if ( pickMode == Scene::PICK_OOBB )
+    {
+        pWorldQuery->oobbQueryCircle( worldPosition, radius );    
+    }
+    else if ( pickMode == Scene::PICK_COLLISION )
+    {
+        pWorldQuery->collisionQueryCircle( worldPosition, radius );    
+    }
+    else
+    {
+        AssertFatal( false, "Unsupported pick mode." );
+    }
+
+    // Fetch result count.
+    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+
+    // Finish if no results.
+    if ( resultCount == 0 )
+        return NULL;
+
+    // Fetch results.
+    return pWorldQuery->getQueryResults();
+};
+
+//-----------------------------------------------------------------------------
+
+typeWorldQueryResultVector Scene::pickRayCollision(const Vector2& worldStartPosition, const Vector2& worldEndPosition, const U32& sceneGroupMask, const U32& sceneLayerMask)
+{
+    // Fetch world query and clear results.
+    WorldQuery* pWorldQuery = getWorldQuery( true );
+    pWorldQuery->clearQuery();
+
+    // Set filter.
+    WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
+    pWorldQuery->setQueryFilter( queryFilter );
+
+    // Perform query.
+    pWorldQuery->collisionQueryRay( worldStartPosition, worldEndPosition );    
+
+    // Sanity!
+    AssertFatal( pWorldQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );
+
+    // Fetch result count.
+    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+
+    // Finish if no results.
+    if ( resultCount == 0 )
+        return NULL;
+
+    // Sort ray-cast result.
+    pWorldQuery->sortRaycastQueryResult();
+
+    // Fetch results.
+    return pWorldQuery->getQueryResults();
 }
 
 //-----------------------------------------------------------------------------
@@ -3649,7 +3795,6 @@ void Scene::addDeleteRequest( SceneObject* pSceneObject )
     // Flag Delete in Progress.
     pSceneObject->mBeingSafeDeleted = true;
 }
-
 
 //-----------------------------------------------------------------------------
 
