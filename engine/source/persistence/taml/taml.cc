@@ -22,36 +22,70 @@
 
 #include "taml.h"
 
-#ifndef _TAML_XMLWRITER_H_
-#include "persistence/taml/xml/tamlXmlWriter.h"
+#ifdef _FORMAT_XML
+	#ifndef _TAML_XMLWRITER_H_
+		#include "persistence/taml/xml/tamlXmlWriter.h"
+	#endif
+
+	#ifndef _TAML_XMLREADER_H_
+		#include "persistence/taml/xml/tamlXmlReader.h"
+	#endif
+
+	#ifndef _TAML_XMLPARSER_H_
+		#include "persistence/taml/xml/tamlXmlParser.h"
+	#endif
 #endif
 
-#ifndef _TAML_XMLREADER_H_
-#include "persistence/taml/xml/tamlXmlReader.h"
+#ifdef _FORMAT_XML
+	#ifndef _TAML_BINARYWRITER_H_
+		#include "persistence/taml/binary/tamlBinaryWriter.h"
+	#endif
+
+	#ifndef _TAML_BINARYREADER_H_
+		#include "persistence/taml/binary/tamlBinaryReader.h"
+	#endif
 #endif
 
-#ifndef _TAML_XMLPARSER_H_
-#include "persistence/taml/xml/tamlXmlParser.h"
+#ifdef _FORMAT_JSON
+	#ifndef _TAML_JSONWRITER_H_
+		#include "persistence/taml/json/tamlJSONWriter.h"
+	#endif
+
+	#ifndef _TAML_JSONREADER_H_
+		#include "persistence/taml/json/tamlJSONReader.h"
+	#endif
+
+	#ifndef _TAML_JSONPARSER_H_
+		#include "persistence/taml/json/tamlJSONParser.h"
+	#endif
 #endif
 
-#ifndef _TAML_BINARYWRITER_H_
-#include "persistence/taml/binary/tamlBinaryWriter.h"
+#ifdef _FORMAT_CSV
+	#ifndef _TAML_CSVWRITER_H_
+		#include "persistence/taml/csv/tamlCsvWriter.h"
+	#endif
+
+	#ifndef _TAML_CSVREADER_H_
+		#include "persistence/taml/csv/tamlCsvReader.h"
+	#endif
+
+	#ifndef _TAML_CSVPARSER_H_
+		#include "persistence/taml/csv/tamlCsvParser.h"
+	#endif
 #endif
 
-#ifndef _TAML_BINARYREADER_H_
-#include "persistence/taml/binary/tamlBinaryReader.h"
-#endif
+#ifdef _FORMAT_SQL
+	#ifndef _TAML_SQLWRITER_H_
+		#include "persistence/taml/sql/tamlSqlWriter.h"
+	#endif
 
-#ifndef _TAML_JSONWRITER_H_
-#include "persistence/taml/json/tamlJSONWriter.h"
-#endif
+	#ifndef _TAML_SQLREADER_H_
+		#include "persistence/taml/sql/tamlSqlReader.h"
+	#endif
 
-#ifndef _TAML_JSONREADER_H_
-#include "persistence/taml/json/tamlJSONReader.h"
-#endif
-
-#ifndef _TAML_JSONPARSER_H_
-#include "persistence/taml/json/tamlJSONParser.h"
+	#ifndef _TAML_SQLPARSER_H_
+		#include "persistence/taml/sql/tamlSqlParser.h"
+	#endif
 #endif
 
 #ifndef _FRAMEALLOCATOR_H_
@@ -112,7 +146,9 @@ static EnumTable::Enums tamlFormatModeLookup[] =
                 {
                 { Taml::XmlFormat, "xml" },
                 { Taml::BinaryFormat, "binary" },
-                { Taml::JSONFormat, "json" }
+                { Taml::JSONFormat, "json" },
+                { Taml::CsvFormat, "csv" },
+                { Taml::SqlFormat, "sql" }
                 };
 
 EnumTable tamlFormatModeTable(sizeof(tamlFormatModeLookup) / sizeof(EnumTable::Enums), &tamlFormatModeLookup[0]);
@@ -163,7 +199,9 @@ Taml::Taml() :
     mAutoFormat(true),
     mAutoFormatXmlExtension("taml"),    
     mAutoFormatBinaryExtension("baml"),
-    mAutoFormatJSONExtension("json")
+    mAutoFormatJSONExtension("json"),
+    mAutoFormatCsvExtension("csv"),
+    mAutoFormatSqlExtension("db")
 {
     // Reset the file-path buffer.
     mFilePathBuffer[0] = 0;
@@ -185,6 +223,8 @@ void Taml::initPersistFields()
     addField("AutoFormatXmlExtension", TypeString, Offset(mAutoFormatXmlExtension, Taml), "When using auto-format, this is the extension (end of filename) used to detect the XML format.\n");
     addField("AutoFormatBinaryExtension", TypeString, Offset(mAutoFormatBinaryExtension, Taml), "When using auto-format, this is the extension (end of filename) used to detect the BINARY format.\n");
     addField("AutoFormatJSONExtension", TypeString, Offset(mAutoFormatJSONExtension, Taml), "When using auto-format, this is the extension (end of filename) used to detect the JSON format.\n");
+    addField("AutoFormatCsvExtension", TypeString, Offset(mAutoFormatCsvExtension, Taml), "When using auto-format, this is the extension (end of filename) used to detect the Csv format.\n");
+    addField("AutoFormatSqlExtension", TypeString, Offset(mAutoFormatSqlExtension, Taml), "When using auto-format, this is the extension (end of filename) used to detect the sqlite format.\n");
 }
 
 //-----------------------------------------------------------------------------
@@ -318,7 +358,7 @@ bool Taml::write( FileStream& stream, SimObject* pSimObject, const TamlFormatMod
     // Format appropriately.
     switch( formatMode )
     {
-        /// Xml.
+#ifdef _FORMAT_XML
         case XmlFormat:
         {
             // Create writer.
@@ -327,8 +367,9 @@ bool Taml::write( FileStream& stream, SimObject* pSimObject, const TamlFormatMod
             // Write.
             return writer.write( stream, pRootNode );
         }
+#endif
 
-        /// Binary.
+#ifdef _FORMAT_BINARY
         case BinaryFormat:
         {
             // Create writer.
@@ -337,8 +378,9 @@ bool Taml::write( FileStream& stream, SimObject* pSimObject, const TamlFormatMod
             // Write.
             return writer.write( stream, pRootNode, mBinaryCompression );
         }
+#endif
 
-        /// JSON.
+#ifdef _FORMAT_JSON
         case JSONFormat:
         {
             // Create writer.
@@ -347,6 +389,29 @@ bool Taml::write( FileStream& stream, SimObject* pSimObject, const TamlFormatMod
             // Write.
             return writer.write( stream, pRootNode );
         }
+#endif
+
+#ifdef _FORMAT_CSV
+        case CsvFormat:
+        {
+            // Create writer.
+            TamlCsvWriter writer( this );
+
+            // Write.
+            return writer.write( stream, pRootNode );
+        }
+#endif
+
+#ifdef _FORMAT_SQL
+        case SqlFormat:
+        {
+            // Create writer.
+            TamlSqlWriter writer( this );
+
+            // Write.
+            return writer.write( stream, pRootNode );
+        }
+#endif
 
         /// Invalid.
         case InvalidFormat:
@@ -369,7 +434,7 @@ SimObject* Taml::read( FileStream& stream, const TamlFormatMode formatMode )
     // Format appropriately.
     switch( formatMode )
     {
-        /// Xml.
+#ifdef _FORMAT_XML
         case XmlFormat:
         {
             // Create reader.
@@ -378,8 +443,9 @@ SimObject* Taml::read( FileStream& stream, const TamlFormatMode formatMode )
             // Read.
             return reader.read( stream );
         }
+#endif
 
-        /// Binary.
+#ifdef _FORMAT_BINARY
         case BinaryFormat:
         {
             // Create reader.
@@ -388,8 +454,9 @@ SimObject* Taml::read( FileStream& stream, const TamlFormatMode formatMode )
             // Read.
             return reader.read( stream );
         }
+#endif
 
-        /// JSON.
+#ifdef _FORMAT_JSON
         case JSONFormat:
         {
             // Create reader.
@@ -398,7 +465,30 @@ SimObject* Taml::read( FileStream& stream, const TamlFormatMode formatMode )
             // Read.
             return reader.read( stream );
         }
-        
+#endif
+
+#ifdef _FORMAT_CSV
+        case CsvFormat:
+        {
+            // Create reader.
+            TamlCsvReader reader( this );
+
+            // Read.
+            return reader.read( stream );
+        }
+#endif
+
+#ifdef _FORMAT_SQL
+        case SqlFormat:
+        {
+            // Create reader.
+            TamlSqlReader reader( this );
+
+            // Read.
+            return reader.read( stream );
+        }
+#endif
+
         /// Invalid.
         case InvalidFormat:
         {
@@ -429,6 +519,7 @@ bool Taml::parse( const char* pFilename, TamlVisitor& visitor )
     // Handle format mode appropriately.
     switch( formatMode )
     {
+#ifdef _FORMAT_XML
         case XmlFormat:
         {
             // Parse with the visitor.
@@ -444,7 +535,9 @@ bool Taml::parse( const char* pFilename, TamlVisitor& visitor )
 
             return parser.accept( pFilename, visitor );            
         }
+#endif
 
+#ifdef _FORMAT_JSON
         case JSONFormat:
         {
             // Parse with the visitor.
@@ -460,6 +553,43 @@ bool Taml::parse( const char* pFilename, TamlVisitor& visitor )
 
             return parser.accept( pFilename, visitor );            
         }
+#endif
+
+#ifdef _FORMAT_CSV
+        case CsvFormat:
+        {
+            // Parse with the visitor.
+            TamlCsvParser parser;
+
+            // Are property changes needed but not supported?
+            if ( visitor.wantsPropertyChanges() && !parser.canChangeProperty() )
+            {
+                // Yes, so warn.
+                Con::warnf( "Taml::parse() - Cannot parse '%s' file-type for filename '%s' as a specified visitor requires property changes which are not supported by the parser.", getFormatModeDescription(formatMode), pFilename );
+                return false;
+            }
+
+            return parser.accept( pFilename, visitor );            
+        }
+#endif
+
+#ifdef _FORMAT_SQL
+        case SqlFormat:
+        {
+            // Parse with the visitor.
+            TamlSqlParser parser;
+
+            // Are property changes needed but not supported?
+            if ( visitor.wantsPropertyChanges() && !parser.canChangeProperty() )
+            {
+                // Yes, so warn.
+                Con::warnf( "Taml::parse() - Cannot parse '%s' file-type for filename '%s' as a specified visitor requires property changes which are not supported by the parser.", getFormatModeDescription(formatMode), pFilename );
+                return false;
+            }
+
+            return parser.accept( pFilename, visitor );            
+        }
+#endif
 
         case BinaryFormat:
         default:
@@ -513,6 +643,8 @@ Taml::TamlFormatMode Taml::getFileAutoFormatMode( const char* pFilename )
         const U32 xmlExtensionLength = dStrlen( mAutoFormatXmlExtension );
         const U32 binaryExtensionLength = dStrlen( mAutoFormatBinaryExtension );
         const U32 jsonExtensionLength = dStrlen( mAutoFormatJSONExtension );
+        const U32 csvExtensionLength = dStrlen( mAutoFormatCsvExtension );
+        const U32 sqlExtensionLength = dStrlen( mAutoFormatSqlExtension );
 
         // Fetch filename length.
         const U32 filenameLength = dStrlen( pFilename );
@@ -528,9 +660,17 @@ Taml::TamlFormatMode Taml::getFileAutoFormatMode( const char* pFilename )
         if ( binaryExtensionLength <= filenameLength && dStricmp( pEndOfFilename - xmlExtensionLength, mAutoFormatBinaryExtension ) == 0 )
             return Taml::BinaryFormat;  
 
-        // Check for the XML format.
+        // Check for the JSON format.
         if ( jsonExtensionLength <= filenameLength && dStricmp( pEndOfFilename - jsonExtensionLength, mAutoFormatJSONExtension ) == 0 )
             return Taml::JSONFormat;
+
+        // Check for the Csv format.
+        if ( csvExtensionLength <= filenameLength && dStricmp( pEndOfFilename - csvExtensionLength, mAutoFormatCsvExtension ) == 0 )
+            return Taml::CsvFormat;
+
+        // Check for the Sqlite format.
+        if ( sqlExtensionLength <= filenameLength && dStricmp( pEndOfFilename - sqlExtensionLength, mAutoFormatSqlExtension ) == 0 )
+            return Taml::SqlFormat;
     }
 
     // Use the explicitly specified format mode.

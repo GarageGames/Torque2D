@@ -75,9 +75,11 @@ public:
     enum TamlFormatMode
     {
         InvalidFormat = 0,
-        XmlFormat,
-        BinaryFormat,
-        JSONFormat,
+        XmlFormat = 1,
+        BinaryFormat = 2,
+        JSONFormat = 3,
+		CsvFormat = 4,
+		SqlFormat = 5
     };
 
 private:
@@ -92,6 +94,8 @@ private:
     StringTableEntry    mAutoFormatXmlExtension;
     StringTableEntry    mAutoFormatBinaryExtension;
     StringTableEntry    mAutoFormatJSONExtension;
+    StringTableEntry    mAutoFormatCsvExtension;
+    StringTableEntry    mAutoFormatSqlExtension;
     bool                mJSONStrict;
     bool                mBinaryCompression;
     bool                mAutoFormat;
@@ -152,6 +156,10 @@ public:
     inline StringTableEntry getAutoFormatXmlExtension( void ) const { return mAutoFormatXmlExtension; }
     inline void setAutoFormatBinaryExtension( const char* pExtension ) { mAutoFormatBinaryExtension = StringTable->insert( pExtension ); }
     inline StringTableEntry getAutoFormatBinaryExtension( void ) const { return mAutoFormatBinaryExtension; }
+    inline void setAutoFormatCsvExtension( const char* pExtension ) { mAutoFormatCsvExtension = StringTable->insert( pExtension ); }
+    inline StringTableEntry getAutoFormatCsvExtension( void ) const { return mAutoFormatCsvExtension; }
+    inline void setAutoFormatSqlExtension( const char* pExtension ) { mAutoFormatSqlExtension = StringTable->insert( pExtension ); }
+    inline StringTableEntry getAutoFormatSqlExtension( void ) const { return mAutoFormatSqlExtension; }
 
     /// Compression.
     inline void setBinaryCompression( const bool compressed ) { mBinaryCompression = compressed; }
