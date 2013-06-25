@@ -65,7 +65,7 @@ public:
 
     /// Puts a reference to an existing stack frame
     /// on the top of the stack.
-    void pushFrameRef(S32 stackIndex);
+    void pushFrameRef(U32 stackIndex);
 
     /// @}
 };

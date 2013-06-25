@@ -375,7 +375,7 @@ bool ZipArchive::rebuildZip()
   }
 
    // Copy any unmodified files
-   for(S32 i = 0;i < mEntries.size();++i)
+   for(U32 i = 0;i < mEntries.size();++i)
    {
       ZipEntry *entry = mEntries[i];
 
@@ -387,7 +387,7 @@ bool ZipArchive::rebuildZip()
    }
 
    // Copy any dirty files
-   for(S32 i = 0;i < mTempFiles.size();++i)
+   for(U32 i = 0;i < mTempFiles.size();++i)
    {
       ZipTempStream *zts = mTempFiles[i];
 
@@ -402,7 +402,7 @@ bool ZipArchive::rebuildZip()
    mEOCD.mCDOffset = zipFile->getPosition();
    mEOCD.mNumEntriesInThisCD = 0;
    
-   for(S32 i = 0;i < mEntries.size();++i)
+   for(U32 i = 0;i < mEntries.size();++i)
    {
       ZipEntry *entry = mEntries[i];
 
@@ -578,7 +578,7 @@ void ZipArchive::closeArchive()
       rebuildZip();
 
    // Free any remaining temporary files
-   for(S32 i = 0;i < mTempFiles.size();++i)
+   for(U32 i = 0;i < mTempFiles.size();++i)
    {
       SAFE_DELETE(mTempFiles[i]);
    }
@@ -680,7 +680,7 @@ Stream *ZipArchive::openFileForRead(const CentralDir *fileCD)
    if(fileCD->mInternalFlags & CDFileDirty)
    {
       // File is dirty, we need to read from the temporary file
-      for(S32 i = 0;i < mTempFiles.size();++i)
+      for(U32 i = 0;i < mTempFiles.size();++i)
       {
          if(mTempFiles[i]->getCentralDir() == fileCD)
          {

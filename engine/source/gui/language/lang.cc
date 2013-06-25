@@ -199,9 +199,7 @@ LangTable::LangTable() : mDefaultLang(-1), mCurrentLang(-1)
 
 LangTable::~LangTable()
 {
-	S32 i;
-
-	for(i = 0;i < mLangTable.size();i++)
+	for(U32 i = 0;i < mLangTable.size();i++)
 	{
 		if(mLangTable[i])
 			delete mLangTable[i];
@@ -265,7 +263,7 @@ const U32 LangTable::getStringLength(const U32 id) const
 	return 0;
 }
 
-void LangTable::setDefaultLanguage(S32 langid)
+void LangTable::setDefaultLanguage(U32 langid)
 {
 	if(langid >= 0 && langid < mLangTable.size())
 	{
@@ -279,7 +277,7 @@ void LangTable::setDefaultLanguage(S32 langid)
 	}
 }
 
-void LangTable::setCurrentLanguage(S32 langid)
+void LangTable::setCurrentLanguage(U32 langid)
 {
 	if(langid >= 0 && langid < mLangTable.size())
 	{

@@ -161,7 +161,7 @@ ConsoleMethod( GuiFrameSetCtrl, getColumnOffset, S32, 3, 3, "( column ) Use the 
 																"@return Returns the pixel offset for the specified column.\n"
 																"@sa getRowOffset, setColumnOffset, setRowOffset")
 {
-   S32 index = dAtoi(argv[2]);
+   U32 index = dAtoi(argv[2]);
    if(index < 0 || index > object->columnOffsets()->size())
    {
       Con::errorf(ConsoleLogEntry::General, "Column index out of range");
@@ -176,7 +176,7 @@ ConsoleMethod( GuiFrameSetCtrl, getRowOffset, S32, 3, 3, "( row ) Use the getRow
 																"@return Returns the pixel offset for the specified row.\n"
 																"@sa getColumnOffset, setColumnOffset, setRowOffset")
 {
-   S32 index = dAtoi(argv[2]);
+   U32 index = dAtoi(argv[2]);
    if(index < 0 || index > object->rowOffsets()->size())
    {
       Con::errorf(ConsoleLogEntry::General, "Row index out of range");
@@ -194,7 +194,7 @@ ConsoleMethod( GuiFrameSetCtrl, setColumnOffset, void, 4, 4, "( column , offset 
 {
    Vector<S32> & columns = *(object->columnOffsets());
 
-   S32 index = dAtoi(argv[2]);
+   U32 index = dAtoi(argv[2]);
    if(index < 0 || index > columns.size())
    {
       Con::errorf(ConsoleLogEntry::General, "Column index out of range");
@@ -202,11 +202,10 @@ ConsoleMethod( GuiFrameSetCtrl, setColumnOffset, void, 4, 4, "( column , offset 
    }
 
    //
-   S32 offset = dAtoi(argv[3]);
+   U32 offset = dAtoi(argv[3]);
 
    // check the offset
-   if(((index > 0) && (offset < columns[index-1])) ||
-      ((index < (columns.size() - 1)) && (offset > columns[index+1])))
+   if(((index > 0) && (offset < columns[index-1])) || ((index < (columns.size() - 1)) && (offset > columns[index+1])))
    {
       Con::errorf(ConsoleLogEntry::General, "Invalid column offset");
       return;
@@ -225,7 +224,7 @@ ConsoleMethod( GuiFrameSetCtrl, setRowOffset, void, 4, 4, "( row , offset ) Use 
 {
    Vector<S32> & rows = *(object->rowOffsets());
 
-   S32 index = dAtoi(argv[2]);
+   U32 index = dAtoi(argv[2]);
    if(index < 0 || index > rows.size())
    {
       Con::errorf(ConsoleLogEntry::General, "Row index out of range");
@@ -233,11 +232,10 @@ ConsoleMethod( GuiFrameSetCtrl, setRowOffset, void, 4, 4, "( row , offset ) Use 
    }
 
    //
-   S32 offset = dAtoi(argv[3]);
+   U32 offset = dAtoi(argv[3]);
 
    // check the offset
-   if(((index > 0) && (offset < rows[index-1])) ||
-      ((index < (rows.size() - 1)) && (offset > rows[index+1])))
+   if(((index > 0) && (offset < rows[index-1])) || ((index < (rows.size() - 1)) && (offset > rows[index+1])))
    {
       Con::errorf(ConsoleLogEntry::General, "Invalid row offset");
       return;

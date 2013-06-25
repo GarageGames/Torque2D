@@ -160,7 +160,7 @@ void GameInterface::processEvents()
    Mutex::unlockMutex(gGameEventQueueMutex);
 
    // Walk the event queue in fifo order, processing the events, then clear the queue.
-   for(int i=0; i < fullEventQueue.size(); i++)
+   for(U32 i=0; i < fullEventQueue.size(); i++)
    {
       Game->processEvent(fullEventQueue[i]);
       dFree(fullEventQueue[i]);

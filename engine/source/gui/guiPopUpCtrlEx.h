@@ -101,7 +101,7 @@ class GuiPopUpMenuCtrlEx : public GuiTextCtrl
    struct Entry
    {
       char buf[256];
-      S32 id;
+      U32 id;
       U16 ascii;
       U16 scheme;
 	  bool usesColorBox;	// DAW: Added
@@ -124,13 +124,13 @@ class GuiPopUpMenuCtrlEx : public GuiTextCtrl
    GuiPopUpBackgroundCtrlEx *mBackground;
    Vector<Entry> mEntries;
    Vector<Scheme> mSchemes;
-   S32 mSelIndex;
+   U32 mSelIndex;
    S32 mMaxPopupHeight;
    F32 mIncValue;
    F32 mScrollCount;
    S32 mLastYvalue;
    GuiEvent mEventSave;
-   S32 mRevNum;
+   U32 mRevNum;
    bool mInAction;
    bool mReplaceText;
    bool mMouseOver; // DAW: Added
@@ -173,7 +173,7 @@ class GuiPopUpMenuCtrlEx : public GuiTextCtrl
    bool getColoredBox(ColorI &boxColor, S32 id); // DAW: Added
 
    S32 getSelected();
-   void setSelected(S32 id);
+   void setSelected(U32 id);
    void setFirstSelected(); // DAW: Added
    void setNoneSelected();	// DAW: Added
    const char *getScriptValue();

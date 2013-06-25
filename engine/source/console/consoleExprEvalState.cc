@@ -51,7 +51,7 @@ void ExprEvalState::popFrame()
    delete last;
 }
 
-void ExprEvalState::pushFrameRef(S32 stackIndex)
+void ExprEvalState::pushFrameRef(U32 stackIndex)
 {
    AssertFatal( stackIndex >= 0 && stackIndex < stack.size(), "You must be asking for a valid frame!" );
    Dictionary *newFrame = new Dictionary(this, stack[stackIndex]);

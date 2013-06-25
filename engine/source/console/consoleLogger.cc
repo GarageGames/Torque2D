@@ -169,7 +169,7 @@ bool ConsoleLogger::detach()
    mStream.close();
 
    // Remove this object from the list of active loggers
-   for( int i = 0; i < mActiveLoggers.size(); i++ ) 
+   for( U32 i = 0; i < mActiveLoggers.size(); i++ ) 
    {
       if( mActiveLoggers[i] == this ) 
       {
@@ -190,7 +190,7 @@ void ConsoleLogger::logCallback( ConsoleLogEntry::Level level, const char *conso
    ConsoleLogger *curr;
 
    // Loop through active consumers and send them the message
-   for( int i = 0; i < mActiveLoggers.size(); i++ ) 
+   for( U32 i = 0; i < mActiveLoggers.size(); i++ ) 
    {
       curr = mActiveLoggers[i];
 

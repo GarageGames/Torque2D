@@ -119,7 +119,7 @@ void SimObject::buildFilterList()
 void SimObject::addFieldFilter( const char *fieldName )
 {
    StringTableEntry st = StringTable->insert(fieldName);
-   for(S32 i = 0;i < mFieldFilter.size();i++)
+   for(U32 i = 0;i < mFieldFilter.size();i++)
    {
       if(mFieldFilter[i] == st)
          return;
@@ -131,7 +131,7 @@ void SimObject::addFieldFilter( const char *fieldName )
 void SimObject::removeFieldFilter( const char *fieldName )
 {
    StringTableEntry st = StringTable->insert(fieldName);
-   for(S32 i = 0;i < mFieldFilter.size();i++)
+   for(U32 i = 0;i < mFieldFilter.size();i++)
    {
       if(mFieldFilter[i] == st)
       {
@@ -151,7 +151,7 @@ void SimObject::clearFieldFilters()
 bool SimObject::isFiltered( const char *fieldName )
 {
    StringTableEntry st = StringTable->insert(fieldName);
-   for(S32 i = 0;i < mFieldFilter.size();i++)
+   for(U32 i = 0;i < mFieldFilter.size();i++)
    {
       if(mFieldFilter[i] == st)
          return true;

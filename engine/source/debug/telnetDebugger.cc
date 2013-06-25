@@ -835,7 +835,7 @@ void TelnetDebugger::debugStepOut()
    send("RUNNING\r\n");
 }
 
-void TelnetDebugger::evaluateExpression(const char *tag, S32 frame, const char *evalBuffer)
+void TelnetDebugger::evaluateExpression(const char *tag, U32 frame, const char *evalBuffer)
 {
    // Make sure we're passing a valid frame to the eval.
    if ( frame > gEvalState.stack.size() )

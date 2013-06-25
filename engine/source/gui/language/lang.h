@@ -95,11 +95,11 @@ public:
 	S32 addLanguage(LangFile *lang, const UTF8 *name = NULL);
 	S32 addLanguage(const UTF8 *filename, const UTF8 *name = NULL);
 
-	void setDefaultLanguage(S32 langid);
-	void setCurrentLanguage(S32 langid);
+	void setDefaultLanguage(U32 langid);
+	void setCurrentLanguage(U32 langid);
 	S32 getCurrentLanguage(void)			{ return mCurrentLang; }
 	
-	const UTF8 * getLangName(const S32 langid) const 
+	const UTF8 * getLangName(const U32 langid) const 
 	{
 		if(langid < 0 || langid >= mLangTable.size())
 			return NULL;

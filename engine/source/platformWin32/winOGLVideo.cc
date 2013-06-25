@@ -626,7 +626,7 @@ bool OpenGLDevice::setScreenMode( U32 width, U32 height, U32 bpp, bool fullScree
       Con::warnf( ConsoleLogEntry::General, "OpenGLDevice::setScreenMode -- can't switch to resolution larger than desktop in windowed mode!" );
       S32 resIndex = 0;
       S32 bestScore = 0, thisScore = 0;
-      for ( S32 i = 0; i < mResolutionList.size(); i++ )
+      for ( U32 i = 0; i < mResolutionList.size(); i++ )
       {
          if ( newRes == mResolutionList[i] )
          {
@@ -664,7 +664,7 @@ bool OpenGLDevice::setScreenMode( U32 width, U32 height, U32 bpp, bool fullScree
       // Match the new resolution to one in the list:
       U32 resIndex = 0;
       U32 bestScore = 0, thisScore = 0;
-      for ( int i = 0; i < mResolutionList.size(); i++ )
+      for ( U32 i = 0; i < mResolutionList.size(); i++ )
       {
          if ( newRes == mResolutionList[i] )
          {

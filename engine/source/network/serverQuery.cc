@@ -720,7 +720,7 @@ ConsoleFunction( setServerInfo, bool, 2, 2, "( index ) Use the setServerInfo fun
                                                                 "@return Will return true if the information was successfully set, false otherwise.\n"
                                                                 "@sa getServerCount, queryLANServers, queryMasterServer, querySingleServer")
 {
-   S32 index = dAtoi(argv[1]);
+   U32 index = dAtoi(argv[1]);
    
    if (index >= 0 && index < gServerList.size())
    {

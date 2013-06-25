@@ -291,7 +291,7 @@ bool Video::setDevice( const char *renderName, U32 width, U32 height, U32 bpp, b
    bool bAllowOpengl    = true; //Con::getBoolVariable("$pref::Video::allowOpenGL");
 
 
-   for ( S32 i = 0; i < smDeviceList.size(); i++ )
+   for ( U32 i = 0; i < smDeviceList.size(); i++ )
    {
       if ( dStrcmp( smDeviceList[i]->mDeviceName, renderName ) == 0 )
          deviceIndex = i;
@@ -527,7 +527,7 @@ bool Video::toggleFullScreen()
 //------------------------------------------------------------------------------
 DisplayDevice* Video::getDevice( const char* renderName )
 {
-   for ( S32 i = 0; i < smDeviceList.size(); i++ )
+   for ( U32 i = 0; i < smDeviceList.size(); i++ )
    {
       if ( dStrcmp( smDeviceList[i]->mDeviceName, renderName ) == 0 )
             return( smDeviceList[i] );

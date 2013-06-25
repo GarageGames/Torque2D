@@ -171,7 +171,7 @@ void GuiInspector::inspectObject( SimObject *object )
    }
 
    // If the general group is still empty at this point, kill it.
-   for(S32 i=0; i<mGroups.size(); i++)
+   for(U32 i=0; i<mGroups.size(); i++)
    {
       if(mGroups[i] == general && general->mStack->size() == 0)
       {
