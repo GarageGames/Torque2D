@@ -109,7 +109,8 @@ class b2Fixture
 public:
 	/// Get the type of the child shape. You can use this to down cast to the concrete shape.
 	/// @return the shape type.
-	b2Shape::Type GetType() const;
+	b2Shape::Type GetType();
+	const b2Shape::Type GetType() const;
 
 	/// Get the child shape. You can modify the child shape, however you should not change the
 	/// number of vertices because this will crash some collision caching mechanisms.
@@ -235,7 +236,12 @@ protected:
 	void* m_userData;
 };
 
-inline b2Shape::Type b2Fixture::GetType() const
+inline const b2Shape::Type b2Fixture::GetType() const
+{
+	return m_shape->GetType();
+}
+
+inline b2Shape::Type b2Fixture::GetType()
 {
 	return m_shape->GetType();
 }
