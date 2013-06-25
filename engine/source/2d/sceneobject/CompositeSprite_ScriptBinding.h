@@ -947,32 +947,36 @@ ConsoleMethod(CompositeSprite, pickPoint, const char*, 3, 4,    "(x / y ) Picks 
     }
 
 	const typeSpriteBatchQueryResultVector& queryResults = object->pickPoint(point);
+	if(queryResults.size() > 0)
+	{
+		// Set Max Buffer Size.
+		const U32 maxBufferSize = 4096;
 
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
+		// Create Returnable Buffer.
+		char* pBuffer = Con::getReturnBuffer(maxBufferSize);
 
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
+		// Set Buffer Counter.
+		U32 bufferCount = 0;
 
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
+		// Add picked sprites.
+		for ( U32 n = 0; n < queryResults.size(); n++ )
+		{
+			// Output Object ID.
+			bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSpriteBatchItem->getBatchId() );
 
-    // Add picked sprites.
-    for ( U32 n = 0; n < queryResults.size(); n++ )
-    {
-        // Output Object ID.
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSpriteBatchItem->getBatchId() );
+			// Finish early if we run out of buffer space.
+			if ( bufferCount >= maxBufferSize )
+			{
+				// Warn.
+				Con::warnf("CompositeSprite::pickPoint() - Too many items picked to return to scripts!");
+				break;
+			}
+		}
 
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("CompositeSprite::pickPoint() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
+		return pBuffer;
+	}
 
-    return pBuffer;
+	return "";
 }
 
 //-----------------------------------------------------------------------------
@@ -1023,32 +1027,36 @@ ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y )
     }
 
 	const typeSpriteBatchQueryResultVector& queryResults = object->pickArea(v1, v2);
+	if(queryResults.size() > 0)
+	{
+		// Set Max Buffer Size.
+		const U32 maxBufferSize = 4096;
 
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
+		// Create Returnable Buffer.
+		char* pBuffer = Con::getReturnBuffer(maxBufferSize);
 
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
+		// Set Buffer Counter.
+		U32 bufferCount = 0;
 
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
+		// Add picked objects.
+		for ( U32 n = 0; n < queryResults.size(); n++ )
+		{
+			// Output Object ID.
+			bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSpriteBatchItem->getBatchId() );
 
-    // Add picked objects.
-    for ( U32 n = 0; n < queryResults.size(); n++ )
-    {
-        // Output Object ID.
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSpriteBatchItem->getBatchId() );
+			// Finish early if we run out of buffer space.
+			if ( bufferCount >= maxBufferSize )
+			{
+				// Warn.
+				Con::warnf("CompositeSprite::pickArea() - Too many items picked to return to scripts!");
+				break;
+			}
+		}
 
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("CompositeSprite::pickArea() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
+		return pBuffer;
+	}
 
-    return pBuffer;
+	return "";
 }
 
 //-----------------------------------------------------------------------------
@@ -1103,29 +1111,34 @@ ConsoleMethod(CompositeSprite, pickRay, const char*, 4, 6,  "(startx/y, endx/y) 
 
 	const typeSpriteBatchQueryResultVector& queryResults = object->pickRay(v1, v2);
 
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
+	if(queryResults.size() > 0)
+	{
+		// Set Max Buffer Size.
+		const U32 maxBufferSize = 4096;
 
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
+		// Create Returnable Buffer.
+		char* pBuffer = Con::getReturnBuffer(maxBufferSize);
 
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
+		// Set Buffer Counter.
+		U32 bufferCount = 0;
 
-    // Add Picked Objects to List.
-    for ( U32 n = 0; n < queryResults.size(); n++ )
-    {
-        // Output Object ID.
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSpriteBatchItem->getBatchId() );
+		// Add Picked Objects to List.
+		for ( U32 n = 0; n < queryResults.size(); n++ )
+		{
+			// Output Object ID.
+			bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSpriteBatchItem->getBatchId() );
 
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("CompositeSprite::pickRay() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
+			// Finish early if we run out of buffer space.
+			if ( bufferCount >= maxBufferSize )
+			{
+				// Warn.
+				Con::warnf("CompositeSprite::pickRay() - Too many items picked to return to scripts!");
+				break;
+			}
+		}
 
-	return pBuffer;
+		return pBuffer;
+	}
+
+	return "";
 }

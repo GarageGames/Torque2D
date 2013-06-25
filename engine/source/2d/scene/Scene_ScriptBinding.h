@@ -2406,32 +2406,36 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
     }
 
 	const typeWorldQueryResultVector& queryResults = object->pickArea(v1, v2, sceneGroupMask, sceneLayerMask, pickMode);
+	if(queryResults.size() > 0)
+	{
+		// Set Max Buffer Size.
+		const U32 maxBufferSize = 4096;
 
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
+		// Create Returnable Buffer.
+		char* pBuffer = Con::getReturnBuffer(maxBufferSize);
 
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
+		// Set Buffer Counter.
+		U32 bufferCount = 0;
 
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
+		// Add picked objects.
+		for ( U32 n = 0; n < queryResults.size(); n++ )
+		{
+			// Output Object ID.
+			bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
 
-    // Add picked objects.
-	for ( U32 n = 0; n < queryResults.size(); n++ )
-    {
-        // Output Object ID.
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
+			// Finish early if we run out of buffer space.
+			if ( bufferCount >= maxBufferSize )
+			{
+				// Warn.
+				Con::warnf("Scene::pickArea() - Too many items picked to return to scripts!");
+				break;
+			}
+		}
 
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("Scene::pickArea() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
+		return pBuffer;
+	}
 
-    return pBuffer;
+	return "";
 }
 
 //-----------------------------------------------------------------------------
@@ -2515,32 +2519,36 @@ ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroup
     }
 
 	const typeWorldQueryResultVector& queryResults = object->pickRay(v1, v2, sceneGroupMask, sceneLayerMask, pickMode);
+	if(queryResults.size() > 0)
+	{
+		// Set Max Buffer Size.
+		const U32 maxBufferSize = 4096;
 
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
+		// Create Returnable Buffer.
+		char* pBuffer = Con::getReturnBuffer(maxBufferSize);
 
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
+		// Set Buffer Counter.
+		U32 bufferCount = 0;
 
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
+		// Add Picked Objects to List.
+		for ( U32 n = 0; n < queryResults.size(); n++ )
+		{
+			// Output Object ID.
+			bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
 
-    // Add Picked Objects to List.
-    for ( U32 n = 0; n < queryResults.size(); n++ )
-    {
-        // Output Object ID.
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
+			// Finish early if we run out of buffer space.
+			if ( bufferCount >= maxBufferSize )
+			{
+				// Warn.
+				Con::warnf("Scene::pickRay() - Too many items picked to return to scripts!");
+				break;
+			}
+		}
 
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("Scene::pickRay() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
+		return pBuffer;
+	}
 
-    return pBuffer;
+	return "";
 }
 
 //-----------------------------------------------------------------------------
@@ -2610,32 +2618,36 @@ ConsoleMethod(Scene, pickPoint, const char*, 3, 7, "(x / y, [sceneGroupMask], [s
     }
 
 	const typeWorldQueryResultVector& queryResults = object->pickPoint(point, sceneGroupMask, sceneLayerMask, pickMode);
+	if(queryResults.size() > 0)
+	{
+		// Set Max Buffer Size.
+		const U32 maxBufferSize = 4096;
 
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
+		// Create Returnable Buffer.
+		char* pBuffer = Con::getReturnBuffer(maxBufferSize);
 
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
+		// Set Buffer Counter.
+		U32 bufferCount = 0;
 
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
+		// Add Picked Objects to List.
+		for ( U32 n = 0; n < queryResults.size(); n++ )
+		{
+			// Output Object ID.
+			bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
 
-    // Add Picked Objects to List.
-    for ( U32 n = 0; n < queryResults.size(); n++ )
-    {
-        // Output Object ID.
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
+			// Finish early if we run out of buffer space.
+			if ( bufferCount >= maxBufferSize )
+			{
+				// Warn.
+				Con::warnf("Scene::pickPoint() - Too many items picked to return to scripts!");
+				break;
+			}
+		}
 
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("Scene::pickPoint() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
+		return pBuffer;
+	}
 
-    return pBuffer;
+	return "";
 }
 
 //-----------------------------------------------------------------------------
@@ -2716,32 +2728,36 @@ ConsoleMethod(Scene, pickCircle, const char*, 4, 8, "(x / y, radius, [sceneGroup
     }
 
 	const typeWorldQueryResultVector& queryResults = object->pickCircle(point, radius, sceneGroupMask, sceneLayerMask, pickMode);
+	if(queryResults.size() > 0)
+	{
+		// Set Max Buffer Size.
+		const U32 maxBufferSize = 4096;
 
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
+		// Create Returnable Buffer.
+		char* pBuffer = Con::getReturnBuffer(maxBufferSize);
 
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
+		// Set Buffer Counter.
+		U32 bufferCount = 0;
 
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
+		// Add Picked Objects to List.
+		for ( U32 n = 0; n < queryResults.size(); n++ )
+		{
+			// Output Object ID.
+			bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
 
-    // Add Picked Objects to List.
-    for ( U32 n = 0; n < queryResults.size(); n++ )
-    {
-        // Output Object ID.
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
+			// Finish early if we run out of buffer space.
+			if ( bufferCount >= maxBufferSize )
+			{
+				// Warn.
+				Con::warnf("Scene::pickPoint() - Too many items picked to return to scripts!");
+				break;
+			}
+		}
 
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("Scene::pickPoint() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
+		return pBuffer;
+	}
 
-    return pBuffer;
+	return "";
 }
 
 //-----------------------------------------------------------------------------
@@ -2812,39 +2828,43 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
     }
 
 	const typeWorldQueryResultVector& queryResults = object->pickRayCollision(v1, v2, sceneGroupMask, sceneLayerMask);
+	if(queryResults.size() > 0)
+	{
+		// Set Max Buffer Size.
+		const U32 maxBufferSize = 4096;
 
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
+		// Create Returnable Buffer.
+		char* pBuffer = Con::getReturnBuffer(maxBufferSize);
 
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
+		// Set Buffer Counter.
+		U32 bufferCount = 0;
 
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
+		// Add Picked Objects to List.
+		for ( U32 n = 0; n < queryResults.size(); n++ )
+		{
+			// Fetch query result.
+			const WorldQueryResult& queryResult = queryResults[n];
 
-    // Add Picked Objects to List.
-    for ( U32 n = 0; n < queryResults.size(); n++ )
-    {
-        // Fetch query result.
-        const WorldQueryResult& queryResult = queryResults[n];
+			bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d %g %g %g %g %g %d ",
+				queryResult.mpSceneObject->getId(),
+				queryResult.mPoint.x, queryResult.mPoint.y,
+				queryResult.mNormal.x, queryResult.mNormal.y,
+				queryResult.mFraction,
+				queryResult.mshapeId );
 
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d %g %g %g %g %g %d ",
-            queryResult.mpSceneObject->getId(),
-            queryResult.mPoint.x, queryResult.mPoint.y,
-            queryResult.mNormal.x, queryResult.mNormal.y,
-            queryResult.mFraction,
-            queryResult.mshapeId );
+			// Finish early if we run out of buffer space.
+			if ( bufferCount >= maxBufferSize )
+			{
+				// Warn.
+				Con::warnf("Scene::pickRayCollision() - Too many items picked to return to scripts!");
+				break;
+			}
+		}
 
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("Scene::pickRayCollision() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
+		return pBuffer;
+	}
 
-    return pBuffer;
+	return "";
 }
 
 //-----------------------------------------------------------------------------
