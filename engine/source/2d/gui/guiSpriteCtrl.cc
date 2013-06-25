@@ -82,7 +82,7 @@ bool GuiSpriteCtrl::onWake()
     if ( mImageAssetId != StringTable->EmptyString )
     {
         // Set image asset.
-		ImageFrameProvider::setImage( mImageAssetId );
+		ImageFrameProvider::setImage( mImageAssetId, mImageFrame );
     }
     else if ( mAnimationAssetId != StringTable->EmptyString )
     {

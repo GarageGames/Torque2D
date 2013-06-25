@@ -411,8 +411,8 @@ bool SpriteBatch::selectSprite( const SpriteBatchItem::LogicalPosition& logicalP
     if ( mSelectedSprite != NULL )
         return true;
 
-    // Not selected so warn.
-    Con::warnf( "Cannot select sprite at logical position '%s' as one does not exist.", logicalPosition.getString() );
+    //SPAM! i use this as a test for sprite existance.
+	//Con::warnf( "Cannot select sprite at logical position '%s' as one does not exist.", logicalPosition.getString() );
 
     return false;
 }
@@ -1272,8 +1272,8 @@ bool SpriteBatch::checkSpriteSelected( void ) const
     if ( mSelectedSprite != NULL )
         return true;
 
-    // No, so warn,
-    Con::warnf( "Cannot perform sprite operation no sprite is selected." );
+	//SPAM!
+    //Con::warnf( "Cannot perform sprite operation no sprite is selected." );
 
     return false;
 }

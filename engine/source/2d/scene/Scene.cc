@@ -1673,10 +1673,8 @@ bool Scene::hasJoints( SceneObject* pSceneObject )
 S32 Scene::createDistanceJoint(
     const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
     const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
-    const F32 length,
-    const F32 frequency,
-    const F32 dampingRatio,
-    const bool collideConnected )
+    const F32 length, const F32 frequency, const F32 dampingRatio,
+	const bool collideConnected )
 {
     // Sanity!
     if (    (pSceneObjectA != NULL && pSceneObjectA->getScene() == NULL) ||
@@ -1880,8 +1878,7 @@ F32 Scene::getDistanceJointDampingRatio( const U32 jointId )
 
 S32 Scene::createRopeJoint(
         const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
-        const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
-        const F32 maxLength,
+        const b2Vec2& localAnchorA, const b2Vec2& localAnchorB, const F32 maxLength,
         const bool collideConnected )
 {
     // Sanity!
@@ -2342,8 +2339,7 @@ F32 Scene::getWeldJointDampingRatio( const U32 jointId )
 
 S32 Scene::createWheelJoint(
         const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
-        const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
-        const b2Vec2& worldAxis,
+        const b2Vec2& localAnchorA, const b2Vec2& localAnchorB, const b2Vec2& worldAxis,
         const bool collideConnected )
 {
     // Sanity!
@@ -2703,8 +2699,7 @@ F32 Scene::getFrictionJointMaxTorque( const U32 jointId )
 
 S32 Scene::createPrismaticJoint(
         const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
-        const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
-        const b2Vec2& worldAxis,
+        const b2Vec2& localAnchorA, const b2Vec2& localAnchorB, const b2Vec2& worldAxis,
         const bool collideConnected )
 {
     // Sanity!
@@ -2867,8 +2862,7 @@ S32 Scene::createPulleyJoint(
         const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
         const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
         const b2Vec2& worldGroundAnchorA, const b2Vec2& worldGroundAnchorB,
-        const F32 ratio,
-        const F32 lengthA, const F32 lengthB,
+        const F32 ratio, const F32 lengthA, const F32 lengthB,
         const bool collideConnected )
 {
     // Sanity!
@@ -2912,10 +2906,8 @@ S32 Scene::createPulleyJoint(
 //-----------------------------------------------------------------------------
 
 S32 Scene::createTargetJoint(
-        const SceneObject* pSceneObject,
-        const b2Vec2& worldTarget,
-        const F32 maxForce,
-        const bool useCenterOfMass,
+        const SceneObject* pSceneObject, const b2Vec2& worldTarget,
+        const F32 maxForce, const bool useCenterOfMass,
         const F32 frequency, const F32 dampingRatio,
         const bool collideConnected )
 {
@@ -3187,8 +3179,7 @@ F32 Scene::getTargetJointDampingRatio( const U32 jointId )
 S32 Scene::createMotorJoint(
             const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
             const b2Vec2 linearOffset, const F32 angularOffset,
-            const F32 maxForce, const F32 maxTorque,
-            const F32 correctionFactor,
+            const F32 maxForce, const F32 maxTorque, const F32 correctionFactor,
             const bool collideConnected )
 {
     // Sanity!
@@ -5419,7 +5410,7 @@ static EnumTable::Enums DebugOptionsLookup[] =
                 { Scene::SCENE_DEBUG_SLEEP,             "sleep" },
                 { Scene::SCENE_DEBUG_COLLISION_SHAPES,  "collision" },
                 { Scene::SCENE_DEBUG_POSITION_AND_COM,  "position" },
-                { Scene::SCENE_DEBUG_SORT_POINTS,       "sort" },
+                { Scene::SCENE_DEBUG_SORT_POINTS,       "sort" }
                 };
 
 //-----------------------------------------------------------------------------
@@ -5467,7 +5458,7 @@ static EnumTable::Enums jointTypeLookup[] =
                 { e_prismaticJoint, "prismatic" },
                 { e_pulleyJoint,    "pulley"    },
                 { e_mouseJoint,     "target"    },
-                { e_motorJoint,     "motor"     },
+                { e_motorJoint,     "motor"     }
                 };
 
 EnumTable jointTypeTable(sizeof(jointTypeLookup) / sizeof(EnumTable::Enums), &jointTypeLookup[0]);
@@ -5513,7 +5504,7 @@ static EnumTable::Enums pickModeLookup[] =
                 { Scene::PICK_ANY,          "Any" },
                 { Scene::PICK_AABB,         "AABB" },
                 { Scene::PICK_OOBB,         "OOBB" },
-                { Scene::PICK_COLLISION,    "Collision" },
+                { Scene::PICK_COLLISION,    "Collision" }
                 };
 
 //-----------------------------------------------------------------------------

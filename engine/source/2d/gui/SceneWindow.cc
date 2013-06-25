@@ -1023,11 +1023,16 @@ void SceneWindow::sendObjectInputEvent( StringTableEntry name, const GuiEvent& e
     if ( !getScene() ) return;
 
     // Only process appropriate input events.
-    if ( !( name == inputEventDownName ||
-            name == inputEventUpName ||
-            name == inputEventMovedName ||
-            name == inputEventDraggedName ) )
-        return;
+    if(!( name == inputEventDownName ||  
+            name == inputEventUpName ||  
+            name == inputEventMovedName ||  
+            name == inputEventDraggedName ||  
+            name == mouseEventRightMouseDownName ||  
+            name == mouseEventRightMouseUpName ||  
+            name == mouseEventRightMouseDraggedName ||  
+            name == mouseEventEnterName ||  
+            name == mouseEventLeaveName))  
+        return;  
 
     // Convert Event-Position into scene coordinates.
     Vector2 worldMousePoint;

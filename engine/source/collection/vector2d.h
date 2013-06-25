@@ -26,6 +26,9 @@
 #ifndef _VECTOR_H_
 #include "vector.h"
 #endif
+#ifndef _VECTOR2_H_
+#include "2d/core/vector2.h"
+#endif
 
 //-------------------------------------------------------------------------------------
 // Adds accessors for using vector as a 2d structure
@@ -72,7 +75,7 @@ public:
 
     //---------------------------------------------------------
 
-    bool resize( const U32 width, const U32 height )
+    bool resize(const U32 width, const U32 height)
     {
         reserve( width * height );
         mWidth = width;
@@ -82,7 +85,7 @@ public:
 
     //---------------------------------------------------------
 
-    T& get( const U32 indexX, const U32 indexY )
+    T& get(const U32 indexX, const U32 indexY)
     {
         U32 index = ( indexY * mWidth ) + indexX;
         return mArray[index];
@@ -90,9 +93,9 @@ public:
 
     //---------------------------------------------------------
 
-    T& get( const Vector2 v )
+    T& get(const Vector2 v)
     {
-        U32 index = ( v.mY * mWidth ) + v.mX;
+        U32 index = (v.mY * mWidth) + v.mX;
         return mArray[index];
     }
 };

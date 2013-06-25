@@ -45,6 +45,7 @@ class SparseArray
   protected:
    U32   mModulus;
    Node* mSentryTables;
+   U32   mCount;
 
 public:
    SparseArray(const U32 modulusSize = 64);
@@ -53,8 +54,9 @@ public:
    void insert(T* pObject, U32 key);
    T*   remove(U32 key);
    T*   retrieve(U32 key);
+   U32  count(void){return mCount;};
 
-   void clearTables();           // Note: _deletes_ the objects!
+   void clearTables(void);           // Note: _deletes_ the objects!
 };
 
 template <class T>
@@ -89,6 +91,8 @@ inline void SparseArray<T>::clearTables()
    delete [] mSentryTables;
    mSentryTables = NULL;
    mModulus = 0;
+
+   mCount = 0;
 }
 
 template <class T>
@@ -100,6 +104,8 @@ inline void SparseArray<T>::insert(T* pObject, U32 key)
    pNew->key     = key;
    pNew->next    = mSentryTables[insert].next;
    mSentryTables[insert].next = pNew;
+
+   mCount = mCount++;
 
 #ifdef TORQUE_DEBUG
    Node* probe = pNew->next;
@@ -125,6 +131,8 @@ inline T* SparseArray<T>::remove(U32 key)
       }
       probe = probe->next;
    }
+
+   mCount = mCount--;
 
    // [tom, 8/19/2006] This assert is also utterly, utterly useless
    // AssertFatal(false, "Key didn't exist in the array!");
