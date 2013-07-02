@@ -634,7 +634,7 @@ ConsoleMethod(ParticleAssetEmitter, deselectField, void, 2, 2,  "() Deselect any
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ParticleAssetEmitter, getSelectedField, bool, 2, 2,   "() Gets the selected field name or nothing if no field is selected.\n"
+ConsoleMethod(ParticleAssetEmitter, getSelectedField, const char*, 2, 2,   "() Gets the selected field name or nothing if no field is selected.\n"
                                                                     "@return The selected field name or nothing if no fields is selected.")
 {
     // Get the selected field.
