@@ -207,6 +207,24 @@ ConsoleMethod(ImageAsset, getCellWidth, S32, 2, 2,            "() Gets the CELL 
     return object->getCellWidth();
 }
 
+ConsoleMethod(ImageAsset, getExplicitCellWidth, S32, 3,3, "(CellIndex) Gets the CELL width in Explicit Mode.\n"
+                                                                        "@return the specified CELL width.")
+{
+	    // Fetch cell index.
+    const S32 cellIndex = dAtoi( argv[2] );
+
+    return(object->getExplicitCellWidth(cellIndex));
+}
+
+ConsoleMethod(ImageAsset, getExplicitCellHeight, S32, 3,3, "(CellIndex) Gets the CELL height in Explicit Mode.\n"
+                                                                        "@return the specified CELL height.")
+{
+	    // Fetch cell index.
+    const S32 cellIndex = dAtoi( argv[2] );
+
+    return(object->getExplicitCellHeight(cellIndex));
+
+}
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(ImageAsset, setCellHeight, void, 3, 3,          "(Height) Sets the CELL height.\n"
