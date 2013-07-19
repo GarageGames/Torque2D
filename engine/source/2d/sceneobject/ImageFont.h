@@ -75,7 +75,7 @@ private:
 private:
     AssetPtr<ImageAsset>    mImageAsset;
     StringBuffer            mText;
-    U32                     mFontPadding;
+    F32                     mFontPadding;
     Vector2                 mFontSize;
     TextAlignment           mTextAlignment;
 
@@ -106,8 +106,8 @@ public:
     inline TextAlignment getTextAlignment( void ) const                     { return mTextAlignment; }
     void setFontSize( const Vector2& size );
     inline Vector2 getFontSize( void ) const                                { return mFontSize; }
-    void setFontPadding( const U32 padding );
-    inline U32 getFontPadding( void ) const                                 { return mFontPadding; }
+    void setFontPadding( const F32 padding );
+    inline F32 getFontPadding( void ) const                                 { return mFontPadding; }
 
     static TextAlignment getTextAlignmentEnum(const char* label);
     static const char* getTextAlignmentDescription(const TextAlignment alignment);
@@ -125,8 +125,8 @@ protected:
     static bool setTextAlignment( void* obj, const char* data );
     static bool writeTextAlignment( void* obj, StringTableEntry pFieldName ){return static_cast<ImageFont*>(obj)->getTextAlignment() != ImageFont::ALIGN_CENTER; }
     static bool setFontSize( void* obj, const char* data )                  { static_cast<ImageFont*>( obj )->setFontSize( Utility::mGetStringElementVector(data) ); return false; }
-    static bool writeFontSize( void* obj, StringTableEntry pFieldName )     { return static_cast<ImageFont*>(obj)->getFontSize().isEqual(Vector2::getOne()); }
-    static bool setFontPadding( void* obj, const char* data )               { static_cast<ImageFont*>( obj )->setFontPadding( dAtoi(data) ); return false; }
+	static bool writeFontSize( void* obj, StringTableEntry pFieldName )     { return static_cast<ImageFont*>(obj)->getFontSize().notEqual(Vector2::getOne()); }	
+    static bool setFontPadding( void* obj, const char* data )               { static_cast<ImageFont*>( obj )->setFontPadding( dAtof(data) ); return false; }
     static bool writeFontPadding( void* obj, StringTableEntry pFieldName )  { return static_cast<ImageFont*>(obj)->getFontPadding() != 0; }
 };
 
