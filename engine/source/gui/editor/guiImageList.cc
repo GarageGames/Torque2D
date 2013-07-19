@@ -25,6 +25,7 @@
 #include "console/console.h"
 #include "graphics/dgl.h"
 #include "gui/editor/guiImageList.h"
+#include <new>
 
 GuiImageList::GuiImageList()
 {
@@ -38,7 +39,7 @@ U32 GuiImageList::Insert( const char* texturePath , TextureHandle::TextureHandle
     // Sanity!
     AssertISV( type != TextureHandle::InvalidTexture, "Invalid texture type." );
 
-  TextureEntry *t = new TextureEntry;
+  TextureEntry *t = new(std::nothrow) TextureEntry;
 
   if ( ! t ) return -1;
 

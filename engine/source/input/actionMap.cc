@@ -32,7 +32,7 @@
 IMPLEMENT_CONOBJECT(ActionMap);
 
 // This is used for determing keys that have ascii codes for the foreign keyboards. IsAlpha doesn't work on foreign keys.
-#define dIsDecentChar(c) (((char(0xa0) <= (c)) && ((c) <= char(0xff))) || (( char(0x21) <= (c)) && ((c) <= char(0x7e))) || (( char(0x91) <= (c)) && ((c) <= char(0x92))))
+#define dIsDecentChar(c) (((U8(0xa0) <= (c)) && ((c) <= U8(0xff))) || (( U8(0x21) <= (c)) && ((c) <= U8(0x7e))) || (( U8(0x91) <= (c)) && ((c) <= U8(0x92))))
 
 struct CodeMapping
 {

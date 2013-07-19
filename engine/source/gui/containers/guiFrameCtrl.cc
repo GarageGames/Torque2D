@@ -819,7 +819,7 @@ void GuiFrameSetCtrl::computeSizes(bool balanceFrames)
    {
       Vector<S32>::iterator itr;
       F32 totWidth = F32(mBounds.extent.x - vDividers * mFramesetDetails.mBorderWidth);
-      F32 totHeight = F32(mBounds.extent.y - hDividers * mFramesetDetails.mBorderWidth);
+	  F32 totHeight = F32(mBounds.extent.y - hDividers * mFramesetDetails.mBorderWidth);
       F32 frameWidth = totWidth/(F32)columns;
       F32 frameHeight = totHeight/(F32)rows;
       F32 i = 0.;

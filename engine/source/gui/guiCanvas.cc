@@ -399,7 +399,7 @@ ConsoleFunction(screenShot, void, 3, 3, "(string file, string format)"
    else if( dStrcmp( argv[2], "PNG" ) == 0)
       bitmap->writePNG(fStream);
    else
-      bitmap->writePNG(fStream);
+	   bitmap->writeMSBmp(fStream);
 
    fStream.close();
    delete [] pixels;

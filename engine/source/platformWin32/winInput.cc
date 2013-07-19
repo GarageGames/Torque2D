@@ -20,6 +20,7 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
+#include <new>
 #include "platformWin32/platformWin32.h"
 #include "platform/platformInput.h"
 #include "platform/platformVideo.h"
@@ -105,7 +106,7 @@ void Input::init()
    // Startup the Cursor Manager
    if(!smCursorManager)
    {
-      smCursorManager = new CursorManager();
+      smCursorManager = new(std::nothrow) CursorManager();
       if(smCursorManager)
       {
          // Add the arrow cursor to the stack

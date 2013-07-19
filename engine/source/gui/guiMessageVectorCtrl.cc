@@ -712,7 +712,7 @@ void GuiMessageVectorCtrl::findSpecialFromCoord(const Point2I& point, S32* speci
    }
 
    // Ok, we have real work to do here.  Let's determine the physical line that it's on...
-   U32 physLine = point.y / linePixels;
+   S32 physLine = point.y / linePixels;
    AssertFatal(physLine >= 0, "Bad physical line!");
 
    // And now we find the LineElement that contains that physicalLine...

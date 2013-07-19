@@ -22,6 +22,7 @@
 #include "gui/editor/guiInspector.h"
 #include "gui/buttons/guiIconButtonCtrl.h"
 #include "memory/frameAllocator.h"
+#include <new>
 
 //////////////////////////////////////////////////////////////////////////
 // GuiInspector
@@ -134,7 +135,7 @@ void GuiInspector::inspectObject( SimObject *object )
    mTarget = object;
 
    // Always create the 'general' group (for un-grouped fields)
-   GuiInspectorGroup* general = new GuiInspectorGroup( mTarget, "General", this );
+   GuiInspectorGroup* general = new(std::nothrow) GuiInspectorGroup( mTarget, "General", this );
    if( general != NULL )
    {
       general->registerObject();
@@ -151,7 +152,7 @@ void GuiInspector::inspectObject( SimObject *object )
    {
       if(itr->type == AbstractClassRep::StartGroupFieldType && !findExistentGroup( itr->pGroupname ) )
       {
-         GuiInspectorGroup *group = new GuiInspectorGroup( mTarget, itr->pGroupname, this );
+         GuiInspectorGroup *group = new(std::nothrow) GuiInspectorGroup( mTarget, itr->pGroupname, this );
          if( group != NULL )
          {
             group->registerObject();
@@ -162,7 +163,7 @@ void GuiInspector::inspectObject( SimObject *object )
    }
 
    // Deal with dynamic fields
-   GuiInspectorGroup *dynGroup = new GuiInspectorDynamicGroup( mTarget, "Dynamic Fields", this);
+   GuiInspectorGroup *dynGroup = new(std::nothrow) GuiInspectorDynamicGroup( mTarget, "Dynamic Fields", this);
    if( dynGroup != NULL )
    {
       dynGroup->registerObject();
@@ -350,7 +351,7 @@ StringTableEntry GuiInspectorField::getFieldName()
 //////////////////////////////////////////////////////////////////////////
 GuiControl* GuiInspectorField::constructEditControl()
 {
-   GuiControl* retCtrl = new GuiTextEditCtrl();
+   GuiControl* retCtrl = new(std::nothrow) GuiTextEditCtrl();
    
    // If we couldn't construct the control, bail!
    if( retCtrl == NULL )
@@ -553,7 +554,7 @@ bool GuiInspectorGroup::onAdd()
 bool GuiInspectorGroup::createContent()
 {
    // Create our field stack control
-   mStack = new GuiStackControl();
+   mStack = new(std::nothrow) GuiStackControl();
    if( !mStack )
       return false;
 
@@ -588,7 +589,7 @@ GuiInspectorField* GuiInspectorGroup::constructField( S32 fieldType )
    if(cbt->isDatablock())
    {
       // This is fairly straightforward to deal with.
-      GuiInspectorDatablockField *dbFieldClass = new GuiInspectorDatablockField( cbt->getTypeClassName() );
+      GuiInspectorDatablockField *dbFieldClass = new(std::nothrow) GuiInspectorDatablockField( cbt->getTypeClassName() );
       if( dbFieldClass != NULL )
       {
          // return our new datablock field with correct datablock type enumeration info
@@ -849,7 +850,7 @@ bool GuiInspectorDynamicGroup::inspectGroup()
    for(U32 i = 0; i < (U32)flist.size(); i++)
    {
       SimFieldDictionary::Entry * entry = flist[i];
-      GuiInspectorField *field = new GuiInspectorDynamicField( this, mTarget, entry );
+      GuiInspectorField *field = new(std::nothrow) GuiInspectorDynamicField( this, mTarget, entry );
       if( field != NULL )
       {
          field->registerObject();
@@ -885,7 +886,7 @@ void GuiInspectorDynamicGroup::clearFields()
 SimFieldDictionary::Entry* GuiInspectorDynamicGroup::findDynamicFieldInDictionary( StringTableEntry fieldName )
 {
    if( !mTarget )
-      return false;
+      return NULL;
 
    SimFieldDictionary * fieldDictionary = mTarget->getFieldDictionary();
 
@@ -1048,7 +1049,7 @@ bool GuiInspectorDynamicField::onAdd()
 GuiControl* GuiInspectorDynamicField::constructRenameControl()
 {
    // Create our renaming field
-   GuiControl* retCtrl = new GuiTextEditCtrl();
+   GuiControl* retCtrl = new(std::nothrow) GuiTextEditCtrl();
 
    // If we couldn't construct the control, bail!
    if( retCtrl == NULL )
@@ -1086,7 +1087,7 @@ GuiControl* GuiInspectorDynamicField::constructRenameControl()
    mEdit->resize(valueRect.point, valueRect.extent);
 
    // Finally, add a delete button for this field
-   GuiIconButtonCtrl * delButt = new GuiIconButtonCtrl();
+   GuiIconButtonCtrl * delButt = new(std::nothrow) GuiIconButtonCtrl();
    if( delButt != NULL )
    {
       dSprintf(szBuffer, 512, "%d.%s = \"\";%d.inspectGroup();", mTarget->getId(), getFieldName(), mParent->getId());
@@ -1163,7 +1164,7 @@ void GuiInspectorDatablockField::setClassName( StringTableEntry className )
 
 GuiControl* GuiInspectorDatablockField::constructEditControl()
 {
-   GuiControl* retCtrl = new GuiPopUpMenuCtrl();
+   GuiControl* retCtrl = new(std::nothrow) GuiPopUpMenuCtrl();
 
    // If we couldn't construct the control, bail!
    if( retCtrl == NULL )

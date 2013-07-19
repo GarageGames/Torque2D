@@ -31,7 +31,7 @@
 /// @param a Object to delete
 /// @see #SAFE_DELETE_ARRAY(), #SAFE_DELETE_OBJECT(), #SAFE_FREE(), #SAFE_FREE_REFERENCE()
 //////////////////////////////////////////////////////////////////////////
-#define SAFE_DELETE(a) if( (a) != NULL ) delete (a); (a) = NULL;
+#define SAFE_DELETE(a) { delete (a); (a) = NULL; };
 
 #undef  SAFE_DELETE_ARRAY
 
@@ -41,7 +41,7 @@
 /// @param a Array to delete
 /// @see #SAFE_DELETE(), #SAFE_DELETE_OBJECT(), #SAFE_FREE(), #SAFE_FREE_REFERENCE()
 //////////////////////////////////////////////////////////////////////////
-#define SAFE_DELETE_ARRAY(a) if( (a) != NULL ) delete [] (a); (a) = NULL;
+#define SAFE_DELETE_ARRAY(a) { delete [] (a); (a) = NULL; };
 
 #undef  SAFE_DELETE_OBJECT
 
@@ -61,7 +61,7 @@
 /// @param a Pointer to memory to free
 /// @see #SAFE_DELETE_ARRAY(), #SAFE_DELETE_OBJECT(), #SAFE_DELETE(), #SAFE_FREE_REFERENCE()
 //////////////////////////////////////////////////////////////////////////
-#define SAFE_FREE(a)   if( (a) != NULL ) dFree ((void *)a); (a) = NULL;
+#define SAFE_FREE(a) { dFree ((void *)a); (a) = NULL; };
 
 #undef  SAFE_FREE_REFERENCE
 

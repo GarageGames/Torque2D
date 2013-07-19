@@ -264,7 +264,7 @@ ConsoleMethod(ModuleManager, copyModule, const char*, 6, 6, "(sourceModuleDefini
     {
         // No, so warn.
         Con::warnf( "ModuleManager::copyModule() - Could not find source module definition '%s'.", argv[2] );
-        return false;
+        return NULL;
     }
 
     // Fetch the target module Id.

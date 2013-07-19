@@ -644,7 +644,7 @@ ConsoleMethod(SceneObject, getWorldPoint, const char*, 3, 4, "(float localPointX
    else
    {
       Con::warnf("SceneObject::getWorldPoint() - Invalid number of parameters!");
-      return false;
+      return NULL;
    }
 
     // Calculate world coordinate.
@@ -712,7 +712,7 @@ ConsoleMethod(SceneObject, getWorldVector, const char*, 3, 4,    "(float localVe
    else
    {
       Con::warnf("SceneObject::getWorldVector() - Invalid number of parameters!");
-      return false;
+      return NULL;
    }
 
     // Calculate world vector.
@@ -2785,14 +2785,14 @@ ConsoleMethod( SceneObject, getChainCollisionShapeAdjacentStart, const char*, 3,
     if ( shapeIndex >= shapeCount )
     {
         Con::warnf("SceneObject::getChainCollisionShapeAdjacentStart() - Invalid shape index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     // Sanity!
     if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_chain )
     {
         Con::warnf("SceneObject::getChainCollisionShapeAdjacentStart() - Not a chain shape at index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     return object->getChainCollisionShapeAdjacentStart( shapeIndex ).scriptThis();
@@ -2814,14 +2814,14 @@ ConsoleMethod( SceneObject, getChainCollisionShapeAdjacentEnd, const char*, 3, 3
     if ( shapeIndex >= shapeCount )
     {
         Con::warnf("SceneObject::getChainCollisionShapeAdjacentEnd() - Invalid shape index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     // Sanity!
     if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_chain )
     {
         Con::warnf("SceneObject::getChainCollisionShapeAdjacentEnd() - Not a chain shape at index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     return object->getChainCollisionShapeAdjacentEnd( shapeIndex ).scriptThis();
@@ -2947,14 +2947,14 @@ ConsoleMethod( SceneObject, getEdgeCollisionShapeLocalPositionStart, const char*
     if ( shapeIndex >= shapeCount )
     {
         Con::warnf("SceneObject::getEdgeCollisionShapeLocalPositionStart() - Invalid shape index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     // Sanity!
     if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_edge )
     {
         Con::warnf("SceneObject::getEdgeCollisionShapeLocalPositionStart() - Not an edge shape at index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     return object->getEdgeCollisionShapeLocalPositionStart( shapeIndex ).scriptThis();
@@ -2976,14 +2976,14 @@ ConsoleMethod( SceneObject, getEdgeCollisionShapeLocalPositionEnd, const char*, 
     if ( shapeIndex >= shapeCount )
     {
         Con::warnf("SceneObject::getEdgeCollisionShapeLocalPositionEnd() - Invalid shape index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     // Sanity!
     if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_edge )
     {
         Con::warnf("SceneObject::getEdgeCollisionShapeLocalPositionEnd() - Not an edge shape at index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     return object->getEdgeCollisionShapeLocalPositionEnd( shapeIndex ).scriptThis();
@@ -3063,14 +3063,14 @@ ConsoleMethod( SceneObject, getEdgeCollisionShapeAdjacentStart, const char*, 3, 
     if ( shapeIndex >= shapeCount )
     {
         Con::warnf("SceneObject::getEdgeCollisionShapeAdjacentStart() - Invalid shape index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     // Sanity!
     if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_edge )
     {
         Con::warnf("SceneObject::getEdgeCollisionShapeAdjacentStart() - Not an edge shape at index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     return object->getEdgeCollisionShapeAdjacentStart( shapeIndex ).scriptThis();
@@ -3092,14 +3092,14 @@ ConsoleMethod( SceneObject, getEdgeCollisionShapeAdjacentEnd, const char*, 3, 3,
     if ( shapeIndex >= shapeCount )
     {
         Con::warnf("SceneObject::getEdgeCollisionShapeAdjacentEnd() - Invalid shape index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     // Sanity!
     if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_edge )
     {
         Con::warnf("SceneObject::getEdgeCollisionShapeAdjacentEnd() - Not an edge shape at index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     return object->getEdgeCollisionShapeAdjacentEnd( shapeIndex ).scriptThis();

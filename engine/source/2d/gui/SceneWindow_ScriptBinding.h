@@ -1279,7 +1279,7 @@ ConsoleMethod(SceneWindow, getWorldPoint, const char*, 3, 4, "(X / Y) - Returns 
    else
    {
       Con::warnf("SceneWindow::getWorldPoint() - Invalid number of parameters!");
-      return false;
+      return NULL;
    }
    
    // Destination Point.

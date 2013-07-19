@@ -173,7 +173,7 @@ void TelnetConsole::process()
       Net::Error err = Net::NotASocket;
       
       if ( client->socket != InvalidSocket )
-         Net::recv(client->socket, (unsigned char*)recvBuf, sizeof(recvBuf), &numBytes);
+         err = Net::recv(client->socket, (unsigned char*)recvBuf, sizeof(recvBuf), &numBytes);
 
       if((err != Net::NoError && err != Net::WouldBlock) || numBytes == 0)
       {

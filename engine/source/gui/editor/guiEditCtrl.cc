@@ -276,10 +276,8 @@ bool GuiEditCtrl::initCursors()
       mNESWCursor = dynamic_cast<GuiCursor*>(obj);
       obj = Sim::findObject("NWSECursor");
       mNWSECursor = dynamic_cast<GuiCursor*>(obj);
-      obj = Sim::findObject("MoveCursor");
-      mMoveCursor = dynamic_cast<GuiCursor*>(obj);
 
-      return(mMoveCursor != NULL && mUpDownCursor != NULL && mLeftRightCursor != NULL && mDefaultCursor != NULL && mNWSECursor != NULL && mNESWCursor != NULL && mMoveCursor != NULL);
+      return(mMoveCursor != NULL && mUpDownCursor != NULL && mLeftRightCursor != NULL && mDefaultCursor != NULL && mNWSECursor != NULL && mNESWCursor != NULL);
    }
    else
       return(true);

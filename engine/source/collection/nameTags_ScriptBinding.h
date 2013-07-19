@@ -251,7 +251,7 @@ ConsoleMethod(NameTags, queryTags, const char*, 3, 4,   "(tagIds, [excluded]) Fi
     if ( tagId == 0 )
     {
         Con::warnf("Invalid tag Id.\n");
-        return false;
+        return NULL;
     }
 
     // Query tags.
@@ -271,7 +271,7 @@ ConsoleMethod(NameTags, queryTags, const char*, 3, 4,   "(tagIds, [excluded]) Fi
     // Format results.
     U32 bufferSize = 8192;
     char* pReturnBuffer = Con::getReturnBuffer( bufferSize );
-    dSprintf(pReturnBuffer, sizeof(pReturnBuffer), "%s", "");
+    dSprintf(pReturnBuffer, sizeof(char) * bufferSize, "%s", "");
     char* pBuffer = pReturnBuffer;
 
     for( NameTags::queryType::iterator itr = results.begin(); itr != results.end(); ++itr )

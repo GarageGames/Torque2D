@@ -73,7 +73,7 @@ bool GuiGridControl::IsPointInGridControl(GuiControl* ctrl, const Point2I& pt)
 
 void GuiGridControl::addObject(SimObject *obj)
 {
-	if (mRowSizes.size() <= 0 && mRowSizes.size() <= 0)
+	if (mRowSizes.size() <= 0 && mColSizes.size() <= 0)
 		AdjustGrid(mBounds.extent);
 
 	GuiControl *ctrl = static_cast<GuiControl *>(obj);
@@ -271,7 +271,7 @@ void GuiGridControl::AdjustGridItems(S32 size, Vector<StringTableEntry>& strItem
 			char* tmp = new char[len-1];
 			dStrncpy(tmp, str, len-1);
 			int perc = dAtoi(tmp);
-			delete tmp;
+			delete[] tmp;
 
 			GridItem gi;
 			gi.IsAbsolute = false;

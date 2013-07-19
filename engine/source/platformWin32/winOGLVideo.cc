@@ -20,6 +20,7 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
+#include <new>
 #include "platformWin32/platformGL.h"
 #include "platformWin32/platformWin32.h"
 #include "platformWin32/winOGLVideo.h"
@@ -1238,7 +1239,7 @@ DisplayDevice* OpenGLDevice::create()
 
    if ( result )
    {
-      OpenGLDevice* newOGLDevice = new OpenGLDevice();
+      OpenGLDevice* newOGLDevice = new(std::nothrow) OpenGLDevice();
       if ( newOGLDevice )
       {
          newOGLDevice->mFullScreenOnly = fullScreenOnly;
