@@ -316,8 +316,7 @@ NetConnection::~NetConnection()
    delete[] mGhostRefs;
    delete[] mGhostArray;
    delete mStringTable;
-   if(mDemoWriteStream)
-      delete mDemoWriteStream;
+   delete mDemoWriteStream;
    if(mDemoReadStream)
       ResourceManager->closeStream(mDemoReadStream);
 }

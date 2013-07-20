@@ -566,8 +566,7 @@ void GuiTreeViewCtrl::destroyTree()
    for(U32 i = 0; i < (U32)mItems.size(); i++)
    {
       Item *pFreeItem = mItems[ i ];
-      if( pFreeItem != NULL )
-         delete pFreeItem;
+      delete pFreeItem;
    }
 
    mItems.clear();

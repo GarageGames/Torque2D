@@ -213,7 +213,7 @@ class GuiMLTextCtrl : public GuiControl
    void processEmitAtoms();
    Atom *splitAtomListEmit(Atom *list, U32 width);
    void drawAtomText(bool sel, U32 start, U32 end, Atom *atom, Line *line, Point2I offset);
-   Atom *findHitAtom(const Point2I localCoords);
+   Atom *findHitAtom(const Point2I& localCoords);
    Style *allocStyle(Style *style);
 
    static const U32 csmTextBufferGrowthSize;
