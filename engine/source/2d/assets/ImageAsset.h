@@ -202,9 +202,11 @@ public:
 
     void                    setCellWidth( const S32 cellWidth );
     inline S32              getCellWidth( void ) const						{ return mCellWidth; }
+    S32                     getExplicitCellWidth(const S32 cellIndex);
 
     void                    setCellHeight( const S32 cellheight );
     S32                     getCellHeight( void) const						{ return mCellHeight; }
+    S32                     getExplicitCellHeight(const S32 cellIndex);
 
     inline TextureHandle&   getImageTexture( void )                         { return mImageTextureHandle; }
     inline S32              getImageWidth( void ) const                     { return mImageTextureHandle.getWidth(); }
