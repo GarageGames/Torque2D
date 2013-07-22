@@ -1866,13 +1866,12 @@ void SceneWindow::renderMetricsOverlay( Point2I offset, const RectI& updateRect 
 
         // Batching #1.
         dglDrawText( font, bannerOffset + Point2I(0,(S32)linePositionY), "Batching", NULL );
-        dSprintf( mDebugText, sizeof( mDebugText ), "- %sTris=%d<%d>, MaxTriDraw=%d, MaxVerts=%d, Single=%d<%d>, Mult=%d<%d>, Sorted=%d<%d>",
+        dSprintf( mDebugText, sizeof( mDebugText ), "- %sTris=%d<%d>, MaxTriDraw=%d, MaxVerts=%d, Strict=%d<%d>, Sorted=%d<%d>",
             pScene->getBatchingEnabled() ? "" : "(OFF) ",
             debugStats.batchTrianglesSubmitted, debugStats.maxBatchTrianglesSubmitted,
             debugStats.batchMaxTriangleDrawn,
             debugStats.batchMaxVertexBuffer,
-            debugStats.batchDrawCallsStrictSingle, debugStats.maxBatchDrawCallsStrictSingle,
-            debugStats.batchDrawCallsStrictMultiple, debugStats.maxBatchDrawCallsStrictMultiple,
+            debugStats.batchDrawCallsStrict, debugStats.maxBatchDrawCallsStrict,
             debugStats.batchDrawCallsSorted, debugStats.maxBatchDrawCallsSorted                   
             );
         dglDrawText( font, bannerOffset + Point2I(metricsOffset,(S32)linePositionY), mDebugText, NULL );

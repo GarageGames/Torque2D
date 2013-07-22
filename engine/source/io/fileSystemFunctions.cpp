@@ -580,7 +580,12 @@ ConsoleFunction(restartInstance, void, 1, 1, "restartInstance()")
    Platform::postQuitMessage( 0 );
 }
 
-ConsoleFunction( createPath, bool, 2,2, "createPath(\"file name or path name\");  creates the path or path to the file name")
+ConsoleFunction( createPath, bool, 2,2, "createPath(\"path\");  creates the path.  "
+                "Verifies all the elements in a path exists or creates them if they do not.  "
+                "Note that the path should end with a slash (/).  Otherwise, the last element in the path "
+                "will be assumed to be a filename and not a path component, and it will not be created.  "
+                "For example \"data/stage2/part1\" will verify or create \"data/stage2/\" and not \"part1\"."
+                )
 {
    static char pathName[1024];
 

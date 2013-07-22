@@ -122,7 +122,7 @@ ConsoleMethod(ParticleAsset, deselectField, void, 2, 2, "() Deselect any selecte
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ParticleAsset, getSelectedField, bool, 2, 2,  "() Gets the selected field name or nothing if no field is selected.\n"
+ConsoleMethod(ParticleAsset, getSelectedField, const char*, 2, 2,  "() Gets the selected field name or nothing if no field is selected.\n"
                                                             "@return The selected field name or nothing if no fields is selected.")
 {
     // Get the selected field.

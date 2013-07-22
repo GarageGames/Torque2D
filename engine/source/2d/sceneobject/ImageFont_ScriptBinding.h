@@ -124,13 +124,13 @@ ConsoleMethod(ImageFont, setFontPadding, void, 3, 3,    "(padding) - Set the fon
                                                         "@return No return value.")
 {
    // Set character padding.
-   object->setFontPadding( dAtoi(argv[2]) );
+   object->setFontPadding( dAtof(argv[2]) );
 
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ImageFont, getFontPadding, S32, 2, 2,     "() - Gets the font padding.\n"
+ConsoleMethod(ImageFont, getFontPadding, F32, 2, 2,     "() - Gets the font padding.\n"
                                                         "@return The font padding.")
 {
     return object->getFontPadding();
