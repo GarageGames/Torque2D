@@ -19,13 +19,10 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
-
-#import <UIKit/UIKit.h>
-
-#import "platformiOS/platformiOS.h"
-#import "platformiOS/T2DAppDelegate.h"
-#import "platformiOS/iOSEvents.h"
-#import "platformiOS/iOSUtil.h"
+#import "platformAndroid/platformAndroid.h"
+#import "platformAndroid/T2DAppDelegate.h"
+#import "platformAndroid/AndroidEvents.h"
+#import "platformAndroid/AndroidUtil.h"
 #include "platform/threads/thread.h"
 #include "game/gameInterface.h"
 #include "io/fileObject.h"
@@ -36,9 +33,10 @@ S32 gLastStart = 0;
 
 bool appIsRunning = true;
 
-int _iOSRunTorqueMain( id appID, UIView * Window, T2DViewController *viewController)
+int _AndroidRunTorqueMain( id appID, UIView * Window, T2DViewController *viewController)
 {
-    UIApplication *app = [UIApplication sharedApplication];
+	//TODO: android
+    /*UIApplication *app = [UIApplication sharedApplication];
     platState.viewController = viewController;
     
 	platState.appID = appID;
@@ -57,11 +55,11 @@ int _iOSRunTorqueMain( id appID, UIView * Window, T2DViewController *viewControl
 	{
 		return 0;
 	}
-
+*/
     return true;
 }
 
-void _iOSGameInnerLoop()
+void _AndroidGameInnerLoop()
 {
     if (!appIsRunning)
     {
@@ -85,28 +83,28 @@ void _iOSGameInnerLoop()
 	}
 }
 
-void _iOSGameResignActive()
+void _AndroidGameResignActive()
 {
-    if ( Con::isFunction("oniOSResignActive") )
-        Con::executef( 1, "oniOSResignActive" );
+    if ( Con::isFunction("onAndroidResignActive") )
+        Con::executef( 1, "onAndroidResignActive" );
     
     appIsRunning = false;
 }
 
-void _iOSGameBecomeActive()
+void _AndroidGameBecomeActive()
 {
 	clearPendingMultitouchEvents( );
     
-    if ( Con::isFunction("oniOSBecomeActive") )
-        Con::executef( 1, "oniOSBecomeActive" );
+    if ( Con::isFunction("onAndroidBecomeActive") )
+        Con::executef( 1, "onAndroidBecomeActive" );
     
     appIsRunning = true;
 }
 
-void _iOSGameWillTerminate()
+void _AndroidGameWillTerminate()
 {
-    if ( Con::isFunction("oniOSWillTerminate") )
-        Con::executef( 1, "oniOSWillTerminate" );
+    if ( Con::isFunction("onAndroidWillTerminate") )
+        Con::executef( 1, "onAndroidWillTerminate" );
     
 	Con::executef( 1, "onExit" );
     
@@ -114,15 +112,15 @@ void _iOSGameWillTerminate()
 }
 
 // Store current orientation for easy access
-void _iOSGameChangeOrientation(S32 newOrientation)
+void _AndroidGameChangeOrientation(S32 newOrientation)
 {    
-	_iOSGameSetCurrentOrientation(newOrientation);
+	_AndroidGameSetCurrentOrientation(newOrientation);
     
     return;
-    
-    bool enableAutoOrientation = Con::getBoolVariable("$pref::iOS::EnableOrientationRotation");
-    int screenOrientation = Con::getIntVariable("$pref::iOS::ScreenOrientation");
-    bool allowOtherOrientation = Con::getBoolVariable("$pref::iOS::EnableOtherOrientationRotation");
+    /*
+    bool enableAutoOrientation = Con::getBoolVariable("$pref::Android::EnableOrientationRotation");
+    int screenOrientation = Con::getIntVariable("$pref::Android::ScreenOrientation");
+    bool allowOtherOrientation = Con::getBoolVariable("$pref::Android::EnableOtherOrientationRotation");
 
     // The rotation matching the project orientation must be allowed for any to occur
     if (enableAutoOrientation)
@@ -136,7 +134,7 @@ void _iOSGameChangeOrientation(S32 newOrientation)
             if (newOrientation == UIDeviceOrientationLandscapeLeft)
             {
                 platState.Window.transform = CGAffineTransformMakeRotation(M_PI*1.5);
-                Con::executef(1, "oniOSOrientationToLandscapeLeft");
+                Con::executef(1, "onAndroidOrientationToLandscapeLeft");
                 //  Show animations
                 [UIView commitAnimations];
                 
@@ -146,7 +144,7 @@ void _iOSGameChangeOrientation(S32 newOrientation)
             if (newOrientation == UIDeviceOrientationLandscapeRight)
             {
                 platState.Window.transform = CGAffineTransformMakeRotation(M_PI_2);
-                Con::executef(1, "oniOSOrientationToLandscapeRight");
+                Con::executef(1, "onAndroidOrientationToLandscapeRight");
                 //  Show animations
                 [UIView commitAnimations];
                 
@@ -160,7 +158,7 @@ void _iOSGameChangeOrientation(S32 newOrientation)
             if (newOrientation == UIDeviceOrientationPortrait)
             {
                 platState.Window.transform = CGAffineTransformMakeRotation(M_PI*1.5);
-                Con::executef(1, "oniOSOrientationToPortrait");
+                Con::executef(1, "onAndroidOrientationToPortrait");
                 //  Show animations
                 [UIView commitAnimations];
                 
@@ -170,7 +168,7 @@ void _iOSGameChangeOrientation(S32 newOrientation)
             if (newOrientation == UIDeviceOrientationPortraitUpsideDown)
             {
                 platState.Window.transform = CGAffineTransformMakeRotation(M_PI_2);
-                Con::executef(1, "oniOSOrientationToPortraitUpsideDown");
+                Con::executef(1, "onAndroidOrientationToPortraitUpsideDown");
                 //  Show animations
                 [UIView commitAnimations];
                 
@@ -180,10 +178,10 @@ void _iOSGameChangeOrientation(S32 newOrientation)
         
         // Show animations
         [UIView commitAnimations];
-    }
+    }*/
 }
 
-static void _iOSGetTxtFileArgs(int &argc, char** argv, int maxargc)
+static void _AndroidGetTxtFileArgs(int &argc, char** argv, int maxargc)
 {
     argc = 0;
     
@@ -196,7 +194,7 @@ static void _iOSGetTxtFileArgs(int &argc, char** argv, int maxargc)
     // Open the file, kick out if we can't
     File cmdfile;
     
-    File::Status err = cmdfile.open("iOSCmdLine.txt", cmdfile.Read);
+    File::Status err = cmdfile.open("AndroidCmdLine.txt", cmdfile.Read);
     
     // Re-organise function to handle memory deletion better
     if (err == File::Ok)
@@ -238,8 +236,8 @@ static void _iOSGetTxtFileArgs(int &argc, char** argv, int maxargc)
 
 int main(int argc, char *argv[])
 {
-    @autoreleasepool
-    {
+    //TODO: android
+	/*
         int kMaxCmdlineArgs = 32; //Arbitrary
         
         printf("Initial Command Line\n");
@@ -271,7 +269,7 @@ int main(int argc, char *argv[])
         S32 textArgc;
         char* textArgv[kMaxCmdlineArgs];
         
-        _iOSGetTxtFileArgs(textArgc, textArgv, kMaxCmdlineArgs);
+        _AndroidGetTxtFileArgs(textArgc, textArgv, kMaxCmdlineArgs);
         
         // merge them
         int i=0;
@@ -297,5 +295,6 @@ int main(int argc, char *argv[])
         
         printf("exiting...\n");
         return(platState.appReturn);
-    }
+
+    */
 }

@@ -33,11 +33,13 @@ LOCAL_SRC_FILES := lib/libjpeg.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 LOCAL_PATH := $(MY_LOCAL_PATH)
-include $(CLEAR_VARS)
+#include $(CLEAR_VARS)
 
 LOCAL_MODULE    := torque2d
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
-    				$(LOCAL_PATH)/../../../source/torqueConfig.h \
+					$(LOCAL_PATH)/include/libjpeg \
+					$(LOCAL_PATH)/include/libpng \
+    				$(LOCAL_PATH)/../../../source \
     				$(LOCAL_PATH)/../../../source/2d \
     				$(LOCAL_PATH)/../../../source/2d/assets \
     				$(LOCAL_PATH)/../../../source/2d/controllers \
@@ -414,7 +416,12 @@ LOCAL_SRC_FILES :=  ../../../source/2d/assets/AnimationAsset.cc \
 					../../../source/platformAndroid/AndroidThread.cpp \
 					../../../source/platformAndroid/AndroidTime.cpp \
 					../../../source/platformAndroid/AndroidUtil.cpp \
-					
+					../../../source/platformAndroid/AndroidWindow.cpp \
+					../../../source/platformAndroid/main.cpp \
+					../../../source/platformAndroid/SoundEngine.cpp \
+					../../../source/platformAndroid/T2DAppDelegate.cpp \
+					../../../source/platformAndroid/T2DView.cpp \
+					../../../source/platformAndroid/T2DViewController.cpp \
 					../../../source/sim/scriptGroup.cc \
 					../../../source/sim/scriptObject.cc \
 					../../../source/sim/simBase.cc \
@@ -470,7 +477,7 @@ LOCAL_SRC_FILES :=  ../../../source/2d/assets/AnimationAsset.cc \
 					../../../source/testing/unitTesting.cc
  
 			   
-LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -O0 -fsigned-char
+LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -O0 -fsigned-char
 				   
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lz -lOpenSLES
 LOCAL_STATIC_LIBRARIES := android_native_app_glue libpng libjpeg

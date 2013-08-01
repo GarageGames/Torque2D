@@ -87,15 +87,13 @@
 //	Includes
 //==================================================================================================
 
+//TODO: replace openal with OpenSL ES
+/*
+
 //	System Includes
-#include <AudioToolbox/AudioToolbox.h>
-#include <CoreFoundation/CFURL.h>
-#include <OpenAL/al.h>
-#include <OpenAL/alc.h>
 #include <map>
 #include <vector>
 #include <pthread.h>
-#include <mach/mach.h>
 
 // Local Includes
 #include "SoundEngine.h"
@@ -772,7 +770,7 @@ class BackgroundTrackMgr
             AssertNoError("Error getting packet upper bound size", end);
             bool isFormatVBR = (inFileInfo->mFileFormat.mBytesPerPacket == 0 || inFileInfo->mFileFormat.mFramesPerPacket == 0);
             
-            CalculateBytesForTime(inFileInfo->mFileFormat, maxPacketSize, 0.5/*seconds*/, &mBufferByteSize, &mNumPacketsToRead);
+            CalculateBytesForTime(inFileInfo->mFileFormat, maxPacketSize, 0.5, &mBufferByteSize, &mNumPacketsToRead);
             
             // if the file is smaller than the capacity of all the buffer queues, always load it at once
             if ((mBufferByteSize * numBuffersToQueue) > inFileInfo->mFileDataSize)
@@ -1601,3 +1599,4 @@ bool LoadSoundFile(const char *inFilePath, UInt32 *outEffectID)
 }
     
 }//namespace SoundEngine
+*/

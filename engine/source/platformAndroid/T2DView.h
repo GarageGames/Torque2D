@@ -19,7 +19,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
-
+//TODO: android
+/*
 #import <GLKit/GLKit.h>
 
 @interface T2DView : GLKView {
@@ -36,3 +37,4 @@
 
 
 @end
+*/

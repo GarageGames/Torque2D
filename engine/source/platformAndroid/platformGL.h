@@ -24,22 +24,15 @@
 #ifndef _PLATFORMGL_H_
 #define _PLATFORMGL_H_
 
-#ifdef __OBJC__
-	#import <QuartzCore/QuartzCore.h>
-//#import <OpenGLES/EAGL.h>
-	#import <OpenGLES/ES1/gl.h>
-	#import <OpenGLES/ES1/glext.h>
-#else
 #include <QuartzCore/QuartzCore.h>
 //#include <OpenGLES/EAGL.h>
 #include <OpenGLES/ES1/gl.h>
 #include <OpenGLES/ES1/glext.h>
-#endif
 
 //------------------------------------------------------------------------------
 /// Overrides and implentations of opengl API to account for ogles differences
 // Include after OpenGLES headers
-#include "platformiOS/iOSGL2ES.h"
+#include "platformAndroid/AndroidGL2ES.h"
 
 
 /// Using aglMacro.h gives us signifigant performance gains in opengl immediate mode ( glVertex etc )
@@ -61,23 +54,23 @@ extern AGLContext agl_ctx;
 #define MIN_RESOLUTION_BIT_DEPTH		16
 #define MIN_RESOLUTION_XY_STRING		"480 320"
 
-#define IOS_DEFAULT_RESOLUTION_X		480
-#define IOS_DEFAULT_RESOLUTION_Y		480
+#define ANDROID_DEFAULT_RESOLUTION_X		480
+#define ANDROID_DEFAULT_RESOLUTION_Y		480
 
-#define IOS_MAX_RESOLUTION_X			2048
-#define IOS_MAX_RESOLUTION_Y			2048
+#define ANDROID_MAX_RESOLUTION_X			2048
+#define ANDROID_MAX_RESOLUTION_Y			2048
 
-#define IOS_DEFAULT_RESOLUTION_BIT_DEPTH	32
+#define ANDROID_DEFAULT_RESOLUTION_BIT_DEPTH	32
 
-#define IOS_SCREEN_PORTRAIT			0
-#define IOS_SCREEN_LANDSCAPE			1
-#define IOS_SCREEN_RIGHT_SIDE_UP		3
-#define IOS_SCREEN_UPSIDE_DOWN		4
+#define ANDROID_SCREEN_PORTRAIT			0
+#define ANDROID_SCREEN_LANDSCAPE			1
+#define ANDROID_SCREEN_RIGHT_SIDE_UP		3
+#define ANDROID_SCREEN_UPSIDE_DOWN		4
 
 
 /// Allows outline mode drawing via a function pointer swapping trick.
 /// Must be included AFTER all the OpenGL headers.
-#include "platformiOS/iOSOutlineGL.h"
+#include "platformAndroid/AndroidOutlineGL.h"
 
 
 //------------------------------------------------------------------------------

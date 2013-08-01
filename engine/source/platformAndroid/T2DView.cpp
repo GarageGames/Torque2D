@@ -20,13 +20,13 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#import "platformiOS/T2DView.h"
+#import "platformAndroid/T2DView.h"
 //#import <QuartzCore/QuartzCore.h>
 //#include "platformiPhone/iPhoneEvents.h"
 
-#import "platformiOS/platformiOS.h"
-#import "platformiOS/platformGL.h"
-#import "platformiOS/iOSOGLVideo.h"
+#import "platformAndroid/platformAndroid.h"
+#import "platformAndroid/platformGL.h"
+#import "platformAndroid/AndroidOGLVideo.h"
 #include "console/console.h"
 #include "math/mPoint.h"
 #include "platform/event.h"
@@ -34,8 +34,8 @@
 #include "console/consoleInternal.h"
 #include "console/ast.h"
 #include "io/fileStream.h"
-#include "platformiOS/iOSUtil.h"
-#include "platformiOS/iOSEvents.h"
+#include "platformAndroid/AndroidUtil.h"
+#include "platformAndroid/AndroidEvents.h"
 #include "graphics/dgl.h"
 #include "debug/profiler.h"
 
@@ -46,6 +46,8 @@ extern bool createMouseDownEvent(S32 touchNumber, S32 x, S32 y, U32 numTouches);
 extern bool createMouseUpEvent(S32 touchNumber, S32 x, S32 y, S32 lastX, S32 lastY, U32 numTouches); //EFM
 extern void createMouseTapEvent( S32 nbrTaps, S32 x, S32 y );
 
+//TODO: android
+/*
 bool retinaEnabled;
 
 void ConvertToRetina(CGPoint *p)
@@ -104,10 +106,10 @@ void ConvertToRetina(CGPoint *p)
             ConvertToRetina(&point);
         }
         
-        S32 orientation = _iOSGameGetOrientation();
+        S32 orientation = _AndroidGameGetOrientation();
         if (UIDeviceOrientationIsPortrait(orientation))
         {
-            point.y -= _iOSGetPortraitTouchoffset();
+            point.y -= _AndroidGetPortraitTouchoffset();
         }
         
         int numTouches = [touch tapCount];
@@ -136,11 +138,11 @@ extern Vector<Event *> TouchMoveEvents;
             ConvertToRetina(&prevPoint);
         }
         
-        S32 orientation = _iOSGameGetOrientation();
+        S32 orientation = _AndroidGameGetOrientation();
         if (UIDeviceOrientationIsPortrait(orientation))
         {
-            point.y -= _iOSGetPortraitTouchoffset();
-            prevPoint.y -= _iOSGetPortraitTouchoffset();
+            point.y -= _AndroidGetPortraitTouchoffset();
+            prevPoint.y -= _AndroidGetPortraitTouchoffset();
         }
         
         createMouseMoveEvent(touchCount, point.x, point.y, prevPoint.x, prevPoint.y);
@@ -165,11 +167,11 @@ extern Vector<Event *> TouchMoveEvents;
             ConvertToRetina(&prevPoint);
         }
         
-        S32 orientation = _iOSGameGetOrientation();
+        S32 orientation = _AndroidGameGetOrientation();
         if (UIDeviceOrientationIsPortrait(orientation))
         {
-            point.y -= _iOSGetPortraitTouchoffset();
-            prevPoint.y -= _iOSGetPortraitTouchoffset();
+            point.y -= _AndroidGetPortraitTouchoffset();
+            prevPoint.y -= _AndroidGetPortraitTouchoffset();
         }
         
         int tc = [touch tapCount];
@@ -203,3 +205,4 @@ int currentRotate = 0;
 #define ROTATE_RIGHT	1
 #define ROTATE_UP		2
 @end
+*/

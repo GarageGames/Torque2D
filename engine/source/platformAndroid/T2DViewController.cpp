@@ -21,12 +21,12 @@
 //-----------------------------------------------------------------------------
 
 #import "T2DViewController.h"
-#import "platformiOS/platformGL.h"
-#include "platformiOS/iOSWindow.h"
-#include "platformiOS/platformiOS.h"
+#import "platformAndroid/platformGL.h"
+#include "platformAndroid/AndroidWindow.h"
+#include "platformAndroid/platformAndroid.h"
 #include "graphics/dgl.h"
 
-extern iOSPlatState platState;
+extern AndroidPlatState platState;
 
 
 #define USE_DEPTH_BUFFER 0
@@ -35,13 +35,15 @@ extern bool retinaEnabled;
 
 extern void ConvertToRetina (CGPoint *p);
 
-extern bool _iOSTorqueFatalError;
-extern int _iOSRunTorqueMain( id appID,  UIView *Window, T2DViewController *Controller );
+extern bool _AndroidTorqueFatalError;
+extern int _AndroidRunTorqueMain( id appID,  UIView *Window, T2DViewController *Controller );
 
 //-Mat we should update the accelereometer once per frame
 extern U32  AccelerometerUpdateMS;
-extern void _iOSGameInnerLoop();
+extern void _AndroidGameInnerLoop();
 
+//TODO: android
+/*
 @implementation T2DViewController
 
 @synthesize context = _context;
@@ -158,10 +160,10 @@ extern void _iOSGameInnerLoop();
     UIApplication * application = [UIApplication sharedApplication];
     id appDelegate = [application delegate];
     
-	_iOSTorqueFatalError = false;
-	if(!_iOSRunTorqueMain( appDelegate, self.view, self ))
+	_AndroidTorqueFatalError = false;
+	if(!_AndroidRunTorqueMain( appDelegate, self.view, self ))
 	{
-		_iOSTorqueFatalError = true;
+		_AndroidTorqueFatalError = true;
 		return;
 	};
 }
@@ -179,7 +181,7 @@ extern void _iOSGameInnerLoop();
 
 - (void)update
 {
-    _iOSGameInnerLoop();
+    _AndroidGameInnerLoop();
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -257,3 +259,4 @@ ConsoleFunction(supportPortrait, void, 2, 2, "supportPortrait( bool ) "
 }
 
 @end
+*/

@@ -42,7 +42,8 @@ class AudioBuffer: public ResourceInstance
 private:
    StringTableEntry  mFilename;
    bool              mLoading;
-   ALuint            malBuffer;
+   //TODO: android
+   //ALuint            malBuffer;
 
    bool readRIFFchunk(Stream &s, const char *seekLabel, U32 *size);
    bool readWAV(ResourceObject *obj);
@@ -50,7 +51,8 @@ private:
 public:
    AudioBuffer(StringTableEntry filename);
    ~AudioBuffer();
-   ALuint getALBuffer();
+   //TODO: android
+   //ALuint getALBuffer();
    bool isLoading() {return(mLoading);}
 
    static Resource<AudioBuffer> find(const char *filename);

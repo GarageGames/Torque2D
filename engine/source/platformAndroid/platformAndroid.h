@@ -20,36 +20,35 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _PLATFORMIOS_H_
-#define _PLATFORMIOS_H_
-
-#import "UIKit/UIKit.h"
-
+#ifndef _PLATFORMANDROID_H_
+#define _PLATFORMANDROID_H_
 
 #include "platform/platform.h"
 #include "math/mMath.h"
-#include "platformiOS/iOSEvents.h"
+#include "platformAndroid/AndroidEvents.h"
 
-#include "platformiOS/iOSOGLVideo.h"
+#include "platformAndroid/AndroidOGLVideo.h"
 
-#include "platformiOS/T2DView.h"
-#include "platformiOS/T2DViewController.h"
+#include "platformAndroid/T2DView.h"
+#include "platformAndroid/T2DViewController.h"
 
 // Mich Note: Do not try to spend too much time analyzing this class.
-// It is planned to refactor the iOS platform layer and replace this
+// It is planned to refactor the Android platform layer and replace this
 // with a platform state similar to what OS X uses.
-class iOSPlatState
+class AndroidPlatState
 {
 public:
     bool              captureDisplay;
     bool              fadeWindows;
 
-    id				 appID;
-    UIView			 *Window;
+    //TODO: android
+    //id				 appID;
+    //UIView			 *Window;
     char              appWindowTitle[256];
     bool              quit;
-    T2DView           *ctx;
-    T2DViewController *viewController;
+    //TODO: android
+    //T2DView           *ctx;
+    //T2DViewController *viewController;
     bool              ctxNeedsUpdate;
 
     bool			portrait;
@@ -91,17 +90,18 @@ public:
 
     StringTableEntry  mainDotCsDir;
 
-    NSTimer			 *mainLoopTimer;
-    NSTimeInterval	 timerInterval;
-    UIApplication	*application;
+    //TODO: android
+    //NSTimer			 *mainLoopTimer;
+    //NSTimeInterval	 timerInterval;
+    //UIApplication	*application;
     //-Mat
     bool		multipleTouchesEnabled;
 
-    iOSPlatState();
+    AndroidPlatState();
 };
 
 /// Global singleton that encapsulates a lot of mac platform state & globals.
-extern iOSPlatState platState;
+extern AndroidPlatState platState;
 
 /// @name Misc Mac Plat Functions
 /// Functions that are used by multiple files in the mac plat, but too trivial
@@ -115,7 +115,7 @@ void getGLCapabilities(void);
 /// calls FileDialog::Execute() on \p dialog
 /// @param dialog The FileDialog object to Execute. A void* is used to cut down on header dependencies.
 /// @see platform/nativeDialogs/fileDialog.h
-void iOSShowDialog(void* dialog);
+void AndroidShowDialog(void* dialog);
 
 /// Translates a Mac keycode to a Torque keycode
 U8 TranslateOSKeyCode(U8 vcode);
@@ -137,5 +137,5 @@ const S32 kTMouseWheelMagnificationFactor = 25;
 
 
 
-#endif //_PLATFORMIOS_H_
+#endif //_PLATFORMANDROID_H_
 

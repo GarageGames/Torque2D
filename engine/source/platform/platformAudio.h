@@ -101,6 +101,8 @@ void alxStopAll();
 // one-shot helper alxPlay functions, create and play in one call
 AUDIOHANDLE alxPlay(const AudioAsset *profile, const MatrixF *transform=NULL, const Point3F *velocity=NULL);
 
+//TODO: android
+/*
 // Source
 void alxSourcef(AUDIOHANDLE handle, ALenum pname, ALfloat value);
 void alxSourcefv(AUDIOHANDLE handle, ALenum pname, ALfloat *values);
@@ -112,36 +114,46 @@ void alxGetSourcef(AUDIOHANDLE handle, ALenum pname, ALfloat *value);
 void alxGetSourcefv(AUDIOHANDLE handle, ALenum pname, ALfloat *values);
 void alxGetSource3f(AUDIOHANDLE handle, ALenum pname, ALfloat *value1, ALfloat *value2, ALfloat *value3);
 void alxGetSourcei(AUDIOHANDLE handle, ALenum pname, ALint *value);
-
+*/
 /**   alSource3f access extension for use with Point3F's
 */
+//TODO: android
+/*
 inline void alxSourcePoint3F(AUDIOHANDLE handle, ALenum pname, const Point3F *value)
 {
    alxSource3f(handle, pname, value->x, value->y, value->z);
 }
-
+*/
 /**   alGetSource3f access extension for use with Point3F's
 */
+//TODO: android
+/*
 inline void alxSourceGetPoint3F(AUDIOHANDLE handle, ALenum pname, Point3F * value)
 {
    alxGetSource3f(handle, pname, &value->x, &value->y, &value->z);
 }
-
+*/
 // Listener
+//TODO: android
+/*
 void alxListenerMatrixF(const MatrixF *transform);
 void alxListenerf(ALenum param, ALfloat value);
 void alxGetListenerf(ALenum param, ALfloat *value);
 
-
+*/
 /**   alListener3f access extension for use with Point3F's
 */
+//TODO: android
+/*
 inline void alxListenerPoint3F(ALenum pname, const Point3F *value)
 {
    alListener3f(pname, value->x, value->y, value->z);   
 }
-
+*/
 /**   alGetListener3f access extension for use with Point3F's
 */
+//TODO: android
+/*
 inline void alxGetListenerPoint3F(ALenum pname, Point3F *value)
 {
    alGetListener3f(pname, &value->x, &value->y, &value->z);
@@ -152,7 +164,7 @@ void alxEnvironmenti(ALenum pname, ALint value);
 void alxEnvironmentf(ALenum pname, ALfloat value);
 void alxGetEnvironmenti(ALenum pname, ALint * value);
 void alxGetEnvironmentf(ALenum pname, ALfloat * value);
-
+*/
 void alxSetEnvironment(const AudioEnvironment * environment);
 const AudioEnvironment * alxGetEnvironment();
 

@@ -127,8 +127,8 @@ void Platform::init()
     Input::init();
 
     // allow users to specify whether to capture the display or not when going fullscreen
-    Con::addVariable("pref::mac::captureDisplay", TypeBool, &platState.captureDisplay);
-    Con::addVariable("pref::mac::fadeWindows", TypeBool, &platState.fadeWindows);
+    Con::addVariable("pref::Android::captureDisplay", TypeBool, &platState.captureDisplay);
+    Con::addVariable("pref::Android::fadeWindows", TypeBool, &platState.fadeWindows);
 
     // create the opengl display device
     DisplayDevice *dev = NULL;
@@ -233,8 +233,9 @@ void Platform::initWindow(const Point2I &initialSize, const char *name)
 
     glView = (T2DView *) platState.Window;
     
-    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2)
-        glView.contentScaleFactor = [[UIScreen mainScreen] scale];
+    //TODO: android
+    //if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2)
+    //    glView.contentScaleFactor = [[UIScreen mainScreen] scale];
     
     platState.ctx = glView;
     
@@ -287,65 +288,15 @@ bool appIsRunning(int batchId)
 
 bool Platform::openWebBrowser(const char *webAddress)
 {
-    NSString *string = [[NSString alloc] initWithUTF8String:webAddress];
+	//TODO: android
+    /*NSString *string = [[NSString alloc] initWithUTF8String:webAddress];
     NSURL *url = [[NSURL alloc] initWithString:string];
     bool ret = [platState.application openURL:url];
 
     return ret;// this bails on the application, switching to Safari
+    */
+	return false;
 }
-
-bool isStatusBarHidden()
-{
-    if (platState.application.statusBarHidden == YES)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-bool setStatusBarHidden(bool hidden)
-{
-    if (hidden)
-    {
-        platState.application.statusBarHidden = YES;
-        gStatusBarHidden = true;
-
-        return true;
-    }
-    else
-    {
-        platState.application.statusBarHidden = NO;
-        gStatusBarHidden = false;
-
-        return false;
-    }
-}
-
-void setStatusBarType(S32 type)
-{
-    switch (type)
-    {
-        case 0: //Hidden
-            setStatusBarHidden(true);
-            break;
-        case 1: //Black Opaque
-            platState.application.statusBarStyle = UIStatusBarStyleBlackOpaque;
-            setStatusBarHidden(false);
-            break;
-        case 2: //Black Transparent
-            platState.application.statusBarStyle = UIStatusBarStyleBlackTranslucent;
-            setStatusBarHidden(false);
-            break;
-        default:
-            platState.application.statusBarStyle = UIStatusBarStyleDefault;
-    }
-
-    gStatusBarType = type;
-}
-
 
 bool setScreenOrientation(bool portrait, bool upsidedown)
 {
@@ -364,7 +315,8 @@ bool setScreenOrientation(bool portrait, bool upsidedown)
     }
 
 
-    [platState.ctx centerOnPoint:point];
+    //TODO: android
+    /*[platState.ctx centerOnPoint:point];
 
     if (portrait)
     {//normal upright
@@ -393,26 +345,11 @@ bool setScreenOrientation(bool portrait, bool upsidedown)
             success = true;
         }
     }
-
+*/
     return success;
 }
 
 ConsoleFunction(setScreenOrientation, bool, 3, 3, "Sets the orientation of the screen ( portrait/landscape, upside down or right-side up )\n"
         "@(bool portrait, bool upside_down)"){
     return setScreenOrientation(dAtob(argv[1]), dAtob(argv[2]));
-}
-
-
-ConsoleFunction(getStatusBarHidden, bool, 1, 1, " Checks whether the status bar is hidden\n"
-        "@return Returns true if hidden and false if not"){
-    return isStatusBarHidden();
-}
-
-ConsoleFunction(setStatusBarHidden, bool, 2, 2, " Hides/unhides the Android status bar \n"
-        "@return true == status bar is hidden, false == status bar is visible"){
-    return setStatusBarHidden(dAtob(argv[1]));
-}
-
-ConsoleFunction(setStatusBarType, void, 2, 2, " Set the status bar type. 0 hidden, 1 Black Opaque, 2 Black Translucent \n"){
-    return setStatusBarType(dAtoi(argv[1]));
 }

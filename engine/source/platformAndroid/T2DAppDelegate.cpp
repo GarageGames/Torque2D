@@ -20,22 +20,24 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#import "platformiOS/T2DAppDelegate.h"
+#import "platformAndroid/T2DAppDelegate.h"
 
 #include "platform/platformInput.h"
-#include "platformiOS/iOSUtil.h"
+#include "platformAndroid/AndroidUtil.h"
 #include "console/console.h"
 
-extern void _iOSGameInnerLoop();
-extern void _iOSGameResignActive();
-extern void _iOSGameBecomeActive();
-extern void _iOSGameWillTerminate();
+extern void _AndroidGameInnerLoop();
+extern void _AndroidGameResignActive();
+extern void _AndroidGameBecomeActive();
+extern void _AndroidGameWillTerminate();
 
 // Store current orientation for easy access
-extern void _iOSGameChangeOrientation(S32 newOrientation);
+extern void _AndroidGameChangeOrientation(S32 newOrientation);
+//TODO: android
+/*
 UIDeviceOrientation currentOrientation;
 
-bool _iOSTorqueFatalError = false;
+bool _AndroidTorqueFatalError = false;
 
 @implementation T2DAppDelegate
 
@@ -56,33 +58,18 @@ bool _iOSTorqueFatalError = false;
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    _iOSGameResignActive();
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
-    /*
-     Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-     If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-     */
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    /*
-     Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-     */
+    _AndroidGameResignActive();
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    if(!_iOSTorqueFatalError)
-        _iOSGameBecomeActive();
+    if(!_AndroidTorqueFatalError)
+        _AndroidGameBecomeActive();
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    _iOSGameWillTerminate();
+    _AndroidGameWillTerminate();
 	
 	[[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
 }
@@ -96,13 +83,12 @@ bool _iOSTorqueFatalError = false;
 		//Change the orientation
 		currentOrientation = orientation;
 		//Tell the rest of the engine
-		_iOSGameChangeOrientation(currentOrientation);
+		_AndroidGameChangeOrientation(currentOrientation);
 	}
 }
 
 - (void) runMainLoop
 {
-	_iOSGameInnerLoop();
+	_AndroidGameInnerLoop();
 }
-
-@end
+*/

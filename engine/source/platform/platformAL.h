@@ -31,6 +31,8 @@
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
 #include "platform/eaxtypes.h"
+#elif defined(TORQUE_OS_ANDROID)
+//TODO: android
 #elif defined(TORQUE_OS_IOS)
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>

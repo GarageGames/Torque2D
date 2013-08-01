@@ -19,19 +19,20 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
-
+//TODO: android
+/*
 #import <GLKit/GLKit.h>
 
 
 @interface T2DViewController : GLKViewController {
-	/* The pixel dimensions of the backbuffer */
+	// The pixel dimensions of the backbuffer
 	GLint backingWidth;
 	GLint backingHeight;
 	
-    /* OpenGL names for the renderbuffer and framebuffers used to render to this view */
+    // OpenGL names for the renderbuffer and framebuffers used to render to this view
 	GLuint viewRenderbuffer, viewFramebuffer;
 	
-	/* OpenGL name for the depth buffer that is attached to viewFramebuffer, if it exists (0 if it does not exist) */
+	/ OpenGL name for the depth buffer that is attached to viewFramebuffer, if it exists (0 if it does not exist)
 	GLuint depthRenderbuffer;
     
     GLuint _vertexBuffer;
@@ -57,3 +58,4 @@
 void supportLandscape( bool );
 void supportPortrait( bool );
 @end
+*/
