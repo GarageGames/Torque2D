@@ -438,7 +438,7 @@ void Net::process()
    PacketReceiveEvent receiveEvent;
    for(;;)
    {
-      U32 addrLen = sizeof(sa);
+      S32 addrLen = sizeof(sa);
       S32 bytesRead = -1;
       if(udpSocket != InvalidSocket)
          bytesRead = recvfrom(udpSocket, (char *) receiveEvent.data,  MaxPacketDataSize, 0, &sa, &addrLen);
@@ -481,7 +481,7 @@ void Net::process()
    static ConnectedReceiveEvent cReceiveEvent;
 
    S32 optval;
-   socklen_t optlen = sizeof(S32);
+   socklen_t optlen = sizeof(U32);
    S32 bytesRead;
    Net::Error err;
    bool removeSock = false;
@@ -505,7 +505,8 @@ void Net::process()
             notifyEvent.tag = currentSock->fd;
             // see if it is now connected
             if (getsockopt(currentSock->fd, SOL_SOCKET, SO_ERROR,
-                           &optval, &optlen) == -1)
+                           &optval,
+                           (S32*)&optlen) == -1)
             {
                Con::errorf("Error getting socket options: %s",  strerror(errno));
                notifyEvent.state = ConnectedNotifyEvent::ConnectFailed;
@@ -694,7 +695,7 @@ Net::Error Net::listen(NetSocket socket, S32 backlog)
 NetSocket Net::accept(NetSocket acceptSocket, NetAddress *remoteAddress)
 {
    sockaddr_in socketAddress;
-   U32 addrLen = sizeof(socketAddress);
+   S32 addrLen = sizeof(socketAddress);
 
    int retVal = ::accept(acceptSocket, (sockaddr *) &socketAddress,  &addrLen);
    if(retVal != InvalidSocket)

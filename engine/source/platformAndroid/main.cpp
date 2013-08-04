@@ -33,10 +33,12 @@ S32 gLastStart = 0;
 
 bool appIsRunning = true;
 
+//TODO: android
+/*
 int _AndroidRunTorqueMain( id appID, UIView * Window, T2DViewController *viewController)
 {
-	//TODO: android
-    /*UIApplication *app = [UIApplication sharedApplication];
+
+    UIApplication *app = [UIApplication sharedApplication];
     platState.viewController = viewController;
     
 	platState.appID = appID;
@@ -55,9 +57,8 @@ int _AndroidRunTorqueMain( id appID, UIView * Window, T2DViewController *viewCon
 	{
 		return 0;
 	}
-*/
-    return true;
 }
+*/
 
 void _AndroidGameInnerLoop()
 {

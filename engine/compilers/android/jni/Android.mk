@@ -24,20 +24,10 @@ LOCAL_SRC_FILES := lib/libpng.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 LOCAL_PATH := $(MY_LOCAL_PATH)
-# LibJPEG
-include $(CLEAR_VARS)
-
-LOCAL_MODULE    := libjpeg
-LOCAL_SRC_FILES := lib/libjpeg.a
-
-include $(PREBUILT_STATIC_LIBRARY)
-
-LOCAL_PATH := $(MY_LOCAL_PATH)
-#include $(CLEAR_VARS)
 
 LOCAL_MODULE    := torque2d
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
-					$(LOCAL_PATH)/include/libjpeg \
+					$(LOCAL_PATH)/../../../lib/ljpeg \
 					$(LOCAL_PATH)/include/libpng \
     				$(LOCAL_PATH)/../../../source \
     				$(LOCAL_PATH)/../../../source/2d \
@@ -87,16 +77,63 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
     				$(LOCAL_PATH)/../../../source/persistence/taml/binary \
     				$(LOCAL_PATH)/../../../source/persistence/taml/json \
     				$(LOCAL_PATH)/../../../source/persistence/taml/xml \
+    				$(LOCAL_PATH)/../../../source/persistence/rapidjson/include \
     				$(LOCAL_PATH)/../../../source/platform \
     				$(LOCAL_PATH)/../../../source/platform/nativeDialogs \
     				$(LOCAL_PATH)/../../../source/platformAndroid \
     				$(LOCAL_PATH)/../../../source/sim \
-    				$(LOCAL_PATH)/../../../source/string \
-    				$(LOCAL_PATH)/../../../source/testing \
-    				$(LOCAL_PATH)/../../../source/testing/tests
+    				$(LOCAL_PATH)/../../../source/string 
+#    				$(LOCAL_PATH)/../../../source/testing \
+#    				$(LOCAL_PATH)/../../../source/testing/tests \
 	    			
 	    			
-LOCAL_SRC_FILES :=  ../../../source/2d/assets/AnimationAsset.cc \
+LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
+					../../../lib/ljpeg/jcapistd.c \
+					../../../lib/ljpeg/jccoefct.c \
+					../../../lib/ljpeg/jccolor.c \
+					../../../lib/ljpeg/jcdctmgr.c \
+					../../../lib/ljpeg/jchuff.c \
+					../../../lib/ljpeg/jcinit.c \
+					../../../lib/ljpeg/jcmainct.c \
+					../../../lib/ljpeg/jcmarker.c \
+					../../../lib/ljpeg/jcmaster.c \
+					../../../lib/ljpeg/jcomapi.c \
+					../../../lib/ljpeg/jcparam.c \
+					../../../lib/ljpeg/jcphuff.c \
+					../../../lib/ljpeg/jcprepct.c \
+					../../../lib/ljpeg/jcsample.c \
+					../../../lib/ljpeg/jctrans.c \
+					../../../lib/ljpeg/jdapimin.c \
+					../../../lib/ljpeg/jdapistd.c \
+					../../../lib/ljpeg/jdatadst.c \
+					../../../lib/ljpeg/jdatasrc.c \
+					../../../lib/ljpeg/jdcoefct.c \
+					../../../lib/ljpeg/jdcolor.c \
+					../../../lib/ljpeg/jddctmgr.c \
+					../../../lib/ljpeg/jdhuff.c \
+					../../../lib/ljpeg/jdinput.c \
+					../../../lib/ljpeg/jdmainct.c \
+					../../../lib/ljpeg/jdmarker.c \
+					../../../lib/ljpeg/jdmaster.c \
+					../../../lib/ljpeg/jdmerge.c \
+					../../../lib/ljpeg/jdphuff.c \
+					../../../lib/ljpeg/jdpostct.c \
+					../../../lib/ljpeg/jdsample.c \
+					../../../lib/ljpeg/jdtrans.c \
+					../../../lib/ljpeg/jerror.c \
+					../../../lib/ljpeg/jfdctflt.c \
+					../../../lib/ljpeg/jfdctfst.c \
+					../../../lib/ljpeg/jfdctint.c \
+					../../../lib/ljpeg/jidctflt.c \
+					../../../lib/ljpeg/jidctfst.c \
+					../../../lib/ljpeg/jidctint.c \
+					../../../lib/ljpeg/jidctred.c \
+					../../../lib/ljpeg/jmemansi.c \
+					../../../lib/ljpeg/jmemmgr.c \
+					../../../lib/ljpeg/jquant1.c \
+					../../../lib/ljpeg/jquant2.c \
+					../../../lib/ljpeg/jutils.c \
+					../../../source/2d/assets/AnimationAsset.cc \
 					../../../source/2d/assets/ImageAsset.cc \
 					../../../source/2d/assets/ParticleAsset.cc \
 					../../../source/2d/assets/ParticleAssetEmitter.cc \
@@ -470,11 +507,11 @@ LOCAL_SRC_FILES :=  ../../../source/2d/assets/AnimationAsset.cc \
 					../../../source/gui/editor/guiInspector.cc \
 					../../../source/gui/editor/guiInspectorTypes.cc \
 					../../../source/gui/editor/guiMenuBar.cc \
-					../../../source/gui/editor/guiSeparatorCtrl.cc \
-					../../../source/testing/tests/platformFileIoTests.cc \
-					../../../source/testing/tests/platformMemoryTests.cc \
-					../../../source/testing/tests/platformStringTests.cc \
-					../../../source/testing/unitTesting.cc
+					../../../source/gui/editor/guiSeparatorCtrl.cc 
+#					../../../source/testing/tests/platformFileIoTests.cc \
+#					../../../source/testing/tests/platformMemoryTests.cc \
+#					../../../source/testing/tests/platformStringTests.cc \
+#					../../../source/testing/unitTesting.cc
  
 			   
 LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -O0 -fsigned-char

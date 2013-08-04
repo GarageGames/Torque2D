@@ -36,7 +36,8 @@
 #define PLATFORM_UNITTEST_STRING_DESTINATION_BUFFERSIZE     1024
 
 //-----------------------------------------------------------------------------
-
+//TODO: android
+#ifndef TORQUE_OS_ANDROID
 TEST( PlatformStringTests, dStrlenTest )
 {
     // Check length of string.
@@ -610,5 +611,5 @@ TEST( PlatformStringTests, dIsspaceTest )
         ASSERT_EQ( false, dIsspace(source3[index]) );
     }
 }
-
+#endif
 #endif // TORQUE_SHIPPING

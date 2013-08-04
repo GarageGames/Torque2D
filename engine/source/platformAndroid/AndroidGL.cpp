@@ -149,9 +149,11 @@ void getGLCapabilities( )
 
       // Anisotropic filtering ========================================
       gGLState.suppTexAnisotropic    = (dStrstr(pExtString, (const char*)"GL_EXT_texture_filter_anisotropic") != NULL);
-      if (gGLState.suppTexAnisotropic)
-         glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &gGLState.maxAnisotropy);
 
+      //TODO: android
+      /*if (gGLState.suppTexAnisotropic)
+         glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &gGLState.maxAnisotropy);
+*/
       // Binary states, i.e., no supporting functions  ========================================
       // NOTE:
       // Some of these have multiple representations, via EXT and|or ARB and|or NV and|or SGIS ... etc.

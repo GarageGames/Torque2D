@@ -43,7 +43,6 @@
 
 #include <stdio.h>
 #include "collection/vector.h"
-#import <mach/mach_time.h>
 #include "console/console.h"
 
 #define ANDROID_PROFILER_MAX_CALLS 256

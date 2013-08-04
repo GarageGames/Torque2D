@@ -76,7 +76,8 @@ AndroidPlatState::AndroidPlatState()
     // running with the scripts in the bundle or not.
     mainDotCsDir = NULL;
 
-    mainLoopTimer = NULL;
+    //TODO: android
+    //mainLoopTimer = NULL;
 }
 
 
@@ -176,6 +177,8 @@ void Platform::initWindow(const Point2I &initialSize, const char *name)
     // 0: iPhone
     // 1: iPad
     // 2: iPhone 5
+    //TODO: android
+    /*
     if (iDeviceType == 2)
     {
         resolutionWidth = 1136;
@@ -270,6 +273,7 @@ void Platform::initWindow(const Point2I &initialSize, const char *name)
     //NOTE:	This should probably be set by the user to be the color closest to Default.png in order to minimize any popping effect... $pref:: anyone? Are $pref::s even valid at this point in the Init process?
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+    */
 }
 
 //--------------------------------------
@@ -301,7 +305,8 @@ bool Platform::openWebBrowser(const char *webAddress)
 bool setScreenOrientation(bool portrait, bool upsidedown)
 {
     bool success = false;
-
+    //TODO: android
+    /*
     CGPoint point;
     if (platState.portrait)
     {
@@ -313,7 +318,7 @@ bool setScreenOrientation(bool portrait, bool upsidedown)
         point.x = platState.windowSize.y / 2;
         point.y = platState.windowSize.x / 2;
     }
-
+*/
 
     //TODO: android
     /*[platState.ctx centerOnPoint:point];

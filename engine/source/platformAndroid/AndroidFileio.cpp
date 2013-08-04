@@ -45,13 +45,6 @@
 #define MAX_MAC_PATH_LONG     2048
 
 //-----------------------------------------------------------------------------
-//#if defined(TORQUE_OS_MAC_OSX)
-#include <CoreFoundation/CFBundle.h>
-//#else
-//#include <CFBundle.h>
-//#endif
-
-//-----------------------------------------------------------------------------
 bool Platform::fileDelete(const char * name)
 {
    if(!name )
@@ -556,6 +549,8 @@ StringTableEntry Platform::getExecutablePath()
       return platState.mainDotCsDir;
       
    char cwd_buf[MAX_MAC_PATH_LONG];
+   //TODO: android
+   /*
    CFBundleRef mainBundle = CFBundleGetMainBundle();
    CFURLRef bundleUrl = CFBundleCopyBundleURL(mainBundle);
    
@@ -601,7 +596,7 @@ StringTableEntry Platform::getExecutablePath()
    
    //CFRelease(mainBundle);   // apple docs say to release this, but that causes a sigsegv(11)
    CFRelease(bundleUrl);
-   
+   */
 //   chdir(cwd_buf);            // set the current working directory.
    
    char* ret = NULL;
@@ -617,6 +612,8 @@ StringTableEntry Platform::getExecutablePath()
 StringTableEntry Platform::getExecutableName()
 {
    char path_buf[MAX_MAC_PATH_LONG];
+   //TODO: android
+   /*
    // get a cfurl to the executable name
    CFBundleRef mainBundle = CFBundleGetMainBundle();
    CFURLRef bundleUrl = CFBundleCopyBundleURL(mainBundle);
@@ -630,7 +627,7 @@ StringTableEntry Platform::getExecutableName()
    CFRelease(bundleUrl);
    CFRelease(workingString);
    CFRelease(normalizedString);
-   
+   */
    return StringTable->insert(path_buf);   
 }
 
@@ -850,7 +847,8 @@ static bool recurseDumpPath(const char* curPath, Vector<Platform::FileInfo>& fil
            break;
        
       // construct the full file path. we need this to get the file size and to recurse
-      const U32 len = dStrlen(curPath) + entry->d_namlen + 2;
+       //TODO: android
+      const U32 len = 0;//dStrlen(curPath) + entry->d_namlen + 2;
       char pathbuf[len];
       dSprintf( pathbuf, len, "%s/%s", curPath, entry->d_name);
       

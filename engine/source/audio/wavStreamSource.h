@@ -19,7 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
-
+#ifndef TORQUE_OS_ANDROID
 #ifndef _WAVSTREAMSOURCE_H_
 #define _WAVSTREAMSOURCE_H_
 
@@ -64,3 +64,4 @@ class WavStreamSource: public AudioStreamSource
 };
 
 #endif // _AUDIOSTREAMSOURCE_H_
+#endif

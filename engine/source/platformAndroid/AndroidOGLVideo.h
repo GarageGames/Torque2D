@@ -23,9 +23,6 @@
 #ifndef _ANDROIDOGLVIDEO_H_
 #define _ANDROIDOGLVIDEO_H_
 
-#import "UIKit/UIKit.h"
-#import "UIKit/UIAccelerometer.h"
-
 #include "platform/platformVideo.h"
 
 class OpenGLDevice : public DisplayDevice

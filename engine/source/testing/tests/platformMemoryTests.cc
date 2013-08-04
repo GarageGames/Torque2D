@@ -36,7 +36,8 @@
 #define PLATFORM_UNITTEST_MEMORY_BUFFERSIZE     16384
 
 //-----------------------------------------------------------------------------
-
+//TODO: android
+#ifndef TORQUE_OS_ANDROID
 TEST( PlatformMemoryTests, dMallocrAnddFreeTest )
 {
     // Allocate some memory.
@@ -165,6 +166,6 @@ TEST( PlatformMemoryTests, dMemcmpTest )
     ASSERT_EQ( 0, result2 ) << "Memory compare is incorrect.";
     ASSERT_GT( 0, result3 ) << "Memory compare is incorrect.";
 }
-
+#endif
 
 #endif // TORQUE_SHIPPING

@@ -26,7 +26,7 @@
 //
 // Kurtis Seebaldt
 //--------------------------------------
-
+#ifndef TORQUE_OS_ANDROID
 #include "audio/wavStreamSource.h"
 
 #define BUFFERSIZE 32768
@@ -350,3 +350,4 @@ F32 WavStreamSource::getTotalTime()
    Con::warnf( "GetTotalTime not implemented in WaveStreams yet" );
    return -1.f;
 }
+#endif

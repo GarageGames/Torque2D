@@ -233,7 +233,8 @@ bool OpenGLDevice::setScreenMode(U32 width, U32 height, U32 bpp, bool fullScreen
 //------------------------------------------------------------------------------
 void OpenGLDevice::swapBuffers()
 {
-    [platState.ctx swapBuffers];
+	//TODO: android
+    //[platState.ctx swapBuffers];
 }
 
 

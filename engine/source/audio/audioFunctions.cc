@@ -19,7 +19,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
-
+//TODO: android
+#ifndef TORQUE_OS_ANDROID
 #ifndef _ASSET_MANAGER_H_
 #include "assets/assetManager.h"
 #endif
@@ -743,3 +744,4 @@ ConsoleFunction(setiOSAudioStreamVolume, void, 3, 3, "setiPhoneAudioVolume( Stre
 
 
 ConsoleFunctionGroupEnd(Audio);
+#endif

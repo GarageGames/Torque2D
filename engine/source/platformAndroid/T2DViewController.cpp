@@ -32,12 +32,13 @@ extern AndroidPlatState platState;
 #define USE_DEPTH_BUFFER 0
 
 extern bool retinaEnabled;
-
+//TODO: android
+/*
 extern void ConvertToRetina (CGPoint *p);
 
 extern bool _AndroidTorqueFatalError;
 extern int _AndroidRunTorqueMain( id appID,  UIView *Window, T2DViewController *Controller );
-
+*/
 //-Mat we should update the accelereometer once per frame
 extern U32  AccelerometerUpdateMS;
 extern void _AndroidGameInnerLoop();

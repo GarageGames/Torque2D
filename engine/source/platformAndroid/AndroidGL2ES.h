@@ -33,9 +33,7 @@
 
 
 #include "platform/types.h"
-
-#include "OpenGLES/ES1/gl.h"
-#include "OpenGLES/ES1/glext.h"
+#include <GLES/gl.h>
 
 extern "C"
 {

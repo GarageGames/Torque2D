@@ -779,10 +779,11 @@ bool activateKeyboard()
    if ( !gInputEnabled || !Input::isActive() || !gKBEnabled )
       return( false );
 
-   OSStatus status = noErr;
+   //TODO: android
+   /*OSStatus status = noErr;
    if (status==noErr)
       gKBActive = true;
-
+*/
    return( gKBActive );
 }
 
@@ -1234,7 +1235,8 @@ void createMouseTapEvent( S32 nbrTaps, S32 x, S32 y ) {
 
 
 // 0 = x, 1 = y, 2 = z
-UIAccelerationValue g_lastAccel[3];
+//TODO: android
+//UIAccelerationValue g_lastAccel[3];
 
 // PUAP -Mat this is polled at AccelerometerUpdateMS, which should be set at around 33 
 /*

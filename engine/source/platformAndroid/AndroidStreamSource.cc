@@ -44,6 +44,8 @@ bool AndroidStreamSource::isPlaying() {
 }
 
 bool AndroidStreamSource::start( bool loop ) {
+	//TODO: android
+	/*
 	SoundEngine::SoundEngine_LoadBackgroundMusicTrack( mFilename, true, false );
 	SoundEngine::SoundEngine_StartBackgroundMusic();
 	if( !loop ) {
@@ -51,17 +53,24 @@ bool AndroidStreamSource::start( bool loop ) {
 		SoundEngine::SoundEngine_StopBackgroundMusic( true );
 		Con::executef(1,"onAndroidStreamEnd");
 	}
+	*/
 	return true;
 }
 
 bool AndroidStreamSource::stop() {
 	//false == stop now
+	//TODO: android
+	/*
 	SoundEngine::SoundEngine_StopBackgroundMusic( false );
 	SoundEngine::SoundEngine_UnloadBackgroundMusicTrack();
+	*/
 	return true;
 }
     
 bool AndroidStreamSource::setVolume( F32 volume) {
+	//TODO: android
+	/*
     SoundEngine::SoundEngine_SetBackgroundMusicVolume(volume);
+    */
     return true;
 }

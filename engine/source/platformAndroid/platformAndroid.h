@@ -47,7 +47,7 @@ public:
     char              appWindowTitle[256];
     bool              quit;
     //TODO: android
-    //T2DView           *ctx;
+    void*          *ctx;
     //T2DViewController *viewController;
     bool              ctxNeedsUpdate;
 

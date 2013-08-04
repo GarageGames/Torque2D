@@ -21,7 +21,6 @@
 //-----------------------------------------------------------------------------
 
 #include "platform/platformFont.h"
-#import <CoreText/CoreText.h>
 
 class AndroidFont : public PlatformFont
 {

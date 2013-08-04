@@ -40,7 +40,8 @@
 
 
 //Luma:	Orientation support
-int gAndroidGameCurrentOrientation = UIDeviceOrientationLandscapeRight;
+//TODO: android
+//int gAndroidGameCurrentOrientation = UIDeviceOrientationLandscapeRight;
 TCPObject* gpTCPObject = NULL;
 char gszTCPAddress[256];
 
@@ -53,6 +54,8 @@ void Platform::outputDebugString( const char *string )
 }
 
 //--------------------------------------
+//TODO: android
+/*
 bool GBitmap::readPNGiPhone(Stream& io_rStream)
 {
     int filesize = io_rStream.getStreamSize();
@@ -89,17 +92,20 @@ bool GBitmap::readPNGiPhone(Stream& io_rStream)
 
     delete [] buff;
     return true;
-}
+}*/
 
 
 //Luma:	Orientation support
 int _AndroidGameGetOrientation()
 {
-    return gAndroidGameCurrentOrientation;
+	//TODO: android
+    //return gAndroidGameCurrentOrientation;
+	return 0;
 }
 void _AndroidGameSetCurrentOrientation(int iOrientation)
 {
-    gAndroidGameCurrentOrientation = iOrientation;
+	//TODO: android
+    //gAndroidGameCurrentOrientation = iOrientation;
 }
 
 S32 _AndroidGetPortraitTouchoffset()
@@ -123,6 +129,8 @@ S32 _AndroidGetPortraitTouchoffset()
 //Luma: Ability to get the Local IP (Internal IP) for an Android as opposed to it's External one
 void _AndroidGetLocalIP(unsigned char *pcIPString)
 {
+	//TODO: android
+	/*
     int a,b,c,d ; 
     struct ifaddrs* interface;
     char* addr;
@@ -159,10 +167,13 @@ void _AndroidGetLocalIP(unsigned char *pcIPString)
     pcIPString[1] = (unsigned char)b;
     pcIPString[2] = (unsigned char)c;
     pcIPString[3] = (unsigned char)d;
+    */
 }
 
 
 //Luma: Make sure that the Android Radio is on before connection via TCP... NOTE: sometimes the Radio wont be ready for immediate use after this is processed... need to see why
+//TODO: android
+/*
 static void TCPObjectConnectCallback(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, const void *dataIn, void *info)
 {
     if(type == kCFSocketConnectCallBack) 
@@ -209,15 +220,8 @@ CFSocketRef CreateCFSocketToURLAndPort(const char *ipAddress, U16 port)
     addr4.sin_port = htons(port);
     inet_aton(ipAddress, &addr4.sin_addr);
 
-    //TODO: objc
-    /*NSData *address = [NSData dataWithBytes:&addr4 length:sizeof(addr4)];
-    CFSocketConnectToAddress(socket, (__bridge CFDataRef)address, -1);
-
-    CFRunLoopSourceRef source;
-    source = CFSocketCreateRunLoopSource(NULL, socket, 1);
-    CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopDefaultMode);
-    CFRelease(source);*/
     
+
     return socket;
 }
 
@@ -247,6 +251,6 @@ void OpenAndroidNetworkingAndConnectToTCPObject(TCPObject *psTCPObject, const ch
     //call socket create function
     CreateCFSocketToURLAndPort(remoteAddr, port);
 }
-
+*/
 
 

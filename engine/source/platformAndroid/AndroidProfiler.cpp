@@ -28,7 +28,7 @@
 //  Copyright 2008  PUAP. All rights reserved.
 //
 
-#import "AndroidProfiler.h"
+#include "AndroidProfiler.h"
 
 //PUAP
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ int	g_AndroidProfilerCount = 0;
 bool g_AndroidProfilerReady = false;
 
 void AndroidProfilerResetAll() {
-	for(int i=0; i<Android_PROFILER_MAX_CALLS; i++){
+	for(int i=0; i<ANDROID_PROFILER_MAX_CALLS; i++){
 		g_AndroidProfilerData[i].name = NULL;
 		g_AndroidProfilerData[i].timeMach = 0;
 		g_AndroidProfilerData[i].timeMS = 0;
@@ -61,7 +61,8 @@ void AndroidProfilerStart( const char *name ) {
 
 		int i = g_AndroidProfilerCount++;
 		g_AndroidProfilerData[i].name = name;
-		g_AndroidProfilerData[i].timeMach = mach_absolute_time();
+		//TODO: android
+		//g_AndroidProfilerData[i].timeMach = mach_absolute_time();
 		g_AndroidProfilerData[i].timeMS = Platform::getRealMilliseconds();
 		g_AndroidProfilerData[i].type = 0;
 		g_AndroidProfilerData[i].invokes = 0;
@@ -77,7 +78,8 @@ void AndroidProfilerEnd( const char *name ) {
 
 		int i = g_AndroidProfilerCount++;
 		g_AndroidProfilerData[i].name = name;
-		g_AndroidProfilerData[i].timeMach = mach_absolute_time();
+		//TODO: android
+		//g_AndroidProfilerData[i].timeMach = mach_absolute_time();
 		g_AndroidProfilerData[i].timeMS = Platform::getRealMilliseconds();
 		g_AndroidProfilerData[i].type = 1;
 		g_AndroidProfilerData[i].invokes = 0;

@@ -34,8 +34,11 @@
 AudioStreamSource* AudioStreamSourceFactory::getNewInstance(const char *filename)
 {
 	S32 len = dStrlen(filename);
+	//TODO: android
+	/*
 	if(len > 3 && !dStricmp(filename + len - 4, ".wav"))
 		return new WavStreamSource(filename);
+		*/
 	
 	return NULL;
 }

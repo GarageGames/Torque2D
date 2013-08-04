@@ -1527,7 +1527,7 @@ void GuiCanvas::renderFrame(bool preRenderOnly, bool bufferSwap /* = true */)
 {
    PROFILE_START(CanvasPreRender);
 
-#ifndef TORQUE_OS_IOS
+#if !defined TORQUE_OS_IOS && !defined TORQUE_OS_ANDROID
     
    if(mRenderFront)
       glDrawBuffer(GL_FRONT);

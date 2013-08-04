@@ -24,11 +24,6 @@
 #ifndef _PLATFORMGL_H_
 #define _PLATFORMGL_H_
 
-#include <QuartzCore/QuartzCore.h>
-//#include <OpenGLES/EAGL.h>
-#include <OpenGLES/ES1/gl.h>
-#include <OpenGLES/ES1/glext.h>
-
 //------------------------------------------------------------------------------
 /// Overrides and implentations of opengl API to account for ogles differences
 // Include after OpenGLES headers
