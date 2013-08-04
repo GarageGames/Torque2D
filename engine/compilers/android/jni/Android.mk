@@ -456,9 +456,7 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/platformAndroid/AndroidWindow.cpp \
 					../../../source/platformAndroid/main.cpp \
 					../../../source/platformAndroid/SoundEngine.cpp \
-					../../../source/platformAndroid/T2DAppDelegate.cpp \
-					../../../source/platformAndroid/T2DView.cpp \
-					../../../source/platformAndroid/T2DViewController.cpp \
+					../../../source/platformAndroid/T2DActivity.cpp \
 					../../../source/sim/scriptGroup.cc \
 					../../../source/sim/scriptObject.cc \
 					../../../source/sim/simBase.cc \
