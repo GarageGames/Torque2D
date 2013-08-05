@@ -440,6 +440,249 @@ void _AndroidGetDeviceIPAddress(char* address) {
 
 }
 
+/**
+ * Initialize an EGL context for the current display.
+ */
+static int engine_init_display(struct engine* engine) {
+    // initialize OpenGL ES and EGL
+
+    /*
+     * Here specify the attributes of the desired configuration.
+     * Below, we select an EGLConfig with at least 8 bits per color
+     * component compatible with on-screen windows
+     */
+    const EGLint attribs[] = {
+            EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+            EGL_BLUE_SIZE, 8,
+            EGL_GREEN_SIZE, 8,
+            EGL_RED_SIZE, 8,
+            //EGL_ALPHA_SIZE, 8,
+            //EGL_DEPTH_SIZE, 24,
+            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+            EGL_NONE
+    };
+
+    static const EGLint ctx_attribs[] = {
+          EGL_CONTEXT_CLIENT_VERSION, 2,
+          EGL_NONE
+        };
+
+    EGLint w, h, dummy, format;
+    EGLint numConfigs;
+    EGLConfig config;
+    EGLSurface surface;
+    EGLContext context;
+
+    EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+
+    eglInitialize(display, 0, 0);
+
+    /* Here, the application chooses the configuration it desires. In this
+     * sample, we have a very simplified selection process, where we pick
+     * the first EGLConfig that matches our criteria */
+    eglChooseConfig(display, attribs, &config, 1, &numConfigs);
+
+    /* EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
+     * guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
+     * As soon as we picked a EGLConfig, we can safely reconfigure the
+     * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
+    eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
+
+    ANativeWindow_setBuffersGeometry(engine->app->window, 0, 0, format);
+
+    surface = eglCreateWindowSurface(display, config, engine->app->window, NULL);
+    context = eglCreateContext(display, config, EGL_NO_CONTEXT, ctx_attribs);
+
+    if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
+    	adprintf("Unable to eglMakeCurrent");
+        return -1;
+    }
+
+    eglQuerySurface(display, surface, EGL_WIDTH, &w);
+    eglQuerySurface(display, surface, EGL_HEIGHT, &h);
+
+    engine->display = display;
+    engine->context = context;
+    engine->surface = surface;
+    engine->width = w;
+    engine->height = h;
+    engine->state.angle = 0;
+
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
+
+    engine->animating = 1;
+
+    glViewport(0, 0, engine->width, engine->height);
+
+    if (SetupCompleted == false) {
+
+    	thePVDMan    = new PandaVideoDataManager();
+    	thePandaBase = new PandaBase();
+    	thePandaBase->SetupVideoData();
+
+    	PandaShader::CreateShaders();
+
+    	loadSplashScreen();
+
+    	PandaAudio::SetupSoundSystem();
+    }
+
+    return 0;
+}
+
+/**
+ * update callback
+ */
+static void engine_update_frame(struct engine* engine) {
+
+	if (bSuspended == true)
+	    return;
+
+	double thisSysTime = timeGetTime();
+	float timeElapsed = (thisSysTime-lastSystemTime)/1000.0f;
+	if (timeElapsed > 1.0f)
+		timeElapsed = 1.0f; // clamp it
+
+
+#ifdef GOOGLE_PLAY
+	if (gOBBPollData == true) {
+		gPollElapsed += timeElapsed;
+		//check every 10 seconds
+		if (gPollElapsed > 10.0f) {
+			PollOBBData();
+			gPollElapsed = 0.0f;
+		}
+	}
+#endif
+
+	if (SetupCompleted == false) {
+		if (timeElapsed > 0.25f) {
+			PandaSetup();
+			PandaRegainedDevice();
+			backBufferFBO[0].Setup(engine_screenWidth(),engine_screenHeight());
+			loadDeviceType();
+			SetupCompleted = true;
+			lastSystemTime = timeGetTime();
+		}
+	} else {
+
+		lastSystemTime = thisSysTime;
+
+		if (isDeviceiPhone()) {
+			if (currentActiveBufferPerc < 1.0f) {
+				if (currentBufferInTransition == false) {
+					currentActiveBufferPerc += timeElapsed * 2.0f;
+					if (currentActiveBufferPerc > 1.0f)
+						currentActiveBufferPerc = 1.0f;
+				}
+			}
+		}
+
+		if (keyboardShowing) {
+			if (keyboardTransition > 0.0f) {
+				keyboardTransition -= timeElapsed * 2.0f;
+				if (keyboardTransition < 0.0f)
+					keyboardTransition = 0.0f;
+			}
+		} else {
+			if (keyboardTransition < 1.0f) {
+				keyboardTransition += timeElapsed * 2.0f;
+				if (keyboardTransition > 1.0f)
+					keyboardTransition = 1.0f;
+			}
+		}
+
+
+		PandaTick(timeElapsed);
+		PandaTickMusic();
+
+	}
+
+}
+
+/**
+ * Just the current frame in the display.
+ */
+static void engine_draw_frame(struct engine* engine) {
+    if (engine->display == NULL) {
+        // No display.
+        return;
+    }
+
+    if (bSuspended == true)
+    	return;
+
+	if (SetupCompleted == false) {
+		return;
+	}
+
+	if (keyboardShowing == true) {
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+	backBufferFBO[currentActiveBuffer].AcceptRender(true);
+
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	PandaDraw();
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	int height = engine_screenHeight() - (keyboardTransition * (engine_screenHeight()/2));
+
+	//draw tp screen
+	if (isDeviceiPhone()) {
+
+		float scale = 1.0f;
+		//shrink it to fit screen if we have blown it up
+		//if (engine->height > 0 && engine->width == 1024 && engine->height < 768) {
+		//	scale = 1.0f / ARTIF_SCALE;
+		//}
+
+		if (currentActiveBufferPerc < 1.0f)
+			backBufferFBO[otherBuffer].bitmap->DrawBuffer((engine_screenWidth()/2 - ((engine_screenWidth()*currentActiveBufferPerc) * currentBufferDirection)) * scale,height * scale, scale);
+		backBufferFBO[currentActiveBuffer].bitmap->DrawBuffer((engine_screenWidth()/2 + ((engine_screenWidth()-(engine_screenWidth()*currentActiveBufferPerc)) * currentBufferDirection)) * scale,height * scale, scale);
+
+	} else {
+		float scale = 1.0f;
+		float width = engine_screenWidth()/2;
+		//shrink it to fit screen if we have blown it up
+		//if (engine->height > 0 && engine->width == 1024 && engine->height < 768) {
+		//	scale = 1.0f / ARTIF_SCALE;
+		//}
+
+		backBufferFBO[currentActiveBuffer].bitmap->DrawBuffer(width*scale,height*scale, scale);
+	}
+
+    eglSwapBuffers(engine->display, engine->surface);
+}
+
+/**
+ * Tear down the EGL context currently associated with the display.
+ */
+static void engine_term_display(struct engine* engine, bool shutdown) {
+
+	if (shutdown == true) {
+
+	}
+
+    if (engine->display != EGL_NO_DISPLAY) {
+        eglMakeCurrent(engine->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+        if (engine->context != EGL_NO_CONTEXT) {
+            eglDestroyContext(engine->display, engine->context);
+        }
+        if (engine->surface != EGL_NO_SURFACE) {
+            eglDestroySurface(engine->display, engine->surface);
+        }
+        eglTerminate(engine->display);
+    }
+    engine->animating = 0;
+    engine->display = EGL_NO_DISPLAY;
+    engine->context = EGL_NO_CONTEXT;
+    engine->surface = EGL_NO_SURFACE;
+}
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
 
