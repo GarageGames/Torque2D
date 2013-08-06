@@ -28,9 +28,9 @@
 //  Copyright 2008 Pick Up And Play. All rights reserved.
 //
 
-#import "AndroidGL2ES.h"
-#import "platform/platformAssert.h"
-#import "AndroidOGLVideo.h"
+#include "AndroidGL2ES.h"
+#include "platform/platformAssert.h"
+#include "AndroidOGLVideo.h"
 
 #include "math/mMatrix.h"
 #include "math/mPoint.h"

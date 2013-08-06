@@ -512,7 +512,7 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 #					../../../source/testing/unitTesting.cc
  
 			   
-LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -O0 -fsigned-char
+LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O0 -fsigned-char
 				   
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lz -lOpenSLES
 LOCAL_STATIC_LIBRARIES := android_native_app_glue libpng libjpeg

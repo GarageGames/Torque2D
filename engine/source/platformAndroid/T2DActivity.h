@@ -19,11 +19,11 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
+#include "platformAndroid/AndroidGL2ES.h"
 
+class T2DActivity {
 
-
-class T2DViewController {
-
+private:
 	// The pixel dimensions of the backbuffer
 	GLint backingWidth;
 	GLint backingHeight;
@@ -51,4 +51,9 @@ public:
 
     void supportLandscape( bool );
     void supportPortrait( bool );
-}
+    bool createFramebuffer();
+    void destroyFramebuffer();
+    void update();
+    void finishShutdown();
+    void finishGLSetup();
+};

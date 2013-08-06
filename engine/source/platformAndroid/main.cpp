@@ -19,10 +19,9 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
-#import "platformAndroid/platformAndroid.h"
-#import "platformAndroid/T2DAppDelegate.h"
-#import "platformAndroid/AndroidEvents.h"
-#import "platformAndroid/AndroidUtil.h"
+#include "platformAndroid/platformAndroid.h"
+#include "platformAndroid/AndroidEvents.h"
+#include "platformAndroid/AndroidUtil.h"
 #include "platform/threads/thread.h"
 #include "game/gameInterface.h"
 #include "io/fileObject.h"
@@ -34,10 +33,10 @@ S32 gLastStart = 0;
 bool appIsRunning = true;
 
 //TODO: android
-/*
-int _AndroidRunTorqueMain( id appID, UIView * Window, T2DViewController *viewController)
-{
 
+int _AndroidRunTorqueMain()
+{
+/*
     UIApplication *app = [UIApplication sharedApplication];
     platState.viewController = viewController;
     
@@ -57,8 +56,9 @@ int _AndroidRunTorqueMain( id appID, UIView * Window, T2DViewController *viewCon
 	{
 		return 0;
 	}
+	*/
 }
-*/
+
 
 void _AndroidGameInnerLoop()
 {

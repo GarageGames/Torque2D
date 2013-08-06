@@ -20,10 +20,10 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#import "platform/platform.h"
-#import "platformAndroid/platformAndroid.h"
-#import "platformAndroid/AndroidFont.h"
-#import "string/Unicode.h"
+#include "platform/platform.h"
+#include "platformAndroid/platformAndroid.h"
+#include "platformAndroid/AndroidFont.h"
+#include "string/Unicode.h"
 
 //------------------------------------------------------------------------------
 // New Unicode capable font class.

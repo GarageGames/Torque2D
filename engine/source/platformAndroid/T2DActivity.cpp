@@ -20,11 +20,43 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#import "T2DViewController.h"
-#import "platformAndroid/platformGL.h"
+#include "platformAndroid/platformGL.h"
 #include "platformAndroid/AndroidWindow.h"
 #include "platformAndroid/platformAndroid.h"
 #include "graphics/dgl.h"
+
+#include <errno.h>
+#include <EGL/egl.h>
+//#include <android/sensor.h>
+#include <android/log.h>
+#include <android_native_app_glue.h>
+#include <android/asset_manager.h>
+
+/**
+ * Our saved state data.
+ */
+struct saved_state {
+    float angle;
+    int32_t x;
+    int32_t y;
+};
+
+/**
+ * Shared state for our app.
+ */
+struct engine {
+    struct android_app* app;
+
+    int animating;
+    EGLDisplay display;
+    EGLSurface surface;
+    EGLContext context;
+    int32_t width;
+    int32_t height;
+    struct saved_state state;
+};
+
+static struct engine engine;
 
 extern AndroidPlatState platState;
 
@@ -39,6 +71,7 @@ extern void _AndroidGameInnerLoop();
 extern void _AndroidGameResignActive();
 extern void _AndroidGameBecomeActive();
 extern void _AndroidGameWillTerminate();
+extern S32 _AndroidGameGetOrientation();
 
 // Store current orientation for easy access
 extern void _AndroidGameChangeOrientation(S32 newOrientation);
@@ -52,7 +85,7 @@ bool _AndroidTorqueFatalError = false;
 extern U32  AccelerometerUpdateMS;
 extern void _AndroidGameInnerLoop();
 
-bool createFramebuffer() {
+bool T2DActivity::createFramebuffer() {
 	
 	glGenFramebuffersOES(1, &viewFramebuffer);
 	glGenRenderbuffersOES(1, &viewRenderbuffer);
@@ -76,14 +109,14 @@ bool createFramebuffer() {
 	if(glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES) != GL_FRAMEBUFFER_COMPLETE_OES) {
 		//TODO: android
 		//NSLog(@"failed to make complete framebuffer object %x", glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES));
-		return NO;
+		return false;
 	}
 	
-	return YES;
+	return true;
 }
 
 
-void destroyFramebuffer() {
+void T2DActivity::destroyFramebuffer() {
 	
 	glDeleteFramebuffersOES(1, &viewFramebuffer);
 	viewFramebuffer = 0;
@@ -97,7 +130,7 @@ void destroyFramebuffer() {
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-void finishGLSetup()
+void T2DActivity::finishGLSetup()
 {
     //TODO: android
     //self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
@@ -118,14 +151,14 @@ void finishGLSetup()
     //[self.view setMultipleTouchEnabled:YES];
     
 	_AndroidTorqueFatalError = false;
-	if(!_AndroidRunTorqueMain( appDelegate, self.view, self ))
+	if(!_AndroidRunTorqueMain())
 	{
 		_AndroidTorqueFatalError = true;
 		return;
 	}
 }
 
-void finishShutdown()
+void T2DActivity::finishShutdown()
 {
 	//TODO: android
     // Release any retained subviews of the main view.
@@ -136,12 +169,11 @@ void finishShutdown()
     //self.context = nil;
 }
 
-void update()
+void T2DActivity::update()
 {
     _AndroidGameInnerLoop();
 }
 
-extern Vector<Event *> TouchMoveEvents;
 Vector<Point2I> lastTouches;
 
 // Handle touch and keyboard input from android OS
@@ -169,10 +201,12 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
         		}
 
         	    S32 orientation = _AndroidGameGetOrientation();
-        	    if (UIDeviceOrientationIsPortrait(orientation))
+        	    //TODO: android
+        	    /* if (UIDeviceOrientationIsPortrait(orientation))
         	    {
         	    	point.y -= _AndroidGetPortraitTouchoffset();
         	    }
+        	    */
         	    createMouseDownEvent(i, point.x, point.y, touchCount);
         	}
 
@@ -189,11 +223,12 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				Point2I prevPoint = lastTouches[i];
 
 				S32 orientation = _AndroidGameGetOrientation();
-				if (UIDeviceOrientationIsPortrait(orientation))
+				//TODO: android
+				/*if (UIDeviceOrientationIsPortrait(orientation))
 				{
 					point.y -= _AndroidGetPortraitTouchoffset();
 					prevPoint.y -= _AndroidGetPortraitTouchoffset();
-				}
+				}*/
 				createMouseUpEvent(i, point.x, point.y, prevPoint.x, prevPoint.y, touchCount);
 
     	        //Luma: Tap support
@@ -217,11 +252,13 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				Point2I prevPoint = lastTouches[i];
 
 				S32 orientation = _AndroidGameGetOrientation();
+				//TODO: android
+				/*
 				if (UIDeviceOrientationIsPortrait(orientation))
 				{
 					point.y -= _AndroidGetPortraitTouchoffset();
 					prevPoint.y -= _AndroidGetPortraitTouchoffset();
-				}
+				}*/
 				createMouseMoveEvent(i, point.x, point.y, prevPoint.x, prevPoint.y);
 
 				lastTouches[i].x = point.x;
@@ -241,11 +278,14 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				Point2I prevPoint = lastTouches[i];
 
 				S32 orientation = _AndroidGameGetOrientation();
+				//TODO: android
+				/*
 				if (UIDeviceOrientationIsPortrait(orientation))
 				{
 					point.y -= _AndroidGetPortraitTouchoffset();
 					prevPoint.y -= _AndroidGetPortraitTouchoffset();
 				}
+				*/
 				createMouseUpEvent(i, point.x, point.y, prevPoint.x, prevPoint.y, touchCount);
 
 				//Luma: Tap support
@@ -369,8 +409,6 @@ char* _AndroidLoadFile(const char* fileName, int *size) {
 void _AndroidGetDeviceIPAddress(char* address) {
 
 	 int fd;
-	 struct ifreq ifr;
-
 	 strcpy(address, "error");
 
 	 // Attaches the current thread to the JVM.
@@ -458,7 +496,7 @@ static int engine_init_display(struct engine* engine) {
             EGL_RED_SIZE, 8,
             //EGL_ALPHA_SIZE, 8,
             //EGL_DEPTH_SIZE, 24,
-            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
             EGL_NONE
     };
 
@@ -515,17 +553,16 @@ static int engine_init_display(struct engine* engine) {
 
     glViewport(0, 0, engine->width, engine->height);
 
-    if (SetupCompleted == false) {
+    if (SetupCompleted == false)
+    {
 
-    	thePVDMan    = new PandaVideoDataManager();
-    	thePandaBase = new PandaBase();
-    	thePandaBase->SetupVideoData();
+    	//TODO: android
 
-    	PandaShader::CreateShaders();
-
-    	loadSplashScreen();
-
-    	PandaAudio::SetupSoundSystem();
+    }
+    else
+    {
+    	if(!_AndroidTorqueFatalError)
+    	        _AndroidGameBecomeActive();
     }
 
     return 0;
@@ -543,18 +580,6 @@ static void engine_update_frame(struct engine* engine) {
 	float timeElapsed = (thisSysTime-lastSystemTime)/1000.0f;
 	if (timeElapsed > 1.0f)
 		timeElapsed = 1.0f; // clamp it
-
-
-#ifdef GOOGLE_PLAY
-	if (gOBBPollData == true) {
-		gPollElapsed += timeElapsed;
-		//check every 10 seconds
-		if (gPollElapsed > 10.0f) {
-			PollOBBData();
-			gPollElapsed = 0.0f;
-		}
-	}
-#endif
 
 	if (SetupCompleted == false) {
 		if (timeElapsed > 0.25f) {
@@ -593,10 +618,7 @@ static void engine_update_frame(struct engine* engine) {
 			}
 		}
 
-
-		PandaTick(timeElapsed);
-		PandaTickMusic();
-
+		_AndroidGameInnerLoop();
 	}
 
 }
@@ -621,19 +643,20 @@ static void engine_draw_frame(struct engine* engine) {
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
-	backBufferFBO[currentActiveBuffer].AcceptRender(true);
+	//backBufferFBO[currentActiveBuffer].AcceptRender(true);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	PandaDraw();
+	//TODO: android
+	//PandaDraw();
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	int height = engine_screenHeight() - (keyboardTransition * (engine_screenHeight()/2));
+	//int height = engine_screenHeight() - (keyboardTransition * (engine_screenHeight()/2));
 
 	//draw tp screen
-	if (isDeviceiPhone()) {
+	/*if (isDeviceiPhone()) {
 
 		float scale = 1.0f;
 		//shrink it to fit screen if we have blown it up
@@ -655,7 +678,7 @@ static void engine_draw_frame(struct engine* engine) {
 
 		backBufferFBO[currentActiveBuffer].bitmap->DrawBuffer(width*scale,height*scale, scale);
 	}
-
+*/
     eglSwapBuffers(engine->display, engine->surface);
 }
 
@@ -665,7 +688,9 @@ static void engine_draw_frame(struct engine* engine) {
 static void engine_term_display(struct engine* engine, bool shutdown) {
 
 	if (shutdown == true) {
-
+		_AndroidGameWillTerminate();
+	} else {
+		 _AndroidGameResignActive();
 	}
 
     if (engine->display != EGL_NO_DISPLAY) {
@@ -684,37 +709,8 @@ static void engine_term_display(struct engine* engine, bool shutdown) {
     engine->surface = EGL_NO_SURFACE;
 }
 
-- (void)applicationDidFinishLaunching:(UIApplication *)application {
-
-	[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-	//Also we set the currentRotation up so its not invalid
-	currentOrientation = [UIDevice currentDevice].orientation;
-	//So we make a selector to handle that, called didRotate (lower down in the code)
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(didRotate:)
-												 name:UIDeviceOrientationDidChangeNotification
-											   object:nil];
-}
-
-- (void)applicationWillResignActive:(UIApplication *)application
-{
-    _AndroidGameResignActive();
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    if(!_AndroidTorqueFatalError)
-        _AndroidGameBecomeActive();
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-    _AndroidGameWillTerminate();
-
-	[[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-}
-
-- (void)didRotate:(NSNotification *)notification
+//TODO: android rotate
+/*- (void)didRotate:(NSNotification *)notification
 {
     //Default to landscape left
 	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
@@ -725,14 +721,7 @@ static void engine_term_display(struct engine* engine, bool shutdown) {
 		//Tell the rest of the engine
 		_AndroidGameChangeOrientation(currentOrientation);
 	}
-}
-
-- (void) runMainLoop
-{
-	_AndroidGameInnerLoop();
-}
-*/
-
+}*/
 
 void supportLandscape( bool enable)
 {
