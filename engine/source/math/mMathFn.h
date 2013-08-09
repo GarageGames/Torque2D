@@ -33,14 +33,6 @@
 
 #include <math.h>
 
-// Remove a couple of annoying macros, if they are present (In VC 6, they are.)
-#ifdef min
-	#undef min
-#endif
-#ifdef max
-	#undef max
-#endif
-
 class MatrixF;
 class PlaneF;
 

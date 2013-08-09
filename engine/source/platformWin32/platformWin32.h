@@ -30,19 +30,53 @@
 #  endif
 #endif
 
-
 //Luma:	add WINVER definition if it doesn't exist.. Is that our bad that it isn't on our systems already?
 #ifndef	WINVER
 #define WINVER  0x0500      /* version 5.0 */
 #endif	//!WINVER
-
 
 // define this so that we can use WM_MOUSEWHEEL messages...
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0400
 #endif
 
+//One does not simply include Windows.h
+#define NOGDICAPMASKS
+//#define NOSYSMETRICS
+//#define NOMENUS
+#define NOICONS
+#define NOKEYSTATES
+//#define NOSYSCOMMANDS
+#define NORASTEROPS
+#define NOATOM
+//#define NOCLIPBOARD
+#define NODRAWTEXT
+#define NOKERNEL
+//#define NONLS
+#define NOMEMMGR
+#define NOMETAFILE
+#define NOOPENFILE
+#define NOSCROLL
+#define NOSERVICE
+#define NOSOUND
+//#define NOTEXTMETRIC
+#define NOWH
+#define NOCOMM
+#define NOKANJI
+#define NOHELP
+#define NOPROFILER
+#define NODEFERWINDOWPOS
+#define NOMCX
+#define NOCRYPT
+#define NOTAPE
+#define NOIMAGE
+#define NOPROXYSTUB
+#define NORPC
+#define NOMINMAX
+//#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
 #include <windows.h>
+
 #ifndef _PLATFORM_H_
 #include "platform/platform.h"
 #endif
