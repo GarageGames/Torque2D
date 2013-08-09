@@ -21,6 +21,8 @@
 //-----------------------------------------------------------------------------
 #include "platformAndroid/AndroidGL2ES.h"
 
+extern void adprintf(const char* fmt,...);
+
 class T2DActivity {
 
 private:

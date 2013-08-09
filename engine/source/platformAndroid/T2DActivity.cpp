@@ -31,6 +31,10 @@
 #include <android/log.h>
 #include <android_native_app_glue.h>
 #include <android/asset_manager.h>
+#include <sstream>
+#include <list>
+#include <unistd.h>
+#include <time.h>
 
 /**
  * Our saved state data.
@@ -60,6 +64,12 @@ static struct engine engine;
 
 extern AndroidPlatState platState;
 
+bool keyboardShowing = false;
+float keyboardTransition = 1.0f;
+bool bSuspended = false;
+bool SetupCompleted = false;
+double lastSystemTime = 0;
+
 #define USE_DEPTH_BUFFER 0
 
 extern int _AndroidRunTorqueMain();
@@ -84,6 +94,15 @@ bool _AndroidTorqueFatalError = false;
 //-Mat we should update the accelereometer once per frame
 extern U32  AccelerometerUpdateMS;
 extern void _AndroidGameInnerLoop();
+
+double timeGetTime() {
+
+    struct timeval  tv;
+    gettimeofday(&tv, NULL);
+
+    return ((tv.tv_sec) * 1000.0 + (tv.tv_usec) / 1000.0);
+
+}
 
 bool T2DActivity::createFramebuffer() {
 	
@@ -174,7 +193,7 @@ void T2DActivity::update()
     _AndroidGameInnerLoop();
 }
 
-Vector<Point2I> lastTouches;
+Vector<Point2I> rawLastTouches;
 
 // Handle touch and keyboard input from android OS
 static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
@@ -192,12 +211,12 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
         		point.x = AMotionEvent_getX(event, i);
         		point.y = AMotionEvent_getY(event, i);
 
-        		if (lastTouches.size() < i)
-        			lastTouches.push_back(point);
+        		if (rawLastTouches.size() < i)
+        			rawLastTouches.push_back(point);
         		else
         		{
-        			lastTouches[i].x = point.x;
-        			lastTouches[i].y = point.y;
+        			rawLastTouches[i].x = point.x;
+        			rawLastTouches[i].y = point.y;
         		}
 
         	    S32 orientation = _AndroidGameGetOrientation();
@@ -220,7 +239,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				Point2I point;
 				point.x = AMotionEvent_getX(event, i);
 				point.y = AMotionEvent_getY(event, i);
-				Point2I prevPoint = lastTouches[i];
+				Point2I prevPoint = rawLastTouches[i];
 
 				S32 orientation = _AndroidGameGetOrientation();
 				//TODO: android
@@ -249,7 +268,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				Point2I point;
 				point.x = AMotionEvent_getX(event, i);
 				point.y = AMotionEvent_getY(event, i);
-				Point2I prevPoint = lastTouches[i];
+				Point2I prevPoint = rawLastTouches[i];
 
 				S32 orientation = _AndroidGameGetOrientation();
 				//TODO: android
@@ -261,8 +280,8 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				}*/
 				createMouseMoveEvent(i, point.x, point.y, prevPoint.x, prevPoint.y);
 
-				lastTouches[i].x = point.x;
-				lastTouches[i].y = point.y;
+				rawLastTouches[i].x = point.x;
+				rawLastTouches[i].y = point.y;
 
 			}
         }
@@ -275,7 +294,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				Point2I point;
 				point.x = AMotionEvent_getX(event, i);
 				point.y = AMotionEvent_getY(event, i);
-				Point2I prevPoint = lastTouches[i];
+				Point2I prevPoint = rawLastTouches[i];
 
 				S32 orientation = _AndroidGameGetOrientation();
 				//TODO: android
@@ -583,26 +602,13 @@ static void engine_update_frame(struct engine* engine) {
 
 	if (SetupCompleted == false) {
 		if (timeElapsed > 0.25f) {
-			PandaSetup();
-			PandaRegainedDevice();
-			backBufferFBO[0].Setup(engine_screenWidth(),engine_screenHeight());
-			loadDeviceType();
+			//TODO: android load
 			SetupCompleted = true;
 			lastSystemTime = timeGetTime();
 		}
 	} else {
 
 		lastSystemTime = thisSysTime;
-
-		if (isDeviceiPhone()) {
-			if (currentActiveBufferPerc < 1.0f) {
-				if (currentBufferInTransition == false) {
-					currentActiveBufferPerc += timeElapsed * 2.0f;
-					if (currentActiveBufferPerc > 1.0f)
-						currentActiveBufferPerc = 1.0f;
-				}
-			}
-		}
 
 		if (keyboardShowing) {
 			if (keyboardTransition > 0.0f) {
@@ -756,4 +762,49 @@ ConsoleFunction(supportPortrait, void, 2, 2, "supportPortrait( bool ) "
     
     supportPortrait(enable);
 }
+
+void adprintf(const char* fmt,...) {
+
+	va_list argptr;
+	int cnt;
+	char s[4096];
+	time_t now;
+
+	va_start(argptr,fmt);
+	cnt = vsprintf(s,fmt,argptr);
+	va_end(argptr);
+
+	time(&now);
+	tm* t = localtime(&now);
+
+	std::stringstream ss;
+	ss.clear();
+	ss << "[";
+	ss << (t->tm_year + 1900);
+	ss << "/";
+	if (t->tm_mon < 9)
+		ss << "0";
+	ss << (t->tm_mon+1);
+	ss << "/";
+	if (t->tm_mday < 10)
+		ss << "0";
+	ss << t->tm_mday;
+	ss << " ";
+	if (t->tm_hour < 10)
+		ss << "0";
+	ss << t->tm_hour;
+	ss << ":";
+	if (t->tm_min < 10)
+		ss << "0";
+	ss << t->tm_min;
+	ss << ":";
+	if (t->tm_sec < 10)
+		ss << "0";
+	ss << t->tm_sec;
+	ss << "] ";
+	ss << s;
+
+    __android_log_print(ANDROID_LOG_INFO, "Torque2D", "%s", ss.str().c_str());
+}
+
 
