@@ -418,36 +418,28 @@ void CompositeSprite::onTamlCustomRead( const TamlCustomNodes& customNodes )
 
 //------------------------------------------------------------------------------
 
-const Vector2 CompositeSprite::getLocalPosition( const Vector2& worldPosition ) const
- {
-	const b2Transform& renderTransform = getRenderTransform();
-    return b2MulT( renderTransform, worldPosition );
- }
-
-//------------------------------------------------------------------------------
-
-const Vector2 CompositeSprite::getLogicalPosition( const Vector2& worldPosition ) const
+const Vector2 CompositeSprite::getLogicalPoint( const Vector2& worldPosition ) const
  {
 	const b2Transform& renderTransform = getRenderTransform();
     const Vector2 localPosition = b2MulT( renderTransform, worldPosition );
     
-	Vector2 logicalPosition;
-
     switch( mBatchLayoutType )
     {
         case NO_LAYOUT:
-			return localPosition;
+			break;
 
         case RECTILINEAR_LAYOUT:
 			{
-				const Vector2 spriteStride = getDefaultSpriteStride();
-				
-				if(logicalPosition.x > 0)
+				//FIXME
+				const Vector2 spriteStride = getDefaultSpriteStride();				
+				Vector2 logicalPosition;
+
+				if(localPosition.x > 0)
 					logicalPosition.x = mFloor(localPosition.x / spriteStride.x);
 				else
 					logicalPosition.x = mCeil(localPosition.x / spriteStride.x);
 
-				if(logicalPosition.y > 0)
+				if(localPosition.y > 0)
 					logicalPosition.y = mCeil(localPosition.y / spriteStride.y);
 				else
 					logicalPosition.y = mFloor(localPosition.y / spriteStride.y);
@@ -457,14 +449,16 @@ const Vector2 CompositeSprite::getLogicalPosition( const Vector2& worldPosition 
 
         case ISOMETRIC_LAYOUT:
 			//TODO
+			//
             break;
 
         case CUSTOM_LAYOUT:
 			//TODO
+			// custom function pointer?
             break;
 
         default:
-            Con::warnf( "CompositeSprite::getLocalPosition() - Unknown layout type encountered." );
+            Con::warnf( "CompositeSprite::getLogicalPoint() - Unknown layout type encountered." );
     }
 
 	return localPosition;
@@ -486,8 +480,6 @@ typeSpriteBatchQueryResultVector CompositeSprite::pickArea(const Vector2& worldS
         // Return nothing.
         return NULL;
     }
-
-	pSpriteBatchQuery->clearQuery();
 
     // Calculate normalized AABB.
     b2AABB aabb;
@@ -512,11 +504,8 @@ typeSpriteBatchQueryResultVector CompositeSprite::pickArea(const Vector2& worldS
     // Perform query.
     pSpriteBatchQuery->queryOOBB( localAABB, oobb_polygon, true );
 
-    // Fetch result count.
-    const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
-
     // Finish if no results.
-    if (resultCount == 0 )
+    if (pSpriteBatchQuery->getQueryResultsCount() == 0 )
         return NULL;
 
     // Fetch results.
@@ -539,8 +528,6 @@ typeSpriteBatchQueryResultVector CompositeSprite::pickRay(const Vector2& worldSt
         // Return nothing.
         return NULL;
     }
-
-	pSpriteBatchQuery->clearQuery();
 	
     // Fetch the render transform.
     const b2Transform& renderTransform = getRenderTransform();
@@ -555,11 +542,8 @@ typeSpriteBatchQueryResultVector CompositeSprite::pickRay(const Vector2& worldSt
     // Sanity!
     AssertFatal( pSpriteBatchQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );
 
-    // Fetch result count.
-    const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
-
     // Finish if no results.
-    if (resultCount == 0 )
+    if (pSpriteBatchQuery->getQueryResultsCount() == 0 )
         return NULL;
 
     // Sort ray-cast result.
@@ -574,31 +558,20 @@ typeSpriteBatchQueryResultVector CompositeSprite::pickRay(const Vector2& worldSt
 typeSpriteBatchQueryResultVector CompositeSprite::pickPoint(const Vector2& worldPosition)
 {
     // Fetch sprite batch query and clear results.
-    SpriteBatchQuery* pSpriteBatchQuery = getSpriteBatchQuery( true );
+    SpriteBatchQuery* pSpriteBatchQuery = getSpriteBatchQuery(true);
 
     // Is the sprite batch query available?
-    if ( pSpriteBatchQuery == NULL )
+    if(pSpriteBatchQuery == NULL)
     {
-        // No, so warn.
-        Con::warnf( "CompositeSprite::pickPoint() - Cannot pick sprites if clipping mode is off." );
-
-        // Return nothing.
+        Con::warnf("CompositeSprite::pickPoint() - Cannot pick sprites if clipping mode is off.");
         return NULL;
     }
 
-	pSpriteBatchQuery->clearQuery();
-
     // Transform into local space.
-	const Vector2 point = getLocalPosition(worldPosition);
+	const Vector2 point = getLocalPoint(worldPosition);
 
-    // Perform query.
-    pSpriteBatchQuery->queryPoint( point, true );
-
-    // Fetch result count.
-    const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
-
-    // Finish if no results.
-    if (resultCount == 0 )
+	// Finish if no results.
+    if(pSpriteBatchQuery->queryPoint(point, true) == 0)
         return NULL;
 
     // Fetch results.

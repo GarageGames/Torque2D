@@ -83,11 +83,9 @@ bool SimObject::registerObject()
         mIdString = StringTable->insert( idBuffer );
     }
 
-   AssertFatal(Sim::gIdDictionary && Sim::gNameDictionary, 
-      "SimObject::registerObject - tried to register an object before Sim::init()!");
+   AssertFatal(Sim::gIdDictionary && Sim::gNameDictionary, "SimObject::registerObject - tried to register an object before Sim::init()!");
 
-   Sim::gIdDictionary->insert(this);	
-
+   Sim::gIdDictionary->insert(this);
    Sim::gNameDictionary->insert(this);
 
     // Notify object
@@ -98,8 +96,8 @@ bool SimObject::registerObject()
 
    AssertFatal(!ret || isProperlyAdded(), "Object did not call SimObject::onAdd()");
 
-    if ( isMethod( "onAdd" ) )
-        Con::executef( this, 1, "onAdd" );
+    if(isMethod("onAdd"))
+        Con::executef(this, 1, "onAdd");
 
    return ret;
 }

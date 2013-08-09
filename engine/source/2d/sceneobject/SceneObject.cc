@@ -226,7 +226,7 @@ SceneObject::SceneObject() :
     mAutoSizing = false;
 
     // Set size.
-    setSize( Vector2::getOne() );
+    setSize(Vector2::getOne());
 }
 
 //-----------------------------------------------------------------------------
@@ -234,7 +234,7 @@ SceneObject::SceneObject() :
 SceneObject::~SceneObject()
 {
     // Are we in a Scene?
-    if ( mpScene )
+    if(mpScene)
     {
         // Yes, so remove from Scene.
         mpScene->removeFromScene( this );
@@ -319,7 +319,7 @@ void SceneObject::initPersistFields()
     addField("SleepingCallback", TypeBool, Offset(mSleepingCallback, SceneObject), &writeSleepingCallback, "");
 
     /// Scene.
-    addProtectedField("scene", TypeSimObjectPtr, Offset(mpScene, SceneObject), &setScene, &defaultProtectedGetFn, &writeScene, "");
+    addProtectedField("Scene", TypeSimObjectPtr, Offset(mpScene, SceneObject), &setScene, &defaultProtectedGetFn, &writeScene, "");
 }
 
 //-----------------------------------------------------------------------------
@@ -331,11 +331,10 @@ bool SceneObject::onAdd()
         return false;
 
     // Add to any target scene.
-    if ( mpTargetScene )
+    if( mpTargetScene)
     {
         // Add to the target scene.
         mpTargetScene->addToScene(this);
-
         mpTargetScene = NULL;
     }
    
@@ -351,8 +350,8 @@ void SceneObject::onRemove()
     detachGui();
 
     // Remove from Scene.
-    if ( getScene() )
-        getScene()->removeFromScene( this );
+    if(getScene())
+        getScene()->removeFromScene(this);
 
     // Call Parent.
     Parent::onRemove();
@@ -360,29 +359,27 @@ void SceneObject::onRemove()
 
 //-----------------------------------------------------------------------------
 
-void SceneObject::onDestroyNotify( SceneObject* pSceneObject )
+void SceneObject::onDestroyNotify(SceneObject* pSceneObject)
 {
 }
 
 //-----------------------------------------------------------------------------
 
-void SceneObject::OnRegisterScene( Scene* pScene )
+void SceneObject::OnRegisterScene(Scene* pScene)
 {
-    // Sanity!
-    AssertFatal( mpScene == NULL, "Cannot register to a scene if already registered." );
-    AssertFatal( mpBody == NULL, "Cannot create a physics body if one already exists." );
+    AssertFatal(mpScene == NULL, "Cannot register to a scene if already registered.");
+    AssertFatal(mpBody == NULL, "Cannot create a physics body if one already exists.");
 
-    // Initialize contact gathering.
     initializeContactGathering();
 
-    // Set scene.
     mpScene = pScene;
 
     // Create the physics body.
-    mpBody = pScene->getWorld()->CreateBody( &mBodyDefinition );
+    mpBody = pScene->getWorld()->CreateBody(&mBodyDefinition);
 
     // Set active status.
-    if ( !isEnabled() ) mpBody->SetActive( false );
+    if ( !isEnabled() ) 
+		mpBody->SetActive( false );
 
     // Create fixtures.
 	for( typeCollisionFixtureDefMap::iterator itr = mCollisionFixtureDefs.begin(); itr != mCollisionFixtureDefs.end(); itr++ )
@@ -479,7 +476,6 @@ void SceneObject::OnUnregisterScene( Scene* pScene )
     // Destroy world proxy Id.
     if ( mWorldProxyId != -1 )
     {
-
         mpScene->getWorldQuery()->remove( this );
         mWorldProxyId = -1;
     }
@@ -548,8 +544,8 @@ void SceneObject::preIntegrate( const F32 totalTime, const F32 elapsedTime, Debu
     mSpatialDirty = false;
 
     mPreTickPosition = mRenderPosition = getPosition();
-    mPreTickAngle    = mRenderAngle = getAngle();
-    mPreTickAABB     = mCurrentAABB;
+    mPreTickAngle = mRenderAngle = getAngle();
+    mPreTickAABB = mCurrentAABB;
 
     // Calculate render OOBB.
     CoreMath::mCalculateOOBB( getLocalSizedOOBB(), getTransform(), mRenderOOBB );
@@ -679,6 +675,7 @@ void SceneObject::interpolateObject( const F32 timeDelta )
                 relativeAngle -= b2_pi2;
             else if ( relativeAngle < -b2_pi )
                 relativeAngle += b2_pi2;
+
             mRenderAngle = angle - (relativeAngle * timeDelta);
         }
         else
@@ -2214,6 +2211,7 @@ S32 SceneObject::createPolygonBoxCollisionShape( const F32 width, const F32 heig
         Con::errorf("SceneObject::createPolygonBoxCollisionShape() - Invalid width of %g.", width);
         return -1;
     }
+
     if ( height <= 0.0f )
     {
         Con::errorf("SceneObject::createPolygonBoxCollisionShape() - Invalid height of %g.", height);
@@ -2221,14 +2219,14 @@ S32 SceneObject::createPolygonBoxCollisionShape( const F32 width, const F32 heig
     }
 
     // Configure fixture definition.
-    b2FixtureDef* pFixtureDef = new b2FixtureDef( mDefaultFixture );
-    b2PolygonShape* pShape    = new b2PolygonShape();
-    pShape->SetAsBox( width * 0.5f, height * 0.5f, localCentroid, 0.0f );
+    b2FixtureDef* pFixtureDef = new b2FixtureDef(mDefaultFixture);
+    b2PolygonShape* pShape = new b2PolygonShape();
+    pShape->SetAsBox(width * 0.5f, height * 0.5f, localCentroid, 0.0f);
     pFixtureDef->shape = pShape;
 
 	const U32 lID = ++sCollisionShapeMasterSerialId;
 
-    if ( mpScene )
+    if(mpScene)
     {
         // Create and push fixture.
 		mCollisionFixtures.insert(lID, mpBody->CreateFixture(pFixtureDef));
@@ -2241,7 +2239,7 @@ S32 SceneObject::createPolygonBoxCollisionShape( const F32 width, const F32 heig
     }
 
     // Push fixture definition.
-	mCollisionFixtureDefs.insert( lID, pFixtureDef );
+	mCollisionFixtureDefs.insert(lID, pFixtureDef);
 
 	return lID;
 }

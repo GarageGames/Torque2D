@@ -882,7 +882,7 @@ ConsoleMethod(CompositeSprite, getLocalPosition, const char*, 3, 4,    "() - Get
         return NULL;
     }
 
-	return object->getLocalPosition(position).scriptThis();
+	return object->getLocalPoint(position).scriptThis();
 }
 
 ConsoleMethod(CompositeSprite, getLogicalPosition, const char*, 3, 4,    "() - Gets a logical position from a world position.\n"
@@ -909,7 +909,7 @@ ConsoleMethod(CompositeSprite, getLogicalPosition, const char*, 3, 4,    "() - G
         return NULL;
     }
 
-	return object->getLogicalPosition(position).scriptThis();
+	return object->getLogicalPoint(position).scriptThis();
 }
 
 //-----------------------------------------------------------------------------

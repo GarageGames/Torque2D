@@ -3439,8 +3439,7 @@ F32 Scene::getMotorJointMaxTorque( const U32 jointId )
 typeWorldQueryResultVector Scene::pickArea(const Vector2& worldStartPosition, const Vector2& worldEndPosition, const U32& sceneGroupMask, const U32& sceneLayerMask, const PickMode& pickMode)
 {
     // Fetch world query and clear results.
-    WorldQuery* pWorldQuery = getWorldQuery( true );
-    pWorldQuery->clearQuery();
+    WorldQuery* pWorldQuery = getWorldQuery(true);
 
     // Set filter.
     WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
@@ -3456,33 +3455,29 @@ typeWorldQueryResultVector Scene::pickArea(const Vector2& worldStartPosition, co
     // Perform query.
     if ( pickMode == Scene::PICK_ANY )
     {
-        pWorldQuery->anyQueryAABB( aabb );    
+        pWorldQuery->anyQueryAABB(aabb);
     }
     else if ( pickMode == Scene::PICK_AABB )
     {
-        pWorldQuery->aabbQueryAABB( aabb );    
+        pWorldQuery->aabbQueryAABB(aabb);
     }
     else if ( pickMode == Scene::PICK_OOBB )
     {
-        pWorldQuery->oobbQueryAABB( aabb );    
+        pWorldQuery->oobbQueryAABB(aabb);
     }
     else if ( pickMode == Scene::PICK_COLLISION )
     {
-        pWorldQuery->collisionQueryAABB( aabb );    
+        pWorldQuery->collisionQueryAABB(aabb);
     }
     else
     {
         AssertFatal( false, "Unsupported pick mode." );
     }
 
-    // Fetch result count.
-    const U32 resultCount = pWorldQuery->getQueryResultsCount();
-
-    // Finish if no results.
-    if ( resultCount == 0 )
+    if(pWorldQuery->getQueryResultsCount() == 0)
         return NULL;
 
-    // Fetch results.
+    //Fetch results.
     return pWorldQuery->getQueryResults();
 };
 
@@ -3491,8 +3486,7 @@ typeWorldQueryResultVector Scene::pickArea(const Vector2& worldStartPosition, co
 typeWorldQueryResultVector Scene::pickRay(const Vector2& worldStartPosition, const Vector2& worldEndPosition, const U32& sceneGroupMask, const U32& sceneLayerMask, const PickMode& pickMode)
 {
     // Fetch world query and clear results.
-    WorldQuery* pWorldQuery = getWorldQuery( true );
-    pWorldQuery->clearQuery();
+    WorldQuery* pWorldQuery = getWorldQuery(true);
 
     // Set filter.
     WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
@@ -3523,11 +3517,9 @@ typeWorldQueryResultVector Scene::pickRay(const Vector2& worldStartPosition, con
     // Sanity!
     AssertFatal( pWorldQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );
 
-    // Fetch result count.
-    const U32 resultCount = pWorldQuery->getQueryResultsCount();
 
     // Finish if no results.
-    if ( resultCount == 0 )
+    if(pWorldQuery->getQueryResultsCount() == 0)
         return NULL;
 
     // Sort ray-cast result.
@@ -3542,8 +3534,7 @@ typeWorldQueryResultVector Scene::pickRay(const Vector2& worldStartPosition, con
 typeWorldQueryResultVector Scene::pickPoint(const Vector2& worldPosition, const U32& sceneGroupMask, const U32& sceneLayerMask, const PickMode& pickMode)
 {
     // Fetch world query and clear results.
-    WorldQuery* pWorldQuery = getWorldQuery( true );
-    pWorldQuery->clearQuery();
+    WorldQuery* pWorldQuery = getWorldQuery(true);
 
     // Set filter.
     WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
@@ -3571,11 +3562,8 @@ typeWorldQueryResultVector Scene::pickPoint(const Vector2& worldPosition, const 
         AssertFatal( false, "Unsupported pick mode." );
     }
 
-    // Fetch result count.
-    const U32 resultCount = pWorldQuery->getQueryResultsCount();
-
     // Finish if no results.
-    if ( resultCount == 0 )
+    if(pWorldQuery->getQueryResultsCount() == 0)
         return NULL;
 
     // Fetch results.
@@ -3587,8 +3575,7 @@ typeWorldQueryResultVector Scene::pickPoint(const Vector2& worldPosition, const 
 typeWorldQueryResultVector Scene::pickCircle(const Vector2& worldPosition, const F32& radius, const U32& sceneGroupMask, const U32& sceneLayerMask, const PickMode& pickMode)
 {
     // Fetch world query and clear results.
-    WorldQuery* pWorldQuery = getWorldQuery( true );
-    pWorldQuery->clearQuery();
+    WorldQuery* pWorldQuery = getWorldQuery(true);
 
     // Set filter.
     WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
@@ -3616,11 +3603,8 @@ typeWorldQueryResultVector Scene::pickCircle(const Vector2& worldPosition, const
         AssertFatal( false, "Unsupported pick mode." );
     }
 
-    // Fetch result count.
-    const U32 resultCount = pWorldQuery->getQueryResultsCount();
-
     // Finish if no results.
-    if ( resultCount == 0 )
+    if ( pWorldQuery->getQueryResultsCount() == 0 )
         return NULL;
 
     // Fetch results.
@@ -3632,8 +3616,7 @@ typeWorldQueryResultVector Scene::pickCircle(const Vector2& worldPosition, const
 typeWorldQueryResultVector Scene::pickRayCollision(const Vector2& worldStartPosition, const Vector2& worldEndPosition, const U32& sceneGroupMask, const U32& sceneLayerMask)
 {
     // Fetch world query and clear results.
-    WorldQuery* pWorldQuery = getWorldQuery( true );
-    pWorldQuery->clearQuery();
+    WorldQuery* pWorldQuery = getWorldQuery(true);
 
     // Set filter.
     WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
@@ -3645,11 +3628,8 @@ typeWorldQueryResultVector Scene::pickRayCollision(const Vector2& worldStartPosi
     // Sanity!
     AssertFatal( pWorldQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );
 
-    // Fetch result count.
-    const U32 resultCount = pWorldQuery->getQueryResultsCount();
-
     // Finish if no results.
-    if ( resultCount == 0 )
+    if ( pWorldQuery->getQueryResultsCount() == 0 )
         return NULL;
 
     // Sort ray-cast result.

@@ -490,7 +490,7 @@ public:
     inline void             setAlphaTest( const F32 alpha )             { mAlphaTest = alpha; }
     inline F32              getAlphaTest( void ) const                  { return mAlphaTest; }
     void                    setBlendOptions( void );
-    static                  void resetBlendOptions( void );
+    static void				resetBlendOptions( void );
 
     /// Render sorting.
     inline void             setSortPoint( const Vector2& pt )           { mSortPoint = pt; }
@@ -554,10 +554,10 @@ public:
     /// Miscellaneous.
     inline const char*      scriptThis(void) const                      { return Con::getIntArg(getId()); }
     inline bool             getIsAlwaysInScope(void) const              { return mAlwaysInScope; }
-    inline void             setWorldQueryKey( const U32 key )           { mWorldQueryKey = key; }
-    inline U32              getWorldQueryKey( void ) const              { return mWorldQueryKey; }
-    static U32              getGlobalSceneObjectCount( void );
-    inline U32              getSerialId( void ) const                   { return mSerialId; }
+    inline void             setWorldQueryKey(const U32 key)           { mWorldQueryKey = key; }
+    inline U32              getWorldQueryKey(void) const              { return mWorldQueryKey; }
+    static U32              getGlobalSceneObjectCount(void);
+    inline U32              getSerialId(void) const                   { return mSerialId; }
 
     // Read / Write fields.
     virtual bool            writeField(StringTableEntry fieldname, const char* value);
@@ -572,7 +572,7 @@ public:
     static const char*		getDstBlendFactorDescription(const GLenum factor);
 
     /// Declare Console Object.
-    DECLARE_CONOBJECT( SceneObject );
+    DECLARE_CONOBJECT(SceneObject);
 
 protected:
     U32                     copyCircleCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const;
@@ -580,7 +580,6 @@ protected:
     U32                     copyChainCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const;
     U32                     copyEdgeCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const;
 
-protected:
     /// Lifetime.
     static bool             setLifetime(void* obj, const char* data)    { static_cast<SceneObject*>(obj)->setLifetime(dAtof(data)); return false; }
     static bool             writeLifetime( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getLifetime() > 0.0f ; }
@@ -713,7 +712,8 @@ protected:
     {
         Scene* pScene = dynamic_cast<Scene*>(Sim::findObject(data));
         SceneObject* object = static_cast<SceneObject*>(obj);
-        if (pScene)
+
+        if(pScene)
         {
             if (object->getScene()) object->getScene()->removeFromScene(object);
 

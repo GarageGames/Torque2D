@@ -35,10 +35,10 @@
 
 // Remove a couple of annoying macros, if they are present (In VC 6, they are.)
 #ifdef min
-#undef min
+	#undef min
 #endif
 #ifdef max
-#undef max
+	#undef max
 #endif
 
 class MatrixF;
@@ -217,43 +217,43 @@ U32 getBinLog2(U32 io_num);
 /// Returns the lesser of the two parameters: a & b.
 inline U32 getMin(U32 a, U32 b)
 {
-   return a>b ? b : a;
+   return a > b ? b : a;
 }
 
 /// Returns the lesser of the two parameters: a & b.
 inline U16 getMin(U16 a, U16 b)
 {
-   return a>b ? b : a;
+   return a > b ? b : a;
 }
 
 /// Returns the lesser of the two parameters: a & b.
 inline U8 getMin(U8 a, U8 b)
 {
-   return a>b ? b : a;
+   return a > b ? b : a;
 }
 
 /// Returns the lesser of the two parameters: a & b.
 inline S32 getMin(S32 a, S32 b)
 {
-   return a>b ? b : a;
+   return a > b ? b : a;
 }
 
 /// Returns the lesser of the two parameters: a & b.
 inline S16 getMin(S16 a, S16 b)
 {
-   return a>b ? b : a;
+   return a > b ? b : a;
 }
 
 /// Returns the lesser of the two parameters: a & b.
 inline S8 getMin(S8 a, S8 b)
 {
-   return a>b ? b : a;
+   return a > b ? b : a;
 }
 
 /// Returns the lesser of the two parameters: a & b.
 inline float getMin(float a, float b)
 {
-   return a>b ? b : a;
+   return a > b ? b : a;
 }
 
 /// Returns the lesser of the two parameters: a & b.
@@ -265,74 +265,74 @@ inline double getMin(double a, double b)
 /// Returns the greater of the two parameters: a & b.
 inline U32 getMax(U32 a, U32 b)
 {
-   return a>b ? a : b;
+   return a > b ? a : b;
 }
 
 /// Returns the greater of the two parameters: a & b.
 inline U16 getMax(U16 a, U16 b)
 {
-   return a>b ? a : b;
+   return a > b ? a : b;
 }
 
 /// Returns the greater of the two parameters: a & b.
 inline U8 getMax(U8 a, U8 b)
 {
-   return a>b ? a : b;
+   return a > b ? a : b;
 }
 
 /// Returns the greater of the two parameters: a & b.
 inline S32 getMax(S32 a, S32 b)
 {
-   return a>b ? a : b;
+   return a > b ? a : b;
 }
 
 /// Returns the greater of the two parameters: a & b.
 inline S16 getMax(S16 a, S16 b)
 {
-   return a>b ? a : b;
+   return a > b ? a : b;
 }
 
 /// Returns the greater of the two parameters: a & b.
 inline S8 getMax(S8 a, S8 b)
 {
-   return a>b ? a : b;
+   return a > b ? a : b;
 }
 
 /// Returns the greater of the two parameters: a & b.
 inline float getMax(float a, float b)
 {
-   return a>b ? a : b;
+   return a > b ? a : b;
 }
 
 /// Returns the greater of the two parameters: a & b.
 inline double getMax(double a, double b)
 {
-   return a>b ? a : b;
+   return a > b ? a : b;
 }
 
 inline F32 mFloor(const F32 val)
 {
-   return (F32) floor(val);
+   return (F32)floor(val);
 }
 
 inline F32 mCeil(const F32 val)
 {
-   return (F32) ceil(val);
+   return (F32)ceil(val);
 }
 
 inline F32 mFabs(const F32 val)
 {
-   return (F32) fabs(val);
+   return (F32)fabs(val);
 }
 
 inline F32 mFsign(const F32 val)
 {
-   return (F32) (val > 0 ? 1 : val < 0 ? -1 : 0);
+   return (F32)(val > 0 ? 1 : val < 0 ? -1 : 0);
 }
 
 inline F32 mFmod(const F32 val, const F32 mod)
 {
-   return (F32) fmod(val, mod);
+   return (F32)fmod(val, mod);
 }
 
 inline S32 mAbs(const S32 val)
@@ -352,7 +352,7 @@ inline S32 mClamp(S32 val, S32 low, S32 high)
 
 inline F32 mClampF(F32 val, F32 low, F32 high)
 {
-   return (F32) getMax(getMin(val, high), low);
+   return (F32)getMax(getMin(val, high), low);
 }
 
 inline S32 mMulDiv(S32 a, S32 b, S32 c)
@@ -365,10 +365,9 @@ inline U32 mMulDiv(S32 a, S32 b, U32 c)
    return m_mulDivU32(a, b, c);
 }
 
-
 inline F32 mSin(const F32 angle)
 {
-   return (F32) sin(angle);
+   return (F32)sin(angle);
 }
 
 inline F32 mCos(const F32 angle)
@@ -378,22 +377,22 @@ inline F32 mCos(const F32 angle)
 
 inline F32 mTan(const F32 angle)
 {
-   return (F32) tan(angle);
+   return (F32)tan(angle);
 }
 
 inline F32 mAsin(const F32 val)
 {
-   return (F32) asin(val);
+   return (F32)asin(val);
 }
 
 inline F32 mAcos(const F32 val)
 {
-   return (F32) acos(val);
+   return (F32)acos(val);
 }
 
 inline F32 mAtan(const F32 x, const F32 y)
 {
-   return (F32) atan2(x, y);
+   return (F32)atan2(x, y);
 }
 
 inline void mSinCos(const F32 angle, F32 &s, F32 &c)
@@ -404,53 +403,52 @@ inline void mSinCos(const F32 angle, F32 &s, F32 &c)
 
 inline F32 mTanh(const F32 angle)
 {
-   return (F32) tanh(angle);
+   return (F32)tanh(angle);
 }
 
 inline F32 mSqrt(const F32 val)
 {
-   return (F32) sqrt(val);
+   return (F32)sqrt(val);
 }
 
 inline F32 mPow(const F32 x, const F32 y)
 {
-   return (F32) pow(x, y);
+   return (F32)pow(x, y);
 }
 
 inline F32 mLog(const F32 val)
 {
-   return (F32) log(val);
+   return (F32)log(val);
 }
-
 
 inline F64 mSin(const F64 angle)
 {
-   return (F64) sin(angle);
+   return (F64)sin(angle);
 }
 
 inline F64 mCos(const F64 angle)
 {
-   return (F64) cos(angle);
+   return (F64)cos(angle);
 }
 
 inline F64 mTan(const F64 angle)
 {
-   return (F64) tan(angle);
+   return (F64)tan(angle);
 }
 
 inline F64 mAsin(const F64 val)
 {
-   return (F64) asin(val);
+   return (F64)asin(val);
 }
 
 inline F64 mAcos(const F64 val)
 {
-   return (F64) acos(val);
+   return (F64)acos(val);
 }
 
 inline F64 mAtan(const F64 x, const F64 y)
 {
-   return (F64) atan2(x, y);
+   return (F64)atan2(x, y);
 }
 
 inline void mSinCos(const F64 angle, F64 &sin, F64 &cos)
@@ -461,17 +459,17 @@ inline void mSinCos(const F64 angle, F64 &sin, F64 &cos)
 
 inline F64 mTanh(const F64 angle)
 {
-   return (F64) tanh(angle);
+   return (F64)tanh(angle);
 }
 
 inline F64 mPow(const F64 x, const F64 y)
 {
-   return (F64) pow(x, y);
+   return (F64)pow(x, y);
 }
 
 inline F64 mLog(const F64 val)
 {
-   return (F64) log(val);
+   return (F64)log(val);
 }
 
 
@@ -483,27 +481,27 @@ inline F32 mCatmullrom(F32 t, F32 p0, F32 p1, F32 p2, F32 p3)
 
 inline F64 mFabsD(const F64 val)
 {
-   return (F64) fabs(val);
+   return (F64)fabs(val);
 }
 
 inline F64 mFmodD(const F64 val, const F64 mod)
 {
-   return (F64) fmod(val, mod);
+   return (F64)fmod(val, mod);
 }
 
 inline F64 mSqrtD(const F64 val)
 {
-   return (F64) sqrt(val);
+   return (F64)sqrt(val);
 }
 
 inline F64 mFloorD(const F64 val)
 {
-   return (F64) floor(val);
+   return (F64)floor(val);
 }
 
 inline F64 mCeilD(const F64 val)
 {
-   return (F64) ceil(val);
+   return (F64)ceil(val);
 }
 
 inline bool isEqual(F32 a, F32 b)
@@ -517,18 +515,19 @@ inline bool isZero(F32 a)
 }
 
 //--------------------------------------
+
 #ifndef _MPOINT_H_
 #include "math/mPoint.h"
 #endif
 
 inline F32 mDot(const Point2F &p1, const Point2F &p2)
 {
-   return (p1.x*p2.x + p1.y*p2.y);
+   return (p1.x * p2.x + p1.y * p2.y);
 }
 
 inline F32 mDot(const Point3F &p1, const Point3F &p2)
 {
-   return (p1.x*p2.x + p1.y*p2.y + p1.z*p2.z);
+   return (p1.x * p2.x + p1.y * p2.y + p1.z * p2.z);
 }
 
 inline void mCross(const Point3F &a, const Point3F &b, Point3F *res)
@@ -540,7 +539,7 @@ inline void mCross(const Point3F &a, const Point3F &b, Point3F *res)
 
 inline F64 mDot(const Point3D &p1, const Point3D &p2)
 {
-   return (p1.x*p2.x + p1.y*p2.y + p1.z*p2.z);
+   return (p1.x * p2.x + p1.y * p2.y + p1.z * p2.z);
 }
 
 inline void mCross(const Point3D &a, const Point3D &b, Point3D *res)
@@ -573,8 +572,8 @@ inline void mCross(const F64* a, const F64* b, F64* res)
 
 void mTransformPlane(const MatrixF& mat, const Point3F& scale, const PlaneF& plane, PlaneF* result);
 
-
 //--------------------------------------
+
 inline F32 mDegToRad(F32 d)
 {
    return F32((d * M_PI) / F32(180));
@@ -608,51 +607,110 @@ inline F32 mGetFlippedYAngle( const F32 radians )
 }
 
 /// Precision Rounding.
-inline F32 mRound(const F32& value, const F32 epsilon = 0.5f) { return value > 0.0f ? mFloor(value + epsilon) : mCeil(value - epsilon); }
+inline F32 mRound(const F32& value, const F32 epsilon = 0.5f)
+{
+	return value > 0.0f ? mFloor(value + epsilon) : mCeil(value - epsilon); 
+}
 
 /// Is NAN?
-inline F32 mIsNAN(const F32& value) { return (value != value); }
+inline F32 mIsNAN(const F32& value)
+{
+	return (value != value); 
+}
 
 /// Tolerate Is Zero?
-inline bool mIsZero(const F32& value) { return mFabs(value) < FLT_EPSILON; }
+inline bool mIsZero(const F32& value)
+{
+	return mFabs(value) < FLT_EPSILON; 
+}
 
 /// Tolerate Not Zero?
-inline bool mNotZero(const F32& value) { return !mIsZero(value); }
+inline bool mNotZero(const F32& value)
+{
+	return !mIsZero(value); 
+}
 
 /// Tolerate Less-Than?
-inline bool mLessThan(const F32& a, const F32& b) { return a < b; }
+inline bool mLessThan(const F32& a, const F32& b)
+{
+	return a < b; 
+}
 
 /// Tolerate Greater-Than?
-inline bool mGreaterThan(const F32& a, const F32& b) { return a > b; }
+inline bool mGreaterThan(const F32& a, const F32& b)
+{
+	return a > b; 
+}
 
 /// Safe Less Than Zero?
-inline bool mLessThanZero(const F32& value) { return mLessThan(value, 0.0f); }
+inline bool mLessThanZero(const F32& value) 
+{
+	return mLessThan(value, 0.0f); 
+}
 
 /// Safe Greater Than Zero?
-inline bool mGreaterThanZero(const F32& value) { return mGreaterThan(value, 0.0f); }
+inline bool mGreaterThanZero(const F32& value) 
+{
+	return mGreaterThan(value, 0.0f); 
+}
 
 /// Safe Is Equal?
-inline bool mIsEqual(const F32& a, const F32& b) { return mIsZero(mFabs(a-b)); }
+inline bool mIsEqual(const F32& a, const F32& b) 
+{
+	return mIsZero(mFabs(a - b)); 
+}
 
 /// Safe Not Equal?
-inline bool mNotEqual(const F32& a, const F32& b) { return !mIsEqual(a,b); }
+inline bool mNotEqual(const F32& a, const F32& b)
+{
+	return !mIsEqual(a, b); 
+}
 
 /// Tolerate Is Equal within Range?
-inline bool mIsEqualRange(const F32& a, const F32& b, const F32 epsilon = FLT_EPSILON) { return mFabs(a-b) <= epsilon; }
+inline bool mIsEqualRange(const F32& a, const F32& b, const F32 epsilon = FLT_EPSILON)
+{
+	return mFabs(a - b) <= epsilon; 
+}
 
 /// Tolerate Is One?
-inline bool mIsOne(const F32& value) { return mIsEqual(value, 1.0f); }
+inline bool mIsOne(const F32& value) 
+{
+	return mIsEqual(value, 1.0f); 
+}
 
 /// Tolerate Less-Than or Equal?
-inline bool mLessThanOrEqual(const F32& a, const F32& b) { return ( (a < b) || (!(a>b) && mIsEqual(a,b)) ); }
+inline bool mLessThanOrEqual(const F32& a, const F32& b) 
+{ 
+	return ( (a < b) || (!(a > b) && mIsEqual(a, b)) ); 
+}
 
 /// Tolerate Greater-Than or Equal?
-inline bool mGreaterThanOrEqual(const F32&a, const F32& b) { return ( (a > b) || (!(a < b) && mIsEqual(a,b)) ); }
+inline bool mGreaterThanOrEqual(const F32&a, const F32& b)
+{
+	return ( (a > b) || (!(a < b) && mIsEqual(a, b)) ); 
+}
 
 /// Get Min/Max.
-inline void mGetMinMax(const F32& a, const F32& b, F32& min, F32& max) { if ( mGreaterThan(a,b) ) { max = a; min = b; } else { max = b; min = a; } }
+inline void mGetMinMax(const F32& a, const F32& b, F32& min, F32& max)
+{
+	if(mGreaterThan(a,b))
+	{
+		max = a; 
+		min = b; 
+	}
+	else
+	{
+		max = b; 
+		min = a; 
+	}
+}
 
 /// Swap.
-inline void mSwap(F32& a, F32& b) { F32 temp = b; b = a; a = temp; }
+inline void mSwap(F32& a, F32& b)
+{
+	F32 temp = b;
+	b = a;
+	a = temp; 
+}
 
 #endif //_MMATHFN_H_

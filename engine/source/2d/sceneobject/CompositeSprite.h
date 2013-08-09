@@ -58,27 +58,26 @@ private:
     BatchLayoutType mBatchLayoutType;
 
 public:
-    CompositeSprite();
-    virtual ~CompositeSprite();
+    CompositeSprite(void);
+    virtual ~CompositeSprite(void);
 
-    static void initPersistFields();
+    static void initPersistFields(void);
 
-    virtual bool onAdd();
-    virtual void onRemove();
+    virtual bool onAdd(void);
+    virtual void onRemove(void);
 
-    virtual void preIntegrate( const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
-    virtual void integrateObject( const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
-    virtual void interpolateObject( const F32 timeDelta );
+    virtual void preIntegrate(const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats);
+    virtual void integrateObject(const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats);
+    virtual void interpolateObject(const F32 timeDelta);
 
     virtual bool canPrepareRender( void ) const { return true; }
     virtual bool shouldRender( void ) const { return true; }
     virtual void scenePrepareRender( const SceneRenderState* pSceneRenderState, SceneRenderQueue* pSceneRenderQueue );    
     virtual void sceneRender( const SceneRenderState* pSceneRenderState, const SceneRenderRequest* pSceneRenderRequest, BatchRender* pBatchRenderer );
 
-    virtual void copyTo( SimObject* object );
+    virtual void copyTo(SimObject* object);
 
-    const Vector2 getLocalPosition( const Vector2& worldPosition ) const;
-	const Vector2 getLogicalPosition( const Vector2& worldPosition ) const;
+	const Vector2 getLogicalPoint( const Vector2& worldPosition ) const;
 
 	typeSpriteBatchQueryResultVector pickPoint(const Vector2& worldPosition);
 	typeSpriteBatchQueryResultVector pickArea(const Vector2& worldStartPosition, const Vector2& worldEndPosition);
@@ -91,7 +90,7 @@ public:
     static const char* getBatchLayoutTypeDescription( const BatchLayoutType batchLayoutType );
 
     /// Declare Console Object.
-    DECLARE_CONOBJECT( CompositeSprite );
+    DECLARE_CONOBJECT(CompositeSprite);
 
 protected:
     virtual SpriteBatchItem* createSprite( const SpriteBatchItem::LogicalPosition& logicalPosition );
@@ -110,7 +109,6 @@ protected:
     static bool         writeDefaultSpriteAngle( void* obj, StringTableEntry pFieldName )   { return mNotZero( STATIC_VOID_CAST_TO(CompositeSprite, SpriteBatch, obj)->getDefaultSpriteAngle() ); }
     static bool         writeBatchIsolated( void* obj, StringTableEntry pFieldName )        { return static_cast<CompositeSprite*>(obj)->getBatchIsolated(); }
     static bool         writeBatchSortMode( void* obj, StringTableEntry pFieldName )        { return static_cast<CompositeSprite*>(obj)->getBatchSortMode() != SceneRenderQueue::RENDER_SORT_OFF; }
-
     static bool         setBatchLayout(void* obj, const char* data)                         { static_cast<CompositeSprite*>(obj)->setBatchLayout( getBatchLayoutTypeEnum(data) ); return false; }
     static bool         writeBatchLayout( void* obj, StringTableEntry pFieldName )          { return static_cast<CompositeSprite*>(obj)->getBatchLayout() != CompositeSprite::NO_LAYOUT; }
     static bool         setBatchCulling(void* obj, const char* data)                        { STATIC_VOID_CAST_TO(CompositeSprite, SpriteBatch, obj)->setBatchCulling(dAtob(data)); return false; }
