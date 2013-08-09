@@ -36,7 +36,7 @@
 	#endif
 #endif
 
-#ifdef _FORMAT_XML
+#ifdef _FORMAT_BINARY
 	#ifndef _TAML_BINARYWRITER_H_
 		#include "persistence/taml/binary/tamlBinaryWriter.h"
 	#endif
