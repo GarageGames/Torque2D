@@ -421,7 +421,7 @@ void CompositeSprite::onTamlCustomRead( const TamlCustomNodes& customNodes )
 const Vector2 CompositeSprite::getLogicalPoint( const Vector2& worldPosition ) const
  {
 	const b2Transform& renderTransform = getRenderTransform();
-    const Vector2 localPosition = b2MulT( renderTransform, worldPosition );
+    const Vector2 localPosition = b2MulT(renderTransform, worldPosition);
     
     switch( mBatchLayoutType )
     {
@@ -474,10 +474,7 @@ typeSpriteBatchQueryResultVector CompositeSprite::pickArea(const Vector2& worldS
     // Is the sprite batch query available?
     if ( pSpriteBatchQuery == NULL )
     {
-        // No, so warn.
         Con::warnf( "CompositeSprite::pickArea() - Cannot pick sprites if clipping mode is off." );
-
-        // Return nothing.
         return NULL;
     }
 
@@ -501,11 +498,8 @@ typeSpriteBatchQueryResultVector CompositeSprite::pickArea(const Vector2& worldS
     b2PolygonShape oobb_polygon;
     oobb_polygon.Set(localOOBB, 4);
 
-    // Perform query.
-    pSpriteBatchQuery->queryOOBB( localAABB, oobb_polygon, true );
-
     // Finish if no results.
-    if (pSpriteBatchQuery->getQueryResultsCount() == 0 )
+    if(pSpriteBatchQuery->queryOOBB( localAABB, oobb_polygon, true) == 0)
         return NULL;
 
     // Fetch results.
@@ -522,17 +516,12 @@ typeSpriteBatchQueryResultVector CompositeSprite::pickRay(const Vector2& worldSt
     // Is the sprite batch query available?
     if ( pSpriteBatchQuery == NULL )
     {
-        // No, so warn.
         Con::warnf( "CompositeSprite::pickRay() - Cannot pick sprites if clipping mode is off." );
-
-        // Return nothing.
         return NULL;
     }
 	
-    // Fetch the render transform.
-    const b2Transform& renderTransform = getRenderTransform();
-
     // Transform into local space.
+    const b2Transform& renderTransform = getRenderTransform();
     const Vector2 v1 = b2MulT( renderTransform, worldStartPosition );
     const Vector2 v2 = b2MulT( renderTransform, worldEndPosition );
 
@@ -540,7 +529,7 @@ typeSpriteBatchQueryResultVector CompositeSprite::pickRay(const Vector2& worldSt
     pSpriteBatchQuery->queryRay( v1, v2, true );
 
     // Sanity!
-    AssertFatal( pSpriteBatchQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );
+    AssertFatal(pSpriteBatchQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned.");
 
     // Finish if no results.
     if (pSpriteBatchQuery->getQueryResultsCount() == 0 )
@@ -568,7 +557,11 @@ typeSpriteBatchQueryResultVector CompositeSprite::pickPoint(const Vector2& world
     }
 
     // Transform into local space.
-	const Vector2 point = getLocalPoint(worldPosition);
+    const b2Transform& renderTransform = getRenderTransform();
+    const Vector2 point = b2MulT(renderTransform, worldPosition);
+
+    // Transform into local space.
+	//const Vector2 point = getLocalPoint(worldPosition);
 
 	// Finish if no results.
     if(pSpriteBatchQuery->queryPoint(point, true) == 0)

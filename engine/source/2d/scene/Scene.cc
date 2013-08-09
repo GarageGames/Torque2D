@@ -3517,7 +3517,6 @@ typeWorldQueryResultVector Scene::pickRay(const Vector2& worldStartPosition, con
     // Sanity!
     AssertFatal( pWorldQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );
 
-
     // Finish if no results.
     if(pWorldQuery->getQueryResultsCount() == 0)
         return NULL;
