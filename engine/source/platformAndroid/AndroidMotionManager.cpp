@@ -20,7 +20,7 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#import "AndroidMotionManager.h"
+#include "AndroidMotionManager.h"
 
 #include "platformAndroid.h"
 #include "string/stringBuffer.h"
