@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+<?fileVersion 4.0.0?>
+
+<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="com.android.toolchain.gcc.1442582075">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.android.toolchain.gcc.1442582075" moduleId="org.eclipse.cdt.core.settings" name="Default">
@@ -23,10 +25,10 @@
 							<builder arguments="NDEBUG=1" command="ndk-build" id="com.android.builder.1818800065" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Android Builder" superClass="com.android.builder"/>
 							<tool id="com.android.gcc.compiler.1014866906" name="Android GCC Compiler" superClass="com.android.gcc.compiler">
 								<option id="com.android.gcc.option.includePath.100688008" superClass="com.android.gcc.option.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="/Users/timmgt/androidDev/android-ndk-r8e/sources/cxx-stl/stlport/stlport"/>
-									<listOptionValue builtIn="false" value="/Users/timmgt/androidDev/android-ndk-r8e/platforms/android-14/arch-arm/usr/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Torque2D/jni/include/libpng}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Torque2D/jni/include/libjpeg}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${NDK}/sources/cxx-stl/stlport/stlport&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${NDK}/platforms/android-14/arch-arm/usr/include&quot;"/>
 								</option>
 								<inputType id="com.android.gcc.inputType.2067917403" superClass="com.android.gcc.inputType"/>
 							</tool>
@@ -40,7 +42,9 @@
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="Torque2D.null.1900297553" name="Torque2D"/>
 	</storageModule>
-	<storageModule moduleId="refreshScope" versionNumber="1"/>
+	<storageModule moduleId="refreshScope" versionNumber="1">
+		<resource resourceType="PROJECT" workspacePath="/Torque2D"/>
+	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
