@@ -285,7 +285,21 @@ bool osxOpenGLDevice::setScreenMode( U32 width, U32 height, U32 bpp, bool fullSc
     }
     else
     {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < 1070
+        [[platState window] setStyleMask:NSTitledWindowMask | NSClosableWindowMask] ;
+        
+        // Calculate the actual center
+        CGFloat x = ([[NSScreen mainScreen] frame].size.width - width) / 2;
+        CGFloat y = ([[NSScreen mainScreen] frame].size.height - height) / 2;
+        
+        // Create a rect to send to the window
+        NSRect newFrame = NSMakeRect(x, y, width, height);
+        
+        // Send message to the window to resize/relocate
+        [[platState window] setFrame:newFrame display:YES animate:NO];
+#else
         [[platState window] setStyleMask:NSTitledWindowMask | NSClosableWindowMask | NSResizableWindowMask];
+#endif
     }
     
     [[platState torqueView] createContextWithPixelFormat:pixelFormat];
