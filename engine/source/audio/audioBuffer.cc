@@ -19,8 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
-//TODO: android
-#ifndef TORQUE_OS_ANDROID
+
 #include "platform/platformAL.h"
 #include "audio/audioBuffer.h"
 #include "io/stream.h"
@@ -362,4 +361,3 @@ bool AudioBuffer::readWAV(ResourceObject *obj)
 
    return false;
 }
-#endif

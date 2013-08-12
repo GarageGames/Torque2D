@@ -19,7 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
-#ifndef TORQUE_OS_ANDROID
+
 #include "audio/audioDataBlock.h"
 #include "console/consoleTypes.h"
 #include "platform/platformAL.h"
@@ -277,4 +277,4 @@ void AudioSampleEnvironment::unpackData(BitStream* stream)
    mOutsideVolumeHF = readRangedS32(stream, -10000, 0);
    mFlags = stream->readInt(3);
 }
-#endif
+

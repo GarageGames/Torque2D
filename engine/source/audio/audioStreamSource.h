@@ -61,8 +61,7 @@ class AudioStreamSource
         //void clear();
 
         AUDIOHANDLE             mHandle;
-        //TODO: android
-        //ALuint				    mSource;
+        ALuint				    mSource;
 
         Audio::Description      mDescription;
         AudioSampleEnvironment *mEnvironment;

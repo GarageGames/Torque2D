@@ -19,8 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
-//TODO: android
-#ifndef TORQUE_OS_ANDROID
+
 #include "audio/audio.h"
 #include "audio/audioDataBlock.h"
 #include "collection/vector.h"
@@ -60,8 +59,6 @@ extern ALvoid  alcMacOSXMixerOutputRateProc(const ALdouble value);
 #ifdef TORQUE_OS_OSX
 static ALCdevice *mDevice   = NULL;             // active OpenAL device
 static ALCcontext *mContext = NULL;             // active OpenAL context
-#elif TORQUE_OS_ANDROID
-//TODO: android
 #elif TORQUE_OS_IOS
 static ALCdevice *mDevice   = NULL;             // active OpenAL device
 static ALCcontext *mContext = NULL;             // active OpenAL context
@@ -103,8 +100,8 @@ struct LoopingImage
 
 //-------------------------------------------------------------------------
 static F32 mMasterVolume = 1.f;           // traped from AL_LISTENER gain (miles has difficulties with 3d sources)
-//TODO: android
-//static ALuint                 mSource[MAX_AUDIOSOURCES];                   // ALSources
+
+static ALuint                 mSource[MAX_AUDIOSOURCES];                   // ALSources
 static AUDIOHANDLE            mHandle[MAX_AUDIOSOURCES];                   // unique handles
 static Resource<AudioBuffer>  mBuffer[MAX_AUDIOSOURCES];                   // each of the playing buffers (needed for AudioThread)
 static F32                    mScore[MAX_AUDIOSOURCES];                    // for figuring out which sources to cull/uncull
@@ -284,8 +281,7 @@ static bool findFreeSource(U32 *index)
 // - volumes are attenuated by channel only
 static bool cullSource(U32 *index, F32 volume)
 {
-	//TODO: android
-   //alGetError();
+   alGetError();
 
    F32 minVolume = volume;
    S32 best = -1;
@@ -344,8 +340,7 @@ static bool cullSource(U32 *index, F32 volume)
       }
    }
 
-   //TODO: android
-   //alSourceStop(mSource[best]);
+   alSourceStop(mSource[best]);
    mHandle[best] = NULL_AUDIOHANDLE;
    mBuffer[best] = 0;
    *index = best;
@@ -360,8 +355,7 @@ static bool cullSource(U32 *index, F32 volume)
 static F32 approximate3DVolume(const Audio::Description& desc, const Point3F &position)
 {
    Point3F p1;
-   //TODO: android
-   //alGetListener3f(AL_POSITION, &p1.x, &p1.y, &p1.z);
+   alGetListener3f(AL_POSITION, &p1.x, &p1.y, &p1.z);
 
    p1 -= position;
    F32 distance = p1.magnitudeSafe();
@@ -384,15 +378,13 @@ inline U32 alxFindIndex(AUDIOHANDLE handle)
 }
 
 //--------------------------------------------------------------------------
-//TODO: android
-/*
 ALuint alxFindSource(AUDIOHANDLE handle)
 {
    for (U32 i=0; i<mNumSources; i++)
       if(mHandle[i] && areEqualHandles(mHandle[i], handle))
          return mSource[i];
    return(INVALID_SOURCE);
-}*/
+}
 
 
 //--------------------------------------------------------------------------
@@ -413,12 +405,9 @@ bool alxIsValidHandle(AUDIOHANDLE handle)
          return(true);
 
       // if it is active but not playing then it has stopped...
-      //TODO: android
-      /*
       ALint state = AL_STOPPED;
       alGetSourcei(mSource[idx], AL_SOURCE_STATE, &state);
       return(state == AL_PLAYING);
-      */
    }
 
    if(mLoopingList.findImage(handle))
@@ -442,13 +431,9 @@ bool alxIsPlaying(AUDIOHANDLE handle)
    if(idx == MAX_AUDIOSOURCES)
       return(false);
 
-   //TODO: android
-   /*
    ALint state = 0;
    alGetSourcei(mSource[idx], AL_SOURCE_STATE, &state);
    return(state == AL_PLAYING);
-   */
-   return false;
 }
 
 //--------------------------------------------------------------------------
@@ -478,19 +463,15 @@ void alxEnvironmentInit()
 
 //--------------------------------------------------------------------------
 // - setup a sources environmental effect settings
-//TODO: android
-/*
 static void alxSourceEnvironment(ALuint source, F32 environmentLevel, AudioSampleEnvironment * env)
-{*/
+{
    // environment level is on the AudioDatablock
 /* todo
    alSourcef(source, AL_ENV_SAMPLE_REVERB_MIX_EXT, environmentLevel);
 */
-
-//TODO: android
- /*if(!env)
+   if(!env)
       return;
-*/
+
 /* todo
    alSourcei(source, AL_ENV_SAMPLE_DIRECT_EXT,                 env->mDirect);
    alSourcei(source, AL_ENV_SAMPLE_DIRECT_HF_EXT,              env->mDirectHF);
@@ -507,32 +488,26 @@ static void alxSourceEnvironment(ALuint source, F32 environmentLevel, AudioSampl
    alSourcef(source, AL_ENV_SAMPLE_ROOM_ROLLOFF_EXT,           env->mRoomRolloff);
    alSourcef(source, AL_ENV_SAMPLE_AIR_ABSORPTION_EXT,         env->mAirAbsorption);
 */
-//TODO: android
-//}
-//TODO: android
-/*
+}
+
 static void alxSourceEnvironment(ALuint source, LoopingImage * image)
 {
    AssertFatal(image, "alxSourceEnvironment: invalid looping image");
    if(image->mDescription.mIs3D)
       alxSourceEnvironment(source, image->mDescription.mEnvironmentLevel, image->mEnvironment);
-}*/
+}
 
-//TODO: android
-/*
 static void alxSourceEnvironment(ALuint source, AudioStreamSource * image)
 {
    AssertFatal(image, "alxSourceEnvironment: invalid looping image");
    if(image->mDescription.mIs3D)
       alxSourceEnvironment(source, image->mDescription.mEnvironmentLevel, image->mEnvironment);
-}*/
+}
 
 //--------------------------------------------------------------------------
 // setup a source to play... loopers have pitch cached
 // - by default, pitch is 1x (settings not defined in description)
 // - all the settings are cached by openAL (miles version), so no worries setting them here
-//TODO: android
-/*
 static void alxSourcePlay(ALuint source, Resource<AudioBuffer> buffer, const Audio::Description& desc, const MatrixF *transform)
 {
    alSourcei(source, AL_BUFFER, buffer->getALBuffer());
@@ -569,19 +544,16 @@ static void alxSourcePlay(ALuint source, Resource<AudioBuffer> buffer, const Aud
 
    alSourcef(source, AL_REFERENCE_DISTANCE, desc.mReferenceDistance);
    alSourcef(source, AL_MAX_DISTANCE, desc.mMaxDistance);
-*/
+
 /* todo
    // environmental audio stuff:
    alSourcef(source, AL_ENV_SAMPLE_REVERB_MIX_EXT, desc.mEnvironmentLevel);
    if(desc.mEnvironmentLevel != 0.f)
       alSourceResetEnvironment_EXT(source);
 */
-//TODO: android
-//}
+}
 
 // helper for looping images
-//TODO: android
-/*
 static void alxSourcePlay(ALuint source, LoopingImage * image)
 {
    AssertFatal(image, "alxSourcePlay: invalid looping image");
@@ -599,7 +571,7 @@ static void alxSourcePlay(ALuint source, LoopingImage * image)
       // 2d source
       alxSourcePlay(source, image->mBuffer, image->mDescription, 0);
    }
-}*/
+}
 
 //--------------------------------------------------------------------------
 // setup a streaming source to play
@@ -2589,4 +2561,3 @@ AudioStreamSource* alxFindAudioStreamSource(AUDIOHANDLE handle)
         return *itr2;
     return NULL;
 }
-#endif
