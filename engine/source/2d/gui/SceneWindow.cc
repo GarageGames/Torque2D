@@ -576,42 +576,15 @@ F32 SceneWindow::interpolate( F32 from, F32 to, F32 delta )
 {
     // Linear.
     if ( mCameraInterpolationMode == LINEAR )
-        return linearInterpolate( from, to, delta );
+        return mLerp( from, to, delta );
     // Sigmoid.
     else if ( mCameraInterpolationMode == SIGMOID )
-        return sigmoidInterpolate( from, to, delta );
+        return mSmoothStep( from, to, delta );
     // Hmmm...
     else
         return from;
 }
 
-//-----------------------------------------------------------------------------
-
-F32 SceneWindow::linearInterpolate( F32 from, F32 to, F32 delta )
-{
-    // Clamp if we're over/under time.
-    if ( delta <= 0.0f )
-        return from;
-    else if ( delta >= 1.0f )
-        return to;
-
-    // Calculate resultant interpolation.
-    return ( from * ( 1.0f - delta ) ) + ( to * delta );
-}
-
-//-----------------------------------------------------------------------------
-
-F32 SceneWindow::sigmoidInterpolate( F32 from, F32 to, F32 delta )
-{
-    // Range Expand/Clamp Delta to (-1 -> +1).
-    delta = mClampF( (delta - 0.5f) * 2.0f, -1.0f, 1.0f );
-
-    // Calculate interpolator value using sigmoid function.
-    F32 sigmoid = mClampF ( 1.0f / (1.0f + mPow(2.718282f, -15.0f * delta)), 0.0f, 1.0f );
-
-    // Calculate resultant interpolation.
-    return ( from * ( 1.0f - sigmoid ) ) + ( to * sigmoid );
-}
 
 //-----------------------------------------------------------------------------
 
