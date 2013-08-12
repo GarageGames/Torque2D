@@ -67,6 +67,10 @@
 #include "component/behaviors/behaviorInstance.h"
 #endif
 
+#ifndef _HASHTABLE_H
+#include "collection/HashTable.h"
+#endif
+
 //-----------------------------------------------------------------------------
 
 struct tDestroyNotification
@@ -77,14 +81,14 @@ struct tDestroyNotification
 
 //-----------------------------------------------------------------------------
 
-typedef VectorPtr<b2FixtureDef*> typeCollisionFixtureDefVector;
-typedef VectorPtr<b2Fixture*> typeCollisionFixtureVector;
+typedef HashMap<const U32, b2FixtureDef*> typeCollisionFixtureDefMap;
+typedef HashMap<const U32, b2Fixture*> typeCollisionFixtureMap;
 typedef Vector<tDestroyNotification> typeDestroyNotificationVector;
 
 //-----------------------------------------------------------------------------
 
 const S32 GL_INVALID_BLEND_FACTOR = -1;
-const S32 INVALID_COLLISION_SHAPE_INDEX = -1;
+const S32 INVALID_COLLISION_SHAPE_ID = -1;
 
 //-----------------------------------------------------------------------------
 
@@ -94,12 +98,8 @@ extern EnumTable dstBlendFactorTable;
 
 //-----------------------------------------------------------------------------
 
-class SceneObject :
-    public BehaviorComponent,
-    public SceneRenderObject,
-    public PhysicsProxy
+class SceneObject : public BehaviorComponent, public SceneRenderObject, public PhysicsProxy
 {
-
 private:
     typedef BehaviorComponent Parent;
 
@@ -114,7 +114,7 @@ public:
 
 protected:
     /// Scene.
-    SimObjectPtr<Scene>  mpScene;
+    SimObjectPtr<Scene>		mpScene;
 
     /// Target Scene.
     /// NOTE:   Unfortunately this is required as the scene can be set via a field which
@@ -166,8 +166,8 @@ protected:
     Scene::typeContactVector* mpCurrentContacts;
 
     /// General collision shape access.
-    typeCollisionFixtureDefVector mCollisionFixtureDefs;
-    typeCollisionFixtureVector mCollisionFixtures;
+    typeCollisionFixtureDefMap mCollisionFixtureDefs;
+    typeCollisionFixtureMap mCollisionFixtures;
 
     /// Render visibility.
     bool                    mVisible;
@@ -223,7 +223,6 @@ protected:
 protected:
     static S32 QSORT_CALLBACK sceneObjectLayerDepthSort(const void* a, const void* b);
 
-
     /// Scene (un)registering.
     virtual void            OnRegisterScene( Scene* pScene );
     virtual void            OnUnregisterScene( Scene* pScene );
@@ -263,7 +262,6 @@ public:
     virtual bool            validRender( void ) const { return true; }
     virtual bool            shouldRender( void ) const { return false; }
 
-    
     /// Render Output.
     virtual bool            canPrepareRender( void ) const { return false; }
     virtual void            scenePrepareRender( const SceneRenderState* pSceneRenderState, SceneRenderQueue* pSceneRenderQueue ) {}
@@ -336,7 +334,7 @@ public:
     Vector2                 getLocalVector( const Vector2& worldVector );
     Vector2                 getWorldVector( const Vector2& localVector );
     bool                    getIsPointInOOBB( const Vector2& worldPoint );
-    bool                    getIsPointInCollisionShape( const U32 shapeIndex, const Vector2& worldPoint );
+    bool                    getIsPointInCollisionShape( const U32 shapeId, const Vector2& worldPoint );
 
     /// Body.
     virtual ePhysicsProxyType getPhysicsProxyType( void ) const         { return PhysicsProxy::PHYSIC_PROXY_SCENEOBJECT; }
@@ -408,33 +406,33 @@ public:
     inline F32              getGravityScale(void) const                 { if ( mpScene ) return mpBody->GetGravityScale(); else return mBodyDefinition.gravityScale; }
 
     /// General collision shape access.
-    void                    deleteCollisionShape( const U32 shapeIndex );
+    void                    deleteCollisionShape( const U32 shapeId );
     void                    clearCollisionShapes( void );
-    inline U32              getCollisionShapeCount( void ) const        { if ( mpScene ) return mCollisionFixtures.size(); else return mCollisionFixtureDefs.size(); }
-    b2Shape::Type           getCollisionShapeType( const U32 shapeIndex ) const;
-    S32                     getCollisionShapeIndex( const b2Fixture* pFixture ) const;
-    void                    setCollisionShapeDefinition( const U32 shapeIndex, const b2FixtureDef& fixtureDef );
-    b2FixtureDef            getCollisionShapeDefinition( const U32 shapeIndex ) const;
-    const b2CircleShape*    getCollisionCircleShape( const U32 shapeIndex ) const;
-    const b2PolygonShape*   getCollisionPolygonShape( const U32 shapeIndex ) const;
-    const b2ChainShape*     getCollisionChainShape( const U32 shapeIndex ) const;
-    const b2EdgeShape*      getCollisionEdgeShape( const U32 shapeIndex ) const;
-    void                    setCollisionShapeDensity( const U32 shapeIndex, const F32 density );
-    F32                     getCollisionShapeDensity( const U32 shapeIndex ) const;
-    void                    setCollisionShapeFriction( const U32 shapeIndex, const F32 friction );
-    F32                     getCollisionShapeFriction( const U32 shapeIndex ) const;
-    void                    setCollisionShapeRestitution( const U32 shapeIndex, const F32 restitution );
-    F32                     getCollisionShapeRestitution( const U32 shapeIndex ) const;
-    void                    setCollisionShapeIsSensor( const U32 shapeIndex, const bool isSensor );
-    bool                    getCollisionShapeIsSensor( const U32 shapeIndex ) const;
+    inline U32              getCollisionShapeCount( void )        { if ( mpScene ) return mCollisionFixtures.size(); else return mCollisionFixtureDefs.size(); }
+    b2Shape::Type           getCollisionShapeType( const U32 shapeId ) const;
+    S32                     getCollisionShapeId( const b2Fixture* pFixture ) const;
+    void                    setCollisionShapeDefinition( const U32 shapeId, const b2FixtureDef& fixtureDef );
+    const b2FixtureDef      getCollisionShapeDefinition( const U32 shapeId ) const;
+    const b2CircleShape*    getCollisionCircleShape( const U32 shapeId ) const;
+    const b2PolygonShape*   getCollisionPolygonShape( const U32 shapeId ) const;
+    const b2ChainShape*     getCollisionChainShape( const U32 shapeId ) const;
+    const b2EdgeShape*      getCollisionEdgeShape( const U32 shapeId ) const;
+    void                    setCollisionShapeDensity( const U32 shapeId, const F32 density );
+    F32                     getCollisionShapeDensity( const U32 shapeId ) const;
+    void                    setCollisionShapeFriction( const U32 shapeId, const F32 friction );
+    F32                     getCollisionShapeFriction( const U32 shapeId ) const;
+    void                    setCollisionShapeRestitution( const U32 shapeId, const F32 restitution );
+    F32                     getCollisionShapeRestitution( const U32 shapeId ) const;
+    void                    setCollisionShapeIsSensor( const U32 shapeId, const bool isSensor );
+    bool                    getCollisionShapeIsSensor( const U32 shapeId ) const;
 
     /// Circle collision shape creation.
     S32                     createCircleCollisionShape( const F32 radius );
     S32                     createCircleCollisionShape( const F32 radius, const b2Vec2& localPosition );
 
     /// Circle collision shape access.
-    F32                     getCircleCollisionShapeRadius( const U32 shapeIndex ) const;
-    Vector2                 getCircleCollisionShapeLocalPosition( const U32 shapeIndex ) const;
+    F32                     getCircleCollisionShapeRadius( const U32 shapeId ) const;
+    Vector2                 getCircleCollisionShapeLocalPosition( const U32 shapeId ) const;
 
     /// Polygon collision shape creation.
     S32                     createPolygonCollisionShape( const U32 pointCount, const b2Vec2* localPoints );
@@ -443,8 +441,8 @@ public:
     S32                     createPolygonBoxCollisionShape( const F32 width, const F32 height, const b2Vec2& localCentroid, const F32 rotation );
 
     /// Polygon collision shape access.
-    U32                     getPolygonCollisionShapePointCount( const U32 shapeIndex ) const;
-    Vector2                 getPolygonCollisionShapeLocalPoint( const U32 shapeIndex, const U32 pointIndex ) const;
+    U32                     getPolygonCollisionShapePointCount( const U32 shapeId ) const;
+    Vector2                 getPolygonCollisionShapeLocalPoint( const U32 shapeId, const U32 pointIndex ) const;
 
     /// Chain collision shape creation.
     S32                     createChainCollisionShape( const U32 pointCount, const b2Vec2* localPoints );
@@ -453,12 +451,12 @@ public:
                                                         const b2Vec2& adjacentLocalPositionStart, const b2Vec2& adjacentLocalPositionEnd );
 
     /// Chain collision shape access.
-    U32                     getChainCollisionShapePointCount( const U32 shapeIndex ) const;
-    Vector2                 getChainCollisionShapeLocalPoint( const U32 shapeIndex, const U32 pointIndex ) const;
-    bool                    getChainCollisionShapeHasAdjacentStart( const U32 shapeIndex ) const;
-    bool                    getChainCollisionShapeHasAdjacentEnd( const U32 shapeIndex ) const;
-    Vector2                 getChainCollisionShapeAdjacentStart( const U32 shapeIndex ) const;
-    Vector2                 getChainCollisionShapeAdjacentEnd( const U32 shapeIndex ) const;
+    U32                     getChainCollisionShapePointCount( const U32 shapeId ) const;
+    Vector2                 getChainCollisionShapeLocalPoint( const U32 shapeId, const U32 pointIndex ) const;
+    bool                    getChainCollisionShapeHasAdjacentStart( const U32 shapeId ) const;
+    bool                    getChainCollisionShapeHasAdjacentEnd( const U32 shapeId ) const;
+    Vector2                 getChainCollisionShapeAdjacentStart( const U32 shapeId ) const;
+    Vector2                 getChainCollisionShapeAdjacentEnd( const U32 shapeId ) const;
 
     /// Edge collision shape creation.
     S32                     createEdgeCollisionShape( const b2Vec2& localPositionStart, const b2Vec2& localPositionEnd );
@@ -467,12 +465,12 @@ public:
                                                         const b2Vec2& adjacentLocalPositionStart, const b2Vec2& adjacentLocalPositionEnd );
 
     /// Edge collision shape access.
-    Vector2                 getEdgeCollisionShapeLocalPositionStart( const U32 shapeIndex ) const;
-    Vector2                 getEdgeCollisionShapeLocalPositionEnd( const U32 shapeIndex ) const;
-    bool                    getEdgeCollisionShapeHasAdjacentStart( const U32 shapeIndex ) const;
-    bool                    getEdgeCollisionShapeHasAdjacentEnd( const U32 shapeIndex ) const;
-    Vector2                 getEdgeCollisionShapeAdjacentStart( const U32 shapeIndex ) const;
-    Vector2                 getEdgeCollisionShapeAdjacentEnd( const U32 shapeIndex ) const;
+    Vector2                 getEdgeCollisionShapeLocalPositionStart( const U32 shapeId ) const;
+    Vector2                 getEdgeCollisionShapeLocalPositionEnd( const U32 shapeId ) const;
+    bool                    getEdgeCollisionShapeHasAdjacentStart( const U32 shapeId ) const;
+    bool                    getEdgeCollisionShapeHasAdjacentEnd( const U32 shapeId ) const;
+    Vector2                 getEdgeCollisionShapeAdjacentStart( const U32 shapeId ) const;
+    Vector2                 getEdgeCollisionShapeAdjacentEnd( const U32 shapeId ) const;
 
     /// Render visibility.
     inline void             setVisible( const bool status )             { mVisible = status; }
@@ -492,7 +490,7 @@ public:
     inline void             setAlphaTest( const F32 alpha )             { mAlphaTest = alpha; }
     inline F32              getAlphaTest( void ) const                  { return mAlphaTest; }
     void                    setBlendOptions( void );
-    static                  void resetBlendOptions( void );
+    static void				resetBlendOptions( void );
 
     /// Render sorting.
     inline void             setSortPoint( const Vector2& pt )           { mSortPoint = pt; }
@@ -535,7 +533,7 @@ public:
     /// Cloning.
     virtual void            copyFrom( SceneObject* pSceneObject, const bool copyDynamicFields );
     virtual void            copyTo( SimObject* object );
-    S32                     copyCollisionShapes( SceneObject* pSceneObject, const bool clearTargetShapes = true, const S32 shapeIndex = -1 );
+    S32                     copyCollisionShapes( SceneObject* pSceneObject, const bool clearTargetShapes = true, const S32 shapeId = -1 );
 
     /// Safe deletion.
     inline void             setSafeDelete( const bool status )          { mSafeDeleteReady = status; }
@@ -556,33 +554,32 @@ public:
     /// Miscellaneous.
     inline const char*      scriptThis(void) const                      { return Con::getIntArg(getId()); }
     inline bool             getIsAlwaysInScope(void) const              { return mAlwaysInScope; }
-    inline void             setWorldQueryKey( const U32 key )           { mWorldQueryKey = key; }
-    inline U32              getWorldQueryKey( void ) const              { return mWorldQueryKey; }
-    static U32              getGlobalSceneObjectCount( void );
-    inline U32              getSerialId( void ) const                   { return mSerialId; }
+    inline void             setWorldQueryKey(const U32 key)           { mWorldQueryKey = key; }
+    inline U32              getWorldQueryKey(void) const              { return mWorldQueryKey; }
+    static U32              getGlobalSceneObjectCount(void);
+    inline U32              getSerialId(void) const                   { return mSerialId; }
 
     // Read / Write fields.
     virtual bool            writeField(StringTableEntry fieldname, const char* value);
 
-    static b2BodyType getBodyTypeEnum(const char* label);
-    static const char* getBodyTypeDescription(const b2BodyType bodyType);
-    static b2Shape::Type getCollisionShapeTypeEnum(const char* label);
-    static const char* getCollisionShapeTypeDescription(const b2Shape::Type collisionShapeType);
-    static S32 getSrcBlendFactorEnum(const char* label);
-    static S32 getDstBlendFactorEnum(const char* label);
-    static const char* getSrcBlendFactorDescription(const GLenum factor);
-    static const char* getDstBlendFactorDescription(const GLenum factor);
+    static b2BodyType		getBodyTypeEnum(const char* label);
+    static const char*	    getBodyTypeDescription(const b2BodyType bodyType);
+    static b2Shape::Type	getCollisionShapeTypeEnum(const char* label);
+    static const char*		getCollisionShapeTypeDescription(const b2Shape::Type collisionShapeType);
+    static S32				getSrcBlendFactorEnum(const char* label);
+    static S32				getDstBlendFactorEnum(const char* label);
+    static const char*		getSrcBlendFactorDescription(const GLenum factor);
+    static const char*		getDstBlendFactorDescription(const GLenum factor);
 
     /// Declare Console Object.
-    DECLARE_CONOBJECT( SceneObject );
+    DECLARE_CONOBJECT(SceneObject);
 
 protected:
-    S32                     copyCircleCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const;
-    S32                     copyPolygonCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const;
-    S32                     copyChainCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const;
-    S32                     copyEdgeCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const;
+    U32                     copyCircleCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const;
+    U32                     copyPolygonCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const;
+    U32                     copyChainCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const;
+    U32                     copyEdgeCollisionShapeTo( SceneObject* pSceneObject, const b2FixtureDef& fixtureDef ) const;
 
-protected:
     /// Lifetime.
     static bool             setLifetime(void* obj, const char* data)    { static_cast<SceneObject*>(obj)->setLifetime(dAtof(data)); return false; }
     static bool             writeLifetime( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getLifetime() > 0.0f ; }
@@ -624,7 +621,7 @@ protected:
     static bool             writeFixedAngle( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getFixedAngle() == true; }
 
     /// Body.
-    static bool setBodyType(void* obj, const char* data)
+    static bool				setBodyType(void* obj, const char* data)
     {
         // Fetch body type.
         const b2BodyType type = getBodyTypeEnum( data );
@@ -715,7 +712,8 @@ protected:
     {
         Scene* pScene = dynamic_cast<Scene*>(Sim::findObject(data));
         SceneObject* object = static_cast<SceneObject*>(obj);
-        if (pScene)
+
+        if(pScene)
         {
             if (object->getScene()) object->getScene()->removeFromScene(object);
 
@@ -734,7 +732,6 @@ protected:
         return false;
     }
     static bool             writeScene( void* obj, StringTableEntry pFieldName ) { return false; }
-
 };
 
 #endif // _SCENE_OBJECT_H_

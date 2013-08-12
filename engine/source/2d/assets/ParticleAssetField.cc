@@ -91,7 +91,7 @@ void ParticleAssetField::copyTo( ParticleAssetField& field )
 
     // Copy data keys.    
     field.clearDataKeys();
-    for ( S32 i = 0; i < mDataKeys.size(); i++ )
+    for ( U32 i = 0; i < mDataKeys.size(); i++ )
     {
         DataKey key = mDataKeys[i];
         field.addDataKey(key.mTime, key.mValue);

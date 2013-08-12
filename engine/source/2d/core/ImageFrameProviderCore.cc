@@ -332,7 +332,7 @@ const U32 ImageFrameProviderCore::getCurrentAnimationFrame( void ) const
     const Vector<S32>& validatedFrames = (*mpAnimationAsset)->getValidatedAnimationFrames();
 
     // Sanity!
-    AssertFatal( mCurrentFrameIndex < validatedFrames.size(), "Animation controller requested the current frame but it is out of bounds of the validated frames." );
+    AssertFatal( mCurrentFrameIndex < (S32)validatedFrames.size(), "Animation controller requested the current frame but it is out of bounds of the validated frames." );
 
     return validatedFrames[mCurrentFrameIndex];
 };
@@ -349,7 +349,7 @@ bool ImageFrameProviderCore::isAnimationValid( void ) const
     const Vector<S32>& validatedFrames = (*mpAnimationAsset)->getValidatedAnimationFrames();
 
     // Not valid if current frame index is out of bounds of the validated frames.
-    if ( mCurrentFrameIndex >= validatedFrames.size() )
+    if ( mCurrentFrameIndex >= (S32)validatedFrames.size() )
         return false;
 
     // Fetch image asset.

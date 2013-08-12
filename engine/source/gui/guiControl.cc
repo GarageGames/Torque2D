@@ -620,7 +620,7 @@ void GuiControl::renderChildControls(Point2I offset, const RectI &updateRect)
    S32 size_cpy = size;
     //-Mat look through our vector all normal-like, trying to use an iterator sometimes gives us
    //bad cast on good objects
-   for( S32 count = 0; count < objectList.size(); count++ )
+   for( U32 count = 0; count < objectList.size(); count++ )
    {
       GuiControl *ctrl = (GuiControl *)objectList[count];
       if( ctrl == NULL ) {

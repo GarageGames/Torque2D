@@ -56,7 +56,6 @@ ConsoleMethod(CompositeSprite, getSpriteCount, S32, 2, 2,   "() - Gets a count o
     return object->getSpriteCount();
 }
 
-
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(CompositeSprite, setBatchLayout, void, 3, 3,      "(batchLayoutType) - Sets the batch layout type.\n"
@@ -293,7 +292,6 @@ ConsoleMethod(CompositeSprite, selectSpriteName, bool, 3, 3,    "( name ) - Sele
 {
     return object->selectSpriteName( argv[2] );
 }
-
 
 //-----------------------------------------------------------------------------
 
@@ -608,7 +606,6 @@ ConsoleMethod(CompositeSprite, getSpriteSortPoint, const char*, 2, 2,   "() - Ge
     return object->getSpriteSortPoint().scriptThis();
 }
 
-
 //-----------------------------------------------------------------------------
 
 ConsoleMethod(CompositeSprite, setSpriteRenderGroup, void, 3, 3,    "(renderGroup) Sets the name of the render group used to sort the sprite during rendering.\n"
@@ -861,23 +858,66 @@ ConsoleMethod(CompositeSprite, getSpriteName, const char*, 2, 2,    "() - Gets t
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethod(CompositeSprite, getLocalPosition, const char*, 3, 4,    "() - Get the local position from a world position.\n"
+																	"@param x/y The world position as either (\"x y\") or (x,y)\n"
+                                                                    "@return Local position on the composite of the specified world position.")
+{
+    Vector2 position;
+    U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+
+    // ("x y")
+    if ((elementCount == 2) && (argc < 8))
+    {
+        position = Utility::mGetStringElementVector(argv[2]);
+    }   
+    // (x, y)
+    else if ((elementCount == 1) && (argc > 3))
+    {
+        position = Vector2(dAtof(argv[2]), dAtof(argv[3]));
+    }   
+    // Invalid
+    else
+    {
+        Con::warnf("CompositeSprite::getLocalPosition() - Invalid number of parameters!");
+        return NULL;
+    }
+
+	return object->getLocalPoint(position).scriptThis();
+}
+
+ConsoleMethod(CompositeSprite, getLogicalPosition, const char*, 3, 4,    "() - Gets a logical position from a world position.\n"
+																	"@param x/y The world position as either (\"x y\") or (x,y)\n"
+                                                                    "@return Logical position on the composite of the specified world position.")
+{
+    Vector2 position;
+    U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+
+    // ("x y")
+    if ((elementCount == 2) && (argc < 8))
+    {
+        position = Utility::mGetStringElementVector(argv[2]);
+    }   
+    // (x, y)
+    else if ((elementCount == 1) && (argc > 3))
+    {
+        position = Vector2(dAtof(argv[2]), dAtof(argv[3]));
+    }   
+    // Invalid
+    else
+    {
+        Con::warnf("CompositeSprite::getLogicalPosition() - Invalid number of parameters!");
+        return NULL;
+    }
+
+	return object->getLogicalPoint(position).scriptThis();
+}
+
+//-----------------------------------------------------------------------------
+
 ConsoleMethod(CompositeSprite, pickPoint, const char*, 3, 4,    "(x / y ) Picks sprites intersecting the specified point with optional group/layer masks.\n"
                                                                 "@param x/y The coordinate of the point as either (\"x y\") or (x,y)\n"
                                                                 "@return Returns list of sprite Ids.")
 {
-    // Fetch sprite batch query and clear results.
-    SpriteBatchQuery* pSpriteBatchQuery = object->getSpriteBatchQuery( true );
-
-    // Is the sprite batch query available?
-    if ( pSpriteBatchQuery == NULL )
-    {
-        // No, so warn.
-        Con::warnf( "CompositeSprite::pickPoint() - Cannot pick sprites if clipping mode is off." );
-
-        // Return nothing.
-        return NULL;
-    }
-
     // The point.
     Vector2 point;
 
@@ -885,22 +925,20 @@ ConsoleMethod(CompositeSprite, pickPoint, const char*, 3, 4,    "(x / y ) Picks 
     U32 firstArg;
 
     // Grab the number of elements in the first parameter.
-    U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+    const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
 
     // ("x y")
     if ((elementCount == 2) && (argc < 8))
     {
         point = Utility::mGetStringElementVector(argv[2]);
         firstArg = 3;
-    }
-   
+    }   
     // (x, y)
     else if ((elementCount == 1) && (argc > 3))
     {
         point = Vector2(dAtof(argv[2]), dAtof(argv[3]));
         firstArg = 4;
-    }
-   
+    }   
     // Invalid
     else
     {
@@ -908,54 +946,37 @@ ConsoleMethod(CompositeSprite, pickPoint, const char*, 3, 4,    "(x / y ) Picks 
         return NULL;
     }
 
-    // Fetch the render transform.
-    const b2Transform& renderTransform = object->getRenderTransform();
+	const typeSpriteBatchQueryResultVector& queryResults = object->pickPoint(point);
+	if(queryResults.size() > 0)
+	{
+		// Set Max Buffer Size.
+		const U32 maxBufferSize = 4096;
 
-    // Transform into local space.
-    point = b2MulT( renderTransform, point );
+		// Create Returnable Buffer.
+		char* pBuffer = Con::getReturnBuffer(maxBufferSize);
 
-    // Perform query.
-    pSpriteBatchQuery->queryPoint( point, true );
+		// Set Buffer Counter.
+		U32 bufferCount = 0;
 
-    // Fetch result count.
-    const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
+		// Add picked sprites.
+		for ( U32 n = 0; n < queryResults.size(); n++ )
+		{
+			// Output Object ID.
+			bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSpriteBatchItem->getBatchId() );
 
-    // Finish if no results.
-    if (resultCount == 0 )
-        return NULL;
+			// Finish early if we run out of buffer space.
+			if ( bufferCount >= maxBufferSize )
+			{
+				// Warn.
+				Con::warnf("CompositeSprite::pickPoint() - Too many items picked to return to scripts!");
+				break;
+			}
+		}
 
-    // Fetch results.
-    typeSpriteBatchQueryResultVector& queryResults = pSpriteBatchQuery->getQueryResults();
+		return pBuffer;
+	}
 
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
-
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
-
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
-
-    // Add picked sprites.
-    for ( U32 n = 0; n < resultCount; n++ )
-    {
-        // Output Object ID.
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSpriteBatchItem->getBatchId() );
-
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("CompositeSprite::pickPoint() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
-
-    // Clear sprite batch query.
-    pSpriteBatchQuery->clearQuery();
-
-    // Return buffer.
-    return pBuffer;
+	return "";
 }
 
 //-----------------------------------------------------------------------------
@@ -965,19 +986,6 @@ ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y )
                                                             "@param endx/y The coordinates of the end point as either (\"x y\") or (x,y)\n"
                                                             "@return Returns list of sprite Ids.")
 {
-    // Fetch sprite batch query and clear results.
-    SpriteBatchQuery* pSpriteBatchQuery = object->getSpriteBatchQuery( true );
-
-    // Is the sprite batch query available?
-    if ( pSpriteBatchQuery == NULL )
-    {
-        // No, so warn.
-        Con::warnf( "CompositeSprite::pickArea() - Cannot pick sprites if clipping mode is off." );
-
-        // Return nothing.
-        return NULL;
-    }
-
     // Upper left and lower right bound.
     Vector2 v1, v2;
 
@@ -985,7 +993,7 @@ ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y )
     U32 firstArg;
 
     // Grab the number of elements in the first two parameters.
-    U32 elementCount1 = Utility::mGetStringElementCount(argv[2]);
+    const U32 elementCount1 = Utility::mGetStringElementCount(argv[2]);
     U32 elementCount2 = 1;
     if (argc > 3)
         elementCount2 = Utility::mGetStringElementCount(argv[3]);
@@ -996,24 +1004,21 @@ ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y )
         v1 = Utility::mGetStringElementVector(argv[2]);
         v2 = Utility::mGetStringElementVector(argv[2], 2);
         firstArg = 3;
-    }
-   
+    }   
     // ("x1 y1", "x2 y2")
     else if ((elementCount1 == 2) && (elementCount2 == 2) && (argc > 3) && (argc < 10))
     {
         v1 = Utility::mGetStringElementVector(argv[2]);
         v2 = Utility::mGetStringElementVector(argv[3]);
         firstArg = 4;
-    }
-   
+    }   
     // (x1, y1, x2, y2)
     else if (argc > 5)
     {
         v1 = Vector2(dAtof(argv[2]), dAtof(argv[3]));
         v2 = Vector2(dAtof(argv[4]), dAtof(argv[5]));
         firstArg = 6;
-    }
-   
+    }   
     // Invalid
     else
     {
@@ -1021,69 +1026,37 @@ ConsoleMethod(CompositeSprite, pickArea, const char*, 4, 6, "(startx/y, endx/y )
         return NULL;
     }
 
-    // Calculate normalized AABB.
-    b2AABB aabb;
-    aabb.lowerBound.x = getMin( v1.x, v2.x );
-    aabb.lowerBound.y = getMin( v1.y, v2.y );
-    aabb.upperBound.x = getMax( v1.x, v2.x );
-    aabb.upperBound.y = getMax( v1.y, v2.y );
+	const typeSpriteBatchQueryResultVector& queryResults = object->pickArea(v1, v2);
+	if(queryResults.size() > 0)
+	{
+		// Set Max Buffer Size.
+		const U32 maxBufferSize = 4096;
 
-	// Calculate local OOBB.
-    b2Vec2 localOOBB[4];
-    CoreMath::mAABBtoOOBB( aabb, localOOBB );
-    CoreMath::mCalculateInverseOOBB( localOOBB, object->getRenderTransform(), localOOBB );
+		// Create Returnable Buffer.
+		char* pBuffer = Con::getReturnBuffer(maxBufferSize);
 
-	// Calculate local AABB.
-    b2AABB localAABB;
-    CoreMath::mOOBBtoAABB( localOOBB, localAABB );
-  
-	// Convert OOBB to a PolygonShape
-    b2PolygonShape oobb_polygon;
-    oobb_polygon.Set(localOOBB, 4);
+		// Set Buffer Counter.
+		U32 bufferCount = 0;
 
-    // Perform query.
-    pSpriteBatchQuery->queryOOBB( localAABB, oobb_polygon, true );
+		// Add picked objects.
+		for ( U32 n = 0; n < queryResults.size(); n++ )
+		{
+			// Output Object ID.
+			bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSpriteBatchItem->getBatchId() );
 
+			// Finish early if we run out of buffer space.
+			if ( bufferCount >= maxBufferSize )
+			{
+				// Warn.
+				Con::warnf("CompositeSprite::pickArea() - Too many items picked to return to scripts!");
+				break;
+			}
+		}
 
-    // Fetch result count.
-    const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
+		return pBuffer;
+	}
 
-    // Finish if no results.
-    if (resultCount == 0 )
-        return NULL;
-
-    // Fetch results.
-    typeSpriteBatchQueryResultVector& queryResults = pSpriteBatchQuery->getQueryResults();
-
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
-
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
-
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
-
-    // Add picked objects.
-    for ( U32 n = 0; n < resultCount; n++ )
-    {
-        // Output Object ID.
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSpriteBatchItem->getBatchId() );
-
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("CompositeSprite::pickArea() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
-
-    // Clear sprite batch query.
-    pSpriteBatchQuery->clearQuery();
-
-    // Return buffer.
-    return pBuffer;
+	return "";
 }
 
 //-----------------------------------------------------------------------------
@@ -1093,19 +1066,6 @@ ConsoleMethod(CompositeSprite, pickRay, const char*, 4, 6,  "(startx/y, endx/y) 
                                                             "@param endx/y The coordinates of the end point as either (\"x y\") or (x,y)\n"
                                                             "@return Returns list of sprite Ids")
 {
-    // Fetch sprite batch query and clear results.
-    SpriteBatchQuery* pSpriteBatchQuery = object->getSpriteBatchQuery( true );
-
-    // Is the sprite batch query available?
-    if ( pSpriteBatchQuery == NULL )
-    {
-        // No, so warn.
-        Con::warnf( "CompositeSprite::pickRay() - Cannot pick sprites if clipping mode is off." );
-
-        // Return nothing.
-        return NULL;
-    }
-
     // Upper left and lower right bound.
     Vector2 v1, v2;
 
@@ -1113,7 +1073,7 @@ ConsoleMethod(CompositeSprite, pickRay, const char*, 4, 6,  "(startx/y, endx/y) 
     U32 firstArg;
 
     // Grab the number of elements in the first two parameters.
-    U32 elementCount1 = Utility::mGetStringElementCount(argv[2]);
+    const U32 elementCount1 = Utility::mGetStringElementCount(argv[2]);
     U32 elementCount2 = 1;
     if (argc > 3)
         elementCount2 = Utility::mGetStringElementCount(argv[3]);
@@ -1149,59 +1109,36 @@ ConsoleMethod(CompositeSprite, pickRay, const char*, 4, 6,  "(startx/y, endx/y) 
         return NULL;
     }
 
-    // Fetch the render transform.
-    const b2Transform& renderTransform = object->getRenderTransform();
+	const typeSpriteBatchQueryResultVector& queryResults = object->pickRay(v1, v2);
 
-    // Transform into local space.
-    v1 = b2MulT( renderTransform, v1 );
-    v2 = b2MulT( renderTransform, v2 );
+	if(queryResults.size() > 0)
+	{
+		// Set Max Buffer Size.
+		const U32 maxBufferSize = 4096;
 
-    // Perform query.
-    pSpriteBatchQuery->queryRay( v1, v2, true );
+		// Create Returnable Buffer.
+		char* pBuffer = Con::getReturnBuffer(maxBufferSize);
 
-    // Sanity!
-    AssertFatal( pSpriteBatchQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );
+		// Set Buffer Counter.
+		U32 bufferCount = 0;
 
-    // Fetch result count.
-    const U32 resultCount = pSpriteBatchQuery->getQueryResultsCount();
+		// Add Picked Objects to List.
+		for ( U32 n = 0; n < queryResults.size(); n++ )
+		{
+			// Output Object ID.
+			bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSpriteBatchItem->getBatchId() );
 
-    // Finish if no results.
-    if (resultCount == 0 )
-        return NULL;
+			// Finish early if we run out of buffer space.
+			if ( bufferCount >= maxBufferSize )
+			{
+				// Warn.
+				Con::warnf("CompositeSprite::pickRay() - Too many items picked to return to scripts!");
+				break;
+			}
+		}
 
-    // Sort ray-cast result.
-    pSpriteBatchQuery->sortRaycastQueryResult();
+		return pBuffer;
+	}
 
-    // Fetch results.
-    typeSpriteBatchQueryResultVector& queryResults = pSpriteBatchQuery->getQueryResults();
-
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
-
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
-
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
-
-    // Add Picked Objects to List.
-    for ( U32 n = 0; n < resultCount; n++ )
-    {
-        // Output Object ID.
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSpriteBatchItem->getBatchId() );
-
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("CompositeSprite::pickRay() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
-
-    // Clear sprite batch query.
-    pSpriteBatchQuery->clearQuery();
-
-    // Return buffer.
-    return pBuffer;
+	return "";
 }

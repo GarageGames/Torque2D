@@ -83,11 +83,9 @@ bool SimObject::registerObject()
         mIdString = StringTable->insert( idBuffer );
     }
 
-   AssertFatal(Sim::gIdDictionary && Sim::gNameDictionary, 
-      "SimObject::registerObject - tried to register an object before Sim::init()!");
+   AssertFatal(Sim::gIdDictionary && Sim::gNameDictionary, "SimObject::registerObject - tried to register an object before Sim::init()!");
 
-   Sim::gIdDictionary->insert(this);	
-
+   Sim::gIdDictionary->insert(this);
    Sim::gNameDictionary->insert(this);
 
     // Notify object
@@ -98,8 +96,8 @@ bool SimObject::registerObject()
 
    AssertFatal(!ret || isProperlyAdded(), "Object did not call SimObject::onAdd()");
 
-    if ( isMethod( "onAdd" ) )
-        Con::executef( this, 1, "onAdd" );
+    if(isMethod("onAdd"))
+        Con::executef(this, 1, "onAdd");
 
    return ret;
 }
@@ -676,7 +674,7 @@ ConsoleMethod( SimObject, getFieldCount, S32, 2, 2, "() - Gets the number of per
    const AbstractClassRep::FieldList &list = object->getFieldList();
    const AbstractClassRep::Field* f;
    U32 numDummyEntries = 0;
-   for(int i = 0; i < list.size(); i++)
+   for(U32 i = 0; i < list.size(); i++)
    {
       f = &list[i];
 
@@ -693,14 +691,14 @@ ConsoleMethod( SimObject, getFieldCount, S32, 2, 2, "() - Gets the number of per
 
 ConsoleMethod( SimObject, getField, const char*, 3, 3, "(int index) - Gets the name of the field at the given index." )
 {
-   S32 index = dAtoi( argv[2] );
+   U32 index = dAtoi( argv[2] );
    const AbstractClassRep::FieldList &list = object->getFieldList();
    if( ( index < 0 ) || ( index >= list.size() ) )
       return "";
 
    const AbstractClassRep::Field* f;
-   S32 currentField = 0;
-   for(int i = 0; i < list.size() && currentField <= index; i++)
+   U32 currentField = 0;
+   for(U32 i = 0; i < list.size() && currentField <= index; i++)
    {
       f = &list[i];
       

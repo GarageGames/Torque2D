@@ -55,6 +55,7 @@ struct Vector2 : b2Vec2
     inline Vector2( void ) {}
     inline Vector2( const Vector2& copy ) : b2Vec2( copy.x, copy.y ) {}
     inline Vector2( const F32 x, const F32 y ) : b2Vec2(x, y) {}
+    inline Vector2( const S32 x, const S32 y ) : b2Vec2((F32)x, (F32)y) {}
     inline Vector2( const b2Vec2& vec2 ) : b2Vec2( vec2 ) {}
     inline Vector2( const Point2I& point ) : b2Vec2( F32(point.x), F32(point.y) ) {}
     inline Vector2( const Point2F& point ) : b2Vec2( point.x, point.y ) {}

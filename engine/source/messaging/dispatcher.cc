@@ -47,7 +47,7 @@ namespace Dispatcher
 
 IMessageListener::~IMessageListener()
 {
-   for(S32 i = 0;i < mQueues.size();i++)
+   for(U32 i = 0;i < mQueues.size();i++)
    {
       unregisterMessageListener(mQueues[i], this);
    }
@@ -63,7 +63,7 @@ void IMessageListener::onAddToQueue(StringTableEntry queue)
 
 void IMessageListener::onRemoveFromQueue(StringTableEntry queue)
 {
-   for(S32 i = 0;i < mQueues.size();i++)
+   for(U32 i = 0;i < mQueues.size();i++)
    {
       if(mQueues[i] == queue)
       {
@@ -145,7 +145,7 @@ void unregisterMessageQueue(const char *name)
          return;
 
       // Tell the listeners about it
-      for(S32 i = 0;i < queue->mListeners.size();i++)
+      for(U32 i = 0;i < queue->mListeners.size();i++)
       {
          queue->mListeners[i]->onRemoveFromQueue(name);
       }

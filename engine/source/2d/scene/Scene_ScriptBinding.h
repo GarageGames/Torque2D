@@ -230,7 +230,7 @@ ConsoleMethod(Scene, getSceneObjectList, const char*, 2, 2, "() Gets the Scene O
     U32 bufferCount = 0;
 
     // Iterate through the list and generate an id string list to return
-    for ( S32 n = 0; n < objList.size(); n++ )
+    for ( U32 n = 0; n < objList.size(); n++ )
     {
         // Output Object ID.
         bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", objList[n]->getId() );
@@ -2343,7 +2343,7 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
     U32 firstArg;
 
     // Grab the number of elements in the first two parameters.
-    U32 elementCount1 = Utility::mGetStringElementCount(argv[2]);
+    const U32 elementCount1 = Utility::mGetStringElementCount(argv[2]);
     U32 elementCount2 = 1;
     if (argc > 3)
         elementCount2 = Utility::mGetStringElementCount(argv[3]);
@@ -2354,24 +2354,21 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
         v1 = Utility::mGetStringElementVector(argv[2]);
         v2 = Utility::mGetStringElementVector(argv[2], 2);
         firstArg = 3;
-    }
-   
+    }   
     // ("x1 y1", "x2 y2")
     else if ((elementCount1 == 2) && (elementCount2 == 2) && (argc > 3) && (argc < 10))
     {
         v1 = Utility::mGetStringElementVector(argv[2]);
         v2 = Utility::mGetStringElementVector(argv[3]);
         firstArg = 4;
-    }
-   
+    }   
     // (x1, y1, x2, y2)
     else if (argc > 5)
     {
         v1 = Vector2(dAtof(argv[2]), dAtof(argv[3]));
         v2 = Vector2(dAtof(argv[4]), dAtof(argv[5]));
         firstArg = 6;
-    }
-   
+    }   
     // Invalid
     else
     {
@@ -2401,88 +2398,44 @@ ConsoleMethod(Scene, pickArea, const char*, 4, 9, "(startx/y, endx/y, [sceneGrou
     {
         pickMode = Scene::getPickModeEnum(argv[firstArg + 2]);
     }
+
     if ( pickMode == Scene::PICK_INVALID )
     {
         Con::warnf("Scene::pickArea() - Invalid pick mode of %s", argv[firstArg + 2]);
         pickMode = Scene::PICK_OOBB;
     }
 
+	const typeWorldQueryResultVector& queryResults = object->pickArea(v1, v2, sceneGroupMask, sceneLayerMask, pickMode);
+	if(queryResults.size() > 0)
+	{
+		// Set Max Buffer Size.
+		const U32 maxBufferSize = 4096;
 
-    // Fetch world query and clear results.
-    WorldQuery* pWorldQuery = object->getWorldQuery( true );
+		// Create Returnable Buffer.
+		char* pBuffer = Con::getReturnBuffer(maxBufferSize);
 
-    // Set filter.
-    WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
-    pWorldQuery->setQueryFilter( queryFilter );
+		// Set Buffer Counter.
+		U32 bufferCount = 0;
 
-    // Calculate normalized AABB.
-    b2AABB aabb;
-    aabb.lowerBound.x = getMin( v1.x, v2.x );
-    aabb.lowerBound.y = getMin( v1.y, v2.y );
-    aabb.upperBound.x = getMax( v1.x, v2.x );
-    aabb.upperBound.y = getMax( v1.y, v2.y );
+		// Add picked objects.
+		for ( U32 n = 0; n < queryResults.size(); n++ )
+		{
+			// Output Object ID.
+			bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
 
-    // Perform query.
-    if ( pickMode == Scene::PICK_ANY )
-    {
-        pWorldQuery->anyQueryAABB( aabb );    
-    }
-    else if ( pickMode == Scene::PICK_AABB )
-    {
-        pWorldQuery->aabbQueryAABB( aabb );    
-    }
-    else if ( pickMode == Scene::PICK_OOBB )
-    {
-        pWorldQuery->oobbQueryAABB( aabb );    
-    }
-    else if ( pickMode == Scene::PICK_COLLISION )
-    {
-        pWorldQuery->collisionQueryAABB( aabb );    
-    }
-    else
-    {
-        AssertFatal( false, "Unsupported pick mode." );
-    }
+			// Finish early if we run out of buffer space.
+			if ( bufferCount >= maxBufferSize )
+			{
+				// Warn.
+				Con::warnf("Scene::pickArea() - Too many items picked to return to scripts!");
+				break;
+			}
+		}
 
-    // Fetch result count.
-    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+		return pBuffer;
+	}
 
-    // Finish if no results.
-    if ( resultCount == 0 )
-        return NULL;
-
-    // Fetch results.
-    typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
-
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
-
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
-
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
-
-    // Add picked objects.
-    for ( U32 n = 0; n < resultCount; n++ )
-    {
-        // Output Object ID.
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
-
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("Scene::pickArea() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
-
-    // Clear world query.
-    pWorldQuery->clearQuery();
-
-    // Return buffer.
-    return pBuffer;
+	return "";
 }
 
 //-----------------------------------------------------------------------------
@@ -2502,7 +2455,7 @@ ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroup
     U32 firstArg;
 
     // Grab the number of elements in the first two parameters.
-    U32 elementCount1 = Utility::mGetStringElementCount(argv[2]);
+    const U32 elementCount1 = Utility::mGetStringElementCount(argv[2]);
     U32 elementCount2 = 1;
     if (argc > 3)
         elementCount2 = Utility::mGetStringElementCount(argv[3]);
@@ -2521,16 +2474,14 @@ ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroup
         v1 = Utility::mGetStringElementVector(argv[2]);
         v2 = Utility::mGetStringElementVector(argv[3]);
         firstArg = 4;
-    }
-   
+    }   
     // (x1, y1, x2, y2)
     else if (argc > 5)
     {
         v1 = Vector2(dAtof(argv[2]), dAtof(argv[3]));
         v2 = Vector2(dAtof(argv[4]), dAtof(argv[5]));
         firstArg = 6;
-    }
-   
+    }   
     // Invalid
     else
     {
@@ -2560,87 +2511,44 @@ ConsoleMethod(Scene, pickRay, const char*, 4, 9, "(startx/y, endx/y, [sceneGroup
     {
         pickMode = Scene::getPickModeEnum(argv[firstArg + 2]);
     }
+
     if ( pickMode == Scene::PICK_INVALID )
     {
         Con::warnf("Scene::pickRay() - Invalid pick mode of %s", argv[firstArg + 2]);
         pickMode = Scene::PICK_OOBB;
     }
 
+	const typeWorldQueryResultVector& queryResults = object->pickRay(v1, v2, sceneGroupMask, sceneLayerMask, pickMode);
+	if(queryResults.size() > 0)
+	{
+		// Set Max Buffer Size.
+		const U32 maxBufferSize = 4096;
 
-    // Fetch world query and clear results.
-    WorldQuery* pWorldQuery = object->getWorldQuery( true );
+		// Create Returnable Buffer.
+		char* pBuffer = Con::getReturnBuffer(maxBufferSize);
 
-    // Set filter.
-    WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
-    pWorldQuery->setQueryFilter( queryFilter );
+		// Set Buffer Counter.
+		U32 bufferCount = 0;
 
-    // Perform query.
-    if ( pickMode == Scene::PICK_ANY )
-    {
-        pWorldQuery->anyQueryRay( v1, v2 );    
-    }
-    else if ( pickMode == Scene::PICK_AABB )
-    {
-        pWorldQuery->aabbQueryRay( v1, v2 );    
-    }
-    else if ( pickMode == Scene::PICK_OOBB )
-    {
-        pWorldQuery->oobbQueryRay( v1, v2 );    
-    }
-    else if ( pickMode == Scene::PICK_COLLISION )
-    {
-        pWorldQuery->collisionQueryRay( v1, v2 );    
-    }
-    else
-    {
-        AssertFatal( false, "Unsupported pick mode." );
-    }
+		// Add Picked Objects to List.
+		for ( U32 n = 0; n < queryResults.size(); n++ )
+		{
+			// Output Object ID.
+			bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
 
-    // Sanity!
-    AssertFatal( pWorldQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );
+			// Finish early if we run out of buffer space.
+			if ( bufferCount >= maxBufferSize )
+			{
+				// Warn.
+				Con::warnf("Scene::pickRay() - Too many items picked to return to scripts!");
+				break;
+			}
+		}
 
-    // Fetch result count.
-    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+		return pBuffer;
+	}
 
-    // Finish if no results.
-    if ( resultCount == 0 )
-        return NULL;
-
-    // Sort ray-cast result.
-    pWorldQuery->sortRaycastQueryResult();
-
-    // Fetch results.
-    typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
-
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
-
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
-
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
-
-    // Add Picked Objects to List.
-    for ( U32 n = 0; n < resultCount; n++ )
-    {
-        // Output Object ID.
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
-
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("Scene::pickRay() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
-
-    // Clear world query.
-    pWorldQuery->clearQuery();
-
-    // Return buffer.
-    return pBuffer;
+	return "";
 }
 
 //-----------------------------------------------------------------------------
@@ -2659,22 +2567,20 @@ ConsoleMethod(Scene, pickPoint, const char*, 3, 7, "(x / y, [sceneGroupMask], [s
     U32 firstArg;
 
     // Grab the number of elements in the first parameter.
-    U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+    const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
 
     // ("x y")
     if ((elementCount == 2) && (argc < 8))
     {
         point = Utility::mGetStringElementVector(argv[2]);
         firstArg = 3;
-    }
-   
+    }   
     // (x, y)
     else if ((elementCount == 1) && (argc > 3))
     {
         point = Vector2(dAtof(argv[2]), dAtof(argv[3]));
         firstArg = 4;
-    }
-   
+    }   
     // Invalid
     else
     {
@@ -2704,81 +2610,44 @@ ConsoleMethod(Scene, pickPoint, const char*, 3, 7, "(x / y, [sceneGroupMask], [s
     {
         pickMode = Scene::getPickModeEnum(argv[firstArg + 2]);
     }
+
     if ( pickMode == Scene::PICK_INVALID )
     {
         Con::warnf("Scene::pickPoint() - Invalid pick mode of %s", argv[firstArg + 2]);
         pickMode = Scene::PICK_OOBB;
     }
 
+	const typeWorldQueryResultVector& queryResults = object->pickPoint(point, sceneGroupMask, sceneLayerMask, pickMode);
+	if(queryResults.size() > 0)
+	{
+		// Set Max Buffer Size.
+		const U32 maxBufferSize = 4096;
 
-    // Fetch world query and clear results.
-    WorldQuery* pWorldQuery = object->getWorldQuery( true );
+		// Create Returnable Buffer.
+		char* pBuffer = Con::getReturnBuffer(maxBufferSize);
 
-    // Set filter.
-    WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
-    pWorldQuery->setQueryFilter( queryFilter );
+		// Set Buffer Counter.
+		U32 bufferCount = 0;
 
-    // Perform query.
-    if ( pickMode == Scene::PICK_ANY )
-    {
-        pWorldQuery->anyQueryPoint( point );    
-    }
-    else if ( pickMode == Scene::PICK_AABB )
-    {
-        pWorldQuery->aabbQueryPoint( point );    
-    }
-    else if ( pickMode == Scene::PICK_OOBB )
-    {
-        pWorldQuery->oobbQueryPoint( point );    
-    }
-    else if ( pickMode == Scene::PICK_COLLISION )
-    {
-        pWorldQuery->collisionQueryPoint( point );    
-    }
-    else
-    {
-        AssertFatal( false, "Unsupported pick mode." );
-    }
+		// Add Picked Objects to List.
+		for ( U32 n = 0; n < queryResults.size(); n++ )
+		{
+			// Output Object ID.
+			bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
 
-    // Fetch result count.
-    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+			// Finish early if we run out of buffer space.
+			if ( bufferCount >= maxBufferSize )
+			{
+				// Warn.
+				Con::warnf("Scene::pickPoint() - Too many items picked to return to scripts!");
+				break;
+			}
+		}
 
-    // Finish if no results.
-    if ( resultCount == 0 )
-        return NULL;
+		return pBuffer;
+	}
 
-    // Fetch results.
-    typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
-
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
-
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
-
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
-
-    // Add Picked Objects to List.
-    for ( U32 n = 0; n < resultCount; n++ )
-    {
-        // Output Object ID.
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
-
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("Scene::pickPoint() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
-
-    // Clear world query.
-    pWorldQuery->clearQuery();
-
-    // Return buffer.
-    return pBuffer;
+	return "";
 }
 
 //-----------------------------------------------------------------------------
@@ -2798,22 +2667,20 @@ ConsoleMethod(Scene, pickCircle, const char*, 4, 8, "(x / y, radius, [sceneGroup
     U32 firstArg;
 
     // Grab the number of elements in the first parameter.
-    U32 elementCount = Utility::mGetStringElementCount(argv[2]);
+    const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
 
     // ("x y")
     if ((elementCount == 2) && (argc < 8))
     {
         point = Utility::mGetStringElementVector(argv[2]);
         firstArg = 3;
-    }
-   
+    }   
     // (x, y)
     else if ((elementCount == 1) && (argc > 3))
     {
         point = Vector2(dAtof(argv[2]), dAtof(argv[3]));
         firstArg = 4;
-    }
-   
+    }   
     // Invalid
     else
     {
@@ -2853,83 +2720,45 @@ ConsoleMethod(Scene, pickCircle, const char*, 4, 8, "(x / y, radius, [sceneGroup
     {
         pickMode = Scene::getPickModeEnum(argv[firstArg + 2]);
     }
+
     if ( pickMode == Scene::PICK_INVALID )
     {
         Con::warnf("Scene::pickPoint() - Invalid pick mode of %s", argv[firstArg + 2]);
         pickMode = Scene::PICK_OOBB;
     }
 
+	const typeWorldQueryResultVector& queryResults = object->pickCircle(point, radius, sceneGroupMask, sceneLayerMask, pickMode);
+	if(queryResults.size() > 0)
+	{
+		// Set Max Buffer Size.
+		const U32 maxBufferSize = 4096;
 
-    // Fetch world query and clear results.
-    WorldQuery* pWorldQuery = object->getWorldQuery( true );
+		// Create Returnable Buffer.
+		char* pBuffer = Con::getReturnBuffer(maxBufferSize);
 
-    // Set filter.
-    WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
-    pWorldQuery->setQueryFilter( queryFilter );
+		// Set Buffer Counter.
+		U32 bufferCount = 0;
 
-    // Perform query.
-    if ( pickMode == Scene::PICK_ANY )
-    {
-        pWorldQuery->anyQueryCircle( point, radius );    
-    }
-    else if ( pickMode == Scene::PICK_AABB )
-    {
-        pWorldQuery->aabbQueryCircle( point, radius );    
-    }
-    else if ( pickMode == Scene::PICK_OOBB )
-    {
-        pWorldQuery->oobbQueryCircle( point, radius );    
-    }
-    else if ( pickMode == Scene::PICK_COLLISION )
-    {
-        pWorldQuery->collisionQueryCircle( point, radius );    
-    }
-    else
-    {
-        AssertFatal( false, "Unsupported pick mode." );
-    }
+		// Add Picked Objects to List.
+		for ( U32 n = 0; n < queryResults.size(); n++ )
+		{
+			// Output Object ID.
+			bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
 
-    // Fetch result count.
-    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+			// Finish early if we run out of buffer space.
+			if ( bufferCount >= maxBufferSize )
+			{
+				// Warn.
+				Con::warnf("Scene::pickPoint() - Too many items picked to return to scripts!");
+				break;
+			}
+		}
 
-    // Finish if no results.
-    if ( resultCount == 0 )
-        return NULL;
+		return pBuffer;
+	}
 
-    // Fetch results.
-    typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
-
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
-
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
-
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
-
-    // Add Picked Objects to List.
-    for ( U32 n = 0; n < resultCount; n++ )
-    {
-        // Output Object ID.
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d ", queryResults[n].mpSceneObject->getId() );
-
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("Scene::pickPoint() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
-
-    // Clear world query.
-    pWorldQuery->clearQuery();
-
-    // Return buffer.
-    return pBuffer;
+	return "";
 }
-
 
 //-----------------------------------------------------------------------------
 
@@ -2940,7 +2769,7 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
                 "@param sceneGroupMask Optional scene group mask.  (-1) or empty string selects all groups.\n"
                 "@param sceneLayerMask Optional scene layer mask.  (-1) or empty string selects all layers.\n"
                 "@return Returns a list of objects in blocks of detail items where each block represents a single object and its collision detail in the format:"
-                "<ObjectId PointX PointY NormalX NormalY RayFraction ShapeIndex> <ObjectId PointX PointY NormalX NormalY RayFraction ShapeIndex> <ObjectId PointX PointY NormalX NormalY RayFraction ShapeIndex> etc.\n")
+                "<ObjectId PointX PointY NormalX NormalY RayFraction shapeId> <ObjectId PointX PointY NormalX NormalY RayFraction shapeId> <ObjectId PointX PointY NormalX NormalY RayFraction shapeId> etc.\n")
 {
     // Upper left and lower right bound.
     Vector2 v1, v2;
@@ -2949,7 +2778,7 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
     U32 firstArg;
 
     // Grab the number of elements in the first two parameters.
-    U32 elementCount1 = Utility::mGetStringElementCount(argv[2]);
+    const U32 elementCount1 = Utility::mGetStringElementCount(argv[2]);
     U32 elementCount2 = 1;
     if (argc > 3)
         elementCount2 = Utility::mGetStringElementCount(argv[3]);
@@ -2960,24 +2789,21 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
         v1 = Utility::mGetStringElementVector(argv[2]);
         v2 = Utility::mGetStringElementVector(argv[2], 2);
         firstArg = 3;
-    }
-   
+    }   
     // ("x1 y1", "x2 y2")
     else if ((elementCount1 == 2) && (elementCount2 == 2) && (argc > 3) && (argc < 9))
     {
         v1 = Utility::mGetStringElementVector(argv[2]);
         v2 = Utility::mGetStringElementVector(argv[3]);
         firstArg = 4;
-    }
-   
+    }   
     // (x1, y1, x2, y2)
     else if (argc > 5)
     {
         v1 = Vector2(dAtof(argv[2]), dAtof(argv[3]));
         v2 = Vector2(dAtof(argv[4]), dAtof(argv[5]));
         firstArg = 6;
-    }
-   
+    }   
     // Invalid
     else
     {
@@ -3001,68 +2827,44 @@ ConsoleMethod(Scene, pickRayCollision, const char*, 4, 8, "(startx/y, endx/y, [s
             sceneLayerMask = dAtoi(argv[firstArg + 1]);
     }
 
-    // Fetch world query and clear results.
-    WorldQuery* pWorldQuery = object->getWorldQuery( true );
+	const typeWorldQueryResultVector& queryResults = object->pickRayCollision(v1, v2, sceneGroupMask, sceneLayerMask);
+	if(queryResults.size() > 0)
+	{
+		// Set Max Buffer Size.
+		const U32 maxBufferSize = 4096;
 
-    // Set filter.
-    WorldQueryFilter queryFilter( sceneLayerMask, sceneGroupMask, true, false, true, true );
-    pWorldQuery->setQueryFilter( queryFilter );
+		// Create Returnable Buffer.
+		char* pBuffer = Con::getReturnBuffer(maxBufferSize);
 
-    // Perform query.
-    pWorldQuery->collisionQueryRay( v1, v2 );    
+		// Set Buffer Counter.
+		U32 bufferCount = 0;
 
-    // Sanity!
-    AssertFatal( pWorldQuery->getIsRaycastQueryResult(), "Invalid non-ray-cast query result returned." );
+		// Add Picked Objects to List.
+		for ( U32 n = 0; n < queryResults.size(); n++ )
+		{
+			// Fetch query result.
+			const WorldQueryResult& queryResult = queryResults[n];
 
-    // Fetch result count.
-    const U32 resultCount = pWorldQuery->getQueryResultsCount();
+			bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d %g %g %g %g %g %d ",
+				queryResult.mpSceneObject->getId(),
+				queryResult.mPoint.x, queryResult.mPoint.y,
+				queryResult.mNormal.x, queryResult.mNormal.y,
+				queryResult.mFraction,
+				queryResult.mshapeId );
 
-    // Finish if no results.
-    if ( resultCount == 0 )
-        return NULL;
+			// Finish early if we run out of buffer space.
+			if ( bufferCount >= maxBufferSize )
+			{
+				// Warn.
+				Con::warnf("Scene::pickRayCollision() - Too many items picked to return to scripts!");
+				break;
+			}
+		}
 
-    // Sort ray-cast result.
-    pWorldQuery->sortRaycastQueryResult();
+		return pBuffer;
+	}
 
-    // Fetch results.
-    typeWorldQueryResultVector& queryResults = pWorldQuery->getQueryResults();
-
-    // Set Max Buffer Size.
-    const U32 maxBufferSize = 4096;
-
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(maxBufferSize);
-
-    // Set Buffer Counter.
-    U32 bufferCount = 0;
-
-    // Add Picked Objects to List.
-    for ( U32 n = 0; n < resultCount; n++ )
-    {
-        // Fetch query result.
-        const WorldQueryResult& queryResult = queryResults[n];
-
-        bufferCount += dSprintf( pBuffer + bufferCount, maxBufferSize-bufferCount, "%d %g %g %g %g %g %d ",
-            queryResult.mpSceneObject->getId(),
-            queryResult.mPoint.x, queryResult.mPoint.y,
-            queryResult.mNormal.x, queryResult.mNormal.y,
-            queryResult.mFraction,
-            queryResult.mShapeIndex );
-
-        // Finish early if we run out of buffer space.
-        if ( bufferCount >= maxBufferSize )
-        {
-            // Warn.
-            Con::warnf("Scene::pickRayCollision() - Too many items picked to return to scripts!");
-            break;
-        }
-    }
-
-    // Clear world query.
-    pWorldQuery->clearQuery();
-
-    // Return buffer.
-    return pBuffer;
+	return "";
 }
 
 //-----------------------------------------------------------------------------
@@ -3378,4 +3180,3 @@ ConsoleMethod(Scene, create, const char*, 3, 3, "(type) Creates the specified sc
 
     return pSceneObject == NULL ? NULL : pSceneObject->getIdString();
 }
-

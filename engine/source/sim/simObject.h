@@ -272,6 +272,8 @@ public:
                             ///  marked as selected should be outputted. Used in SimSet.
     };
 
+    inline const char* scriptThis(void) const { return Con::getIntArg(getId()); }
+
 private:
     // dictionary information stored on the object
     StringTableEntry objectName;

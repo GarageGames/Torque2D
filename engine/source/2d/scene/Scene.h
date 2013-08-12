@@ -355,8 +355,8 @@ public:
 
     inline SimSet*			getControllers( void )						{ return mControllers; }
 
-    inline S32              getAssetPreloadCount( void ) const          { return mAssetPreloads.size(); }
-    const AssetPtr<AssetBase>* getAssetPreload( const S32 index ) const;
+    inline U32              getAssetPreloadCount( void ) const          { return mAssetPreloads.size(); }
+    const AssetPtr<AssetBase>* getAssetPreload( const U32 index ) const;
     void                    addAssetPreload( const char* pAssetId );
     void                    removeAssetPreload( const char* pAssetId );
     void                    clearAssetPreloads( void );
@@ -379,27 +379,13 @@ public:
     S32                     createDistanceJoint(
                                 const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
                                 const b2Vec2& localAnchorA = b2Vec2_zero, const b2Vec2& localAnchorB = b2Vec2_zero,
-                                const F32 length = -1.0f,
-                                const F32 frequency = 0.0f,
-                                const F32 dampingRatio = 0.0f,
+                                const F32 length = -1.0f, const F32 frequency = 0.0f, const F32 dampingRatio = 0.0f,
                                 const bool collideConnected = false );
-
-    void                    setDistanceJointLength(
-                                const U32 jointId,
-                                const F32 length );
-
+    void                    setDistanceJointLength( const U32 jointId, const F32 length );
     F32                     getDistanceJointLength( const U32 jointId );
-
-    void                    setDistanceJointFrequency(
-                                const U32 jointId,
-                                const F32 frequency );
-
+    void                    setDistanceJointFrequency( const U32 jointId, const F32 frequency );
     F32                     getDistanceJointFrequency( const U32 jointId );
-
-    void                    setDistanceJointDampingRatio(
-                                const U32 jointId,
-                                const F32 dampingRatio );
-
+    void                    setDistanceJointDampingRatio( const U32 jointId, const F32 dampingRatio );
     F32                     getDistanceJointDampingRatio( const U32 jointId );
 
     /// Rope joint.
@@ -408,11 +394,7 @@ public:
                                 const b2Vec2& localAnchorA = b2Vec2_zero, const b2Vec2& localAnchorB = b2Vec2_zero,
                                 const F32 maxLength = -1.0f,
                                 const bool collideConnected = false );
-
-    void                    setRopeJointMaxLength(
-                                const U32 jointId,
-                                const F32 maxLength );
-
+    void                    setRopeJointMaxLength( const U32 jointId, const F32 maxLength );
     F32                     getRopeJointMaxLength( const U32 jointId );
 
     /// Revolute joint.
@@ -420,29 +402,10 @@ public:
                                 const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
                                 const b2Vec2& localAnchorA = b2Vec2_zero, const b2Vec2& localAnchorB = b2Vec2_zero,
                                 const bool collideConnected = false );
-
-    void                    setRevoluteJointLimit(
-                                const U32 jointId,
-                                const bool enableLimit,
-                                const F32 lowerAngle, const F32 upperAngle );
-
-    bool                    getRevoluteJointLimit(
-                                const U32 jointId,
-                                bool& enableLimit,
-                                F32& lowerAngle, F32& upperAngle );
-
-    void                    setRevoluteJointMotor(
-                                const U32 jointId,
-                                const bool enableMotor,
-                                const F32 motorSpeed = b2_pi,
-                                const F32 maxMotorTorque = 0.0f );
-
-    bool                    getRevoluteJointMotor(
-                                const U32 jointId,
-                                bool& enableMotor,
-                                F32& motorSpeed,
-                                F32& maxMotorTorque );
-
+    void                    setRevoluteJointLimit( const U32 jointId, const bool enableLimit, const F32 lowerAngle, const F32 upperAngle );
+	bool                    getRevoluteJointLimit( const U32 jointId, bool& enableLimit, F32& lowerAngle, F32& upperAngle );
+    void                    setRevoluteJointMotor( const U32 jointId, const bool enableMotor, const F32 motorSpeed = b2_pi, const F32 maxMotorTorque = 0.0f );
+    bool                    getRevoluteJointMotor( const U32 jointId, bool& enableMotor, F32& motorSpeed, F32& maxMotorTorque );
 	F32                     getRevoluteJointAngle( const U32 jointId );
 	F32						getRevoluteJointSpeed( const U32 jointId );
 
@@ -450,178 +413,90 @@ public:
     S32                     createWeldJoint(
                                 const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
                                 const b2Vec2& localAnchorA = b2Vec2_zero, const b2Vec2& localAnchorB = b2Vec2_zero,
-                                const F32 frequency = 0.0f,
-                                const F32 dampingRatio = 0.0f,
+                                const F32 frequency = 0.0f, const F32 dampingRatio = 0.0f,
                                 const bool collideConnected = false );
-
-    void                    setWeldJointFrequency(
-                                const U32 jointId,
-                                const F32 frequency );
-
+    void                    setWeldJointFrequency( const U32 jointId, const F32 frequency );
     F32                     getWeldJointFrequency( const U32 jointId );
-
-    void                    setWeldJointDampingRatio(
-                                const U32 jointId,
-                                const F32 dampingRatio );
-
+    void                    setWeldJointDampingRatio( const U32 jointId, const F32 dampingRatio );
     F32                     getWeldJointDampingRatio( const U32 jointId );
 
     /// Wheel joint.
     S32                     createWheelJoint(
                                 const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
-                                const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
-                                const b2Vec2& worldAxis,
+                                const b2Vec2& localAnchorA, const b2Vec2& localAnchorB, const b2Vec2& worldAxis,
                                 const bool collideConnected = false );
-
-    void                    setWheelJointMotor(
-                                const U32 jointId,
-                                const bool enableMotor,
-                                const F32 motorSpeed = b2_pi,
-                                const F32 maxMotorTorque = 0.0f );
-
-    bool                    getWheelJointMotor(
-                                const U32 jointId,
-                                bool& enableMotor,
-                                F32& motorSpeed,
-                                F32& maxMotorTorque );
-
-    void                    setWheelJointFrequency(
-                                const U32 jointId,
-                                const F32 frequency );
-
+    void                    setWheelJointMotor( const U32 jointId, const bool enableMotor, const F32 motorSpeed = b2_pi, const F32 maxMotorTorque = 0.0f );
+	bool                    getWheelJointMotor( const U32 jointId, bool& enableMotor, F32& motorSpeed, F32& maxMotorTorque );
+	void                    setWheelJointFrequency( const U32 jointId, const F32 frequency );
     F32                     getWheelJointFrequency( const U32 jointId );
-
-    void                    setWheelJointDampingRatio(
-                                const U32 jointId,
-                                const F32 dampingRatio );
-
+    void                    setWheelJointDampingRatio( const U32 jointId, const F32 dampingRatio );
     F32                     getWheelJointDampingRatio( const U32 jointId );
 
     /// Friction joint.
     S32                     createFrictionJoint(
                                 const SceneObject* pSceneObjectA,const  SceneObject* pSceneObjectB,
                                 const b2Vec2& localAnchorA = b2Vec2_zero, const b2Vec2& localAnchorB = b2Vec2_zero,
-                                const F32 maxForce = 0.0f,
-                                const F32 maxTorque = 0.0f,
+                                const F32 maxForce = 0.0f, const F32 maxTorque = 0.0f,
                                 const bool collideConnected = false );
-
-    void                    setFrictionJointMaxForce(
-                                const U32 jointId,
-                                const F32 maxForce );
-
+    void                    setFrictionJointMaxForce( const U32 jointId, const F32 maxForce );
     F32                     getFrictionJointMaxForce( const U32 jointId );
-
-    void                    setFrictionJointMaxTorque(
-                                const U32 jointId,
-                                const F32 maxTorque );
-
+    void                    setFrictionJointMaxTorque( const U32 jointId, const F32 maxTorque );
     F32                     getFrictionJointMaxTorque( const U32 jointId );
 
     /// Prismatic joint.
     S32                     createPrismaticJoint(
                                 const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
-                                const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
-                                const b2Vec2& worldAxis,
+                                const b2Vec2& localAnchorA, const b2Vec2& localAnchorB, const b2Vec2& worldAxis,
                                 const bool collideConnected = false );
-
-    void                    setPrismaticJointLimit(
-                                const U32 jointId,
-                                const bool enableLimit,
-                                const F32 lowerTranslation, const F32 upperTranslation );
-
-    bool                    getPrismaticJointLimit(
-                                const U32 jointId,
-                                bool& enableLimit,
-                                F32& lowerTranslation, F32& upperTranslation );
-
-    void                    setPrismaticJointMotor(
-                                const U32 jointId,
-                                const bool enableMotor,
-                                const F32 motorSpeed = b2_pi,
-                                const F32 maxMotorForce = 0.0f );
-
-    bool                    getPrismaticJointMotor(
-                                const U32 jointId,
-                                bool& enableMotor,
-                                F32& motorSpeed,
-                                F32& maxMotorTorque );
+    void                    setPrismaticJointLimit( const U32 jointId, const bool enableLimit, const F32 lowerTranslation, const F32 upperTranslation );
+	bool                    getPrismaticJointLimit( const U32 jointId, bool& enableLimit, F32& lowerTranslation, F32& upperTranslation );
+    void                    setPrismaticJointMotor( const U32 jointId, const bool enableMotor, const F32 motorSpeed = b2_pi, const F32 maxMotorForce = 0.0f );
+    bool                    getPrismaticJointMotor( const U32 jointId, bool& enableMotor, F32& motorSpeed, F32& maxMotorTorque );
 
     /// Pulley joint.
     S32                     createPulleyJoint(
                                 const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
                                 const b2Vec2& localAnchorA, const b2Vec2& localAnchorB,
                                 const b2Vec2& worldGroundAnchorA, const b2Vec2& worldGroundAnchorB,
-                                const F32 ratio,
-                                const F32 lengthA = -1.0f, const F32 lengthB = -1.0f,
+                                const F32 ratio, const F32 lengthA = -1.0f, const F32 lengthB = -1.0f,
                                 const bool collideConnected = false );
 
     /// Target (a.k.a Mouse) joint.
     S32                     createTargetJoint(
-                                const SceneObject* pSceneObject,
-                                const b2Vec2& worldTarget,
-                                const F32 maxForce,
-                                const bool useCenterOfMass = false,
-                                const F32 frequency = 5.0f,
-                                const F32 dampingRatio = 0.7f,
+                                const SceneObject* pSceneObject, const b2Vec2& worldTarget,
+                                const F32 maxForce, const bool useCenterOfMass = false,
+                                const F32 frequency = 5.0f, const F32 dampingRatio = 0.7f,
                                 const bool collideConnected = false );
-
-    void                    setTargetJointTarget(
-                                const U32 jointId,
-                                const b2Vec2& worldTarget );
-
+    void                    setTargetJointTarget( const U32 jointId, const b2Vec2& worldTarget );
     b2Vec2                  getTargetJointTarget( const U32 jointId );
-
-    void                    setTargetJointMaxForce(
-                                const U32 jointId,
-                                const F32 maxForce );
-
+    void                    setTargetJointMaxForce( const U32 jointId, const F32 maxForce );
     F32                     getTargetJointMaxForce( const U32 jointId );
-
-    void                    setTargetJointFrequency(
-                                const U32 jointId,
-                                const F32 frequency );
-
+    void                    setTargetJointFrequency( const U32 jointId, const F32 frequency );
     F32                     getTargetJointFrequency( const U32 jointId );
-
-    void                    setTargetJointDampingRatio(
-                                const U32 jointId,
-                                const F32 dampingRatio );
-
+    void                    setTargetJointDampingRatio( const U32 jointId, const F32 dampingRatio );
     F32                     getTargetJointDampingRatio( const U32 jointId );
 
     /// Motor Joint.
     S32                     createMotorJoint(
                                 const SceneObject* pSceneObjectA, const SceneObject* pSceneObjectB,
-                                const b2Vec2 linearOffset = b2Vec2_zero,
-                                const F32 angularOffset = 0.0f,
-                                const F32 maxForce = 1.0f,
-                                const F32 maxTorque = 1.0f,
-                                const F32 correctionFactor = 0.3f,
+                                const b2Vec2 linearOffset = b2Vec2_zero, const F32 angularOffset = 0.0f,
+                                const F32 maxForce = 1.0f, const F32 maxTorque = 1.0f, const F32 correctionFactor = 0.3f,
                                 const bool collideConnected = false );
-
-    void                    setMotorJointLinearOffset(
-                                const U32 jointId,
-                                const b2Vec2& linearOffset );
-
+    void                    setMotorJointLinearOffset( const U32 jointId, const b2Vec2& linearOffset );
     b2Vec2                  getMotorJointLinearOffset( const U32 jointId );
-
-    void                    setMotorJointAngularOffset(
-                                const U32 jointId,
-                                const F32 angularOffset );
-
+    void                    setMotorJointAngularOffset( const U32 jointId, const F32 angularOffset );
     F32                     getMotorJointAngularOffset( const U32 jointId );
-
-    void                    setMotorJointMaxForce(
-                                const U32 jointId,
-                                const F32 maxForce );
-
+    void                    setMotorJointMaxForce( const U32 jointId, const F32 maxForce );
     F32                     getMotorJointMaxForce( const U32 jointId );
-
-    void                    setMotorJointMaxTorque(
-                                const U32 jointId,
-                                const F32 maxTorque );
-
+    void                    setMotorJointMaxTorque( const U32 jointId, const F32 maxTorque );
     F32                     getMotorJointMaxTorque( const U32 jointId );
+
+	/// Picking
+	typeWorldQueryResultVector pickArea(const Vector2& worldStartPosition, const Vector2& worldEndPosition, const U32& sceneGroupMask = MASK_ALL, const U32& sceneLayerMask = MASK_ALL, const PickMode& pickMode = PICK_OOBB);
+	typeWorldQueryResultVector pickRay(const Vector2& worldStartPosition, const Vector2& worldEndPosition, const U32& sceneGroupMask = MASK_ALL, const U32& sceneLayerMask = MASK_ALL, const PickMode& pickMode = PICK_OOBB);
+	typeWorldQueryResultVector pickPoint(const Vector2& worldPosition, const U32& sceneGroupMask = MASK_ALL, const U32& sceneLayerMask = MASK_ALL, const PickMode& pickMode = PICK_OOBB);
+	typeWorldQueryResultVector pickCircle(const Vector2& worldPosition, const F32& radius, const U32& sceneGroupMask = MASK_ALL, const U32& sceneLayerMask = MASK_ALL, const PickMode& pickMode = PICK_OOBB);
+	typeWorldQueryResultVector pickRayCollision(const Vector2& worldStartPosition, const Vector2& worldEndPosition, const U32& sceneGroupMask = MASK_ALL, const U32& sceneLayerMask = MASK_ALL);
 
     /// Debug and metrics.
     inline void             setDebugOn( const U32 debugMask )           { mDebugMask |= debugMask; }
@@ -650,7 +525,6 @@ public:
     /// Destruction listeners.
     virtual                 void SayGoodbye( b2Joint* pJoint );
     virtual                 void SayGoodbye( b2Fixture* pFixture )      {}
-
     virtual SceneObject*    create( const char* pType );
 
     /// Miscellaneous.
@@ -667,13 +541,13 @@ public:
     static SceneRenderRequest* createDefaultRenderRequest( SceneRenderQueue* pSceneRenderQueue, SceneObject* pSceneObject  );
 
     /// Taml children.
-    virtual U32 getTamlChildCount( void ) const                         { return (U32)mSceneObjects.size(); }
+    virtual U32 getTamlChildCount( void ) const                         { return mSceneObjects.size(); }
     virtual SimObject* getTamlChild( const U32 childIndex ) const;
     virtual void addTamlChild( SimObject* pSimObject );
 
     static b2JointType getJointTypeEnum(const char* label);
     static const char* getJointTypeDescription( b2JointType jointType );
-    static PickMode getPickModeEnum(const char* label);
+    static PickMode	getPickModeEnum(const char* label);
     static const char* getPickModeDescription( PickMode pickMode );
     static DebugOption getDebugOptionEnum(const char* label);
     static const char* getDebugOptionDescription( DebugOption debugOption );

@@ -90,6 +90,7 @@ ConsoleMethod( GuiListBoxCtrl, clearSelection, void, 2, 2, "() Sets all currentl
 {
    object->clearSelection();
 }
+
 void GuiListBoxCtrl::clearSelection()
 {
    if( !mSelectedItems.size() )
@@ -118,7 +119,7 @@ ConsoleMethod( GuiListBoxCtrl, setSelected, void, 3, 4, "(S32 index, bool settin
       object->removeSelection( dAtoi( argv[2] ) );
 }
 
-void GuiListBoxCtrl::removeSelection( S32 index )
+void GuiListBoxCtrl::removeSelection( U32 index )
 {
    // Range Check
    if( index >= mItems.size() || index < 0 )
@@ -129,7 +130,8 @@ void GuiListBoxCtrl::removeSelection( S32 index )
 
    removeSelection( mItems[index], index );
 }
-void GuiListBoxCtrl::removeSelection( LBItem *item, S32 index )
+
+void GuiListBoxCtrl::removeSelection( LBItem *item, U32 index )
 {
    if( !mSelectedItems.size() )
       return;
@@ -137,7 +139,7 @@ void GuiListBoxCtrl::removeSelection( LBItem *item, S32 index )
    if( !item )
       return;
 
-   for( S32 i = 0 ; i < mSelectedItems.size(); i++ )
+   for( U32 i = 0 ; i < mSelectedItems.size(); i++ )
    {
       if( mSelectedItems[i] == item )
       {
@@ -149,7 +151,7 @@ void GuiListBoxCtrl::removeSelection( LBItem *item, S32 index )
    }
 }
 
-void GuiListBoxCtrl::addSelection( S32 index )
+void GuiListBoxCtrl::addSelection( U32 index )
 {
    // Range Check
    if( index >= mItems.size() || index < 0 )
@@ -161,7 +163,8 @@ void GuiListBoxCtrl::addSelection( S32 index )
    addSelection( mItems[index], index );
 
 }
-void GuiListBoxCtrl::addSelection( LBItem *item, S32 index )
+
+void GuiListBoxCtrl::addSelection( LBItem *item, U32 index )
 {
    if( !mMultipleSelections )
    {
@@ -178,7 +181,7 @@ void GuiListBoxCtrl::addSelection( LBItem *item, S32 index )
    {
       if( !mSelectedItems.empty() )
       {
-         for( S32 i = 0; i < mSelectedItems.size(); i++ )
+         for( U32 i = 0; i < mSelectedItems.size(); i++ )
          {
             if( mSelectedItems[ i ] == item )
                return;
@@ -199,7 +202,7 @@ S32 GuiListBoxCtrl::getItemIndex( LBItem *item )
       return -1;
 
    // Lookup the index of an item in our list, by the pointer to the item
-   for( S32 i = 0; i < mItems.size(); i++ )
+   for( U32 i = 0; i < mItems.size(); i++ )
       if( mItems[i] == item )
          return i;
 
@@ -211,7 +214,7 @@ ConsoleMethod( GuiListBoxCtrl, getItemCount, S32, 2, 2, "()\n @return Returns th
    return object->getItemCount();
 }
 
-S32 GuiListBoxCtrl::getItemCount()
+U32 GuiListBoxCtrl::getItemCount()
 {
    return mItems.size();
 }
@@ -220,7 +223,8 @@ ConsoleMethod( GuiListBoxCtrl, getSelCount, S32, 2, 2, "()\n @return Returns the
 {
    return object->getSelCount();
 }
-S32 GuiListBoxCtrl::getSelCount()
+
+U32 GuiListBoxCtrl::getSelCount()
 {
    return mSelectedItems.size();
 }
@@ -230,12 +234,13 @@ ConsoleMethod( GuiListBoxCtrl, getSelectedItem, S32, 2, 2, "()\n @return Returns
 {
    return object->getSelectedItem();
 }
+
 S32 GuiListBoxCtrl::getSelectedItem()
 {
    if( mSelectedItems.empty() || mItems.empty() )
       return -1;
 
-   for( S32 i = 0 ; i < mItems.size(); i++ )
+   for( U32 i = 0 ; i < mItems.size(); i++ )
       if( mItems[i]->isSelected )
          return i;
 
@@ -245,7 +250,7 @@ S32 GuiListBoxCtrl::getSelectedItem()
 ConsoleMethod( GuiListBoxCtrl, getSelectedItems, const char*, 2, 2, "()\n @return Returns a space delimited list "
               "of the selected items indexes in the list")
 {
-   S32 selCount = object->getSelCount();
+   U32 selCount = object->getSelCount();
    if( selCount == -1 || selCount == 0 )
       return StringTable->lookup("-1");
    else if( selCount == 1 )
@@ -269,6 +274,7 @@ ConsoleMethod( GuiListBoxCtrl, getSelectedItems, const char*, 2, 2, "()\n @retur
 
    return retBuffer;
 }
+
 void GuiListBoxCtrl::getSelectedItems( Vector<S32> &Items )
 {
    // Clear our return vector
@@ -278,7 +284,7 @@ void GuiListBoxCtrl::getSelectedItems( Vector<S32> &Items )
    if( mSelectedItems.empty() )
       return;
    
-   for( S32 i = 0; i < mItems.size(); i++ )
+   for( U32 i = 0; i < mItems.size(); i++ )
       if( mItems[i]->isSelected )
          Items.push_back( i );
 }
@@ -311,7 +317,7 @@ S32 GuiListBoxCtrl::findItemText( StringTableEntry text, bool caseSensitive )
       return -1;
 
    // Lookup the index of an item in our list, by the pointer to the item
-   for( S32 i = 0; i < mItems.size(); i++ )
+   for( U32 i = 0; i < mItems.size(); i++ )
    {
       // Case Sensitive Compare?
       if( caseSensitive && ( dStrcmp( mItems[i]->itemText, text ) == 0 ) )
@@ -329,10 +335,11 @@ ConsoleMethod(GuiListBoxCtrl, setCurSel, void, 3, 3, "(index) Sets the currently
 {
    object->setCurSel( dAtoi( argv[2] ) );
 }
+
 void GuiListBoxCtrl::setCurSel( S32 index )
 {
    // Range Check
-   if( index >= mItems.size() )
+   if( index >= (S32)mItems.size() )
    {
       Con::warnf("GuiListBoxCtrl::setCurSel - index out of range!" );
       return;
@@ -361,7 +368,8 @@ ConsoleMethod( GuiListBoxCtrl, setCurSelRange, void, 3, 4, "(start,[stop]) Sets 
    else
       object->setCurSelRange( dAtoi(argv[2]), 999999 );
 }
-void GuiListBoxCtrl::setCurSelRange( S32 start, S32 stop )
+
+void GuiListBoxCtrl::setCurSelRange( U32 start, U32 stop )
 {
    // Verify Selection Range
    if( start < 0 )
@@ -414,13 +422,14 @@ ConsoleMethod( GuiListBoxCtrl, addItem, void, 3, 4, "(text, [color]) Adds an ite
       Con::warnf("GuiListBoxCtrl::addItem() - Invalid number of parameters!");
    }  
 }
-S32 GuiListBoxCtrl::addItem( StringTableEntry text, void *itemData )
+
+U32 GuiListBoxCtrl::addItem( StringTableEntry text, void *itemData )
 {
    // This just calls insert item at the end of the list
    return insertItem( mItems.size(), text, itemData );
 }
 
-S32 GuiListBoxCtrl::addItemWithColor( StringTableEntry text, ColorF color, void *itemData )
+U32 GuiListBoxCtrl::addItemWithColor( StringTableEntry text, ColorF color, void *itemData )
 {
    // This just calls insert item at the end of the list
    return insertItemWithColor( mItems.size(), text, color, itemData );
@@ -445,7 +454,7 @@ ConsoleMethod(GuiListBoxCtrl, setItemColor, void, 4, 4, "(index, color) Sets the
       Con::warnf("GuiListBoxCtrl::addItem() - Invalid number of parameters for the color!");
 }
 
-void GuiListBoxCtrl::setItemColor( S32 index, ColorF color )
+void GuiListBoxCtrl::setItemColor( U32 index, ColorF color )
 {
    if ((index >= mItems.size()) || index < 0)
    {
@@ -465,7 +474,7 @@ ConsoleMethod(GuiListBoxCtrl, clearItemColor, void, 3, 3, "(index) Clears the co
    object->clearItemColor(dAtoi(argv[2]));
 }
 
-void GuiListBoxCtrl::clearItemColor( S32 index )
+void GuiListBoxCtrl::clearItemColor( U32 index )
 {
    if ((index >= mItems.size()) || index < 0)
    {
@@ -485,7 +494,7 @@ ConsoleMethod( GuiListBoxCtrl, insertItem, void, 4, 4, "( text, index ) Inserts 
    object->insertItem( dAtoi( argv[3] ), argv[2] );
 }
 
-S32 GuiListBoxCtrl::insertItem( S32 index, StringTableEntry text, void *itemData )
+U32 GuiListBoxCtrl::insertItem( U32 index, StringTableEntry text, void *itemData )
 {
    // If the index is greater than our list size, insert it at the end
    if( index >= mItems.size() )
@@ -523,7 +532,7 @@ S32 GuiListBoxCtrl::insertItem( S32 index, StringTableEntry text, void *itemData
 
 }
 
-S32 GuiListBoxCtrl::insertItemWithColor( S32 index, StringTableEntry text, ColorF color, void *itemData )
+U32 GuiListBoxCtrl::insertItemWithColor( U32 index, StringTableEntry text, ColorF color, void *itemData )
 {
    // If the index is greater than our list size, insert it at the end
    if( index >= mItems.size() )
@@ -575,7 +584,7 @@ ConsoleMethod ( GuiListBoxCtrl, deleteItem, void, 3, 3, "(index) Deletes the ite
    object->deleteItem( dAtoi( argv[2] ) );
 }
 
-void  GuiListBoxCtrl::deleteItem( S32 index )
+void  GuiListBoxCtrl::deleteItem( U32 index )
 {
    // Range Check
    if( index >= mItems.size() || index < 0 )
@@ -621,7 +630,7 @@ ConsoleMethod( GuiListBoxCtrl, getItemText, const char*, 3, 3, "(index) \n @retu
 StringTableEntry GuiListBoxCtrl::getItemText( S32 index )
 {
    // Range Checking
-   if( index > mItems.size() || index < 0 )
+   if( index > (S32)mItems.size() || index < 0 )
    {
       Con::warnf( "GuiListBoxCtrl::getItemText - index out of range!" );
       return StringTable->EmptyString;
@@ -638,7 +647,8 @@ ConsoleMethod( GuiListBoxCtrl, setItemText, void, 4, 4, "(index, newtext) Sets t
 {
    object->setItemText( dAtoi( argv[2] ), argv[3] );
 }
-void GuiListBoxCtrl::setItemText( S32 index, StringTableEntry text )
+
+void GuiListBoxCtrl::setItemText( U32 index, StringTableEntry text )
 {
    // Sanity Checking
    if( !text )
@@ -708,7 +718,7 @@ void GuiListBoxCtrl::onRender( Point2I offset, const RectI &updateRect )
    // Save our original clip rect
    RectI oldClipRect = clipRect;
 
-   for ( S32 i = 0; i < mItems.size(); i++)
+   for ( U32 i = 0; i < mItems.size(); i++)
    {
       S32 colorBoxSize = 0;
       ColorI boxColor = ColorI(0, 0, 0);
@@ -749,7 +759,7 @@ void GuiListBoxCtrl::onRenderItem( RectI itemRect, LBItem *item )
    renderJustifiedText(itemRect.point + Point2I( 2, 0 ), itemRect.extent, item->itemText);
 }
 
-void GuiListBoxCtrl::drawBox(const Point2I &box, S32 size, ColorI &outlineColor, ColorI &boxColor)
+void GuiListBoxCtrl::drawBox(const Point2I &box, U32 size, ColorI &outlineColor, ColorI &boxColor)
 {
    RectI r(box.x - size, box.y - size, 2 * size + 1, 2 * size + 1);
    r.inset(1, 1);

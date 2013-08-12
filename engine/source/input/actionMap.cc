@@ -120,13 +120,13 @@ void ActionMap::dumpActionMap(const char* fileName, const bool append) const
       iostrm.write(dStrlen(lineBuffer), lineBuffer);
 
       // Dump all the binds to the console...
-      for (S32 i = 0; i < mDeviceMaps.size(); i++) {
+      for (U32 i = 0; i < mDeviceMaps.size(); i++) {
          const DeviceMap* pDevMap = mDeviceMaps[i];
 
          char devbuffer[32];
          getDeviceName(pDevMap->deviceType, pDevMap->deviceInst, devbuffer);
 
-         for (S32 j = 0; j < pDevMap->nodeMap.size(); j++) {
+         for (U32 j = 0; j < pDevMap->nodeMap.size(); j++) {
             const Node& rNode = pDevMap->nodeMap[j];
 
             const char* pModifierString = getModifierString(rNode.modifiers);
@@ -204,13 +204,13 @@ void ActionMap::dumpActionMap(const char* fileName, const bool append) const
    }
    else {
       // Dump all the binds to the console...
-      for (S32 i = 0; i < mDeviceMaps.size(); i++) {
+      for (U32 i = 0; i < mDeviceMaps.size(); i++) {
          const DeviceMap* pDevMap = mDeviceMaps[i];
 
          char devbuffer[32];
          getDeviceName(pDevMap->deviceType, pDevMap->deviceInst, devbuffer);
 
-         for (S32 j = 0; j < pDevMap->nodeMap.size(); j++) {
+         for (U32 j = 0; j < pDevMap->nodeMap.size(); j++) {
             const Node& rNode = pDevMap->nodeMap[j];
 
             const char* pModifierString = getModifierString(rNode.modifiers);

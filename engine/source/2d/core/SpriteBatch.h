@@ -94,7 +94,7 @@ public:
 
     virtual void copyTo( SpriteBatch* pSpriteBatch ) const;
 
-    inline U32 getSpriteCount( void ) { return (U32)mSprites.size(); }
+    inline U32 getSpriteCount( void ) { return mSprites.size(); }
 
     U32 addSprite( const SpriteBatchItem::LogicalPosition& logicalPosition );
     bool removeSprite( void );
@@ -120,6 +120,13 @@ public:
     bool selectSpriteName( const char* pName );
     inline void deselectSprite( void ) { mSelectedSprite = NULL; }
     bool isSpriteSelected( void ) const { return mSelectedSprite != NULL; }
+
+	U32 getSelectedSpriteId(void)
+	{
+		if(mSelectedSprite)
+			return mSelectedSprite->getBatchId(); 
+		return 0;
+	}
 
     void setSpriteImage( const char* pAssetId, const U32 imageFrame = 0 );
     StringTableEntry getSpriteImage( void ) const;

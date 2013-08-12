@@ -477,7 +477,7 @@ void StringBufferManager::remove(StringBuffer* s)
    //   if(strings[i] == s)
    //      strings.erase_fast(i);
 
-   for (int i = 0; i < strings.size(); )
+   for (U32 i = 0; i < strings.size(); )
    {
       if (strings[i] == s)
          strings.erase_fast(i);

@@ -1024,7 +1024,7 @@ void GuiEditCtrl::onMouseDragged(const GuiEvent &event)
          Point2I dragTotalDelta = event.mousePoint - mDragBeginPoint;
          if( dragTotalDelta.y < 10 && dragTotalDelta.y > -10 )
          {
-            for(S32 i = 0; i < mSelectedControls.size(); i++)
+            for(U32 i = 0; i < mSelectedControls.size(); i++)
             {
                // skip locked controls
                if (mSelectedControls[i]->isLocked())
@@ -1039,7 +1039,7 @@ void GuiEditCtrl::onMouseDragged(const GuiEvent &event)
          }
          if( dragTotalDelta.x < 10 && dragTotalDelta.x > -10 )
          {
-            for(S32 i = 0; i < mSelectedControls.size(); i++)
+            for(U32 i = 0; i < mSelectedControls.size(); i++)
             {
                // skip locked controls
                if (mSelectedControls[i]->isLocked())
@@ -1060,10 +1060,10 @@ void GuiEditCtrl::onMouseDragged(const GuiEvent &event)
 
       // find the current control under the mouse but not in the selected set.
       // setting a control invisible makes sure it wont be seen by findHitControl()
-      for(int i = 0; i< mSelectedControls.size(); i++)
+      for(U32 i = 0; i< mSelectedControls.size(); i++)
          mSelectedControls[i]->setVisible(false);
       GuiControl *inCtrl = mContentControl->findHitControl(mousePoint, mCurrentAddSet->mLayer);
-      for(int i = 0; i< mSelectedControls.size(); i++)
+      for(U32 i = 0; i< mSelectedControls.size(); i++)
          mSelectedControls[i]->setVisible(true);
 
       // find the nearest control up the heirarchy from the control the mouse is in
@@ -1087,7 +1087,7 @@ void GuiEditCtrl::onMouseDragged(const GuiEvent &event)
 
 void GuiEditCtrl::moveSelectionToCtrl(GuiControl *newParent)
 {
-   for(int i = 0; i < mSelectedControls.size(); i++)
+   for(U32 i = 0; i < mSelectedControls.size(); i++)
    {
       GuiControl* ctrl = mSelectedControls[i];
       if(ctrl->getParent() == newParent)

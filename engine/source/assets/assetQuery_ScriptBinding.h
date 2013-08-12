@@ -64,7 +64,7 @@ ConsoleMethod(AssetQuery, getAsset, const char*, 3, 3,  "(int resultIndex) - Get
                                                         "@return (assetId) The asset Id at the specified index or NULL if not valid.")
 {
     // Fetch result index.
-    const S32 resultIndex = dAtoi(argv[2]);
+    const U32 resultIndex = dAtoi(argv[2]);
 
     // Is index within bounds?
     if ( resultIndex >= object->size() )

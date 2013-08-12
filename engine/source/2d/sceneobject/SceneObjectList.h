@@ -53,7 +53,7 @@ public:
 	/// Remove the SimObject* from the list; guaranteed to preserve list order.
 	void removeStable(SceneObject* pObject);
 
-	inline SceneObject* at(S32 index) const {  if(index >= 0 && index < size()) return (*this)[index]; return NULL; }
+	inline SceneObject* at(U32 index) const {  if(index >= 0 && index < size()) return (*this)[index]; return NULL; }
 
 	///< Sort the list by object ID.
 	void sortId();

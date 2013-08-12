@@ -94,8 +94,8 @@ U32 SpriteBatchQuery::queryOOBB( const b2AABB& aabb, b2PolygonShape& oobb, const
     // Flag as not a ray-cast query result.
     mIsRaycastQueryResult = false;
 
-  mComparePolygonShape.Set(oobb.m_vertices,4);
-  mComparePolygonShape.m_centroid = oobb.m_centroid;
+    mComparePolygonShape.Set(oobb.m_vertices,4);
+    mComparePolygonShape.m_centroid = oobb.m_centroid;
 
     mCompareTransform.SetIdentity();
     mCheckOOBB = targetOOBB;

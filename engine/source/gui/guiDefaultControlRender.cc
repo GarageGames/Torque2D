@@ -282,7 +282,7 @@ void renderFilledBorder( RectI &bounds, ColorI &borderColor, ColorI &fillColor )
 void renderSizableBitmapBordersFilled(RectI &bounds, S32 baseMultiplier, GuiControlProfile *profile)
 {
    // DAW: Indices into the bitmap array
-   S32 NumBitmaps = 9;
+   U32 NumBitmaps = 9;
    S32 BorderTopLeft =     NumBitmaps * baseMultiplier - NumBitmaps;
    S32 BorderTop =         1 + BorderTopLeft;
    S32 BorderTopRight =    2 + BorderTopLeft;
@@ -380,7 +380,7 @@ void renderSizableBitmapBordersFilled(RectI &bounds, S32 baseMultiplier, GuiCont
 void renderSizableBitmapBordersFilledIndex(RectI &bounds, S32 startIndex, GuiControlProfile *profile)
 {
    // DAW: Indices into the bitmap array
-   S32 NumBitmaps = 9;
+   U32 NumBitmaps = 9;
    S32 BorderTopLeft =     startIndex;
    S32 BorderTop =         1 + BorderTopLeft;
    S32 BorderTopRight =    2 + BorderTopLeft;
@@ -480,7 +480,7 @@ void renderSizableBitmapBordersFilledIndex(RectI &bounds, S32 startIndex, GuiCon
 void renderFixedBitmapBordersFilled(RectI &bounds, S32 baseMultiplier, GuiControlProfile *profile)
 {
    // DAW: Indices into the bitmap array
-   S32 NumBitmaps = 3;
+   U32 NumBitmaps = 3;
    S32 BorderLeft =     NumBitmaps * baseMultiplier - NumBitmaps;
    S32 Fill =              1 + BorderLeft;
    S32 BorderRight =       2 + BorderLeft;
@@ -524,7 +524,7 @@ void renderFixedBitmapBordersFilled(RectI &bounds, S32 baseMultiplier, GuiContro
 void renderFixedBitmapBordersFilledIndex(RectI &bounds, S32 startIndex, GuiControlProfile *profile)
 {
    // DAW: Indices into the bitmap array
-   S32 NumBitmaps = 3;
+   U32 NumBitmaps = 3;
    S32 BorderLeft =     startIndex;
    S32 Fill =              1 + startIndex;
    S32 BorderRight =       2 + startIndex;
@@ -568,7 +568,7 @@ void renderFixedBitmapBordersFilledIndex(RectI &bounds, S32 startIndex, GuiContr
 void renderFixedBitmapBordersStretchYFilled(RectI &bounds, S32 baseMultiplier, GuiControlProfile *profile)
 {
    // DAW: Indices into the bitmap array
-   S32 NumBitmaps = 3;
+   U32 NumBitmaps = 3;
    S32 BorderLeft =     NumBitmaps * baseMultiplier - NumBitmaps;
    S32 Fill =              1 + BorderLeft;
    S32 BorderRight =       2 + BorderLeft;

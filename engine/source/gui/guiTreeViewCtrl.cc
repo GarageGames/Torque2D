@@ -718,7 +718,7 @@ bool GuiTreeViewCtrl::scrollVisible( Item *item )
    buildVisibleTree();
 
    // All done, let's figure out where we have to scroll...
-   for(S32 i=0; i<mVisibleItems.size(); i++)
+   for(U32 i=0; i<mVisibleItems.size(); i++)
    {
       if(mVisibleItems[i] == item)
       {
@@ -1281,9 +1281,9 @@ void GuiTreeViewCtrl::syncSelection()
 {
    // for each visible item check to see if it is on the mSelected list.
    // if it is then make sure that it is on the mSelectedItems list as well.
-   for (S32 i = 0; i < mVisibleItems.size(); i++) 
+   for (U32 i = 0; i < mVisibleItems.size(); i++) 
    {
-      for (S32 j = 0; j < mSelected.size(); j++) 
+      for (U32 j = 0; j < mSelected.size(); j++) 
       {
          if (mVisibleItems[i]->mId == mSelected[j]) 
          {
@@ -1310,7 +1310,7 @@ void GuiTreeViewCtrl::syncSelection()
             {
                // check to see if it is on the visible items list.
                bool addToSelectedItems = true;
-               for (S32 k = 0; k < mSelectedItems.size(); k++) 
+               for (U32 k = 0; k < mSelectedItems.size(); k++) 
                {
                   if (mSelectedItems[k]->isInspectorData()) 
                   {
@@ -1351,7 +1351,7 @@ void GuiTreeViewCtrl::removeSelection(S32 itemId)
 
    // the item may have been selected at one point but was never created/visible in the tree
    // so remove it.
-   for (S32 j = 0; j <mSelected.size(); j++) 
+   for (U32 j = 0; j <mSelected.size(); j++) 
    {
       if (item) 
       {
@@ -1375,7 +1375,7 @@ void GuiTreeViewCtrl::removeSelection(S32 itemId)
    if(!item)
    {
       // maybe what we were passed wasn't an item id but an object id.
-      for (S32 i = 0; i <mItems.size(); i++) 
+      for (U32 i = 0; i <mItems.size(); i++) 
       {
          if (mItems[i] != NULL) 
          {
@@ -1399,7 +1399,7 @@ void GuiTreeViewCtrl::removeSelection(S32 itemId)
 
    item->mState.set(Item::Selected, false);
    
-   for (S32 i = 0; i < mSelectedItems.size(); i++) 
+   for (U32 i = 0; i < mSelectedItems.size(); i++) 
    {
       if (mSelectedItems[i] == item) 
       {
@@ -1420,7 +1420,7 @@ void GuiTreeViewCtrl::addSelection(S32 itemId)
 
    Item * item = getItem(itemId);
 
-   S32 itr; // used to loop thru items
+   U32 itr; // used to loop thru items
    bool foundMatch = false;
 
    if(!item)
@@ -1554,7 +1554,7 @@ bool GuiTreeViewCtrl::setItemSelected(S32 itemId, bool select)
       // rdbnote: this isn't going to be very fast, but we need to make sure we're not adding things to this list twice!!
       // in a perfect world, code would be cleanly written enough to not have this problem..
       bool foundMatch = false;
-      for (S32 itr = 0; itr < mSelected.size(); itr++)
+      for (U32 itr = 0; itr < mSelected.size(); itr++)
       {
          if (mSelected[itr] == itemId)
             foundMatch = true;
@@ -1568,7 +1568,7 @@ bool GuiTreeViewCtrl::setItemSelected(S32 itemId, bool select)
       if (mDebug) Con::printf("setItemSelected called false");
 
       // remove it from the mSelected list
-      for (S32 j = 0; j <mSelected.size(); j++)
+      for (U32 j = 0; j <mSelected.size(); j++)
       {
          if (item)
          {
@@ -1602,7 +1602,7 @@ bool GuiTreeViewCtrl::setItemSelected(S32 itemId, bool select)
    if(!item)
    {
       // maybe what we were passed wasn't an item id but an object id.
-      for (S32 i = 0; i <mItems.size(); i++)
+      for (U32 i = 0; i <mItems.size(); i++)
       {
          if (mItems[i] != NULL)
          {
@@ -1649,7 +1649,7 @@ bool GuiTreeViewCtrl::setItemSelected(S32 itemId, bool select)
          Con::executef(this, 2, "onUnSelect", Con::getIntArg(item->mId));
 
       // remove it from the selected items list
-      for (S32 i = 0; i < mSelectedItems.size(); i++)
+      for (U32 i = 0; i < mSelectedItems.size(); i++)
       {
          if (mSelectedItems[i] == item)
          {
@@ -1789,7 +1789,7 @@ void GuiTreeViewCtrl::deleteSelection()
 
    if (mSelectedItems.empty())
    {
-      for (S32 i = 0; i < mSelected.size(); i++)
+      for (U32 i = 0; i < mSelected.size(); i++)
       {
          S32 objectId = mSelected[i];
 
@@ -2290,7 +2290,7 @@ void GuiTreeViewCtrl::onMouseUp(const GuiEvent &event)
          }
 
 
-         for (S32 i = 0; i <mSelectedItems.size();i++) 
+         for (U32 i = 0; i <mSelectedItems.size();i++) 
          {
             newItem = newItem2;
             Item * item = mSelectedItems[i];
@@ -2678,14 +2678,14 @@ void GuiTreeViewCtrl::onMiddleMouseDown(const GuiEvent & event)
          Con::printf("className:%s",item->getObject()->getClassName());
       }
       Con::printf("contents of mSelectedItems:");
-      for(S32 i = 0; i < mSelectedItems.size(); i++) {
+      for(U32 i = 0; i < mSelectedItems.size(); i++) {
          if (mSelectedItems[i]->isInspectorData()) {
             Con::printf("%d",mSelectedItems[i]->getObject()->getId());
          } else
             Con::printf("wtf %d", mSelectedItems[i]);
       }
       Con::printf("contents of mSelected");
-      for (S32 j = 0; j < mSelected.size(); j++) {
+      for (U32 j = 0; j < mSelected.size(); j++) {
          Con::printf("%d", mSelected[j]);
       }
       S32 mCurrentDragCell = mMouseOverCell.y;
@@ -2754,7 +2754,7 @@ void GuiTreeViewCtrl::onMouseDown(const GuiEvent & event)
       if (!mSelectedItems.empty())
       {
          firstItem = mSelectedItems.front();
-         for (S32 i = 0; i < mVisibleItems.size();i++)
+         for (U32 i = 0; i < mVisibleItems.size();i++)
          {
             if (mVisibleItems[i] == mSelectedItems.front())
             {
@@ -3488,7 +3488,7 @@ void GuiTreeViewCtrl::inspectObject(SimObject *obj, bool okToEdit)
 
 S32 GuiTreeViewCtrl::findItemByName(const char *name)
 {
-   for (S32 i = 0; i < mItems.size(); i++) 
+   for (U32 i = 0; i < mItems.size(); i++) 
    {
       if (mItems[i] != NULL)
       {
@@ -3803,7 +3803,7 @@ ConsoleMethod(GuiTreeViewCtrl,getSelectedItemList,const char*, 2,2,"returns a sp
     char* buff = Con::getReturnBuffer(1024);
     dSprintf(buff,1024,"");
 
-    for(int i = 0; i < object->mSelected.size(); i++)
+    for(U32 i = 0; i < object->mSelected.size(); i++)
     {
         S32 id  = object->mSelected[i];
         //get the current length of the buffer
@@ -3829,7 +3829,7 @@ ConsoleMethod(GuiTreeViewCtrl,getSelectedItemList,const char*, 2,2,"returns a sp
 //------------------------------------------------------------------------------
 S32 GuiTreeViewCtrl::findItemByObjectId(S32 iObjId)
 {  
-   for (S32 i = 0; i < mItems.size(); i++)
+   for (U32 i = 0; i < mItems.size(); i++)
    {
       if (mItems[i] != NULL)
       {
