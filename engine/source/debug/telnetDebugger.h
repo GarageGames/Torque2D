@@ -85,7 +85,7 @@ class TelnetDebugger
 
    bool mProgramPaused;
    bool mBreakOnNextStatement;
-   S32 mStackPopBreakIndex;
+   U32 mStackPopBreakIndex;
 
    void addVariableBreakpoint(const char *varName, S32 passCount, const char *evalString);
    void removeVariableBreakpoint(const char *varName);
@@ -98,7 +98,7 @@ class TelnetDebugger
    void debugStepIn();
    void debugStepOver();
    void debugStepOut();
-   void evaluateExpression(const char *tag, S32 frame, const char *evalBuffer);
+   void evaluateExpression(const char *tag, U32 frame, const char *evalBuffer);
    void dumpFileList();
    void dumpBreakableList(const char *fileName);
    void removeBreakpointsFromCode(CodeBlock *code);

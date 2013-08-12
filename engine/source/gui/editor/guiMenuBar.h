@@ -99,7 +99,7 @@ public:
       U32 acceleratorIndex; // index of this accelerator
         bool enabled;        // true if the menu item is selectable
       bool visible;        // true if the menu item is visible
-      S32 bitmapIndex;     // index of the bitmap in the bitmap array
+      U32 bitmapIndex;     // index of the bitmap in the bitmap array
       S32 checkGroup;      // the group index of the item visa vi check marks - 
                            // only one item in the group can be checked.
         MenuItem *nextMenuItem; // next menu item in the linked list

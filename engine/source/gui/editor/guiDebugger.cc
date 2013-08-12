@@ -213,7 +213,7 @@ bool DbgFileView::findString(const char *text)
 		return false;
 
 	//see which line we start searching from
-	S32 curLine = 0;
+	U32 curLine = 0;
 	bool searchAgain = false;
 	if (mFindLineNumber >= 0 && !dStricmp(mFindString, text))
 	{

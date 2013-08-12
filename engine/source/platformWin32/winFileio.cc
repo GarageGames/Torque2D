@@ -190,7 +190,7 @@ bool Platform::pathCopy(const char *fromName, const char *toName, bool nooverwri
       Platform::clearExcludedDirectories();
 
       // Create all the directories.
-      for (S32 i = 0; i < directoryInfo.size(); i++)
+      for (U32 i = 0; i < directoryInfo.size(); i++)
       {
          const char* from = directoryInfo[i];
 
@@ -207,7 +207,7 @@ bool Platform::pathCopy(const char *fromName, const char *toName, bool nooverwri
          }
       }
 
-      for (S32 i = 0; i < fileInfo.size(); i++)
+      for (U32 i = 0; i < fileInfo.size(); i++)
       {
          char from[1024];
          dSprintf(from, 1024, "%s/%s", fileInfo[i].pFullPath, fileInfo[i].pFileName);

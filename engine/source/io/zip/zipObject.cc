@@ -45,7 +45,7 @@ IMPLEMENT_CONOBJECT(ZipObject);
 
 StreamObject *ZipObject::createStreamObject(Stream *stream)
 {
-   for(S32 i = 0;i < mStreamPool.size();++i)
+   for(U32 i = 0;i < mStreamPool.size();++i)
    {
       StreamObject *so = mStreamPool[i];
 
@@ -95,7 +95,7 @@ void ZipObject::closeArchive()
    if(mZipArchive == NULL)
       return;
 
-   for(S32 i = 0;i < mStreamPool.size();++i)
+   for(U32 i = 0;i < mStreamPool.size();++i)
    {
       StreamObject *so = mStreamPool[i];
       if(so && so->getStream() != NULL)
@@ -142,7 +142,7 @@ void ZipObject::closeFile(StreamObject *stream)
 
 #ifdef TORQUE_DEBUG
    bool found = false;
-   for(S32 i = 0;i < mStreamPool.size();++i)
+   for(U32 i = 0;i < mStreamPool.size();++i)
    {
       StreamObject *so = mStreamPool[i];
       if(so && so == stream)

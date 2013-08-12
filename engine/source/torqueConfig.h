@@ -53,6 +53,15 @@
 
 //-----------------------------------------------------------------------------
 
+//Define which TAML format support to build
+#define _FORMAT_BINARY
+#define _FORMAT_XML
+#define _FORMAT_JSON
+//#define _FORMAT_CSV
+//#define _FORMAT_SQL
+
+//-----------------------------------------------------------------------------
+
 /// The following pre-processor definitions should be added to your compiler command-line
 /// if you required their respective functionality:
 ///

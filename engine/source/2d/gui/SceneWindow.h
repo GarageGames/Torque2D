@@ -82,7 +82,7 @@ private:
 
     // Camera Interpolation.
     Vector<CameraView>  mCameraQueue;
-    S32                 mMaxQueueItems;
+    U32                 mMaxQueueItems;
     F32                 mCameraTransitionTime;
     F32                 mPreCameraTime;
     F32                 mPostCameraTime;

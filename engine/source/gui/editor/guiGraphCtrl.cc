@@ -231,7 +231,7 @@ void GuiGraphCtrl::onRender(Point2I offset, const RectI &updateRect)
 
 			for (S32 sample = 0; sample < getExtent().x; sample++)
 			{
-				if(mPlots[k].mGraphData.size() >= getExtent().x)
+				if((S32)mPlots[k].mGraphData.size() >= getExtent().x)
 					temp2 = sample;
 				else
 					temp2 = (S32)(((F32)getExtent().x / (F32)mPlots[k].mGraphData.size()) * (F32)sample);
@@ -266,7 +266,7 @@ void GuiGraphCtrl::onRender(Point2I offset, const RectI &updateRect)
 
 			for (S32 sample = 0; sample < (getExtent().x-1); sample++)
 			{
-				if(mPlots[k].mGraphData.size() >= getExtent().x)
+				if((S32)mPlots[k].mGraphData.size() >= getExtent().x)
 					temp2 = sample;
 				else
 					temp2 = (S32)(((F32)getExtent().x / (F32)mPlots[k].mGraphData.size()) * (F32)sample);
@@ -290,7 +290,7 @@ void GuiGraphCtrl::onRender(Point2I offset, const RectI &updateRect)
 			// last point
 			S32 sample = getExtent().x;
 
-			if(mPlots[k].mGraphData.size() >= getExtent().x)
+			if((S32)mPlots[k].mGraphData.size() >= getExtent().x)
 				temp2 = sample;
 			else
 				temp2 = (S32)(((F32)getExtent().x / (F32)mPlots[k].mGraphData.size()) * (F32)sample);
@@ -324,7 +324,7 @@ void GuiGraphCtrl::onRender(Point2I offset, const RectI &updateRect)
 			for (S32 sample = 0; sample < getExtent().x; sample++)
 			{
 				S32 temp;
-				if(mPlots[k].mGraphData.size() >= getExtent().x)
+				if((S32)mPlots[k].mGraphData.size() >= getExtent().x)
 					temp = sample;
 				else
 					temp = (S32)(((F32)getExtent().x / (F32)mPlots[k].mGraphData.size()) * (F32)sample);

@@ -31,6 +31,10 @@
 #include "2d/sceneobject/SceneObject.h"
 #endif
 
+#ifndef _SPRITE_BATCH_QUERY_H_
+#include "2d/core/spriteBatchQuery.h"
+#endif
+
 //------------------------------------------------------------------------------  
 
 class CompositeSprite : public SceneObject, public SpriteBatch
@@ -72,6 +76,13 @@ public:
     virtual void sceneRender( const SceneRenderState* pSceneRenderState, const SceneRenderRequest* pSceneRenderRequest, BatchRender* pBatchRenderer );
 
     virtual void copyTo( SimObject* object );
+
+    const Vector2 getLocalPosition( const Vector2& worldPosition ) const;
+	const Vector2 getLogicalPosition( const Vector2& worldPosition ) const;
+
+	typeSpriteBatchQueryResultVector pickPoint(const Vector2& worldPosition);
+	typeSpriteBatchQueryResultVector pickArea(const Vector2& worldStartPosition, const Vector2& worldEndPosition);
+	typeSpriteBatchQueryResultVector pickRay(const Vector2& worldStartPosition, const Vector2& worldEndPosition);
 
     void setBatchLayout( const BatchLayoutType& batchLayoutType );
     BatchLayoutType getBatchLayout( void ) const { return mBatchLayoutType; }

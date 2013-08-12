@@ -73,33 +73,33 @@ public:
    static void       initPersistFields();   
 
    // Item Accessors
-   S32               getItemCount();
-   S32               getSelCount();
+   U32               getItemCount();
+   U32               getSelCount();
    S32               getSelectedItem();
    void              getSelectedItems( Vector<S32> &Items );
    S32               getItemIndex( LBItem *item );
    StringTableEntry  getItemText( S32 index );
    
    void              setCurSel( S32 index );
-   void              setCurSelRange( S32 start, S32 stop );
-   void              setItemText( S32 index, StringTableEntry text );
+   void              setCurSelRange( U32 start, U32 stop );
+   void              setItemText( U32 index, StringTableEntry text );
 
-   S32               addItem( StringTableEntry text, void *itemData = NULL );
-   S32               addItemWithColor( StringTableEntry text, ColorF color = ColorF(-1, -1, -1), void *itemData = NULL);
-   S32               insertItem( S32 index, StringTableEntry text, void *itemData = NULL );
-   S32               insertItemWithColor( S32 index, StringTableEntry text, ColorF color = ColorF(-1, -1, -1), void *itemData = NULL);
+   U32               addItem( StringTableEntry text, void *itemData = NULL );
+   U32               addItemWithColor( StringTableEntry text, ColorF color = ColorF(-1, -1, -1), void *itemData = NULL);
+   U32               insertItem( U32 index, StringTableEntry text, void *itemData = NULL );
+   U32               insertItemWithColor( U32 index, StringTableEntry text, ColorF color = ColorF(-1, -1, -1), void *itemData = NULL);
    S32               findItemText( StringTableEntry text, bool caseSensitive = false );
 
-   void              setItemColor(S32 index, ColorF color);
-   void              clearItemColor(S32 index);
+   void              setItemColor(U32 index, ColorF color);
+   void              clearItemColor(U32 index);
 
-   void              deleteItem( S32 index );
+   void              deleteItem( U32 index );
    void              clearItems();
    void              clearSelection();
-   void              removeSelection( LBItem *item, S32 index );
-   void              removeSelection( S32 index );
-   void              addSelection( LBItem *item, S32 index );
-   void              addSelection( S32 index );
+   void              removeSelection( LBItem *item, U32 index );
+   void              removeSelection( U32 index );
+   void              addSelection( LBItem *item, U32 index );
+   void              addSelection( U32 index );
    inline void       setMultipleSelection( bool allowMultipleSelect = true ) { mMultipleSelections = allowMultipleSelect; };
 
    // Sizing
@@ -110,7 +110,7 @@ public:
    // Rendering
    virtual void      onRender( Point2I offset, const RectI &updateRect );
    virtual void      onRenderItem( RectI itemRect, LBItem *item );
-   void              drawBox( const Point2I &box, S32 size, ColorI &outlineColor, ColorI &boxColor );
+   void              drawBox( const Point2I &box, U32 size, ColorI &outlineColor, ColorI &boxColor );
 
    // Mouse Events
    virtual void      onMouseDown( const GuiEvent &event );

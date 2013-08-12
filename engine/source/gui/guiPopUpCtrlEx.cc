@@ -145,7 +145,7 @@ void GuiPopupTextListCtrlEx::onCellSelected( Point2I cell )
 
 bool GuiPopupTextListCtrlEx::hasCategories()
 {
-   for( S32 i = 0; i < mList.size(); i++)
+   for( U32 i = 0; i < mList.size(); i++)
    {
       if( mList[i].id == -1)
          return true;
@@ -761,10 +761,10 @@ S32 GuiPopUpMenuCtrlEx::findText( const char* text )
 }
 
 //------------------------------------------------------------------------------
-void GuiPopUpMenuCtrlEx::setSelected(S32 id)
+void GuiPopUpMenuCtrlEx::setSelected(U32 id)
 {
-   S32 i;
-   for (i = 0; i < mEntries.size(); i++)
+   for (U32 i = 0; i < mEntries.size(); i++)
+   {
       if (id == mEntries[i].id)
       {
          i = (mRevNum > i) ? mRevNum - i : i;
@@ -781,6 +781,7 @@ void GuiPopUpMenuCtrlEx::setSelected(S32 id)
             Con::executef( this, 3, "onSelect", idval, mEntries[mSelIndex].buf );
          return;
       }
+   }
 
    if(mReplaceText) // DAW: Only change the displayed text if appropriate.
    {

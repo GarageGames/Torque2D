@@ -106,7 +106,7 @@ void GuiGridControl::addObject(SimObject *obj)
 
 void GuiGridControl::removeObject(SimObject *obj)
 {
-	for(int idx =0; idx < objectList.size();idx++)
+	for(U32 idx =0; idx < objectList.size();idx++)
 	{
 		if ( objectList[idx] == obj )
 		{
@@ -188,8 +188,8 @@ void GuiGridControl::resize(const Point2I &newPosition, const Point2I &newExtent
 
 RectI GuiGridControl::GetGridRect(GuiControl* ctrl)
 {
-	S32 col = dAtoi(ctrl->getDataField( StringTable->insert("Col"), NULL));
-	S32 row = dAtoi(ctrl->getDataField( StringTable->insert("Row"), NULL));
+	U32 col = dAtoi(ctrl->getDataField( StringTable->insert("Col"), NULL));
+	U32 row = dAtoi(ctrl->getDataField( StringTable->insert("Row"), NULL));
 	S32 colSpan = dAtoi(ctrl->getDataField( StringTable->insert("ColSpan"), NULL));
 	S32 rowSpan = dAtoi(ctrl->getDataField( StringTable->insert("RowSpan"), NULL));
 
@@ -204,22 +204,22 @@ RectI GuiGridControl::GetGridRect(GuiControl* ctrl)
 
 	RectI newRect(0,0,0,0);
 
-	for(int i = 0; i < col; i++)
+	for(U32 i = 0; i < col; i++)
 	{
 		newRect.point.x += mColSizes[i];
 	}
 
-	for(int i =col; i < col+colSpan; i++)
+	for(U32 i =col; i < col+colSpan; i++)
 	{
 		newRect.extent.x += mColSizes[i];
 	}
 	
-	for(int i = 0; i < row; i++)
+	for(U32 i = 0; i < row; i++)
 	{
 		newRect.point.y += mRowSizes[i];
 	}
 
-	for(int i =row; i < row+rowSpan; i++)
+	for(U32 i =row; i < row+rowSpan; i++)
 	{
 		newRect.extent.y += mRowSizes[i];
 	}
@@ -299,7 +299,7 @@ void GuiGridControl::AdjustGridItems(S32 size, Vector<StringTableEntry>& strItem
     //step two: iterate the grid columns again, and fill in any percentage based sizing, and setup the correct grid array.
 	int remainingSize = size - totalSize;
 	int sizeForPerc = remainingSize;
-	for(int i = 0; i < GridItems.size(); ++i)
+	for(U32 i = 0; i < GridItems.size(); ++i)
 	{
 		GridItem gi = GridItems[i];
 

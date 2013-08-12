@@ -115,7 +115,7 @@ class Vector
    iterator       end();
    const_iterator end() const;
 
-   S32 size() const;
+   U32 size() const;
    bool empty() const;
    bool contains(const T&) const;
 
@@ -446,9 +446,9 @@ template<class T> inline typename Vector<T>::const_iterator Vector<T>::end() con
    return mArray + mElementCount;
 }
 
-template<class T> inline S32 Vector<T>::size() const
+template<class T> inline U32 Vector<T>::size() const
 {
-   return (S32)mElementCount;
+   return mElementCount;
 }
 
 template<class T> inline bool Vector<T>::empty() const

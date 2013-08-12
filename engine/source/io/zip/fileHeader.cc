@@ -61,7 +61,7 @@ FileHeader::~FileHeader()
 {
    SAFE_DELETE_ARRAY(mFilename);
 
-   for(S32 i = 0;i < mExtraFields.size();i++)
+   for(U32 i = 0;i < mExtraFields.size();i++)
    {
       SAFE_DELETE(mExtraFields[i]);
    }
@@ -173,7 +173,7 @@ bool FileHeader::write(Stream *stream)
 
 ExtraField *FileHeader::findExtraField(U16 id)
 {
-   for(S32 i = 0;i < mExtraFields.size();++i)
+   for(U32 i = 0;i < mExtraFields.size();++i)
    {
       if(mExtraFields[i]->getID() == id)
          return mExtraFields[i];

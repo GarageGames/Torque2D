@@ -125,6 +125,7 @@ ConsoleMethod( GuiTextListCtrl, getSelectedRow, S32, 2, 2, "( row ) Use the setS
 {
    return object->getSelectedRow();
 }
+
 ConsoleMethod( GuiTextListCtrl, clearSelection, void, 2, 2, "() Use the clearSelection method to deselect the current selection (if any).\n"
                                                                 "@return No return value.\n"
                                                                 "@sa clear, setSelection")
@@ -238,7 +239,7 @@ ConsoleMethod( GuiTextListCtrl, getRowText, const char*, 3, 3, "( row ) Use the 
                                                                 "@return Returns the text found at the specified row, or the NULL string if the row number is out of bounds.\n"
                                                                 "@sa addRow, getRowID, getRowNumByID, getRowTextByID")
 {
-   S32 index = dAtoi(argv[2]);
+   U32 index = dAtoi(argv[2]);
    if( index >= object->mList.size())
       return "";
    return object->mList[index].text;
@@ -319,6 +320,7 @@ U32 GuiTextListCtrl::getSelectedRow()
 {
    return mSelectedCell.y;
 }
+
 void GuiTextListCtrl::onCellSelected(Point2I cell)
 {
    Con::executef(this, 3, "onSelect", Con::getIntArg(mList[cell.y].id), mList[cell.y].text);
@@ -405,7 +407,7 @@ U32 GuiTextListCtrl::getRowWidth(Entry *row)
    return width;
 }
 
-void GuiTextListCtrl::insertEntry(U32 id, const char *text, S32 index)
+void GuiTextListCtrl::insertEntry(U32 id, const char *text, U32 index)
 {
    Entry e;
    e.text = dStrdup(text);
@@ -461,8 +463,7 @@ void GuiTextListCtrl::setEntryActive(U32 id, bool active)
       mList[index].active = active;
 
       // You can't have an inactive entry selected...
-      if ( !active && mSelectedCell.y >= 0 && mSelectedCell.y < mList.size()
-           && mList[mSelectedCell.y].id == id )
+      if ( !active && mSelectedCell.y >= 0 && (U32)mSelectedCell.y < mList.size() && mList[mSelectedCell.y].id == id )
          setSelectedCell( Point2I( -1, -1 ) );
 
       setUpdate();
@@ -566,7 +567,7 @@ U32 GuiTextListCtrl::getNumEntries()
    return mList.size();
 }
 
-void GuiTextListCtrl::removeEntryByIndex(S32 index)
+void GuiTextListCtrl::removeEntryByIndex(U32 index)
 {
    if(index < 0 || index >= mList.size())
       return;
@@ -628,7 +629,7 @@ bool GuiTextListCtrl::onKeyDown( const GuiEvent &event )
       break;
    case KEY_DOWN:
    case KEY_RIGHT:
-      if ( mSelectedCell.y < ( mList.size() - 1 ) )
+      if ( (U32)mSelectedCell.y < ( mList.size() - 1 ) )
    {
          mSelectedCell.y++;
          yDelta = mCellSize.y;
@@ -638,7 +639,7 @@ bool GuiTextListCtrl::onKeyDown( const GuiEvent &event )
       if ( mList.size() )
       {
          mSelectedCell.y = 0;
-         yDelta = -(mCellSize.y * mList.size() + 1 );
+         yDelta = -(mCellSize.y * (S32)mList.size() + 1 );
       }
       break;
    case KEY_END:
@@ -649,7 +650,7 @@ bool GuiTextListCtrl::onKeyDown( const GuiEvent &event )
       }
       break;
    case KEY_DELETE:
-      if ( mSelectedCell.y >= 0 && mSelectedCell.y < mList.size() )
+      if ( mSelectedCell.y >= 0 && (U32)mSelectedCell.y < mList.size() )
       Con::executef( this, 2, "onDeleteKey", Con::getIntArg( mList[mSelectedCell.y].id ) );
       break;
    default:

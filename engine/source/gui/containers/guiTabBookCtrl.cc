@@ -104,7 +104,7 @@ void GuiTabBookCtrl::onRemove()
 
 void GuiTabBookCtrl::onChildRemoved( GuiControl* child )
 {
-   for (S32 i = 0; i < mPages.size(); i++ )
+   for (U32 i = 0; i < mPages.size(); i++ )
    {
       GuiTabPageCtrl* tab = mPages[i].Page;
       if( tab == child )
@@ -336,7 +336,7 @@ void GuiTabBookCtrl::renderTabs( const Point2I &offset )
    if( mPages.empty() || mTabHeight <= 0 )
       return;
 
-   for( S32 i = 0; i < mPages.size(); i++ )
+   for( U32 i = 0; i < mPages.size(); i++ )
    {
       RectI tabBounds = mPages[i].TabRect;
       tabBounds.point += offset;
@@ -546,7 +546,7 @@ void GuiTabBookCtrl::calculatePageTabs()
    S32 currY      = 0;
    S32 maxWidth   = 0;
 
-   for( S32 i = 0; i < mPages.size(); i++ )
+   for( U32 i = 0; i < mPages.size(); i++ )
    {
       // Fetch Tab Width
       S32 tabWidth = calculatePageTabWidth( mPages[i].Page ) + ( mTabMargin * 2 );
@@ -702,7 +702,7 @@ void GuiTabBookCtrl::balanceColumn( S32 column , S32 totalTabWidth )
    Vector<TabHeaderInfo*> rowTemp;
    rowTemp.clear();
 
-   for( S32 i = 0; i < mPages.size(); i++ )
+   for( U32 i = 0; i < mPages.size(); i++ )
    {
       TabHeaderInfo &info = mPages[i];
 
@@ -716,7 +716,7 @@ void GuiTabBookCtrl::balanceColumn( S32 column , S32 totalTabWidth )
    // Balance the tabs across the remaining space
    S32 spaceToDivide = mBounds.extent.y - totalTabWidth;
    S32 pointDelta    = 0;
-   for( S32 i = 0; i < rowTemp.size(); i++ )
+   for( U32 i = 0; i < rowTemp.size(); i++ )
    {
       TabHeaderInfo &info = *rowTemp[i];
       S32 extraSpace = (S32)( spaceToDivide / rowTemp.size() );
@@ -738,7 +738,7 @@ void GuiTabBookCtrl::balanceRow( S32 row, S32 totalTabWidth )
    Vector<TabHeaderInfo*> rowTemp;
    rowTemp.clear();
 
-   for( S32 i = 0; i < mPages.size(); i++ )
+   for( U32 i = 0; i < mPages.size(); i++ )
    {
       TabHeaderInfo &info = mPages[i];
 
@@ -752,7 +752,7 @@ void GuiTabBookCtrl::balanceRow( S32 row, S32 totalTabWidth )
    // Balance the tabs across the remaining space
    S32 spaceToDivide = mBounds.extent.x - totalTabWidth;
    S32 pointDelta    = 0;
-   for( S32 i = 0; i < rowTemp.size(); i++ )
+   for( U32 i = 0; i < rowTemp.size(); i++ )
    {
       TabHeaderInfo &info = *rowTemp[i];
       S32 extraSpace = (S32)spaceToDivide / ( rowTemp.size() );
@@ -777,7 +777,7 @@ GuiTabPageCtrl *GuiTabBookCtrl::findHitTab( Point2I hitPoint )
    if( mPages.empty() || mTabHeight <= 0 )
       return NULL;
 
-   for( S32 i = 0; i < mPages.size(); i++ )
+   for( U32 i = 0; i < mPages.size(); i++ )
    {
       if( mPages[i].TabRect.pointInRect( hitPoint ) )
          return mPages[i].Page;
@@ -787,7 +787,7 @@ GuiTabPageCtrl *GuiTabBookCtrl::findHitTab( Point2I hitPoint )
 
 void GuiTabBookCtrl::selectPage( S32 index )
 {
-   if( mPages.size() < index )
+   if( mPages.size() < (U32)index )
       return;
 
    // Select the page
@@ -865,8 +865,7 @@ void GuiTabBookCtrl::selectNextPage()
    if( mActivePage == NULL )
       mActivePage = mPages[0].Page;
 
-   S32 nI = 0;
-   for( ; nI < mPages.size(); nI++ )
+   for(U32 nI = 0; nI < mPages.size(); nI++ )
    {
       GuiTabPageCtrl *tab = mPages[ nI ].Page;
       if( tab == mActivePage )
@@ -899,8 +898,7 @@ void GuiTabBookCtrl::selectPrevPage()
    if( mActivePage == NULL )
       mActivePage = mPages[0].Page;
 
-   S32 nI = 0;
-   for( ; nI < mPages.size(); nI++ )
+   for(U32 nI = 0; nI < mPages.size(); nI++ )
    {
       GuiTabPageCtrl *tab = mPages[ nI ].Page;
       if( tab == mActivePage )

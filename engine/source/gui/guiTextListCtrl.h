@@ -78,7 +78,7 @@ class GuiTextListCtrl : public GuiArrayCtrl
 
    void clear();
    virtual void addEntry(U32 id, const char *text);
-   virtual void insertEntry(U32 id, const char *text, S32 index);
+   virtual void insertEntry(U32 id, const char *text, U32 index);
    void setEntry(U32 id, const char *text);
    void setEntryActive(U32 id, bool active);
    S32 findEntryById(U32 id);
@@ -89,7 +89,7 @@ class GuiTextListCtrl : public GuiArrayCtrl
 
    bool onWake();
    void removeEntry(U32 id);
-   virtual void removeEntryByIndex(S32 id);
+   virtual void removeEntryByIndex(U32 id);
    virtual void sort(U32 column, bool increasing = true);
    virtual void sortNumerical(U32 column, bool increasing = true);
 

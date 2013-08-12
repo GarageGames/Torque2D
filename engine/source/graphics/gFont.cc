@@ -476,7 +476,7 @@ GFont::~GFont()
       }
    }
    
-   S32 i;
+   U32 i;
 
    for(i = 0;i < mCharInfoList.size();i++)
    {
@@ -484,7 +484,7 @@ GFont::~GFont()
    }
 
    //Luma:	decrement reference of the texture handles too
-   for(i=0;i<mTextureSheets.size();i++)
+   for(i=0; i<mTextureSheets.size(); i++)
    {
        mTextureSheets[i] = 0;
    }
@@ -1020,10 +1020,9 @@ bool GFont::write(Stream& stream)
 
 
    // Get the min/max we have values for, and only write that range out.
-   S32 minGlyph = S32_MAX, maxGlyph = 0;
-   S32 i;
+   U32 minGlyph = S32_MAX, maxGlyph = 0;
 
-   for(i = 0; i < 65536; i++)
+   for(U32 i = 0; i < 65536; i++)
    {
        if(mRemapTable[i] != -1)
        {
@@ -1033,7 +1032,7 @@ bool GFont::write(Stream& stream)
    }
 
    //-Mat make sure all our character info is good before writing it
-   for(i = minGlyph; i <= maxGlyph; i++) {
+   for(U32 i = minGlyph; i <= maxGlyph; i++) {
        if( mRemapTable[i] == -1 ) {
            //-Mat get info and try this again
            getCharInfo(i);
@@ -1045,7 +1044,7 @@ bool GFont::write(Stream& stream)
 
     // Write char info list
     stream.write(U32(mCharInfoList.size()));
-    for(i = 0; i < mCharInfoList.size(); i++)
+    for(U32 i = 0; i < mCharInfoList.size(); i++)
     {
         const PlatformFont::CharInfo *ci = &mCharInfoList[i];
         stream.write(ci->bitmapIndex);
@@ -1059,7 +1058,7 @@ bool GFont::write(Stream& stream)
    }
 
    stream.write(mTextureSheets.size());
-   for(i = 0; i < mTextureSheets.size(); i++) {
+   for(U32 i = 0; i < mTextureSheets.size(); i++) {
        mTextureSheets[i].getBitmap()->writePNG(stream);
    }
 
@@ -1075,9 +1074,9 @@ bool GFont::write(Stream& stream)
    if(maxGlyph >= minGlyph)
    {
       // Put everything big endian, to be consistent. Do this inplace.
-      for(i = minGlyph; i <= maxGlyph; i++)
+      for(U32 i = minGlyph; i <= maxGlyph; i++)
          mRemapTable[i] = convertHostToBEndian(mRemapTable[i]);
-
+	  //>annonynmous scope?
       {
          // Compress.
          const U32 buffSize = 128 * 1024;
@@ -1091,7 +1090,7 @@ bool GFont::write(Stream& stream)
       }
 
       // Put us back to normal.
-      for(i = minGlyph; i <= maxGlyph; i++) {
+      for(U32 i = minGlyph; i <= maxGlyph; i++) {
          mRemapTable[i] = convertBEndianToHost(mRemapTable[i]);
 
          if( mRemapTable[i] == -1 ) {
@@ -1111,7 +1110,7 @@ void GFont::exportStrip(const char *fileName, U32 padding, U32 kerning)
 
    S32 heightMin=0, heightMax=0;
 
-   for(S32 i=0; i<mCharInfoList.size(); i++)
+   for(U32 i=0; i<mCharInfoList.size(); i++)
    {
       totalWidth += mCharInfoList[i].width + kerning + 2*padding;
       heightMin = getMin((S32)heightMin, (S32)getBaseline() - (S32)mCharInfoList[i].yOrigin);
@@ -1128,7 +1127,7 @@ void GFont::exportStrip(const char *fileName, U32 padding, U32 kerning)
    // Ok, copy some rects, taking into account padding, kerning, offset.
    U32 curWidth = kerning + padding;
 
-   for(S32 i=0; i<mCharInfoList.size(); i++)
+   for(U32 i=0; i<mCharInfoList.size(); i++)
    {
       // Skip invalid stuff.
       if(mCharInfoList[i].bitmapIndex == -1 || mCharInfoList[i].height == 0 || mCharInfoList[i].width == 0)
@@ -1202,7 +1201,7 @@ void GFont::importStrip(const char *fileName, U32 padding, U32 kerning)
    glyphList.reserve(mCharInfoList.size());
 
    U32 curWidth = 0;
-   for(S32 i=0; i<mCharInfoList.size(); i++)
+   for(U32 i=0; i<mCharInfoList.size(); i++)
    {
       // Skip invalid stuff.
       if(mCharInfoList[i].bitmapIndex == -1 || mCharInfoList[i].height == 0 || mCharInfoList[i].width == 0)
@@ -1285,7 +1284,7 @@ void GFont::importStrip(const char *fileName, U32 padding, U32 kerning)
       maxHeight = getHeight() + padding * 2;
 
    // Allocate texture pages.
-   for(S32 i=0; i<sheetSizes.size(); i++)
+   for(U32 i=0; i<sheetSizes.size(); i++)
    {
       char buf[30];
       dSprintf(buf, sizeof(buf), "newfont_%d", smSheetIdCount++);
@@ -1302,9 +1301,8 @@ void GFont::importStrip(const char *fileName, U32 padding, U32 kerning)
       mTextureSheets.last() = handle;
    }
 
-
    // Alright, we're ready to copy bits!
-   for(S32 i=0; i<glyphList.size(); i++)
+   for(U32 i=0; i<glyphList.size(); i++)
    {
       // Copy each glyph into the appropriate place.
       PlatformFont::CharInfo *ci = &mCharInfoList[glyphList[i].charId];
@@ -1313,6 +1311,6 @@ void GFont::importStrip(const char *fileName, U32 padding, U32 kerning)
    }
 
    // Ok, all done! Just refresh some textures and we're set.
-   for(S32 i=0; i<sheetSizes.size(); i++)
+   for(U32 i=0; i<sheetSizes.size(); i++)
       mTextureSheets[i].refresh();
 }

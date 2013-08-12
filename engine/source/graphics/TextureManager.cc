@@ -128,7 +128,7 @@ U32 TextureManager::registerEventCallback(TextureEventCallback callback, void *u
 
 void TextureManager::unregisterEventCallback(const U32 callbackKey)
 {
-    for (S32 i = 0; i < sgEventCallbacks.size(); i++)
+    for (U32 i = 0; i < sgEventCallbacks.size(); i++)
     {
         if (sgEventCallbacks[i].key == callbackKey)
         {
@@ -142,7 +142,7 @@ void TextureManager::unregisterEventCallback(const U32 callbackKey)
 
 void TextureManager::postTextureEvent(const TextureEventCode eventCode)
 {
-    for (S32 i = 0; i < sgEventCallbacks.size(); i++)
+    for (U32 i = 0; i < sgEventCallbacks.size(); i++)
     {
         (sgEventCallbacks[i].callback)(eventCode, sgEventCallbacks[i].userData);
     }

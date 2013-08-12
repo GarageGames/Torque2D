@@ -266,7 +266,7 @@ ConsoleFunction(getDirectoryList, const char*, 2, 3, "(strPath, [intDepth])\n"
    // Grab the required buffer length.
    S32 length = 0;
 
-   for (S32 i = 0; i < directories.size(); i++)
+   for (U32 i = 0; i < directories.size(); i++)
       length += dStrlen(directories[i]) + 1;
 
    // Get a return buffer.
@@ -274,7 +274,7 @@ ConsoleFunction(getDirectoryList, const char*, 2, 3, "(strPath, [intDepth])\n"
    char* p = buffer;
 
    // Copy the directory names to the buffer.
-   for (S32 i = 0; i < directories.size(); i++)
+   for (U32 i = 0; i < directories.size(); i++)
    {
       dStrcpy(p, directories[i]);
       p += dStrlen(directories[i]);
@@ -309,7 +309,7 @@ ConsoleFunction(getFileList, const char*, 2, 2, "(strPath) - Gets all the files 
    // Grab the required buffer length.
    S32 length = 0;
 
-   for (S32 i = 0; i < files.size(); i++)
+   for (U32 i = 0; i < files.size(); i++)
        length += dStrlen(files[i].pFileName) + 1;
 
    // Get a return buffer.
@@ -317,7 +317,7 @@ ConsoleFunction(getFileList, const char*, 2, 2, "(strPath) - Gets all the files 
    char* p = buffer;
 
    // Copy the directory names to the buffer.
-   for (S32 i = 0; i < files.size(); i++)
+   for (U32 i = 0; i < files.size(); i++)
    {
        dStrcpy(p, files[i].pFileName);
        p += dStrlen(files[i].pFileName);
