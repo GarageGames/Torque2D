@@ -28,7 +28,7 @@
 #endif
 
 #ifndef _SIMSET_H_
-#include "sim/simSet.h""
+#include "sim/simSet.h"
 #endif
 
 #ifndef _SIMBASE_H_

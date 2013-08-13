@@ -24,6 +24,16 @@ LOCAL_SRC_FILES := lib/libpng.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 LOCAL_PATH := $(MY_LOCAL_PATH)
+# OpenAL Soft library must be a shared library since license is LGPL
+include $(CLEAR_VARS)
+
+LOCAL_MODULE    := libopenal
+LOCAL_SRC_FILES := ../../../lib/openal/Android/$(TARGET_ARCH_ABI)/libopenal.so
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../lib/openal/Android
+
+include $(PREBUILT_SHARED_LIBRARY)
+
+LOCAL_PATH := $(MY_LOCAL_PATH)
 
 LOCAL_MODULE    := torque2d
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
@@ -423,6 +433,7 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/platform/platformNetwork.cc \
 					../../../source/platform/platformString.cc \
 					../../../source/platform/platformVideo.cc \
+					../../../source/platform/platformNetAsync.unix.cc \
 					../../../source/platform/menus/popupMenu.cc \
 					../../../source/platform/nativeDialogs/msgBox.cpp \
 					../../../source/platform/Tickable.cc \
@@ -457,6 +468,7 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/platformAndroid/main.cpp \
 					../../../source/platformAndroid/SoundEngine.cpp \
 					../../../source/platformAndroid/T2DActivity.cpp \
+					../../../source/platformAndroid/menus/popupMenu.cpp \
 					../../../source/sim/scriptGroup.cc \
 					../../../source/sim/scriptObject.cc \
 					../../../source/sim/simBase.cc \
@@ -515,7 +527,8 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O0 -fsigned-char
 				   
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lz -lOpenSLES
-LOCAL_STATIC_LIBRARIES := android_native_app_glue libpng libjpeg
+LOCAL_STATIC_LIBRARIES := android_native_app_glue libpng
+LOCAL_SHARED_LIBRARIES := libopenal
 
 LOCAL_ARM_MODE := arm
 

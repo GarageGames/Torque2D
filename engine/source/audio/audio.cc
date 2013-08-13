@@ -2462,6 +2462,8 @@ bool OpenALInit()
       0
    };
    mContext = alcCreateContext(mDevice,attrlist);
+#elif TORQUE_OS_ANDROID
+   mContext = alcCreateContext((ALCdevice*)mDevice, NULL);
 #else
    mContext = alcCreateContext(mDevice,NULL);
 #endif
@@ -2469,8 +2471,11 @@ bool OpenALInit()
       return false;
 
    // Make this context the active context
+#ifdef TORQUE_OS_ANDROID
+   alcMakeContextCurrent((ALCcontext*)mContext);
+#else
    alcMakeContextCurrent(mContext);
-
+#endif
    ALenum err = alGetError();
    mRequestSources = MAX_AUDIOSOURCES;	
    while(true)
@@ -2539,12 +2544,21 @@ void OpenALShutdown()
 
    if (mContext)
    {
-      alcDestroyContext(mContext);
+#ifdef TORQUE_OS_ANDROID
+	   alcDestroyContext((ALCcontext*)mContext);
+#else
+	   alcDestroyContext(mContext);
+#endif
+
       mContext = NULL;
    }
    if (mDevice)
    {
-      alcCloseDevice(mDevice);
+#ifdef TORQUE_OS_ANDROID
+	   alcCloseDevice((ALCdevice*)mDevice);
+#else
+	   alcCloseDevice(mDevice);
+#endif
       mDevice = NULL;
    }
 

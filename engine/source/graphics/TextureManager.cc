@@ -93,7 +93,7 @@ ConsoleFunction(setOpenGLTextureCompressionHint, void, 2, 2, " ( hint ) Use the 
 
     TextureManager::mTextureCompressionHint = newHint;
 
-#if !defined(TORQUE_OS_IOS)
+#if !defined(TORQUE_OS_IOS)  && !defined(TORQUE_OS_ANDROID)
     if (dglDoesSupportTextureCompression())
         glHint(GL_TEXTURE_COMPRESSION_HINT_ARB, TextureManager::mTextureCompressionHint);
 #endif

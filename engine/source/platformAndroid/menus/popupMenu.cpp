@@ -20,17 +20,13 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#include "platformiOS/platformiOS.h"
+#include "platformAndroid/platformAndroid.h"
 #include "platform/menus/popupMenu.h"
 #include "memory/safeDelete.h"
 #include "gui/guiCanvas.h"
-#include "platformiOS/iOSUtil.h"
+#include "platformAndroid/AndroidUtil.h"
 
-
-//The iPhone has it's own type of menu system
-#if 0 // PUAP -Mat file menus only can't use on iPhone
-
-
+#if 0
 //-----------------------------------------------------------------------------
 // Platform Menu Data
 //-----------------------------------------------------------------------------
@@ -507,6 +503,5 @@ void PopupMenu::deletePlatformPopupMenuData()
 
 void PopupMenu::createPlatformMenu()
 {}
-
 
 #endif
