@@ -30,6 +30,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := libopenal
 LOCAL_SRC_FILES := ../../../lib/openal/Android/$(TARGET_ARCH_ABI)/libopenal.so
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../lib/openal/Android
+$(info $(shell ($(LOCAL_PATH)/copylib.sh $(LOCAL_PATH) $(TARGET_ARCH_ABI))))
 
 include $(PREBUILT_SHARED_LIBRARY)
 
