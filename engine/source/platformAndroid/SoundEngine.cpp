@@ -82,14 +82,11 @@
  Copyright (C) 2008 Apple Inc. All Rights Reserved.
  
  */
-
+//TODO: android
+/*
 //==================================================================================================
 //	Includes
 //==================================================================================================
-
-//TODO: replace openal with OpenSL ES
-/*
-
 //	System Includes
 #include <map>
 #include <vector>

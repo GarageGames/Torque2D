@@ -20,47 +20,11 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
+#include "platformAndroid/T2DActivity.h"
 #include "platformAndroid/platformGL.h"
 #include "platformAndroid/AndroidWindow.h"
 #include "platformAndroid/platformAndroid.h"
 #include "graphics/dgl.h"
-
-#include <errno.h>
-#include <EGL/egl.h>
-//#include <android/sensor.h>
-#include <android/log.h>
-#include <android_native_app_glue.h>
-#include <android/asset_manager.h>
-#include <sstream>
-#include <list>
-#include <unistd.h>
-#include <time.h>
-
-/**
- * Our saved state data.
- */
-struct saved_state {
-    float angle;
-    int32_t x;
-    int32_t y;
-};
-
-/**
- * Shared state for our app.
- */
-struct engine {
-    struct android_app* app;
-
-    int animating;
-    EGLDisplay display;
-    EGLSurface surface;
-    EGLContext context;
-    int32_t width;
-    int32_t height;
-    struct saved_state state;
-};
-
-static struct engine engine;
 
 extern AndroidPlatState platState;
 

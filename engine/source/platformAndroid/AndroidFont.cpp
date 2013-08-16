@@ -48,9 +48,6 @@ void PlatformFont::enumeratePlatformFonts( Vector<StringTableEntry>& fonts )
 
 AndroidFont::AndroidFont()
 {
-    // Reset the rendering color-space.
-    //TODO: android
-	//mColorSpace = NULL;
 }
 
 //------------------------------------------------------------------------------

@@ -150,10 +150,9 @@ void getGLCapabilities( )
       // Anisotropic filtering ========================================
       gGLState.suppTexAnisotropic    = (dStrstr(pExtString, (const char*)"GL_EXT_texture_filter_anisotropic") != NULL);
 
-      //TODO: android
-      /*if (gGLState.suppTexAnisotropic)
+      if (gGLState.suppTexAnisotropic)
          glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &gGLState.maxAnisotropy);
-*/
+
       // Binary states, i.e., no supporting functions  ========================================
       // NOTE:
       // Some of these have multiple representations, via EXT and|or ARB and|or NV and|or SGIS ... etc.
@@ -168,7 +167,7 @@ void getGLCapabilities( )
       gGLState.suppEdgeClamp         = (dStrstr(pExtString, (const char*)"GL_EXT_texture_edge_clamp") != NULL);
       gGLState.suppEdgeClamp        |= (dStrstr(pExtString, (const char*)"GL_SGIS_texture_edge_clamp") != NULL);
       gGLState.suppEdgeClamp        |= (dStrstr(pExtString, (const char*)"GL_ARB_texture_border_clamp") != NULL);
-	   gGLState.suppEdgeClamp		= true; //TODO does android support edge clamp?
+	   gGLState.suppEdgeClamp		= true;
 
       gGLState.suppTexEnvAdd         = (dStrstr(pExtString, (const char*)"GL_ARB_texture_env_add") != NULL);
       gGLState.suppTexEnvAdd        |= (dStrstr(pExtString, (const char*)"GL_EXT_texture_env_add") != NULL);

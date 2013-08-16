@@ -783,7 +783,8 @@ bool activateKeyboard()
    /*OSStatus status = noErr;
    if (status==noErr)
       gKBActive = true;
-*/
+      */
+
    return( gKBActive );
 }
 

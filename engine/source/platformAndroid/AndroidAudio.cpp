@@ -49,9 +49,6 @@ namespace Audio
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//TODO: ???
-//TODO: android
-/*
 typedef ALvoid	AL_APIENTRY	(*alcMacOSXMixerOutputRateProcPtr) (const ALdouble value);
 ALvoid  alcMacOSXMixerOutputRateProc(const ALdouble value)
 {
@@ -66,4 +63,4 @@ ALvoid  alcMacOSXMixerOutputRateProc(const ALdouble value)
 	
     return;
 }
-*/
+

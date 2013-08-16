@@ -38,6 +38,7 @@
 #include "platformAndroid/AndroidEvents.h"
 #include "graphics/dgl.h"
 #include "debug/profiler.h"
+#include "platformAndroid/T2DActivity.h"
 
 //Luma: Tap support
 extern void createMouseTapEvent(S32 nbrTaps, S32 x, S32 y);
@@ -48,7 +49,6 @@ extern bool setScreenOrientation(bool, bool);
 // TODO: Card Profiling code isn't doing anything.
 extern StringTableEntry gScreenOrientation;
 extern bool gScreenUpsideDown;
-
 
 //-Mat we should update the accelereometer once per frame
 U32 AccelerometerUpdateMS = sgTimeManagerProcessInterval; // defines period between accelerometer updates updates in Milliseconds
@@ -233,8 +233,7 @@ bool OpenGLDevice::setScreenMode(U32 width, U32 height, U32 bpp, bool fullScreen
 //------------------------------------------------------------------------------
 void OpenGLDevice::swapBuffers()
 {
-	//TODO: android
-    //[platState.ctx swapBuffers];
+	 eglSwapBuffers(engine.display, engine.surface);
 }
 
 
