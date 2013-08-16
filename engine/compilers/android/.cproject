@@ -29,6 +29,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Torque2D/jni/include/libjpeg}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${NDK}/sources/cxx-stl/stlport/stlport&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${NDK}/platforms/android-14/arch-arm/usr/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Torque2D/jni/torqueLibs/openal/Android}&quot;"/>
 								</option>
 								<inputType id="com.android.gcc.inputType.2067917403" superClass="com.android.gcc.inputType"/>
 							</tool>

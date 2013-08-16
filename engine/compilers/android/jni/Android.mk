@@ -18,7 +18,7 @@ LOCAL_PATH := $(MY_LOCAL_PATH)
 # LibPNG
 include $(CLEAR_VARS)
 
-LOCAL_MODULE    := libpng
+LOCAL_MODULE    := libpng-prebuilt
 LOCAL_SRC_FILES := lib/libpng.a
 
 include $(PREBUILT_STATIC_LIBRARY)
@@ -27,7 +27,7 @@ LOCAL_PATH := $(MY_LOCAL_PATH)
 # OpenAL Soft library must be a shared library since license is LGPL
 include $(CLEAR_VARS)
 
-LOCAL_MODULE    := libopenal
+LOCAL_MODULE    := libopenal-prebuilt
 LOCAL_SRC_FILES := ../../../lib/openal/Android/$(TARGET_ARCH_ABI)/libopenal.so
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../lib/openal/Android
 $(info $(shell ($(LOCAL_PATH)/copylib.sh $(LOCAL_PATH) $(TARGET_ARCH_ABI))))
@@ -525,11 +525,10 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 #					../../../source/testing/unitTesting.cc
  
 			   
-LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O0 -fsigned-char
-				   
-LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lz -lOpenSLES
-LOCAL_STATIC_LIBRARIES := android_native_app_glue libpng
-LOCAL_SHARED_LIBRARIES := libopenal
+LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O0 -fsigned-char   
+LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lz -lOpenSLES -L../../../lib/openal/Android/$(TARGET_ARCH_ABI)
+LOCAL_STATIC_LIBRARIES := android_native_app_glue libpng-prebuilt
+LOCAL_SHARED_LIBRARIES := libopenal-prebuilt
 
 LOCAL_ARM_MODE := arm
 
