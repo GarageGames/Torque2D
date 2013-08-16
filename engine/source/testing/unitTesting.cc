@@ -30,8 +30,7 @@
 #ifndef _UNIT_TESTING_H_
 #include "testing/unitTesting.h"
 #endif
-//TODO: android
-#ifndef TORQUE_OS_ANDROID
+
 #include "src/gtest.cc"
 #include "src/gtest-death-test.cc"
 #include "src/gtest-filepath.cc"
@@ -39,7 +38,6 @@
 #include "src/gtest-printers.cc"
 #include "src/gtest-test-part.cc"
 #include "src/gtest-typed-test.cc"
-#endif
 //-----------------------------------------------------------------------------
 
 class TorqueUnitTestListener : public ::testing::EmptyTestEventListener
