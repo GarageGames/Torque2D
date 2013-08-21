@@ -967,7 +967,11 @@ bool alxPause( AUDIOHANDLE handle )
 
     ALenum error = 0;
     if ( (error = alGetError()) == AL_NO_ERROR)
+	{
+		mHandle[index] |= (AUDIOHANDLE_INACTIVE_BIT);
+
         return true;
+	}
     switch (error)
     {
         case AL_INVALID_NAME:
@@ -1920,7 +1924,7 @@ void alxCloseHandles()
 
       ALint state = 0;
       alGetSourcei(mSource[i], AL_SOURCE_STATE, &state);
-      if(state == AL_PLAYING)
+      if(state == AL_PLAYING || state == AL_PAUSED)
          continue;
 
       if(!(mHandle[i] & AUDIOHANDLE_INACTIVE_BIT))

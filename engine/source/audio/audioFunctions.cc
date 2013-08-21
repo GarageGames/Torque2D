@@ -440,6 +440,18 @@ ConsoleFunction(alxPlay, S32, 2, 2, "(audio-assetId) - Play the audio asset Id.\
     return handle;
 }
 
+ConsoleFunction(alxPlaySource, bool, 2,2, "( handle ) Plays a previously created source.\n"
+											"@param handle The ID corresponding to a previously set up sound source.\n"
+											"@returns 0 if failed, 1 if successful.")
+{
+
+	AUDIOHANDLE handle = dAtoi(argv[1]);
+	
+	AUDIOHANDLE ret = alxPlay(handle);
+	if(ret) return true;
+	else return false;
+}
+
 ConsoleFunction(alxPause, bool, 2, 2, "( handle ) Use the alxPause function to pause a currently playing sound as specified by handle.\n"
                                                                 "@param handle The ID (a non-negative integer) corresponding to a previously set up sound source.\n"
                                                                 "@return No return value.\n"

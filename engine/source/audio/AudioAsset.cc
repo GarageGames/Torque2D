@@ -112,14 +112,14 @@ void AudioAsset::initPersistFields()
    addProtectedField("Looping", TypeBool, Offset(mDescription.mIsLooping, AudioAsset), &setLooping, &defaultProtectedGetFn, &writeLooping, "");
    addProtectedField("Streaming", TypeBool, Offset(mDescription.mIsStreaming, AudioAsset), &setStreaming, &defaultProtectedGetFn, &writeStreaming, "");
 
-   //addField("is3D",              TypeBool,    Offset(mDescription.mIs3D, AudioAsset));
-   //addField("referenceDistance", TypeF32,     Offset(mDescription.mReferenceDistance, AudioAsset));
-   //addField("maxDistance",       TypeF32,     Offset(mDescription.mMaxDistance, AudioAsset));
-   //addField("coneInsideAngle",   TypeS32,     Offset(mDescription.mConeInsideAngle, AudioAsset));
-   //addField("coneOutsideAngle",  TypeS32,     Offset(mDescription.mConeOutsideAngle, AudioAsset));
-   //addField("coneOutsideVolume", TypeF32,     Offset(mDescription.mConeOutsideVolume, AudioAsset));
-   //addField("coneVector",        TypePoint3F, Offset(mDescription.mConeVector, AudioAsset));
-   //addField("environmentLevel",  TypeF32,     Offset(mDescription.mEnvironmentLevel, AudioAsset));
+   addField("is3D",              TypeBool,    Offset(mDescription.mIs3D, AudioAsset));
+   addField("referenceDistance", TypeF32,     Offset(mDescription.mReferenceDistance, AudioAsset));
+   addField("maxDistance",       TypeF32,     Offset(mDescription.mMaxDistance, AudioAsset));
+   addField("coneInsideAngle",   TypeS32,     Offset(mDescription.mConeInsideAngle, AudioAsset));
+   addField("coneOutsideAngle",  TypeS32,     Offset(mDescription.mConeOutsideAngle, AudioAsset));
+   addField("coneOutsideVolume", TypeF32,     Offset(mDescription.mConeOutsideVolume, AudioAsset));
+   addField("coneVector",        TypePoint3F, Offset(mDescription.mConeVector, AudioAsset));
+   addField("environmentLevel",  TypeF32,     Offset(mDescription.mEnvironmentLevel, AudioAsset));
 }
 
 //------------------------------------------------------------------------------
