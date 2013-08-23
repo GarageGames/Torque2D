@@ -28,6 +28,7 @@
 #include "game/gameConnection.h"
 #include "io/fileStream.h"
 #include "audio/audioStreamSourceFactory.h"
+#include "2d/experimental/AudioEmitter/AudioEmitter.h"
 
 #ifdef TORQUE_OS_IOS
 #include "platformiOS/SoundEngine.h"
@@ -868,6 +869,11 @@ AUDIOHANDLE alxCreateSource(const AudioAsset *profile, const MatrixF *transform)
    return alxCreateSource(profile->getAudioDescription(), profile->getAudioFile(), transform, NULL );
 }
 
+AUDIOHANDLE AudioEmitter::alxCreateSourceEmitter(const AudioEmitter *Emitter, const AudioAsset *profile, const MatrixF *transform)
+{
+   return alxCreateSource(Emitter->getAudioDescription(), profile->getAudioFile(), transform, NULL );
+}
+
 //--------------------------------------------------------------------------
 
 extern void threadPlay(AudioBuffer * buffer, AUDIOHANDLE handle);
@@ -956,6 +962,8 @@ AUDIOHANDLE alxPlay(const AudioAsset *profile, const MatrixF *transform, const P
       return(alxPlay(handle));
    return(handle);
 }
+
+
 
 bool alxPause( AUDIOHANDLE handle )
 {
@@ -2506,8 +2514,8 @@ bool OpenALInit()
 
    // Similiar to DSound Model w/o min distance clamping
    alEnable(AL_DISTANCE_MODEL);
-   alDistanceModel(AL_INVERSE_DISTANCE);
-   alListenerf(AL_GAIN_LINEAR, 1.f);
+   alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);   
+   alListenerf(AL_GAIN, 1.0f);
 
    return true;
 }

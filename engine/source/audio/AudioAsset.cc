@@ -88,16 +88,6 @@ AudioAsset::AudioAsset()
    mDescription.mVolumeChannel       = 0;
    mDescription.mIsLooping           = false;
    mDescription.mIsStreaming		 = false;
-
-   mDescription.mIs3D                = false;
-   mDescription.mReferenceDistance   = 1.0f;
-   mDescription.mMaxDistance         = 100.0f;
-   mDescription.mEnvironmentLevel    = 0.0f;
-   mDescription.mConeInsideAngle     = 360;
-   mDescription.mConeOutsideAngle    = 360;
-   mDescription.mConeOutsideVolume   = 1.0f;
-   mDescription.mConeVector.set(0, 0, 1);
-
 }
 
 //--------------------------------------------------------------------------
@@ -112,14 +102,7 @@ void AudioAsset::initPersistFields()
    addProtectedField("Looping", TypeBool, Offset(mDescription.mIsLooping, AudioAsset), &setLooping, &defaultProtectedGetFn, &writeLooping, "");
    addProtectedField("Streaming", TypeBool, Offset(mDescription.mIsStreaming, AudioAsset), &setStreaming, &defaultProtectedGetFn, &writeStreaming, "");
 
-   addField("is3D",              TypeBool,    Offset(mDescription.mIs3D, AudioAsset));
-   addField("referenceDistance", TypeF32,     Offset(mDescription.mReferenceDistance, AudioAsset));
-   addField("maxDistance",       TypeF32,     Offset(mDescription.mMaxDistance, AudioAsset));
-   addField("coneInsideAngle",   TypeS32,     Offset(mDescription.mConeInsideAngle, AudioAsset));
-   addField("coneOutsideAngle",  TypeS32,     Offset(mDescription.mConeOutsideAngle, AudioAsset));
-   addField("coneOutsideVolume", TypeF32,     Offset(mDescription.mConeOutsideVolume, AudioAsset));
-   addField("coneVector",        TypePoint3F, Offset(mDescription.mConeVector, AudioAsset));
-   addField("environmentLevel",  TypeF32,     Offset(mDescription.mEnvironmentLevel, AudioAsset));
+
 }
 
 //------------------------------------------------------------------------------
@@ -156,17 +139,7 @@ void AudioAsset::initializeAsset( void )
     // Asset should never auto-unload.
     setAssetAutoUnload( false );
 
-    // Clamp these for now.
-    if (mDescription.mIs3D)
-    {
-        mDescription.mReferenceDistance   = mClampF(mDescription.mReferenceDistance, 0.0f, mDescription.mReferenceDistance);
-        mDescription.mMaxDistance         = mDescription.mMaxDistance > mDescription.mReferenceDistance ? mDescription.mMaxDistance : (mDescription.mReferenceDistance+0.01f);
-        mDescription.mEnvironmentLevel    = mClampF(mDescription.mEnvironmentLevel, 0.0f, 1.0f);
-        mDescription.mConeInsideAngle     = mClamp(mDescription.mConeInsideAngle, 0, 360);
-        mDescription.mConeOutsideAngle    = mClamp(mDescription.mConeOutsideAngle, mDescription.mConeInsideAngle, 360);
-        mDescription.mConeOutsideVolume   = mClampF(mDescription.mConeOutsideVolume, 0.0f, 1.0f);
-        mDescription.mConeVector.normalize();
-    }
+
 }
 
 //--------------------------------------------------------------------------
