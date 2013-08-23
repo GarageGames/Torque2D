@@ -67,7 +67,7 @@ void AudioEmitter::integrateObject( const F32 totalTime, const F32 elapsedTime, 
 	{
 	if(mHandle)
 	{
-		alxSource3f(getHandle(), AL_POSITION, getPosition().x, getPosition().y, 0.0);
+		alxSource3f(getHandle(), AL_POSITION, getPosition().x, getPosition().y, -0.25);
 	}
 	}
 }

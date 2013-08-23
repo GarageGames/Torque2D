@@ -2514,7 +2514,7 @@ bool OpenALInit()
 
    // Similiar to DSound Model w/o min distance clamping
    alEnable(AL_DISTANCE_MODEL);
-   alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);   
+   alDistanceModel(AL_INVERSE_DISTANCE);   
    alListenerf(AL_GAIN, 1.0f);
 
    return true;

@@ -13,11 +13,11 @@ ConsoleMethod(AudioEmitter, playSource, S32, 2, 2, "")
 	
 	F32 x = object->getPosition().x;
 	F32 y = object->getPosition().y;
-	transform.setColumn(3, Point3F(x,y,1.0));
+	transform.setColumn(3, Point3F(x,y,-0.25));
 	
 	   
 	AUDIOHANDLE handle = object->alxCreateSourceEmitter( object, myAudio, &transform);
-
+	
 
    if(handle != NULL_AUDIOHANDLE)
    {
