@@ -103,6 +103,7 @@ struct LoopingImage
 static F32 mMasterVolume = 1.f;           // traped from AL_LISTENER gain (miles has difficulties with 3d sources)
 
 static ALuint                 mSource[MAX_AUDIOSOURCES];                   // ALSources
+static ALint                 mResumePosition[MAX_AUDIOSOURCES];			   // Ensures Pause resumes from the correct buffer position
 static AUDIOHANDLE            mHandle[MAX_AUDIOSOURCES];                   // unique handles
 static Resource<AudioBuffer>  mBuffer[MAX_AUDIOSOURCES];                   // each of the playing buffers (needed for AudioThread)
 static F32                    mScore[MAX_AUDIOSOURCES];                    // for figuring out which sources to cull/uncull
@@ -973,43 +974,40 @@ bool alxPause( AUDIOHANDLE handle )
 
     alSourcePause( mSource[index] );
 
-    ALenum error = 0;
-    if ( (error = alGetError()) == AL_NO_ERROR)
+	ALint state;
+	alGetSourcei(mSource[index], AL_SOURCE_STATE, &state);
+	
+	if( state==AL_PAUSED )
 	{
-		mHandle[index] |= (AUDIOHANDLE_INACTIVE_BIT);
-
-        return true;
+		mResumePosition[index] = -1;
+		return true;
 	}
-    switch (error)
-    {
-        case AL_INVALID_NAME:
-            Con::errorf("alxPause - OpenAL AL_INVALID_NAME error code returned");
-            break;
-        case AL_INVALID_ENUM:
-            Con::errorf("alxPause - OpenAL AL_INVALID_ENUM error code returned");
-            break;
-        case AL_INVALID_VALUE:
-            Con::errorf("alxPause - OpenAL AL_INVALID_VALUE error code returned");
-            break;
-        case AL_INVALID_OPERATION:
-            Con::errorf("alxPause - OpenAL AL_INVALID_OPERATION error code returned");
-            break;
-        case AL_OUT_OF_MEMORY:
-            Con::errorf("alxPause - OpenAL AL_OUT_OF_MEMORY error code returned");
-            break;
-        default:
-            Con::errorf("alxPause - OpenAL has encountered a problem and won't tell us what it is.");
-    };
-    return false;
+
+	alGetSourcei(mSource[index], AL_SAMPLE_OFFSET, &mResumePosition[index] );
+	return alxCheckError("alxPause()","alGetSourcei");
+
 }
 
 void alxUnPause( AUDIOHANDLE handle )
 {
     if(handle == NULL_AUDIOHANDLE)
         return;
-    
-    alxPlay( handle );
+
+  U32 index = alxFindIndex(handle);
+
+  ALuint source = mSource[index];
+
+  if( mResumePosition[index] != -1 )
+  {
+    alSourcei( source, AL_SAMPLE_OFFSET, mResumePosition[index] );
+    mResumePosition[index] = -1;
+  }
+  alxCheckError("alxUnPause()", "alSourcei");
+
+  alSourcePlay( source );
+  alxCheckError("alxUnPause()", "alSourcePlay");
 }
+
 //--------------------------------------------------------------------------
 void alxStop(AUDIOHANDLE handle)
 {
@@ -1991,6 +1989,11 @@ void alxUpdateScores(bool sourcesOnly)
          continue;
       }
 
+	  ALint state = 0;
+	  alGetSourcei(mSource[i], AL_SOURCE_STATE, &state);
+	  if ( state==AL_PAUSED )
+		continue;
+
       // grab the volume.. (not attenuated by master for score)
       F32 volume = mSourceVolume[i] * mAudioChannelVolumes[mType[i]];
 
@@ -2169,6 +2172,37 @@ ALuint alxGetWaveLen(ALuint buffer)
 
    ALuint len = (ALuint)((F64(size) * 8000.f) / F64(frequency * bits * channels));
    return(len);
+}
+
+bool alxCheckError(const char* sourceFuncName, const char* alFuncName)
+{
+  ALenum errorVal = alGetError();
+  switch (errorVal)
+  {
+    case AL_NO_ERROR:
+      break;
+    case AL_INVALID_NAME:
+      Con::errorf("%s - %s OpenAL AL_INVALID_NAME error code returned", sourceFuncName, alFuncName);
+      break;
+    case AL_INVALID_ENUM:
+      Con::errorf("%s - %s OpenAL AL_INVALID_ENUM error code returned", sourceFuncName, alFuncName);
+      break;
+    case AL_INVALID_VALUE:
+      Con::errorf("%s - %s OpenAL AL_INVALID_VALUE error code returned", sourceFuncName, alFuncName);
+      break;
+    case AL_INVALID_OPERATION:
+      Con::errorf("%s - %s OpenAL AL_INVALID_OPERATION error code returned", sourceFuncName, alFuncName);
+      break;
+    case AL_OUT_OF_MEMORY:
+      Con::errorf("%s - %s OpenAL AL_OUT_OF_MEMORY error code returned", sourceFuncName, alFuncName);
+      break;
+    default:
+      Con::errorf("%s - %s OpenAL has encountered a problem and won't tell us what it is. %d", errorVal, sourceFuncName, alFuncName);
+  };
+  if (errorVal == AL_NO_ERROR)
+    return true;
+  else
+    return false;
 }
 
 
@@ -2543,9 +2577,21 @@ void OpenALShutdown()
       delete mLoopingFreeList.last();
       mLoopingFreeList.pop_back();
    }
+   //clear error buffer
+   alGetError();
 
    for(U32 i = 0; i < MAX_AUDIOSOURCES; i++)
-      mBuffer[i] = 0;
+   {
+	   ALint tempbuff = 0;
+	   alGetSourcei( mSource[i], AL_BUFFER, &tempbuff );
+
+	   if (alIsBuffer(tempbuff) && tempbuff != 0)
+       {
+		  ALuint buffer = tempbuff;
+          alSourceUnqueueBuffers( mSource[i], 1, &buffer );
+          alxCheckError("OpenALShutdown()", "alSourceUnqueueBuffers");
+       }
+   }
 
    alDeleteSources(mNumSources, mSource);
 
