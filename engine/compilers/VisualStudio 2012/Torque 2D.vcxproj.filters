@@ -193,6 +193,9 @@
     <Filter Include="persistence\taml\xml">
       <UniqueIdentifier>{cc1c1416-376b-4686-a4ac-21d1a35c9390}</UniqueIdentifier>
     </Filter>
+    <Filter Include="2d\experimental\AudioEmitter">
+      <UniqueIdentifier>{315e4e03-1c33-419b-bb24-26a5bb55f4f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\audio\audio.cc">
@@ -1331,6 +1334,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\gui\containers\guiGridCtrl.cc">
       <Filter>gui\containers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\experimental\AudioEmitter\AudioEmitter.cc">
+      <Filter>2d\experimental\AudioEmitter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2756,6 +2762,12 @@
     </ClInclude>
     <ClInclude Include="..\..\source\gui\containers\guiGridCtrl.h">
       <Filter>gui\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\experimental\AudioEmitter\AudioEmitter.h">
+      <Filter>2d\experimental\AudioEmitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\experimental\AudioEmitter\AudioEmitter_ScriptBinding.h">
+      <Filter>2d\experimental\AudioEmitter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1443,6 +1443,26 @@ void SceneWindow::calculateCameraView( CameraView* pCameraView )
     // Calculate Scene Window Scale.
     pCameraView->mSceneWindowScale.x = (pCameraView->mSceneMax.x - pCameraView->mSceneMin.x) / mBounds.len_x();
     pCameraView->mSceneWindowScale.y = (pCameraView->mSceneMax.y - pCameraView->mSceneMin.y) / mBounds.len_y();
+	
+	//F32 ListenerX = pCameraView->mDestinationArea.point.x;
+	//F32 ListenerY = pCameraView->mDestinationArea.point.y;
+	
+	F32 ListenerX = pCameraView->mSourceArea.point.x + (pCameraView->mSourceArea.len_x()/2);
+	F32 ListenerY = pCameraView->mSourceArea.point.y + (pCameraView->mSourceArea.len_y()/2);
+	
+	F32 Zoom;
+	
+	if(pCameraView->mCameraZoom <= 0.95)
+	{
+		Zoom = 100 - (pCameraView->mCameraZoom * 100);
+	}
+	else if (pCameraView->mCameraZoom>0.95 && pCameraView->mCameraZoom<1.05)
+	{	
+		Zoom = 1;
+	}
+	else Zoom = pCameraView->mCameraZoom * 0.05;
+
+	alListener3f(AL_POSITION,ListenerX,ListenerY, Zoom);
 }
 
 //-----------------------------------------------------------------------------

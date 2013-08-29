@@ -1497,6 +1497,7 @@ void Platform::shutdown()
    sgQueueEvents = false;
 
    setMouseLock( false );
+   Audio::OpenALShutdown();
    Video::destroy();
    Input::destroy();
    WinConsole::destroy();
