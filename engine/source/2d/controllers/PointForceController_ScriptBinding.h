@@ -52,7 +52,7 @@ ConsoleMethod(PointForceController, setPosition, void, 3, 4,    "(float x, float
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(PointForceController, PointForceController, const char*, 2, 2,    "() Gets the position of the force center.\n"
+ConsoleMethod(PointForceController, getPosition, const char*, 2, 2,    "() Gets the position of the force center.\n"
                                                                                 "@return (float x/float y) The x and y (horizontal and vertical) position of the force center.")
 {
     // Get position.
