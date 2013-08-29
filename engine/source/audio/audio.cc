@@ -580,6 +580,8 @@ static void alxSourcePlay(AudioStreamSource *streamSource)
    ALuint source = streamSource->mSource;
    Audio::Description& desc = streamSource->mDescription;
 
+   bool ret = streamSource->initStream();
+
    alSourcef(source, AL_GAIN, Audio::linearToDB(desc.mVolume * mAudioChannelVolumes[desc.mVolumeChannel] * mMasterVolume));
 //   alSourcei(source, AL_LOOPING, AL_FALSE);
    alSourcef(source, AL_PITCH, 1.f);
