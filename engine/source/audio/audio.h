@@ -38,5 +38,7 @@
 //-Mat default sample rate, change as needed
 #define DEFAULT_SOUND_OUTPUT_RATE		44100
 
+bool alxCheckError(const char*, const char*);
+
 
 #endif  // _H_AUDIO_
