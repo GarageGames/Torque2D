@@ -20,6 +20,7 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
+#include <new>
 #include "platform/platform.h"
 #include "console/console.h"
 #include "console/consoleParser.h"
@@ -48,7 +49,7 @@ bool addConsoleParser( const char *ext, fnGetCurrentFile gcf, fnGetCurrentLine g
 	AssertFatal(ext && gcf && gcl && p && r, "AddConsoleParser called with one or more NULL arguments");
 
 	ConsoleParser *pParser;
-	if((pParser = new ConsoleParser))
+	if((pParser = new(std::nothrow) ConsoleParser))
 	{
 		pParser->ext = ext;
 		pParser->getCurrentFile = gcf;

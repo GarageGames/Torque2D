@@ -22,6 +22,7 @@ must not be misrepresented as being the original software.
 distribution.
 */
 
+#include <new>
 #include <ctype.h>
 
 #ifdef TIXML_USE_STL
@@ -871,7 +872,7 @@ bool TiXmlElement::Accept( TiXmlVisitor* visitor ) const
 
 TiXmlNode* TiXmlElement::Clone() const
 {
-    TiXmlElement* clone = new TiXmlElement( Value() );
+    TiXmlElement* clone = new(std::nothrow) TiXmlElement( Value() );
     if ( !clone )
         return 0;
 
@@ -1106,7 +1107,7 @@ void TiXmlDocument::CopyTo( TiXmlDocument* target ) const
 
 TiXmlNode* TiXmlDocument::Clone() const
 {
-    TiXmlDocument* clone = new TiXmlDocument();
+    TiXmlDocument* clone = new(std::nothrow) TiXmlDocument();
     if ( !clone )
         return 0;
 
@@ -1290,7 +1291,7 @@ bool TiXmlComment::Accept( TiXmlVisitor* visitor ) const
 
 TiXmlNode* TiXmlComment::Clone() const
 {
-    TiXmlComment* clone = new TiXmlComment();
+    TiXmlComment* clone = new(std::nothrow) TiXmlComment();
 
     if ( !clone )
         return 0;
@@ -1336,7 +1337,7 @@ bool TiXmlText::Accept( TiXmlVisitor* visitor ) const
 TiXmlNode* TiXmlText::Clone() const
 {	
     TiXmlText* clone = 0;
-    clone = new TiXmlText( "" );
+    clone = new(std::nothrow) TiXmlText( "" );
 
     if ( !clone )
         return 0;
@@ -1425,7 +1426,7 @@ bool TiXmlDeclaration::Accept( TiXmlVisitor* visitor ) const
 
 TiXmlNode* TiXmlDeclaration::Clone() const
 {	
-    TiXmlDeclaration* clone = new TiXmlDeclaration();
+    TiXmlDeclaration* clone= new(std::nothrow)  TiXmlDeclaration();
 
     if ( !clone )
         return 0;
@@ -1458,7 +1459,7 @@ bool TiXmlUnknown::Accept( TiXmlVisitor* visitor ) const
 
 TiXmlNode* TiXmlUnknown::Clone() const
 {
-    TiXmlUnknown* clone = new TiXmlUnknown();
+    TiXmlUnknown* clone = new(std::nothrow) TiXmlUnknown();
 
     if ( !clone )
         return 0;

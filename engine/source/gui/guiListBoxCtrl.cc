@@ -20,6 +20,7 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 #include "gui/guiListBoxCtrl.h"
+#include <new>
 
 IMPLEMENT_CONOBJECT(GuiListBoxCtrl);
 
@@ -498,7 +499,7 @@ S32 GuiListBoxCtrl::insertItem( S32 index, StringTableEntry text, void *itemData
       return -1;
    }
 
-   LBItem *newItem = new LBItem;
+   LBItem *newItem = new(std::nothrow) LBItem;
    if( !newItem )
    {
       Con::warnf("GuiListBoxCtrl::insertItem - error allocating item memory!" );
@@ -542,7 +543,7 @@ S32 GuiListBoxCtrl::insertItemWithColor( S32 index, StringTableEntry text, Color
       return -1;
    }
 
-   LBItem *newItem = new LBItem;
+   LBItem *newItem = new(std::nothrow) LBItem;
    if( !newItem )
    {
       Con::warnf("GuiListBoxCtrl::insertItem - error allocating item memory!" );

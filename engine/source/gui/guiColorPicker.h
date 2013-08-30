@@ -82,8 +82,8 @@ class GuiColorPickerCtrl : public GuiControl
    /// @{
    void renderColorBox(RectI &bounds);			///< Function that draws the actual color box
    void drawSelector(RectI &bounds, Point2I &selectorPos, SelectorMode mode);	///< Function that draws the selection indicator
-   Point2I getRangeBoxColorPos(RectI &bounds, bool vertical, ColorF targetColor);
-   Point2I getBlendBoxColorPos(RectI &bounds, ColorF targetColor);
+   Point2I getRangeBoxColorPos(RectI &bounds, bool vertical, const ColorF& targetColor);
+   Point2I getBlendBoxColorPos(RectI &bounds, const ColorF& targetColor);
    /// @}
 
    /// @name Core Variables
@@ -126,7 +126,7 @@ class GuiColorPickerCtrl : public GuiControl
    /// @{
    void setSelectorPos(const Point2I &pos); ///< Set new pos (in local coords)
    Point2I getSelectorPos() {return mSelectorPos;}
-   Point2I getSelectorPositionForColor(RectI &bounds, ColorF color);
+   Point2I getSelectorPositionForColor(RectI &bounds, const ColorF& color);
    /// @}
    
    /// @name Input Events

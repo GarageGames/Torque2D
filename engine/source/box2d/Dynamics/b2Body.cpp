@@ -363,7 +363,6 @@ void b2Body::SetMassData(const b2MassData* massData)
 		return;
 	}
 
-	m_invMass = 0.0f;
 	m_I = 0.0f;
 	m_invI = 0.0f;
 

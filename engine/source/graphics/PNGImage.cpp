@@ -510,7 +510,7 @@ ConsoleFunction(CaptureScreenArea, bool, 7, 7, "(posX, posY, width, height, file
     else if( dStrcmp( argv[6], "PNG" ) == 0)
         bitmap->writePNG(fStream);
     else
-        bitmap->writePNG(fStream);
+		bitmap->writeMSBmp(fStream);
 
     fStream.close();
 

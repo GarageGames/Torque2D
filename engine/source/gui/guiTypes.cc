@@ -81,7 +81,7 @@ void GuiCursor::render(const Point2I &pos)
 
    // Render the cursor centered according to dimensions of texture
    S32 texWidth = mTextureHandle.getWidth();
-   S32 texHeight = mTextureHandle.getWidth();
+   S32 texHeight = mTextureHandle.getHeight();
 
    Point2I renderPos = pos;
    renderPos.x -= (S32)( texWidth  * mRenderOffset.x );

@@ -20,6 +20,8 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
+#include <new>
+
 #include "platform/platform.h"
 #include "io/stream.h"
 #include "io/fileStream.h"
@@ -229,7 +231,7 @@ S32 LangTable::addLanguage(const UTF8 *filename, const UTF8 *name /* = NULL */)
 	LangFile *pLang;
 	S32 ret = -1;
 
-	if((pLang = new LangFile(name)))
+	if((pLang = new(std::nothrow) LangFile(name)))
 	{
 		if(bool(ResourceManager->find((const char*)filename)))
 		{

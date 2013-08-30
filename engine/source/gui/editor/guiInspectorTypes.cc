@@ -19,6 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
+#include <new>
 #include "gui/editor/guiInspectorTypes.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -28,7 +29,7 @@ IMPLEMENT_CONOBJECT(GuiInspectorTypeEnum);
 
 GuiControl* GuiInspectorTypeEnum::constructEditControl()
 {
-   GuiControl* retCtrl = new GuiPopUpMenuCtrl();
+   GuiControl* retCtrl = new(std::nothrow) GuiPopUpMenuCtrl();
 
    // If we couldn't construct the control, bail!
    if( retCtrl == NULL )
@@ -95,7 +96,7 @@ IMPLEMENT_CONOBJECT(GuiInspectorTypeCheckBox);
 
 GuiControl* GuiInspectorTypeCheckBox::constructEditControl()
 {
-   GuiControl* retCtrl = new GuiCheckBoxCtrl();
+   GuiControl* retCtrl = new(std::nothrow) GuiCheckBoxCtrl();
 
    // If we couldn't construct the control, bail!
    if( retCtrl == NULL )
@@ -150,7 +151,7 @@ static S32 QSORT_CALLBACK stringCompare(const void *a,const void *b)
 
 GuiControl* GuiInspectorTypeGuiProfile::constructEditControl()
 {
-   GuiControl* retCtrl = new GuiPopUpMenuCtrl();
+   GuiControl* retCtrl = new(std::nothrow) GuiPopUpMenuCtrl();
 
    // If we couldn't construct the control, bail!
    if( retCtrl == NULL )
@@ -205,7 +206,7 @@ void GuiInspectorTypeFileName::consoleInit()
 
 GuiControl* GuiInspectorTypeFileName::constructEditControl()
 {
-   GuiControl* retCtrl = new GuiTextEditCtrl();
+   GuiControl* retCtrl = new(std::nothrow) GuiTextEditCtrl();
 
    // If we couldn't construct the control, bail!
    if( retCtrl == NULL )
@@ -271,7 +272,7 @@ IMPLEMENT_CONOBJECT(GuiInspectorTypeColor);
 
 GuiControl* GuiInspectorTypeColor::constructEditControl()
 {
-   GuiControl* retCtrl = new GuiTextEditCtrl();
+   GuiControl* retCtrl = new(std::nothrow) GuiTextEditCtrl();
 
    // If we couldn't construct the control, bail!
    if( retCtrl == NULL )

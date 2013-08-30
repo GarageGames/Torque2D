@@ -161,7 +161,7 @@ RectClipper::clipRect(const RectI& in_rRect,
                      m_clipRect.point.y + m_clipRect.extent.y - 1);
 
    out_rRect.extent.x = bottomR.x - out_rRect.point.x + 1;
-   out_rRect.extent.x = bottomR.y - out_rRect.point.y + 1;
+   out_rRect.extent.y = bottomR.y - out_rRect.point.y + 1;
 
    return true;
 }

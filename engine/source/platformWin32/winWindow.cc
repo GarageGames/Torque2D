@@ -679,7 +679,7 @@ static LRESULT PASCAL WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
          for (nI = 0; nI < nFileCount; nI++)
          {
             LPTSTR pszTheBuffer[MAX_PATH];
-            ZeroMemory( pszTheBuffer, MAX_PATH );
+            ZeroMemory( pszTheBuffer, sizeof(pszTheBuffer));
 
             // Query it
             // FIXME: Deal with Unicode

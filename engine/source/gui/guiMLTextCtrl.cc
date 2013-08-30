@@ -854,7 +854,7 @@ void GuiMLTextCtrl::scrollToBottom()
 }
 
 //--------------------------------------------------------------------------
-GuiMLTextCtrl::Atom *GuiMLTextCtrl::findHitAtom(const Point2I localCoords)
+GuiMLTextCtrl::Atom *GuiMLTextCtrl::findHitAtom(const Point2I& localCoords)
 {
    AssertFatal(mAwake, "Can't get the text position of a sleeping control.");
    if(mDirty)

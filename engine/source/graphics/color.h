@@ -575,9 +575,9 @@ inline U32 ColorI::getRGBAPack() const
 inline U32 ColorI::getABGRPack() const
 {
    return (U32(alpha) << 24) |
-          (U32(red)   << 16) |
+          (U32(blue)   << 16) |
           (U32(green) <<  8) |
-          (U32(blue)  <<  0);
+          (U32(red)  <<  0);
 }
 
 //-----------------------------------------------------------------------------

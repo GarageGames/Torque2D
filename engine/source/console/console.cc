@@ -37,6 +37,7 @@
 #include "component/dynamicConsoleMethodComponent.h"
 #include "memory/safeDelete.h"
 #include <stdarg.h>
+#include <new>
 
 #ifndef _HASHTABLE_H
 #include "collection/hashTable.h"
@@ -968,7 +969,7 @@ const char *evaluate(const char* string, bool echo, const char *fileName)
 const char *evaluatef(const char* string, ...)
 {
    const char * result = NULL;
-   char * buffer = new char[4096];
+   char * buffer = new(std::nothrow) char[4096];
    if (buffer != NULL)
    {
       va_list args;

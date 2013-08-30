@@ -72,7 +72,7 @@ public:
    void     shiftZ(F32 zz);
    void     invert();
    void     neg();
-   Point3F  project(Point3F pt); // project's the point onto the plane.
+   Point3F  project(const Point3F& pt); // project's the point onto the plane.
 
    F32      distToPlane( const Point3F& cp ) const;
 
@@ -180,7 +180,7 @@ inline bool PlaneF::isVertical() const
     return ((x != 0 || y != 0) && z == 0) ? true : false;
 }
 
-inline Point3F PlaneF::project(Point3F pt)
+inline Point3F PlaneF::project(const Point3F& pt)
 {
    F32 dist = distToPlane(pt);
    return Point3F(pt.x - x * dist, pt.y - y * dist, pt.z - z * dist);

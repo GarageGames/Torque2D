@@ -656,7 +656,7 @@ void GuiColorPickerCtrl::setSelectorPos(const Point2I &pos)
 }
 
 //--------------------------------------------------------------------------
-F32 colorHue(ColorF color)
+F32 colorHue(const ColorF &color)
 {
     F32 b = mSqrt(3) * (color.green - color.blue);
     F32 a = (2 * color.red) - color.green - color.blue;
@@ -673,7 +673,7 @@ F32 colorHue(ColorF color)
     return hue;
 }
 
-Point2I GuiColorPickerCtrl::getRangeBoxColorPos(RectI &bounds, bool vertical, ColorF targetColor)
+Point2I GuiColorPickerCtrl::getRangeBoxColorPos(RectI &bounds, bool vertical, const ColorF& targetColor)
 {
     // Calculate hue
     F32 hue = colorHue(targetColor);
@@ -697,7 +697,7 @@ Point2I GuiColorPickerCtrl::getRangeBoxColorPos(RectI &bounds, bool vertical, Co
     return position;
 }
 
-Point2I GuiColorPickerCtrl::getBlendBoxColorPos(RectI &bounds, ColorF targetColor)
+Point2I GuiColorPickerCtrl::getBlendBoxColorPos(RectI &bounds, const ColorF& targetColor)
 {
     // Calculate hue
     F32 hue = colorHue(targetColor);
@@ -766,7 +766,7 @@ Point2I GuiColorPickerCtrl::getBlendBoxColorPos(RectI &bounds, ColorF targetColo
     return position;
 }
 
-Point2I GuiColorPickerCtrl::getSelectorPositionForColor(RectI &bounds, ColorF targetColor)
+Point2I GuiColorPickerCtrl::getSelectorPositionForColor(RectI &bounds, const ColorF& targetColor)
 {
     Point2I position(0,0);
 

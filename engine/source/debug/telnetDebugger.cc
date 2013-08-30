@@ -339,7 +339,7 @@ void TelnetDebugger::checkDebugRecv()
          return;
       }
 
-      S32 numBytes;
+      S32 numBytes = 0;
       Net::Error err = Net::NotASocket;
       
       if ( mDebugSocket != InvalidSocket )

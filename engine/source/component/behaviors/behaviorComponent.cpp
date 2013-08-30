@@ -1191,7 +1191,7 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
             // Fetch behavior node.
             TamlCustomNode* pBehaviorNode = *behaviorNodeItr;
 
-            if ( pBehaviorNode->getNodeName() == BEHAVIOR_CONNECTION_TYPE_NAME )
+            if (strcmp(pBehaviorNode->getNodeName(), BEHAVIOR_CONNECTION_TYPE_NAME) == 0 )
             {
                 // Fetch field nodes.
                 const TamlCustomFieldVector& connectionFieldNodes = pBehaviorNode->getFields();
