@@ -857,7 +857,7 @@ TextureObject *TextureManager::loadTexture(const char* pTextureKey, TextureHandl
 GBitmap *TextureManager::loadBitmap( const char* pTextureKey, bool recurse, bool nocompression )
 {
     char fileNameBuffer[512];
-    Platform::makeFullPathName( pTextureKey, fileNameBuffer, 512 );
+    Con::expandPath( fileNameBuffer, sizeof(fileNameBuffer), pTextureKey );
     GBitmap *bmp = NULL;
 
     // Loop through the supported extensions to find the file.

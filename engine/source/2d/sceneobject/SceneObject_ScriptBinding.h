@@ -1994,6 +1994,7 @@ ConsoleMethodWithDocs(SceneObject, isRotateToComplete, ConsoleBool, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
+<<<<<<< HEAD
 /*! Applies a force at a world point.
     If the force is not applied at the center of mass, it will generate a torque and affect the angular velocity.
     @param worldForceX/Y - The world force vector in Newtons (N).
@@ -2001,6 +2002,13 @@ ConsoleMethodWithDocs(SceneObject, isRotateToComplete, ConsoleBool, 2, 2, ())
     @return No return Value.
 */
 ConsoleMethodWithDocs(SceneObject, applyForce, ConsoleVoid, 4, 6, (worldForce X/Y, [worldPoint X/Y]))
+=======
+ConsoleMethod(SceneObject, applyForce, void, 3, 6,       "(worldForce X/Y, [worldPoint X/Y]) - Applies a force at a world point.\n"
+                                                            "If the force is not applied at the center of mass, it will generate a torque and affect the angular velocity.\n"
+                                                            "@param worldForceX/Y - The world force vector in Newtons (N)."
+                                                            "@param worldPointX/Y - The world point where the force is applied.  If world point is not specified, the center of mass is used."
+                                                            "@return No return Value.")
+>>>>>>> 6e2964681666532c99f49535de98f93c3b6dfb24
 {
     // World force.
     const U32 worldForceElementCount = Utility::mGetStringElementCount(argv[2]);
@@ -2028,6 +2036,7 @@ ConsoleMethodWithDocs(SceneObject, applyForce, ConsoleVoid, 4, 6, (worldForce X/
     {
         // Apply force.
         object->applyForce( worldForce );
+		return;
     }
 
     // World point.
@@ -2047,7 +2056,7 @@ ConsoleMethodWithDocs(SceneObject, applyForce, ConsoleVoid, 4, 6, (worldForce X/
     // Invalid
     else
     {
-        Con::warnf("Scene::applyForce() - Invalid number of parameters!");
+		Con::warnf("Scene::applyForce() - Invalid number of parameters!");
         return;
     }
 
@@ -2073,6 +2082,7 @@ ConsoleMethodWithDocs(SceneObject, applyTorque, ConsoleVoid, 3, 3, (torque))
 
 //-----------------------------------------------------------------------------
 
+<<<<<<< HEAD
 /*! Applies an impulse at a world point.
     This immediately modifies the linear velocity.  It also modifies the angular velocity if the point of application is not the center of mass.
     @param worldImpulse/Y - The world impulse vector in Newtons (N-seconds) or Kg-m/s.
@@ -2080,6 +2090,13 @@ ConsoleMethodWithDocs(SceneObject, applyTorque, ConsoleVoid, 3, 3, (torque))
     @return No return Value.
 */
 ConsoleMethodWithDocs(SceneObject, applyLinearImpulse, ConsoleVoid, 4, 6, (worldImpulse X/Y, [worldPoint X/Y]))
+=======
+ConsoleMethod(SceneObject, applyLinearImpulse, void, 3, 6,   "(worldImpulse X/Y, [worldPoint X/Y]) - Applies an impulse at a world point.\n"
+                                                                "This immediately modifies the linear velocity.  It also modifies the angular velocity if the point of application is not the center of mass.\n"
+                                                                "@param worldImpulse/Y - The world impulse vector in Newtons (N-seconds) or Kg-m/s."
+                                                                "@param worldPointX/Y - The world point where the force is applied.  If world point is not specified, the center of mass is used."
+                                                                "@return No return Value.")
+>>>>>>> 6e2964681666532c99f49535de98f93c3b6dfb24
 {
     // World impulse.
     const U32 worldImpulseElementCount = Utility::mGetStringElementCount(argv[2]);
@@ -2107,6 +2124,7 @@ ConsoleMethodWithDocs(SceneObject, applyLinearImpulse, ConsoleVoid, 4, 6, (world
     {
         // Apply force.
         object->applyForce( worldImpulse );
+		return;
     }
 
     // World point.

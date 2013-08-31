@@ -860,7 +860,12 @@ const char* SimXMLDocument::getData()
    if(!pNode)
       return "";
 
-   TiXmlText* text = pNode->FirstChild()->ToText();
+   TiXmlNode * firstChild =  pNode->FirstChild();
+
+   if(!firstChild)
+	   return "";
+
+   TiXmlText* text = firstChild->ToText();
    if( !text )
       return "";
 

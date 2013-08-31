@@ -325,6 +325,11 @@ inline F32 mFabs(const F32 val)
    return (F32) fabs(val);
 }
 
+inline F32 mFsign(const F32 val)
+{
+   return (F32) (val > 0 ? 1 : val < 0 ? -1 : 0);
+}
+
 inline F32 mFmod(const F32 val, const F32 mod)
 {
    return (F32) fmod(val, mod);
@@ -360,6 +365,21 @@ inline U32 mMulDiv(S32 a, S32 b, U32 c)
    return m_mulDivU32(a, b, c);
 }
 
+/// Template function for doing a linear interpolation between any two
+/// types which implement operators for scalar multiply and addition.
+template <typename T>
+inline T mLerp( const T &v1, const T &v2, F32 factor )
+{
+   factor = mClampF( factor, 0.0f, 1.0f);
+   return ( v1 * ( 1.0f - factor ) ) + ( v2 * factor );
+}
+
+template <typename T>
+inline T mSmoothStep( const T &v1, const T &v2, F32 factor)
+{
+   factor = mClampF( factor, 0.0f, 1.0f);
+   return mLerp(v1, v2, (factor*factor*(3.0f-2.0f*factor)));
+}
 
 inline F32 mSin(const F32 angle)
 {

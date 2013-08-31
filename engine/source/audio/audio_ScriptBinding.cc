@@ -92,6 +92,9 @@ static ALenum getEnum(const char * name, U32 flags)
       { "AL_CONE_INNER_ANGLE",            AL_CONE_INNER_ANGLE,             (Source|Get|Set|Int) },
       { "AL_CONE_OUTER_ANGLE",            AL_CONE_OUTER_ANGLE,             (Source|Get|Set|Int) },
       { "AL_LOOPING",                     AL_LOOPING,                      (Source|Get|Set|Int) },
+	  { "AL_SAMPLE_OFFSET",               AL_SAMPLE_OFFSET,                (Source|Get|Set|Int) },
+	  { "AL_SEC_OFFSET",                  AL_SEC_OFFSET,                   (Source|Get|Set|Int) },
+	  { "AL_BYTE_OFFSET",                 AL_BYTE_OFFSET,                  (Source|Get|Set|Int) },
       //{ "AL_STREAMING",                   AL_STREAMING,                    (Source|Get|Set|Int) },
       //{ "AL_BUFFER",                      AL_BUFFER,                       (Source|Get|Set|Int) },
 
@@ -366,7 +369,7 @@ ConsoleFunctionWithDocs(alxSourcei, ConsoleVoid, 4, 4, ( handle , ALEnum , value
       return;
    }
 
-   alxSourcei(dAtoi(argv[1]), e, dAtoi(argv[3]));
+   alxSourcei(dAtoi(argv[1]), e, static_cast<ALint>(dAtoi(argv[3])));
 }
 
 
@@ -436,9 +439,9 @@ ConsoleFunctionWithDocs(alxGetSourcei, ConsoleInt, 3, 3, ( handle , ALEnum ))
       return(0);
    }
 
-   S32 value;
+   ALint value;
    alxGetSourcei(dAtoi(argv[1]), e, &value);
-   return(value);
+   return(static_cast<S32>(value));
 }
 
 

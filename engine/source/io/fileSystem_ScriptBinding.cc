@@ -648,9 +648,18 @@ ConsoleFunctionWithDocs(restartInstance, ConsoleVoid, 1, 1, ())
    Platform::postQuitMessage( 0 );
 }
 
+<<<<<<< HEAD:engine/source/io/fileSystem_ScriptBinding.cc
 /*! creates the path or path to the file name
 */
 ConsoleFunctionWithDocs( createPath, ConsoleBool, 2,2, (fileName or pathName))
+=======
+ConsoleFunction( createPath, bool, 2,2, "createPath(\"path\");  creates the path.  "
+                "Verifies all the elements in a path exists or creates them if they do not.  "
+                "Note that the path should end with a slash (/).  Otherwise, the last element in the path "
+                "will be assumed to be a filename and not a path component, and it will not be created.  "
+                "For example \"data/stage2/part1\" will verify or create \"data/stage2/\" and not \"part1\"."
+                )
+>>>>>>> 6e2964681666532c99f49535de98f93c3b6dfb24:engine/source/io/fileSystemFunctions.cpp
 {
    static char pathName[1024];
 
