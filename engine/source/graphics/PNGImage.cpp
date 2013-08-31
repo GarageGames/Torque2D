@@ -25,6 +25,8 @@
 #include "platform/platformGL.h"
 #include "platform/platform.h"
 
+#include "PNGImage_ScriptBinding.h"
+
 #define min(a,b) (a <= b ? a : b)
 
 IMPLEMENT_CONOBJECT(PNGImage);
@@ -470,115 +472,6 @@ bool PNGImage::CleanMemoryUsage()
 
         mRowPointers = NULL;
     }
-
-    return true;
-}
-
-ConsoleFunction(CaptureScreenArea, bool, 7, 7, "(posX, posY, width, height, fileName, fileType) Capture a specific area of the screen")
-{
-    GLint positionX = dAtoi(argv[1]);
-    GLint positionY = dAtoi(argv[2]);
-    U32 width = dAtoi(argv[3]);
-    U32 height = dAtoi(argv[4]);
-    
-    FileStream fStream;
-    if(!fStream.open(argv[5], FileStream::Write))
-    { 
-        Con::printf("Failed to open file '%s'.", argv[5]);
-        return false;
-    }
-
-    // Read gl pixels here
-    glReadBuffer(GL_FRONT);
-   
-    Point2I extent;
-    extent.x = width;
-    extent.y = height;
-
-    U8 * pixels = new U8[extent.x * extent.y * 4];
-    glReadPixels(positionX, positionY, extent.x, extent.y, GL_RGB, GL_UNSIGNED_BYTE, pixels);
-
-    GBitmap * bitmap = new GBitmap;
-    bitmap->allocateBitmap(U32(extent.x), U32(extent.y));
-   
-    // flip the rows
-    for(U32 y = 0; y < (U32)extent.y; y++)
-        dMemcpy(bitmap->getAddress(0, extent.y - y - 1), pixels + y * extent.x * 3, U32(extent.x * 3));
-
-    if ( dStrcmp( argv[6], "JPEG" ) == 0 )
-        bitmap->writeJPEG(fStream);
-    else if( dStrcmp( argv[6], "PNG" ) == 0)
-        bitmap->writePNG(fStream);
-    else
-        bitmap->writePNG(fStream);
-
-    fStream.close();
-
-    delete [] pixels;
-    delete bitmap;
-
-    return true;
-}
-
-ConsoleMethod(PNGImage, CreateBaseImage, bool, 5, 5, "(width, height, imageType) Create the base image to merge onto ")
-{
-    U32 width = dAtoi(argv[2]);
-    U32 height = dAtoi(argv[3]);
-
-    return object->Create(width, height, (PNGImageType)dAtoi(argv[4]));
-}
-
-ConsoleMethod(PNGImage, MergeOn, bool, 5, 5, "(x, y, imageFile) Add an image to the spritesheet")
-{
-    U32 width = dAtoi(argv[2]);
-    U32 height = dAtoi(argv[3]);
-
-    // File name is argv[4]
-    FileStream fStream;
-
-    if(!fStream.open(argv[4], FileStream::Read))
-    { 
-        Con::printf("Failed to open file '%s'.", argv[4]);
-        return false;
-    }
-
-    PNGImage* newImage = new PNGImage();
-
-    bool didReadImage = newImage->Read(argv[4]);
-
-    if(!didReadImage)
-    {
-        newImage->CleanMemoryUsage();
-
-        delete newImage;
-        return false;
-    }
-
-    fStream.close();
-
-    bool didMergeOn = object->MergeOn(width, height, newImage);
-
-    newImage->CleanMemoryUsage();
-    delete newImage;
-
-    return didMergeOn;
-}
-
-ConsoleMethod(PNGImage, SaveImage, bool, 3, 3, "(fileName) Save the new spritesheet to a file")
-{
-    FileStream fStream;
-
-    if(!fStream.open(argv[2], FileStream::Write))
-    { 
-        Con::printf("Failed to open file '%s'.", argv[2]);
-        return false;
-    }
-
-    fStream.close();
-
-    object->Write(argv[2]);
-
-    object->CleanMemoryUsage();
 
     return true;
 }

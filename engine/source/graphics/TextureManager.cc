@@ -34,6 +34,8 @@
 #include "memory/safeDelete.h"
 #include "math/mMath.h"
 
+#include "TextureManager_ScriptBinding.h"
+
 //---------------------------------------------------------------------------------------------------------------------
 
 S32 TextureManager::mMasterTextureKeyIndex = 0;
@@ -72,34 +74,6 @@ static const char* extArray[EXT_ARRAY_SIZE] = { "", ".jpg", ".png"};
 #endif
 
 //---------------------------------------------------------------------------------------------------------------------
-
-ConsoleFunction(setOpenGLTextureCompressionHint, void, 2, 2, " ( hint ) Use the setOpenGLTextureCompressionHint function to select the OpenGL texture compression method.\n"
-    "@param hint \"GL_DONT_CARE\", \"GL_FASTEST\", or \"GL_NICEST\". (Please refer to an OpenGL text for information on what these mean).\n"
-    "@return No return value")
-{
-    GLenum newHint        = GL_DONT_CARE;
-    const char* newString = "GL_DONT_CARE";
-
-    if (!dStricmp(argv[1], "GL_FASTEST"))
-    {
-        newHint = GL_FASTEST;
-        newString = "GL_FASTEST";
-    }
-    else if (!dStricmp(argv[1], "GL_NICEST"))
-    {
-        newHint = GL_NICEST;
-        newString = "GL_NICEST";
-    }
-
-    TextureManager::mTextureCompressionHint = newHint;
-
-#if !defined(TORQUE_OS_IOS)
-    if (dglDoesSupportTextureCompression())
-        glHint(GL_TEXTURE_COMPRESSION_HINT_ARB, TextureManager::mTextureCompressionHint);
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------------------------
 
 struct EventCallbackEntry
 {
@@ -294,14 +268,6 @@ void TextureManager::flush()
 {
     killManager();
     resurrectManager();
-}
-
-//--------------------------------------------------------------------------------------------------------------------
-
-ConsoleFunction( flushTextureCache, void, 1, 1, "() Use the flushTextureCache function to flush the texture cache.\n"
-                                                "@return No return value.\n")
-{
-    TextureManager::flush();
 }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -917,13 +883,6 @@ GBitmap *TextureManager::loadBitmap( const char* pTextureKey, bool recurse, bool
     }
 
     return bmp;
-}
-
-//--------------------------------------------------------------------------------------------------------------------
-
-ConsoleFunction( dumpTextureManagerMetrics, void, 1, 1, "() Dump the texture manager metrics." )
-{
-    return TextureManager::dumpMetrics();
 }
 
 //--------------------------------------------------------------------------------------------------------------------

@@ -49,6 +49,8 @@ class ModuleManager;
 
 //-----------------------------------------------------------------------------
 
+/// @ingroup moduleGroup
+/// @see moduleGroup
 class ModuleDefinition : public SimSet
 {
     friend class ModuleManager;

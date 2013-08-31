@@ -26,6 +26,8 @@
 #include "network/netStringTable.h"
 #include "string/stringTable.h"
 
+#include "netStringTable_ScriptBinding.h"
+
 NetStringTable *gNetStringTable = NULL;
 
 NetStringTable::NetStringTable()
@@ -263,16 +265,5 @@ void NetStringTable::dumpToConsole()
          ( maxIndex == -1 ) ? "" : table[maxIndex].string,
          0x11 );
 }
-
-ConsoleFunctionGroupBegin(NetStringTable, "Debug functions for the NetStringTable.");
-
-ConsoleFunction( dumpNetStringTable, void, 1, 1, "() Use the dumpNetStringTable function to dump a list of all the currently registered NetStringTable entries, including the times each has been referenced, the total entry count, and the current 'highest' reference string.\n"
-                                                                "For this to work, the engine must have been compiled with TORQUE_DEBUG defined\n"
-                                                                "@return No return value.")
-{
-   gNetStringTable->dumpToConsole();
-}
-
-ConsoleFunctionGroupEnd(NetStringTable);
 
 #endif // DEBUG

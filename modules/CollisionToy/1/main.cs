@@ -109,7 +109,7 @@ function CollisionToy::createBlockers( %this )
     for( %n = 0; %n < CollisionToy.MaxBlockers; %n++ )
     {
         // Choose a uniform area.
-        %sizeX = getRandom(0.5, 10);
+        %sizeX = getRandom(1, 9);
         %sizeY = 10 - %sizeX;
         
         // Create sprite.
