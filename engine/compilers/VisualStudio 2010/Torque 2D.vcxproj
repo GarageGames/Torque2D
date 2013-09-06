@@ -344,6 +344,7 @@
     <ClCompile Include="..\..\source\console\consoleNamespace.cc" />
     <ClCompile Include="..\..\source\console\ConsoleTypeValidators.cc" />
     <ClCompile Include="..\..\source\console\metaScripting_ScriptBinding.cc" />
+    <ClCompile Include="..\..\source\console\Package.cc" />
     <ClCompile Include="..\..\source\debug\profiler.cc" />
     <ClCompile Include="..\..\source\debug\remote\RemoteDebugger1.cc" />
     <ClCompile Include="..\..\source\debug\remote\RemoteDebuggerBase.cc" />
@@ -673,7 +674,6 @@
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectRotateToEvent.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet_ScriptBinding.h" />
-    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectTimerEvent.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Scroller.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Scroller_ScriptBinding.h" />
@@ -803,6 +803,7 @@
     <ClInclude Include="..\..\source\console\expando_ScriptBinding.h" />
     <ClInclude Include="..\..\source\console\inputManagement_ScriptBinding.h" />
     <ClInclude Include="..\..\source\console\output_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\console\Package.h" />
     <ClInclude Include="..\..\source\console\taggedStrings_ScriptBinding.h" />
     <ClInclude Include="..\..\source\debug\profiler.h" />
     <ClInclude Include="..\..\source\debug\profiler_ScriptBinding.h" />
@@ -879,7 +880,6 @@
     <ClInclude Include="..\..\source\input\actionMap_ScriptBinding.h" />
     <ClInclude Include="..\..\source\io\bitStream.h" />
     <ClInclude Include="..\..\source\io\bufferStream.h" />
-    <ClInclude Include="..\..\source\io\fileio.h" />
     <ClInclude Include="..\..\source\io\fileObject.h" />
     <ClInclude Include="..\..\source\io\fileObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\io\fileStream.h" />

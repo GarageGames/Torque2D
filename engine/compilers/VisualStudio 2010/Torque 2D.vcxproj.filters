@@ -1335,6 +1335,9 @@
     <ClCompile Include="..\..\source\platform\platformNetwork_ScriptBinding.cc">
       <Filter>platform</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\console\Package.cc">
+      <Filter>console</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\audio\audio.h">
@@ -2108,9 +2111,6 @@
     <ClInclude Include="..\..\source\io\bufferStream.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\io\fileio.h">
-      <Filter>io</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\io\fileObject.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -2385,9 +2385,6 @@
       <Filter>2d\sceneobject</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectRotateToEvent.h">
-      <Filter>2d\sceneobject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectTimerEvent.h">
       <Filter>2d\sceneobject</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\2d\sceneobject\Scroller.h">
@@ -2978,6 +2975,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\network\RemoteCommandEvent.h">
       <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\Package.h">
+      <Filter>console</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
