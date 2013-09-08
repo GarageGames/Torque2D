@@ -1335,6 +1335,9 @@
     <ClCompile Include="..\..\source\memory\frameAllocator_ScriptBinding.cc">
       <Filter>memory</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\console\Package.cc">
+      <Filter>console</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\audio\audio.h">
@@ -2106,9 +2109,6 @@
       <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\io\bufferStream.h">
-      <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\io\fileio.h">
       <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\io\fileObject.h">
@@ -2969,6 +2969,15 @@
     </ClInclude>
     <ClInclude Include="..\..\source\string\stringBuffer_ScriptBinding.h">
       <Filter>string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\io\zip\zipObject_ScriptBinding.h">
+      <Filter>io\zip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\gui\guiControl_ScriptBinding.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\Package.h">
+      <Filter>console</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
