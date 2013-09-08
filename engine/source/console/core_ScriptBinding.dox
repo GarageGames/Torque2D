@@ -1,0 +1,317 @@
+//-----------------------------------------------------------------------------
+// Copyright (c) 2013 GarageGames, LLC
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
+//-----------------------------------------------------------------------------
+
+// Warning!  This file is not real C++ code!
+// It is designed to provide types, operators, and more that are needed by Doxygen
+// to create a TorqueScript reference.
+
+// As long as this file ends in .dox, compilers should ignore it, but Doxygen won't.
+// This means the psuedo-code in here will not be seen by your compiler but it will
+// be seen by the Doxygen code parser.
+
+// Add any constructs here that you want to use to "fake-out" Doxygen while creating
+// the Torquescript doc.
+
+//-----------------------------------------------------
+// TorqueScript Functions
+//-----------------------------------------------
+
+// Most functions will be defined in _ScriptBinding.h files.
+// Here we are only defining a doxygen group, called TorqueScriptFunctions,
+// for all functions to live within.  This is necessary as Doxygen ignores global
+// functions unless they in a group.  But it also helps organize the "modules" page of
+// the Doxygen output.
+// Clusters of functions -- such as vector functions or event scheduling functions --
+// should be kept within a subgroup of the TorqueScriptFunction umbrella group.
+// As groups are created, in various _ScriptBinding.h files, they should be marked as
+// @ingroup TorqueScriptFunctions like so:
+//
+// /*! @defgroup VectorMathFunctions Vector Math
+//    @ingroup TorqueScriptFunctions
+//    @{
+// */
+//
+// <functions, functions, functions!>
+//
+// /*! @} */ // group VectorMathFunctions
+
+/*!
+   @defgroup TorqueScriptFunctions Function Categories
+*/
+
+//-----------------------------------------------
+// TorqueScript Data Types
+//-----------------------------------------------
+
+// "Define" and document generic data types here.  Doxygen does not really understand
+// how to define a language, so we need to fake it out with some C++ concept.  We will
+// use "typedef" as it seems the most innocuous.  Of course, typedef requires two arguments
+// so use "typedef type" then your data type.
+
+// Wrap all data types in a group.  This will help organize Doxygen's output "module" page.
+/*!
+   @defgroup TorqueScriptTypes Data Types
+      @{
+*/
+
+/*! Integers are whole numbers.
+
+	~~~
+	123
+	0xc001   // you can use 0x followed by hexadecimal digits
+	~~~
+*/
+typedef type Integer;
+
+/*! Float, is a floating point number which can hold decimal values.
+
+	~~~
+	1.234
+	1234e-3  // you can use scientific notion
+	~~~
+*/
+typedef type Float;
+
+/*! Text, such as names or phrases, are supported as strings.
+
+	Numbers can also be stored in ::String format. Standard strings are stored in double-quotes.
+
+	@par Example
+	~~~
+	"abcd"
+	~~~
+
+	@par Example
+	~~~
+	$UserName = "Heather";
+	~~~
+	
+	Tagged strings are special in that they contain string data, but also have a special numeric tag associated with them. Tagged strings are used for sending string data across a network. The value of a tagged string is only sent once, regardless of how many times you actually do the sending.
+
+	On subsequent sends, only the tag value is sent. Tagged values must be de-tagged when printing. You will not need to use a tagged string often unless you are in need of sending strings across a network often, like a chat system.
+
+	@par Example
+	~~~
+		$a = 'This is a tagged string';
+		echo("  Tagged string: ", $a);
+		echo("Detagged string: ", detag('$a'));
+	~~~
+	The output will be similar to this:
+	~~~
+		24
+		____
+	~~~
+
+	The second echo will be blank unless the string has been passed to you over a network.
+*/
+typedef type String;
+
+/*! Boolean "numbers" have only two values - true or false.
+
+	true    (1)
+	false   (0)
+
+	The constant `true` evaluates to the number 1 in TorqueScript, and the constant `false` evaluates to the number 0. However, non-zero values are also considered true. Think of booleans as "on/off" switches, often used in conditional statements.
+
+	@par Example
+	~~~
+	$lightsOn = true;
+	
+	if($lightsOn)
+		echo("Lights are turned on");
+	~~~
+*/
+typedef type Boolean;
+
+/*!  Arrays are data structures used to store consecutive values of the same data type.
+
+	+ $TestArray[n]   (Single-dimension)
+	+ $TestArray[m,n] (Multidimensional)
+	+ $TestArray[m_n] (Multidimensional)
+
+	@par Example
+	~~~
+	$userNames[0] = "Heather";
+	$userNames[1] = "Nikki";
+	$userNames[2] = "Mich";
+	echo($userNames[0]);
+	echo($userNames[1]);
+	echo($userNames[2]);
+	~~~
+*/
+typedef type Array;
+
+/*! Vector2 is a ::String of two numbers (::Float or ::Integer) separated by a space.
+
+	It is a special case of a Vector.  Note that TorqueScript does not check that you have exactly
+	two elements.  The type Vector2 is used here to remind you what is expected by a function, for instance.
+*/
+typedef type Vector2;
+
+/*! Vector is a ::String of any number of values separated by spaces between each.
+
+	~~~
+	%position = "25 32";
+	%color = %red SPC %blue SPC %green SPC %alpha;
+	~~~
+*/
+typedef type Vector;
+
+/*! Void is actually not a real type.  It simply represents the absense of a type.
+*/
+typedef type Void;
+
+/*! @} */ // data types
+//-----------------------------------------------
+// End TorqueScript Data Types
+//-----------------------------------------------
+
+//-----------------------------------------------
+// TorqueScript Operators
+//-----------------------------------------------
+
+// "Define" and document TorqueScript operators here.  Doxygen does not really understand
+// how to define a language, so we need to fake it out with some C++ concept.  As with
+// data types (above), we will use "typedef" as it seems the most innocuous.  Of course,
+// typedef requires two arguments so use "typedef type" then your operator.
+
+// Wrap all operators in a group.  This will help organize Doxygen's output "module" page.
+/*!
+   @defgroup Operators Operators
+   @{
+*/
+
+/*! @defgroup StringOperators String Operators
+	@{
+*/
+
+/*! Concatenates two Strings into a single ::String separated by a space.
+
+	Note: such a ::String can be decomposed with getWord()
+
+	@par example
+	~~~
+	%newString = "Hello" SPC "World";
+	echo(%newString);
+
+	OUTPUT:
+	Hello World
+	~~~
+*/
+typedef type SPC;
+
+/*! Concatenates two strings into a single ::String separated by a tab.
+
+	Note: such a ::String can be decomposed with getField()
+
+	@par example
+	~~~
+	%newString = "Hello" TAB "World";
+	echo(%newString);
+
+	OUTPUT:
+	Hello	World
+	~~~
+*/
+typedef type TAB;
+
+/*! Concatenates two strings into a single ::String with no separation.
+
+	@par example
+	~~~
+	%newString = "Hello" @ "World";
+	echo(%newString);
+
+	OUTPUT:
+	HelloWorld
+	~~~
+*/
+typedef type operator @;
+
+/*! Concatenates two strings into a single ::String separated by a new-line.
+
+	@par example
+	~~~
+	%newString = "Hello" NL "World";
+	echo(%newString);
+
+	OUTPUT: 
+	Hello
+	World
+	~~~
+*/
+typedef type NL;
+
+/*! @} */ // string operators
+
+/*! @defgroup mathOperators Arithmetic Operators
+	@{
+*/
+
+
+/*! @} */ // arithmetic operators
+
+/*! @defgroup constructionOperators Construction Operators
+	@{
+*/
+
+/*!	create a new object
+
+	@par Format
+	@code
+	%myID = new class([name])
+	{
+		[field = value;]
+		...
+	};
+	@endcode
+
+	@par Where
+	+ *myID* is the return ID that can be used to access the object in the form `%%myID.myFunction`.\n
+	+ `new` is the keyword telling the engine to create an instance of the following *class*.\n
+	+ *class* is any class declared in the engine or in script that has been derived from SimObject.\n
+	+ *name* (optional) is the object's name for referencing in the form `name.myFunction` (without % or $ before it).\n
+	+ *field* - You may initialize static or dynamic class fields here, one at a time.\n
+
+	@par Example
+	@code
+	// An SceneObject named 'Truck'
+	// with two static fields and one dynamic field to define
+	new SceneObject(Truck) 
+	{
+	   position = "0 0";
+	   size = "5 5";
+	   myField = 100;
+	};
+	
+	// A nameless object (tracked by a variable), with no fields to set
+	%myObject = new SimSet();
+	@endcode
+*/
+typedef type new;
+
+/*! @} */ // constructionOperators operators
+
+/*! @} */ // all operators
+//-----------------------------------------------
+// End TorqueScript Operators
+//-----------------------------------------------

@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,18 +20,20 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#include "frameAllocator.h"
-#include "console/console.h"
+ConsoleMethodGroupBeginWithDocs(HTTPObject, TCPObject)
 
-U8*   FrameAllocator::smBuffer = NULL;
-U32   FrameAllocator::smWaterMark = 0;
-U32   FrameAllocator::smHighWaterMark = 0;
-
-#if defined(TORQUE_DEBUG)
-
-ConsoleFunction(getMaxFrameAllocation, S32, 1,1, "getMaxFrameAllocation();")
+/*! 
+*/
+ConsoleMethodWithDocs( HTTPObject, get, ConsoleVoid, 4, 5, (TransportAddress addr, string requirstURI, string query=NULL))
 {
-   return sgMaxFrameAllocation;
+   object->get(argv[2], argv[3], argc == 4 ? NULL : argv[4]);
 }
 
-#endif
+/*! 
+*/
+ConsoleMethodWithDocs( HTTPObject, post, ConsoleVoid, 6, 6, (TransportAddress addr, string requestURI, string query, string post))
+{
+   object->post(argv[2], argv[3], argv[4], argv[5]);
+}
+
+ConsoleMethodGroupEndWithDocs(HTTPObject)

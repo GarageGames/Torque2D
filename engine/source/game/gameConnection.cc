@@ -28,6 +28,8 @@
 #include "game/gameConnection.h"
 #include "io/resource/resourceManager.h"
 
+#include "gameConnection_ScriptBinding.h"
+
 //----------------------------------------------------------------------------
 #define MAX_MOVE_PACKET_SENDS 4
 
@@ -84,24 +86,6 @@ void GameConnection::setConnectArgs(U32 argc, const char **argv)
 void GameConnection::setJoinPassword(const char *password)
 {
    mJoinPassword = dStrdup(password);
-}
-
-ConsoleMethod(GameConnection, setJoinPassword, void, 3, 3, "( password ) Use the setJoinPassword method to set the password required to connect to this server-side GameConnection.\n"
-                                                                "Pass a NULL string to clear the password.\n"
-                                                                "@param password A string representing the case insensitive password to use for this server-side GameConnection.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa setConnectArgs")
-{
-   object->setJoinPassword(argv[2]);
-}
-
-ConsoleMethod(GameConnection, setConnectArgs, void, 3, 17, "( name [ , arg1 , ... , arg15 ] ) Use the setConnectArgs method to set the connection arguments for this client-side GameConnection. These values will be passed to the server upon establishing a connection.\n"
-                                                                "@param name Generally, the first argument is the name of the player.\n"
-                                                                "@param arg1 ... , arg15 - 15 additional arguments may be passed.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa setJoinPassword")
-{
-   object->setConnectArgs(argc - 2, argv + 2);
 }
 
 void GameConnection::onTimedOut()
@@ -423,54 +407,8 @@ void GameConnection::handleConnectionMessage(U32 message, U32 sequence, U32 ghos
    Parent::handleConnectionMessage(message, sequence, ghostCount);
 }
 
-//----------------------------------------------------------------------------
-
-
-ConsoleMethod( GameConnection, activateGhosting, void, 2, 2, "() Use the activateGhosting method to GameConnection instance to start ghosting objects to the client.\n"
-                                                                "This is called on each client connection by the server.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa resetGhosting")
-{
-   object->activateGhosting();
-}
-
-ConsoleMethod( GameConnection, resetGhosting, void, 2, 2, "() Use the resetGhosting method to reset ghosting. This in effect tells the server to resend each ghost to insure that all objects which should be ghosts and are in fact ghosted.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa activateGhosting")
-{
-   object->resetGhosting();
-}
-
-
-ConsoleMethod( GameConnection, delete, void, 2, 3, "( [ reason ] ) Use the delete method to destroy and disconnect the current connection, giving an optional reason. If reason is specified, it will be transmitted to the client/server on the other end of the connection.\n"
-                                                                "@param reason A string explaining while the connection is being severed.\n"
-                                                                "@return No return value")
-{
-   if (argc == 3)
-      object->setDisconnectReason(argv[2]);
-   object->deleteObject();
-}
-
-
 //--------------------------------------------------------------------------
 void GameConnection::consoleInit()
 {
    Con::addVariable("Pref::Net::LagThreshold", TypeS32, &mLagThresholdMS);
-}
-
-ConsoleStaticMethod(GameConnection, getServerConnection, S32, 2, 2, "() Get the server connection if any.")
-{
-   if(GameConnection::getConnectionToServer())
-      return GameConnection::getConnectionToServer()->getId();
-   else
-   {
-      Con::errorf("GameConnection::getServerConnection - no connection available.");
-      return -1;
-   }
-}
-
-//added for a lack of a better place
-ConsoleFunction( purgeResources, void, 1, 1, "() Purge resources from the resource manager.")
-{
-   ResourceManager->purge();
 }

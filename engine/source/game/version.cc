@@ -26,6 +26,8 @@
 #include "string/stringTable.h"
 #include "io/resource/resourceManager.h"
 
+#include "version_ScriptBinding.h"
+
 //-----------------------------------------------------------------------------
 
 static const U32 csgVersionNumber = TORQUE_GAME_ENGINE;
@@ -52,78 +54,33 @@ const char* getCompileTimeString()
 {
    return __DATE__ " at " __TIME__;
 }
-//----------------------------------------------------------------
 
-ConsoleFunction(isDebugBuild, bool, 1, 1, "() Use the isDebugBuild function to determine if this is a debug build.\n"
-                                                                "@return Returns true if this is a debug build, otherwise false.\n"
-                                                                "@sa getBuildString, getCompileTimeString, getVersionNumber, getVersionString")
-{
-#ifdef TORQUE_DEBUG
-   return true;
-#else
-   return false;
-#endif
-}
+//-----------------------------------------------------------------------------
 
-ConsoleFunction( getVersionNumber, S32, 1, 1, "() Use the getVersionNumber function to get the version number of the currently executing engine.\n"
-                                                                "@return Returns an integer representing the engine's version number.\n"
-                                                                "@sa getBuildString, getCompileTimeString, getVersionString, isDebugBuild")
+const char* getCompanyName()
 {
-   return getVersionNumber();
-}
-
-ConsoleFunction( getVersionString, const char*, 1, 1, "() Use the getVersionString function to get the version name and number for the currently executing engine.\n"
-                                                                "@return Returns a string containing a name and an integer representing the engine's version type and version number.\n"
-                                                                "@sa getBuildString, getCompileTimeString, getVersionNumber, isDebugBuild")
-{
-   return getVersionString();
-}
-
-ConsoleFunction( getCompileTimeString, const char*, 1, 1, "() Use the getCompileTimeString function to determine when the currently running engine was built.\n"
-                                                                "@return Returns a string containing \"Month Day Year at Hour:Minute:Second\" showing when this executable was built.\n"
-                                                                "@sa getBuildString, getVersionNumber, getVersionString, isDebugBuild")
-{
-   return getCompileTimeString();
-}
-
-ConsoleFunction( getBuildString, const char*, 1, 1, "() Use the getBuildString function to determine if this build is a \"Debug\" release, or a \"Release\" build.\n"
-                                                                "@return Returns a string, either \"Debug\" for a debug build, or \"Release\" for a release build.\n"
-                                                                "@sa getCompileTimeString, getVersionNumber, getVersionString, isDebugBuild")
-{
-#ifdef TORQUE_DEBUG
-   return "Debug";
-#else
-   return "Release";
-#endif
+	return sgCompanyName;
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunction( getEngineVersion, const char*, 1, 1, "() - Gets the engine version.")
+const char* getProductName()
 {
-    return T2D_ENGINE_VERSION;
+	return sgProductName;
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunction( getiPhoneToolsVersion, const char*, 1, 1, "Returns iPhone Tools Version")
+void setCompanyName(StringTableEntry companyName)
 {
-    return T2D_IPHONETOOLS_VERSION;
+	sgCompanyName = companyName;
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunction(setCompanyAndProduct, void, 3, 3, "(company, product) Sets the company and product information.")
+void setProductName(StringTableEntry productName)
 {
-   sgCompanyName = StringTable->insert(argv[1]);
-   sgProductName = StringTable->insert(argv[2]);
-
-   Con::setVariable("$Game::CompanyName", sgCompanyName);
-   Con::setVariable("$Game::ProductName", sgProductName);
-
-   char appDataPath[1024];
-   dSprintf(appDataPath, sizeof(appDataPath), "%s/%s/%s", Platform::getUserDataDirectory(), sgCompanyName, sgProductName);
-   
-   ResourceManager->addPath(appDataPath);
+	sgProductName = productName;
 }
 
+//-----------------------------------------------------------------------------

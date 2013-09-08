@@ -26,6 +26,8 @@
 #include "io/fileStream.h"
 #include "io/resource/resourceManager.h"
 
+#include "simSerialize_ScriptBinding.h"
+
 //////////////////////////////////////////////////////////////////////////
 // SimObject Methods
 //////////////////////////////////////////////////////////////////////////
@@ -269,46 +271,3 @@ SimObject *loadObjectStream(Stream *stream)
 }
 
 } // end namespace Sim
-
-//////////////////////////////////////////////////////////////////////////
-// Console Methods
-//////////////////////////////////////////////////////////////////////////
-
-ConsoleMethod(SimObject, addFieldFilter, void, 3, 3, "(fieldName) Adds the given field filter to the list of table entries.\n"
-              "@param fieldName The name of the field filter to add.\n"
-              "@return No return value")
-{
-   object->addFieldFilter(argv[2]);
-}
-
-ConsoleMethod(SimObject, removeFieldFilter, void, 3, 3, "(fieldName) Removes the specified field filter from the table\n"
-              "@param fieldName The name of the field filter to remove.\n"
-              "@return No return value.")
-{
-   object->removeFieldFilter(argv[2]);
-}
-
-
-//////////////////////////////////////////////////////////////////////////
-// Console Functions
-//////////////////////////////////////////////////////////////////////////
-
-ConsoleFunction(saveObject, bool, 3, 3, "(object, filename) Saves the given object to the given filename\n"
-                "@param object The SimObject to save\n"
-                "@param filename The name of the file in which to save the object\n"
-                "@return Returns true on success and flase on failure")
-{
-   SimObject *obj = dynamic_cast<SimObject *>(Sim::findObject(argv[1]));
-   if(obj == NULL)
-      return false;
-   
-   return Sim::saveObject(obj, argv[2]);
-}
-
-ConsoleFunction(loadObject, S32, 2, 2, "(filename) Loads an object from the specified filename\n"
-                "@param filename The name of the file to load the object from\n"
-                "@return Returns the ID of the object on success, or 0 on failure.")
-{
-   SimObject *obj = Sim::loadObjectStream(argv[1]);
-   return obj ? obj->getId() : 0;
-}

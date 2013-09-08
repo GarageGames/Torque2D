@@ -22,6 +22,8 @@
 
 #include "fileObject.h"
 
+#include "fileObject_ScriptBinding.h"
+
 IMPLEMENT_CONOBJECT(FileObject);
 
 bool FileObject::isEOF()
@@ -166,81 +168,4 @@ void FileObject::writeObject( SimObject* object, const U8* objectPrepend )
    else
       stream.write(dStrlen((const char *) objectPrepend), objectPrepend );
    object->write( stream, 0 );
-}
-
-ConsoleMethod( FileObject, openForRead, bool, 3, 3, "( filename ) Use the openForRead method to open a previously created file for reading.\n"
-                                                                "@param filename The path and filename of the file to open for reading.\n"
-                                                                "@return Returns true if the file was successfully opened for reading, false otherwise.\n"
-                                                                "@sa close, OpenForAppend, OpenForWrite")
-{
-   return object->readMemory(argv[2]);
-}
-
-ConsoleMethod( FileObject, openForWrite, bool, 3, 3, "( filename ) Use the openForWrite method to previously created or a new file for writing. In either case, the file will be overwritten.\n"
-                                                                "@param filename The path and filename of the file to open for writing.\n"
-                                                                "@return Returns true if the file was successfully opened for writing, false otherwise.\n"
-                                                                "@sa close, OpenForAppend, openForRead")
-{
-   return object->openForWrite(argv[2]);
-}
-
-ConsoleMethod( FileObject, openForAppend, bool, 3, 3, "( filename ) Use the openForAppend method to open a previously created file for appending. If the file specified by filename does not exist, the file is created first.\n"
-                                                                "@param filename The path and filename of the file to open for appending.\n"
-                                                                "@return Returns true if the file was successfully opened for appending, false otherwise.\n"
-                                                                "@sa close, openForRead, openForWrite")
-{
-   return object->openForWrite(argv[2], true);
-}
-
-ConsoleMethod( FileObject, isEOF, bool, 2, 2, "() Use the isEOF method to check to see if the end of the current file (opened for read) has been reached.\n"
-                                                                "@return Returns true if the end of file has been reached, false otherwise.\n"
-                                                                "@sa openForRead")
-{
-   return object->isEOF();
-}
-
-ConsoleMethod( FileObject, readLine, const char*, 2, 2, "() Use the readLine method to read a single line from a file previously opened for reading.\n"
-                                                                "Use isEOF to check for end of file while reading.\n"
-                                                                "@return Returns the next line in the file, or a NULL string if the end-of-file has been reached.\n"
-                                                                "@sa isEOF, openForRead")
-{
-   return (const char *) object->readLine();
-}
-
-ConsoleMethod( FileObject, peekLine, const char*, 2, 2, "Read a line from the file without moving the stream position.")
-{
-   char *line = Con::getReturnBuffer( 512 );
-   object->peekLine( (U8*)line, 512 );
-   return line;
-}
-
-ConsoleMethod( FileObject, writeLine, void, 3, 3, "( text ) Use the writeLine method to write a value ( text ) into a file that was previously opened for appending or over-writing.\n"
-                                                                "@param text The value to write to the file.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa openForAppend, openForWrite")
-{
-   object->writeLine((const U8 *) argv[2]);
-}
-
-ConsoleMethod( FileObject, close, void, 2, 2, "() Use the close method to close the current file handle. If the file was opened for writing, this flushes the contents of the last write to disk.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa openForAppend, openForRead, openForWrite")
-{
-   object->close();
-}
-
-ConsoleMethod( FileObject, writeObject, void, 3, 4, "FileObject.writeObject(SimObject, object prepend)" )
-{
-   SimObject* obj = Sim::findObject( argv[2] );
-   if( !obj )
-   {
-      Con::printf("FileObject::writeObject - Invalid Object!");
-      return;
-   }
-
-   char *objName = NULL;
-   if( argc == 4 )
-      objName = (char*)argv[3];
-
-   object->writeObject( obj, (const U8*)objName );
 }

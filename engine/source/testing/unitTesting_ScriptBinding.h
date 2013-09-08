@@ -20,29 +20,51 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _CONSOLE_H_
-#include "console/console.h"
-#endif
+#ifndef TORQUE_SHIPPING
 
-#ifndef _PLATFORM_NETWORK_H_
-#include "platformNetwork.h"
-#endif
+/*! @defgroup UnitTesting Unit Testing
+	@ingroup TorqueScriptFunctions
+	@{
+*/
 
-//-----------------------------------------------------------------------------
-
-ConsoleFunction( setNetPort, bool, 2, 2, "(int port)"
-                "Set the network port for the game to use.\n"
-                "@param The requested port as an integer\n"
-                "@return Returns true on success, false on fail")
+/*! Runs all the registered unit tests.
+*/
+ConsoleFunctionWithDocs( runAllUnitTests, S32, 1, 1, () )
 {
-    return Net::openPort(dAtoi(argv[1]));
+    // Set-up some empty arguments.
+    S32 testArgc = 0;
+    char** testArgv = NULL;
+
+    // Initialize Google Test.
+    testing::InitGoogleTest( &testArgc, testArgv );
+
+    // Fetch the unit test instance.
+    testing::UnitTest& unitTest = *testing::UnitTest::GetInstance();
+
+    // Fetch the unit test event listeners.
+    testing::TestEventListeners& listeners = unitTest.listeners();
+
+    // Release the default listener.
+    delete listeners.Release( listeners.default_result_printer() );
+
+    // Add the Torque unit test listener.
+    listeners.Append( new TorqueUnitTestListener );
+
+    Con::printBlankLine();
+    Con::printSeparator();
+    Con::printf( "Unit Tests Starting..." );
+    Con::printBlankLine();
+
+    const S32 result RUN_ALL_TESTS();
+
+    Con::printBlankLine();
+    Con::printf( "... Unit Tests Ended." );
+    Con::printSeparator();
+    Con::printBlankLine();
+
+    return result;
 }
 
-//-----------------------------------------------------------------------------
+/*! @} */ // end group UnitTesting
 
-ConsoleFunction( closeNetPort, void, 1, 1, "()"
-   "@brief Closes the current network port\n\n"
-   "@ingroup Networking")
-{
-   Net::closePort();
-}
+#endif // TORQUE_SHIPPING

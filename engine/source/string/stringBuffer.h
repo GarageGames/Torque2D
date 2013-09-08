@@ -141,4 +141,22 @@ private:
    
 };
 
+#if defined(TORQUE_DEBUG)
+   class StringBufferManager
+   {
+      public:
+         static StringBufferManager& getManager();
+         Vector<StringBuffer*> strings;
+         U64 request8;
+         U64 request16;
+         
+         void add(StringBuffer* s);
+         void remove(StringBuffer* s);
+         void updateStats();
+         void dumpStats();
+         void dumpAllStrings();
+   };
+
+#endif // TORQUE_DEBUG
+
 #endif
