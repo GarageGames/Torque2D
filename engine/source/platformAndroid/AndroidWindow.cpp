@@ -153,6 +153,7 @@ void Platform::shutdown()
 
 
 //Hidden by Default. 1 Black Opaque, 2 Black Translucent
+S32 gScreenOrientation = 0;
 S32 gStatusBarType = 0;
 bool gStatusBarHidden = true;
 

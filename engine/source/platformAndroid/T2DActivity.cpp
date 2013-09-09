@@ -75,8 +75,6 @@ bool T2DActivity::createFramebuffer() {
 	
 	glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
 	glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
-	//TODO: android
-	//[self.context renderbufferStorage:GL_RENDERBUFFER_OES fromDrawable:(CAEAGLLayer*)self.view.layer];
 	glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_RENDERBUFFER_OES, viewRenderbuffer);
 	
 	glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &backingWidth);
@@ -792,7 +790,6 @@ static void engine_update_frame(struct engine* engine) {
 
 	if (SetupCompleted == false) {
 		if (timeElapsed > 0.25f) {
-			//TODO: android load
 			SetupCompleted = true;
 			lastSystemTime = timeGetTime();
 		}
@@ -817,65 +814,6 @@ static void engine_update_frame(struct engine* engine) {
 		_AndroidGameInnerLoop();
 	}
 
-}
-
-/**
- * Just the current frame in the display.
- */
-static void engine_draw_frame(struct engine* engine) {
-    if (engine->display == NULL) {
-        // No display.
-        return;
-    }
-
-    if (bSuspended == true)
-    	return;
-
-	if (SetupCompleted == false) {
-		return;
-	}
-
-	if (keyboardShowing == true) {
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	}
-	//backBufferFBO[currentActiveBuffer].AcceptRender(true);
-
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	//TODO: android
-	//PandaDraw();
-
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	//int height = engine_screenHeight() - (keyboardTransition * (engine_screenHeight()/2));
-
-	//draw tp screen
-	/*if (isDeviceiPhone()) {
-
-		float scale = 1.0f;
-		//shrink it to fit screen if we have blown it up
-		//if (engine->height > 0 && engine->width == 1024 && engine->height < 768) {
-		//	scale = 1.0f / ARTIF_SCALE;
-		//}
-
-		if (currentActiveBufferPerc < 1.0f)
-			backBufferFBO[otherBuffer].bitmap->DrawBuffer((engine_screenWidth()/2 - ((engine_screenWidth()*currentActiveBufferPerc) * currentBufferDirection)) * scale,height * scale, scale);
-		backBufferFBO[currentActiveBuffer].bitmap->DrawBuffer((engine_screenWidth()/2 + ((engine_screenWidth()-(engine_screenWidth()*currentActiveBufferPerc)) * currentBufferDirection)) * scale,height * scale, scale);
-
-	} else {
-		float scale = 1.0f;
-		float width = engine_screenWidth()/2;
-		//shrink it to fit screen if we have blown it up
-		//if (engine->height > 0 && engine->width == 1024 && engine->height < 768) {
-		//	scale = 1.0f / ARTIF_SCALE;
-		//}
-
-		backBufferFBO[currentActiveBuffer].bitmap->DrawBuffer(width*scale,height*scale, scale);
-	}
-*/
-    eglSwapBuffers(engine->display, engine->surface);
 }
 
 /**
@@ -1012,24 +950,13 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
                 engine_init_display(engine);
 
                 if (bSuspended == true) {
-
-					//TODO: resume
-
 					glViewport(0, 0, engine->width, engine->height);
-
 					bSuspended = false;
 				}
-
-                engine_draw_frame(engine);
             }
             break;
         case APP_CMD_TERM_WINDOW:
-        	if (bSuspended == false) {
-				//TODO: suspend
-
-				bSuspended = true;
-			}
-
+			bSuspended = true;
             // The window is being hidden or closed, clean it up.
             engine_term_display(engine, false);
             break;
@@ -1046,7 +973,6 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 			}
 
             engine->animating = 1;
-            engine_draw_frame(engine);
             break;
         case APP_CMD_LOST_FOCUS:
         	// When our app loses focus, we stop monitoring the accelerometer.
@@ -1058,7 +984,6 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 
             // stop animating.
         	engine->animating = 0;
-            engine_draw_frame(engine);
             break;
         case APP_CMD_PAUSE:
             break;
@@ -1163,12 +1088,12 @@ void android_main(struct android_app* state) {
 
         engine_update_frame(&engine);
 
-        if (engine.animating) {
+        /*if (engine.animating) {
 
             // Drawing is throttled to the screen update rate, so there
             // is no need to do timing here.
             engine_draw_frame(&engine);
-        }
+        }*/
     }
 
     engine_term_display(&engine, true);

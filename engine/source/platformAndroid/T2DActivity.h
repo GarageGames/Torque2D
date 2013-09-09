@@ -36,6 +36,9 @@
 #include <time.h>
 
 extern void adprintf(const char* fmt,...);
+extern int _AndroidGetScreenWidth();
+extern int _AndroidGetScreenHeight();
+extern S32 _AndroidGameGetOrientation();
 
 /**
  * Our saved state data.
@@ -111,4 +114,6 @@ public:
     void finishShutdown();
     void finishGLSetup();
 };
+
+extern T2DActivity activity;
 #endif

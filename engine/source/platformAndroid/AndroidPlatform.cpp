@@ -25,7 +25,7 @@
 #include "string/stringTable.h"
 #include "platform/platformInput.h"
 #include "platform/threads/thread.h"
-
+#include "platformAndroid/T2DActivity.h"
 
 #pragma mark ---- Various Directories ----
 //-----------------------------------------------------------------------------

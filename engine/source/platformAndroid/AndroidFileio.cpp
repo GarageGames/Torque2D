@@ -40,8 +40,6 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 
-//TODO: file io still needs some work...
-
 #define MAX_MAC_PATH_LONG     2048
 
 //-----------------------------------------------------------------------------
@@ -763,6 +761,7 @@ bool Platform::dumpDirectories(const char *path, Vector<StringTableEntry> &direc
 //-----------------------------------------------------------------------------
 static bool recurseDumpPath(const char* curPath, Vector<Platform::FileInfo>& fileVector, U32 depth)
 {
+	//TODO: is this used on android?
    DIR *dir;
    dirent *entry;
    
