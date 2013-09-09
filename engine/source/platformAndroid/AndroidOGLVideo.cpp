@@ -45,7 +45,6 @@ extern void createMouseTapEvent(S32 nbrTaps, S32 x, S32 y);
 
 //extern bool createAccelMoveEvent( UIAccelerationValue *accel );
 
-extern bool setScreenOrientation(bool, bool);
 // TODO: Card Profiling code isn't doing anything.
 extern StringTableEntry gScreenOrientation;
 extern bool gScreenUpsideDown;
@@ -233,7 +232,7 @@ bool OpenGLDevice::setScreenMode(U32 width, U32 height, U32 bpp, bool fullScreen
 //------------------------------------------------------------------------------
 void OpenGLDevice::swapBuffers()
 {
-	 eglSwapBuffers(engine.display, engine.surface);
+	 eglSwapBuffers(platState.engine->display, platState.engine->surface);
 }
 
 

@@ -59,7 +59,7 @@ void glFreeVertexBufferEXT(GLint handle) {}
 // Find out which extensions are available for this renderer. 
 void getGLCapabilities( )
 {
-   AssertFatal(platState.ctx, "getGLCapabilities() was called before a monitor was chosen!");
+   AssertFatal(platState.engine, "getGLCapabilities() was called before a monitor was chosen!");
 
    // silently create an opengl context on the current display,
    // so that we can get valid renderer and capability info.

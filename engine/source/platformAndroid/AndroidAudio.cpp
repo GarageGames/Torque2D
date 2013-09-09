@@ -24,11 +24,6 @@
 #include "platformAndroid/AndroidUtil.h"
 #include "platform/platformAL.h"
 
-ConsoleFunction(doDeviceVibrate, void, 1, 1, "Makes the device do a quick vibration. Only works on the iPhone line of devices - the iPod Touch line does not have vibration functionality.")  
-{  
-	//TODO: vibrate
-}  
-
 namespace Audio
 {
 	

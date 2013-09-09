@@ -21,7 +21,6 @@
 //-----------------------------------------------------------------------------
 
 #include "AndroidStreamSource.h"
-#include "SoundEngine.h"
 
 #define BUFFERSIZE 32768
 
@@ -30,12 +29,14 @@ AndroidStreamSource::AndroidStreamSource(const char *filename)  {
 	int len = dStrlen( filename );
 	mFilename = new char[len + 1];
 	dStrcpy( mFilename, filename );
+	//TODO: streaming music
 	//SoundEngine::SoundEngine_LoadBackgroundMusicTrack( mFilename, true, false );
 }
 
 AndroidStreamSource::~AndroidStreamSource() {
 	stop();
 	delete [] mFilename;
+	//TODO: streaming music
 	//SoundEngine::SoundEngine_UnloadBackgroundMusicTrack();
 }
 
@@ -44,7 +45,7 @@ bool AndroidStreamSource::isPlaying() {
 }
 
 bool AndroidStreamSource::start( bool loop ) {
-	//TODO: android
+	//TODO: streaming music
 	/*
 	SoundEngine::SoundEngine_LoadBackgroundMusicTrack( mFilename, true, false );
 	SoundEngine::SoundEngine_StartBackgroundMusic();
@@ -59,7 +60,7 @@ bool AndroidStreamSource::start( bool loop ) {
 
 bool AndroidStreamSource::stop() {
 	//false == stop now
-	//TODO: android
+	//TODO: streaming music
 	/*
 	SoundEngine::SoundEngine_StopBackgroundMusic( false );
 	SoundEngine::SoundEngine_UnloadBackgroundMusicTrack();
@@ -68,7 +69,7 @@ bool AndroidStreamSource::stop() {
 }
     
 bool AndroidStreamSource::setVolume( F32 volume) {
-	//TODO: android
+	//TODO: streaming music
 	/*
     SoundEngine::SoundEngine_SetBackgroundMusicVolume(volume);
     */

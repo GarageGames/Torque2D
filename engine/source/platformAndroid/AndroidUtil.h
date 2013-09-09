@@ -26,10 +26,6 @@
 
 #include "network/tcpObject.h"
 
-int _AndroidGameGetOrientation();
-void _AndroidGameSetCurrentOrientation(int iOrientation);
-S32 _AndroidGetPortraitTouchoffset();
-
 //Luma: Ability to get the Local IP (Internal IP) for an Android as opposed to it's External one
 void _AndroidGetLocalIP(unsigned char *pcIPString);
 

@@ -451,7 +451,6 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/platformAndroid/AndroidInput.cpp \
 					../../../source/platformAndroid/AndroidMath.cpp \
 					../../../source/platformAndroid/AndroidMemory.cpp \
-					../../../source/platformAndroid/AndroidMotionManager.cpp \
 					../../../source/platformAndroid/AndroidMutex.cpp \
 					../../../source/platformAndroid/AndroidNet.cpp \
 					../../../source/platformAndroid/AndroidOGLVideo.cpp \
@@ -467,7 +466,6 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/platformAndroid/AndroidUtil.cpp \
 					../../../source/platformAndroid/AndroidWindow.cpp \
 					../../../source/platformAndroid/main.cpp \
-					../../../source/platformAndroid/SoundEngine.cpp \
 					../../../source/platformAndroid/T2DActivity.cpp \
 					../../../source/platformAndroid/menus/popupMenu.cpp \
 					../../../source/sim/scriptGroup.cc \

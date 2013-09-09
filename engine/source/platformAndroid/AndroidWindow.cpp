@@ -36,7 +36,6 @@
 
 #include "platformAndroid/platformGL.h"
 
-bool setScreenOrientation(bool, bool);
 bool getStatusBarHidden();
 bool setStatusBarHidden(bool);
 void setStatusBarType(S32);
@@ -75,9 +74,6 @@ AndroidPlatState::AndroidPlatState()
     // directory that contains main.cs . This will help us detect whether we are
     // running with the scripts in the bundle or not.
     mainDotCsDir = NULL;
-
-    //TODO: android
-    //mainLoopTimer = NULL;
 }
 
 
@@ -160,96 +156,30 @@ void Platform::shutdown()
 S32 gStatusBarType = 0;
 bool gStatusBarHidden = true;
 
-//Landscape by default. 0 Landscape, 1 Portrait
-S32 gScreenOrientation = 0;
-bool gScreenUpsideDown = true;
-
-
 //------------------------------------------------------------------------------
 void Platform::initWindow(const Point2I &initialSize, const char *name)
 {
-    S32 resolutionWidth = ANDROID_DEFAULT_RESOLUTION_X;
-    S32 resolutionHeight = ANDROID_DEFAULT_RESOLUTION_Y;
-
-    // First fetch the values from the prefs.
-    U32 iDeviceOrientation = (U32) Con::getIntVariable("$pref::Android::ScreenOrientation");
-
-    // 0: iPhone
-    // 1: iPad
-    // 2: iPhone 5
-    //TODO: android
-    /*
-    if (iDeviceType == 2)
-    {
-        resolutionWidth = 1136;
-        resolutionHeight = 640;
-    }
-    else
-    {
-        U32 scaleFactor = retinaEnabled ? 2 : 1;
-
-        resolutionWidth = iDeviceType ? (1024 * scaleFactor) : (480 * scaleFactor);
-        resolutionHeight = iDeviceType ? (768 * scaleFactor) : (320 * scaleFactor);
-    }
-
-    Point2I startRes;
-
-    if (!iDeviceOrientation)
-    {
-        startRes.x = resolutionWidth;
-        startRes.y = resolutionHeight;
-    }
-    else
-    {
-        //portrait, swap width height.
-        startRes.x = resolutionHeight;
-        startRes.y = resolutionWidth;
-    }
+    S32 resolutionWidth = _AndroidGetScreenWidth();
+    S32 resolutionHeight = _AndroidGetScreenHeight();
 
     dSprintf(platState.appWindowTitle, sizeof(platState.appWindowTitle), name);
 
-    platState.windowSize.x = startRes.x;
-    platState.windowSize.y = startRes.y;
-
-    //Get screen orientation prefs //Based on 0 Landscape, 1 Portrait
-    gScreenOrientation = iDeviceOrientation;
-    gScreenUpsideDown = Con::getBoolVariable("$pref::Android::ScreenUpsideDown");
+    platState.windowSize.x = _AndroidGetScreenWidth();
+    platState.windowSize.y = _AndroidGetScreenHeight();
 
     //Default to landscape, and run into portrait if requested.
-    platState.portrait = false;
-
-    if (gScreenOrientation != 0) //fuzzytodo :add a constant
+    S32 orientation = _AndroidGameGetOrientation();
+    if (orientation == ACONFIGURATION_ORIENTATION_PORT)
     {
-        //Could handle other options here, later.
-        platState.portrait = true;
+    	gScreenOrientation = 1;
+    	platState.portrait = true;
+    }
+    else
+    {
+    	gScreenOrientation = 0;
+    	platState.portrait = false;
     }
 
-    //We should now have a good windowSize, it will be default if initial size was bad
-    T2DView * glView;
-    CGRect rect;
-
-    rect.origin.x = 0;
-    rect.origin.y = 0;
-
-    rect.size.width = platState.windowSize.x;
-    rect.size.height = platState.windowSize.y;
-
-    glView = (T2DView *) platState.Window;
-    
-    //TODO: android
-    //if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2)
-    //    glView.contentScaleFactor = [[UIScreen mainScreen] scale];
-    
-    platState.ctx = glView;
-    
-    //get status bar pref // 0 Hidden , 1 BlackOpaque , 2 BlackTranslucent
-    
-    S32 tempType = Con::getIntVariable("$pref::Android::StatusBarType");
-    setStatusBarType(tempType);
-    
-    //set screen orientation
-    setScreenOrientation(platState.portrait, gScreenUpsideDown);
-    
     bool fullScreen;
     U32 bpp = Con::getIntVariable("$pref::Android::ScreenDepth"); //ANDROID_DEFAULT_RESOLUTION_BIT_DEPTH;
     if (!bpp)
@@ -273,7 +203,6 @@ void Platform::initWindow(const Point2I &initialSize, const char *name)
     //NOTE:	This should probably be set by the user to be the color closest to Default.png in order to minimize any popping effect... $pref:: anyone? Are $pref::s even valid at this point in the Init process?
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    */
 }
 
 //--------------------------------------
@@ -292,69 +221,16 @@ bool appIsRunning(int batchId)
 
 bool Platform::openWebBrowser(const char *webAddress)
 {
-	//TODO: android
-    /*NSString *string = [[NSString alloc] initWithUTF8String:webAddress];
-    NSURL *url = [[NSURL alloc] initWithString:string];
-    bool ret = [platState.application openURL:url];
+	//TODO: convert to JNI code
+	//Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+	//startActivity(browserIntent);
 
-    return ret;// this bails on the application, switching to Safari
-    */
-	return false;
-}
 
-bool setScreenOrientation(bool portrait, bool upsidedown)
-{
-    bool success = false;
-    //TODO: android
-    /*
-    CGPoint point;
-    if (platState.portrait)
-    {
-        point.x = platState.windowSize.x / 2;
-        point.y = platState.windowSize.y / 2;
-    }
-    else
-    {
-        point.x = platState.windowSize.y / 2;
-        point.y = platState.windowSize.x / 2;
-    }
-*/
-
-    //TODO: android
-    /*[platState.ctx centerOnPoint:point];
-
-    if (portrait)
-    {//normal upright
-        if (upsidedown)
-        {//button on top
-            [platState.ctx rotateToAngle:M_PI + (M_PI / 2.0)];//rotate to 90 degrees
-            platState.application.statusBarOrientation = UIInterfaceOrientationPortraitUpsideDown;
-            success = true;
-        } else
-        {//button on bottom
-            [platState.ctx rotateToAngle:(M_PI / 2.0)];//rotate to 270 degrees
-            platState.application.statusBarOrientation = UIInterfaceOrientationPortrait;
-            success = true;
-        }
-    } else
-    {//landscape/ sideways
-        if (upsidedown)
-        {//button on left
-            [platState.ctx rotateToAngle:0];//rotate to -180 (0) degrees
-            platState.application.statusBarOrientation = UIInterfaceOrientationLandscapeLeft;
-            success = true;
-        } else
-        {//button on right
-            [platState.ctx rotateToAngle:(M_PI)];//rotate to 180 degrees
-            platState.application.statusBarOrientation = UIInterfaceOrientationLandscapeRight;
-            success = true;
-        }
-    }
-*/
-    return success;
+	return true;
 }
 
 ConsoleFunction(setScreenOrientation, bool, 3, 3, "Sets the orientation of the screen ( portrait/landscape, upside down or right-side up )\n"
         "@(bool portrait, bool upside_down)"){
-    return setScreenOrientation(dAtob(argv[1]), dAtob(argv[2]));
+    adprintf("screen orientation is set via the manifest file on android");
+	return false;
 }

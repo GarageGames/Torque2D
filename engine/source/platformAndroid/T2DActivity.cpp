@@ -25,8 +25,12 @@
 #include "platformAndroid/AndroidWindow.h"
 #include "platformAndroid/platformAndroid.h"
 #include "graphics/dgl.h"
+#include "platform/event.h"
+#include "game/gameInterface.h"
 
 extern AndroidPlatState platState;
+
+T2DActivity activity;
 
 bool keyboardShowing = false;
 float keyboardTransition = 1.0f;
@@ -36,7 +40,7 @@ double lastSystemTime = 0;
 
 #define USE_DEPTH_BUFFER 0
 
-extern int _AndroidRunTorqueMain();
+extern int _AndroidRunTorqueMain(engine *eng);
 extern bool createMouseMoveEvent(S32 i, S32 x, S32 y, S32 lastX, S32 lastY);
 extern bool createMouseDownEvent(S32 touchNumber, S32 x, S32 y, U32 numTouches);
 extern bool createMouseUpEvent(S32 touchNumber, S32 x, S32 y, S32 lastX, S32 lastY, U32 numTouches); //EFM
@@ -45,18 +49,14 @@ extern void _AndroidGameInnerLoop();
 extern void _AndroidGameResignActive();
 extern void _AndroidGameBecomeActive();
 extern void _AndroidGameWillTerminate();
-extern S32 _AndroidGameGetOrientation();
 
-// Store current orientation for easy access
-extern void _AndroidGameChangeOrientation(S32 newOrientation);
-//TODO: android
-/*
-UIDeviceOrientation currentOrientation;
-*/
+S32 _AndroidGameGetOrientation()
+{
+	return AConfiguration_getOrientation(platState.engine->app->config);
+}
+
 bool _AndroidTorqueFatalError = false;
 
-//-Mat we should update the accelereometer once per frame
-extern U32  AccelerometerUpdateMS;
 extern void _AndroidGameInnerLoop();
 
 double timeGetTime() {
@@ -90,8 +90,7 @@ bool T2DActivity::createFramebuffer() {
 	}
 	
 	if(glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES) != GL_FRAMEBUFFER_COMPLETE_OES) {
-		//TODO: android
-		//NSLog(@"failed to make complete framebuffer object %x", glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES));
+		adprintf("failed to make complete framebuffer object %x", glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES));
 		return false;
 	}
 	
@@ -112,49 +111,249 @@ void T2DActivity::destroyFramebuffer() {
 	}
 }
 
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-void T2DActivity::finishGLSetup()
-{
-    //TODO: android
-    //self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
-    
-    //if (!self.context) {
-      //  NSLog(@"Failed to create ES context");
-    //}
-    
-	if( AccelerometerUpdateMS <= 0 ) {
-        //Luma:	This variable needs to be store MS value, not Seconds value
-        AccelerometerUpdateMS = 33; // 33 ms
-	}
-	
-	//[EAGLContext setCurrentContext:self.context];
-	createFramebuffer();
-	
-    platState.multipleTouchesEnabled = true;
-    //[self.view setMultipleTouchEnabled:YES];
-    
-	_AndroidTorqueFatalError = false;
-	if(!_AndroidRunTorqueMain())
-	{
-		_AndroidTorqueFatalError = true;
-		return;
-	}
+void ChangeVolume(bool up) {
+
+    // Attaches the current thread to the JVM.
+    jint lResult;
+    jint lFlags = 0;
+
+    JavaVM* lJavaVM = platState.engine->app->activity->vm;
+    JNIEnv* lJNIEnv = platState.engine->app->activity->env;
+
+    JavaVMAttachArgs lJavaVMAttachArgs;
+    lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+    lJavaVMAttachArgs.name = "NativeThread";
+    lJavaVMAttachArgs.group = NULL;
+
+    lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+    if (lResult == JNI_ERR) {
+        return;
+    }
+
+    // Retrieves NativeActivity.
+    jobject lNativeActivity = platState.engine->app->activity->clazz;
+    jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+    // Retrieves Context.AUDIO_SERVICE.
+    jclass ClassContext = lJNIEnv->FindClass("android/content/Context");
+    jfieldID FieldAUDIO_SERVICE =lJNIEnv->GetStaticFieldID(ClassContext,"AUDIO_SERVICE", "Ljava/lang/String;");
+    jobject AUDIO_SERVICE = lJNIEnv->GetStaticObjectField(ClassContext, FieldAUDIO_SERVICE);
+
+    // Runs getSystemService(AUDIO_SERVICE)
+    jclass ClassAudioManager = lJNIEnv->FindClass("android/media/AudioManager");
+    jmethodID MethodGetSystemService = lJNIEnv->GetMethodID(ClassNativeActivity, "getSystemService","(Ljava/lang/String;)Ljava/lang/Object;");
+    jobject lAudioManager = lJNIEnv->CallObjectMethod(lNativeActivity, MethodGetSystemService, AUDIO_SERVICE);
+
+    //get AudioManager.STREAM_MUSIC
+    jfieldID FieldSTREAM_MUSIC =lJNIEnv->GetStaticFieldID(ClassAudioManager,"STREAM_MUSIC", "I");
+    jint STREAM_MUSIC = lJNIEnv->GetStaticIntField(ClassAudioManager, FieldSTREAM_MUSIC);
+
+    //get AudioManager.FLAG_SHOW_UI
+    jfieldID FieldFLAG_SHOW_UI =lJNIEnv->GetStaticFieldID(ClassAudioManager,"FLAG_SHOW_UI", "I");
+    jint FLAG_SHOW_UI = lJNIEnv->GetStaticIntField(ClassAudioManager, FieldFLAG_SHOW_UI);
+
+    if (up) {
+    	//get AudioManager.ADJUST_RAISE
+    	jfieldID FieldADJUST_RAISE =lJNIEnv->GetStaticFieldID(ClassAudioManager,"ADJUST_RAISE", "I");
+    	jint ADJUST_RAISE = lJNIEnv->GetStaticIntField(ClassAudioManager, FieldADJUST_RAISE);
+
+    	//audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+        jmethodID MethodAdjustStreamVolume = lJNIEnv->GetMethodID(ClassAudioManager, "adjustStreamVolume", "(III)V");
+        lJNIEnv->CallVoidMethod(lAudioManager,MethodAdjustStreamVolume, STREAM_MUSIC, ADJUST_RAISE, FLAG_SHOW_UI);
+
+    } else {
+    	//get AudioManager.ADJUST_LOWER
+    	jfieldID FieldADJUST_LOWER =lJNIEnv->GetStaticFieldID(ClassAudioManager,"ADJUST_LOWER", "I");
+    	jint ADJUST_LOWER = lJNIEnv->GetStaticIntField(ClassAudioManager, FieldADJUST_LOWER);
+
+    	//audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
+    	jmethodID MethodAdjustStreamVolume = lJNIEnv->GetMethodID(ClassAudioManager, "adjustStreamVolume", "(III)V");
+    	lJNIEnv->CallVoidMethod(lAudioManager,MethodAdjustStreamVolume, STREAM_MUSIC, ADJUST_LOWER, FLAG_SHOW_UI);
+    }
+
+    // Finished with the JVM.
+    lJavaVM->DetachCurrentThread();
 }
 
-void T2DActivity::finishShutdown()
-{
-	//TODO: android
-    // Release any retained subviews of the main view.
-    //if ([EAGLContext currentContext] == self.context) {
-      //  [EAGLContext setCurrentContext:nil];
-    //}
-    
-    //self.context = nil;
+int convertAndroidToWindowsKeyCode(int key) {
+
+	switch(key) {
+	case AKEYCODE_0:
+		return 48;
+	case AKEYCODE_1:
+		return 49;
+	case AKEYCODE_2:
+		return 50;
+	case AKEYCODE_3:
+		return 51;
+	case AKEYCODE_4:
+		return 52;
+	case AKEYCODE_5:
+		return 53;
+	case AKEYCODE_6:
+		return 54;
+	case AKEYCODE_7:
+		return 55;
+	case AKEYCODE_8:
+		return 56;
+	case AKEYCODE_9:
+		return 57;
+	case AKEYCODE_A:
+		return 65;
+	case AKEYCODE_ALT_LEFT:
+		return 0xA4;
+	case AKEYCODE_ALT_RIGHT:
+		return 0xA5;
+	case AKEYCODE_APOSTROPHE:
+		return 39;
+	case AKEYCODE_AT:
+		return 64;
+	case AKEYCODE_B:
+		return 66;
+	case AKEYCODE_BACKSLASH:
+		return 92;
+	case AKEYCODE_C:
+		return 67;
+	//case KEYCODE_CAPS_LOCK:
+	//	return 0x14;
+	case AKEYCODE_COMMA:
+		return 44;
+	case AKEYCODE_D:
+		return 68;
+	case AKEYCODE_DEL:
+		return 8;
+	case AKEYCODE_E:
+		return 69;
+	case AKEYCODE_ENTER:
+		return 13;
+	case AKEYCODE_EQUALS:
+		return 61;
+	//case AKEYCODE_ESCAPE:
+	//	return 0x1B;
+	case AKEYCODE_F:
+		return 70;
+	//case AKEYCODE_F1:
+	//	return 0x70;
+	//case AKEYCODE_F10:
+	//	return 0x79;
+	//case AKEYCODE_F11:
+	//	return 0x7A;
+	//case AKEYCODE_F12:
+	//	return 0x7B;
+	//case AKEYCODE_F2:
+	//	return 0x71;
+	//case AKEYCODE_F3:
+	//	return 0x72;
+	//case AKEYCODE_F4:
+	//	return 0x73;
+	//case AKEYCODE_F5:
+	//	return 0x74;
+	//case AKEYCODE_F6:
+	//	return 0x75;
+	//case AKEYCODE_F7:
+	//	return 0x76;
+	//case AKEYCODE_F8:
+	//	return 0x77;
+	//case AKEYCODE_F9:
+	//	return 0x78;
+	case AKEYCODE_G:
+		return 71;
+	case AKEYCODE_GRAVE:
+		return 96;
+	case AKEYCODE_H:
+		return 72;
+	case AKEYCODE_I:
+		return 73;
+	//case AKEYCODE_INSERT:
+	//	return 0x2D;
+	case AKEYCODE_J:
+		return 74;
+	case AKEYCODE_K:
+		return 75;
+	case AKEYCODE_L:
+		return 76;
+	case AKEYCODE_LEFT_BRACKET:
+		return 91;
+	case AKEYCODE_M:
+		return 77;
+	case AKEYCODE_MINUS:
+		return 45;
+	case AKEYCODE_N:
+		return 78;
+	case AKEYCODE_O:
+		return 79;
+	case AKEYCODE_P:
+		return 80;
+	case AKEYCODE_PAGE_DOWN:
+		return 0x22;
+	case AKEYCODE_PAGE_UP:
+		return 0x21;
+	case AKEYCODE_PERIOD:
+		return 46;
+	case AKEYCODE_PLUS:
+		return 43;
+	case AKEYCODE_POUND:
+		return 35;
+	case AKEYCODE_Q:
+		return 81;
+	case AKEYCODE_R:
+		return 82;
+	case AKEYCODE_RIGHT_BRACKET:
+		return 93;
+	case AKEYCODE_S:
+		return 83;
+	case AKEYCODE_SEMICOLON:
+		return 59;
+	case AKEYCODE_SHIFT_LEFT:
+		return 0xA0;
+	case AKEYCODE_SHIFT_RIGHT:
+		return 0xA1;
+	case AKEYCODE_SLASH:
+		return 47;
+	case AKEYCODE_SPACE:
+		return 32;
+	case AKEYCODE_STAR:
+		return 42;
+	case AKEYCODE_T:
+		return 84;
+	case AKEYCODE_TAB:
+		return 0x09;
+	case AKEYCODE_U:
+		return 85;
+	case AKEYCODE_V:
+		return 86;
+	case AKEYCODE_W:
+		return 87;
+	case AKEYCODE_X:
+		return 88;
+	case AKEYCODE_Y:
+		return 89;
+	case AKEYCODE_Z:
+		return 90;
+	default:
+		return 0;
+	}
+
+	return 0;
+
 }
 
-void T2DActivity::update()
-{
-    _AndroidGameInnerLoop();
+
+void androidKeyboardEvent(int keyval, bool make) {
+
+   S32 keyCode = convertAndroidToWindowsKeyCode(keyval);
+
+   InputEvent event;
+   event.deviceInst = 0;
+   event.deviceType = KeyboardDeviceType;
+   event.objType    = SI_KEY;
+   event.objInst    = keyCode;
+   event.action     = make ? SI_MAKE : SI_BREAK;
+   event.modifier   = 0;
+   event.ascii      = keyCode;
+   event.fValue     = make ? 1.0f : 0.0f;
+
+   Game->postEvent(event);
 }
 
 Vector<Point2I> rawLastTouches;
@@ -183,13 +382,12 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
         			rawLastTouches[i].y = point.y;
         		}
 
-        	    S32 orientation = _AndroidGameGetOrientation();
-        	    //TODO: android
-        	    /* if (UIDeviceOrientationIsPortrait(orientation))
+        	    /*S32 orientation = _AndroidGameGetOrientation();
+        	    if (orientation == ACONFIGURATION_ORIENTATION_PORT)
         	    {
         	    	point.y -= _AndroidGetPortraitTouchoffset();
-        	    }
-        	    */
+        	    }*/
+
         	    createMouseDownEvent(i, point.x, point.y, touchCount);
         	}
 
@@ -205,9 +403,8 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				point.y = AMotionEvent_getY(event, i);
 				Point2I prevPoint = rawLastTouches[i];
 
-				S32 orientation = _AndroidGameGetOrientation();
-				//TODO: android
-				/*if (UIDeviceOrientationIsPortrait(orientation))
+				/*S32 orientation = _AndroidGameGetOrientation();
+				if (orientation == ACONFIGURATION_ORIENTATION_PORT)
 				{
 					point.y -= _AndroidGetPortraitTouchoffset();
 					prevPoint.y -= _AndroidGetPortraitTouchoffset();
@@ -234,10 +431,8 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				point.y = AMotionEvent_getY(event, i);
 				Point2I prevPoint = rawLastTouches[i];
 
-				S32 orientation = _AndroidGameGetOrientation();
-				//TODO: android
-				/*
-				if (UIDeviceOrientationIsPortrait(orientation))
+				/*S32 orientation = _AndroidGameGetOrientation();
+				if (orientation == ACONFIGURATION_ORIENTATION_PORT)
 				{
 					point.y -= _AndroidGetPortraitTouchoffset();
 					prevPoint.y -= _AndroidGetPortraitTouchoffset();
@@ -260,15 +455,13 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				point.y = AMotionEvent_getY(event, i);
 				Point2I prevPoint = rawLastTouches[i];
 
-				S32 orientation = _AndroidGameGetOrientation();
-				//TODO: android
-				/*
-				if (UIDeviceOrientationIsPortrait(orientation))
+				/*S32 orientation = _AndroidGameGetOrientation();
+				if (orientation == ACONFIGURATION_ORIENTATION_PORT)
 				{
 					point.y -= _AndroidGetPortraitTouchoffset();
 					prevPoint.y -= _AndroidGetPortraitTouchoffset();
-				}
-				*/
+				}*/
+
 				createMouseUpEvent(i, point.x, point.y, prevPoint.x, prevPoint.y, touchCount);
 
 				//Luma: Tap support
@@ -294,32 +487,26 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 			case AKEY_EVENT_ACTION_DOWN:
 
 				if (key_val == AKEYCODE_VOLUME_UP) {
-					//TODO: android
-					//ChangeVolume(true);
+					ChangeVolume(true);
 				} else if (key_val == AKEYCODE_VOLUME_DOWN) {
-					//TODO: android
-					//ChangeVolume(false);
+					ChangeVolume(false);
 				} else if (key_val == AKEYCODE_BACK) {
-					//android back button
+					Con::executef(2, "androidBackButton", Con::getBoolArg(true));
 			    } else {
-			        //TODO: android
-			    	//convertAndroidToWindowsKeyCode(key_val);
+			    	androidKeyboardEvent(key_val, true);
 			    }
 				break;
 
 			case AKEY_EVENT_ACTION_UP:
 
 				if (key_val == AKEYCODE_VOLUME_UP) {
-					//TODO: android
-					//ChangeVolume(true);
+					ChangeVolume(true);
 				} else if (key_val == AKEYCODE_VOLUME_DOWN) {
-					//TODO: android
-					//ChangeVolume(false);
+					ChangeVolume(false);
 				} else if (key_val == AKEYCODE_BACK) {
-					//android back button
+					Con::executef(2, "androidBackButton", Con::getBoolArg(false));
 				} else {
-					//TODO: android
-					//convertAndroidToWindowsKeyCode(key_val);
+					androidKeyboardEvent(key_val, false);
 				}
 				break;
 
@@ -333,17 +520,17 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 
 int _AndroidGetScreenWidth() {
 
-	return engine.width;
+	return platState.engine->width;
 }
 
 int _AndroidGetScreenHeight() {
 
-	return engine.height;
+	return platState.engine->height;
 }
 
 bool _AndroidGetFileDescriptor(const char* fileName, int32_t *mDescriptor, off_t *mStart, off_t* mLength) {
 
-	AAsset* asset = AAssetManager_open(engine.app->activity->assetManager, fileName, AASSET_MODE_UNKNOWN);
+	AAsset* asset = AAssetManager_open(platState.engine->app->activity->assetManager, fileName, AASSET_MODE_UNKNOWN);
 	if (asset != NULL) {
 		*mDescriptor = AAsset_openFileDescriptor(asset, mStart, mLength);
 		AAsset_close(asset);
@@ -363,7 +550,7 @@ char* _AndroidLoadFile(const char* fileName, int *size) {
 	uint8_t buf[1024];
 	char* buffer = NULL;
 	*size = 0;
-	asset = AAssetManager_open(engine.app->activity->assetManager, fileName, AASSET_MODE_UNKNOWN);
+	asset = AAssetManager_open(platState.engine->app->activity->assetManager, fileName, AASSET_MODE_UNKNOWN);
 	if(asset != NULL){
 		*size = AAsset_getLength(asset);
 		if (*size <= 0)
@@ -398,8 +585,8 @@ void _AndroidGetDeviceIPAddress(char* address) {
 	 jint lResult;
 	 jint lFlags = 0;
 
-	 JavaVM* lJavaVM = engine.app->activity->vm;
-	 JNIEnv* lJNIEnv = engine.app->activity->env;
+	 JavaVM* lJavaVM = platState.engine->app->activity->vm;
+	 JNIEnv* lJNIEnv = platState.engine->app->activity->env;
 
 	 JavaVMAttachArgs lJavaVMAttachArgs;
 	 lJavaVMAttachArgs.version = JNI_VERSION_1_6;
@@ -412,7 +599,7 @@ void _AndroidGetDeviceIPAddress(char* address) {
 	 }
 
 	 // Retrieves NativeActivity.
-	 jobject lNativeActivity = engine.app->activity->clazz;
+	 jobject lNativeActivity = platState.engine->app->activity->clazz;
 	 jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
 
 	 // Retrieves Context.INPUT_METHOD_SERVICE.
@@ -538,8 +725,8 @@ static int engine_init_display(struct engine* engine) {
 
     if (SetupCompleted == false)
     {
-
-    	//TODO: android
+    	activity.finishGLSetup();
+    	_AndroidRunTorqueMain(engine);
 
     }
     else
@@ -549,6 +736,45 @@ static int engine_init_display(struct engine* engine) {
     }
 
     return 0;
+}
+
+void T2DActivity::finishGLSetup()
+{
+	createFramebuffer();
+
+    platState.multipleTouchesEnabled = true;
+
+	_AndroidTorqueFatalError = false;
+}
+
+void T2DActivity::finishShutdown()
+{
+	destroyFramebuffer();
+}
+
+void T2DActivity::enableAccelerometer(bool enable) {
+
+	accelerometerActive = enable;
+
+	if (enable) {
+
+		if (platState.engine->accelerometerSensor != NULL) {
+			ASensorEventQueue_enableSensor(platState.engine->sensorEventQueue,
+					platState.engine->accelerometerSensor);
+			// We'd like to get 30 events per second (in us).
+			ASensorEventQueue_setEventRate(platState.engine->sensorEventQueue,
+					platState.engine->accelerometerSensor, (1000L/30)*1000);
+		}
+
+	} else {
+
+		if (platState.engine->accelerometerSensor != NULL) {
+			ASensorEventQueue_disableSensor(platState.engine->sensorEventQueue,
+					platState.engine->accelerometerSensor);
+		}
+
+	}
+
 }
 
 /**
@@ -663,6 +889,8 @@ static void engine_term_display(struct engine* engine, bool shutdown) {
 		 _AndroidGameResignActive();
 	}
 
+	activity.finishShutdown();
+
     if (engine->display != EGL_NO_DISPLAY) {
         eglMakeCurrent(engine->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
         if (engine->context != EGL_NO_CONTEXT) {
@@ -679,53 +907,333 @@ static void engine_term_display(struct engine* engine, bool shutdown) {
     engine->surface = EGL_NO_SURFACE;
 }
 
-//TODO: android rotate
-/*- (void)didRotate:(NSNotification *)notification
+void keepScreenOn() {
+
+    // Attaches the current thread to the JVM.
+    jint lResult;
+    jint lFlags = 0;
+
+    JavaVM* lJavaVM = platState.engine->app->activity->vm;
+    JNIEnv* lJNIEnv = platState.engine->app->activity->env;
+
+    JavaVMAttachArgs lJavaVMAttachArgs;
+    lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+    lJavaVMAttachArgs.name = "NativeThread";
+    lJavaVMAttachArgs.group = NULL;
+
+    lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+    if (lResult == JNI_ERR) {
+        return;
+    }
+
+    // Retrieves NativeActivity.
+    jobject lNativeActivity = platState.engine->app->activity->clazz;
+    jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+    // Runs getWindow().getDecorView().
+    jmethodID MethodGetWindow = lJNIEnv->GetMethodID(
+        ClassNativeActivity, "getWindow",
+        "()Landroid/view/Window;");
+    jobject lWindow = lJNIEnv->CallObjectMethod(lNativeActivity,
+        MethodGetWindow);
+    jclass ClassWindow = lJNIEnv->FindClass(
+        "android/view/Window");
+    jmethodID MethodGetDecorView = lJNIEnv->GetMethodID(
+        ClassWindow, "getDecorView", "()Landroid/view/View;");
+    jobject lDecorView = lJNIEnv->CallObjectMethod(lWindow,
+        MethodGetDecorView);
+
+    jclass ClassView = lJNIEnv->FindClass("android/view/View");
+    jmethodID MethodSetKeepScreenOn = lJNIEnv->GetMethodID(
+            ClassView, "setKeepScreenOn", "(Z)V");
+    jboolean on = true;
+    lJNIEnv->CallVoidMethod(lDecorView, MethodSetKeepScreenOn, on);
+
+    // Finished with the JVM.
+    lJavaVM->DetachCurrentThread();
+}
+
+void T2DActivity::loadCacheDir() {
+
+    // Attaches the current thread to the JVM.
+    jint lResult;
+    jint lFlags = 0;
+
+    JavaVM* lJavaVM = platState.engine->app->activity->vm;
+    JNIEnv* lJNIEnv = platState.engine->app->activity->env;
+
+    JavaVMAttachArgs lJavaVMAttachArgs;
+    lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+    lJavaVMAttachArgs.name = "NativeThread";
+    lJavaVMAttachArgs.group = NULL;
+
+    lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+    if (lResult == JNI_ERR) {
+        return;
+    }
+
+    // Retrieves NativeActivity.
+    jobject lNativeActivity = platState.engine->app->activity->clazz;
+    jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+    jmethodID getCacheDir = lJNIEnv->GetMethodID(ClassNativeActivity, "getCacheDir", "()Ljava/io/File;");
+    jobject file = lJNIEnv->CallObjectMethod(platState.engine->app->activity->clazz, getCacheDir);
+    jclass fileClass = lJNIEnv->FindClass("java/io/File");
+    jmethodID getAbsolutePath = lJNIEnv->GetMethodID(fileClass, "getAbsolutePath", "()Ljava/lang/String;");
+    jstring jpath = (jstring)lJNIEnv->CallObjectMethod(file, getAbsolutePath);
+    const char* app_dir = lJNIEnv->GetStringUTFChars(jpath, NULL);
+
+    strcpy(cacheDir, app_dir);
+    cacheDir[strlen(app_dir)] = '\0';
+
+    lJNIEnv->ReleaseStringUTFChars(jpath, app_dir);
+
+    // Finished with the JVM.
+    lJavaVM->DetachCurrentThread();
+
+}
+
+/**
+ * Process the next main command.
+ */
+static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
+    struct engine* engine = (struct engine*)app->userData;
+    switch (cmd) {
+        case APP_CMD_SAVE_STATE:
+            // The system has asked us to save our current state.  Do so.
+            engine->app->savedState = malloc(sizeof(struct saved_state));
+            *((struct saved_state*)engine->app->savedState) = engine->state;
+            engine->app->savedStateSize = sizeof(struct saved_state);
+            break;
+        case APP_CMD_INIT_WINDOW:
+            // The window is being shown, get it ready.
+            if (engine->app->window != NULL) {
+
+                engine_init_display(engine);
+
+                if (bSuspended == true) {
+
+					//TODO: resume
+
+					glViewport(0, 0, engine->width, engine->height);
+
+					bSuspended = false;
+				}
+
+                engine_draw_frame(engine);
+            }
+            break;
+        case APP_CMD_TERM_WINDOW:
+        	if (bSuspended == false) {
+				//TODO: suspend
+
+				bSuspended = true;
+			}
+
+            // The window is being hidden or closed, clean it up.
+            engine_term_display(engine, false);
+            break;
+        case APP_CMD_RESUME:
+            break;
+        case APP_CMD_GAINED_FOCUS:
+        	// When our app gains focus, we start monitoring the accelerometer.
+			if (engine->accelerometerSensor != NULL && activity.isAccelerometerActive()) {
+				ASensorEventQueue_enableSensor(engine->sensorEventQueue,
+						engine->accelerometerSensor);
+				// We'd like to get 30 events per second (in us).
+				ASensorEventQueue_setEventRate(engine->sensorEventQueue,
+						engine->accelerometerSensor, (1000L/30)*1000);
+			}
+
+            engine->animating = 1;
+            engine_draw_frame(engine);
+            break;
+        case APP_CMD_LOST_FOCUS:
+        	// When our app loses focus, we stop monitoring the accelerometer.
+			// This is to avoid consuming battery while not being used.
+			if (engine->accelerometerSensor != NULL) {
+				ASensorEventQueue_disableSensor(engine->sensorEventQueue,
+						engine->accelerometerSensor);
+			}
+
+            // stop animating.
+        	engine->animating = 0;
+            engine_draw_frame(engine);
+            break;
+        case APP_CMD_PAUSE:
+            break;
+    }
+}
+
+struct engine engine;
+
+/**
+ * This is the main entry point of a native application that is using
+ * android_native_app_glue.  It runs in its own thread, with its own
+ * event loop for receiving input events and doing other things.
+ */
+void android_main(struct android_app* state) {
+
+    // Make sure glue isn't stripped.
+    app_dummy();
+
+    memset(&engine, 0, sizeof(engine));
+    state->userData = &engine;
+    state->onAppCmd = engine_handle_cmd;
+    state->onInputEvent = engine_handle_input;
+    engine.app = state;
+
+    // Prepare to monitor accelerometer
+	engine.sensorManager = ASensorManager_getInstance();
+	engine.accelerometerSensor = ASensorManager_getDefaultSensor(engine.sensorManager,
+			ASENSOR_TYPE_ACCELEROMETER);
+	engine.sensorEventQueue = ASensorManager_createEventQueue(engine.sensorManager,
+			state->looper, LOOPER_ID_USER, NULL, NULL);
+
+
+    if (state->savedState != NULL) {
+        // We are starting with a previous saved state; restore from it.
+        engine.state = *(struct saved_state*)state->savedState;
+    }
+
+    keepScreenOn();
+
+    //This is to help the debugger catch up.  If you dont have this you cant debug this early in the execution
+    //so only uncomment when needed as it adds 10 seconds to startup
+    //sleep(10);
+
+    //store the cache dir
+    activity.loadCacheDir();
+
+    //TODO: anything we need to do with these?
+    platState.argc = 0;
+    //platState.argv
+
+    // loop waiting for stuff to do.
+    while (1) {
+        // Read all pending events.
+        int ident;
+        int events;
+        struct android_poll_source* source;
+
+        // If not animating, we will block forever waiting for events.
+        // If animating, we loop until all events are read, then continue
+        // to draw the next frame of animation.
+        while ((ident=ALooper_pollAll(engine.animating ? 0 : -1, NULL, &events,
+                (void**)&source)) >= 0) {
+
+            // Process this event.
+            if (source != NULL) {
+                source->process(state, source);
+            }
+
+            // If a sensor has data, process it now.
+			if (ident == LOOPER_ID_USER) {
+				if (engine.accelerometerSensor != NULL && activity.isAccelerometerActive()) {
+					ASensorEvent event;
+					int i = 0;
+					while (ASensorEventQueue_getEvents(engine.sensorEventQueue,
+							&event, 1) > 0) {
+
+						InputEvent inputEvent;
+						U32 accelAxes[6] = { SI_ACCELX, SI_ACCELY, SI_ACCELZ, SI_GRAVX, SI_GRAVY, SI_GRAVZ };
+						double userAcc[6] = { event.acceleration.x, event.acceleration.y, event.acceleration.z,0,0,0};
+
+						inputEvent.deviceInst = 0;
+						inputEvent.fValue = userAcc[i];
+						inputEvent.deviceType = AccelerometerDeviceType;
+						inputEvent.objType = accelAxes[i];
+						inputEvent.objInst = i;
+						inputEvent.action = SI_MOTION;
+						inputEvent.modifier = 0;
+
+						Game->postEvent(inputEvent);
+
+						i++;
+					}
+				}
+			}
+
+            // Check if we are exiting.
+            if (state->destroyRequested != 0) {
+                engine_term_display(&engine, true);
+                return;
+            }
+        }
+
+        engine_update_frame(&engine);
+
+        if (engine.animating) {
+
+            // Drawing is throttled to the screen update rate, so there
+            // is no need to do timing here.
+            engine_draw_frame(&engine);
+        }
+    }
+
+    engine_term_display(&engine, true);
+}
+
+ConsoleFunction(doDeviceVibrate, void, 1, 1, "Makes the device do a quick vibration. Only works on devices with vibration functionality.")
 {
-    //Default to landscape left
-	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-	if(currentOrientation != orientation)
-	{
-		//Change the orientation
-		currentOrientation = orientation;
-		//Tell the rest of the engine
-		_AndroidGameChangeOrientation(currentOrientation);
+	// Vibrate for 500 milliseconds
+	long vibrateTimeMS = 500L;
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = platState.engine->app->activity->vm;
+	JNIEnv* lJNIEnv = platState.engine->app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return;
 	}
-}*/
 
-void supportLandscape( bool enable)
-{
-	//TODO: android
-    //platState.viewController->mOrientationLandscapeLeftSupported = enable;
-    //platState.viewController->mOrientationLandscapeRightSupported = enable;
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = platState.engine->app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	// Retrieves Context.VIBRATOR_SERVICE.
+	jclass ClassContext = lJNIEnv->FindClass("android/content/Context");
+	jfieldID FieldVIBRATOR_SERVICE =lJNIEnv->GetStaticFieldID(ClassContext,"VIBRATOR_SERVICE", "Ljava/lang/String;");
+	jobject VIBRATOR_SERVICE = lJNIEnv->GetStaticObjectField(ClassContext, FieldVIBRATOR_SERVICE);
+
+	// Runs getSystemService(VIBRATOR_SERVICE)
+	jmethodID MethodGetSystemService = lJNIEnv->GetMethodID(ClassNativeActivity, "getSystemService","(Ljava/lang/String;)Ljava/lang/Object;");
+	jobject lVibrator = lJNIEnv->CallObjectMethod(lNativeActivity, MethodGetSystemService, VIBRATOR_SERVICE);
+
+	//Runs v.vibrate(ms)
+	jclass ClassVibrator = lJNIEnv->FindClass("android/os/Vibrator");
+	jmethodID MethodVibrate = lJNIEnv->GetMethodID(ClassVibrator, "vibrate", "(J)V");
+	lJNIEnv->CallVoidMethod(lVibrator, MethodVibrate, vibrateTimeMS);
+
+	// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
 }
 
-ConsoleFunction(supportLandscape, void, 2, 2, "supportLandscape( bool ) "
-                "enable or disable Landscape")
+ConsoleFunction(enableAccelerometer, void, 1, 1, "() Allow accelerometer tracking during device motion updates")
 {
-    bool enable = true;
-    if( argc > 1 )
-        enable = dAtob( argv[1] );
-    
-    supportLandscape(enable);
+	activity.enableAccelerometer(true);
 }
 
-void supportPortrait( bool enable )
+ConsoleFunction(disableAccelerometer, void, 1, 1, "() Stop accelerometer tracking")
 {
-	//TODO: android
-    //platState.viewController->mOrientationPortraitSupported = enable;
-    //platState.viewController->mOrientationPortraitUpsideDownSupported = enable;
+	activity.enableAccelerometer(false);
 }
 
-ConsoleFunction(supportPortrait, void, 2, 2, "supportPortrait( bool ) "
-                "enable or disable portrait")
+ConsoleFunction(isAccelerometerActive, bool, 1, 1, "() Check to see if Accelerometer is being polled\n"
+                "@return True if accelerometer is on, false otherwise")
 {
-    bool enable = true;
-    if( argc > 1 )
-        enable = dAtob( argv[1] );
-    
-    supportPortrait(enable);
+
+	return activity.isAccelerometerActive();
 }
+
 
 void adprintf(const char* fmt,...) {
 

@@ -28,6 +28,8 @@
 #include <android/log.h>
 #include <android_native_app_glue.h>
 #include <android/asset_manager.h>
+#include <android/sensor.h>
+#include <android/configuration.h>
 #include <sstream>
 #include <list>
 #include <unistd.h>
@@ -50,6 +52,10 @@ struct saved_state {
 struct engine {
     struct android_app* app;
 
+    ASensorManager* sensorManager;
+    const ASensor* accelerometerSensor;
+    ASensorEventQueue* sensorEventQueue;
+
     int animating;
     EGLDisplay display;
     EGLSurface surface;
@@ -58,8 +64,6 @@ struct engine {
     int32_t height;
     struct saved_state state;
 };
-
-static struct engine engine;
 
 class T2DActivity {
 
@@ -80,17 +84,27 @@ private:
     
     bool isLayedOut;
     
-public:
-    //TODO: android
-    //NSURLConnection *connection;
-    //NSMutableData *connectionData;
-    bool mOrientationLandscapeRightSupported;
-    bool mOrientationLandscapeLeftSupported;
-    bool mOrientationPortraitSupported;
-    bool mOrientationPortraitUpsideDownSupported;
+    char cacheDir[2048];
 
-    void supportLandscape( bool );
-    void supportPortrait( bool );
+    bool accelerometerActive;
+
+public:
+
+    T2DActivity() {
+
+    	accelerometerActive = false;
+    }
+
+    void enableAccelerometer(bool enable);
+    bool isAccelerometerActive() {
+
+    	return accelerometerActive;
+    }
+
+    void loadCacheDir();
+    char *getCacheDir() {
+    	return cacheDir;
+    }
     bool createFramebuffer();
     void destroyFramebuffer();
     void update();

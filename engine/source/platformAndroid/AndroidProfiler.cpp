@@ -39,7 +39,6 @@ bool g_AndroidProfilerReady = false;
 void AndroidProfilerResetAll() {
 	for(int i=0; i<ANDROID_PROFILER_MAX_CALLS; i++){
 		g_AndroidProfilerData[i].name = NULL;
-		g_AndroidProfilerData[i].timeMach = 0;
 		g_AndroidProfilerData[i].timeMS = 0;
 		g_AndroidProfilerData[i].type = 0;
 		g_AndroidProfilerData[i].invokes = 0;
@@ -61,8 +60,6 @@ void AndroidProfilerStart( const char *name ) {
 
 		int i = g_AndroidProfilerCount++;
 		g_AndroidProfilerData[i].name = name;
-		//TODO: android
-		//g_AndroidProfilerData[i].timeMach = mach_absolute_time();
 		g_AndroidProfilerData[i].timeMS = Platform::getRealMilliseconds();
 		g_AndroidProfilerData[i].type = 0;
 		g_AndroidProfilerData[i].invokes = 0;
@@ -78,8 +75,6 @@ void AndroidProfilerEnd( const char *name ) {
 
 		int i = g_AndroidProfilerCount++;
 		g_AndroidProfilerData[i].name = name;
-		//TODO: android
-		//g_AndroidProfilerData[i].timeMach = mach_absolute_time();
 		g_AndroidProfilerData[i].timeMS = Platform::getRealMilliseconds();
 		g_AndroidProfilerData[i].type = 1;
 		g_AndroidProfilerData[i].invokes = 0;

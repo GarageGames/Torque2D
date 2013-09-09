@@ -27,8 +27,6 @@
 //--------------------------------------
 void Platform::getLocalTime(LocalTime &lt)
 {
-   //TODO: android
-	/*
 	struct tm systime;
    time_t long_time;
 
@@ -47,61 +45,29 @@ void Platform::getLocalTime(LocalTime &lt)
    lt.year     = systime.tm_year;
    lt.yearday  = systime.tm_yday;
    lt.isdst    = systime.tm_isdst;
-   */
 }   
 
 /// Gets the time in seconds since the Epoch
 U32 Platform::getTime()
 {
    time_t epoch_time;
-   //TODO: android
-   //time( &epoch_time );
+   time( &epoch_time );
    return epoch_time;
 }   
 
-//TODO: mach?
-//TODO: android
-/*static mach_timebase_info_data_t InitTimebaseInfo();
-/static mach_timebase_info_data_t timebase_info = InitTimebaseInfo();
-*/
 static double absolute_to_seconds;
 static double seconds_to_absolute;
 static double absolute_to_millis;
 static double millis_to_absolute;
 
-//TODO: android
-/*
-mach_timebase_info_data_t InitTimebaseInfo()
-{
-	mach_timebase_info_data_t timebase_info;
-	mach_timebase_info(&timebase_info);
-	absolute_to_seconds = timebase_info.numer / (1000000000.0 * timebase_info.denom);
-	seconds_to_absolute = 1.0 / absolute_to_seconds;
-	absolute_to_millis = timebase_info.numer / (1000000.0 * timebase_info.denom);
-	millis_to_absolute = 1.0 / absolute_to_millis;
-	
-	return timebase_info;
-}*/
-
 /// Gets the time in milliseconds since some epoch. In this case, system start time.
 /// Storing milisec in a U32 overflows every 49.71 days
 U32 Platform::getRealMilliseconds()
 {
-   // Duration is a S32 value.
-   // if negative, it is in microseconds.
-   // if positive, it is in milliseconds.
-	//TODO: android
-	/*
-	Duration durTime = mach_absolute_time() * absolute_to_millis;
-   U32 ret;
-   if( durTime < 0 )
-      ret = durTime / -1000;
-   else 
-      ret = durTime;
+   struct timeval  tv;
+   gettimeofday(&tv, NULL);
 
-   return ret;
-   */
-	return 0;
+   return ((tv.tv_sec) * 1000.0 + (tv.tv_usec) / 1000.0);
 }   
 
 U32 Platform::getVirtualMilliseconds()

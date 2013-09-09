@@ -541,69 +541,17 @@ static bool isMainDotCsPresent(char *dir)
 /// Since you probably don't want to copy the game files into the app every time
 /// you build, you will want to leave them outside the bundle for development.
 ///
-/// Placing all content inside the application bundle gives a much better user
-/// experience when you distribute your app.
+/// Android reads all assets out of compressed bundle so we dont realy have an executable path
 StringTableEntry Platform::getExecutablePath()
 {
    if(platState.mainDotCsDir) 
       return platState.mainDotCsDir;
       
-   char cwd_buf[MAX_MAC_PATH_LONG];
-   //TODO: android
-   /*
-   CFBundleRef mainBundle = CFBundleGetMainBundle();
-   CFURLRef bundleUrl = CFBundleCopyBundleURL(mainBundle);
-   
-   bool inside = true;
-   bool outside = false;
-   bool done = false;
-   
-   while(!done)
-   {
-      // first look for game content inside the application bundle.
-      // then we look outside the bundle
-      // then we assume it's a tool, and the "bundle" = the binary file.
-      CFURLRef workingUrl;
-      if(inside)
-         workingUrl = CFURLCreateCopyAppendingPathComponent(kCFAllocatorSystemDefault,bundleUrl,CFSTR("Contents/Resources"),true);
-      else if(outside)
-         workingUrl = CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorSystemDefault, bundleUrl);
-      else
-      {
-         workingUrl = bundleUrl;
-         CFRetain(workingUrl); // so that we can release bundleUrl twice.
-      }
-      
-      CFStringRef workingString = CFURLCopyFileSystemPath(workingUrl, kCFURLPOSIXPathStyle);
-      CFMutableStringRef normalizedString = CFStringCreateMutableCopy(NULL, 0, workingString);
-      CFStringNormalize(normalizedString,kCFStringNormalizationFormC);
-      CFStringGetCString(normalizedString, cwd_buf, sizeof(cwd_buf)-1, kCFStringEncodingUTF8);
-      
-      // if we dont see main.cs inside the bundle, try again looking outside
-      // we're done if we find it, or if we find it neither inside or outside.
-      if( isMainDotCsPresent(cwd_buf) || ( !inside && !outside))
-         done = true;
-      
-      if(inside)
-         inside = false, outside = true;
-      else if(outside)
-         outside = false;
-         
-      CFRelease(workingUrl);
-      CFRelease(workingString);
-      CFRelease(normalizedString);   
-   }
-   
-   //CFRelease(mainBundle);   // apple docs say to release this, but that causes a sigsegv(11)
-   CFRelease(bundleUrl);
-   */
-//   chdir(cwd_buf);            // set the current working directory.
-   
    char* ret = NULL;
    if(StringTable)
-      platState.mainDotCsDir = StringTable->insert(cwd_buf);
+      platState.mainDotCsDir = StringTable->insert(".");
    else
-      ret = dStrdup(cwd_buf);
+      ret = dStrdup(".");
    
    return ret ? ret : platState.mainDotCsDir;
 }
@@ -611,24 +559,8 @@ StringTableEntry Platform::getExecutablePath()
 //-----------------------------------------------------------------------------
 StringTableEntry Platform::getExecutableName()
 {
-   char path_buf[MAX_MAC_PATH_LONG];
-   //TODO: android
-   /*
-   // get a cfurl to the executable name
-   CFBundleRef mainBundle = CFBundleGetMainBundle();
-   CFURLRef bundleUrl = CFBundleCopyBundleURL(mainBundle);
-
-   // get a cfstring of just the app name
-   CFStringRef workingString = CFURLCopyLastPathComponent(bundleUrl);
-   CFMutableStringRef normalizedString = CFStringCreateMutableCopy(NULL, 0, workingString);
-   CFStringNormalize(normalizedString,kCFStringNormalizationFormC);
-   CFStringGetCString(normalizedString, path_buf, sizeof(path_buf)-1, kCFStringEncodingUTF8);
-   
-   CFRelease(bundleUrl);
-   CFRelease(workingString);
-   CFRelease(normalizedString);
-   */
-   return StringTable->insert(path_buf);   
+   //TODO: does this need anything further?
+   return StringTable->insert("Torque2D");
 }
 
 //-----------------------------------------------------------------------------

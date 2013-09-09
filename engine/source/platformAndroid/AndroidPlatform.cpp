@@ -19,9 +19,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
-
-
-
 #include <unistd.h>
 #include "platform/platform.h"
 #include "console/console.h"
@@ -34,38 +31,22 @@
 //-----------------------------------------------------------------------------
 const char* Platform::getUserDataDirectory() 
 {
-   // application support directory is most in line with the current usages of this function.
-   // this may change with later usage
-   // perhaps the user data directory should be pref-controlled?
-   //NSString *nsDataDir = [@"~/Library/Application Support/" stringByStandardizingPath];
-    //-Mat using Documents directory in same folder as .app 
-   //TODO: replace objc
-	/*NSString *nsDataDir = [@"~/Documents/" stringByStandardizingPath];
-   return StringTable->insert([nsDataDir UTF8String]);
-   */
-	return StringTable->insert("");
+    //on android we will be using the cache dir to store user data
+	return StringTable->insert(activity.getCacheDir());
 
 }
 
 //-----------------------------------------------------------------------------
 const char* Platform::getUserHomeDirectory() 
 {
-	//TODO: replace objc
-		/*
-   return StringTable->insert([[@"~/" stringByStandardizingPath] UTF8String]);
-   */
-	return StringTable->insert("");
+	return StringTable->insert("~/");
 }
 
 //-----------------------------------------------------------------------------
 StringTableEntry Platform::osGetTemporaryDirectory()
 {
-	//TODO: replace objc
-   /*NSString *tdir = NSTemporaryDirectory();
-   const char *path = [tdir UTF8String];
-   return StringTable->insert(path);
-   */
-	return StringTable->insert("");
+	//Android has no global temp folder, each application is expected to use cache dir
+	return StringTable->insert(activity.getCacheDir());
 }
 
 //-----------------------------------------------------------------------------
@@ -79,52 +60,7 @@ S32 Platform::messageBox(const UTF8 *title, const UTF8 *message, MBButtons butto
 //-----------------------------------------------------------------------------
 bool Platform::pathCopy(const char* source, const char* dest, bool nooverwrite)
 {
-	//TODO: replace objc
-	/*
-   NSFileManager *manager = [NSFileManager defaultManager];
-   @autoreleasepool {
-   
-      NSString *nsource = [@(source) stringByStandardizingPath];
-      NSString *ndest   = [@(dest) stringByStandardizingPath];
-      NSString *ndestFolder = [ndest stringByDeletingLastPathComponent];
-      
-      if(! [manager fileExistsAtPath:nsource])
-      {
-         Con::errorf("Platform::pathCopy: no file exists at %s",source);
-         return false;
-      }
-       
-       //Catcher for the errors.
-       NSError* returnValue = nil;
-      
-      if( [manager fileExistsAtPath:ndest] )
-      {
-         if(nooverwrite)
-         {
-            Con::errorf("Platform::pathCopy file already exists at %s",dest);
-            return false;
-         }
-          
-         Con::warnf("Deleting files at path: %s", dest);
-         bool deleted = [manager removeItemAtPath:ndest error:&returnValue];
-         if(!deleted)
-         {
-            Con::errorf("Copy failed! Could not delete files at path: %s", dest);
-            return false;
-         }
-      }
-      
-      if([manager fileExistsAtPath:ndestFolder] == NO)
-      {
-         ndestFolder = [ndestFolder stringByAppendingString:@"/"]; // createpath requires a trailing slash
-         Platform::createPath([ndestFolder UTF8String]);
-      }
-      
-      bool ret = [manager copyItemAtPath:nsource toPath:ndest error:&returnValue];
-      
-      return ret;
-   }
-   */
+	//TODO: Not used on android?
 	return false;
    
 }
@@ -132,33 +68,7 @@ bool Platform::pathCopy(const char* source, const char* dest, bool nooverwrite)
 //-----------------------------------------------------------------------------
 bool Platform::fileRename(const char *source, const char *dest)
 {
-	//TODO: replace objc
-	/*
-   if(source == NULL || dest == NULL)
-      return false;
-      
-   NSFileManager *manager = [NSFileManager defaultManager];
-   
-   NSString *nsource = [manager stringWithFileSystemRepresentation:source length:dStrlen(source)];
-   NSString *ndest   = [manager stringWithFileSystemRepresentation:dest length:dStrlen(dest)];
-   
-   if(! [manager fileExistsAtPath:nsource])
-   {
-      Con::errorf("Platform::fileRename: no file exists at %s",source);
-      return false;
-   }
-   
-   if( [manager fileExistsAtPath:ndest] )
-   {
-      Con::warnf("Platform::fileRename: Deleting files at path: %s", dest);
-   }
-    
-    NSError* returnValue = NULL;
-   
-   bool ret = [manager moveItemAtPath:nsource toPath:ndest error:&returnValue];
-  
-   return ret;
-   */
+   //TODO: not used on android?
    return false;
 }
 

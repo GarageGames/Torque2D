@@ -32,22 +32,11 @@ S32 gLastStart = 0;
 
 bool appIsRunning = true;
 
-//TODO: android
-
-int _AndroidRunTorqueMain()
+int _AndroidRunTorqueMain(engine *eng)
 {
-/*
-    UIApplication *app = [UIApplication sharedApplication];
-    platState.viewController = viewController;
+	platState.engine = eng;
+    platState.firstThreadId = ThreadManager::getCurrentThreadId();
     
-	platState.appID = appID;
-	platState.firstThreadId = ThreadManager::getCurrentThreadId();
-	platState.Window = Window;
-	platState.application = app;
-	
-	// Hidden by default.
-	platState.application.statusBarHidden = YES;
-	
 	printf("performing mainInit()\n");
     
 	platState.lastTimeTick = Platform::getRealMilliseconds();
@@ -56,7 +45,6 @@ int _AndroidRunTorqueMain()
 	{
 		return 0;
 	}
-	*/
 }
 
 
@@ -112,76 +100,6 @@ void _AndroidGameWillTerminate()
 	Game->mainShutdown();
 }
 
-// Store current orientation for easy access
-void _AndroidGameChangeOrientation(S32 newOrientation)
-{    
-	_AndroidGameSetCurrentOrientation(newOrientation);
-    
-    return;
-    /*
-    bool enableAutoOrientation = Con::getBoolVariable("$pref::Android::EnableOrientationRotation");
-    int screenOrientation = Con::getIntVariable("$pref::Android::ScreenOrientation");
-    bool allowOtherOrientation = Con::getBoolVariable("$pref::Android::EnableOtherOrientationRotation");
-
-    // The rotation matching the project orientation must be allowed for any to occur
-    if (enableAutoOrientation)
-    {
-        // Start "collecting animations"
-        [UIView beginAnimations: nil context: nil];
-        
-        //  If the project is designed for landscape or it allows landscape rotation
-        if (screenOrientation == 0 || allowOtherOrientation)
-        {
-            if (newOrientation == UIDeviceOrientationLandscapeLeft)
-            {
-                platState.Window.transform = CGAffineTransformMakeRotation(M_PI*1.5);
-                Con::executef(1, "onAndroidOrientationToLandscapeLeft");
-                //  Show animations
-                [UIView commitAnimations];
-                
-                return;
-            }
-            
-            if (newOrientation == UIDeviceOrientationLandscapeRight)
-            {
-                platState.Window.transform = CGAffineTransformMakeRotation(M_PI_2);
-                Con::executef(1, "onAndroidOrientationToLandscapeRight");
-                //  Show animations
-                [UIView commitAnimations];
-                
-                return;
-            }
-        }
-        
-        // If the project is designed for portrait or it allows portrait rotation
-        if (screenOrientation == 1 ||  allowOtherOrientation)
-        {
-            if (newOrientation == UIDeviceOrientationPortrait)
-            {
-                platState.Window.transform = CGAffineTransformMakeRotation(M_PI*1.5);
-                Con::executef(1, "onAndroidOrientationToPortrait");
-                //  Show animations
-                [UIView commitAnimations];
-                
-                return;
-            }
-            
-            if (newOrientation == UIDeviceOrientationPortraitUpsideDown)
-            {
-                platState.Window.transform = CGAffineTransformMakeRotation(M_PI_2);
-                Con::executef(1, "onAndroidOrientationToPortraitUpsideDown");
-                //  Show animations
-                [UIView commitAnimations];
-                
-                return;
-            }
-        }
-        
-        // Show animations
-        [UIView commitAnimations];
-    }*/
-}
-
 static void _AndroidGetTxtFileArgs(int &argc, char** argv, int maxargc)
 {
     argc = 0;
@@ -235,67 +153,3 @@ static void _AndroidGetTxtFileArgs(int &argc, char** argv, int maxargc)
 	text = NULL;
 }
 
-int main(int argc, char *argv[])
-{
-    //TODO: android
-	/*
-        int kMaxCmdlineArgs = 32; //Arbitrary
-        
-        printf("Initial Command Line\n");
-        
-        for( int i = 0; i < argc; i++ )
-        {
-            printf("%i : %s", i, argv[i] );
-        }
-        
-        NSString *nsStrVersion = [UIDevice currentDevice ].systemVersion;
-        const char *strVersion = [nsStrVersion UTF8String ];
-        platState.osVersion = dAtof( strVersion);
-        
-        // Find Main.cs .
-        const char* cwd = Platform::getMainDotCsDir();
-        
-        // Change to the directory that contains main.cs
-        Platform::setCurrentDirectory(cwd);
-        
-        // get the actual command line args
-        S32   newArgc = argc;
-        
-        const char* newArgv[kMaxCmdlineArgs];
-        
-        for(int i=0; i < argc && i < kMaxCmdlineArgs; i++)
-            newArgv[i] = argv[i];
-        
-        // get the text file args
-        S32 textArgc;
-        char* textArgv[kMaxCmdlineArgs];
-        
-        _AndroidGetTxtFileArgs(textArgc, textArgv, kMaxCmdlineArgs);
-        
-        // merge them
-        int i=0;
-        
-        while(i < textArgc && newArgc < kMaxCmdlineArgs)
-            newArgv[newArgc++] = textArgv[i++];
-        
-        // store them in platState
-        platState.argc = newArgc;
-        platState.argv = newArgv;
-        
-        printf("\nMerged Command Line\n");
-        
-        for( int i = 0; i < platState.argc; i++ )
-        {
-            printf("%i : %s", i, platState.argv[i] );
-        }
-        
-        printf("\n");
-        
-        // now, we run UIApplication which calls back and starts thread or timer
-        platState.appReturn = UIApplicationMain(argc, argv, nil, NSStringFromClass([T2DAppDelegate class]));
-        
-        printf("exiting...\n");
-        return(platState.appReturn);
-
-    */
-}

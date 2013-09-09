@@ -56,7 +56,7 @@ void Platform::restartInstance()
       Con::errorf("The game is still running, we cant relaunch now!");
       return;
    }
-   //TODO: replace
+   //TODO: is this needed on android?
    /*
    // get the path to the torque executable
    CFBundleRef mainBundle =  CFBundleGetMainBundle();

@@ -26,11 +26,13 @@
 void Platform::AlertOK(const char *windowTitle, const char *message)
 {
 	//TODO: alertok
+	adprintf("Alert OK!");
 }
 //-----------------------------------------------------------------------------
 bool Platform::AlertOKCancel(const char *windowTitle, const char *message)
 {
 	//TODO: AlertOKCancel
+	adprintf("Alert OK CANCEL!");
 	return false;
 }
 
@@ -39,6 +41,7 @@ bool Platform::AlertRetry(const char *windowTitle, const char *message)
 {//retry/cancel
 	
 	//TODO: alertRetry
+	adprintf("Alert OK RETRY!");
 	return false;
 }
 
@@ -46,5 +49,6 @@ bool Platform::AlertRetry(const char *windowTitle, const char *message)
 bool Platform::AlertYesNo(const char *windowTitle, const char *message)
 {
 	//TODO: alertYesNo
+	adprintf("Alert Yes No");
 	return false;
 }

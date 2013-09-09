@@ -39,14 +39,9 @@ public:
     bool              captureDisplay;
     bool              fadeWindows;
 
-    //TODO: android
-    //id				 appID;
-    //UIView			 *Window;
+    struct engine	  *engine;
     char              appWindowTitle[256];
     bool              quit;
-    //TODO: android
-    void*          *ctx;
-    //T2DViewController *viewController;
     bool              ctxNeedsUpdate;
 
     bool			portrait;
@@ -87,11 +82,6 @@ public:
 
 
     StringTableEntry  mainDotCsDir;
-
-    //TODO: android
-    //NSTimer			 *mainLoopTimer;
-    //NSTimeInterval	 timerInterval;
-    //UIApplication	*application;
     //-Mat
     bool		multipleTouchesEnabled;
 
