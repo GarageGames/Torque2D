@@ -22,6 +22,7 @@
 #ifndef T2DACTIVITY_H
 #define T2DACTIVITY_H
 #include "platformAndroid/AndroidGL2ES.h"
+#include "graphics/DynamicTexture.h"
 #include <errno.h>
 #include <EGL/egl.h>
 //#include <android/sensor.h>
@@ -39,6 +40,13 @@ extern void adprintf(const char* fmt,...);
 extern int _AndroidGetScreenWidth();
 extern int _AndroidGetScreenHeight();
 extern S32 _AndroidGameGetOrientation();
+extern char* _AndroidLoadFile(const char* fileName, U32 *size);
+extern void android_InitDirList(const char* dir);
+extern void android_GetNextDir(const char* pdir, char *dir);
+extern void android_GetNextFile(const char* pdir, char *file);
+extern bool android_IsDir(const char* path);
+extern bool android_IsFile(const char* path);
+extern U32 android_GetFileSize(const char* pFilePath);
 
 /**
  * Our saved state data.
@@ -72,12 +80,14 @@ class T2DActivity {
 
 private:
 	// The pixel dimensions of the backbuffer
-	GLint backingWidth;
-	GLint backingHeight;
+	S32 backingWidth;
+	S32 backingHeight;
 	
     // OpenGL names for the renderbuffer and framebuffers used to render to this view
 	GLuint viewRenderbuffer, viewFramebuffer;
 	
+	DynamicTexture framebufferTexture;
+
 	// OpenGL name for the depth buffer that is attached to viewFramebuffer, if it exists (0 if it does not exist)
 	GLuint depthRenderbuffer;
     

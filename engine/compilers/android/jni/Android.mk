@@ -28,13 +28,15 @@ LOCAL_PATH := $(MY_LOCAL_PATH)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := libopenal-prebuilt
-LOCAL_SRC_FILES := ../../../lib/openal/Android/$(TARGET_ARCH_ABI)/libopenal.so
+#LOCAL_SRC_FILES := ../../../lib/openal/Android/$(TARGET_ARCH_ABI)/libopenal.so
+LOCAL_SRC_FILES := ../../../lib/openal/Android/$(TARGET_ARCH_ABI)/libopenal.a
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../lib/openal/Android
-$(info $(shell ($(LOCAL_PATH)/copylib.sh $(LOCAL_PATH) $(TARGET_ARCH_ABI))))
-
-include $(PREBUILT_SHARED_LIBRARY)
+include $(PREBUILT_STATIC_LIBRARY)
+#include $(PREBUILT_SHARED_LIBRARY)
 
 LOCAL_PATH := $(MY_LOCAL_PATH)
+
+include $(CLEAR_VARS)
 
 LOCAL_MODULE    := torque2d
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
@@ -525,8 +527,8 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 			   
 LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O0 -fsigned-char   
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lz -lOpenSLES -L../../../lib/openal/Android/$(TARGET_ARCH_ABI)
-LOCAL_STATIC_LIBRARIES := android_native_app_glue libpng-prebuilt
-LOCAL_SHARED_LIBRARIES := libopenal-prebuilt
+LOCAL_STATIC_LIBRARIES := android_native_app_glue libpng-prebuilt libopenal-prebuilt
+#LOCAL_SHARED_LIBRARIES := libopenal-prebuilt
 
 LOCAL_ARM_MODE := arm
 

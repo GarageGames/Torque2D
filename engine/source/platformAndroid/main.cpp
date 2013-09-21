@@ -34,7 +34,6 @@ bool appIsRunning = true;
 
 int _AndroidRunTorqueMain(engine *eng)
 {
-	platState.engine = eng;
     platState.firstThreadId = ThreadManager::getCurrentThreadId();
     
 	printf("performing mainInit()\n");

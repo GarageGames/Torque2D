@@ -22,7 +22,7 @@
 					<folderInfo id="com.android.toolchain.gcc.1442582075.1056020003" name="/" resourcePath="">
 						<toolChain id="com.android.toolchain.gcc.1400756764" name="com.android.toolchain.gcc" superClass="com.android.toolchain.gcc">
 							<targetPlatform binaryParser="org.eclipse.cdt.core.ELF" id="com.android.targetPlatform.1302199400" isAbstract="false" superClass="com.android.targetPlatform"/>
-							<builder arguments="NDEBUG=1" command="ndk-build" id="com.android.builder.1818800065" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Android Builder" superClass="com.android.builder"/>
+							<builder arguments="NDK_DEBUG=1" command="ndk-build" id="com.android.builder.1818800065" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Android Builder" superClass="com.android.builder"/>
 							<tool id="com.android.gcc.compiler.1014866906" name="Android GCC Compiler" superClass="com.android.gcc.compiler">
 								<option id="com.android.gcc.option.includePath.100688008" superClass="com.android.gcc.option.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Torque2D/jni/include/libpng}&quot;"/>

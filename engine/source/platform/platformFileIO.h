@@ -19,7 +19,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
-
 #ifndef _PLATFORM_FILEIO_H_
 #define _PLATFORM_FILEIO_H_
 
@@ -61,6 +60,12 @@ private:
    void *handle;           ///< Pointer to the file handle.
    Status currentStatus;   ///< Current status of the file (Ok, IOError, etc.).
    U32 capability;         ///< Keeps track of file capabilities.
+
+#ifdef TORQUE_OS_ANDROID
+    U8* buffer;
+   	U32 size;
+   	U32 filePointer;
+#endif
 
    File(const File&);              ///< This is here to disable the copy constructor.
    File& operator=(const File&);   ///< This is here to disable assignment.

@@ -70,11 +70,14 @@ double timeGetTime() {
 
 bool T2DActivity::createFramebuffer() {
 	
+	framebufferTexture.setSize(platState.engine->width, platState.engine->height);
 	glGenFramebuffersOES(1, &viewFramebuffer);
+	framebufferTexture.getTextureHandle().setClamp(true);
 	glGenRenderbuffersOES(1, &viewRenderbuffer);
 	
 	glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
 	glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
+	glRenderbufferStorageOES(GL_RENDERBUFFER_OES, GL_DEPTH_COMPONENT16_OES, platState.engine->width, platState.engine->height);
 	glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_RENDERBUFFER_OES, viewRenderbuffer);
 	
 	glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &backingWidth);
@@ -372,7 +375,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
         		point.x = AMotionEvent_getX(event, i);
         		point.y = AMotionEvent_getY(event, i);
 
-        		if (rawLastTouches.size() < i)
+        		if (rawLastTouches.size() < i+1)
         			rawLastTouches.push_back(point);
         		else
         		{
@@ -542,7 +545,7 @@ bool _AndroidGetFileDescriptor(const char* fileName, int32_t *mDescriptor, off_t
 	return false;
 }
 
-char* _AndroidLoadFile(const char* fileName, int *size) {
+char* _AndroidLoadFile(const char* fileName, U32 *size) {
 
 	AAsset *asset;
 	uint8_t buf[1024];
@@ -669,7 +672,7 @@ static int engine_init_display(struct engine* engine) {
     };
 
     static const EGLint ctx_attribs[] = {
-          EGL_CONTEXT_CLIENT_VERSION, 2,
+          EGL_CONTEXT_CLIENT_VERSION, 1,
           EGL_NONE
         };
 
@@ -723,9 +726,9 @@ static int engine_init_display(struct engine* engine) {
 
     if (SetupCompleted == false)
     {
-    	activity.finishGLSetup();
     	_AndroidRunTorqueMain(engine);
-
+    	activity.finishGLSetup();
+    	SetupCompleted = true;
     }
     else
     {
@@ -788,31 +791,24 @@ static void engine_update_frame(struct engine* engine) {
 	if (timeElapsed > 1.0f)
 		timeElapsed = 1.0f; // clamp it
 
-	if (SetupCompleted == false) {
-		if (timeElapsed > 0.25f) {
-			SetupCompleted = true;
-			lastSystemTime = timeGetTime();
+	lastSystemTime = thisSysTime;
+
+	if (keyboardShowing) {
+		if (keyboardTransition > 0.0f) {
+			keyboardTransition -= timeElapsed * 2.0f;
+			if (keyboardTransition < 0.0f)
+				keyboardTransition = 0.0f;
 		}
 	} else {
-
-		lastSystemTime = thisSysTime;
-
-		if (keyboardShowing) {
-			if (keyboardTransition > 0.0f) {
-				keyboardTransition -= timeElapsed * 2.0f;
-				if (keyboardTransition < 0.0f)
-					keyboardTransition = 0.0f;
-			}
-		} else {
-			if (keyboardTransition < 1.0f) {
-				keyboardTransition += timeElapsed * 2.0f;
-				if (keyboardTransition > 1.0f)
-					keyboardTransition = 1.0f;
-			}
+		if (keyboardTransition < 1.0f) {
+			keyboardTransition += timeElapsed * 2.0f;
+			if (keyboardTransition > 1.0f)
+				keyboardTransition = 1.0f;
 		}
-
-		_AndroidGameInnerLoop();
 	}
+
+	if (SetupCompleted == true)
+		_AndroidGameInnerLoop();
 
 }
 
@@ -999,6 +995,8 @@ struct engine engine;
  */
 void android_main(struct android_app* state) {
 
+	sleep(10);
+
     // Make sure glue isn't stripped.
     app_dummy();
 
@@ -1020,6 +1018,8 @@ void android_main(struct android_app* state) {
         // We are starting with a previous saved state; restore from it.
         engine.state = *(struct saved_state*)state->savedState;
     }
+
+    platState.engine = &engine;
 
     keepScreenOn();
 
@@ -1097,6 +1097,259 @@ void android_main(struct android_app* state) {
     }
 
     engine_term_display(&engine, true);
+}
+
+void android_InitDirList(const char* dir)
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FileWalker");
+	jclass FileWalkerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jstring strDirName = lJNIEnv->NewStringUTF(dir);
+	jmethodID MethodFileWalker = lJNIEnv->GetStaticMethodID(FileWalkerClass, "InitDirList", "(Landroid/content/Context;Ljava/lang/String;)V");
+	lJNIEnv->CallStaticObjectMethod(FileWalkerClass, MethodFileWalker, lNativeActivity, strDirName);
+	lJNIEnv->DeleteLocalRef(strClassName);
+	lJNIEnv->DeleteLocalRef(strDirName);
+
+	// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+
+
+}
+
+void android_GetNextDir(const char* pdir, char *dir)
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FileWalker");
+	jclass FileWalkerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jstring strDirName = lJNIEnv->NewStringUTF(pdir);
+	jmethodID MethodFileWalker = lJNIEnv->GetStaticMethodID(FileWalkerClass, "GetNextDir", "(Ljava/lang/String;)Ljava/lang/String;");
+	jstring jpath = (jstring)lJNIEnv->CallStaticObjectMethod(FileWalkerClass, MethodFileWalker, strDirName);
+	if (jpath != NULL)
+	{
+		const char* path = lJNIEnv->GetStringUTFChars(jpath, NULL);
+		strcpy(dir, path);
+        dir[strlen(path)] = '\0';
+        lJNIEnv->ReleaseStringUTFChars(jpath, path);
+	}
+	else
+	{
+		strcpy(dir,"");
+	}
+
+	lJNIEnv->DeleteLocalRef(strClassName);
+	lJNIEnv->DeleteLocalRef(strDirName);
+
+	// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+}
+
+void android_GetNextFile(const char* pdir, char *file)
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FileWalker");
+	jclass FileWalkerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jstring strDirName = lJNIEnv->NewStringUTF(pdir);
+	jmethodID MethodFileWalker = lJNIEnv->GetStaticMethodID(FileWalkerClass, "GetNextFile", "(Ljava/lang/String;)Ljava/lang/String;");
+	jstring jpath = (jstring)lJNIEnv->CallStaticObjectMethod(FileWalkerClass, MethodFileWalker, strDirName);
+	if (jpath != NULL)
+	{
+		const char* path = lJNIEnv->GetStringUTFChars(jpath, NULL);
+		strcpy(file, path);
+        file[strlen(path)] = '\0';
+        lJNIEnv->ReleaseStringUTFChars(jpath, path);
+	}
+	else
+	{
+		strcpy(file,"");
+	}
+
+	lJNIEnv->DeleteLocalRef(strClassName);
+	lJNIEnv->DeleteLocalRef(strDirName);
+
+	// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+}
+
+bool android_IsFile(const char* path)
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return false;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FileWalker");
+	jclass FileWalkerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jstring strDirName = lJNIEnv->NewStringUTF(path);
+	jmethodID MethodFileWalker = lJNIEnv->GetStaticMethodID(FileWalkerClass, "IsFile", "(Landroid/content/Context;Ljava/lang/String;)Z");
+	jboolean jpath = lJNIEnv->CallStaticBooleanMethod(FileWalkerClass, MethodFileWalker, lNativeActivity, strDirName);
+	if (jpath)
+	{
+		lJNIEnv->DeleteLocalRef(strClassName);
+		lJNIEnv->DeleteLocalRef(strDirName);
+
+		// Finished with the JVM.
+		lJavaVM->DetachCurrentThread();
+		return true;
+	}
+	else
+	{
+		lJNIEnv->DeleteLocalRef(strClassName);
+		lJNIEnv->DeleteLocalRef(strDirName);
+
+		// Finished with the JVM.
+		lJavaVM->DetachCurrentThread();
+		return false;
+	}
+}
+
+bool android_IsDir(const char* path)
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return false;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FileWalker");
+	jclass FileWalkerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jstring strDirName = lJNIEnv->NewStringUTF(path);
+	jmethodID MethodFileWalker = lJNIEnv->GetStaticMethodID(FileWalkerClass, "IsDir", "(Landroid/content/Context;Ljava/lang/String;)Z");
+	jboolean jpath = lJNIEnv->CallStaticBooleanMethod(FileWalkerClass, MethodFileWalker, lNativeActivity, strDirName);
+	if (jpath)
+	{
+		lJNIEnv->DeleteLocalRef(strClassName);
+		lJNIEnv->DeleteLocalRef(strDirName);
+
+		// Finished with the JVM.
+		lJavaVM->DetachCurrentThread();
+		return true;
+	}
+	else
+	{
+		lJNIEnv->DeleteLocalRef(strClassName);
+		lJNIEnv->DeleteLocalRef(strDirName);
+
+		// Finished with the JVM.
+		lJavaVM->DetachCurrentThread();
+		return false;
+	}
+}
+
+U32 android_GetFileSize(const char* pFilePath)
+{
+	//TODO: get file size
+	return 0;
 }
 
 ConsoleFunction(doDeviceVibrate, void, 1, 1, "Makes the device do a quick vibration. Only works on devices with vibration functionality.")

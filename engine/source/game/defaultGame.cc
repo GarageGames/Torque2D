@@ -382,6 +382,20 @@ bool DefaultGame::mainInitialize(int argc, const char **argv)
 #endif
     #endif
 
+#ifdef TORQUE_OS_ANDROID
+
+      //-Mat this is a bit of a hack, but if we don't want the network, we shut it off now.
+    // We can't do it until we've run the entry script, otherwise the script variable will not have ben loaded
+    bool usesNet = false; //dAtob( Con::getVariable( "$pref::iOS::UseNetwork" ) );
+    if( !usesNet ) {
+        Net::shutdown();
+    }
+
+#ifdef TORQUE_OS_ANDROID_PROFILE
+    AndroidProfilerProfilerInit();
+#endif
+    #endif
+
    return true;
 }
 

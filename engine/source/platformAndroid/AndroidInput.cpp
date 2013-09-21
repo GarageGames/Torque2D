@@ -834,6 +834,9 @@ bool createMouseMoveEvent( S32 touchNumber, S32 x, S32 y, S32 lastX, S32 lastY )
 {	
 	S32 currentSlot = -1;
 	
+	if (Canvas == NULL)
+		return false;
+
 	for( int i = 0 ; (i < MAX_TOUCH_EVENTS) && (currentSlot == -1) ; i++ )
 	{
 		if( (lastX == lastTouches[i].lastX ) &&
@@ -872,6 +875,9 @@ bool createMouseDownEvent( S32 touchNumber, S32 x, S32 y, U32 numTouches )
 {
 	S32 vacantSlot = -1;
 	
+	if (Canvas == NULL)
+		return false;
+
 	for( int i = 0 ; (i < MAX_TOUCH_EVENTS) && (vacantSlot == -1) ; i++ )
 	{
 		if( lastTouches[i].lastX == -1 )

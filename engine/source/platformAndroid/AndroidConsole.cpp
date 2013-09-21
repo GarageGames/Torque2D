@@ -122,12 +122,12 @@ void AndroidConsole::processConsoleLine(const char *consoleLine)
 {
    if(consoleEnabled)
    {
-         printf("%s\n", consoleLine);
+         adprintf("%s\n", consoleLine);
    }
 	//%PUAP%
 	if(debugOutputEnabled)
 	{
-		printf("%s\n", consoleLine);
+		adprintf("%s\n", consoleLine);
 	}
 
 }

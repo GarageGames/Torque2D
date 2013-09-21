@@ -19,12 +19,12 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
-
 #include "platform/platform.h"
 #include "platformAndroid/platformAndroid.h"
 #include "platform/platformFileIO.h"
 #include "collection/vector.h"
 #include "string/stringTable.h"
+#include "string/stringUnit.h"
 #include "console/console.h"
 #include "debug/profiler.h"
 #include "io/resource/resourceManager.h"
@@ -45,24 +45,18 @@
 //-----------------------------------------------------------------------------
 bool Platform::fileDelete(const char * name)
 {
-   if(!name )
-      return(false);
+   Con::warnf("Platform::FileDelete() - Not supported on android.");
    
-   if (dStrlen(name) > MAX_MAC_PATH_LONG)
-      Con::warnf("Platform::FileDelete() - Filename length is pretty long...");
-   
-   return(remove(name) == 0); // remove returns 0 on success
+   return false;
 }
 
 
 //-----------------------------------------------------------------------------
 bool dFileTouch(const char *path)
 {
-   if (!path || !*path) 
-      return false;
-   
-   // set file at path's modification and access times to now.
-   return( utimes( path, NULL) == 0); // utimes returns 0 on success.
+	Con::warnf("Platform::dFileTouch() - Not supported on android.");
+
+	return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -76,7 +70,9 @@ bool dFileTouch(const char *path)
 File::File()
 : currentStatus(Closed), capability(0)
 {
-   handle = NULL;
+   buffer = NULL;
+   size = 0;
+   filePointer = 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -88,8 +84,8 @@ File::File()
 //-----------------------------------------------------------------------------
 File::~File()
 {
-   close();
-   handle = NULL;
+	if (buffer != NULL)
+		close();
 }
 
 
@@ -107,55 +103,37 @@ File::Status File::open(const char *filename, const AccessMode openMode)
       Con::warnf("File::open: Filename length is pretty long...");
    
    // Close the file if it was already open...
-   if (currentStatus != Closed)
+   if (currentStatus != Closed || buffer != NULL)
       close();
    
    // create the appropriate type of file...
    switch (openMode)
    {
       case Read:
-         handle = (void *)fopen(filename, "rb"); // read only
-         break;
+    	filePointer = 0;
+    	buffer = (U8*)_AndroidLoadFile(filename, &size);
+		if (buffer == NULL) {
+			currentStatus = UnknownError;
+		}
+		break;
       case Write:
-         handle = (void *)fopen(filename, "wb"); // write only
-         break;
+    	  AssertFatal(false, "File::open: Write not supported on Android");
+          return currentStatus;
       case ReadWrite:
-         handle = (void *)fopen(filename, "ab+"); // write(append) and read
-         break;
+    	  AssertFatal(false, "File::open: ReadWrite not supported on Android");
+    	  return currentStatus;
       case WriteAppend:
-         handle = (void *)fopen(filename, "ab"); // write(append) only
-         break;
+    	  AssertFatal(false, "File::open: WriteAppend not supported on Android");
+    	  return currentStatus;
       default:
          AssertFatal(false, "File::open: bad access mode");
    }
    
-   // handle not created successfully
-   if (handle == NULL)                
-      return setStatus();
-   
-   // successfully created file, so set the file capabilities...
-   switch (openMode)
-   {
-      case Read:
-         capability = FileRead;
-         break;
-      case Write:
-      case WriteAppend:
-         capability = FileWrite;
-         break;
-      case ReadWrite:
-         capability = FileRead | FileWrite;
-         break;
-      default:
-         AssertFatal(false, "File::open: bad access mode");
-   }
+   capability = FileRead;
    
    // must set the file status before setting the position.
    currentStatus = Ok;
-   
-   if (openMode == ReadWrite)
-      setPosition(0);
-   
+
    // success!
    return currentStatus;                                
 }
@@ -166,9 +144,9 @@ File::Status File::open(const char *filename, const AccessMode openMode)
 U32 File::getPosition() const
 {
    AssertFatal(currentStatus != Closed , "File::getPosition: file closed");
-   AssertFatal(handle != NULL, "File::getPosition: invalid file handle");
+   AssertFatal(buffer != NULL, "File::getPosition: invalid file buffer");
    
-   return ftell((FILE*)handle);
+   return filePointer;
 }
 
 //-----------------------------------------------------------------------------
@@ -186,7 +164,7 @@ U32 File::getPosition() const
 File::Status File::setPosition(S32 position, bool absolutePos)
 {
    AssertFatal(Closed != currentStatus, "File::setPosition: file closed");
-   AssertFatal(handle != NULL, "File::setPosition: invalid file handle");
+   AssertFatal(buffer != NULL, "File::setPosition: invalid file buffer");
    
    if (currentStatus != Ok && currentStatus != EOS )
       return currentStatus;
@@ -197,16 +175,16 @@ File::Status File::setPosition(S32 position, bool absolutePos)
       // absolute position
       AssertFatal(0 <= position, "File::setPosition: negative absolute position");
       // position beyond EOS is OK
-      fseek((FILE*)handle, position, SEEK_SET);
-      finalPos = ftell((FILE*)handle);
+      filePointer = position;
+      finalPos = filePointer;
    }
    else
    {
       // relative position
       AssertFatal((getPosition() + position) >= 0, "File::setPosition: negative relative position");
       // position beyond EOS is OK
-      fseek((FILE*)handle, position, SEEK_CUR);
-      finalPos = ftell((FILE*)handle);
+      filePointer += position;
+      finalPos = filePointer;
    }
    
    // ftell returns -1 on error. set error status
@@ -230,17 +208,11 @@ File::Status File::setPosition(S32 position, bool absolutePos)
 U32 File::getSize() const
 {
    AssertWarn(Closed != currentStatus, "File::getSize: file closed");
-   AssertFatal(handle != NULL, "File::getSize: invalid file handle");
+   AssertFatal(buffer != NULL, "File::getSize: invalid file buffer");
    
    if (Ok == currentStatus || EOS == currentStatus)
    {
-      struct stat statData;
-      
-      if(fstat(fileno((FILE*)handle), &statData) != 0)
-         return 0;
-      
-      // return the size in bytes
-      return statData.st_size;
+      return size;
    }
    
    return 0;
@@ -254,13 +226,10 @@ U32 File::getSize() const
 File::Status File::flush()
 {
    AssertFatal(Closed != currentStatus, "File::flush: file closed");
-   AssertFatal(handle != NULL, "File::flush: invalid file handle");
+   AssertFatal(buffer != NULL, "File::flush: invalid file buffer");
    AssertFatal(true == hasCapability(FileWrite), "File::flush: cannot flush a read-only file");
    
-   if (fflush((FILE*)handle) != 0)
-      return setStatus();
-   else
-      return currentStatus = Ok;
+   return setStatus();
 }
 
 //-----------------------------------------------------------------------------
@@ -275,12 +244,14 @@ File::Status File::close()
       return currentStatus;
    
    // it's not, so close it...
-   if (handle != NULL)
+   if (buffer != NULL)
    {
-      if (fclose((FILE*)handle) != 0)
-         return setStatus();
+		delete[] buffer;
+		buffer = NULL;
+		size = 0;
+		filePointer = 0;
    }
-   handle = NULL;
+
    return currentStatus = Closed;
 }
 
@@ -297,19 +268,7 @@ File::Status File::getStatus() const
 //-----------------------------------------------------------------------------
 File::Status File::setStatus()
 {
-   switch (errno)
-   {
-      case EACCES:   // permission denied
-         currentStatus = IOError;
-         break;
-      case EBADF:   // Bad File Pointer
-      case EINVAL:   // Invalid argument
-      case ENOENT:   // file not found
-      case ENAMETOOLONG:
-      default:
-         currentStatus = UnknownError;
-   }
-   
+   currentStatus = UnknownError;
    return currentStatus;
 }
 
@@ -327,10 +286,10 @@ File::Status File::setStatus(File::Status status)
 // The number of bytes read is available in bytesRead if a non-Null pointer is
 // provided.
 //-----------------------------------------------------------------------------
-File::Status File::read(U32 size, char *dst, U32 *bytesRead)
+File::Status File::read(U32 _size, char *dst, U32 *bytesRead)
 {
    AssertFatal(Closed != currentStatus, "File::read: file closed");
-   AssertFatal(handle != NULL, "File::read: invalid file handle");
+   AssertFatal(buffer != NULL, "File::read: invalid file buffer");
    AssertFatal(NULL != dst, "File::read: NULL destination pointer");
    AssertFatal(true == hasCapability(FileRead), "File::read: file lacks capability");
    AssertWarn(0 != size, "File::read: size of zero");
@@ -339,8 +298,23 @@ File::Status File::read(U32 size, char *dst, U32 *bytesRead)
       return currentStatus;
    
    // read from stream
-   U32 nBytes = fread(dst, 1, size, (FILE*)handle);
+   U32 nBytes = 0;
    
+   if ((size-filePointer) > (_size * *bytesRead))
+   {
+   		memcpy(dst, buffer+filePointer, _size * *bytesRead);
+   		nBytes = *bytesRead;
+   }
+   else if (size-filePointer <= 0)
+   {
+	    nBytes = 0;
+   }
+   else
+   {
+	   memcpy(dst, buffer+filePointer, size-filePointer);
+	   nBytes = *bytesRead;
+   }
+
    // did we hit the end of the stream?
    if( nBytes != size)
       currentStatus = EOS;
@@ -361,28 +335,8 @@ File::Status File::read(U32 size, char *dst, U32 *bytesRead)
 //-----------------------------------------------------------------------------
 File::Status File::write(U32 size, const char *src, U32 *bytesWritten)
 {
-   AssertFatal(Closed != currentStatus, "File::write: file closed");
-   AssertFatal(handle != NULL, "File::write: invalid file handle");
-   AssertFatal(NULL != src, "File::write: NULL source pointer");
-   AssertFatal(true == hasCapability(FileWrite), "File::write: file lacks capability");
-   AssertWarn(0 != size, "File::write: size of zero");
-   
-   if ((Ok != currentStatus && EOS != currentStatus) || 0 == size)
-      return currentStatus;
-
-   // write bytes to the stream
-   U32 nBytes = fwrite(src, 1, size,(FILE*)handle);
-   
-   // if we couldn't write everything, we've got a problem. set error status.
-   if(nBytes != size)
-      setStatus();
-   
-   // if bytesWritten is a valid pointer, put number of bytes read there.
-   if(bytesWritten)
-      *bytesWritten = nBytes;
-   
-   // return current File status, whether good or ill.
-   return currentStatus;
+   AssertFatal(0, "File::write: Not supported on Android.");
+   return setStatus();
 }
 
 
@@ -418,16 +372,7 @@ bool Platform::getFileTimes(const char *path, FileTime *createTime, FileTime *mo
    if (!path || !*path) 
       return false;
    
-   struct stat statData;
-   
-   if (stat(path, &statData) == -1)
-      return false;
-   
-   if(createTime)
-      *createTime = statData.st_ctime;
-   
-   if(modifyTime)
-      *modifyTime = statData.st_mtime;
+   Con::warnf("Platform::getFileTimes - Not supported on android.");
    
    return true;
 }
@@ -436,50 +381,8 @@ bool Platform::getFileTimes(const char *path, FileTime *createTime, FileTime *mo
 //-----------------------------------------------------------------------------
 bool Platform::createPath(const char *file)
 {
-    //<Mat> needless console noise
-   //Con::warnf("creating path %s",file);
-   // if the path exists, we're done.
-   struct stat statData;
-   if( stat(file, &statData) == 0 )
-   { 
-      return true;               // exists, rejoice.
-   }
-   
-   // get the parent path.
-   // we're not using basename because it's not thread safe.
-   const U32 len = dStrlen(file) + 1;
-   char parent[len];
-   bool isDirPath = false;
-   
-   dSprintf(parent, len, "%s", file);
-
-   if(parent[len - 2] == '/')
-   {
-      parent[len - 2] = '\0';    // cut off the trailing slash, if there is one
-      isDirPath = true;          // we got a trailing slash, so file is a directory.
-   }
-   
-   // recusively create the parent path.
-   // only recurse if newpath has a slash that isn't a leading slash.
-   char *slash = dStrrchr(parent,'/');
-   if( slash && slash != parent)
-   {
-      // snip the path just after the last slash.
-      slash[1] = '\0';
-      // recusively create the parent path. fail if parent path creation failed.
-      if(!Platform::createPath(parent))
-         return false;
-   }
-   
-   // create *file if it is a directory path.
-   if(isDirPath)
-   {
-      // try to create the directory
-      if( mkdir(file, 0777) != 0) // app may reside in global apps dir, and so must be writable to all.
-         return false;
-   }
-   
-   return true;
+   Con::warnf("Platform::createPath() - Not supported on android.");
+   return false;
 }
 
 
@@ -566,17 +469,8 @@ bool Platform::isFile(const char *path)
 {
    if (!path || !*path) 
       return false;
-   
-   // make sure we can stat the file
-   struct stat statData;
-   if( stat(path, &statData) < 0 )
-      return false;
-   
-   // now see if it's a regular file
-   if( (statData.st_mode & S_IFMT) == S_IFREG)
-      return true;
-   
-   return false;
+
+   return android_IsFile(path);
 }
 
 
@@ -586,16 +480,7 @@ bool Platform::isDirectory(const char *path)
    if (!path || !*path) 
       return false;
    
-   // make sure we can stat the file
-   struct stat statData;
-   if( stat(path, &statData) < 0 )
-      return false;
-   
-   // now see if it's a directory
-   if( (statData.st_mode & S_IFMT) == S_IFDIR)
-      return true;
-   
-   return false;
+   return android_IsDir(path);
 }
 
 
@@ -604,12 +489,7 @@ S32 Platform::getFileSize(const char* pFilePath)
    if (!pFilePath || !*pFilePath) 
       return 0;
    
-   struct stat statData;
-   if( stat(pFilePath, &statData) < 0 )
-      return 0;
-   
-   // and return it's size in bytes
-   return (S32)statData.st_size;
+   return android_GetFileSize(pFilePath);
 }
 
 
@@ -621,49 +501,47 @@ bool Platform::isSubDirectory(const char *pathParent, const char *pathSub)
    return isDirectory((const char *)fullpath);
 }
 
+void getDirectoryName(const char* path, char* name)
+{
+	int cnt = StringUnit::getUnitCount(path, "/");
+	strcpy(name,StringUnit::getUnit(path, cnt-1, "/"));
+}
+
 //-----------------------------------------------------------------------------
 // utility for platform::hasSubDirectory() and platform::dumpDirectories()
 // ensures that the entry is a directory, and isnt on the ignore lists.
-inline bool isGoodDirectory(dirent* entry)
+inline bool isGoodDirectory(const char* path)
 {
-   return (entry->d_type == DT_DIR                          // is a dir
-           && dStrcmp(entry->d_name,".") != 0                 // not here
-           && dStrcmp(entry->d_name,"..") != 0                // not parent
-           && !Platform::isExcludedDirectory(entry->d_name)); // not excluded
+   char name[80];
+   getDirectoryName(path, name);
+   return (Platform::isDirectory(path)                          // is a dir
+           && dStrcmp(name,".") != 0                 // not here
+           && dStrcmp(name,"..") != 0                // not parent
+           && !Platform::isExcludedDirectory(name)); // not excluded
 }
 
 //-----------------------------------------------------------------------------
 bool Platform::hasSubDirectory(const char *path) 
 {
-   DIR *dir;
-   dirent *entry;
-   
-   dir = opendir(path);
-   if(!dir)
-      return false; // we got a bad path, so no, it has no subdirectory.
-   
-   while( true )
-   {
-       entry = readdir(dir);
-       if ( entry == NULL )
-           break;
-       
-      if(isGoodDirectory(entry) ) 
-      {
-         closedir(dir);
-         return true; // we have a subdirectory, that isnt on the exclude list.
-      }
-   }
-   
-   closedir(dir);
-   return false; // either this dir had no subdirectories, or they were all on the exclude list.
+	android_InitDirList(path);
+	char dir[80];
+	char pdir[255];
+	strcpy(dir,"");
+	android_GetNextDir(path, dir);
+	while(strcmp(dir,"") != 0)
+	{
+		sprintf(pdir, "%s/%s", path, dir);
+		if (isGoodDirectory(pdir))
+			return true;
+		android_GetNextDir(path, dir);
+	}
+
+    return false;
 }
 
 //-----------------------------------------------------------------------------
 bool recurseDumpDirectories(const char *basePath, const char *path, Vector<StringTableEntry> &directoryVector, S32 depth, bool noBasePath)
 {
-   DIR *dir;
-   dirent *entry;
    const U32 len = dStrlen(basePath) + dStrlen(path) + 2;
    char pathbuf[len];
    
@@ -671,68 +549,51 @@ bool recurseDumpDirectories(const char *basePath, const char *path, Vector<Strin
    dSprintf(pathbuf, len, "%s/%s", basePath, path);
    
    // be sure it opens.
-   dir = opendir(pathbuf);
-   if(!dir)
-      return false;
+   android_InitDirList(pathbuf);
    
    // look inside the current directory
-   while( true )
+   char dir[80];
+   char pdir[255];
+   strcpy(dir,"");
+   android_GetNextDir(pathbuf, dir);
+   while(strcmp(dir,"") != 0)
    {
-       entry = readdir(dir);
-       if ( entry == NULL )
-           break;
-       
-      // we just want directories.
-      if(!isGoodDirectory(entry))
-         continue;
+		sprintf(pdir, "%s/%s", pathbuf, dir);
+		if (!isGoodDirectory(pdir))
+			return false;
       
-      // TODO: better unicode file name handling
-      //      // Apple's file system stores unicode file names in decomposed form.
-      //      // ATSUI will not reliably draw out just the accent character by itself,
-      //      // so our text renderer has no chance of rendering decomposed form unicode.
-      //      // We have to convert the entry name to precomposed normalized form.
-      //      CFStringRef cfdname = CFStringCreateWithCString(NULL,entry->d_name,kCFStringEncodingUTF8);
-      //      CFMutableStringRef cfentryName = CFStringCreateMutableCopy(NULL,0,cfdname);
-      //      CFStringNormalize(cfentryName,kCFStringNormalizationFormC);
-      //      
-      //      U32 entryNameLen = CFStringGetLength(cfentryName) * 4 + 1;
-      //      char entryName[entryNameLen];
-      //      CFStringGetCString(cfentryName, entryName, entryNameLen, kCFStringEncodingUTF8);
-      //      entryName[entryNameLen-1] = NULL; // sometimes, CFStringGetCString() doesn't null terminate.
-      //      CFRelease(cfentryName);
-      //      CFRelease(cfdname);
+		// construct the new path string, we'll need this below.
+        const U32 newpathlen = dStrlen(path) + dStrlen(dir) + 2;
+        char newpath[newpathlen];
+        if(dStrlen(path) > 0)
+        {
+            dSprintf(newpath, newpathlen, "%s/%s", path, dir);
+        }
+        else
+        {
+           dSprintf(newpath, newpathlen, "%s", dir);
+        }
       
-      // construct the new path string, we'll need this below.
-      const U32 newpathlen = dStrlen(path) + dStrlen(entry->d_name) + 2;
-      char newpath[newpathlen];
-      if(dStrlen(path) > 0)
-      {
-          dSprintf(newpath, newpathlen, "%s/%s", path, entry->d_name);
-      }
-      else
-      {
-         dSprintf(newpath, newpathlen, "%s", entry->d_name);
-      }
+        // we have a directory, add it to the list.
+        if( noBasePath )
+        {
+           directoryVector.push_back(StringTable->insert(newpath));
+        }
+        else
+        {
+           const U32 fullpathlen = dStrlen(basePath) + dStrlen(newpath) + 2;
+           char fullpath[fullpathlen];
+           dSprintf(fullpath, fullpathlen, "%s/%s",basePath,newpath);
+           directoryVector.push_back(StringTable->insert(fullpath));
+        }
       
-      // we have a directory, add it to the list.
-      if( noBasePath )
-      {
-         directoryVector.push_back(StringTable->insert(newpath));
-      }
-      else
-      {
-         const U32 fullpathlen = dStrlen(basePath) + dStrlen(newpath) + 2;
-         char fullpath[fullpathlen];
-         dSprintf(fullpath, fullpathlen, "%s/%s",basePath,newpath);
-         directoryVector.push_back(StringTable->insert(fullpath));
-      }
-      
-      // and recurse into it, unless we've run out of depth
-      if( depth != 0) // passing a val of -1 as the recurse depth means go forever
-         recurseDumpDirectories(basePath, newpath, directoryVector, depth-1, noBasePath);
-   }
-   closedir(dir);
-   return true;
+        // and recurse into it, unless we've run out of depth
+        if( depth != 0) // passing a val of -1 as the recurse depth means go forever
+           recurseDumpDirectories(basePath, newpath, directoryVector, depth-1, noBasePath);
+
+        android_GetNextDir(pathbuf, dir);
+     }
+     return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -761,56 +622,66 @@ bool Platform::dumpDirectories(const char *path, Vector<StringTableEntry> &direc
 //-----------------------------------------------------------------------------
 static bool recurseDumpPath(const char* curPath, Vector<Platform::FileInfo>& fileVector, U32 depth)
 {
-	//TODO: is this used on android?
-   DIR *dir;
-   dirent *entry;
-   
-   // be sure it opens.
-   dir = opendir(curPath);
-   if(!dir)
-      return false;
+   android_InitDirList(curPath);
    
    // look inside the current directory
-   while( true )
+   char dir[80];
+   char file[80];
+   strcpy(dir,"");
+   strcpy(file,"");
+   android_GetNextDir(curPath, dir);
+   android_GetNextFile(curPath, file);
+
+   while(strcmp(file,"") != 0)
    {
-       entry = readdir(dir);
-       if ( entry == NULL )
-           break;
-       
-      // construct the full file path. we need this to get the file size and to recurse
-       //TODO: android
-      const U32 len = 0;//dStrlen(curPath) + entry->d_namlen + 2;
-      char pathbuf[len];
-      dSprintf( pathbuf, len, "%s/%s", curPath, entry->d_name);
-      
-      // ok, deal with directories and files seperately.
-      if( entry->d_type == DT_DIR )
-      {
-         if( depth == 0)
-            continue;
-         
-         // filter out dirs we dont want.
-         if( !isGoodDirectory(entry) )
-            continue;
-         
-         // recurse into the dir
-         recurseDumpPath( pathbuf, fileVector, depth-1);
-      }
-      else
-      {
-         //add the file entry to the list
-         // unlike recurseDumpDirectories(), we need to return more complex info here.
-          //<Mat> commented this out in case we ever want a dir file printout again
-          //printf( "File Name: %s ", entry->d_name );
-         const U32 fileSize = Platform::getFileSize(pathbuf);
-         fileVector.increment();
-         Platform::FileInfo& rInfo = fileVector.last();
-         rInfo.pFullPath = StringTable->insert(curPath);
-         rInfo.pFileName = StringTable->insert(entry->d_name);
-         rInfo.fileSize  = fileSize;
-      }
+  	 // construct the full file path. we need this to get the file size and to recurse
+  	 const U32 len = dStrlen(curPath) + dStrlen(file) + 2;
+  	 char pathbuf[len];
+  	 dSprintf( pathbuf, len, "%s/%s", curPath, file);
+
+  	 //add the file entry to the list
+  	 // unlike recurseDumpDirectories(), we need to return more complex info here.
+  	  //<Mat> commented this out in case we ever want a dir file printout again
+  	  //printf( "File Name: %s ", entry->d_name );
+  	 const U32 fileSize = Platform::getFileSize(pathbuf);
+  	 fileVector.increment();
+  	 Platform::FileInfo& rInfo = fileVector.last();
+  	 rInfo.pFullPath = StringTable->insert(curPath);
+  	 rInfo.pFileName = StringTable->insert(file);
+  	 rInfo.fileSize  = fileSize;
+
+  	 android_GetNextFile(curPath, file);
    }
-   closedir(dir);
+
+   while(strcmp(dir,"") != 0)
+   {
+      // construct the full file path. we need this to get the file size and to recurse
+      const U32 len = dStrlen(curPath) + dStrlen(dir) + 2;
+      char pathbuf[len];
+      if (strcmp(curPath,"") == 0)
+    	  dSprintf( pathbuf, len, "%s", dir);
+      else
+    	  dSprintf( pathbuf, len, "%s/%s", curPath, dir);
+      
+	  if( depth == 0)
+	  {
+		  android_GetNextDir(curPath, dir);
+		continue;
+	  }
+
+	  // filter out dirs we dont want.
+	  if( !isGoodDirectory(pathbuf) )
+	  {
+		android_GetNextDir(curPath, dir);
+		continue;
+	  }
+
+	  // recurse into the dir
+	  recurseDumpPath( pathbuf, fileVector, depth-1);
+
+	  android_GetNextDir(curPath, dir);
+   }
+
    return true;
    
 }
