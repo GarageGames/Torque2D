@@ -107,7 +107,8 @@ bool AndroidConsole::isEnabled()
 
 AndroidConsole::AndroidConsole()
 {
-   consoleEnabled = false;
+	//TODO: change back to false?
+   consoleEnabled = true;
    clearInBuf();
    
    Con::addConsumer(AndroidConsoleConsumer);
@@ -124,11 +125,10 @@ void AndroidConsole::processConsoleLine(const char *consoleLine)
    {
          adprintf("%s\n", consoleLine);
    }
-	//%PUAP%
-	if(debugOutputEnabled)
-	{
+   else if(debugOutputEnabled)
+   {
 		adprintf("%s\n", consoleLine);
-	}
+   }
 
 }
 

@@ -372,7 +372,7 @@ ConsoleFunction(screenShot, void, 3, 3, "(string file, string format)"
                 "Take a screenshot.\n\n"
                 "@param format One of JPEG or PNG.")
 {
-#ifndef TORQUE_OS_IOS
+#if !defined(TORQUE_OS_IOS) && !defined(TORQUE_OS_ANDROID)
 // PUAP -Mat no screenshots on iPhone can do it from Xcode
     FileStream fStream;
    if(!fStream.open(argv[1], FileStream::Write))
@@ -412,6 +412,9 @@ GuiCanvas::GuiCanvas()
 {
 #ifdef TORQUE_OS_IOS
    mBounds.set(0, 0, IOS_DEFAULT_RESOLUTION_X, IOS_DEFAULT_RESOLUTION_Y);
+#elif TORQUE_OS_ANDROID
+   //TODO: this need to access something else?
+   mBounds.set(0, 0, ANDROID_DEFAULT_RESOLUTION_X, ANDROID_DEFAULT_RESOLUTION_Y);
 #else
    mBounds.set(0, 0, MIN_RESOLUTION_X, MIN_RESOLUTION_Y);
 #endif
@@ -1084,7 +1087,7 @@ void GuiCanvas::rootMouseDragged(const GuiEvent &event)
       if(!mMouseCapturedControl.isNull())
             mMouseCapturedControl->onMouseDragged(event);
        //Luma: Mouse dragged calls mouse Moved on iPhone
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
        mMouseCapturedControl->onMouseMove(event);
 #endif //TORQUE_OS_IOS
    }
@@ -1094,7 +1097,7 @@ void GuiCanvas::rootMouseDragged(const GuiEvent &event)
       if(bool(mMouseControl))
       {
           mMouseControl->onMouseDragged(event);
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
           mMouseControl->onMouseMove(event);
 #endif //TORQUE_OS_IOS
           
@@ -1661,7 +1664,7 @@ void GuiCanvas::renderFrame(bool preRenderOnly, bool bufferSwap /* = true */)
       //temp draw the mouse
       if (cursorON && mShowCursor && !mouseCursor)
       {
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
          glColor4ub(255, 0, 0, 255);
          GLfloat vertices[] = {
               (GLfloat)(cursorPt.x),(GLfloat)(cursorPt.y),

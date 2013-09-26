@@ -30,6 +30,8 @@
 
 extern AndroidPlatState platState;
 
+static void engine_term_display(struct engine* engine, bool shutdown);
+
 T2DActivity activity;
 
 bool keyboardShowing = false;
@@ -66,50 +68,6 @@ double timeGetTime() {
 
     return ((tv.tv_sec) * 1000.0 + (tv.tv_usec) / 1000.0);
 
-}
-
-bool T2DActivity::createFramebuffer() {
-	
-	framebufferTexture.setSize(platState.engine->width, platState.engine->height);
-	glGenFramebuffersOES(1, &viewFramebuffer);
-	framebufferTexture.getTextureHandle().setClamp(true);
-	glGenRenderbuffersOES(1, &viewRenderbuffer);
-	
-	glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
-	glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
-	glRenderbufferStorageOES(GL_RENDERBUFFER_OES, GL_DEPTH_COMPONENT16_OES, platState.engine->width, platState.engine->height);
-	glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_RENDERBUFFER_OES, viewRenderbuffer);
-	
-	glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &backingWidth);
-	glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_HEIGHT_OES, &backingHeight);
-	
-	if (USE_DEPTH_BUFFER) {
-		glGenRenderbuffersOES(1, &depthRenderbuffer);
-		glBindRenderbufferOES(GL_RENDERBUFFER_OES, depthRenderbuffer);
-		glRenderbufferStorageOES(GL_RENDERBUFFER_OES, GL_DEPTH_COMPONENT16_OES, backingWidth, backingHeight);
-		glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_DEPTH_ATTACHMENT_OES, GL_RENDERBUFFER_OES, depthRenderbuffer);
-	}
-	
-	if(glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES) != GL_FRAMEBUFFER_COMPLETE_OES) {
-		adprintf("failed to make complete framebuffer object %x", glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES));
-		return false;
-	}
-	
-	return true;
-}
-
-
-void T2DActivity::destroyFramebuffer() {
-	
-	glDeleteFramebuffersOES(1, &viewFramebuffer);
-	viewFramebuffer = 0;
-	glDeleteRenderbuffersOES(1, &viewRenderbuffer);
-	viewRenderbuffer = 0;
-	
-	if(depthRenderbuffer) {
-		glDeleteRenderbuffersOES(1, &depthRenderbuffer);
-		depthRenderbuffer = 0;
-	}
 }
 
 void ChangeVolume(bool up) {
@@ -545,7 +503,17 @@ bool _AndroidGetFileDescriptor(const char* fileName, int32_t *mDescriptor, off_t
 	return false;
 }
 
-char* _AndroidLoadFile(const char* fileName, U32 *size) {
+char* _AndroidLoadFile(const char* fn, U32 *size) {
+
+	char fileName[255];
+	if (fn[0] == '/')
+	{
+		strcpy(fileName, fn+1);
+	}
+	else
+	{
+		strcpy(fileName,fn);
+	}
 
 	AAsset *asset;
 	uint8_t buf[1024];
@@ -726,7 +694,12 @@ static int engine_init_display(struct engine* engine) {
 
     if (SetupCompleted == false)
     {
-    	_AndroidRunTorqueMain(engine);
+    	if (_AndroidRunTorqueMain(engine) == 0)
+    	{
+    		engine->app->destroyRequested = 1;
+    		engine_term_display(engine, true);
+			return -1;
+    	}
     	activity.finishGLSetup();
     	SetupCompleted = true;
     }
@@ -741,8 +714,6 @@ static int engine_init_display(struct engine* engine) {
 
 void T2DActivity::finishGLSetup()
 {
-	createFramebuffer();
-
     platState.multipleTouchesEnabled = true;
 
 	_AndroidTorqueFatalError = false;
@@ -750,7 +721,7 @@ void T2DActivity::finishGLSetup()
 
 void T2DActivity::finishShutdown()
 {
-	destroyFramebuffer();
+
 }
 
 void T2DActivity::enableAccelerometer(bool enable) {

@@ -14,23 +14,16 @@
 #
 
 MY_LOCAL_PATH := $(call my-dir)
-LOCAL_PATH := $(MY_LOCAL_PATH)
-# LibPNG
-include $(CLEAR_VARS)
-
-LOCAL_MODULE    := libpng-prebuilt
-LOCAL_SRC_FILES := lib/libpng.a
-
-include $(PREBUILT_STATIC_LIBRARY)
 
 LOCAL_PATH := $(MY_LOCAL_PATH)
-# OpenAL Soft library must be a shared library since license is LGPL
+# OpenAL Soft library must be a shared library since license is LGPLv3
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := libopenal-prebuilt
 #LOCAL_SRC_FILES := ../../../lib/openal/Android/$(TARGET_ARCH_ABI)/libopenal.so
 LOCAL_SRC_FILES := ../../../lib/openal/Android/$(TARGET_ARCH_ABI)/libopenal.a
-LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../lib/openal/Android
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../lib/openal/Android/openal-soft-master/jni/OpenAL/include
+
 include $(PREBUILT_STATIC_LIBRARY)
 #include $(PREBUILT_SHARED_LIBRARY)
 
@@ -41,7 +34,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := torque2d
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
 					$(LOCAL_PATH)/../../../lib/ljpeg \
-					$(LOCAL_PATH)/include/libpng \
+					$(LOCAL_PATH)/../../../lib/lpng \
     				$(LOCAL_PATH)/../../../source \
     				$(LOCAL_PATH)/../../../source/2d \
     				$(LOCAL_PATH)/../../../source/2d/assets \
@@ -146,6 +139,21 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../lib/ljpeg/jquant1.c \
 					../../../lib/ljpeg/jquant2.c \
 					../../../lib/ljpeg/jutils.c \
+					../../../lib/lpng/png.c \
+					../../../lib/lpng/pngerror.c \
+					../../../lib/lpng/pngget.c \
+					../../../lib/lpng/pngmem.c \
+					../../../lib/lpng/pngpread.c \
+					../../../lib/lpng/pngread.c \
+					../../../lib/lpng/pngrio.c \
+					../../../lib/lpng/pngrtran.c \
+					../../../lib/lpng/pngrutil.c \
+					../../../lib/lpng/pngset.c \
+					../../../lib/lpng/pngtrans.c \
+					../../../lib/lpng/pngwio.c \
+					../../../lib/lpng/pngwrite.c \
+					../../../lib/lpng/pngwtran.c \
+					../../../lib/lpng/pngwutil.c \
 					../../../source/2d/assets/AnimationAsset.cc \
 					../../../source/2d/assets/ImageAsset.cc \
 					../../../source/2d/assets/ParticleAsset.cc \
@@ -527,7 +535,7 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 			   
 LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O0 -fsigned-char   
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lz -lOpenSLES -L../../../lib/openal/Android/$(TARGET_ARCH_ABI)
-LOCAL_STATIC_LIBRARIES := android_native_app_glue libpng-prebuilt libopenal-prebuilt
+LOCAL_STATIC_LIBRARIES := android_native_app_glue libopenal-prebuilt
 #LOCAL_SHARED_LIBRARIES := libopenal-prebuilt
 
 LOCAL_ARM_MODE := arm

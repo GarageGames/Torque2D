@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.util.Log;
 
 public class FileWalker
 {
@@ -23,15 +24,17 @@ public class FileWalker
 			if (files.containsKey(dir))
 				files.remove(dir);
 			files.put(dir, new Vector<String>());
+			//Log.i("torque2d", "PARENT DIRECTORY: " + dir);
 			for(String asset: assets) {
-				String[] subAssets = assetMgr.list(asset);
-				if (subAssets != null && subAssets.length > 0) 
+				if (asset.indexOf('.') == -1)
 				{
 					directories.get(dir).add(asset);
+					//Log.i("torque2d", "DIRECTORY ASSET: " + asset);
 				}
 				else
 				{
 					files.get(dir).add(asset);
+					//Log.i("torque2d", "FILE ASSET: " + asset);
 				}
 			}
 		} catch (IOException e) {

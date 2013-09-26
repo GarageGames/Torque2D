@@ -1,0 +1,2 @@
+set solib-search-path /Users/tnewell/gitrepos/Torque2D/engine/lib/openal/Android/openal-soft-master/obj/local/armeabi
+directory /Users/tnewell/androidDev/android-ndk-r9/platforms/android-8/arch-arm/usr/include /Users/tnewell/gitrepos/Torque2D/engine/lib/openal/Android/openal-soft-master/jni /Users/tnewell/androidDev/android-ndk-r9/sources/cxx-stl/system

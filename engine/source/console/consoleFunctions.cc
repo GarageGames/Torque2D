@@ -1304,7 +1304,7 @@ ConsoleFunction(exec, bool, 2, 4, "( fileName [ , nocalls [ , journalScript ] ] 
 // work with cs files as is, as they are included with the source either way.
 
 //Also, no DSO generation on iPhone
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
       if(false) 
 #else
       if(compiled)

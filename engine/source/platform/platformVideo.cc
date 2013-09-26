@@ -414,6 +414,7 @@ bool Video::setScreenMode( U32 width, U32 height, U32 bpp, bool fullScreen )
    if ( smCurrentDevice )
    {
        //MIN_RESOLUTION defined in platformWin32/platformGL.h
+	   //TODO: android?
 #ifdef TORQUE_OS_IOS
       if(width == 0)
          width = IOS_DEFAULT_RESOLUTION_X;

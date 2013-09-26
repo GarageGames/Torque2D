@@ -82,14 +82,6 @@ private:
 	// The pixel dimensions of the backbuffer
 	S32 backingWidth;
 	S32 backingHeight;
-	
-    // OpenGL names for the renderbuffer and framebuffers used to render to this view
-	GLuint viewRenderbuffer, viewFramebuffer;
-	
-	DynamicTexture framebufferTexture;
-
-	// OpenGL name for the depth buffer that is attached to viewFramebuffer, if it exists (0 if it does not exist)
-	GLuint depthRenderbuffer;
     
     GLuint _vertexBuffer;
     GLuint _indexBuffer;
@@ -118,8 +110,6 @@ public:
     char *getCacheDir() {
     	return cacheDir;
     }
-    bool createFramebuffer();
-    void destroyFramebuffer();
     void update();
     void finishShutdown();
     void finishGLSetup();

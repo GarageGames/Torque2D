@@ -1,0 +1,17 @@
+This is an OpenAL-soft shared library for Android.
+
+Features:
+ * builds for Froyo or later
+ * builds as a shared library
+ * back-end for AudioTrack or OpenSLES
+ * Fixed-point (default) or floating-point math for mixing
+
+Created with:
+android create project --target android-8 --name openal_soft --path openal-soft --activity openal_soft --package com.apportable.openal_soft 
+
+Fork of OpenAL-soft in jni/OpenAL
+
+Build with:
+cd jni
+ndk-build
+

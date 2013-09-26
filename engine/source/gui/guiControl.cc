@@ -458,7 +458,7 @@ void GuiControl::onRender(Point2I offset, const RectI &updateRect)
 
 bool GuiControl::renderTooltip(Point2I cursorPos, const char* tipText )
 {
-#ifndef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
     // Short Circuit.
     if (!mAwake) 
         return false;

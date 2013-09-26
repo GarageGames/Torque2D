@@ -114,16 +114,19 @@ File::Status File::open(const char *filename, const AccessMode openMode)
     	buffer = (U8*)_AndroidLoadFile(filename, &size);
 		if (buffer == NULL) {
 			currentStatus = UnknownError;
+			capability = FileRead;
+			return currentStatus;
 		}
 		break;
       case Write:
-    	  AssertFatal(false, "File::open: Write not supported on Android");
+    	  //AssertFatal(false, "File::open: Write not supported on Android");
+    	  //Platform::getUserDataDirectory()
           return currentStatus;
       case ReadWrite:
-    	  AssertFatal(false, "File::open: ReadWrite not supported on Android");
+    	  //AssertFatal(false, "File::open: ReadWrite not supported on Android");
     	  return currentStatus;
       case WriteAppend:
-    	  AssertFatal(false, "File::open: WriteAppend not supported on Android");
+    	  //AssertFatal(false, "File::open: WriteAppend not supported on Android");
     	  return currentStatus;
       default:
          AssertFatal(false, "File::open: bad access mode");
@@ -300,10 +303,10 @@ File::Status File::read(U32 _size, char *dst, U32 *bytesRead)
    // read from stream
    U32 nBytes = 0;
    
-   if ((size-filePointer) > (_size * *bytesRead))
+   if ((size-filePointer) > (_size))
    {
-   		memcpy(dst, buffer+filePointer, _size * *bytesRead);
-   		nBytes = *bytesRead;
+   		memcpy(dst, buffer+filePointer, _size);
+   		nBytes = _size;
    }
    else if (size-filePointer <= 0)
    {
@@ -312,11 +315,14 @@ File::Status File::read(U32 _size, char *dst, U32 *bytesRead)
    else
    {
 	   memcpy(dst, buffer+filePointer, size-filePointer);
-	   nBytes = *bytesRead;
+	   nBytes = size-filePointer;
    }
 
+   //Advanced the pointer
+   filePointer += nBytes;
+
    // did we hit the end of the stream?
-   if( nBytes != size)
+   if( nBytes != _size)
       currentStatus = EOS;
    
    // if bytesRead is a valid pointer, send number of bytes read there.
@@ -542,11 +548,24 @@ bool Platform::hasSubDirectory(const char *path)
 //-----------------------------------------------------------------------------
 bool recurseDumpDirectories(const char *basePath, const char *path, Vector<StringTableEntry> &directoryVector, S32 depth, bool noBasePath)
 {
-   const U32 len = dStrlen(basePath) + dStrlen(path) + 2;
+	char aPath[80];
+   if (basePath[0] == '/')
+   {
+	   strcpy(aPath, basePath+1);
+   }
+   else
+   {
+	   strcpy(aPath, basePath);
+   }
+
+   const U32 len = dStrlen(aPath) + dStrlen(path) + 2;
    char pathbuf[len];
    
    // construct the file path
-   dSprintf(pathbuf, len, "%s/%s", basePath, path);
+   if (strcmp(path,"") != 0)
+	   dSprintf(pathbuf, len, "%s/%s", aPath, path);
+   else
+	   strcpy(pathbuf, aPath);
    
    // be sure it opens.
    android_InitDirList(pathbuf);
@@ -581,15 +600,15 @@ bool recurseDumpDirectories(const char *basePath, const char *path, Vector<Strin
         }
         else
         {
-           const U32 fullpathlen = dStrlen(basePath) + dStrlen(newpath) + 2;
+           const U32 fullpathlen = dStrlen(aPath) + dStrlen(newpath) + 2;
            char fullpath[fullpathlen];
-           dSprintf(fullpath, fullpathlen, "%s/%s",basePath,newpath);
+           dSprintf(fullpath, fullpathlen, "%s/%s",aPath,newpath);
            directoryVector.push_back(StringTable->insert(fullpath));
         }
       
         // and recurse into it, unless we've run out of depth
         if( depth != 0) // passing a val of -1 as the recurse depth means go forever
-           recurseDumpDirectories(basePath, newpath, directoryVector, depth-1, noBasePath);
+           recurseDumpDirectories(aPath, newpath, directoryVector, depth-1, noBasePath);
 
         android_GetNextDir(pathbuf, dir);
      }
@@ -605,7 +624,15 @@ bool Platform::dumpDirectories(const char *path, Vector<StringTableEntry> &direc
 
    const S32 len = dStrlen(path)+1;
    char newpath[len];
-   dSprintf(newpath, len, "%s", path);
+   if (path[0] == '/')
+   {
+	   dSprintf(newpath, len-1, "%s", path+1);
+   }
+   else
+   {
+	   dSprintf(newpath, len, "%s", path);
+   }
+
    if(newpath[len - 1] == '/')
       newpath[len - 1] = '\0'; // cut off the trailing slash, if there is one
    
@@ -691,10 +718,19 @@ static bool recurseDumpPath(const char* curPath, Vector<Platform::FileInfo>& fil
 bool Platform::dumpPath(const char *path, Vector<Platform::FileInfo>& fileVector, S32 depth)
 {
    PROFILE_START(dumpPath);
-    const S32 len = dStrlen(path) + 1;
+   char apath[80];
+   if (path[0] == '/')
+   {
+	   strcpy(apath, path+1);
+   }
+   else
+   {
+	   strcpy(apath, path);
+   }
+    const S32 len = dStrlen(apath) + 1;
    char newpath[len];
    
-    dSprintf(newpath, len, "%s", path);
+    dSprintf(newpath, len, "%s", apath);
     
    if(newpath[len - 2] == '/')
       newpath[len - 2] = '\0'; // cut off the trailing slash, if there is one

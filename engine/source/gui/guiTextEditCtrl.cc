@@ -710,7 +710,7 @@ bool GuiTextEditCtrl::onKeyDown(const GuiEvent &event)
          }
 
          // End added UNIX emacs key bindings
-         
+         //TODO: android?
 #if !(defined(TORQUE_OS_OSX) || defined(TORQUE_OS_IOS))
          // windows style cut / copy / paste / undo keybinds
          case KEY_C:
@@ -759,6 +759,7 @@ bool GuiTextEditCtrl::onKeyDown(const GuiEvent &event)
             return false;
       }
    }
+   //TODO: android?
 #if (defined(TORQUE_OS_OSX) || defined(TORQUE_OS_IOS))
    // mac style cut / copy / paste / undo keybinds
    else if (event.modifier & SI_ALT)
@@ -1077,7 +1078,7 @@ void GuiTextEditCtrl::setFirstResponder()
 {
    Parent::setFirstResponder();
    
-#ifndef TORQUE_OS_IOS
+#if !defined(TORQUE_OS_IOS) && !defined(TORQUE_OS_ANDROID)
    Platform::enableKeyboardTranslation();
 #endif	
 }
