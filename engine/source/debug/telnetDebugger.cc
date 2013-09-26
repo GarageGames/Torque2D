@@ -31,6 +31,7 @@
 #include "console/compiler.h"
 #include "game/gameInterface.h"
 
+#include "telnetDebugger_ScriptBinding.h"
 
 //
 // Enhanced TelnetDebugger for Torsion
@@ -96,32 +97,6 @@
 //
 // BRKCLR file line - sent when a breakpoint cannot be moved to a breakable line on the client.
 //
-
-
-ConsoleFunction( dbgSetParameters, void, 3, 4, "(int port, string password, bool waitForClient)"
-                "Open a debug server port on the specified port, requiring the specified password, "
-                "and optionally waiting for the debug client to connect."
-            "@param port The IP port to set the password on.\n"
-        "@param password The password for this port. Set this to a NULL string to clear the password for the port.\n"
-        "@return No return value")
-{
-   if (TelDebugger)
-       TelDebugger->setDebugParameters(dAtoi(argv[1]), argv[2], argc > 3 ? dAtob(argv[3]) : false );
-}
-
-ConsoleFunction( dbgIsConnected, bool, 1, 1, "()\n"
-                "@return Returns true if a script debugging client is connected else return false.")
-{
-   return TelDebugger && TelDebugger->isConnected();
-}
-
-ConsoleFunction( dbgDisconnect, void, 1, 1, "()"
-                "Forcibly disconnects any attached script debugging client.\n"
-                "@return No Return Value")
-{
-   if (TelDebugger)
-       TelDebugger->disconnect();
-}
 
 static void debuggerConsumer(ConsoleLogEntry::Level level, const char *line)
 {

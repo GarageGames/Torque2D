@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -59,13 +59,21 @@ static void backslash(char *str)
 
 
 //----------------------------------------------------------------
-ConsoleFunctionGroupBegin( FileSystem, "Functions allowing you to search for files, read them, write them, and access their properties.");
 
 static ResourceObject *firstMatch = NULL;
 
-ConsoleFunction(findFirstFile, const char *, 2, 2, "( strPattern )\n"
-                "@param strPattern The string pattern to search for.\n"
-                "@return Returns a string representing the first file in the directory system matching the given pattern.")
+ConsoleFunctionGroupBegin( FileSystem, "Functions allowing you to search for files, read them, write them, and access their properties.");
+
+/*! @addtogroup FileSystem File System
+	@ingroup TorqueScriptFunctions
+	@{
+*/
+
+/*! 
+    @param strPattern The string pattern to search for.
+    @return Returns a string representing the first file in the directory system matching the given pattern.
+*/
+ConsoleFunctionWithDocs(findFirstFile, ConsoleString, 2, 2, ( strPattern ))
 {
    TORQUE_UNUSED( argc );
    const char *fn = NULL;
@@ -79,9 +87,11 @@ ConsoleFunction(findFirstFile, const char *, 2, 2, "( strPattern )\n"
       return "";
 }
 
-ConsoleFunction(findNextFile, const char *, 2, 2, "( strPattern )\n" 
-                "@param strPattern The string pattern to search for.\n"
-                "@return Returns the next file matching a search begun in findFirstFile.")
+/*!  
+    @param strPattern The string pattern to search for.
+    @return Returns the next file matching a search begun in findFirstFile.
+*/
+ConsoleFunctionWithDocs(findNextFile, ConsoleString, 2, 2, ( strPattern ))
 {
    TORQUE_UNUSED( argc );
    const char *fn = NULL;
@@ -96,9 +106,11 @@ ConsoleFunction(findNextFile, const char *, 2, 2, "( strPattern )\n"
       return "";
 }
 
-ConsoleFunction(getFileCount, S32, 2, 2, "(strPattern) \n" 
-                "@param strPattern The string pattern to search for.\n"
-                "@return Returns the number of files in the directory tree that match the given pattern")
+/*!  
+    @param strPattern The string pattern to search for.
+    @return Returns the number of files in the directory tree that match the given pattern
+*/
+ConsoleFunctionWithDocs(getFileCount, ConsoleInt, 2, 2, (strPattern))
 {
    TORQUE_UNUSED( argc );
    const char* fn;
@@ -120,9 +132,11 @@ ConsoleFunction(getFileCount, S32, 2, 2, "(strPattern) \n"
    return( count );
 }
 
-ConsoleFunction(findFirstFileMultiExpr, const char *, 2, 2, "(strPattern)\n" 
-                "@param strPattern The string pattern to search for.\n"
-                "@return Returns the first file in the directory system matching the given pattern.")
+/*!  
+    @param strPattern The string pattern to search for.
+    @return Returns the first file in the directory system matching the given pattern.
+*/
+ConsoleFunctionWithDocs(findFirstFileMultiExpr, ConsoleString, 2, 2, (strPattern))
 {
    TORQUE_UNUSED( argc );
    const char *fn = NULL;
@@ -136,7 +150,9 @@ ConsoleFunction(findFirstFileMultiExpr, const char *, 2, 2, "(strPattern)\n"
       return "";
 }
 
-ConsoleFunction(findNextFileMultiExpr, const char *, 2, 2, "(string pattern) Returns the next file matching a search begun in findFirstFile.")
+/*! Returns the next file matching a search begun in findFirstFile.
+*/
+ConsoleFunctionWithDocs(findNextFileMultiExpr, ConsoleString, 2, 2, (string pattern))
 {
    TORQUE_UNUSED( argc );
    const char *fn = NULL;
@@ -151,9 +167,11 @@ ConsoleFunction(findNextFileMultiExpr, const char *, 2, 2, "(string pattern) Ret
       return "";
 }
 
-ConsoleFunction(getFileCountMultiExpr, S32, 2, 2, "(strPattern) \n" 
-                "@param strPattern The string pattern to search for.\n"
-                "@return Returns the number of files in the directory tree that match the given pattern")
+/*!  
+    @param strPattern The string pattern to search for.
+    @return Returns the number of files in the directory tree that match the given pattern
+*/
+ConsoleFunctionWithDocs(getFileCountMultiExpr, ConsoleInt, 2, 2, (strPattern))
 {
    TORQUE_UNUSED( argc );
    const char* fn;
@@ -175,9 +193,11 @@ ConsoleFunction(getFileCountMultiExpr, S32, 2, 2, "(strPattern) \n"
    return( count );
 }
 
-ConsoleFunction(getFileCRC, S32, 2, 2, "(filename)\n"
-                "@param filename The string representing the file from which to get the CRC\n"
-                "@return An integer")
+/*! 
+    @param filename The string representing the file from which to get the CRC
+    @return An integer
+*/
+ConsoleFunctionWithDocs(getFileCRC, ConsoleInt, 2, 2, (filename))
 {
    TORQUE_UNUSED( argc );
    U32 crcVal;
@@ -188,7 +208,9 @@ ConsoleFunction(getFileCRC, S32, 2, 2, "(filename)\n"
    return(S32(crcVal));
 }
 
-ConsoleFunction(isDirectory, bool, 2, 2, "(path)\n @param pathName Path to check.\n @return Returns true if the given path is a folder/directory, false otherwise")
+/*!  @param pathName Path to check. @return Returns true if the given path is a folder/directory, false otherwise
+*/
+ConsoleFunctionWithDocs(isDirectory, ConsoleBool, 2, 2, (path))
 {
     bool doesExist = Platform::isDirectory(argv[1]);
     if(doesExist)
@@ -197,17 +219,21 @@ ConsoleFunction(isDirectory, bool, 2, 2, "(path)\n @param pathName Path to check
     return false;
 }
 
-ConsoleFunction(isFile, bool, 2, 2, "(fileName)\n"
-                "@param fileName Filename to check.\n"
-                "@return Returns true if the given filename is an existing file or false otherwise")
+/*! 
+    @param fileName Filename to check.
+    @return Returns true if the given filename is an existing file or false otherwise
+*/
+ConsoleFunctionWithDocs(isFile, ConsoleBool, 2, 2, (fileName))
 {
    Con::expandPath(scriptFilenameBuffer, sizeof(scriptFilenameBuffer), argv[1]);
    return bool(ResourceManager->find(scriptFilenameBuffer));
 }
 
-ConsoleFunction(isWriteableFileName, bool, 2, 2, "(fileName)\n"
-                "@param fileName Filename to check.\n"
-                "@return Returns true if the given filename is an existing file and is not Read-Only or false otherwise")
+/*! 
+    @param fileName Filename to check.
+    @return Returns true if the given filename is an existing file and is not Read-Only or false otherwise
+*/
+ConsoleFunctionWithDocs(isWriteableFileName, ConsoleBool, 2, 2, (fileName))
 {
    TORQUE_UNUSED( argc );
 
@@ -234,10 +260,12 @@ ConsoleFunction(isWriteableFileName, bool, 2, 2, "(fileName)\n"
    return(true);
 }
 
-ConsoleFunction(getDirectoryList, const char*, 2, 3, "(strPath, [intDepth])\n"
-                "@param strPath The path in which to check\n"
-                "@param intDepth The depth in which to return (default 0 if not specified)\n"
-                "@return The directory contents")
+/*! 
+    @param strPath The path in which to check
+    @param intDepth The depth in which to return (default 0 if not specified)
+    @return The directory contents
+*/
+ConsoleFunctionWithDocs(getDirectoryList, ConsoleString, 2, 3, (strPath, [intDepth]?))
 {
    // Grab the full path.
    char path[1024];
@@ -288,9 +316,11 @@ ConsoleFunction(getDirectoryList, const char*, 2, 3, "(strPath, [intDepth])\n"
    return buffer;
 }
 
-ConsoleFunction(getFileList, const char*, 2, 2, "(strPath) - Gets all the files in the specified directory.\n"
-                "@param strPath The path in which to check\n"
-                "@return A list of files in the specified directory.")
+/*! Gets all the files in the specified directory.
+    @param strPath The path in which to check
+    @return A list of files in the specified directory.
+*/
+ConsoleFunctionWithDocs(getFileList, ConsoleString, 2, 2, (strPath))
 {
    // Grab the full path.
    char basePath[1024];
@@ -331,18 +361,22 @@ ConsoleFunction(getFileList, const char*, 2, 2, "(strPath) - Gets all the files 
    return buffer;
 }
 
-ConsoleFunction(fileSize, S32, 2, 2, "(fileName)\n"
-                "@param fileName The name of the file to check.\n" 
-                "@return Returns the size of the file as an integer or -1 if file not found")
+/*! 
+    @param fileName The name of the file to check. 
+    @return Returns the size of the file as an integer or -1 if file not found
+*/
+ConsoleFunctionWithDocs(fileSize, ConsoleInt, 2, 2, (fileName))
 {
    TORQUE_UNUSED( argc );
    Con::expandPath(scriptFilenameBuffer, sizeof(scriptFilenameBuffer), argv[1]);
    return Platform::getFileSize( scriptFilenameBuffer );
 }
 
-ConsoleFunction(fileDelete, bool, 2,2, "(fileName)\n"
-                "@param fileName Name of the file to remove"
-                "@return Returns true on success and false on failure")
+/*! 
+    @param fileName Name of the file to remove
+    @return Returns true on success and false on failure
+*/
+ConsoleFunctionWithDocs(fileDelete, ConsoleBool, 2,2, (fileName))
 {
    static char fileName[1024];
    static char sandboxFileName[1024];
@@ -353,9 +387,11 @@ ConsoleFunction(fileDelete, bool, 2,2, "(fileName)\n"
    return Platform::fileDelete(sandboxFileName);
 }
 
-ConsoleFunction(directoryDelete, bool, 2,2, "(directoryName)\n"
-                "@param directoryName Name of the directory to remove"
-                "@return Returns true on success and false on failure")
+/*! 
+    @param directoryName Name of the directory to remove
+    @return Returns true on success and false on failure
+*/
+ConsoleFunctionWithDocs(directoryDelete, ConsoleBool, 2,2, (directoryName))
 {
    static char directoryName[1024];
    static char sandboxdirectoryName[1024];
@@ -368,9 +404,11 @@ ConsoleFunction(directoryDelete, bool, 2,2, "(directoryName)\n"
 
 //----------------------------------------------------------------
 
-ConsoleFunction(isValidImageFile, bool, 2, 2, "(string filePath)\n"
-                "@param filePath Full path of file to check.\n"
-                "@return Returns true if the given filename is a valid image file or false otherwise")
+/*! 
+    @param filePath Full path of file to check.
+    @return Returns true if the given filename is a valid image file or false otherwise
+*/
+ConsoleFunctionWithDocs(isValidImageFile, ConsoleBool, 2, 2, (string filePath))
 {
     Con::expandPath(scriptFilenameBuffer, sizeof(scriptFilenameBuffer), argv[1]);
     
@@ -409,9 +447,11 @@ ConsoleFunction(isValidImageFile, bool, 2, 2, "(string filePath)\n"
     return ret;
 }
 
-ConsoleFunction(fileExt, const char *, 2, 2, "(fileName)\n "
-                "@param Name of file from which to extract extension\n"
-                "@return A string containing the file's extension (assuming all data after first '.' is the extension) or returns empty string on failure")
+/*!  
+    @param Name of file from which to extract extension
+    @return A string containing the file's extension (assuming all data after first '.' is the extension) or returns empty string on failure
+*/
+ConsoleFunctionWithDocs(fileExt, ConsoleString, 2, 2, (fileName))
 {
    TORQUE_UNUSED( argc );
    const char *ret = dStrrchr(argv[1], '.');
@@ -420,7 +460,9 @@ ConsoleFunction(fileExt, const char *, 2, 2, "(fileName)\n "
    return "";
 }
 
-ConsoleFunction(fileBase, const char *, 2, 2, "fileBase(fileName)")
+/*! 
+*/
+ConsoleFunctionWithDocs(fileBase, ConsoleString, 2, 2, (fileName))
 {
 
    S32 pathLen = dStrlen( argv[1] );
@@ -443,7 +485,9 @@ ConsoleFunction(fileBase, const char *, 2, 2, "fileBase(fileName)")
    return ret;
 }
 
-ConsoleFunction(fileName, const char *, 2, 2, "(filePathName) Extract the filename from the full path description")
+/*! Extract the filename from the full path description
+*/
+ConsoleFunctionWithDocs(fileName, ConsoleString, 2, 2, (filePathName))
 {
    S32 pathLen = dStrlen( argv[1] );
    FrameTemp<char> szPathCopy( pathLen + 1);
@@ -462,7 +506,9 @@ ConsoleFunction(fileName, const char *, 2, 2, "(filePathName) Extract the filena
    return ret;
 }
 
-ConsoleFunction(filePath, const char *, 2, 2, "(fileName) Extract the file path from a file's full desciption")
+/*! Extract the file path from a file's full desciption
+*/
+ConsoleFunctionWithDocs(filePath, ConsoleString, 2, 2, (fileName))
 {
    S32 pathLen = dStrlen( argv[1] );
    FrameTemp<char> szPathCopy( pathLen + 1);
@@ -481,8 +527,10 @@ ConsoleFunction(filePath, const char *, 2, 2, "(fileName) Extract the file path 
    return ret;
 }
 
-ConsoleFunction(getCurrentDate, const char *, 2, 2, "(bool reverse) Gets the current date and time.\n"
-                                                 "@param reverse Determines if the format will be Month/Day/Year/Hour:Min:Seconds or Year/Month/Day/Hour:Min:Seconds")
+/*! Gets the current date and time.
+    @param reverse Determines if the format will be Month/Day/Year/Hour:Min:Seconds or Year/Month/Day/Hour:Min:Seconds
+*/
+ConsoleFunctionWithDocs(getCurrentDate, ConsoleString, 2, 2, (bool reverse))
 {
     Platform::LocalTime lt;
     Platform::getLocalTime(lt);
@@ -500,12 +548,16 @@ ConsoleFunction(getCurrentDate, const char *, 2, 2, "(bool reverse) Gets the cur
     return returnBuffer;
 }
 
-ConsoleFunction(openFolder, void, 2 ,2,"openFolder(%path);")
+/*! ;
+*/
+ConsoleFunctionWithDocs(openFolder, ConsoleVoid, 2 ,2, (path))
 {
    Platform::openFolder( argv[1] );
 }
 
-ConsoleFunction(pathCopy, bool, 3, 4, "pathCopy(fromFile, toFile [, nooverwrite = true])")
+/*! 
+*/
+ConsoleFunctionWithDocs(pathCopy, ConsoleBool, 3, 4, (fromFile, toFile, [nooverwrite = true]?))
 {
    bool nooverwrite = true;
 
@@ -527,40 +579,54 @@ ConsoleFunction(pathCopy, bool, 3, 4, "pathCopy(fromFile, toFile [, nooverwrite 
    return Platform::pathCopy( qualifiedFromFile, qualifiedToFile, nooverwrite );
 }
 
-ConsoleFunction(getCurrentDirectory, const char *, 1, 1, "getCurrentDirectory()")
+/*! 
+*/
+ConsoleFunctionWithDocs(getCurrentDirectory, ConsoleString, 1, 1, ())
 {
    return Platform::getCurrentDirectory();
 }
 
-ConsoleFunction( setCurrentDirectory, bool, 2, 2, "setCurrentDirectory(absolutePathName)" )
+/*! 
+*/
+ConsoleFunctionWithDocs( setCurrentDirectory, ConsoleBool, 2, 2, (absolutePathName))
 {
    return Platform::setCurrentDirectory( StringTable->insert( argv[1] ) );
 
 }
 
-ConsoleFunction(getExecutableName, const char *, 1, 1, "getExecutableName()")
+/*! 
+*/
+ConsoleFunctionWithDocs(getExecutableName, ConsoleString, 1, 1, ())
 {
    return Platform::getExecutableName();
 }
 
-ConsoleFunction(getMainDotCsDir, const char *, 1, 1, "getMainDotCsDir()")
+/*! 
+*/
+ConsoleFunctionWithDocs(getMainDotCsDir, ConsoleString, 1, 1, ())
 {
    return Platform::getMainDotCsDir();
 }
 
-ConsoleFunction(makeFullPath, const char *, 2, 3, "(string path, [string currentWorkingDir])")
+/*! 
+*/
+ConsoleFunctionWithDocs(makeFullPath, ConsoleString, 2, 3, (string path, [string currentWorkingDir]?))
 {
    char *buf = Con::getReturnBuffer(512);
    Platform::makeFullPathName(argv[1], buf, 512, argc > 2 ? argv[2] : NULL);
    return buf;
 }
 
-ConsoleFunction(makeRelativePath, const char *, 3, 3, "(string path, string to)")
+/*! 
+*/
+ConsoleFunctionWithDocs(makeRelativePath, ConsoleString, 3, 3, (string path, string to))
 {
    return Platform::makeRelativePathName(argv[1], argv[2]);
 }
 
-ConsoleFunction(pathConcat, const char *, 3, 0, "(string path, string file1, [... fileN])")
+/*! 
+*/
+ConsoleFunctionWithDocs(pathConcat, ConsoleString, 3, 0, (string path, string file1, [... fileN]*))
 {
    char *buf = Con::getReturnBuffer(1024);
    char pathBuf[1024];
@@ -574,18 +640,20 @@ ConsoleFunction(pathConcat, const char *, 3, 0, "(string path, string file1, [..
    return buf;
 }
 
-ConsoleFunction(restartInstance, void, 1, 1, "restartInstance()")
+/*! 
+*/
+ConsoleFunctionWithDocs(restartInstance, ConsoleVoid, 1, 1, ())
 {
    Game->setRestart( true );
    Platform::postQuitMessage( 0 );
 }
 
-ConsoleFunction( createPath, bool, 2,2, "createPath(\"path\");  creates the path.  "
-                "Verifies all the elements in a path exists or creates them if they do not.  "
-                "Note that the path should end with a slash (/).  Otherwise, the last element in the path "
-                "will be assumed to be a filename and not a path component, and it will not be created.  "
-                "For example \"data/stage2/part1\" will verify or create \"data/stage2/\" and not \"part1\"."
-                )
+
+/*! Creates the path, verifing all the elements in a path exist or creating them if they do not.
+    Note that the path should end with a slash (/).  Otherwise, the last element in the path will be assumed to be a filename and not a path component, and it will not be created.
+    For example \"data/stage2/part1\" will verify or create \"data/stage2/\" and not \"part1\".
+*/
+ConsoleFunctionWithDocs( createPath, ConsoleBool, 2,2, (pathName))
 {
    static char pathName[1024];
 
@@ -594,4 +662,6 @@ ConsoleFunction( createPath, bool, 2,2, "createPath(\"path\");  creates the path
    return Platform::createPath( pathName );
 }
 
-ConsoleFunctionGroupEnd( FileSystem );
+ConsoleFunctionGroupEnd(FileSystem)
+
+/*! @} */ // group FileSystem

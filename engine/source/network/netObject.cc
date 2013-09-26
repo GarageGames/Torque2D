@@ -27,6 +27,8 @@
 #include "network/netObject.h"
 #include "console/consoleTypes.h"
 
+#include "netObject_ScriptBinding.h"
+
 IMPLEMENT_CONOBJECT(NetObject);
 
 //----------------------------------------------------------------------------
@@ -143,43 +145,6 @@ void NetObject::collapseDirtyList()
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(NetObject,scopeToClient,void,3,3,"( client ) Use the scopeToClient method to force this object to be SCOPE_ALWAYS on client.\n"
-                                                                "When an object is SCOPE_ALWAYS it is always ghosted. Therefore, if you have an object that should always be ghosted to a client, use this method.\n"
-                                                                "@param client The ID of the client to force this object to be SCOPE_ALWAYS for.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa clearScopeToClient, setScopeAlways")
-{
-   NetConnection *conn;
-   if(!Sim::findObject(argv[2], conn))
-   {
-      Con::errorf(ConsoleLogEntry::General, "NetObject::scopeToClient: Couldn't find connection %s", argv[2]);
-      return;
-   }
-   conn->objectLocalScopeAlways(object);
-}
-
-ConsoleMethod(NetObject,clearScopeToClient,void,3,3,"( client ) Use the clearScopeToClient method to undo the effects of a previous call to scopeToClient.\n"
-                                                                "@param client The ID of the client to stop forcing scoping this object for.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa scopeToClient")
-{
-   NetConnection *conn;
-   if(!Sim::findObject(argv[2], conn))
-   {
-      Con::errorf(ConsoleLogEntry::General, "NetObject::clearScopeToClient: Couldn't find connection %s", argv[2]);
-      return;
-   }
-   conn->objectLocalClearAlways(object);
-}
-
-ConsoleMethod(NetObject,setScopeAlways,void,2,2,"() Use the setScopeAlways method to force an object to be SCOPE_ALWAYS for all clients.\n"
-                                                                "When an object is SCOPE_ALWAYS it is always ghosted. Therefore, if you have an object that should always be ghosted to all clients, use this method.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa scopeToClient")
-{
-   object->setScopeAlways();
-}
-
 void NetObject::setScopeAlways()
 {
    if(mNetFlags.test(Ghostable) && !mNetFlags.test(IsGhost))
@@ -279,9 +244,4 @@ void NetObject::onCameraScopeQuery(NetConnection *cr, CameraScopeQuery* /*camInf
 void NetObject::initPersistFields()
 {
    Parent::initPersistFields();
-}
-
-ConsoleMethod( NetObject, getGhostID, S32, 2, 2, "()\n @return Returns the ghost ID of the object")
-{
-   return object->getNetIndex();
 }

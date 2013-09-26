@@ -133,7 +133,10 @@ extern void queryMasterServer(U8 flags, const char* gameType, const char* missio
       U8 filterFlags, U8 buddyCount, U32* buddyList );
 extern void queryFavoriteServers( U8 flags );
 extern void querySingleServer(const NetAddress* addr, U8 flags);
+extern void cancelServerQuery();
+extern void stopServerQuery();
 extern void startHeartbeat();
+extern void stopHeartBeat();
 extern void sendHeartbeat( U8 flags );
 
 #ifdef TORQUE_DEBUG
