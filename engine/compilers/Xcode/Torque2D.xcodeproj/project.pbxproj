@@ -455,6 +455,7 @@
 
 /* Begin PBXFileReference section */
 		04CC626B1795512500F9C119 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = ../../../../../../../System/Library/Frameworks/AVFoundation.framework; sourceTree = "<group>"; };
+		2797C9E117F4E12500625B51 /* eaxtypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eaxtypes.h; sourceTree = "<group>"; };
 		2A03300B165D1D2100E9CD70 /* unitTesting.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = unitTesting.cc; path = ../../../source/testing/unitTesting.cc; sourceTree = "<group>"; };
 		2A03300C165D1D2100E9CD70 /* unitTesting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = unitTesting.h; path = ../../../source/testing/unitTesting.h; sourceTree = "<group>"; };
 		2A033010165D1D4100E9CD70 /* platformFileIoTests.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = platformFileIoTests.cc; path = ../../../source/testing/tests/platformFileIoTests.cc; sourceTree = "<group>"; };
@@ -2939,6 +2940,7 @@
 		86BC82ED16518F6800D96ADF /* platform */ = {
 			isa = PBXGroup;
 			children = (
+				2797C9E117F4E12500625B51 /* eaxtypes.h */,
 				B350D141174ED56500033EBB /* CursorManager_ScriptBinding.h */,
 				B350D142174ED56500033EBB /* platformAssert_ScriptBinding.h */,
 				B350D143174ED56500033EBB /* platformFileIO_ScriptBinding.h */,
