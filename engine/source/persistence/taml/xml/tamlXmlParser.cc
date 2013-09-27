@@ -43,6 +43,12 @@ bool TamlXmlParser::accept( const char* pFilename, TamlVisitor& visitor )
 
     FileStream stream;
 
+#ifdef TORQUE_OS_ANDROID
+    if (strlen(pFilename) > strlen(filenameBuffer)) {
+    	strcpy(filenameBuffer, pFilename);
+    }
+#endif
+
     // File open for read?
     if ( !stream.open( filenameBuffer, FileStream::Read ) )
     {

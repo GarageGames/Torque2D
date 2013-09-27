@@ -1,10 +1,12 @@
 package com.garagegames.torque2d;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Vector;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.util.Log;
 
@@ -93,5 +95,22 @@ public class FileWalker
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	public static int GetFileSize(Context context, String file)
+	{
+		int ret = 0;
+		try {
+			if (file.startsWith("/"))
+				file = file.substring(1);
+			
+			AssetFileDescriptor afd = context.getAssets().openFd(file);
+			ret = (int)afd.getLength();
+			
+			afd.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ret;
 	}
 }

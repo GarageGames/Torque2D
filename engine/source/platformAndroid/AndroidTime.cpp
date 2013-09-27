@@ -23,6 +23,14 @@
 #include "platformAndroid/platformAndroid.h"
 #include "game/gameInterface.h"
 
+static double startupTime = 0;
+void android_StartupTime()
+{
+	struct timeval  tv;
+	gettimeofday(&tv, NULL);
+    startupTime = ((tv.tv_sec) * 1000.0 + (tv.tv_usec) / 1000.0);
+}
+
 #include <unistd.h>
 //--------------------------------------
 void Platform::getLocalTime(LocalTime &lt)
@@ -66,8 +74,8 @@ U32 Platform::getRealMilliseconds()
 {
    struct timeval  tv;
    gettimeofday(&tv, NULL);
-
-   return ((tv.tv_sec) * 1000.0 + (tv.tv_usec) / 1000.0);
+   double ret = ((tv.tv_sec) * 1000.0 + (tv.tv_usec) / 1000.0) - startupTime;
+   return (U32)ret;
 }   
 
 U32 Platform::getVirtualMilliseconds()

@@ -31,6 +31,7 @@
 extern AndroidPlatState platState;
 
 static void engine_term_display(struct engine* engine, bool shutdown);
+extern void android_StartupTime();
 
 T2DActivity activity;
 
@@ -968,6 +969,9 @@ void android_main(struct android_app* state) {
 
 	sleep(10);
 
+	//init startup time so U32 doesnt overflow
+	android_StartupTime();
+
     // Make sure glue isn't stripped.
     app_dummy();
 
@@ -1319,8 +1323,44 @@ bool android_IsDir(const char* path)
 
 U32 android_GetFileSize(const char* pFilePath)
 {
-	//TODO: get file size
-	return 0;
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return false;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FileWalker");
+	jclass FileWalkerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jstring strFileName = lJNIEnv->NewStringUTF(pFilePath);
+	jmethodID MethodFileWalker = lJNIEnv->GetStaticMethodID(FileWalkerClass, "GetFileSize", "(Landroid/content/Context;Ljava/lang/String;)I");
+	jint jsize = lJNIEnv->CallStaticIntMethod(FileWalkerClass, MethodFileWalker, lNativeActivity, strFileName);
+	long size = jsize;
+	lJNIEnv->DeleteLocalRef(strClassName);
+	lJNIEnv->DeleteLocalRef(strFileName);
+
+		// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+
+	return size;
 }
 
 ConsoleFunction(doDeviceVibrate, void, 1, 1, "Makes the device do a quick vibration. Only works on devices with vibration functionality.")

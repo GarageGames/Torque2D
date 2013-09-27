@@ -70,8 +70,8 @@ public:
     bool              backgrounded;
     bool              minimized;
 
-    S32               sleepTicks;
-    S32               lastTimeTick;
+    U32               sleepTicks;
+    U32               lastTimeTick;
 
     Point2I           windowSize;
 
