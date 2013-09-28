@@ -32,6 +32,9 @@
 #include "gui/guiCanvas.h"
 #include "game/gameInterface.h"
 
+extern int _AndroidGetScreenWidth();
+extern int _AndroidGetScreenHeight();
+
 IMPLEMENT_CONOBJECT(GuiCanvas);
 
 GuiCanvas *Canvas = NULL;
@@ -414,7 +417,7 @@ GuiCanvas::GuiCanvas()
    mBounds.set(0, 0, IOS_DEFAULT_RESOLUTION_X, IOS_DEFAULT_RESOLUTION_Y);
 #elif TORQUE_OS_ANDROID
    //TODO: this need to access something else?
-   mBounds.set(0, 0, ANDROID_DEFAULT_RESOLUTION_X, ANDROID_DEFAULT_RESOLUTION_Y);
+   mBounds.set(0, 0, _AndroidGetScreenWidth(), _AndroidGetScreenHeight());
 #else
    mBounds.set(0, 0, MIN_RESOLUTION_X, MIN_RESOLUTION_Y);
 #endif

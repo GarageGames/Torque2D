@@ -269,7 +269,7 @@ bool OpenGLDevice::setVerticalSync(bool on)
 
 Resolution Video::getDesktopResolution()
 {
-    return Resolution(ANDROID_DEFAULT_RESOLUTION_X, ANDROID_DEFAULT_RESOLUTION_Y, ANDROID_DEFAULT_RESOLUTION_BIT_DEPTH);
+    return Resolution(_AndroidGetScreenWidth(), _AndroidGetScreenHeight(), ANDROID_DEFAULT_RESOLUTION_BIT_DEPTH);
 }
 
 DisplayDevice *OpenGLDevice::create()

@@ -316,7 +316,7 @@ void androidKeyboardEvent(int keyval, bool make) {
    Game->postEvent(event);
 }
 
-Vector<Point2I> rawLastTouches;
+Point2I rawLastTouches[10];
 
 // Handle touch and keyboard input from android OS
 static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
@@ -334,19 +334,9 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
         		point.x = AMotionEvent_getX(event, i);
         		point.y = AMotionEvent_getY(event, i);
 
-        		if (rawLastTouches.size() < i+1)
-        			rawLastTouches.push_back(point);
-        		else
-        		{
-        			rawLastTouches[i].x = point.x;
-        			rawLastTouches[i].y = point.y;
-        		}
 
-        	    /*S32 orientation = _AndroidGameGetOrientation();
-        	    if (orientation == ACONFIGURATION_ORIENTATION_PORT)
-        	    {
-        	    	point.y -= _AndroidGetPortraitTouchoffset();
-        	    }*/
+        		rawLastTouches[i].x = point.x;
+        		rawLastTouches[i].y = point.y;
 
         	    createMouseDownEvent(i, point.x, point.y, touchCount);
         	}
@@ -363,15 +353,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				point.y = AMotionEvent_getY(event, i);
 				Point2I prevPoint = rawLastTouches[i];
 
-				/*S32 orientation = _AndroidGameGetOrientation();
-				if (orientation == ACONFIGURATION_ORIENTATION_PORT)
-				{
-					point.y -= _AndroidGetPortraitTouchoffset();
-					prevPoint.y -= _AndroidGetPortraitTouchoffset();
-				}*/
 				createMouseUpEvent(i, point.x, point.y, prevPoint.x, prevPoint.y, touchCount);
-
-    	        //Luma: Tap support
 
     	        if (touchCount > 0)
     	        {
@@ -391,12 +373,6 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				point.y = AMotionEvent_getY(event, i);
 				Point2I prevPoint = rawLastTouches[i];
 
-				/*S32 orientation = _AndroidGameGetOrientation();
-				if (orientation == ACONFIGURATION_ORIENTATION_PORT)
-				{
-					point.y -= _AndroidGetPortraitTouchoffset();
-					prevPoint.y -= _AndroidGetPortraitTouchoffset();
-				}*/
 				createMouseMoveEvent(i, point.x, point.y, prevPoint.x, prevPoint.y);
 
 				rawLastTouches[i].x = point.x;
@@ -415,16 +391,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				point.y = AMotionEvent_getY(event, i);
 				Point2I prevPoint = rawLastTouches[i];
 
-				/*S32 orientation = _AndroidGameGetOrientation();
-				if (orientation == ACONFIGURATION_ORIENTATION_PORT)
-				{
-					point.y -= _AndroidGetPortraitTouchoffset();
-					prevPoint.y -= _AndroidGetPortraitTouchoffset();
-				}*/
-
 				createMouseUpEvent(i, point.x, point.y, prevPoint.x, prevPoint.y, touchCount);
-
-				//Luma: Tap support
 
 				if (touchCount > 0)
 				{

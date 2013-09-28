@@ -60,8 +60,8 @@ AndroidPlatState::AndroidPlatState()
 
     // start with something reasonable.
     desktopBitsPixel = ANDROID_DEFAULT_RESOLUTION_BIT_DEPTH;
-    desktopWidth = ANDROID_DEFAULT_RESOLUTION_X;
-    desktopHeight = ANDROID_DEFAULT_RESOLUTION_Y;
+    desktopWidth = _AndroidGetScreenWidth();
+    desktopHeight = _AndroidGetScreenHeight();
     fullscreen = true;
 
     osVersion = 0;
