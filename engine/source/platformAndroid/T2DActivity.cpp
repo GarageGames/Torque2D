@@ -942,6 +942,8 @@ void android_main(struct android_app* state) {
     // Make sure glue isn't stripped.
     app_dummy();
 
+    platState.engine = &engine;
+
     memset(&engine, 0, sizeof(engine));
     state->userData = &engine;
     state->onAppCmd = engine_handle_cmd;
@@ -960,8 +962,6 @@ void android_main(struct android_app* state) {
         // We are starting with a previous saved state; restore from it.
         engine.state = *(struct saved_state*)state->savedState;
     }
-
-    platState.engine = &engine;
 
     keepScreenOn();
 
@@ -1291,7 +1291,7 @@ bool android_IsDir(const char* path)
 U32 android_GetFileSize(const char* pFilePath)
 {
 	// Attaches the current thread to the JVM.
-	jint lResult;
+	/*jint lResult;
 	jint lFlags = 0;
 
 	JavaVM* lJavaVM = engine.app->activity->vm;
@@ -1328,6 +1328,8 @@ U32 android_GetFileSize(const char* pFilePath)
 	lJavaVM->DetachCurrentThread();
 
 	return size;
+	*/
+	return 0;
 }
 
 ConsoleFunction(doDeviceVibrate, void, 1, 1, "Makes the device do a quick vibration. Only works on devices with vibration functionality.")

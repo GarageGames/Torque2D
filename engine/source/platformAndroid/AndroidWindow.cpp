@@ -60,8 +60,8 @@ AndroidPlatState::AndroidPlatState()
 
     // start with something reasonable.
     desktopBitsPixel = ANDROID_DEFAULT_RESOLUTION_BIT_DEPTH;
-    desktopWidth = _AndroidGetScreenWidth();
-    desktopHeight = _AndroidGetScreenHeight();
+    desktopWidth = ANDROID_DEFAULT_RESOLUTION_X;
+    desktopHeight = ANDROID_DEFAULT_RESOLUTION_Y;
     fullscreen = true;
 
     osVersion = 0;
@@ -160,8 +160,8 @@ bool gStatusBarHidden = true;
 //------------------------------------------------------------------------------
 void Platform::initWindow(const Point2I &initialSize, const char *name)
 {
-    S32 resolutionWidth = _AndroidGetScreenWidth();
-    S32 resolutionHeight = _AndroidGetScreenHeight();
+    S32 resolutionWidth = ANDROID_DEFAULT_RESOLUTION_X;
+    S32 resolutionHeight = ANDROID_DEFAULT_RESOLUTION_Y;
 
     dSprintf(platState.appWindowTitle, sizeof(platState.appWindowTitle), name);
 
