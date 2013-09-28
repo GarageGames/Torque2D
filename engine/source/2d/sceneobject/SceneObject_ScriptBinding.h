@@ -1469,7 +1469,7 @@ ConsoleMethod(SceneObject, setLinearVelocityPolar, void, 4, 4,   "(float angle, 
     mSinCos( angle, sin, cos );
 
     // Set Gross Linear Velocity.
-    object->setLinearVelocity( Vector2( sin*speed, -cos*speed ) );
+    object->setLinearVelocity( Vector2( cos*speed, -sin*speed ) );
 }
 
 //-----------------------------------------------------------------------------
@@ -1484,7 +1484,7 @@ ConsoleMethod(SceneObject, getLinearVelocityPolar, const char*, 2, 2, "() - Gets
     char* pBuffer = Con::getReturnBuffer(32);
 
     // Format Buffer.
-    dSprintf(pBuffer, 32, "%g %g", mRadToDeg(mAtan(linearVelocity.x, -linearVelocity.y)), linearVelocity.Length() );
+    dSprintf(pBuffer, 32, "%g %g", mRadToDeg(mAtan(linearVelocity.x, linearVelocity.y)), linearVelocity.Length() );
 
     // Return Velocity.
     return pBuffer;

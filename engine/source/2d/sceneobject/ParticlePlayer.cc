@@ -1432,7 +1432,7 @@ void ParticlePlayer::integrateParticle( EmitterNode* pEmitterNode, ParticleSyste
     if ( pParticleAssetEmitter->getKeepAligned() && pParticleAssetEmitter->getOrientationType() == ParticleAssetEmitter::ALIGNED_ORIENTATION )
     {
         // Yes, so calculate last movement direction.
-        F32 movementAngle = mRadToDeg( mAtan( pParticleNode->mVelocity.x, -pParticleNode->mVelocity.y ) );
+        F32 movementAngle = mRadToDeg( mAtan( pParticleNode->mVelocity.x, pParticleNode->mVelocity.y ) );
 
         // Adjust for negative ArcTan quadrants.
         if ( movementAngle < 0.0f )

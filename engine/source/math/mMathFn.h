@@ -408,7 +408,7 @@ inline F32 mAcos(const F32 val)
 
 inline F32 mAtan(const F32 x, const F32 y)
 {
-   return (F32) atan2(x, y);
+   return (F32) atan2(y, x);
 }
 
 inline void mSinCos(const F32 angle, F32 &s, F32 &c)
@@ -465,7 +465,7 @@ inline F64 mAcos(const F64 val)
 
 inline F64 mAtan(const F64 x, const F64 y)
 {
-   return (F64) atan2(x, y);
+   return (F64) atan2(y, x);
 }
 
 inline void mSinCos(const F64 angle, F64 &sin, F64 &cos)
@@ -608,18 +608,6 @@ inline F64 mDegToRad(F64 d)
 inline F64 mRadToDeg(F64 r)
 {
    return (r * 180.0) / M_PI;
-}
-
-/// Get an angle flipping the Y (along the X axis).
-inline F32 mGetFlippedXAngle( const F32 radians )
-{
-    return mAtan(-mSin(radians), mCos(radians));
-}
-
-/// Get an angle flipping the Y (along the X axis).
-inline F32 mGetFlippedYAngle( const F32 radians )
-{
-    return mAtan(mSin(radians), -mCos(radians));
 }
 
 /// Precision Rounding.

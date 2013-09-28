@@ -237,7 +237,7 @@ ConsoleFunction( Vector2AngleToPoint, F32, 3, 3, "(Vector2 p1, Vector2 p1) - Ret
     Vector2 p2( argv[2] );
 
     // Do Operation.
-    return mRadToDeg( mAtan((p2.x - p1.x), (p1.y - p2.y)) );
+    return mRadToDeg( mAtan((p2.x - p1.x), (p2.y - p1.y)) );
 }
 
 //-----------------------------------------------------------------------------

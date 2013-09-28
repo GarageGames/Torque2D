@@ -149,7 +149,7 @@ ConsoleFunction( mSin, F32, 2, 2, "( val ) Use the mSin function to get the sine
                                                                 "@return Returns the sine of val. This value will be in the range [ -1.0 , 1.0 ].\n"
                                                                 "@sa mAsin")
 {
-   return(mSin(dAtof(argv[1])));
+   return(mSin(mDegToRad(dAtof(argv[1]))));
 }
 
 ConsoleFunction( mCos, F32, 2, 2, "( val ) Use the mCos function to get the cosine of the radian angle val.\n"
@@ -157,7 +157,7 @@ ConsoleFunction( mCos, F32, 2, 2, "( val ) Use the mCos function to get the cosi
                                                                 "@return Returns the cosine of val. This value will be in the range [ -1.0 , 1.0 ].\n"
                                                                 "@sa mAcos")
 {
-   return(mCos(dAtof(argv[1])));
+   return(mCos(mDegToRad(dAtof(argv[1]))));
 }
 
 ConsoleFunction( mTan, F32, 2, 2, "( val ) Use the mTan function to get the tangent of the radian angle val.\n"
@@ -165,32 +165,50 @@ ConsoleFunction( mTan, F32, 2, 2, "( val ) Use the mTan function to get the tang
                                                                 "@return Returns the tangent of val. This value will be in the range [ -inf.0 , inf.0 ].\n"
                                                                 "@sa mAtan")
 {
-   return(mTan(dAtof(argv[1])));
+   return(mTan(mDegToRad(dAtof(argv[1]))));
 }
 
 ConsoleFunction( mAsin, F32, 2, 2, "( val ) Use the mAsin function to get the inverse sine of val in radians.\n"
                                                                 "@param val A value between -1.0 and 1.0 equal to the sine of some angle theta.\n"
-                                                                "@return Returns the inverse sine of val in radians. This value will be in the range [ - 3.14159/2 , 3.14159/2 ].\n"
+                                                                "@return Returns the inverse sine of val in degrees. This value will be in the range [ -90,90 ].\n"
                                                                 "@sa mSin")
 {
-   return(mAsin(dAtof(argv[1])));
+   return(mRadToDeg(mAsin(dAtof(argv[1]))));
 }
 
 ConsoleFunction( mAcos, F32, 2, 2, "( val ) Use the mAcos function to get the inverse cosine of val in radians.\n"
                                                                 "@param val A value between -1.0 and 1.0 equal to the cosine of some angle theta.\n"
-                                                                "@return Returns the inverse cosine of val in radians. This value will be in the range [ 0 , 3.14159 ].\n"
+                                                                "@return Returns the inverse cosine of val in degrees. This value will be in the range [ 0 , 180 ].\n"
                                                                 "@sa mCos")
 {
-   return(mAcos(dAtof(argv[1])));
+   return(mRadToDeg(mAcos(dAtof(argv[1]))));
 }
 
-ConsoleFunction( mAtan, F32, 3, 3, "( val ) Use the mAtan function to get the inverse tangent of rise/run in radians.\n"
-                                                                "@param rise Vertical component of a line.\n"
-                                                                "@param run Horizontal component of a line.\n"
-                                                                "@return Returns the slope in radians (the arc-tangent) of a line with the given rise and run.\n"
+ConsoleFunction( mAtan, F32, 2, 3, "( [x-run y-rise] ) Use the mAtan function to get the inverse tangent of rise/run in radians.\n"
+                                                                "@param x-run Horizontal component of a line.\n"
+                                                                "@param y-rise Vertical component of a line.\n"
+                                                                "May be called as mAtan( 1, 1 ) or mAtan( \"1 1\" ).\n"
+                                                                "@return Returns the inverse tangent in degrees of a line with the given rise and run.\n"
                                                                 "@sa mTan")
 {
-   return(mAtan(dAtof(argv[1]), dAtof(argv[2])));
+   F32 xRun, yRise;
+
+   if( argc == 3 )
+   {
+     xRun = dAtof( argv[1] );
+     yRise = dAtof( argv[2] );
+   }
+   else if( StringUnit::getUnitCount( argv[1], " " ) == 2 )
+   {
+     dSscanf( argv[1], "%g %g", &xRun, &yRise );
+   }
+   else
+   {
+     Con::warnf( "mAtan - Invalid parameters" );
+     return 0;
+   }
+
+   return(mRadToDeg(mAtan(xRun,yRise)));
 }
 
 ConsoleFunction( mRadToDeg, F32, 2, 2, "( val ) Use the mRadToDeg function to convert radians to degrees.\n"
