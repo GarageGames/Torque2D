@@ -38,6 +38,8 @@
 #include "collection/simpleHashTable.h"
 #include "memory/safeDelete.h"
 
+#include "dispatcher_ScriptBinding.h"
+
 namespace Dispatcher
 {
 
@@ -298,87 +300,3 @@ extern void unlockDispatcherMutex()
 }
 
 } // end namespace Dispatcher
-
-//////////////////////////////////////////////////////////////////////////
-// Console Methods
-//////////////////////////////////////////////////////////////////////////
-
-using namespace Dispatcher;
-
-ConsoleFunction(isQueueRegistered, bool, 2, 2, "(queueName) Checks whether message queue is registered\n"
-                "@param queueName The name of the queue to check\n"
-                "@return Returns true if registered and false if not")
-{
-   return isQueueRegistered(argv[1]);
-}
-
-ConsoleFunction(registerMessageQueue, void, 2, 2, "(queueName) Registers given message queue\n"
-                "@param queueName The name of the message queue\n"
-                "@return No Return Value")
-{
-   return registerMessageQueue(argv[1]);
-}
-
-ConsoleFunction(unregisterMessageQueue, void, 2, 2, "(queueName) Unregisters given message queue\n"
-                "@param The name of the message queue\n"
-                "@return No Return Value")
-{
-   return unregisterMessageQueue(argv[1]);
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-ConsoleFunction(registerMessageListener, bool, 3, 3, "(queueName, listener) Registers a message listener on a message queue\n"
-                "@param queueName The name of the message queue\n"
-                "@param listener The name of the listener to register\n"
-                "@return Returns true on success, and false otherwise (probably not found)")
-{
-   IMessageListener *listener = dynamic_cast<IMessageListener *>(Sim::findObject(argv[2]));
-   if(listener == NULL)
-   {
-      Con::errorf("registerMessageListener - Unable to find listener object, not an IMessageListener ?!");
-      return false;
-   }
-
-   return registerMessageListener(argv[1], listener);
-}
-
-ConsoleFunction(unregisterMessageListener, void, 3, 3, "(queueName, listener) Unregisters the message listener on given message queue"
-                "@param queueName The name of the message queue\n"
-                "@param listener The name of the listener to unregister\n"
-                "@return No Return Value")
-{
-   IMessageListener *listener = dynamic_cast<IMessageListener *>(Sim::findObject(argv[2]));
-   if(listener == NULL)
-   {
-      Con::errorf("unregisterMessageListener - Unable to find listener object, not an IMessageListener ?!");
-      return;
-   }
-
-   unregisterMessageListener(argv[1], listener);
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-ConsoleFunction(dispatchMessage, bool, 3, 4, "(queueName, event, data) Dispatches a message to given message queue\n"
-                "@param queueName The queue to dispatch to\n"
-                "@param event The message you are passing\n"
-                "@param data Data\n"
-                "@return Returns true on success and false otherwise")
-{
-   return dispatchMessage(argv[1], argv[2], argc > 3 ? argv[3] : "" );
-}
-
-ConsoleFunction(dispatchMessageObject, bool, 3, 3, "(queueName, message) Dispatches a message object to the given queue\n"
-                "@param queueName The name of the queue to dispatch object to\n"
-                "@param message The message object\n")
-{
-   Message *msg = dynamic_cast<Message *>(Sim::findObject(argv[2]));
-   if(msg == NULL)
-   {
-      Con::errorf("dispatchMessageObject - Unable to find message object");
-      return false;
-   }
-
-   return dispatchMessageObject(argv[1], msg);
-}

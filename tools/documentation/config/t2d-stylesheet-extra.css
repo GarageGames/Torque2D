@@ -1,0 +1,97 @@
+/* the symbol listing at the top of the page would normally have bold symbol names
+   let's try removing the boldness */
+a.el {
+	font-weight: normal;
+}
+
+/* in the description section, function/method parameters are one to a line.
+   let's combine them on a line */
+.memname tr {
+	float: left;
+}
+
+/* parameter names are bright, dark red.
+   would prefer something that doesn't look like a warning */
+.paramname {
+	color: #707070;
+}
+
+/* not only were our parameter names "warning" red colored,
+   they were bold.  let's go to normal */
+/* note that we change several classes here since they were lumped together
+   in doxygen.css as well.  by the same point, the color was specific to the
+   paramname class
+*/
+.params .paramname, .retval .paramname {
+		font-weight: normal;
+}
+
+/* beautify h2 with an underline */
+h2 {
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: rgb(204, 204, 204);
+}
+
+/* comment text was red.  let's try dark grey */
+span.comment {
+	color: #777799
+}
+
+/* could use more space between lines */
+body, table, div, p, dl, div.line {
+	line-height: 22px;
+}
+
+/* limit body size for looks */
+/* also center it (kinda experimental for a reference work */
+body {
+	max-width: 850px;
+	min-width: 500px;
+	margin: 0 auto;
+	text-align: left;
+}
+
+/* code fragments should not wrap lines but provide a scroll bar */
+.fragment {
+	overflow: auto;
+}
+
+/* "white-space: pre;" does not seem to work (in Chrome at least)
+   According to http://www.w3schools.com/cssref/pr_text_white-space.asp,
+   this should not wrap but only break on linebreaks (like <pre>).  It
+   does not.  On the other hand, "nowrap" looks good, but collapses the
+   white space (like at the beginning of code lines).
+*/
+div.line {
+	white-space: pre;
+}
+
+/*
+line-height: 19px; 22px
+margin-bottom: 15px margin-top: 15px
+19px in code
+
+div.line {
+	min-height: 13px;
+	line-height: 1.0;
+}
+*/
+
+/* mute the tables a bit.  if there are lots of them, it can get overwhelming */
+table.doxtable td, table.doxtable th {
+	border: 1px solid rgb(200,200,200);
+}
+
+table.doxtable th {
+	background-color: rgb(135,160,200);
+	color: #FFFFFF;
+	font-size: 100%;
+	font-weight: normal;
+}
+
+/* make in-line code similar to boxes of code */
+code {
+	background-color: rgb(240,240,250);
+	/* color: rgb(40, 40, 80); */
+}

@@ -204,9 +204,6 @@
     <ClCompile Include="..\..\source\audio\audioDataBlock.cc">
       <Filter>audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\audio\audioFunctions.cc">
-      <Filter>audio</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\audio\audioStreamSourceFactory.cc">
       <Filter>audio</Filter>
     </ClCompile>
@@ -283,9 +280,6 @@
       <Filter>math</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\math\mBox.cc">
-      <Filter>math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\math\mConsoleFunctions.cc">
       <Filter>math</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\math\mMath_C.cc">
@@ -951,9 +945,6 @@
     <ClCompile Include="..\..\source\memory\dataChunker.cc">
       <Filter>memory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\memory\frameAllocator.cc">
-      <Filter>memory</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\algorithm\crc.cc">
       <Filter>algorithm</Filter>
     </ClCompile>
@@ -1013,9 +1004,6 @@
     </ClCompile>
     <ClCompile Include="..\..\source\network\tcpObject.cc">
       <Filter>network</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\io\fileSystemFunctions.cpp">
-      <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\string\stringBuffer.cc">
       <Filter>string</Filter>
@@ -1215,9 +1203,6 @@
     <ClCompile Include="..\..\source\platform\platformFont.cc">
       <Filter>platform</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\platform\platformNetwork.cc">
-      <Filter>platform</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\network\networkProcessList.cc">
       <Filter>network</Filter>
     </ClCompile>
@@ -1331,6 +1316,27 @@
     </ClCompile>
     <ClCompile Include="..\..\source\gui\containers\guiGridCtrl.cc">
       <Filter>gui\containers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\console\metaScripting_ScriptBinding.cc">
+      <Filter>console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\audio\audio_ScriptBinding.cc">
+      <Filter>audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\io\fileSystem_ScriptBinding.cc">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\math\math_ScriptBinding.cc">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\platform\platformNetwork_ScriptBinding.cc">
+      <Filter>platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\memory\frameAllocator_ScriptBinding.cc">
+      <Filter>memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\console\Package.cc">
+      <Filter>console</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2105,9 +2111,6 @@
     <ClInclude Include="..\..\source\io\bufferStream.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\io\fileio.h">
-      <Filter>io</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\io\fileObject.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -2600,7 +2603,6 @@
     <ClInclude Include="..\..\source\2d\core\ParticleSystem.h">
       <Filter>2d\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\torqueConfig.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\ImageFont.h">
       <Filter>2d\sceneobject</Filter>
     </ClInclude>
@@ -2756,6 +2758,226 @@
     </ClInclude>
     <ClInclude Include="..\..\source\gui\containers\guiGridCtrl.h">
       <Filter>gui\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\sim\simBase_ScriptBinding.h">
+      <Filter>sim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\input\actionMap_ScriptBinding.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\gui\guiCanvas_ScriptBinding.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platform\platformString_ScriptBinding.h">
+      <Filter>platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\string\stringUnit_ScriptBinding.h">
+      <Filter>string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\output_ScriptBinding.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platform\platformVideo_ScriptBinding.h">
+      <Filter>platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\version_ScriptBinding.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\expando_ScriptBinding.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\graphics\color_ScriptBinding.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\sim\simObject_ScriptBinding.h">
+      <Filter>sim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\sim\simSet_ScriptBinding.h">
+      <Filter>sim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\persistence\SimXMLDocument_ScriptBinding.h">
+      <Filter>persistence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\messaging\eventManager_ScriptBinding.h">
+      <Filter>messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\io\fileObject_ScriptBinding.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platform\nativeDialogs\fileDialog_ScriptBinding.h">
+      <Filter>platform\nativeDialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\consoleLogger_ScriptBinding.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\netConnection_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\gameConnection_ScriptBinding.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platform\menus\popupMenu_ScriptBinding.h">
+      <Filter>platform\menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\io\streamObject_ScriptBinding.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\collection\undo_ScriptBinding.h">
+      <Filter>collection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\consoleDoc_ScriptBinding.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\messaging\dispatcher_ScriptBinding.h">
+      <Filter>messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\math\random_ScriptBinding.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\math\matrix_ScriptBinding.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\math\vector_ScriptBinding.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\math\box_ScriptBinding.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\component\simComponent_ScriptBinding.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\component\dynamicConsoleMethodComponent_ScriptBinding.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\io\fileStreamObject_ScriptBinding.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\httpObject_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\messaging\message_ScriptBinding.h">
+      <Filter>messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\tcpObject_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\netObject_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\sim\simSerialize_ScriptBinding.h">
+      <Filter>sim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\graphics\PNGImage_ScriptBinding.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\consoleNamespace_ScriptBinding.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\graphics\gFont_ScriptBinding.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\serverQuery_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platform\platformAssert_ScriptBinding.h">
+      <Filter>platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platform\platformFileIO_ScriptBinding.h">
+      <Filter>platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\debug\profiler_ScriptBinding.h">
+      <Filter>debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\debug\telnetDebugger_ScriptBinding.h">
+      <Filter>debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\RemoteCommandEvent_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\RemoteCommandEvent.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\io\resource\resourceManager_ScriptBinding.h">
+      <Filter>io\resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\graphics\TextureManager_ScriptBinding.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\torqueConfig.h" />
+    <ClInclude Include="..\..\source\platformWin32\cardProfile_ScriptBinding.h">
+      <Filter>platformWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\connectionProtocol_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\consoleExprEvalState_ScriptBinding.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\taggedStrings_ScriptBinding.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\inputManagement_ScriptBinding.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platform\CursorManager_ScriptBinding.h">
+      <Filter>platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\graphics\dgl_ScriptBinding.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\graphics\dglMac_Scriptbinding.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platformWin32\winOGLVideo_ScriptBinding.h">
+      <Filter>platformWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platformWin32\winInput_ScriptBinding.h">
+      <Filter>platformWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\core\Utility_ScriptBinding.h">
+      <Filter>2d\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platformWin32\winExec_ScriptBinding.h">
+      <Filter>platformWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platformWin32\winGLSpecial_ScriptBinding.h">
+      <Filter>platformWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platformWin32\winConsole_ScriptBinding.h">
+      <Filter>platformWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\netInterface_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\netStringTable_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\network\telnetConsole_ScriptBinding.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\testing\unitTesting_ScriptBinding.h">
+      <Filter>testing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platform\nativeDialogs\msgBox_ScriptBinding.h">
+      <Filter>platform\nativeDialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\sim\simDatablock_ScriptBinding.h">
+      <Filter>sim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platformWin32\winMath_ScriptBinding.h">
+      <Filter>platformWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\string\stringBuffer_ScriptBinding.h">
+      <Filter>string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\io\zip\zipObject_ScriptBinding.h">
+      <Filter>io\zip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\gui\guiControl_ScriptBinding.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\console\Package.h">
+      <Filter>console</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

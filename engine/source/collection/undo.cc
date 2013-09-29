@@ -25,6 +25,8 @@
 #include "console/console.h"
 #include "console/consoleTypes.h"
 
+#include "undo_ScriptBinding.h"
+
 //-----------------------------------------------------------------------------
 // UndoAction
 //-----------------------------------------------------------------------------
@@ -35,6 +37,11 @@ UndoAction::UndoAction( const UTF8* actionName)
 {
    mActionName = StringTable->insert(actionName);
    mUndoManager = NULL;
+}
+
+S32 UndoManager::getRedoCount()
+{
+   return mRedoStack.size();
 }
 
 // Modified to clean up quiet sub actions [KNM | 08/10/11 | ITGB-152]
@@ -139,12 +146,6 @@ UndoManager& UndoManager::getDefaultManager()
       defaultMan->registerObject();
    }
    return *defaultMan;
-}
-
-ConsoleMethod(UndoManager, clearAll, void, 2, 2, "Clears the undo manager."
-              "@return No Return Value")
-{
-   object->clearAll();
 }
 
 void UndoManager::clearAll()
@@ -263,21 +264,9 @@ void UndoManager::redo()
    (*react).redo();
 }
 
-ConsoleMethod(UndoManager, getUndoCount, S32, 2, 2, "() \n @return Returns the number of UndoActions stored as an integer")
-{
-   return object->getUndoCount();
-}
-
 S32 UndoManager::getUndoCount()
 {
    return mUndoStack.size();
-}
-
-ConsoleMethod(UndoManager, getUndoName, const char*, 3, 3, "( S32 index ) Gets the name of the UndoAction at given index.\n "
-              "@param index An integer index value for the desired undo\n"
-              "@return The name as a string")
-{
-   return object->getUndoName(dAtoi(argv[2]));
 }
 
 StringTableEntry UndoManager::getUndoName(S32 index)
@@ -286,23 +275,6 @@ StringTableEntry UndoManager::getUndoName(S32 index)
       return mUndoStack[index]->mActionName;
 
    return NULL;
-}
-
-ConsoleMethod(UndoManager, getRedoCount, S32, 2, 2, "() \n @return Returns the number of redo Actions stored as an integer")
-{
-   return object->getRedoCount();
-}
-
-S32 UndoManager::getRedoCount()
-{
-   return mRedoStack.size();
-}
-
-ConsoleMethod(UndoManager, getRedoName, const char*, 3, 3, "( S32 index ) Gets the name of the Action at given index.\n "
-              "@param index An integer index value for the desired redo\n"
-              "@return The name as a string")
-{
-   return object->getRedoName(dAtoi(argv[2]));
 }
 
 StringTableEntry UndoManager::getRedoName(S32 index)
@@ -345,57 +317,4 @@ void UndoManager::addAction(UndoAction* action)
 
    // clear the redo stack
    clearStack(mRedoStack);
-}
-
-//-----------------------------------------------------------------------------
-ConsoleMethod(UndoAction, addToManager, void, 2, 3, "action.addToManager([undoManager]) Adds an UndoAction to the manager"
-              "@param undoManager The manager to add the object to (default NULL)\n"
-              "@return No Return Value")
-{
-   UndoManager *theMan = NULL;
-   if(argc == 3)
-   {
-      SimObject *obj = Sim::findObject(argv[2]);
-      if(obj)
-         theMan = dynamic_cast<UndoManager*> (obj);
-   }
-   object->addToManager(theMan);
-}
-
-//-----------------------------------------------------------------------------
-ConsoleMethod(UndoManager, undo, void, 2, 2, "UndoManager.undo(); Pops the top undo action off the stack, resolves it, "
-                                            "and then pushes it onto the redo stack")
-{
-   object->undo();
-}
-
-//-----------------------------------------------------------------------------
-ConsoleMethod(UndoManager, redo, void, 2, 2, "UndoManager.redo(); Pops the top redo action off the stack, resolves it, "
-                                            "and then pushes it onto the undo stack")
-{
-   object->redo();
-}
-
-//-----------------------------------------------------------------------------
-ConsoleMethod(UndoManager, getNextUndoName, const char *, 2, 2, "UndoManager.getNextUndoName(); Gets the name of the action at the top of the undo stack\n"
-              "@return The name of the top action on the undo stack")
-{
-   StringTableEntry name = object->getNextUndoName();
-   if(!name)
-      return NULL;
-   char *ret = Con::getReturnBuffer(dStrlen(name) + 1);
-   dStrcpy(ret, name);
-   return ret;
-}
-
-//-----------------------------------------------------------------------------
-ConsoleMethod(UndoManager, getNextRedoName, const char *, 2, 2, "UndoManager.getNextRedoName(); Gets the name of the action at the top of the undo stack\n"
-              "@return The name of the top action on the redo stack")
-{
-   StringTableEntry name = object->getNextRedoName();
-   if(!name)
-      return NULL;
-   char *ret = Con::getReturnBuffer(dStrlen(name) + 1);
-   dStrcpy(ret, name);
-   return ret;
 }

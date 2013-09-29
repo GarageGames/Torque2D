@@ -82,42 +82,6 @@ static EnumTable::Enums curManagerShapesEnums[] =
       
 static EnumTable gCurManagerShapesTable(8, &curManagerShapesEnums[0]); 
 
-//*** Console function to set the current cursor shape given the cursor shape
-//*** name as defined in the enum above.
-ConsoleFunction( inputPushCursor, void, 2, 2, "(cursorShapeName) Set's the current cursor to one specified"
-                "@param cursorShapeName Name corresponding to enumerated shape value: \"Arrow\", \"Wait\", \"Plus\", \"ResizeVert\", \"ResizeHorz\", "
-                "\"ResizeAll\", \"ibeam\", \"ResizeNESW\", \"ResizeNWSE\"\n"
-                "@return No Return Value")
-{
-   S32 val = 0;
+//------------------------------------------------------------------------------
 
-   //*** Find the cursor shape
-   if(argc == 2)
-   {
-      for (S32 i = 0; i < gCurManagerShapesTable.size; i++)
-      {
-         if (! dStricmp(argv[1], gCurManagerShapesTable.table[i].label))
-         {
-            val = gCurManagerShapesTable.table[i].index;
-            break;
-         }
-      }
-   }
-
-   //*** Now set it
-   CursorManager* cm = Input::getCursorManager();
-   if(cm)
-   {
-      cm->pushCursor(val);
-   }
-}
-//*** Function to pop the current cursor shape
-ConsoleFunction( inputPopCursor, void, 1, 1, "() Pops the current cursor shape from manager stack\n"
-                "@return No Return Value.")
-{
-   CursorManager* cm = Input::getCursorManager();
-   if(cm)
-   {
-      cm->popCursor();
-   }
-}
+#include "CursorManager_ScriptBinding.h"

@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,57 +24,71 @@
 #include "platform/platformInput.h"
 
 //------------------------------------------------------------------------------
-ConsoleFunction( activateKeyboard, bool, 1, 1, "() Use the activateKeyboard function to enable directInput polling of the keyboard.\n"
-																"@return Returns a true if polling was successfully enabled.\n"
-																"@sa deactivateKeyboard")
+/*! Use the activateKeyboard function to enable directInput polling of the keyboard.
+    @return Returns a true if polling was successfully enabled.
+    @sa deactivateKeyboard
+*/
+ConsoleFunctionWithDocs( activateKeyboard, ConsoleBool, 1, 1, ())
 {
 	return Input::activateKeyboard();
 }
 
 //------------------------------------------------------------------------------
-ConsoleFunction( deactivateKeyboard, void, 1, 1, "() Use the deactivateKeyboard function to disable directInput polling of the keyboard.\n"
-																"@return No return value.\n"
-																"@sa activateKeyboard")
+/*! Use the deactivateKeyboard function to disable directInput polling of the keyboard.
+    @return No return value.
+    @sa activateKeyboard
+*/
+ConsoleFunctionWithDocs( deactivateKeyboard, ConsoleVoid, 1, 1, ())
 {
 	Input::deactivateKeyboard();
 }
 
 //------------------------------------------------------------------------------
-ConsoleFunction( enableMouse, void, 1, 1, "() Use the enableMouse function to enable mouse input.\n"
-																"@return No return value.\n"
-																"@sa disableMouse")
+/*! Use the enableMouse function to enable mouse input.
+    @return No return value.
+    @sa disableMouse
+*/
+ConsoleFunctionWithDocs( enableMouse, ConsoleVoid, 1, 1, ())
 {
 	Input::enableMouse();
 }
 
 //------------------------------------------------------------------------------
-ConsoleFunction( disableMouse, void, 1, 1, "() Use the disableMouse function to disable mouse input.\n"
-																"@return No return value.\n"
-																"@sa enableMouse")
+/*! Use the disableMouse function to disable mouse input.
+    @return No return value.
+    @sa enableMouse
+*/
+ConsoleFunctionWithDocs( disableMouse, ConsoleVoid, 1, 1, ())
 {
 	Input::disableMouse();
 }
 
 //------------------------------------------------------------------------------
-ConsoleFunction( enableJoystick, bool, 1, 1, "() Use the enableJoystick function to enable joystick input if it is present.\n"
-																"@return Will return true if the joystick is present and was successfully enabled, false otherwise.\n"
-																"@sa disableJoystick, getJoystickAxes, isJoystickDetected")
+/*! Use the enableJoystick function to enable joystick input if it is present.
+    @return Will return true if the joystick is present and was successfully enabled, false otherwise.
+    @sa disableJoystick, getJoystickAxes, isJoystickDetected
+*/
+ConsoleFunctionWithDocs( enableJoystick, ConsoleBool, 1, 1, ())
 {
 	return Input::enableJoystick();
 }
 
 //------------------------------------------------------------------------------
-ConsoleFunction( disableJoystick, void, 1, 1, "() Use the disableJoystick function to disable joystick input.\n"
-																"@return No return value.\n"
-																"@sa enableJoystick, getJoystickAxes, isJoystickEnabled")
+/*! Use the disableJoystick function to disable joystick input.
+    @return No return value.
+    @sa enableJoystick, getJoystickAxes, isJoystickEnabled
+*/
+ConsoleFunctionWithDocs( disableJoystick, ConsoleVoid, 1, 1, ())
 {
 	Input::disableJoystick();
 }
 
 //------------------------------------------------------------------------------
-ConsoleFunction( echoInputState, void, 1, 1, "() Use the echoInputState function to dump the input state of the mouse, keyboard, and joystick to the console.\n"
-																"@return No return value.\n"
-																"@sa activateDirectInput, deactivateDirectInput, activateKeyboard, deactivateKeyboard, disableJoystick, enableJoystick, enableMouse, disableMouse")
+/*! Use the echoInputState function to dump the input state of the mouse, keyboard, and joystick to the console.
+    @return No return value.
+    @sa activateDirectInput, deactivateDirectInput, activateKeyboard, deactivateKeyboard, disableJoystick, enableJoystick, enableMouse, disableMouse
+*/
+ConsoleFunctionWithDocs( echoInputState, ConsoleVoid, 1, 1, ())
 {
 	Input::echoInputState();
 }

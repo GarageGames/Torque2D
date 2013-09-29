@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,8 +20,12 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(BehaviorTemplate, createInstance, S32, 2, 2, "() - Create an instance of this behavior.\n"
-              "@return (BehaviorInstance inst) The behavior instance created")
+ConsoleMethodGroupBeginWithDocs(BehaviorTemplate, SimObject)
+
+/*! Create an instance of this behavior.
+    @return (BehaviorInstance inst) The behavior instance created
+*/
+ConsoleMethodWithDocs(BehaviorTemplate, createInstance, ConsoleInt, 2, 2, ())
 {
    BehaviorInstance *inst = object->createInstance();
    return inst ? inst->getId() : 0;
@@ -29,16 +33,18 @@ ConsoleMethod(BehaviorTemplate, createInstance, S32, 2, 2, "() - Create an insta
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(BehaviorTemplate, addBehaviorField, bool, 5, 7, "(fieldName, desc, type, [defaultValue, userData])\n"
-              "Adds a named BehaviorField to a Behavior Template\n"
-              "@param fieldName The name of this field\n"
-              "@param desc The Description of this field\n"
-              "@param type The DataType for this field (default, int, float, Point2F, bool, enum, Object, keybind, color)\n"
-              "@param defaultValue The Default value for this field\n"
-              "@param userData An extra data field that can be used for custom data on a per-field basis<br>Usage for default types<br>"
-              "-enum: a TAB separated list of possible values<br>"
-              "-object: the scene-object type that are valid choices for the field.  The object types observe inheritance, so if you have a SceneObject field you will be able to choose t2dStaticSrpites, t2dAnimatedSprites, etc.\n"
-              "@return Whether the field was added or not.\n")
+/*! 
+    Adds a named BehaviorField to a Behavior Template
+    @param fieldName The name of this field
+    @param desc The Description of this field
+    @param type The DataType for this field (default, int, float, Point2F, bool, enum, Object, keybind, color)
+    @param defaultValue The Default value for this field
+    @param userData An extra data field that can be used for custom data on a per-field basis<br>Usage for default types<br>
+    -enum: a TAB separated list of possible values<br>
+    -object: the scene-object type that are valid choices for the field.  The object types observe inheritance, so if you have a SceneObject field you will be able to choose t2dStaticSrpites, t2dAnimatedSprites, etc.
+    @return Whether the field was added or not.
+*/
+ConsoleMethodWithDocs(BehaviorTemplate, addBehaviorField, ConsoleBool, 5, 7, (fieldName, desc, type, [defaultValue, userData]))
 {
     const char *defValue = argc > 5 ? argv[5] : NULL;
     const char *typeInfo = argc > 6 ? argv[6] : NULL;
@@ -48,17 +54,21 @@ ConsoleMethod(BehaviorTemplate, addBehaviorField, bool, 5, 7, "(fieldName, desc,
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(BehaviorTemplate, getBehaviorFieldCount, S32, 2, 2,   "() - Get the number of behavior fields.\n"
-                                                                    "@return Returns the number of behavior fields.\n")
+/*! Get the number of behavior fields.
+    @return Returns the number of behavior fields.
+*/
+ConsoleMethodWithDocs(BehaviorTemplate, getBehaviorFieldCount, ConsoleInt, 2, 2, ())
 {
     return object->getBehaviorFieldCount();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(BehaviorTemplate, getBehaviorField, const char *, 3, 3,   "(int fieldIndex) - Gets a tab-delimited description of the behavior field.\n"
-                                                                        "@param fieldIndex The index of the behavior field.\n"
-                                                                        "@return A tab-delimited description of the behavior field of the format <Name><Type><DefaultValue> or an empty string if behavior field is not found.\n")
+/*! Gets a tab-delimited description of the behavior field.
+    @param fieldIndex The index of the behavior field.
+    @return A tab-delimited description of the behavior field of the format <Name><Type><DefaultValue> or an empty string if behavior field is not found.
+*/
+ConsoleMethodWithDocs(BehaviorTemplate, getBehaviorField, ConsoleString, 3, 3, (int fieldIndex))
 {
 
     // Fetch behavior field.
@@ -80,9 +90,11 @@ ConsoleMethod(BehaviorTemplate, getBehaviorField, const char *, 3, 3,   "(int fi
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(BehaviorTemplate, getBehaviorFieldUserData, const char *, 3, 3,   "(int fieldIndex) - Gets the UserData associated with a field by index in the field list\n"
-                                                                                "@param fieldIndex The index of the behavior field.\n"
-                                                                                "@return Returns a string representing the user data of this field\n")
+/*! Gets the UserData associated with a field by index in the field list
+    @param fieldIndex The index of the behavior field.
+    @return Returns a string representing the user data of this field
+*/
+ConsoleMethodWithDocs(BehaviorTemplate, getBehaviorFieldUserData, ConsoleString, 3, 3, (int fieldIndex))
 {
     // Fetch behavior field.
     BehaviorTemplate::BehaviorField* pField = object->getBehaviorField( dAtoi(argv[2]) );
@@ -100,9 +112,11 @@ ConsoleMethod(BehaviorTemplate, getBehaviorFieldUserData, const char *, 3, 3,   
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(BehaviorTemplate, getBehaviorFieldDescription, const char *, 3, 3,    "(int fieldIndex) - Gets the description of the field.\n"
-                                                                                    "@param fieldIndex The index of the behavior field.\n"
-                                                                                    "@return Returns the field description.\n")
+/*! Gets the description of the field.
+    @param fieldIndex The index of the behavior field.
+    @return Returns the field description.
+*/
+ConsoleMethodWithDocs(BehaviorTemplate, getBehaviorFieldDescription, ConsoleString, 3, 3, (int fieldIndex))
 {
     // Fetch behavior field.
     BehaviorTemplate::BehaviorField* pField = object->getBehaviorField( dAtoi(argv[2]) );
@@ -119,11 +133,13 @@ ConsoleMethod(BehaviorTemplate, getBehaviorFieldDescription, const char *, 3, 3,
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(BehaviorTemplate, addBehaviorOutput, bool, 5, 5,  "(outputName, label, description) - Adds a behavior output.\n"
-                                                                "@param outputName The output name to use.\n"
-                                                                "@param label The short label name to show in the editor.\n"
-                                                                "@param description The long description to show in the editor.\n"
-                                                                "@return Whether the output was added or not.\n")
+/*! Adds a behavior output.
+    @param outputName The output name to use.
+    @param label The short label name to show in the editor.
+    @param description The long description to show in the editor.
+    @return Whether the output was added or not.
+*/
+ConsoleMethodWithDocs(BehaviorTemplate, addBehaviorOutput, ConsoleBool, 5, 5, (outputName, label, description))
 {
     // Add behavior output.
     return object->addBehaviorOutput( argv[2], argv[3], argv[4] );
@@ -131,17 +147,21 @@ ConsoleMethod(BehaviorTemplate, addBehaviorOutput, bool, 5, 5,  "(outputName, la
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(BehaviorTemplate, getBehaviorOutputCount, S32, 2, 2,  "() - Get the number of behavior outputs.\n"
-                                                                    "@return Returns the number of behavior outputs.\n")
+/*! Get the number of behavior outputs.
+    @return Returns the number of behavior outputs.
+*/
+ConsoleMethodWithDocs(BehaviorTemplate, getBehaviorOutputCount, ConsoleInt, 2, 2, ())
 {
     return object->getBehaviorOutputCount();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(BehaviorTemplate, getBehaviorOutput, const char *, 3, 3,  "(int outputIndex) - Gets a comma-delimited description of the behavior output.\n"
-                                                                        "@param outputIndex The index of the behavior output.\n"
-                                                                        "@return A comma-delimited description of the behavior output of the format <Name>,<Label><,Description> or an empty string if behavior output is not found.\n")
+/*! Gets a comma-delimited description of the behavior output.
+    @param outputIndex The index of the behavior output.
+    @return A comma-delimited description of the behavior output of the format <Name>,<Label><,Description> or an empty string if behavior output is not found.
+*/
+ConsoleMethodWithDocs(BehaviorTemplate, getBehaviorOutput, ConsoleString, 3, 3, (int outputIndex))
 {
 
     // Fetch behavior output.
@@ -163,20 +183,24 @@ ConsoleMethod(BehaviorTemplate, getBehaviorOutput, const char *, 3, 3,  "(int ou
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(BehaviorTemplate, hasBehaviorOutput, bool, 3, 3,  "(outputName) - Gets whether the behavior has the behavior output or not.\n"
-                                                                "@param outputName The output name to check.\n"
-                                                                "@return Whether the behavior has the behavior output or not.\n")
+/*! Gets whether the behavior has the behavior output or not.
+    @param outputName The output name to check.
+    @return Whether the behavior has the behavior output or not.
+*/
+ConsoleMethodWithDocs(BehaviorTemplate, hasBehaviorOutput, ConsoleBool, 3, 3, (outputName))
 {
     return object->hasBehaviorOutput( argv[2] );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(BehaviorTemplate, addBehaviorInput, bool, 5, 5,   "(inputName, label, description) - Adds a behavior input.\n"
-                                                                "@param inputName The input name to use.\n"
-                                                                "@param label The short label name to show in the editor.\n"
-                                                                "@param description The long description to show in the editor.\n"
-                                                                "@return Whether the input was added or not.\n")
+/*! Adds a behavior input.
+    @param inputName The input name to use.
+    @param label The short label name to show in the editor.
+    @param description The long description to show in the editor.
+    @return Whether the input was added or not.
+*/
+ConsoleMethodWithDocs(BehaviorTemplate, addBehaviorInput, ConsoleBool, 5, 5, (inputName, label, description))
 {
     // Add behavior input.
     return object->addBehaviorInput( argv[2], argv[3], argv[4] );
@@ -184,17 +208,21 @@ ConsoleMethod(BehaviorTemplate, addBehaviorInput, bool, 5, 5,   "(inputName, lab
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(BehaviorTemplate, getBehaviorInputCount, S32, 2, 2,   "() - Get the number of behavior inputs.\n"
-                                                                    "@return Returns the number of behavior inputs.\n")
+/*! Get the number of behavior inputs.
+    @return Returns the number of behavior inputs.
+*/
+ConsoleMethodWithDocs(BehaviorTemplate, getBehaviorInputCount, ConsoleInt, 2, 2, ())
 {
     return object->getBehaviorInputCount();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(BehaviorTemplate, getBehaviorInput, const char *, 3, 3,   "(int inputIndex) - Gets a comma-delimited description of the behavior input.\n"
-                                                                        "@param inputIndex The index of the behavior input.\n"
-                                                                        "@return A comma-delimited description of the behavior input of the format <Name>,<Label><,Description> or an empty string if behavior input is not found.\n")
+/*! Gets a comma-delimited description of the behavior input.
+    @param inputIndex The index of the behavior input.
+    @return A comma-delimited description of the behavior input of the format <Name>,<Label><,Description> or an empty string if behavior input is not found.
+*/
+ConsoleMethodWithDocs(BehaviorTemplate, getBehaviorInput, ConsoleString, 3, 3, (int inputIndex))
 {
 
     // Fetch behavior input.
@@ -216,10 +244,13 @@ ConsoleMethod(BehaviorTemplate, getBehaviorInput, const char *, 3, 3,   "(int in
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(BehaviorTemplate, hasBehaviorInput, bool, 3, 3,  "(inputName) - Gets whether the behavior has the behavior input or not.\n"
-                                                                "@param inputName The input name to check.\n"
-                                                                "@return Whether the behavior has the behavior input or not.\n")
+/*! Gets whether the behavior has the behavior input or not.
+    @param inputName The input name to check.
+    @return Whether the behavior has the behavior input or not.
+*/
+ConsoleMethodWithDocs(BehaviorTemplate, hasBehaviorInput, ConsoleBool, 3, 3, (inputName))
 {
     return object->hasBehaviorInput( argv[2] );
 }
 
+ConsoleMethodGroupEndWithDocs(BehaviorTemplate)

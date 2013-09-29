@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,26 +20,37 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleFunction( setMouseLock, void, 2, 2, "( isLocked ) Use the setMouseLock function to un/lock the mouse.\n"
-                                                                "@param isLocked A boolean value.\n"
-                                                                "@return No return value")
+/*! @defgroup PlatformFunctions Platform
+	@ingroup TorqueScriptFunctions
+	@{
+*/
+
+/*! Use the setMouseLock function to un/lock the mouse.
+    @param isLocked A boolean value.
+    @return No return value
+*/
+ConsoleFunctionWithDocs( setMouseLock, ConsoleVoid, 2, 2, ( isLocked ))
 {
     Platform::setMouseLock(dAtob(argv[1]));
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunction( getRealTime, S32, 1, 1, "() Use the getRealTime function to the computer time in milliseconds.\n"
-                                                                "@return Returns the current real time in milliseconds.\n"
-                                                                "@sa getSimTime")
+/*! Use the getRealTime function to the computer time in milliseconds.
+    @return Returns the current real time in milliseconds.
+    @sa getSimTime
+*/
+ConsoleFunctionWithDocs( getRealTime, ConsoleInt, 1, 1, ())
 {
     return Platform::getRealMilliseconds();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunction( getLocalTime, const char*, 1, 1,   "() Get the local time\n"
-                                                    "@return the local time formatted as: monthday/month/year hour/minute/second\n")
+/*! Get the local time
+    @return the local time formatted as: monthday/month/year hour/minute/second
+*/
+ConsoleFunctionWithDocs( getLocalTime, ConsoleString, 1, 1, ())
 {
     char* buf = Con::getReturnBuffer(128);
 
@@ -56,3 +67,31 @@ ConsoleFunction( getLocalTime, const char*, 1, 1,   "() Get the local time\n"
 
     return buf;
 }
+
+/*! Use the getClipboard function to get the contents of the GUI clipboard.
+	@return Returns a string equal to the current contents of the copy the clipboard, or a NULL strain if the copy clipboard is empty.
+	@sa setClipboard
+*/
+ConsoleFunctionWithDocs( getClipboard, ConsoleString, 1, 1, ())
+{
+    return Platform::getClipboard();
+};
+
+/*!  Use the setClipboard function to Set value on clipboard to string.
+	@param string The new value to place in the GUI clipboard.
+	@return Returns true if successful, false otherwise.
+	@sa getClipoard")
+*/
+ConsoleFunctionWithDocs( setClipboard, ConsoleBool, 2, 2, ( string ))
+{
+    return Platform::setClipboard(argv[1]);
+};
+
+/*! Creates a UUID string.
+*/
+ConsoleFunctionWithDocs( createUUID, ConsoleString, 1, 1, () )
+{
+    return Platform::createUUID();
+}
+
+/*! @} */ // group PlatformFunctions

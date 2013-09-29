@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,54 +20,68 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetTagsManifest, createTag, void, 3, 3,    "(tagName) Creates an asset tag.\n"
-                                                            "@param tagName The tag name to create.\n"
-                                                            "@return No return value." )
+ConsoleMethodGroupBeginWithDocs(AssetTagsManifest, SimObject)
+
+/*! Creates an asset tag.
+    @param tagName The tag name to create.
+    @return No return value.
+*/
+ConsoleMethodWithDocs( AssetTagsManifest, createTag, ConsoleVoid, 3, 3, (tagName))
 {
     object->createTag( argv[2] );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetTagsManifest, renameTag, bool, 4, 4,    "(oldTagName, newTagName) Renames an existing asset tag.\n"
-                                                            "@param tagName The tag name to rename.\n"
-                                                            "@param newTagName The new tag name to assign.\n"
-                                                            "@return Whether the asset tag was renamed or not." )
+/*! Renames an existing asset tag.
+    @param tagName The tag name to rename.
+    @param newTagName The new tag name to assign.
+    @return Whether the asset tag was renamed or not.
+*/
+ConsoleMethodWithDocs( AssetTagsManifest, renameTag, ConsoleBool, 4, 4, (oldTagName, newTagName))
 {
     return object->renameTag( argv[2], argv[3] );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetTagsManifest, deleteTag, bool, 3, 3,    "(tagName) Deletes an asset tag.\n"
-                                                            "@param tagName The tag name to delete.\n"
-                                                            "@return Whether the asset tag was deleted or not." )
+/*! Deletes an asset tag.
+    @param tagName The tag name to delete.
+    @return Whether the asset tag was deleted or not.
+*/
+ConsoleMethodWithDocs( AssetTagsManifest, deleteTag, ConsoleBool, 3, 3, (tagName))
 {
     return object->deleteTag( argv[2] );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetTagsManifest, isTag, bool, 3, 3,        "(tagName) Checks whether the specified asset tag exists or not.\n"
-                                                            "@param tagName The tag name to check.\n"
-                                                            "@return Whether the specified asset tag exists or not." )
+/*! Checks whether the specified asset tag exists or not.
+    @param tagName The tag name to check.
+    @return Whether the specified asset tag exists or not.
+*/
+ConsoleMethodWithDocs( AssetTagsManifest, isTag, ConsoleBool, 3, 3, (tagName))
 {
     return object->isTag( argv[2] );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetTagsManifest, getTagCount, S32, 2, 2,   "() Gets the total asset tag count.\n"
-                                                            "@return The total asset tag count.")
+/*! Gets the total asset tag count.
+    @return The total asset tag count.
+*/
+ConsoleMethodWithDocs( AssetTagsManifest, getTagCount, ConsoleInt, 2, 2, ())
 {
     return object->getTagCount();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetTagsManifest, getTag, const char*, 3, 3,    "(int tagIndex) Gets the asset tag at the specified index.\n"
-                                                                "@param tagIndex The asset tag index.  This must be 0 to the asset tag count less one.\n"
-                                                                "@return The asset tag at the specified index or NULL if invalid.")
+/*! Gets the asset tag at the specified index.
+    @param tagIndex The asset tag index.  This must be 0 to the asset tag count less one.
+    @return The asset tag at the specified index or NULL if invalid.
+*/
+ConsoleMethodWithDocs( AssetTagsManifest, getTag, ConsoleString, 3, 3, (int tagIndex))
 {
     // Fetch tag index.
     const U32 tagIndex = dAtoi(argv[2]);
@@ -85,19 +99,23 @@ ConsoleMethod( AssetTagsManifest, getTag, const char*, 3, 3,    "(int tagIndex) 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetTagsManifest, getAssetTagCount, S32, 3, 3,  "(assetId) Gets the asset tag count on the specified asset Id.\n"
-                                                                "@param assetId The asset Id to count tags on.\n"
-                                                                "@return The asset tag count on the specified asset Id.")
+/*! Gets the asset tag count on the specified asset Id.
+    @param assetId The asset Id to count tags on.
+    @return The asset tag count on the specified asset Id.
+*/
+ConsoleMethodWithDocs( AssetTagsManifest, getAssetTagCount, ConsoleInt, 3, 3, (assetId))
 {
     return object->getAssetTagCount( argv[2] );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetTagsManifest, getAssetTag, const char*, 4, 4,   "(assetId, int tagIndex) Gets the asset tag on the specified asset Id at the specified index.\n"
-                                                                    "@param assetId The asset Id to count tags on.\n"
-                                                                    "@param tagIndex The asset tag index.  This must be 0 to the asset tag count less one.\n"
-                                                                    "@return The asset tag on the specified asset Id at the specified index or NULL if invalid.")
+/*! Gets the asset tag on the specified asset Id at the specified index.
+    @param assetId The asset Id to count tags on.
+    @param tagIndex The asset tag index.  This must be 0 to the asset tag count less one.
+    @return The asset tag on the specified asset Id at the specified index or NULL if invalid.
+*/
+ConsoleMethodWithDocs( AssetTagsManifest, getAssetTag, ConsoleString, 4, 4, (assetId, int tagIndex))
 {
     // Fetch asset Id.
     const char* pAssetId = argv[2];
@@ -118,30 +136,38 @@ ConsoleMethod( AssetTagsManifest, getAssetTag, const char*, 4, 4,   "(assetId, i
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetTagsManifest, tag, bool, 4, 4,          "(assetId, tagName) Tags the asset Id with the specified asset tag.\n"
-                                                            "@param assetId The asset Id to tag.\n"
-                                                            "@param tagName The tag name to assign.\n"
-                                                            "@return Whether the tag operation was successful or not." )
+/*! Tags the asset Id with the specified asset tag.
+    @param assetId The asset Id to tag.
+    @param tagName The tag name to assign.
+    @return Whether the tag operation was successful or not.
+*/
+ConsoleMethodWithDocs( AssetTagsManifest, tag, ConsoleBool, 4, 4, (assetId, tagName))
 {
     return object->tag( argv[2], argv[3] );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetTagsManifest, untag, bool, 4, 4,        "(assetId, tagName) Un-tags the asset Id from the specified asset tag.\n"
-                                                            "@param assetId The asset Id to un-tag.\n"
-                                                            "@param tagName The tag name to un-assign.\n"
-                                                            "@return Whether the un-tag operation was successful or not." )
+/*! Un-tags the asset Id from the specified asset tag.
+    @param assetId The asset Id to un-tag.
+    @param tagName The tag name to un-assign.
+    @return Whether the un-tag operation was successful or not.
+*/
+ConsoleMethodWithDocs( AssetTagsManifest, untag, ConsoleBool, 4, 4, (assetId, tagName))
 {
     return object->untag( argv[2], argv[3] );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetTagsManifest, hasTag, bool, 4, 4,       "(assetId, tagName) Checks whether the asset Id is tagged with the specified asset tag.\n"
-                                                            "@param assetId The asset Id to check.\n"
-                                                            "@param tagName The tag name to check.\n"
-                                                            "@return Whether the asset Id is tagged with the specified asset tag or not." )
+/*! Checks whether the asset Id is tagged with the specified asset tag.
+    @param assetId The asset Id to check.
+    @param tagName The tag name to check.
+    @return Whether the asset Id is tagged with the specified asset tag or not.
+*/
+ConsoleMethodWithDocs( AssetTagsManifest, hasTag, ConsoleBool, 4, 4, (assetId, tagName))
 {
     return object->hasTag( argv[2], argv[3] );
 }
+
+ConsoleMethodGroupEndWithDocs(AssetTagsManifest)
