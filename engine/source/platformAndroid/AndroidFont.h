@@ -25,11 +25,6 @@
 class AndroidFont : public PlatformFont
 {
 private:
-    
-    // Font reference.
-	//TODO: font code
-    //CTFontRef       mFontRef;
-    
     // Distance from drawing point to typographic baseline.
     // Think of the drawing point as the upper left corner of a text box.
     // NOTE: 'baseline' is synonymous with 'ascent' in Torque.

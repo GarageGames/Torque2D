@@ -75,7 +75,7 @@ bool AndroidFont::create( const char* name, U32 size, U32 charset )
     scaledSize = mRound(scaledSize);
     
 
-    //TODO: generating font cache on android does not work.  Need to generate cache on desktop first.
+    //todo: generating font cache on android does not work.  Need to generate cache on desktop first.
     //freetype2 would need to be added to generate on device.
     // Create the font reference.
     //mFontRef = CTFontCreateWithName( fontName, scaledSize, NULL );
@@ -147,7 +147,7 @@ PlatformFont::CharInfo& AndroidFont::getCharInfo(const UTF16 character) const
     characterInfo.xOffset = 0;
     characterInfo.yOffset = 0;
     
-    //TODO: getcharinfo if freetype2 font creation on device is added
+    //todo: getcharinfo if freetype2 font creation on device is added
     /*
     CGGlyph characterGlyph;
     CGRect characterBounds;
