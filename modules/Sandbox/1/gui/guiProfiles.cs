@@ -21,7 +21,7 @@
 //-----------------------------------------------------------------------------
 
 $platformFontType = ($platform $= "windows") ? "lucida console" : "monaco";
-$platformFontSize = ($platform $= "ios" || $platform $= "Android") ? 18 : 12;
+$platformFontSize = ($platform $= "ios") ? 18 : 12;
 
 //-----------------------------------------------------------------------------
 

@@ -107,8 +107,8 @@ bool AndroidConsole::isEnabled()
 
 AndroidConsole::AndroidConsole()
 {
-	//TODO: change back to false?
-   consoleEnabled = true;
+   consoleEnabled = false;
+
    clearInBuf();
    
    Con::addConsumer(AndroidConsoleConsumer);

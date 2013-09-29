@@ -466,7 +466,6 @@ StringTableEntry Platform::getExecutablePath()
 //-----------------------------------------------------------------------------
 StringTableEntry Platform::getExecutableName()
 {
-   //TODO: does this need anything further?
    return StringTable->insert("Torque2D");
 }
 

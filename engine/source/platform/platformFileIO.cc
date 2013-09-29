@@ -417,7 +417,6 @@ StringTableEntry Platform::stripBasePath(const char *path)
 StringTableEntry Platform::getPrefsPath(const char *file /* = NULL */)
 {
     char buf[1024];
-    //TODO: should android have its own define?
 #if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
     
     if ( file )

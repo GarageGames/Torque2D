@@ -62,13 +62,9 @@ bool AndroidFont::create( const char* name, U32 size, U32 charset )
 {
     // Sanity!
     AssertFatal( name != NULL, "Cannot create a NULL font name." );
-    //TODO: font create
-    /*
-    // Generate compatible font name.
-    CFStringRef fontName = CFStringCreateWithCString( kCFAllocatorDefault, name, kCFStringEncodingUTF8 );
-    
+
     // Sanity!
-    if ( !fontName )
+    if ( !name )
     {
         Con::errorf("Could not handle font name of '%s'.", name );
         return false;
@@ -78,19 +74,24 @@ bool AndroidFont::create( const char* name, U32 size, U32 charset )
     F32 scaledSize = size * (72.0f/96.0f);
     scaledSize = mRound(scaledSize);
     
+
+    //TODO: generating font cache on android does not work.  Need to generate cache on desktop first.
+    //freetype2 would need to be added to generate on device.
     // Create the font reference.
-    mFontRef = CTFontCreateWithName( fontName, scaledSize, NULL );
+    //mFontRef = CTFontCreateWithName( fontName, scaledSize, NULL );
     
     // Sanity!
-    if ( !mFontRef )
+    /*if ( !mFontRef )
     {
         Con::errorf( "Could not generate a font reference to font name '%s' of size '%d'", name, size );
         return false;
-    }
+    }*/
     
     // Fetch font metrics.
-    CGFloat ascent = CTFontGetAscent( mFontRef );
-    CGFloat descent = CTFontGetDescent( mFontRef );
+    //CGFloat ascent = CTFontGetAscent( mFontRef );
+    //CGFloat descent = CTFontGetDescent( mFontRef );
+    float ascent = 0;
+    float descent = 0;
     
     // Set baseline.
     mBaseline = (U32)mRound(ascent);
@@ -99,8 +100,8 @@ bool AndroidFont::create( const char* name, U32 size, U32 charset )
     mHeight = (U32)mRound( ascent + descent );
     
     // Create a gray-scale color-space.
-    mColorSpace = CGColorSpaceCreateDeviceGray();
-    */
+    //mColorSpace = CGColorSpaceCreateDeviceGray();
+
     // Return status.
     return true;
 }
@@ -146,7 +147,7 @@ PlatformFont::CharInfo& AndroidFont::getCharInfo(const UTF16 character) const
     characterInfo.xOffset = 0;
     characterInfo.yOffset = 0;
     
-    //TODO: getcharinfo
+    //TODO: getcharinfo if freetype2 font creation on device is added
     /*
     CGGlyph characterGlyph;
     CGRect characterBounds;

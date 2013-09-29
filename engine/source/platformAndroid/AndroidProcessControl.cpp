@@ -56,26 +56,6 @@ void Platform::restartInstance()
       Con::errorf("The game is still running, we cant relaunch now!");
       return;
    }
-   //TODO: is this needed on android?
-   /*
-   // get the path to the torque executable
-   CFBundleRef mainBundle =  CFBundleGetMainBundle();
-   CFURLRef execURL = CFBundleCopyExecutableURL(mainBundle);
-   CFStringRef execString = CFURLCopyFileSystemPath(execURL, kCFURLPOSIXPathStyle);
-
-   // append ampersand so that we can launch without blocking.
-   // encase in quotes so that spaces in the path are accepted.
-   CFMutableStringRef mut = CFStringCreateMutableCopy(NULL, 0, execString);
-   CFStringInsert(mut, 0, CFSTR("\""));
-   CFStringAppend(mut, CFSTR("\" & "));
    
-   U32 len = CFStringGetMaximumSizeForEncoding(CFStringGetLength(mut), kCFStringEncodingUTF8);
-   char *execCString = new char[len+1];
-   CFStringGetCString(mut, execCString, len, kCFStringEncodingUTF8);
-   execCString[len - 1] = '\0';
-   
-   Con::printf("---- %s -----",execCString);
-   system(execCString);
-   delete[] execCString;
-   */
+   Con::errorf("restartInstance is not supported on Android");
 }

@@ -416,7 +416,6 @@ GuiCanvas::GuiCanvas()
 #ifdef TORQUE_OS_IOS
    mBounds.set(0, 0, IOS_DEFAULT_RESOLUTION_X, IOS_DEFAULT_RESOLUTION_Y);
 #elif TORQUE_OS_ANDROID
-   //TODO: this need to access something else?
    mBounds.set(0, 0, _AndroidGetScreenWidth(), _AndroidGetScreenHeight());
 #else
    mBounds.set(0, 0, MIN_RESOLUTION_X, MIN_RESOLUTION_Y);

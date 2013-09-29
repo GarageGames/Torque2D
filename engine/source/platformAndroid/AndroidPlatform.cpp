@@ -60,7 +60,7 @@ S32 Platform::messageBox(const UTF8 *title, const UTF8 *message, MBButtons butto
 //-----------------------------------------------------------------------------
 bool Platform::pathCopy(const char* source, const char* dest, bool nooverwrite)
 {
-	//TODO: Not used on android?
+	Con::errorf("pathCopy is not supported on Android due to assets being in a zip file");
 	return false;
    
 }
@@ -68,7 +68,7 @@ bool Platform::pathCopy(const char* source, const char* dest, bool nooverwrite)
 //-----------------------------------------------------------------------------
 bool Platform::fileRename(const char *source, const char *dest)
 {
-   //TODO: not used on android?
+	Con::errorf("fileRename is not supported on Android due to assets being in a zip file");
    return false;
 }
 

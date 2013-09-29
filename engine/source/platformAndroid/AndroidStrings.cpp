@@ -412,14 +412,8 @@ void dQsort(void *base, U32 nelem, U32 width, int (QSORT_CALLBACK *fcmp)(const v
    qsort(base, nelem, width, fcmp);
 }   
 
-//TODO: need this?
 StringTableEntry Platform::createUUID( void )
 {
-    /*CFUUIDRef ref = CFUUIDCreate(nil);
-    NSString* uuid = (__bridge_transfer NSString *)CFUUIDCreateString(nil,ref);
-    CFRelease(ref);
-
-    StringTableEntry uuidString = StringTable->insert([uuid UTF8String]);
-    return uuidString;*/
+    Con::errorf("createUUID not supported on Android");
 	return StringTable->insert("");
 }

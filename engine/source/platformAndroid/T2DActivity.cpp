@@ -886,12 +886,14 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 
                 if (bSuspended == true) {
 					glViewport(0, 0, engine->width, engine->height);
+					Game->textureResurrect();
 					bSuspended = false;
 				}
             }
             break;
         case APP_CMD_TERM_WINDOW:
 			bSuspended = true;
+			Game->textureKill();
             // The window is being hidden or closed, clean it up.
             engine_term_display(engine, false);
             break;
@@ -972,7 +974,6 @@ void android_main(struct android_app* state) {
     //store the cache dir
     activity.loadCacheDir();
 
-    //TODO: anything we need to do with these?
     platState.argc = 0;
     //platState.argv
 
