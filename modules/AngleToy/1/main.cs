@@ -22,33 +22,8 @@
 
 function AngleToy::create( %this )
 {        
-    // Creating this toy runs its unit tests.
-    AngleToy.unitTestScriptFunctions();    
-    
     // Reset the toy initially.
-    AngleToy.reset();      
-}
-
-//-----------------------------------------------------------------------------
-
-function AngleToy::unitTestScriptFunctions()
-{
-}
-
-function AngleToy::printVectorTestResult( %this, %test, %actual, %expected )
-{
-  if( Vector2Compare( %actual, %expected ) )
-    echo( %test @ " [SUCCESS] " @ %actual @ " == " @ %expected @ "." );
-  else
-    error( %test @ " [FAILURE] " @ %actual @ " != " @ %expected @ "." );
-}
-
-function AngleToy::printValueTestResult( %this, %actual, %expected )
-{
-  if( mAbs( %actual - %expected ) < 0.000001 )
-    echo( %test @ " [SUCCESS] " @ %actual @ " == " @ %expected @ "." );
-  else
-    error( %test @ " [FAILURE] " @ %actual @ " != " @ %expected @ "." );
+    AngleToy.reset();
 }
 
 //-----------------------------------------------------------------------------
@@ -145,7 +120,42 @@ function AngleToy::createTargets( %this )
     %object.Image = "ToyAssets:hollowArrow";
     %object.Size = 5;
     %object.setBodyType( static );
-    SandboxScene.add( %object );    
+    SandboxScene.add( %object );
+
+    %effect = new ParticleAsset();
+    %effect.AssetName = "DirectedParticles";
+    
+    %emitter = %effect.createEmitter();
+    AngleToy.EmitterParameters = %emitter;
+    %emitter.EmitterName = "AngledParticles";
+    %emitter.Image = "ToyAssets:Crosshair3";
+    %emitter.selectField( "Lifetime" );
+    %emitter.addDataKey( 0, 1 );
+    %emitter.selectField( "Quantity" );
+    %emitter.addDataKey( 0, 50 );
+    %emitter.selectField( "Speed" );
+    %emitter.addDataKey( 0, 4 );
+    %emitter.selectField( "EmissionAngle" );
+    %emitter.addDataKey( 0, 0 );
+    %emitter.selectField( "EmissionArc" );
+    %emitter.addDataKey( 0, 0 );
+    %emitter.selectField( "EmissionForceVariation" );
+    %emitter.addDataKey( 0, 0 );
+    %emitter.selectField( "AlphaChannel" );
+    %emitter.addDataKey( 0, 0 );
+    %emitter.addDataKey( 0.25, 1 );
+    %emitter.addDataKey( 0.75, 1 );
+    %emitter.addDataKey( 1, 0 );
+    %emitter.deselectField();
+    
+    %assetId = AssetDatabase.addPrivateAsset( %effect );
+    
+    %object = new ParticlePlayer();
+    AngleToy.TargetParticles = %object;
+    %object.BodyType = static;
+    %object.Particle = %assetId;
+    
+    SandboxScene.add( %object );      
 }
 
 //-----------------------------------------------------------------------------
@@ -211,32 +221,39 @@ function AngleToy::onTouchMoved(%this, %touchID, %worldPosition)
     //Rotate to the touched angle.
     AngleToy.TargetObject.SetAngle( %angle - 90 ); // Image points at 90 degrees, so we need to subtract that off.
     
+    // "Point" particles towards cursor
+    AngleToy.EmitterParameters.selectField( "EmissionAngle" );
+    AngleToy.EmitterParameters.addDataKey( 0, %angle );
+    AngleToy.EmitterParameters.deselectField();
+    
     // Show Sin, Cos, Tan
     %sin = mSin( %angle );
     %cos = mCos( %angle );
     %tan = mTan( %angle );
 
-    // Fix %worldPosition at 20 units from the center.
-    // There are many ways to do this... For example, we could do this:
-    // %worldPositionAtRadius20 = Vector2Direction( %angle, 20 );
-    // or
-    %worldPositionAtRadius20 = Vector2Scale( Vector2Normalize( %worldPosition ), 20 );
-    // which will first shrink the %worldPosition vector to have a length of 1
-    // and then will scale it back to 20 units.
-    
+    // Find the vector that's 20/21 units from the center in the direction of
+    // %worldPosition.  Here are a couple of ways to do that:
+    %worldPositionAtRadius20 = Vector2Direction( %angle, 20 );
+    %worldPositionAtRadius21 = Vector2Scale( Vector2Normalize( %worldPosition ), 21 );
+
+    // Draw the Sine    
     %onYAxis = setWord( %worldPositionAtRadius20, 0, 0 ); // Set the X-component to 0
     AngleToy.SinLineSegment.draw( %worldPositionAtRadius20, %onYAxis );
-    AngleToy.SinLabel.setPosition( %onYAxis );
-    AngleToy.SinLabel.setText( %sin );
+    AngleToy.SinLabel.setPosition( Vector2Add( %onYAxis, "0 -1" ) );
+    AngleToy.SinLabel.setText( mFloatLength( %sin, 4 ) );
     
+    // Draw the Cosine
     %onXAxis = setWord( %worldPositionAtRadius20, 1, 0 ); // Set the Y-component to 0
     AngleToy.CosLineSegment.draw( %worldPositionAtRadius20, %onXAxis );
-    AngleToy.CosLabel.setPosition( %onXAxis );
-    AngleToy.CosLabel.setText( %cos );
+    AngleToy.CosLabel.setPosition( Vector2Add( %onXAxis, "-1 0" ) );
+    AngleToy.CosLabel.setAngle( 90 );
+    AngleToy.CosLabel.setText( mFloatLength( %cos, 4 ) );
     
+    // Draw the Tangent
     AngleToy.TanLineSegment.drawTangent( %worldPositionAtRadius20, %tan, %angle );
-    AngleToy.TanLabel.setPosition( %worldPosition );
-    AngleToy.TanLabel.setText( %tan );
+    AngleToy.TanLabel.setPosition( %worldPositionAtRadius21 );
+    AngleToy.TanLabel.setAngle( %angle - 90 );
+    AngleToy.TanLabel.setText( mFloatLength( %tan, 4 ) );
 }
 
 //-----------------------------------------------------------------------------
@@ -259,9 +276,11 @@ function LineSegment::drawTangent( %this, %from, %tan, %angleOnCircle )
     // is tangent to the circle will intersect the X-axis with a length of
     // %tangent.  It's fun, so we'll use it for this example.
 
+    // The tangent to a circle at a given angle is equal to +/- 90 degrees.
     %tangentAngle = %angleOnCircle - 90;
     
-    %length = %tan * 20; // Sin/Cos/Tan assume a unit circle.  Scaling...
+    // Sine, cosine, and tangent assume a unit circle.  Let's scale to our 20 units.
+    %length = %tan * 20; 
     
     %tangentEnd = Vector2Add( %from, Vector2Direction( %tangentAngle, %length ) );
     
