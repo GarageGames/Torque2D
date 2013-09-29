@@ -48,6 +48,10 @@ function initializeCanvas(%windowName)
     {
         %resolution = iOSResolutionFromSetting($pref::iOS::DeviceType, $pref::iOS::ScreenOrientation);
     }
+    else if ($platform $= "Android")
+    {
+    	%resolution = GetAndroidResolution();
+    }
     else
     {
         if ( $pref::Video::windowedRes !$= "" )

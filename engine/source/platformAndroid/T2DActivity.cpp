@@ -1332,6 +1332,22 @@ U32 android_GetFileSize(const char* pFilePath)
 	return 0;
 }
 
+ConsoleFunction(GetAndroidResolution, const char*, 1, 1, "Returns the resolution for the android device")
+{
+
+    S32 width = _AndroidGetScreenWidth();
+    S32 height = _AndroidGetScreenHeight();
+	S32 bitdepth = ANDROID_DEFAULT_RESOLUTION_BIT_DEPTH;
+
+	char buf[80];
+	dSprintf(buf, sizeof(buf), "%d %d %d", width, height, bitdepth);
+
+	char* buffer = Con::getReturnBuffer(strlen(buf) + 1);
+	dStrcpy(buffer, buf);
+
+	return buffer;
+}
+
 ConsoleFunction(doDeviceVibrate, void, 1, 1, "Makes the device do a quick vibration. Only works on devices with vibration functionality.")
 {
 	// Vibrate for 500 milliseconds

@@ -163,7 +163,6 @@ void OpenGLDevice::shutdown()
 //
 bool OpenGLDevice::setScreenMode(U32 width, U32 height, U32 bpp, bool fullScreen, bool forceIt, bool repaint)
 {
-    
     Con::printf(" set screen mode %i x %i x %i, %s, %s, %s", width, height, bpp,
                 fullScreen ? "fullscreen" : "windowed",
                 forceIt ? "force it" : "dont force it",
