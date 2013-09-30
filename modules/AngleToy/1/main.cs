@@ -47,6 +47,8 @@ function AngleToy::reset( %this )
     
     // Create Mathematical Objects/Labels
     %this.createMathematicalObjects();
+    
+    AngleToy.repointTarget = "0 0";
 }
 
 //-----------------------------------------------------------------------------
@@ -115,11 +117,12 @@ function AngleToy::createBackground( %this )
 function AngleToy::createTargets( %this )
 {
     // Create the sprite.
-    %object = new Sprite();
+    %object = new Sprite() { class = "MagicTarget"; };
     AngleToy.TargetObject = %object;
     %object.Image = "ToyAssets:hollowArrow";
     %object.Size = 5;
-    %object.setBodyType( static );
+    %object.setBodyType( dynamic );
+    %object.startTimer( repoint, 100 );
     SandboxScene.add( %object );
 
     %effect = new ParticleAsset();
@@ -128,11 +131,13 @@ function AngleToy::createTargets( %this )
     %emitter = %effect.createEmitter();
     AngleToy.EmitterParameters = %emitter;
     %emitter.EmitterName = "AngledParticles";
+    %emitter.setKeepAligned( true );
+    %emitter.setOrientationType( ALIGNED );
     %emitter.Image = "ToyAssets:Crosshair3";
     %emitter.selectField( "Lifetime" );
     %emitter.addDataKey( 0, 1 );
     %emitter.selectField( "Quantity" );
-    %emitter.addDataKey( 0, 50 );
+    %emitter.addDataKey( 0, 250 );
     %emitter.selectField( "Speed" );
     %emitter.addDataKey( 0, 4 );
     %emitter.selectField( "EmissionAngle" );
@@ -141,11 +146,6 @@ function AngleToy::createTargets( %this )
     %emitter.addDataKey( 0, 0 );
     %emitter.selectField( "EmissionForceVariation" );
     %emitter.addDataKey( 0, 0 );
-    %emitter.selectField( "AlphaChannel" );
-    %emitter.addDataKey( 0, 0 );
-    %emitter.addDataKey( 0.25, 1 );
-    %emitter.addDataKey( 0.75, 1 );
-    %emitter.addDataKey( 1, 0 );
     %emitter.deselectField();
     
     %assetId = AssetDatabase.addPrivateAsset( %effect );
@@ -214,12 +214,11 @@ function AngleToy::createMathematicalObjects( %this )
 
 function AngleToy::onTouchMoved(%this, %touchID, %worldPosition)
 {
+    // Used to let the repointing target kno  
+    AngleToy.repointTarget = %worldPosition;
+
     // Calculate the angle to the mouse.
-    %origin = AngleToy.TargetObject.getPosition();
     %angle = mAtan( %worldPosition );
-    
-    //Rotate to the touched angle.
-    AngleToy.TargetObject.SetAngle( %angle - 90 ); // Image points at 90 degrees, so we need to subtract that off.
     
     // "Point" particles towards cursor
     AngleToy.EmitterParameters.selectField( "EmissionAngle" );
@@ -254,6 +253,17 @@ function AngleToy::onTouchMoved(%this, %touchID, %worldPosition)
     AngleToy.TanLabel.setPosition( %worldPositionAtRadius21 );
     AngleToy.TanLabel.setAngle( %angle - 90 );
     AngleToy.TanLabel.setText( mFloatLength( %tan, 4 ) );
+}
+
+//-----------------------------------------------------------------------------
+
+function MagicTarget::repoint( %this )
+{
+    %myPosition = %this.getPosition();
+    %angle = Vector2AngleToPoint( %myPosition, AngleToy.repointTarget );
+    %this.rotateTo( %angle - 90, 360 ); // Image points at 90 degrees, so we need to subtract that off.
+    %this.setLinearVelocityPolar( %angle,
+        Vector2Length( Vector2Sub( AngleToy.repointTarget, %myPosition  ) ) );
 }
 
 //-----------------------------------------------------------------------------

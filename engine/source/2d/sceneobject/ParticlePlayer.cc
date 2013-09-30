@@ -1439,7 +1439,7 @@ void ParticlePlayer::integrateParticle( EmitterNode* pEmitterNode, ParticleSyste
             movementAngle += 360.0f;
 
         // Set new Orientation Angle.
-        pParticleNode->mOrientationAngle = -movementAngle - pParticleAssetEmitter->getAlignedAngleOffset();
+        pParticleNode->mOrientationAngle = movementAngle - pParticleAssetEmitter->getAlignedAngleOffset();
 
     }
     else

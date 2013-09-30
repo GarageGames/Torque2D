@@ -1643,7 +1643,7 @@ ConsoleMethodWithDocs(SceneObject, setLinearVelocityPolar, ConsoleVoid, 4, 4, (f
     mSinCos( angle, sin, cos );
 
     // Set Gross Linear Velocity.
-    object->setLinearVelocity( Vector2( cos*speed, -sin*speed ) );
+    object->setLinearVelocity( Vector2( cos*speed, sin*speed ) );
 }
 
 //-----------------------------------------------------------------------------
