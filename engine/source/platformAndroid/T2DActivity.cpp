@@ -936,8 +936,6 @@ struct engine engine;
  */
 void android_main(struct android_app* state) {
 
-	sleep(10);
-
 	//init startup time so U32 doesnt overflow
 	android_StartupTime();
 
@@ -1347,6 +1345,460 @@ ConsoleFunction(GetAndroidResolution, const char*, 1, 1, "Returns the resolution
 	dStrcpy(buffer, buf);
 
 	return buffer;
+}
+
+bool Platform::openWebBrowser(const char *webAddress)
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return false;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/T2DUtilities");
+	jclass T2DUtilitiesClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jstring strURL = lJNIEnv->NewStringUTF(webAddress);
+	jmethodID MethodT2DUtilities = lJNIEnv->GetStaticMethodID(T2DUtilitiesClass, "OpenURL", "(Landroid/content/Context;Ljava/lang/String;)V");
+	lJNIEnv->CallStaticVoidMethod(T2DUtilitiesClass, MethodT2DUtilities, lNativeActivity, strURL);
+	lJNIEnv->DeleteLocalRef(strClassName);
+	lJNIEnv->DeleteLocalRef(strURL);
+
+		// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+
+	return true;
+}
+
+void android_AlertOK(const char *title, const char *message)
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/T2DUtilities");
+	jclass T2DUtilitiesClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jstring strTitle = lJNIEnv->NewStringUTF(title);
+	jstring strMessage = lJNIEnv->NewStringUTF(message);
+	jmethodID MethodT2DUtilities = lJNIEnv->GetStaticMethodID(T2DUtilitiesClass, "DisplayAlertOK", "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V");
+	lJNIEnv->CallStaticVoidMethod(T2DUtilitiesClass, MethodT2DUtilities, lNativeActivity, strTitle, strMessage);
+	lJNIEnv->DeleteLocalRef(strClassName);
+	lJNIEnv->DeleteLocalRef(strTitle);
+	lJNIEnv->DeleteLocalRef(strMessage);
+
+		// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+}
+
+bool android_AlertOKCancel(const char *title, const char *message)
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return false;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/T2DUtilities");
+	jclass T2DUtilitiesClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jstring strTitle = lJNIEnv->NewStringUTF(title);
+	jstring strMessage = lJNIEnv->NewStringUTF(message);
+	jmethodID MethodT2DUtilities = lJNIEnv->GetStaticMethodID(T2DUtilitiesClass, "DisplayAlertOKCancel", "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)Z");
+	jboolean jret = lJNIEnv->CallStaticBooleanMethod(T2DUtilitiesClass, MethodT2DUtilities, lNativeActivity, strTitle, strMessage);
+
+	lJNIEnv->DeleteLocalRef(strClassName);
+	lJNIEnv->DeleteLocalRef(strTitle);
+	lJNIEnv->DeleteLocalRef(strMessage);
+
+	bool ret = jret;
+
+		// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+
+	return ret;
+}
+
+bool android_AlertRetry(const char *title, const char *message)
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return false;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/T2DUtilities");
+	jclass T2DUtilitiesClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jstring strTitle = lJNIEnv->NewStringUTF(title);
+	jstring strMessage = lJNIEnv->NewStringUTF(message);
+	jmethodID MethodT2DUtilities = lJNIEnv->GetStaticMethodID(T2DUtilitiesClass, "DisplayAlertRetry", "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)Z");
+	jboolean jret = lJNIEnv->CallStaticBooleanMethod(T2DUtilitiesClass, MethodT2DUtilities, lNativeActivity, strTitle, strMessage);
+
+	lJNIEnv->DeleteLocalRef(strClassName);
+	lJNIEnv->DeleteLocalRef(strTitle);
+	lJNIEnv->DeleteLocalRef(strMessage);
+
+	bool ret = jret;
+
+		// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+
+	return ret;
+}
+
+bool android_AlertYesNo(const char *title, const char *message)
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return false;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/T2DUtilities");
+	jclass T2DUtilitiesClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jstring strTitle = lJNIEnv->NewStringUTF(title);
+	jstring strMessage = lJNIEnv->NewStringUTF(message);
+	jmethodID MethodT2DUtilities = lJNIEnv->GetStaticMethodID(T2DUtilitiesClass, "DisplayAlertYesNo", "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)Z");
+	jboolean jret = lJNIEnv->CallStaticBooleanMethod(T2DUtilitiesClass, MethodT2DUtilities, lNativeActivity, strTitle, strMessage);
+
+	lJNIEnv->DeleteLocalRef(strClassName);
+	lJNIEnv->DeleteLocalRef(strTitle);
+	lJNIEnv->DeleteLocalRef(strMessage);
+
+	bool ret = jret;
+
+		// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+
+	return ret;
+}
+
+void android_LoadMusicTrack( const char *mFilename )
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/StreamingAudioPlayer");
+	jclass StreamingAudioPlayerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jstring strFilename = lJNIEnv->NewStringUTF(mFilename);
+	jmethodID MethodStreamingAudioPlayer = lJNIEnv->GetStaticMethodID(StreamingAudioPlayerClass, "LoadMusicTrack", "(Landroid/content/Context;Ljava/lang/String;)V");
+	lJNIEnv->CallStaticVoidMethod(StreamingAudioPlayerClass, MethodStreamingAudioPlayer, lNativeActivity, strFilename);
+
+	lJNIEnv->DeleteLocalRef(strClassName);
+	lJNIEnv->DeleteLocalRef(strFilename);
+
+		// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+}
+
+void android_UnLoadMusicTrack()
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/StreamingAudioPlayer");
+	jclass StreamingAudioPlayerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jmethodID MethodStreamingAudioPlayer = lJNIEnv->GetStaticMethodID(StreamingAudioPlayerClass, "UnLoadMusicTrack", "()V");
+	lJNIEnv->CallStaticVoidMethod(StreamingAudioPlayerClass, MethodStreamingAudioPlayer);
+
+	lJNIEnv->DeleteLocalRef(strClassName);
+
+		// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+}
+
+bool android_isMusicTrackPlaying()
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return false;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/StreamingAudioPlayer");
+	jclass StreamingAudioPlayerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jmethodID MethodStreamingAudioPlayer = lJNIEnv->GetStaticMethodID(StreamingAudioPlayerClass, "isMusicTrackPlaying", "()Z");
+	jboolean jret = lJNIEnv->CallStaticBooleanMethod(StreamingAudioPlayerClass, MethodStreamingAudioPlayer);
+
+	lJNIEnv->DeleteLocalRef(strClassName);
+
+	bool ret = jret;
+
+		// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+
+	return ret;
+}
+
+void android_StartMusicTrack()
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/StreamingAudioPlayer");
+	jclass StreamingAudioPlayerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jmethodID MethodStreamingAudioPlayer = lJNIEnv->GetStaticMethodID(StreamingAudioPlayerClass, "startMusicTrack", "()V");
+	lJNIEnv->CallStaticVoidMethod(StreamingAudioPlayerClass, MethodStreamingAudioPlayer);
+
+	lJNIEnv->DeleteLocalRef(strClassName);
+
+		// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+}
+
+void android_StopMusicTrack()
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/StreamingAudioPlayer");
+	jclass StreamingAudioPlayerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jmethodID MethodStreamingAudioPlayer = lJNIEnv->GetStaticMethodID(StreamingAudioPlayerClass, "stopMusicTrack", "()V");
+	lJNIEnv->CallStaticVoidMethod(StreamingAudioPlayerClass, MethodStreamingAudioPlayer);
+
+	lJNIEnv->DeleteLocalRef(strClassName);
+
+		// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+}
+
+void android_setMusicTrackVolume(F32 volume)
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/StreamingAudioPlayer");
+	jclass StreamingAudioPlayerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jmethodID MethodStreamingAudioPlayer = lJNIEnv->GetStaticMethodID(StreamingAudioPlayerClass, "setMusicTrackVolume", "(F)V");
+	lJNIEnv->CallStaticVoidMethod(StreamingAudioPlayerClass, MethodStreamingAudioPlayer, (jfloat)volume);
+
+	lJNIEnv->DeleteLocalRef(strClassName);
+
+		// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
 }
 
 ConsoleFunction(doDeviceVibrate, void, 1, 1, "Makes the device do a quick vibration. Only works on devices with vibration functionality.")

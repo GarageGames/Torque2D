@@ -22,56 +22,56 @@
 
 #include "AndroidStreamSource.h"
 
-#define BUFFERSIZE 32768
+extern void android_LoadMusicTrack( const char *mFilename );
+extern void android_UnLoadMusicTrack();
+extern bool android_isMusicTrackPlaying();
+extern void android_StartMusicTrack();
+extern void android_StopMusicTrack();
+extern void android_setMusicTrackVolume(F32 volume);
 
 AndroidStreamSource::AndroidStreamSource(const char *filename)  {
 	this->registerObject();
 	int len = dStrlen( filename );
 	mFilename = new char[len + 1];
 	dStrcpy( mFilename, filename );
-	//TODO: streaming music
-	//SoundEngine::SoundEngine_LoadBackgroundMusicTrack( mFilename, true, false );
+
+	android_LoadMusicTrack( mFilename );
 }
 
 AndroidStreamSource::~AndroidStreamSource() {
 	stop();
 	delete [] mFilename;
-	//TODO: streaming music
-	//SoundEngine::SoundEngine_UnloadBackgroundMusicTrack();
+	android_UnLoadMusicTrack();
 }
 
 bool AndroidStreamSource::isPlaying() {
-	return true;
+	return android_isMusicTrackPlaying();
 }
 
 bool AndroidStreamSource::start( bool loop ) {
-	//TODO: streaming music
-	/*
-	SoundEngine::SoundEngine_LoadBackgroundMusicTrack( mFilename, true, false );
-	SoundEngine::SoundEngine_StartBackgroundMusic();
+
+	android_LoadMusicTrack( mFilename );
+	android_StartMusicTrack();
 	if( !loop ) {
 		//stop at end
-		SoundEngine::SoundEngine_StopBackgroundMusic( true );
+		android_StopMusicTrack();
 		Con::executef(1,"onAndroidStreamEnd");
 	}
-	*/
+
 	return true;
 }
 
 bool AndroidStreamSource::stop() {
-	//false == stop now
-	//TODO: streaming music
-	/*
-	SoundEngine::SoundEngine_StopBackgroundMusic( false );
-	SoundEngine::SoundEngine_UnloadBackgroundMusicTrack();
-	*/
+
+	android_StopMusicTrack();
+	android_UnLoadMusicTrack();
+
 	return true;
 }
     
 bool AndroidStreamSource::setVolume( F32 volume) {
-	//TODO: streaming music
-	/*
-    SoundEngine::SoundEngine_SetBackgroundMusicVolume(volume);
-    */
+
+	android_setMusicTrackVolume(volume);
+
     return true;
 }

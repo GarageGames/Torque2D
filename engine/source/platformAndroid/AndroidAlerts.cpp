@@ -22,17 +22,22 @@
 #include "platformAndroid/platformAndroid.h"
 #include "platformAndroid/AndroidAlerts.h"
 
+//TODO: currently crashes so commented out
+
+extern void android_AlertOK(const char *title, const char *message);
+extern bool android_AlertOKCancel(const char *title, const char *message);
+extern bool android_AlertRetry(const char *title, const char *message);
+extern bool android_AlertYesNo(const char *title, const char *message);
+
 //-----------------------------------------------------------------------------
 void Platform::AlertOK(const char *windowTitle, const char *message)
 {
-	//TODO: alertok
-	adprintf("Alert OK!");
+	//android_AlertOK(windowTitle, message);
 }
 //-----------------------------------------------------------------------------
 bool Platform::AlertOKCancel(const char *windowTitle, const char *message)
 {
-	//TODO: AlertOKCancel
-	adprintf("Alert OK CANCEL!");
+	//return android_AlertOKCancel(windowTitle, message);
 	return false;
 }
 
@@ -40,15 +45,13 @@ bool Platform::AlertOKCancel(const char *windowTitle, const char *message)
 bool Platform::AlertRetry(const char *windowTitle, const char *message)
 {//retry/cancel
 	
-	//TODO: alertRetry
-	adprintf("Alert OK RETRY!");
+	//return android_AlertRetry(windowTitle, message);
 	return false;
 }
 
-
+//-----------------------------------------------------------------------------
 bool Platform::AlertYesNo(const char *windowTitle, const char *message)
 {
-	//TODO: alertYesNo
-	adprintf("Alert Yes No");
+	//return android_AlertYesNo(windowTitle, message);
 	return false;
 }

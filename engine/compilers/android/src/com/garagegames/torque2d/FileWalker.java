@@ -6,8 +6,10 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.net.Uri;
 import android.util.Log;
 
 public class FileWalker
@@ -112,5 +114,11 @@ public class FileWalker
 			e.printStackTrace();
 		}
 		return ret;
+	}
+	
+	public static void OpenURL(Context context, String url)
+	{
+		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+		context.startActivity(browserIntent);
 	}
 }

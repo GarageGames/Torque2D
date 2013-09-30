@@ -177,3 +177,16 @@ ConsoleFunction( Assert, void, 3, 3, "(condition, message) - Fatal Script Assert
     // Process Assertion.
     AssertISV( dAtob(argv[1]), argv[2] );
 }
+
+ConsoleFunction(testAlertBox, void, 4, 4, "(title,message,retry)")
+{
+	if (dAtob(argv[3]) == true)
+	{
+		bool retry = Platform::AlertOKCancel(argv[1], argv[2]);
+		Con::printf("testAlertBox - retry = %d", retry);
+	}
+	else
+	{
+		Platform::AlertOK(argv[1], argv[2]);
+	}
+}

@@ -220,16 +220,6 @@ bool appIsRunning(int batchId)
     return false;
 }
 
-bool Platform::openWebBrowser(const char *webAddress)
-{
-	//TODO: convert to JNI code
-	//Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
-	//startActivity(browserIntent);
-
-
-	return true;
-}
-
 ConsoleFunction(setScreenOrientation, bool, 3, 3, "Sets the orientation of the screen ( portrait/landscape, upside down or right-side up )\n"
         "@(bool portrait, bool upside_down)"){
     adprintf("screen orientation is set via the manifest file on android");
