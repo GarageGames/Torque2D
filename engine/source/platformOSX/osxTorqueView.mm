@@ -236,7 +236,10 @@
     torqueEvent.modifier = modifiers;
     torqueEvent.ascii = 0;
     torqueEvent.action = action;
-    torqueEvent.fValue = 1.0;
+    if (action == SI_BREAK)
+        torqueEvent.fValue = 0.0;
+    else
+        torqueEvent.fValue = 1.0;
     
     // Post the input event
     Game->postEvent(torqueEvent);
