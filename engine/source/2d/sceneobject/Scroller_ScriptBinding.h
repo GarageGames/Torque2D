@@ -229,7 +229,7 @@ ConsoleMethodWithDocs(Scroller, setScrollPolar, ConsoleVoid, 4, 4, (angle, scrol
     F32 scrollSpeed = dAtof(argv[3]);
 
     // Set Scroll.
-    object->setScroll( mSin(mDegToRad(angle))*scrollSpeed, -mCos(mDegToRad(angle))*scrollSpeed );
+    object->setScroll( mCos(mDegToRad(angle))*scrollSpeed, mSin(mDegToRad(angle))*scrollSpeed );
 }
 
 //------------------------------------------------------------------------------

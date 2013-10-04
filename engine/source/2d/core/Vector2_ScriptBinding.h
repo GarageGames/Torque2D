@@ -263,7 +263,7 @@ ConsoleFunctionWithDocs( Vector2AngleBetween, ConsoleFloat, 3, 3, (Vector2 v1, V
 /*! Angle from one point to another.
 	@return the angle from p1 to p2.
 */
-ConsoleFunctionWithDocs( Vector2AngleToPoint, ConsoleFloat, 3, 3, (Vector2 p1, Vector2 p1))
+ConsoleFunctionWithDocs( Vector2AngleToPoint, ConsoleFloat, 3, 3, (Vector2 p1, Vector2 p2))
 {
     // Check Parameters.
     if (Utility::mGetStringElementCount(argv[1]) < 2 ||Utility::mGetStringElementCount(argv[2]) < 2 )
@@ -276,7 +276,7 @@ ConsoleFunctionWithDocs( Vector2AngleToPoint, ConsoleFloat, 3, 3, (Vector2 p1, V
     Vector2 p2( argv[2] );
 
     // Do Operation.
-    return mRadToDeg( mAtan((p2.x - p1.x), (p1.y - p2.y)) );
+    return mRadToDeg( mAtan((p2.x - p1.x), (p2.y - p1.y)) );
 }
 
 //-----------------------------------------------------------------------------
