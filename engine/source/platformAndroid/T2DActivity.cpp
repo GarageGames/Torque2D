@@ -936,6 +936,8 @@ struct engine engine;
  */
 void android_main(struct android_app* state) {
 
+	sleep(10);
+
 	//init startup time so U32 doesnt overflow
 	android_StartupTime();
 

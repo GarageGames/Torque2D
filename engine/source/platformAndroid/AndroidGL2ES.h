@@ -198,7 +198,7 @@ class ColorI;
 //
 ///* DataType */
 //#define GL_BYTE                           0x1400
-//#define GL_UNSIGNED_BYTE                  0x1401
+#define GL_UNSIGNED_BYTE                  0x1401
 //#define GL_SHORT                          0x1402
 //#define GL_UNSIGNED_SHORT                 0x1403
 //#define GL_INT                            0x1404

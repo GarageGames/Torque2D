@@ -392,7 +392,7 @@ void TextureManager::getSourceDestByteFormat(GBitmap *pBitmap, U32 *sourceFormat
 {
     *byteFormat = GL_UNSIGNED_BYTE;
     U32 byteSize = 1;
-#if defined(TORQUE_OS_IOS)
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
     switch(pBitmap->getFormat()) 
     {
     case GBitmap::Intensity:
@@ -423,6 +423,7 @@ void TextureManager::getSourceDestByteFormat(GBitmap *pBitmap, U32 *sourceFormat
         *byteFormat   = GL_UNSIGNED_SHORT_5_5_5_1;
         byteSize = 1; // Incorrect but assume worst case.
         break;
+#ifdef TORQUE_OS_IOS
     case GBitmap::PVR2:
         *sourceFormat = GL_RGB;
         *byteFormat = GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
@@ -443,6 +444,7 @@ void TextureManager::getSourceDestByteFormat(GBitmap *pBitmap, U32 *sourceFormat
         *byteFormat = GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG;
         byteSize = 1; // Incorrect but assume worst case.
         break;
+#endif
     }
     *destFormat = *sourceFormat;
     *texelSize = byteSize;
