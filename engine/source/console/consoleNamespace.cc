@@ -161,8 +161,8 @@ bool Namespace::unlinkClass(Namespace *parent)
       return false;
    }
 
+   AssertFatal(mRefCountToParent > 0, "Namespace::unlinkClass - reference count to parent is less than 0");
    mRefCountToParent--;
-   AssertFatal(mRefCountToParent >= 0, "Namespace::unlinkClass - reference count to parent is less than 0");
 
    if(mRefCountToParent == 0)
       walk->mParent = NULL;
