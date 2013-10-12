@@ -24,6 +24,7 @@
 #include "platformAndroid/platformAndroid.h"
 #include "platformAndroid/AndroidFont.h"
 #include "string/Unicode.h"
+#include <sstream>
 
 //------------------------------------------------------------------------------
 // New Unicode capable font class.
@@ -48,12 +49,26 @@ void PlatformFont::enumeratePlatformFonts( Vector<StringTableEntry>& fonts )
 
 AndroidFont::AndroidFont()
 {
+	fontFileBuffer = NULL;
+	fontFileBufferSize = 0;
+	fontFaceCreated = false;
+	int error = FT_Init_FreeType( &library );
+	if ( error )
+	{
+		Con::errorf("Failed to initialize the freetype2 library");
+	}
 }
 
 //------------------------------------------------------------------------------
 
 AndroidFont::~AndroidFont()
 {
+	FT_Done_Face( face );
+	if (fontFileBuffer != NULL)
+	{
+		delete[] fontFileBuffer;
+		fontFileBufferSize = 0;
+	}
 }
 
 //------------------------------------------------------------------------------
@@ -70,39 +85,38 @@ bool AndroidFont::create( const char* name, U32 size, U32 charset )
         return false;
     }
     
-    // Use Windows as a baseline (96 DPI) and adjust accordingly.
-    F32 scaledSize = size * (72.0f/96.0f);
-    scaledSize = mRound(scaledSize);
-    
+	char fontPath[255];
+	activity.getFontPath(name, fontPath);
 
-    //todo: generating font cache on android does not work.  Need to generate cache on desktop first.
-    //freetype2 would need to be added to generate on device.
-    // Create the font reference.
-    //mFontRef = CTFontCreateWithName( fontName, scaledSize, NULL );
-    
-    // Sanity!
-    /*if ( !mFontRef )
+    int error = FT_New_Face( library, fontPath, 0, &face );
+
+    if ( error == FT_Err_Unknown_File_Format )
     {
-        Con::errorf( "Could not generate a font reference to font name '%s' of size '%d'", name, size );
-        return false;
-    }*/
+    	fontFaceCreated = false;
+    	Con::errorf("freetype2: Font was found but format is unsupported");
+    }
+    else if ( error )
+    {
+    	fontFaceCreated = false;
+    	Con::errorf("freetype2: Font file was not found.");
+    }
+    else
+    {
+    	fontFaceCreated = true;
+    }
     
-    // Fetch font metrics.
-    //CGFloat ascent = CTFontGetAscent( mFontRef );
-    //CGFloat descent = CTFontGetDescent( mFontRef );
-    float ascent = 0;
-    float descent = 0;
-    
-    // Set baseline.
-    mBaseline = (U32)mRound(ascent);
-    
-    // Set height.
-    mHeight = (U32)mRound( ascent + descent );
-    
-    // Create a gray-scale color-space.
-    //mColorSpace = CGColorSpaceCreateDeviceGray();
+    if (fontFaceCreated == true)
+    {
+    	error = FT_Set_Pixel_Sizes(face, 0, size);
+    	mBaseline = (face->size->metrics.ascender + 32) >> 6;
+    	mHeight = ((face->size->metrics.ascender + -face->size->metrics.descender) + 32) >> 6;
+    }
+    else
+    {
+    	mHeight = 0;
+    	mBaseline = 0;
+    }
 
-    // Return status.
     return true;
 }
 
@@ -146,85 +160,53 @@ PlatformFont::CharInfo& AndroidFont::getCharInfo(const UTF16 character) const
     characterInfo.bitmapIndex = 0;
     characterInfo.xOffset = 0;
     characterInfo.yOffset = 0;
+    FT_GlyphSlot slot = face->glyph;
+
+    int error = FT_Load_Char( face, character, FT_LOAD_RENDER );
     
-    //todo: getcharinfo if freetype2 font creation on device is added
-    /*
-    CGGlyph characterGlyph;
-    CGRect characterBounds;
-    CGSize characterAdvances;
-    UniChar unicodeCharacter = character;
-    
-    // Fetch font glyphs.
-    if ( !CTFontGetGlyphsForCharacters( mFontRef, &unicodeCharacter, &characterGlyph, (CFIndex)1) )
-    {
-        // Sanity!
-        AssertFatal( false, "Cannot create font glyph." );
+    if ( error ) {
+    	return characterInfo;
     }
     
-    // Fetch glyph bounding box.
-    CTFontGetBoundingRectsForGlyphs( mFontRef, kCTFontHorizontalOrientation, &characterGlyph, &characterBounds, (CFIndex)1 );
-    
-    // Fetch glyph advances.
-    CTFontGetAdvancesForGlyphs( mFontRef, kCTFontHorizontalOrientation, &characterGlyph, &characterAdvances, (CFIndex)1 );
+    FT_Glyph_Metrics metrics = face->glyph->metrics;
     
     // Set character metrics,
-    characterInfo.xOrigin = (S32)mRound( characterBounds.origin.x );
-    characterInfo.yOrigin = (S32)mRound( characterBounds.origin.y );
-    characterInfo.width = (U32)mCeil( characterBounds.size.width ) + 2;
-    characterInfo.height = (U32)mCeil( characterBounds.size.height ) + 2;
-    characterInfo.xIncrement = (S32)mRound( characterAdvances.width );
+    characterInfo.xOrigin = slot->bitmap_left;
+    characterInfo.yOrigin = slot->bitmap_top;
+    characterInfo.width = (metrics.width / 64);
+    characterInfo.height = (metrics.height / 64);
+    characterInfo.xIncrement = slot->advance.x / 64;
     
+   // characterInfo.yOrigin = characterInfo.height - characterInfo.yOrigin;
+
     // Finish if character is undrawable.
     if ( characterInfo.width == 0 && characterInfo.height == 0 )
         return characterInfo;
     
     // Clamp character minimum width.
     if ( characterInfo.width == 0 )
-        characterInfo.width = 2;
+    	return characterInfo;
     
     if ( characterInfo.height == 0 )
-        characterInfo.height = 1;
-    
+    	return characterInfo;
     
     // Allocate a bitmap surface.
     const U32 bitmapSize = characterInfo.width * characterInfo.height;
     characterInfo.bitmapData = new U8[bitmapSize];
     dMemset(characterInfo.bitmapData, 0x00, bitmapSize);
     
-    // Create a bitmap context.
-    CGContextRef bitmapContext = CGBitmapContextCreate( characterInfo.bitmapData, characterInfo.width, characterInfo.height, 8, characterInfo.width, mColorSpace, kCGImageAlphaNone );
-    
-    // Sanity!
-    AssertFatal( bitmapContext != NULL, "Cannot create font context." );
-    
-    // Render font anti-aliased if font is arbitrarily small.
-    CGContextSetShouldAntialias( bitmapContext, true);
-    CGContextSetShouldSmoothFonts( bitmapContext, true);
-    CGContextSetRenderingIntent( bitmapContext, kCGRenderingIntentAbsoluteColorimetric);
-    CGContextSetInterpolationQuality( bitmapContext, kCGInterpolationNone);
-    CGContextSetGrayFillColor( bitmapContext, 1.0, 1.0);
-    CGContextSetTextDrawingMode( bitmapContext,  kCGTextFill);
-    
-    // Draw glyph.
-    CGPoint renderOrigin;
-    renderOrigin.x = -characterInfo.xOrigin;
-    renderOrigin.y = -characterInfo.yOrigin;
-    CTFontDrawGlyphs( mFontRef, &characterGlyph, &renderOrigin, 1, bitmapContext );
-    
-#if 0
-    Con::printf("Width:%f, Height:%f, OriginX:%f, OriginY:%f",
-                characterBounds.size.width,
-                characterBounds.size.height,
-                characterBounds.origin.x,
-                characterBounds.origin.y );
-#endif
-    
-    // Adjust the y origin for the glyph size.
-    characterInfo.yOrigin += characterInfo.height;// + mHeight;
-    
-    // Release the bitmap context.
-    CGContextRelease( bitmapContext );
-    */
+    //copy glyph
+    if (slot->bitmap.buffer != NULL)
+    {
+    	for (int i = 0; i < slot->bitmap.width; i++)
+		{
+			for (int j = 0; j < slot->bitmap.rows; j++)
+			{
+				characterInfo.bitmapData[i + (j*slot->bitmap.width)] = slot->bitmap.buffer[i + (j*slot->bitmap.width)];
+			}
+		}
+    }
+
     // Return character information.
     return characterInfo;
 }

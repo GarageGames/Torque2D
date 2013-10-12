@@ -866,6 +866,132 @@ void T2DActivity::loadCacheDir() {
 
 }
 
+void T2DActivity::enumerateFonts() {
+
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = platState.engine->app->activity->vm;
+	JNIEnv* lJNIEnv = platState.engine->app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = platState.engine->app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FontManager");
+	jclass FontManagerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jmethodID MethodFontManager = lJNIEnv->GetStaticMethodID(FontManagerClass, "enumerateFonts", "(Landroid/content/Context;)V");
+	lJNIEnv->CallStaticObjectMethod(FontManagerClass, MethodFontManager, lNativeActivity);
+	lJNIEnv->DeleteLocalRef(strClassName);
+
+	// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+}
+
+void T2DActivity::dumpFontList() {
+
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = platState.engine->app->activity->vm;
+	JNIEnv* lJNIEnv = platState.engine->app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = platState.engine->app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FontManager");
+	jclass FontManagerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jmethodID MethodFontManager = lJNIEnv->GetStaticMethodID(FontManagerClass, "dumpFontList", "()V");
+	lJNIEnv->CallStaticObjectMethod(FontManagerClass, MethodFontManager);
+	lJNIEnv->DeleteLocalRef(strClassName);
+
+	// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+}
+
+void T2DActivity::getFontPath(const char* fontName, char* fontPath) {
+
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = platState.engine->app->activity->vm;
+	JNIEnv* lJNIEnv = platState.engine->app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = platState.engine->app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FontManager");
+	jstring strFontName = lJNIEnv->NewStringUTF(fontName);
+	jclass FontManagerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jmethodID MethodFontManager = lJNIEnv->GetStaticMethodID(FontManagerClass, "getFont", "(Ljava/lang/String;)Ljava/lang/String;");
+	jstring jpath = (jstring)lJNIEnv->CallStaticObjectMethod(FontManagerClass, MethodFontManager, strFontName);
+	if (jpath != NULL)
+	{
+		const char* path = lJNIEnv->GetStringUTFChars(jpath, NULL);
+		strcpy(fontPath, path);
+		fontPath[strlen(path)] = '\0';
+		lJNIEnv->ReleaseStringUTFChars(jpath, path);
+	}
+	else
+	{
+		strcpy(fontPath,"");
+	}
+
+
+	lJNIEnv->DeleteLocalRef(strClassName);
+	lJNIEnv->DeleteLocalRef(strFontName);
+
+	// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+}
+
 /**
  * Process the next main command.
  */
@@ -973,6 +1099,10 @@ void android_main(struct android_app* state) {
 
     //store the cache dir
     activity.loadCacheDir();
+
+    //enumerate fonts
+    activity.enumerateFonts();
+    activity.dumpFontList();
 
     platState.argc = 0;
     //platState.argv
@@ -1333,9 +1463,13 @@ U32 android_GetFileSize(const char* pFilePath)
 	return 0;
 }
 
+ConsoleFunction(dumpFontList, void, 1, 1, "Print device fonts to console")
+{
+	activity.dumpFontList();
+}
+
 ConsoleFunction(GetAndroidResolution, const char*, 1, 1, "Returns the resolution for the android device")
 {
-
     S32 width = _AndroidGetScreenWidth();
     S32 height = _AndroidGetScreenHeight();
 	S32 bitdepth = ANDROID_DEFAULT_RESOLUTION_BIT_DEPTH;

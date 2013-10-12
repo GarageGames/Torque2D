@@ -27,6 +27,17 @@ LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../lib/openal/Android/openal-soft
 include $(PREBUILT_STATIC_LIBRARY)
 #include $(PREBUILT_SHARED_LIBRARY)
 
+#freetype2 lib for generating fonts on device
+LOCAL_PATH := $(MY_LOCAL_PATH)
+ 
+include $(CLEAR_VARS)
+ 
+LOCAL_MODULE := freetype-prebuilt
+LOCAL_SRC_FILES := ../../../lib/freetype/android/lib/libfreetype.a
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../lib/freetype/android/include $(LOCAL_PATH)/../../../lib/freetype/android/include/freetype2
+ 
+include $(PREBUILT_STATIC_LIBRARY)
+
 LOCAL_PATH := $(MY_LOCAL_PATH)
 
 include $(CLEAR_VARS)
@@ -535,7 +546,7 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 			   
 LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O0 -fsigned-char   
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lz -lOpenSLES -L../../../lib/openal/Android/$(TARGET_ARCH_ABI)
-LOCAL_STATIC_LIBRARIES := android_native_app_glue libopenal-prebuilt
+LOCAL_STATIC_LIBRARIES := android_native_app_glue freetype-prebuilt libopenal-prebuilt
 #LOCAL_SHARED_LIBRARIES := libopenal-prebuilt
 
 LOCAL_ARM_MODE := arm

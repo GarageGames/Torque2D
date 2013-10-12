@@ -21,6 +21,8 @@
 //-----------------------------------------------------------------------------
 
 #include "platform/platformFont.h"
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 class AndroidFont : public PlatformFont
 {
@@ -33,6 +35,13 @@ private:
     // Distance between lines.
     U32             mHeight;
     
+    //freetype2 lib
+    FT_Library library;
+    FT_Face face;
+    unsigned char* fontFileBuffer;
+    unsigned int fontFileBufferSize;
+    bool fontFaceCreated;
+
 public:
     AndroidFont();
     virtual ~AndroidFont();

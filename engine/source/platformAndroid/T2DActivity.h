@@ -113,6 +113,9 @@ public:
     void update();
     void finishShutdown();
     void finishGLSetup();
+    void enumerateFonts();
+    void dumpFontList();
+    void getFontPath(const char* fontName, char* fontPath);
 };
 
 extern T2DActivity activity;
