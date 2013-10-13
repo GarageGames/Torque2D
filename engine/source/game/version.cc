@@ -123,7 +123,6 @@ ConsoleFunction(setCompanyAndProduct, void, 3, 3, "(company, product) Sets the c
 
    char appDataPath[1024];
    dSprintf(appDataPath, sizeof(appDataPath), "%s/%s/%s", Platform::getUserDataDirectory(), sgCompanyName, sgProductName);
-   //TODO: this needs to use different file searching methods
    ResourceManager->addPath(appDataPath);
 }
 

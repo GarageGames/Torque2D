@@ -1062,8 +1062,6 @@ struct engine engine;
  */
 void android_main(struct android_app* state) {
 
-	sleep(10);
-
 	//init startup time so U32 doesnt overflow
 	android_StartupTime();
 
@@ -1102,10 +1100,8 @@ void android_main(struct android_app* state) {
 
     //enumerate fonts
     activity.enumerateFonts();
-    activity.dumpFontList();
 
     platState.argc = 0;
-    //platState.argv
 
     // loop waiting for stuff to do.
     while (1) {

@@ -142,7 +142,7 @@ File::~File()
 File::Status File::open(const char *filename, const AccessMode openMode)
 {
 	//If its a cache path then we need to open it using C methods not AssetManager
-  /* if (isCachePath(filename))
+   if (isCachePath(filename))
    {
 	  if (dStrlen(filename) > MAX_MAC_PATH_LONG)
 	   	  Con::warnf("File::open: Filename length is pretty long...");
@@ -199,7 +199,7 @@ File::Status File::open(const char *filename, const AccessMode openMode)
 
 	  // success!
 	  return currentStatus;
-   }*/
+   }
 
    if (dStrlen(filename) > MAX_MAC_PATH_LONG)
       Con::warnf("File::open: Filename length is pretty long...");
@@ -794,7 +794,7 @@ bool Platform::isFile(const char *path)
    if (!path || !*path) 
       return false;
 
-   /*if (isCachePath(path))
+   if (isCachePath(path))
    {
 	  // make sure we can stat the file
 	  struct stat statData;
@@ -808,7 +808,7 @@ bool Platform::isFile(const char *path)
 	  return false;
    }
 
-*/
+
    return android_IsFile(path);
 }
 
@@ -819,7 +819,7 @@ bool Platform::isDirectory(const char *path)
    if (!path || !*path) 
       return false;
    
- /*  if (isCachePath(path))
+   if (isCachePath(path))
    {
 	  // make sure we can stat the file
 	  struct stat statData;
@@ -832,7 +832,7 @@ bool Platform::isDirectory(const char *path)
 
 	  return false;
    }
-*/
+
    return android_IsDir(path);
 }
 
@@ -842,7 +842,7 @@ S32 Platform::getFileSize(const char* pFilePath)
    if (!pFilePath || !*pFilePath) 
       return 0;
    
-  /* if (isCachePath(pFilePath))
+   if (isCachePath(pFilePath))
    {
 	  struct stat statData;
 	  if( stat(pFilePath, &statData) < 0 )
@@ -850,7 +850,7 @@ S32 Platform::getFileSize(const char* pFilePath)
 
 	  // and return it's size in bytes
 	  return (S32)statData.st_size;
-   }*/
+   }
 
    return android_GetFileSize(pFilePath);
 }
@@ -894,7 +894,7 @@ inline bool isGoodDirectoryCache(dirent* entry)
 //-----------------------------------------------------------------------------
 bool Platform::hasSubDirectory(const char *path) 
 {
-	/*if (isCachePath(path))
+	if (isCachePath(path))
 	{
 	   DIR *dir;
 	   dirent *entry;
@@ -920,7 +920,7 @@ bool Platform::hasSubDirectory(const char *path)
 	   return false; // either this dir had no subdirectories, or they were all on the exclude list.
 
 	}
-*/
+
 	android_InitDirList(path);
 	char dir[80];
 	char pdir[255];
@@ -1086,7 +1086,7 @@ bool recurseDumpDirectoriesCache(const char *basePath, const char *path, Vector<
 //-----------------------------------------------------------------------------
 bool Platform::dumpDirectories(const char *path, Vector<StringTableEntry> &directoryVector, S32 depth, bool noBasePath)
 {
-	/*if (isCachePath(path))
+	if (isCachePath(path))
 	{
 	   PROFILE_START(dumpDirectories);
 
@@ -1107,7 +1107,7 @@ bool Platform::dumpDirectories(const char *path, Vector<StringTableEntry> &direc
 
 	   return ret;
 	}
-*/
+
    PROFILE_START(dumpDirectories);
 
    ResourceManager->initExcludedDirectories();
@@ -1223,8 +1223,8 @@ static bool recurseDumpPathCache(const char* curPath, Vector<Platform::FileInfo>
 
       // construct the full file path. we need this to get the file size and to recurse
       const U32 len = dStrlen(curPath) + entry->d_reclen + 2;
-      char pathbuf[len];
-      dSprintf( pathbuf, len, "%s/%s", curPath, entry->d_name);
+      char pathbuf[255];
+      sprintf( pathbuf, "%s/%s", curPath, entry->d_name);
 
       // ok, deal with directories and files seperately.
       if( entry->d_type == DT_DIR )
@@ -1262,13 +1262,13 @@ static bool recurseDumpPathCache(const char* curPath, Vector<Platform::FileInfo>
 //-----------------------------------------------------------------------------
 bool Platform::dumpPath(const char *path, Vector<Platform::FileInfo>& fileVector, S32 depth)
 {
-	/*if (isCachePath(path))
+	if (isCachePath(path))
 	{
 		PROFILE_START(dumpPath);
 		const S32 len = dStrlen(path) + 1;
-	   char newpath[len];
+	    char newpath[255];
 
-		dSprintf(newpath, len, "%s", path);
+		strcpy(newpath, path);
 
 	   if(newpath[len - 2] == '/')
 		  newpath[len - 2] = '\0'; // cut off the trailing slash, if there is one
@@ -1277,7 +1277,7 @@ bool Platform::dumpPath(const char *path, Vector<Platform::FileInfo>& fileVector
 	   PROFILE_END();
 
 	   return ret;
-	}*/
+	}
 
    PROFILE_START(dumpPath);
    char apath[80];
