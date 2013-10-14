@@ -295,7 +295,7 @@ ConsoleMethodWithDocs(NameTags, queryTags, ConsoleString, 3, 4, (tagIds, [exclud
     // Format results.
     U32 bufferSize = 8192;
     char* pReturnBuffer = Con::getReturnBuffer( bufferSize );
-    dSprintf(pReturnBuffer, sizeof(pReturnBuffer), "%s", "");
+    dSprintf(pReturnBuffer, bufferSize * sizeof(char), "%s", "");
     char* pBuffer = pReturnBuffer;
 
     for( NameTags::queryType::iterator itr = results.begin(); itr != results.end(); ++itr )
