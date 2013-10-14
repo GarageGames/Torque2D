@@ -3,6 +3,7 @@ package com.garagegames.torque2d;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 
 import android.content.Context;
@@ -16,6 +17,8 @@ public class FileWalker
 {
 	public static Hashtable<String,Vector<String>> directories = new Hashtable<String,Vector<String>>();
 	public static Hashtable<String,Vector<String>> files = new Hashtable<String,Vector<String>>();
+	public static Vector<String> dumpPathVec = new Vector<String>();
+	public static Vector<String> dumpDirVec = new Vector<String>();
 	
 	public static void InitDirList(Context context, String dir)
 	{
@@ -43,6 +46,171 @@ public class FileWalker
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static String[] DumpDirectories(Context context, String basePath, String path, boolean depth, boolean noBasePath)
+	{
+
+	    dumpPathVec.clear();
+		dumpDirVec.clear();
+		
+		String dirPath = basePath;
+	    
+		if (dirPath.startsWith("/"))
+	    	dirPath = dirPath.substring(1);
+		
+		if (dirPath.endsWith("/"))
+	    	dirPath = dirPath.substring(0,dirPath.length()-1);
+	   
+	    if ( !noBasePath )
+	        dumpPathVec.add(dirPath);
+	   
+	    if (!path.equals(""))
+	    {
+		    dirPath = basePath + "/" + path; 
+		    
+		    if (dirPath.endsWith("/"))
+		    	dirPath = dirPath.substring(0,dirPath.length()-1);
+		   
+	    }
+	   
+		//Log.i("torque2d", "Dump first dir: " + dirPath);
+		DumpDir2(context, dirPath);
+		
+		while (depth && dumpDirVec.size() > 0)
+		{
+			String newdir = dumpDirVec.remove(0);
+			//Log.i("torque2d", "Dump dir again: " + newdir);
+			DumpDir2(context,newdir);
+		}
+		
+		int size = dumpPathVec.size();
+		if (size > 500)
+			size = 500;
+		String[] retStringArray = new String[size];
+		int cnt = 0;
+		for(cnt = 0; cnt < size; cnt++)
+		{
+			String s = dumpPathVec.remove(0);
+			if (noBasePath)
+				s = s.replace(basePath + "/", "");
+			retStringArray[cnt] = "/" + s;
+		}
+		return retStringArray;
+	}
+	
+	public static void DumpDir2(Context context, String dir)
+	{
+		AssetManager assetMgr = context.getAssets();
+		try {
+			String[] assets = assetMgr.list(dir);
+			for (String asset : assets)
+			{
+				if (asset.equals(".") || asset.equals(".."))
+					continue;
+				
+				if (!asset.contains("."))
+				{
+					if (dir.equals(""))
+						dumpPathVec.add(asset);
+					else
+						dumpPathVec.add(dir + "/" + asset);
+					
+					String newdir = asset;
+					if (!dir.equals(""))
+						newdir = dir + "/" + asset;
+					
+					dumpDirVec.add(newdir);
+				}
+			}
+				
+		} catch (IOException e) {
+			
+		}
+	}
+	
+	public static String[] DumpPath(Context context, String dirPath, boolean depth)
+	{
+		dumpPathVec.clear();
+		dumpDirVec.clear();
+		
+		String dir = dirPath;
+		
+		if (dir.startsWith("/"))
+	    	dir = dir.substring(1);
+		
+		if (dir.endsWith("/"))
+	    	dir = dir.substring(0,dir.length()-1);
+	   
+		//Log.i("torque2d", "Dump first dir: " + dir);
+		DumpDir(context, dir);
+		
+		while (depth && dumpDirVec.size() > 0)
+		{
+			String newdir = dumpDirVec.remove(0);
+			//Log.i("torque2d", "Dump dir again: " + newdir);
+			DumpDir(context,newdir);
+		}
+		
+		int size = dumpPathVec.size();
+		if (size > 500)
+			size = 500;
+		String[] retStringArray = new String[size];
+		int cnt = 0;
+		for(cnt = 0; cnt < size; cnt++)
+		{
+			String s = dumpPathVec.remove(0);
+			retStringArray[cnt] = "/" + s;
+		}
+		return retStringArray;
+	}
+	
+	public static String[] getRestOfDump()
+	{
+		int size = dumpPathVec.size();
+		if (size > 500)
+			size = 500;
+		String[] retStringArray = new String[size];
+		int cnt = 0;
+		for(cnt = 0; cnt < size; cnt++)
+		{
+			String s = dumpPathVec.remove(0);
+			retStringArray[cnt] = "/" + s;
+		}
+		return retStringArray;
+	}
+	
+	public static void DumpDir(Context context, String dir)
+	{
+		AssetManager assetMgr = context.getAssets();
+		try {
+			String[] assets = assetMgr.list(dir);
+			for (String asset : assets)
+			{
+				if (asset.equals(".") || asset.equals(".."))
+					continue;
+				
+				if (asset.contains("."))
+				{
+					if (dir.equals(""))
+						dumpPathVec.add(asset);
+					else
+						dumpPathVec.add(dir + "/" + asset);
+				}
+				else
+				{
+					String newdir = asset;
+					if (!dir.equals(""))
+						newdir = dir + "/" + asset;
+					
+					dumpDirVec.add(newdir);
+						
+				}
+			}
+				
+		} catch (IOException e) {
+			
 		}
 	}
 	

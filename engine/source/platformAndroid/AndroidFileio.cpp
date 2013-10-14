@@ -808,8 +808,13 @@ bool Platform::isFile(const char *path)
 	  return false;
    }
 
+   //Checking for . to avoid multiple JNI calls for performance.
+   if (strstr(path, ".") == NULL)
+	   return false;
 
-   return android_IsFile(path);
+   return true;
+
+   //return android_IsFile(path);
 }
 
 
@@ -938,7 +943,7 @@ bool Platform::hasSubDirectory(const char *path)
 }
 
 //-----------------------------------------------------------------------------
-bool recurseDumpDirectories(const char *basePath, const char *path, Vector<StringTableEntry> &directoryVector, S32 depth, bool noBasePath)
+/*bool recurseDumpDirectories(const char *basePath, const char *path, Vector<StringTableEntry> &directoryVector, S32 depth, bool noBasePath)
 {
 	char aPath[80];
    if (basePath[0] == '/')
@@ -1005,7 +1010,7 @@ bool recurseDumpDirectories(const char *basePath, const char *path, Vector<Strin
         android_GetNextDir(pathbuf, dir);
      }
      return true;
-}
+}*/
 
 //-----------------------------------------------------------------------------
 bool recurseDumpDirectoriesCache(const char *basePath, const char *path, Vector<StringTableEntry> &directoryVector, S32 depth, bool noBasePath)
@@ -1109,35 +1114,15 @@ bool Platform::dumpDirectories(const char *path, Vector<StringTableEntry> &direc
 	}
 
    PROFILE_START(dumpDirectories);
-
    ResourceManager->initExcludedDirectories();
-
-   const S32 len = dStrlen(path)+1;
-   char newpath[len];
-   if (path[0] == '/')
-   {
-	   dSprintf(newpath, len-1, "%s", path+1);
-   }
-   else
-   {
-	   dSprintf(newpath, len, "%s", path);
-   }
-
-   if(newpath[len - 1] == '/')
-      newpath[len - 1] = '\0'; // cut off the trailing slash, if there is one
-   
-    // Insert base path to follow what Windows does.
-    if ( !noBasePath )
-        directoryVector.push_back(StringTable->insert(newpath));
-   
-    bool ret = recurseDumpDirectories(newpath, "", directoryVector, depth, noBasePath);
+   bool ret = android_DumpDirectories(path, "", directoryVector, depth, noBasePath);
    PROFILE_END();
    
    return ret;
 }
 
 //-----------------------------------------------------------------------------
-static bool recurseDumpPath(const char* curPath, Vector<Platform::FileInfo>& fileVector, U32 depth)
+/*static bool recurseDumpPath(const char* curPath, Vector<Platform::FileInfo>& fileVector, U32 depth)
 {
    android_InitDirList(curPath);
    
@@ -1201,7 +1186,7 @@ static bool recurseDumpPath(const char* curPath, Vector<Platform::FileInfo>& fil
 
    return true;
    
-}
+}*/
 
 //-----------------------------------------------------------------------------
 static bool recurseDumpPathCache(const char* curPath, Vector<Platform::FileInfo>& fileVector, U32 depth)
@@ -1280,24 +1265,7 @@ bool Platform::dumpPath(const char *path, Vector<Platform::FileInfo>& fileVector
 	}
 
    PROFILE_START(dumpPath);
-   char apath[80];
-   if (path[0] == '/')
-   {
-	   strcpy(apath, path+1);
-   }
-   else
-   {
-	   strcpy(apath, path);
-   }
-    const S32 len = dStrlen(apath) + 1;
-   char newpath[len];
-   
-    dSprintf(newpath, len, "%s", apath);
-    
-   if(newpath[len - 2] == '/')
-      newpath[len - 2] = '\0'; // cut off the trailing slash, if there is one
-   
-   bool ret = recurseDumpPath( newpath, fileVector, depth);
+   bool ret = android_DumpPath( path, fileVector, depth);
    PROFILE_END();
    
    return ret;

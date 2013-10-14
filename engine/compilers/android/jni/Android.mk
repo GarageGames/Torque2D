@@ -543,8 +543,11 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 #					../../../source/testing/tests/platformStringTests.cc \
 #					../../../source/testing/unitTesting.cc
  
-			   
-LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O0 -fsigned-char   
+ifeq ($(APP_OPTIM),debug)
+	LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_DEBUG -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O0 -fsigned-char   
+else
+	LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O3 -fsigned-char   
+endif				   
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lz -lOpenSLES -L../../../lib/openal/Android/$(TARGET_ARCH_ABI)
 LOCAL_STATIC_LIBRARIES := android_native_app_glue freetype-prebuilt libopenal-prebuilt
 #LOCAL_SHARED_LIBRARIES := libopenal-prebuilt
