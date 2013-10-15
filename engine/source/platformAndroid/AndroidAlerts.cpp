@@ -32,12 +32,12 @@ extern bool android_AlertYesNo(const char *title, const char *message);
 //-----------------------------------------------------------------------------
 void Platform::AlertOK(const char *windowTitle, const char *message)
 {
-	//android_AlertOK(windowTitle, message);
+	android_AlertOK(windowTitle, message);
 }
 //-----------------------------------------------------------------------------
 bool Platform::AlertOKCancel(const char *windowTitle, const char *message)
 {
-	//return android_AlertOKCancel(windowTitle, message);
+	android_AlertOKCancel(windowTitle, message);
 	return false;
 }
 

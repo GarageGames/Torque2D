@@ -1243,6 +1243,8 @@ bool android_DumpDirectoriesExtra(Vector<StringTableEntry> &directoryVector)
 	return ret;
 }
 
+static Vector<Platform::FileInfo> dumpPathBackup;
+
 bool android_DumpDirectories(const char *basePath, const char *path, Vector<StringTableEntry> &directoryVector, S32 depth, bool noBasePath)
 {
 	// Attaches the current thread to the JVM.
@@ -1333,8 +1335,6 @@ bool android_DumpDirectories(const char *basePath, const char *path, Vector<Stri
 
 	return ret;
 }
-
-static Vector<Platform::FileInfo> dumpPathBackup;
 
 bool android_DumpPathExtra(Vector<Platform::FileInfo>& fileVector)
 {
@@ -1477,7 +1477,7 @@ bool android_DumpPath(const char* dir, Vector<Platform::FileInfo>& fileVector, U
 	if (lResult == JNI_ERR) {
 		return false;
 	}
-
+	double time = timeGetTime();
 	// Retrieves NativeActivity.
 	jobject lNativeActivity = engine.app->activity->clazz;
 	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
@@ -1555,7 +1555,7 @@ bool android_DumpPath(const char* dir, Vector<Platform::FileInfo>& fileVector, U
 		lJavaVM->DetachCurrentThread();
 		ret = false;
 	}
-
+	adprintf("time to parse paths: %g", timeGetTime() - time);
 	return ret;
 
 }
@@ -1984,14 +1984,15 @@ bool android_AlertOKCancel(const char *title, const char *message)
 	jclass T2DUtilitiesClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strTitle = lJNIEnv->NewStringUTF(title);
 	jstring strMessage = lJNIEnv->NewStringUTF(message);
-	jmethodID MethodT2DUtilities = lJNIEnv->GetStaticMethodID(T2DUtilitiesClass, "DisplayAlertOKCancel", "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)Z");
-	jboolean jret = lJNIEnv->CallStaticBooleanMethod(T2DUtilitiesClass, MethodT2DUtilities, lNativeActivity, strTitle, strMessage);
+	jmethodID MethodT2DUtilities = lJNIEnv->GetStaticMethodID(T2DUtilitiesClass, "DisplayAlertOKCancel", "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V");
+	lJNIEnv->CallStaticVoidMethod(T2DUtilitiesClass, MethodT2DUtilities, lNativeActivity, strTitle, strMessage);
 
 	lJNIEnv->DeleteLocalRef(strClassName);
 	lJNIEnv->DeleteLocalRef(strTitle);
 	lJNIEnv->DeleteLocalRef(strMessage);
 
-	bool ret = jret;
+	//TODO: return needs to come from popup
+	bool ret = true;
 
 		// Finished with the JVM.
 	lJavaVM->DetachCurrentThread();

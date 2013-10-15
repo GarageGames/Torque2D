@@ -19,6 +19,7 @@ public class FileWalker
 	public static Hashtable<String,Vector<String>> files = new Hashtable<String,Vector<String>>();
 	public static Vector<String> dumpPathVec = new Vector<String>();
 	public static Vector<String> dumpDirVec = new Vector<String>();
+	public static Vector<String> dumpDirList = new Vector<String>();
 	
 	public static void InitDirList(Context context, String dir)
 	{
@@ -31,17 +32,15 @@ public class FileWalker
 			if (files.containsKey(dir))
 				files.remove(dir);
 			files.put(dir, new Vector<String>());
-			//Log.i("torque2d", "PARENT DIRECTORY: " + dir);
+			
 			for(String asset: assets) {
 				if (asset.indexOf('.') == -1)
 				{
 					directories.get(dir).add(asset);
-					//Log.i("torque2d", "DIRECTORY ASSET: " + asset);
 				}
 				else
 				{
 					files.get(dir).add(asset);
-					//Log.i("torque2d", "FILE ASSET: " + asset);
 				}
 			}
 		} catch (IOException e) {
@@ -51,7 +50,7 @@ public class FileWalker
 	
 	public static String[] DumpDirectories(Context context, String basePath, String path, boolean depth, boolean noBasePath)
 	{
-
+		double time = System.currentTimeMillis();
 	    dumpPathVec.clear();
 		dumpDirVec.clear();
 		
@@ -75,13 +74,11 @@ public class FileWalker
 		   
 	    }
 	   
-		//Log.i("torque2d", "Dump first dir: " + dirPath);
 		DumpDir2(context, dirPath);
 		
 		while (depth && dumpDirVec.size() > 0)
 		{
 			String newdir = dumpDirVec.remove(0);
-			//Log.i("torque2d", "Dump dir again: " + newdir);
 			DumpDir2(context,newdir);
 		}
 		
@@ -97,43 +94,57 @@ public class FileWalker
 				s = s.replace(basePath + "/", "");
 			retStringArray[cnt] = "/" + s;
 		}
+		Log.i("torque2d", "time in dir java: " + (System.currentTimeMillis() - time) );
+		
 		return retStringArray;
 	}
 	
 	public static void DumpDir2(Context context, String dir)
 	{
-		AssetManager assetMgr = context.getAssets();
-		try {
-			String[] assets = assetMgr.list(dir);
-			for (String asset : assets)
+		for (String d : dumpDirList)
+		{
+			String d2 = d.substring(1);
+			if (d2.equals(dir))
+				continue;
+			
+			if (d2.length() < dir.length())
+				continue;
+			
+			String newdir = "";
+			if (dir.equals(""))
 			{
-				if (asset.equals(".") || asset.equals(".."))
-					continue;
-				
-				if (!asset.contains("."))
+				if (!d2.contains("/"))
 				{
-					if (dir.equals(""))
-						dumpPathVec.add(asset);
-					else
-						dumpPathVec.add(dir + "/" + asset);
-					
-					String newdir = asset;
-					if (!dir.equals(""))
-						newdir = dir + "/" + asset;
-					
-					dumpDirVec.add(newdir);
+					dumpPathVec.add(d2);
+					newdir = d2;
 				}
 			}
-				
-		} catch (IOException e) {
+			else
+			{
+				if (d2.startsWith(dir))
+				{
+					String asset = d2.replace(dir, "").substring(1);
+					if (!asset.contains("/"))
+					{
+						dumpPathVec.add(d2);
+						newdir = d2;
+					}
+				}
+			}
 			
+			
+			if (!newdir.equals("")) {
+				dumpDirVec.add(newdir);
+			}
 		}
 	}
 	
 	public static String[] DumpPath(Context context, String dirPath, boolean depth)
 	{
+		double time = System.currentTimeMillis();
 		dumpPathVec.clear();
 		dumpDirVec.clear();
+		dumpDirList.clear();
 		
 		String dir = dirPath;
 		
@@ -143,13 +154,11 @@ public class FileWalker
 		if (dir.endsWith("/"))
 	    	dir = dir.substring(0,dir.length()-1);
 	   
-		//Log.i("torque2d", "Dump first dir: " + dir);
 		DumpDir(context, dir);
 		
 		while (depth && dumpDirVec.size() > 0)
 		{
 			String newdir = dumpDirVec.remove(0);
-			//Log.i("torque2d", "Dump dir again: " + newdir);
 			DumpDir(context,newdir);
 		}
 		
@@ -163,6 +172,7 @@ public class FileWalker
 			String s = dumpPathVec.remove(0);
 			retStringArray[cnt] = "/" + s;
 		}
+		Log.i("torque2d", "time in java: " + (System.currentTimeMillis() - time) );
 		return retStringArray;
 	}
 	
@@ -191,6 +201,12 @@ public class FileWalker
 				if (asset.equals(".") || asset.equals(".."))
 					continue;
 				
+				if (dir.equals(""))
+				{
+					if (asset.equals("images") || asset.equals("webkit") || asset.equals("sounds") || asset.equals("kioskmode"))
+						continue;
+				}
+				
 				if (asset.contains("."))
 				{
 					if (dir.equals(""))
@@ -205,6 +221,10 @@ public class FileWalker
 						newdir = dir + "/" + asset;
 					
 					dumpDirVec.add(newdir);
+					if (newdir.startsWith("/"))
+						dumpDirList.add(newdir);
+					else
+						dumpDirList.add("/" + newdir);
 						
 				}
 			}
