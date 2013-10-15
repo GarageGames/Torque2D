@@ -73,7 +73,6 @@ public class FileWalker
 		    	dirPath = dirPath.substring(0,dirPath.length()-1);
 		   
 	    }
-	   
 		DumpDir2(context, dirPath);
 		
 		while (depth && dumpDirVec.size() > 0)
@@ -154,22 +153,26 @@ public class FileWalker
 		if (dir.endsWith("/"))
 	    	dir = dir.substring(0,dir.length()-1);
 	   
+		//Log.i("torque2d","path start: " + dir);
 		DumpDir(context, dir);
 		
 		while (depth && dumpDirVec.size() > 0)
 		{
 			String newdir = dumpDirVec.remove(0);
+			//Log.i("torque2d","newpath " + newdir);
 			DumpDir(context,newdir);
 		}
 		
 		int size = dumpPathVec.size();
 		if (size > 500)
 			size = 500;
+		//Log.i("torque2d","size " + size);
 		String[] retStringArray = new String[size];
 		int cnt = 0;
 		for(cnt = 0; cnt < size; cnt++)
 		{
 			String s = dumpPathVec.remove(0);
+			//Log.i("torque2d","file " + s);
 			retStringArray[cnt] = "/" + s;
 		}
 		Log.i("torque2d", "time in java: " + (System.currentTimeMillis() - time) );

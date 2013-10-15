@@ -22,12 +22,11 @@
 #include "platformAndroid/platformAndroid.h"
 #include "platformAndroid/AndroidAlerts.h"
 
-//TODO: currently crashes so commented out
-
 extern void android_AlertOK(const char *title, const char *message);
-extern bool android_AlertOKCancel(const char *title, const char *message);
-extern bool android_AlertRetry(const char *title, const char *message);
-extern bool android_AlertYesNo(const char *title, const char *message);
+extern void android_AlertOKCancel(const char *title, const char *message);
+extern void android_AlertRetry(const char *title, const char *message);
+extern void android_AlertYesNo(const char *title, const char *message);
+extern int android_checkAlert();
 
 //-----------------------------------------------------------------------------
 void Platform::AlertOK(const char *windowTitle, const char *message)
@@ -38,20 +37,44 @@ void Platform::AlertOK(const char *windowTitle, const char *message)
 bool Platform::AlertOKCancel(const char *windowTitle, const char *message)
 {
 	android_AlertOKCancel(windowTitle, message);
-	return false;
+
+	int ret = -1;
+
+	while((ret = android_checkAlert()) == -1)
+	{
+		usleep(32);
+	}
+
+	return (ret == 1) ? true : false;
 }
 
 //-----------------------------------------------------------------------------
 bool Platform::AlertRetry(const char *windowTitle, const char *message)
 {//retry/cancel
 	
-	//return android_AlertRetry(windowTitle, message);
-	return false;
+	android_AlertRetry(windowTitle, message);
+
+	int ret = -1;
+
+	while((ret = android_checkAlert()) == -1)
+	{
+		usleep(32);
+	}
+
+	return (ret == 1) ? true : false;
 }
 
 //-----------------------------------------------------------------------------
 bool Platform::AlertYesNo(const char *windowTitle, const char *message)
 {
-	//return android_AlertYesNo(windowTitle, message);
-	return false;
+	android_AlertYesNo(windowTitle, message);
+
+	int ret = -1;
+
+	while((ret = android_checkAlert()) == -1)
+	{
+		usleep(32);
+	}
+
+	return (ret == 1) ? true : false;
 }

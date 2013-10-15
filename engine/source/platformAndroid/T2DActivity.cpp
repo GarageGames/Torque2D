@@ -76,7 +76,6 @@ void ChangeVolume(bool up) {
     // Attaches the current thread to the JVM.
     jint lResult;
     jint lFlags = 0;
-    adprintf("JVM ChangeVolume");
     JavaVM* lJavaVM = platState.engine->app->activity->vm;
     JNIEnv* lJNIEnv = platState.engine->app->activity->env;
 
@@ -521,7 +520,6 @@ void _AndroidGetDeviceIPAddress(char* address) {
 	 // Attaches the current thread to the JVM.
 	 jint lResult;
 	 jint lFlags = 0;
-	 adprintf("JVM GetDeviceIP");
 	 JavaVM* lJavaVM = platState.engine->app->activity->vm;
 	 JNIEnv* lJNIEnv = platState.engine->app->activity->env;
 
@@ -785,7 +783,6 @@ void keepScreenOn() {
     // Attaches the current thread to the JVM.
     jint lResult;
     jint lFlags = 0;
-    adprintf("JVM KeepScreenOn");
     JavaVM* lJavaVM = platState.engine->app->activity->vm;
     JNIEnv* lJNIEnv = platState.engine->app->activity->env;
 
@@ -831,7 +828,6 @@ void T2DActivity::loadCacheDir() {
     // Attaches the current thread to the JVM.
     jint lResult;
     jint lFlags = 0;
-    adprintf("JVM loadCacheDir");
     JavaVM* lJavaVM = platState.engine->app->activity->vm;
     JNIEnv* lJNIEnv = platState.engine->app->activity->env;
 
@@ -871,7 +867,6 @@ void T2DActivity::enumerateFonts() {
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JVM enumerateFonts");
 	JavaVM* lJavaVM = platState.engine->app->activity->vm;
 	JNIEnv* lJNIEnv = platState.engine->app->activity->env;
 
@@ -908,7 +903,6 @@ void T2DActivity::dumpFontList() {
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JVM dumpFontList");
 	JavaVM* lJavaVM = platState.engine->app->activity->vm;
 	JNIEnv* lJNIEnv = platState.engine->app->activity->env;
 
@@ -945,7 +939,6 @@ void T2DActivity::getFontPath(const char* fontName, char* fontPath) {
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JVM getFontPath");
 	JavaVM* lJavaVM = platState.engine->app->activity->vm;
 	JNIEnv* lJNIEnv = platState.engine->app->activity->env;
 
@@ -1181,7 +1174,6 @@ bool android_DumpDirectoriesExtra(Vector<StringTableEntry> &directoryVector)
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI dumpDirExtra");
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -1250,7 +1242,6 @@ bool android_DumpDirectories(const char *basePath, const char *path, Vector<Stri
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI dumpDir");
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -1341,7 +1332,6 @@ bool android_DumpPathExtra(Vector<Platform::FileInfo>& fileVector)
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI dumpPathExtra");
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -1464,7 +1454,6 @@ bool android_DumpPath(const char* dir, Vector<Platform::FileInfo>& fileVector, U
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI dumpPath");
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -1477,7 +1466,7 @@ bool android_DumpPath(const char* dir, Vector<Platform::FileInfo>& fileVector, U
 	if (lResult == JNI_ERR) {
 		return false;
 	}
-	double time = timeGetTime();
+
 	// Retrieves NativeActivity.
 	jobject lNativeActivity = engine.app->activity->clazz;
 	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
@@ -1515,15 +1504,12 @@ bool android_DumpPath(const char* dir, Vector<Platform::FileInfo>& fileVector, U
 			rInfo.pFileName = StringTable->insert(fileName.c_str());
 			rInfo.fileSize  = fileSize;
 
-			if (strcmp(dir, "") == 0)
-			{
-				dumpPathBackup.increment();
-				Platform::FileInfo& rInfo2 = dumpPathBackup.last();
-				rInfo2.pFullPath = rInfo.pFullPath;
-				rInfo2.pFileName = rInfo.pFileName;
-				rInfo2.fileSize  = rInfo.fileSize;
+			dumpPathBackup.increment();
+			Platform::FileInfo& rInfo2 = dumpPathBackup.last();
+			rInfo2.pFullPath = rInfo.pFullPath;
+			rInfo2.pFileName = rInfo.pFileName;
+			rInfo2.fileSize  = rInfo.fileSize;
 
-			}
 		}
 		lJNIEnv->DeleteLocalRef(stringArray);
 		stringArray = NULL;
@@ -1555,7 +1541,7 @@ bool android_DumpPath(const char* dir, Vector<Platform::FileInfo>& fileVector, U
 		lJavaVM->DetachCurrentThread();
 		ret = false;
 	}
-	adprintf("time to parse paths: %g", timeGetTime() - time);
+
 	return ret;
 
 }
@@ -1565,7 +1551,7 @@ void android_InitDirList(const char* dir)
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI InitDirList");
+
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -1606,7 +1592,7 @@ void android_GetNextDir(const char* pdir, char *dir)
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI GetNextDir");
+
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -1657,7 +1643,7 @@ void android_GetNextFile(const char* pdir, char *file)
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI GetNextFile");
+
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -1708,7 +1694,7 @@ bool android_IsFile(const char* path)
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI ISFile");
+
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -1760,7 +1746,7 @@ bool android_IsDir(const char* path)
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI ISDir");
+
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -1876,7 +1862,7 @@ bool Platform::openWebBrowser(const char *webAddress)
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI openWeb");
+
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -1917,7 +1903,7 @@ void android_AlertOK(const char *title, const char *message)
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI AlertOK");
+
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -1953,12 +1939,12 @@ void android_AlertOK(const char *title, const char *message)
 	lJavaVM->DetachCurrentThread();
 }
 
-bool android_AlertOKCancel(const char *title, const char *message)
+int android_checkAlert()
 {
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI AlertOKCancel");
+
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -1969,7 +1955,49 @@ bool android_AlertOKCancel(const char *title, const char *message)
 
 	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
 	if (lResult == JNI_ERR) {
-		return false;
+		return 0;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = engine.app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/T2DUtilities");
+	jclass T2DUtilitiesClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jmethodID MethodT2DUtilities = lJNIEnv->GetStaticMethodID(T2DUtilitiesClass, "CheckAlert", "()I");
+	jint jret = lJNIEnv->CallStaticIntMethod(T2DUtilitiesClass, MethodT2DUtilities);
+
+	int ret = jret;
+
+	lJNIEnv->DeleteLocalRef(strClassName);
+
+	// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+
+	return ret;
+}
+
+void android_AlertOKCancel(const char *title, const char *message)
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = engine.app->activity->vm;
+	JNIEnv* lJNIEnv = engine.app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return;
 	}
 
 	// Retrieves NativeActivity.
@@ -1991,21 +2019,16 @@ bool android_AlertOKCancel(const char *title, const char *message)
 	lJNIEnv->DeleteLocalRef(strTitle);
 	lJNIEnv->DeleteLocalRef(strMessage);
 
-	//TODO: return needs to come from popup
-	bool ret = true;
-
-		// Finished with the JVM.
+	// Finished with the JVM.
 	lJavaVM->DetachCurrentThread();
-
-	return ret;
 }
 
-bool android_AlertRetry(const char *title, const char *message)
+void android_AlertRetry(const char *title, const char *message)
 {
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI alertRetry");
+
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -2016,7 +2039,7 @@ bool android_AlertRetry(const char *title, const char *message)
 
 	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
 	if (lResult == JNI_ERR) {
-		return false;
+		return;
 	}
 
 	// Retrieves NativeActivity.
@@ -2031,27 +2054,23 @@ bool android_AlertRetry(const char *title, const char *message)
 	jclass T2DUtilitiesClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strTitle = lJNIEnv->NewStringUTF(title);
 	jstring strMessage = lJNIEnv->NewStringUTF(message);
-	jmethodID MethodT2DUtilities = lJNIEnv->GetStaticMethodID(T2DUtilitiesClass, "DisplayAlertRetry", "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)Z");
-	jboolean jret = lJNIEnv->CallStaticBooleanMethod(T2DUtilitiesClass, MethodT2DUtilities, lNativeActivity, strTitle, strMessage);
+	jmethodID MethodT2DUtilities = lJNIEnv->GetStaticMethodID(T2DUtilitiesClass, "DisplayAlertRetry", "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V");
+	lJNIEnv->CallStaticVoidMethod(T2DUtilitiesClass, MethodT2DUtilities, lNativeActivity, strTitle, strMessage);
 
 	lJNIEnv->DeleteLocalRef(strClassName);
 	lJNIEnv->DeleteLocalRef(strTitle);
 	lJNIEnv->DeleteLocalRef(strMessage);
 
-	bool ret = jret;
-
-		// Finished with the JVM.
+	// Finished with the JVM.
 	lJavaVM->DetachCurrentThread();
-
-	return ret;
 }
 
-bool android_AlertYesNo(const char *title, const char *message)
+void android_AlertYesNo(const char *title, const char *message)
 {
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI AlertYesNO");
+
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -2062,7 +2081,7 @@ bool android_AlertYesNo(const char *title, const char *message)
 
 	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
 	if (lResult == JNI_ERR) {
-		return false;
+		return;
 	}
 
 	// Retrieves NativeActivity.
@@ -2077,19 +2096,15 @@ bool android_AlertYesNo(const char *title, const char *message)
 	jclass T2DUtilitiesClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strTitle = lJNIEnv->NewStringUTF(title);
 	jstring strMessage = lJNIEnv->NewStringUTF(message);
-	jmethodID MethodT2DUtilities = lJNIEnv->GetStaticMethodID(T2DUtilitiesClass, "DisplayAlertYesNo", "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)Z");
-	jboolean jret = lJNIEnv->CallStaticBooleanMethod(T2DUtilitiesClass, MethodT2DUtilities, lNativeActivity, strTitle, strMessage);
+	jmethodID MethodT2DUtilities = lJNIEnv->GetStaticMethodID(T2DUtilitiesClass, "DisplayAlertYesNo", "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V");
+	lJNIEnv->CallStaticVoidMethod(T2DUtilitiesClass, MethodT2DUtilities, lNativeActivity, strTitle, strMessage);
 
 	lJNIEnv->DeleteLocalRef(strClassName);
 	lJNIEnv->DeleteLocalRef(strTitle);
 	lJNIEnv->DeleteLocalRef(strMessage);
 
-	bool ret = jret;
-
-		// Finished with the JVM.
+	// Finished with the JVM.
 	lJavaVM->DetachCurrentThread();
-
-	return ret;
 }
 
 void android_LoadMusicTrack( const char *mFilename )
@@ -2097,7 +2112,7 @@ void android_LoadMusicTrack( const char *mFilename )
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI LoadMusic");
+
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -2137,7 +2152,7 @@ void android_UnLoadMusicTrack()
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI UnloadMusic");
+
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -2175,7 +2190,7 @@ bool android_isMusicTrackPlaying()
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI isMusicPLaying");
+
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -2217,7 +2232,7 @@ void android_StartMusicTrack()
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI StartMusic");
+
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -2255,7 +2270,7 @@ void android_StopMusicTrack()
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI stopMusic");
+
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -2293,7 +2308,7 @@ void android_setMusicTrackVolume(F32 volume)
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JNI setMusicVol");
+
 	JavaVM* lJavaVM = engine.app->activity->vm;
 	JNIEnv* lJNIEnv = engine.app->activity->env;
 
@@ -2333,7 +2348,7 @@ ConsoleFunction(doDeviceVibrate, void, 1, 1, "Makes the device do a quick vibrat
 	// Attaches the current thread to the JVM.
 	jint lResult;
 	jint lFlags = 0;
-	adprintf("JVM DeviceVibrate");
+
 	JavaVM* lJavaVM = platState.engine->app->activity->vm;
 	JNIEnv* lJNIEnv = platState.engine->app->activity->env;
 
