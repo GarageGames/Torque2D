@@ -694,10 +694,9 @@ static int engine_init_display(struct engine* engine) {
 
     glViewport(0, 0, engine->width, engine->height);
 
-    toggleSplashScreen(true);
-
     if (SetupCompleted == false)
     {
+    	toggleSplashScreen(true);
     	if (_AndroidRunTorqueMain(engine) == 0)
     	{
     		engine->app->destroyRequested = 1;
@@ -1046,7 +1045,6 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 					Game->textureResurrect();
 					bSuspended = false;
 				}
-                toggleSplashScreen(false);
             }
             break;
         case APP_CMD_TERM_WINDOW:
