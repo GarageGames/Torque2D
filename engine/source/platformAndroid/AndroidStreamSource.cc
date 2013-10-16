@@ -34,8 +34,6 @@ AndroidStreamSource::AndroidStreamSource(const char *filename)  {
 	int len = dStrlen( filename );
 	mFilename = new char[len + 1];
 	dStrcpy( mFilename, filename );
-
-	android_LoadMusicTrack( mFilename );
 }
 
 AndroidStreamSource::~AndroidStreamSource() {
@@ -50,14 +48,9 @@ bool AndroidStreamSource::isPlaying() {
 
 bool AndroidStreamSource::start( bool loop ) {
 
+	Con::printf("Starting music file: %s", mFilename);
 	android_LoadMusicTrack( mFilename );
 	android_StartMusicTrack();
-	if( !loop ) {
-		//stop at end
-		android_StopMusicTrack();
-		Con::executef(1,"onAndroidStreamEnd");
-	}
-
 	return true;
 }
 
@@ -74,4 +67,13 @@ bool AndroidStreamSource::setVolume( F32 volume) {
 	android_setMusicTrackVolume(volume);
 
     return true;
+}
+AndroidStreamSource* stream = NULL;
+ConsoleFunction(playStreamingMusic, void, 2, 2, "")
+{
+	if (stream != NULL)
+		delete stream;
+
+	stream = new AndroidStreamSource(argv[1]);
+	stream->start();
 }

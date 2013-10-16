@@ -5,6 +5,7 @@ import java.io.IOException;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
+import android.util.Log;
 
 public class StreamingAudioPlayer {
 	
@@ -16,7 +17,11 @@ public class StreamingAudioPlayer {
 		AssetFileDescriptor fd;
 		try {
 			fd = context.getAssets().openFd(filename);
-			mediaPlayer.setDataSource(fd.getFileDescriptor());
+			if (fd == null)
+				Log.i("torque2d", "failed to load music file " + filename);
+			
+			mediaPlayer.setDataSource(fd.getFileDescriptor(),fd.getStartOffset(),fd.getLength());
+			mediaPlayer.prepare();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
