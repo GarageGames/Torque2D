@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
@@ -19,11 +20,11 @@ import android.widget.ImageView.ScaleType;
 
 public class SplashScreen extends Dialog {
 	
-	private static SplashScreen _instance = null;
-	
-	public SplashScreen(Context context) {
-		super(context);
+	public SplashScreen(Context context, int theme) {
+		super(context, theme);
 	}
+
+	private static SplashScreen _instance = null;
 	
 	public static void ToggleSplashScreen(final Context context, final boolean show, final int screenWidth, final int screenHeight) 
 	{
@@ -34,7 +35,7 @@ public class SplashScreen extends Dialog {
 				@Override
 					public void run() {
 						
-						_instance = new SplashScreen(context);
+						_instance = new SplashScreen(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
 						
 						try {
 							AssetManager assetMgr = context.getAssets();
@@ -48,6 +49,7 @@ public class SplashScreen extends Dialog {
 							view.setBackgroundColor(Color.BLACK);
 							_instance.getWindow().setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
 							         WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+							_instance.requestWindowFeature(Window.FEATURE_NO_TITLE); 
 							_instance.setCancelable(false);
 							_instance.setContentView(view);
 							_instance.show();
