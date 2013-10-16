@@ -49,7 +49,7 @@ extern bool android_IsFile(const char* path);
 extern U32 android_GetFileSize(const char* pFilePath);
 extern bool android_DumpPath(const char* dir, Vector<Platform::FileInfo>& fileVector, U32 depth);
 extern bool android_DumpDirectories(const char *basePath, const char *path, Vector<StringTableEntry> &directoryVector, S32 depth, bool noBasePath);
-
+extern void toggleSplashScreen(bool show);
 
 /**
  * Our saved state data.

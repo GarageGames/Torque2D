@@ -71,6 +71,42 @@ double timeGetTime() {
 
 }
 
+void toggleSplashScreen(bool show)
+{
+	// Attaches the current thread to the JVM.
+	jint lResult;
+	jint lFlags = 0;
+
+	JavaVM* lJavaVM = platState.engine->app->activity->vm;
+	JNIEnv* lJNIEnv = platState.engine->app->activity->env;
+
+	JavaVMAttachArgs lJavaVMAttachArgs;
+	lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+	lJavaVMAttachArgs.name = "NativeThread";
+	lJavaVMAttachArgs.group = NULL;
+
+	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
+	if (lResult == JNI_ERR) {
+		return;
+	}
+
+	// Retrieves NativeActivity.
+	jobject lNativeActivity = platState.engine->app->activity->clazz;
+	jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
+
+	jmethodID getClassLoader = lJNIEnv->GetMethodID(ClassNativeActivity,"getClassLoader", "()Ljava/lang/ClassLoader;");
+	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
+	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
+	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/SplashScreen");
+	jclass SplashScreenClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
+	jmethodID MethodSplashScreen = lJNIEnv->GetStaticMethodID(SplashScreenClass, "ToggleSplashScreen", "(Landroid/content/Context;ZII)V");
+	lJNIEnv->CallStaticVoidMethod(SplashScreenClass, MethodSplashScreen, lNativeActivity, (jboolean)show, (jint)platState.engine->width, (jint)platState.engine->height);
+
+	// Finished with the JVM.
+	lJavaVM->DetachCurrentThread();
+}
+
 void ChangeVolume(bool up) {
 
     // Attaches the current thread to the JVM.
@@ -657,6 +693,8 @@ static int engine_init_display(struct engine* engine) {
     engine->animating = 1;
 
     glViewport(0, 0, engine->width, engine->height);
+
+    toggleSplashScreen(true);
 
     if (SetupCompleted == false)
     {
@@ -1840,6 +1878,11 @@ U32 android_GetFileSize(const char* pFilePath)
 ConsoleFunction(dumpFontList, void, 1, 1, "Print device fonts to console")
 {
 	activity.dumpFontList();
+}
+
+ConsoleFunction(hideSplashScreen, void, 1, 1, "hide the splash screen")
+{
+	toggleSplashScreen(false);
 }
 
 ConsoleFunction(GetAndroidResolution, const char*, 1, 1, "Returns the resolution for the android device")
