@@ -53,6 +53,8 @@ function ToyCategorySelectList::onSelect(%this)
                 %firstToyButton.performSelect();
         }
     }
+    if ($platform $= "Android")
+    	hideSplashScreen();
 }
 
 //-----------------------------------------------------------------------------

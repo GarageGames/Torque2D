@@ -23,7 +23,7 @@
 if ($platform $= "windows")
 	$platformFontType = "lucida console";
 else if ($platform $= "Android")
-	$platformFontType = "Droid Serif";
+	$platformFontType = "Droid";
 else
 	$platformFontType = "monaco";
 if ($platform $= "ios")
