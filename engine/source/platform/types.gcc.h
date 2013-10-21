@@ -61,7 +61,11 @@ typedef unsigned long long  U64;
 #  define TORQUE_SUPPORTS_NASM
 #  define TORQUE_SUPPORTS_GCC_INLINE_X86_ASM
 #  include "platform/types.win32.h"
-
+#elif defined(__ANDROID__)
+#ifndef TORQUE_OS_ANDROID
+		#define TORQUE_OS_ANDROID
+#endif
+#  include "platform/types.arm.h"
 #elif defined(linux)
 #  define TORQUE_OS_STRING "Linux"
 #  define TORQUE_OS_LINUX

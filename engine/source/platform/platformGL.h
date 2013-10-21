@@ -30,5 +30,7 @@
 #include "platformX86UNIX/platformGL.h"
 #elif defined(TORQUE_OS_IOS)
 #include "platformiOS/platformGL.h"
+#elif defined(TORQUE_OS_ANDROID)
+#include "platformAndroid/platformGL.h"
 #endif
 #endif

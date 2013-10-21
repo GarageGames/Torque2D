@@ -411,7 +411,7 @@ ConsoleFunctionWithDocs( setCanvasTitle, ConsoleVoid, 2, 2, (string windowTitle)
 */
 ConsoleFunctionWithDocs(screenShot, ConsoleVoid, 3, 3, (string file, string format))
 {
-#ifndef TORQUE_OS_IOS
+#if !defined(TORQUE_OS_IOS) && !defined(TORQUE_OS_ANDROID)
 // PUAP -Mat no screenshots on iPhone can do it from Xcode
     FileStream fStream;
    if(!fStream.open(argv[1], FileStream::Write))

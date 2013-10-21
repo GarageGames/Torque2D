@@ -407,7 +407,7 @@ StringTableEntry Platform::stripBasePath(const char *path)
 StringTableEntry Platform::getPrefsPath(const char *file /* = NULL */)
 {
     char buf[1024];
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
     
     if ( file )
     {

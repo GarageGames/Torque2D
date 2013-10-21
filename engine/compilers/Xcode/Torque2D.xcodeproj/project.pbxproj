@@ -3717,6 +3717,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					TORQUE_OS_OSX,
 					"$(inherited)",
+					TORQUE_ALLOW_DSO_GENERATION,
 				);
 				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = (

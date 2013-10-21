@@ -29,7 +29,10 @@
 
 extern void GameDeactivate( bool noRender );
 extern void GameReactivate();
-
+#ifdef TORQUE_OS_ANDROID
+extern int _AndroidGetScreenWidth();
+extern int _AndroidGetScreenHeight();
+#endif
 // Static class data:
 Vector<DisplayDevice*>  Video::smDeviceList;
 DisplayDevice*          Video::smCurrentDevice;
@@ -230,6 +233,13 @@ bool Video::setScreenMode( U32 width, U32 height, U32 bpp, bool fullScreen )
       //    height *=2;
       //}
        
+#elif TORQUE_OS_ANDROID
+      if(width == 0)
+	     width = _AndroidGetScreenWidth();
+	  if(height == 0)
+	     height = _AndroidGetScreenHeight();
+	  if(bpp == 0)
+	     bpp = ANDROID_DEFAULT_RESOLUTION_BIT_DEPTH;
 #else
       if(width == 0)
          width = MIN_RESOLUTION_X;

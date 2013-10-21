@@ -175,7 +175,7 @@ void dglDrawBitmapStretchSR(TextureObject* texture,
              sg_bitmapModulation.blue,
              sg_bitmapModulation.alpha);
 
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
 
     GLfloat verts[] = {
         (GLfloat)scrPoints[0].x, (GLfloat)scrPoints[0].y,
@@ -348,7 +348,7 @@ U32 dglDrawTextN(GFont*          font,
 
 //-----------------------------------------------------------------------------
 
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
 U32 dglDrawTextN(GFont*          font,
                  const Point2I&  ptDraw,
                  const UTF16*    in_string,
@@ -780,7 +780,7 @@ void dglDrawLine(S32 x1, S32 y1, S32 x2, S32 y2, const ColorI &color)
    glDisable(GL_TEXTURE_2D);
 
    glColor4ub(color.red, color.green, color.blue, color.alpha);
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
     GLfloat verts[] = {
         (GLfloat)(x1 + 0.5f), (GLfloat)(y1 + 0.5f),
         (GLfloat)(x2 + 0.5f), (GLfloat)(y2 + 0.5f),
@@ -814,7 +814,7 @@ void dglDrawRect(const Point2I &upperL, const Point2I &lowerR, const ColorI &col
    glLineWidth(lineWidth);
 
    glColor4ub(color.red, color.green, color.blue, color.alpha);
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
     GLfloat verts[] = {
         (GLfloat)(upperL.x), (GLfloat)(upperL.y),
         (GLfloat)(lowerR.x), (GLfloat)(upperL.y),
@@ -853,7 +853,7 @@ void dglDrawRectFill(const Point2I &upperL, const Point2I &lowerR, const ColorI 
    glDisable(GL_TEXTURE_2D);
 
    glColor4ub(color.red, color.green, color.blue, color.alpha);
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
     GLfloat vertices[] = {
         (GLfloat)upperL.x, (GLfloat)upperL.y,
         (GLfloat)upperL.x, (GLfloat)lowerR.y,
@@ -895,7 +895,7 @@ void dglDraw2DSquare( const Point2F &screenPoint, F32 width, F32 spinAngle )
       points[i] += offset;
    }
 
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
     GLfloat verts[] = {
         0.0, 0.0,
         1.0, 0.0,
@@ -960,7 +960,7 @@ void dglDrawBillboard( const Point3F &position, F32 width, F32 spinAngle )
    }
 
 
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
     GLfloat verts[] = {
         0.0, 1.0,
         0.0, 0.0,
@@ -1016,7 +1016,7 @@ void dglWireCube(const Point3F & extent, const Point3F & center)
 
    glDisable(GL_CULL_FACE);
 
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
 //PUAP -Mat untested
    for (S32 i = 0; i < 6; i++)
    {
@@ -1071,7 +1071,7 @@ void dglSolidCube(const Point3F & extent, const Point3F & center)
       { 3, 2, 6, 7 }, { 7, 6, 4, 5 }, { 3, 7, 5, 1 }
    };
 
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
 //PUAP -Mat untested
    for (S32 i = 0; i < 6; i++)
    {
@@ -1118,7 +1118,7 @@ void dglSetClipRect(const RectI &clipRect)
 
    U32 screenHeight = Platform::getWindowSize().y;
 
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
    glOrthof(clipRect.point.x, clipRect.point.x + clipRect.extent.x,
            clipRect.extent.y, 0,
            0, 1);
@@ -1146,7 +1146,7 @@ const RectI& dglGetClipRect()
 
 bool dglPointToScreen( Point3F &point3D, Point3F &screenPoint )
 {
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
    GLfloat       glMV[16];
    GLfloat       glPR[16];
    GLint          glVP[4];
@@ -1228,7 +1228,7 @@ bool dglIsInCanonicalState()
    ret &= glIsEnabled(GL_BLEND) == GL_FALSE;
    ret &= glIsEnabled(GL_CULL_FACE) == GL_FALSE;
    GLint temp;
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
 // PUAP -Mat removed unsupported textureARB and Fog stuff
    if (dglDoesSupportARBMultitexture() == true) {
       //glActiveTextureARB(GL_TEXTURE1_ARB);
@@ -1300,7 +1300,7 @@ bool dglIsInCanonicalState()
 
 void dglSetCanonicalState()
 {
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
 // PUAP -Mat removed unsupported textureARB and Fog stuff
    glDisable(GL_BLEND);
    glDisable(GL_CULL_FACE);
@@ -1365,7 +1365,7 @@ void dglGetTransformState(S32* mvDepth,
    glGetFloatv(GL_TEXTURE_MATRIX, t0Matrix);
    if (dglDoesSupportARBMultitexture())
    {
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
 // PUAP -Mat removed unsupported textureARB stuff
       //glActiveTextureARB(GL_TEXTURE1_ARB);
       glGetIntegerv(GL_TEXTURE_STACK_DEPTH, (GLint*)t1Depth);
@@ -1411,7 +1411,7 @@ bool dglCheckState(const S32 mvDepth, const S32 pDepth,
    glGetFloatv(GL_TEXTURE_MATRIX, t0m);
    if (dglDoesSupportARBMultitexture())
    {
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
 // PUAP -Mat removed unsupported textureARB and Fog stuff
       //glActiveTextureARB(GL_TEXTURE1_ARB);
       glGetIntegerv(GL_TEXTURE_STACK_DEPTH, &t1d);
@@ -1445,7 +1445,7 @@ bool dglCheckState(const S32 mvDepth, const S32 pDepth,
             (v.extent.y == vp[3])));
 }
 
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
 GLfloat gVertexFloats[8];
 GLfloat gTextureVerts[8];
 #endif

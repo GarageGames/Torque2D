@@ -40,6 +40,8 @@
 #  include <ctype.h>
 #endif
 
+#include <stdarg.h>
+
 
 char *dStrdup_r(const char *src, const char *fileName, dsize_t lineNumber)
 {
@@ -325,7 +327,7 @@ S32 dSprintf(char *buffer, U32 bufferSize, const char *format, ...)
 }
 
 
-S32 dVsprintf(char *buffer, U32 bufferSize, const char *format, void *arglist)
+S32 dVsprintf(char *buffer, U32 bufferSize, const char *format, va_list arglist)
 {
    S32 len = vsnprintf(buffer, bufferSize, format, (char*)arglist);
     

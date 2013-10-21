@@ -1700,3 +1700,4 @@ bool stripRepeatSlashes( char* pDstPath, const char* pSrcPath, S32 dstSize )
 }
 
 } // end of Console namespace
+
