@@ -103,7 +103,7 @@ public:
     F32 getDataKeyTime( const U32 index ) const;
     inline U32 getDataKeyCount( void ) const { return (U32)mDataKeys.size(); }
     const DataKey& getDataKey( const U32 index ) const;
-    inline F32 getFieldValue( F32 time ) const;
+    F32 getFieldValue( F32 time ) const;
 
     static F32 calculateFieldBV( const ParticleAssetField& base, const ParticleAssetField& variation, const F32 effectAge, const bool modulate = false, const F32 modulo = 0.0f );
     static F32 calculateFieldBVE( const ParticleAssetField& base, const ParticleAssetField& variation, const ParticleAssetField& effect, const F32 effectAge, const bool modulate = false, const F32 modulo = 0.0f );

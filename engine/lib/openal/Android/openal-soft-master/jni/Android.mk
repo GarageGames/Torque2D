@@ -39,7 +39,7 @@ LOCAL_CFLAGS    +=  -I$(ROOTDIR)/$(OPENAL_DIR) \
                     -O3 \
                     -g \
 
-LOCAL_LDLIBS    += -Wl,--build-id -Bsymbolic -static #-shared
+LOCAL_LDLIBS    += -Wl,--build-id -Bsymbolic -shared
 
 # Default to Fixed-point math
 ifeq ($(TARGET_ARCH_ABI),armeabi)
@@ -98,5 +98,5 @@ LOCAL_SRC_FILES :=  \
 
 
 
-include $(BUILD_STATIC_LIBRARY)
+include $(BUILD_SHARED_LIBRARY)
 

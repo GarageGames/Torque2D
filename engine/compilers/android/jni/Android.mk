@@ -20,12 +20,10 @@ LOCAL_PATH := $(MY_LOCAL_PATH)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := libopenal-prebuilt
-#LOCAL_SRC_FILES := ../../../lib/openal/Android/$(TARGET_ARCH_ABI)/libopenal.so
-LOCAL_SRC_FILES := ../../../lib/openal/Android/$(TARGET_ARCH_ABI)/libopenal.a
+LOCAL_SRC_FILES := ../../../lib/openal/Android/$(TARGET_ARCH_ABI)/libopenal.so
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../lib/openal/Android/openal-soft-master/jni/OpenAL/include
 
-include $(PREBUILT_STATIC_LIBRARY)
-#include $(PREBUILT_SHARED_LIBRARY)
+include $(PREBUILT_SHARED_LIBRARY)
 
 #freetype2 lib for generating fonts on device
 LOCAL_PATH := $(MY_LOCAL_PATH)
@@ -275,6 +273,7 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/console/consoleExprEvalState.cc \
 					../../../source/console/consoleNamespace.cc \
 					../../../source/console/ConsoleTypeValidators.cc \
+					../../../source/console/metaScripting_ScriptBinding.cc \
 					../../../source/debug/profiler.cc \
 					../../../source/debug/remote/RemoteDebugger1.cc \
 					../../../source/debug/remote/RemoteDebuggerBase.cc \
@@ -339,7 +338,7 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/io/fileObject.cc \
 					../../../source/io/fileStream.cc \
 					../../../source/io/fileStreamObject.cc \
-					../../../source/io/fileSystemFunctions.cpp \
+					../../../source/io/fileSystem_ScriptBinding.cc \
 					../../../source/io/filterStream.cc \
 					../../../source/io/memStream.cc \
 					../../../source/io/nStream.cc \
@@ -360,7 +359,7 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/io/zip/zipTempStream.cc \
 					../../../source/math/rectClipper.cpp \
 					../../../source/memory/dataChunker.cc \
-					../../../source/memory/frameAllocator.cc \
+					../../../source/memory/frameAllocator_ScriptBinding.cc \
 					../../../source/messaging/dispatcher.cc \
 					../../../source/messaging/eventManager.cc \
 					../../../source/messaging/message.cc \
@@ -403,7 +402,7 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/audio/audio.cc \
 					../../../source/audio/audioBuffer.cc \
 					../../../source/audio/audioDataBlock.cc \
-					../../../source/audio/audioFunctions.cc \
+					../../../source/audio/audio_ScriptBinding.cc \
 					../../../source/audio/audioStreamSourceFactory.cc \
 					../../../source/audio/wavStreamSource.cc \
 					../../../source/component/dynamicConsoleMethodComponent.cpp \
@@ -427,10 +426,10 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/console/consoleTypes.cc \
 					../../../source/game/gameConnection.cc \
 					../../../source/game/version.cc \
+					../../../source/math/math_ScriptBinding.cc \
 					../../../source/math/mathTypes.cc \
 					../../../source/math/mathUtils.cc \
 					../../../source/math/mBox.cc \
-					../../../source/math/mConsoleFunctions.cc \
 					../../../source/math/mMath_C.cc \
 					../../../source/math/mMathAltivec.cc \
 					../../../source/math/mMathAMD.cc \
@@ -452,7 +451,7 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/platform/platformFileIO.cc \
 					../../../source/platform/platformFont.cc \
 					../../../source/platform/platformMemory.cc \
-					../../../source/platform/platformNetwork.cc \
+					../../../source/platform/platformNetwork_ScriptBinding.cc \
 					../../../source/platform/platformString.cc \
 					../../../source/platform/platformVideo.cc \
 					../../../source/platform/platformNetAsync.unix.cc \
@@ -549,8 +548,8 @@ else
 	LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O3 -fsigned-char   
 endif				   
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lz -lOpenSLES -L../../../lib/openal/Android/$(TARGET_ARCH_ABI)
-LOCAL_STATIC_LIBRARIES := android_native_app_glue freetype-prebuilt libopenal-prebuilt
-#LOCAL_SHARED_LIBRARIES := libopenal-prebuilt
+LOCAL_STATIC_LIBRARIES := android_native_app_glue freetype-prebuilt
+LOCAL_SHARED_LIBRARIES := libopenal-prebuilt
 
 LOCAL_ARM_MODE := arm
 
