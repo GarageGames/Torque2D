@@ -13,6 +13,10 @@
 # limitations under the License.
 #
 
+#required for compiling on windows
+NDK_APP_SHORT_COMMANDS  := true
+LOCAL_SHORT_COMMANDS  := true
+
 MY_LOCAL_PATH := $(call my-dir)
 
 LOCAL_PATH := $(MY_LOCAL_PATH)
