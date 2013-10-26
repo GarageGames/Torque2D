@@ -509,13 +509,36 @@ bool _AndroidGetFileDescriptor(const char* fileName, int32_t *mDescriptor, off_t
 char* _AndroidLoadFile(const char* fn, U32 *size) {
 
 	char fileName[255];
-	if (fn[0] == '/')
+
+	//Check for .. in path and remove them so apk reading code doesnt choke on it
+	std::string filepath = fn;
+	//first remove any cases of /./
+	std::string find = "/./";
+	size_t start_pos = filepath.find(find);
+	while (start_pos != std::string::npos)
 	{
-		strcpy(fileName, fn+1);
+		filepath.replace(start_pos+1, find.length()-1, "");
+		start_pos = filepath.find(find);
+	}
+
+	find = "/../";
+	start_pos = filepath.find(find);
+	while (start_pos != std::string::npos)
+	{
+		size_t begin_pos = filepath.rfind("/", start_pos-1);
+		filepath.replace(begin_pos, (start_pos - begin_pos - 1) + find.length(), "");
+		start_pos = filepath.find(find);
+
+	}
+	if (filepath.find("/") == 0)
+	{
+		strcpy(fileName, filepath.substr(1).c_str());
+		fileName[filepath.size()-1] = '\0';
 	}
 	else
 	{
-		strcpy(fileName,fn);
+		strcpy(fileName, filepath.c_str());
+		fileName[filepath.size()] = '\0';
 	}
 
 	AAsset *asset;
