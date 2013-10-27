@@ -490,22 +490,6 @@ int _AndroidGetScreenHeight() {
 	return platState.engine->height;
 }
 
-bool _AndroidGetFileDescriptor(const char* fileName, int32_t *mDescriptor, off_t *mStart, off_t* mLength) {
-
-	AAsset* asset = AAssetManager_open(platState.engine->app->activity->assetManager, fileName, AASSET_MODE_UNKNOWN);
-	if (asset != NULL) {
-		*mDescriptor = AAsset_openFileDescriptor(asset, mStart, mLength);
-		AAsset_close(asset);
-		return true;
-	}
-
-	*mDescriptor = 0;
-	*mStart = 0;
-	*mLength = 0;
-
-	return false;
-}
-
 char* _AndroidLoadFile(const char* fn, U32 *size) {
 
 	char fileName[255];

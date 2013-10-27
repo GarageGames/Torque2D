@@ -55,6 +55,19 @@ public class FileWalker
 		dumpDirVec.clear();
 		
 		String dirPath = basePath;
+		
+		//remove any ./ from path since the apk code chokes on it
+		while (dirPath.contains("./"))
+			dirPath = dirPath.replace("./", "");
+		
+		//remove any ../ from path since the apk code chokes on it
+		String search = "/../";
+		while (dirPath.contains(search))
+		{
+			int pos = dirPath.indexOf(search);
+			int posStart = dirPath.lastIndexOf("/", pos-1);
+			dirPath = dirPath.substring(0, posStart+1) + dirPath.substring(pos+4);
+		}
 	    
 		if (dirPath.startsWith("/"))
 	    	dirPath = dirPath.substring(1);
@@ -146,6 +159,19 @@ public class FileWalker
 		dumpDirList.clear();
 		
 		String dir = dirPath;
+		
+		//remove any ./ from path since the apk code chokes on it
+		while (dir.contains("./"))
+			dir = dir.replace("./", "");
+		
+		//remove any ../ from path since the apk code chokes on it
+		String search = "/../";
+		while (dir.contains(search))
+		{
+			int pos = dir.indexOf(search);
+			int posStart = dir.lastIndexOf("/", pos-1);
+			dir = dir.substring(0, posStart+1) + dir.substring(pos+4);
+		}
 		
 		if (dir.startsWith("/"))
 	    	dir = dir.substring(1);
