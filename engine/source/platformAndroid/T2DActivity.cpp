@@ -1450,8 +1450,35 @@ bool android_DumpPathExtra(Vector<Platform::FileInfo>& fileVector)
 
 }
 
-bool loadDumpPathFromCache(const char* dir, Vector<Platform::FileInfo>& fileVector, U32 depth)
+bool loadDumpPathFromCache(const char* dirPath, Vector<Platform::FileInfo>& fileVector, U32 depth)
 {
+	char dir[255];
+
+	//Check for .. in path and remove them so apk reading code doesnt choke on it
+	std::string filepath = dirPath;
+	//first remove any cases of /./
+	std::string find = "/./";
+	size_t start_pos = filepath.find(find);
+	while (start_pos != std::string::npos)
+	{
+		filepath.replace(start_pos+1, find.length()-1, "");
+		start_pos = filepath.find(find);
+	}
+
+	find = "/../";
+	start_pos = filepath.find(find);
+	while (start_pos != std::string::npos)
+	{
+		size_t begin_pos = filepath.rfind("/", start_pos-1);
+		filepath.replace(begin_pos, (start_pos - begin_pos - 1) + find.length(), "");
+		start_pos = filepath.find(find);
+
+	}
+
+	strcpy(dir, filepath.c_str());
+	dir[filepath.size()] = '\0';
+
+
 	bool foundPaths = false;
 	for (int i = 0; i < dumpPathBackup.size(); i++)
 	{
