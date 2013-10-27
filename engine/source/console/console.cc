@@ -1537,10 +1537,10 @@ bool expandPath( char* pDstPath, U32 size, const char* pSrcPath, const char* pWo
     //Using a special case here because the code below barfs on trying to build a full path for apk reading
  #ifdef TORQUE_OS_ANDROID
  	   dSprintf(pathBuffer, sizeof(pathBuffer), "/%s", pSrcPath);
- #endif
-
-    // All else.
-    Platform::makeFullPathName( pSrcPath, pathBuffer, sizeof(pathBuffer), pWorkingDirectoryHint );
+#else
+ 	  // All else.
+ 	  Platform::makeFullPathName( pSrcPath, pathBuffer, sizeof(pathBuffer), pWorkingDirectoryHint );
+#endif
 
     // Are we ensuring the trailing slash?
     if ( ensureTrailingSlash )
