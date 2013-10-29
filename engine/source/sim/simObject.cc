@@ -880,9 +880,6 @@ bool SimObject::onAdd()
 {
    mFlags.set(Added);
 
-   if(getClassRep())
-      mNameSpace = getClassRep()->getNameSpace();
-
    linkNamespaces();
 
    // onAdd() should return FALSE if there was an error
