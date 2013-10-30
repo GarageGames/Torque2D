@@ -1,9 +1,7 @@
 package com.garagegames.torque2d;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Vector;
 
 import android.content.Context;
