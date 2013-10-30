@@ -2566,7 +2566,11 @@ ConsoleFunction(isAccelerometerActive, bool, 1, 1, "() Check to see if Accelerom
 ConsoleFunction(toggleAndroidKeyboard, void, 2, 2, "(show) show or hide android virtual keyboard")
 {
 	displayKeyboard(dAtob(argv[1]));
+}
 
+ConsoleFunction(isAndroidKeyboardShowing, bool, 1, 1, "() returns if the keyboard is showing")
+{
+	return keyboardShowing;
 }
 
 void adprintf(const char* fmt,...) {
