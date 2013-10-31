@@ -253,7 +253,14 @@ static void* android_app_entry(void* param) {
 
     android_main(android_app);
 
+    pthread_mutex_lock(&android_app->mutex);
+	android_app->running = 0;
+	pthread_cond_broadcast(&android_app->cond);
+	pthread_mutex_unlock(&android_app->mutex);
+
     android_app_destroy(android_app);
+   //Hack to get the app to stil exit after keyboard work around
+    exit(0);
     return NULL;
 }
 
