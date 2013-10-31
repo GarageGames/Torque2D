@@ -539,7 +539,8 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				} else if (key_val == AKEYCODE_VOLUME_DOWN) {
 					ChangeVolume(false);
 				} else if (key_val == AKEYCODE_BACK) {
-					Con::executef(2, "androidBackButton", Con::getBoolArg(true));
+					if (!keyboardShowing)
+						Con::executef(2, "androidBackButton", Con::getBoolArg(true));
 			    } else {
 			    	androidKeyboardEvent(key_val, true);
 			    }
@@ -552,7 +553,10 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				} else if (key_val == AKEYCODE_VOLUME_DOWN) {
 					ChangeVolume(false);
 				} else if (key_val == AKEYCODE_BACK) {
-					Con::executef(2, "androidBackButton", Con::getBoolArg(false));
+					if (keyboardShowing)
+						displayKeyboard(false);
+					else
+						Con::executef(2, "androidBackButton", Con::getBoolArg(false));
 				} else {
 					androidKeyboardEvent(key_val, false);
 				}

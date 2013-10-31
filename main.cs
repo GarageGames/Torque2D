@@ -70,12 +70,6 @@ function onExit()
 function androidBackButton(%val)
 {
 	if (%val) {
-		if (isAndroidKeyboardShowing())
-		{
-			toggleAndroidKeyboard(false);
-			return;
-		}
-
 		//Add code here for other options the back button can do like going back a screen.  the quit should happen at your main menu.
 
 		quit();
