@@ -137,7 +137,10 @@ function games::MakeTextObject( %this, %scene_ID, %size, %text )
 function TextScene::OnAdd(%this)
 {
   %obj = games.MakeTextObject(%this,40,"Torque rules");
-  %obj.SetPosition( 0, 0 );
+  %obj.SetPosition( 0, 100 );
+  
+  %obj = games.createRectangle(%this,30,30);
+  %obj.SetPosition( 0, 100 );
   
 }
 
