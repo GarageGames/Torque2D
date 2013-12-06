@@ -269,6 +269,7 @@
     <ClCompile Include="..\..\source\2d\sceneobject\Scroller.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\ShapeVector.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Sprite.cc" />
+    <ClCompile Include="..\..\source\2d\sceneobject\TextObject.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Trigger.cc" />
     <ClCompile Include="..\..\source\2d\scene\ContactFilter.cc" />
     <ClCompile Include="..\..\source\2d\scene\DebugDraw.cc" />
@@ -681,6 +682,7 @@
     <ClInclude Include="..\..\source\2d\sceneobject\ShapeVector_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Sprite.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Sprite_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\TextObject.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Trigger.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Trigger_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\scene\ContactFilter.h" />
