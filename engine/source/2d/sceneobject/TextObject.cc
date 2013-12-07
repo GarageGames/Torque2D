@@ -213,6 +213,14 @@ void TextObject::onRemove()
   Parent::onRemove();
 }
 
+//-----------------------------------------------------------------------------
+  
+void TextObject::setPosition( const Vector2& position )
+{
+  Parent::setPosition(position);
+  autoSize();
+}
+
 //------------------------------------------------------------------------------
 
 void TextObject::copyTo(SimObject* object)
@@ -710,11 +718,17 @@ void TextObject::autoSize()
 
   // Update size.
   Parent::setSize( size );
-  setPosition( newPosition );
+  Parent::setPosition( newPosition );
   updateSpatialConfig();
 
   // Reset auto size flag. setSize turned it off.
   mAutoSize = true;
+
+  //Invert vertical coordinate
+  Vector2 position = getPosition();
+  position.y = - position.y;
+  Parent::setPosition( position );
+
 }
 
 //------------------------------------------------------------------------------

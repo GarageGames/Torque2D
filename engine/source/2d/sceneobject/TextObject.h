@@ -61,6 +61,9 @@ public:
   /// @name t2dSceneObject_Overrides
   /// @{
 
+  /// Redifined here to call autoSize()
+  virtual void  setPosition( const Vector2& position );
+
   /// Redifined here so we can recalculate the character positions when the size is changed.
   virtual void setSize( const Vector2& size );
 
