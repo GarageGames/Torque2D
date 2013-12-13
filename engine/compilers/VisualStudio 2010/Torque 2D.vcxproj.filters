@@ -2985,6 +2985,9 @@
     <ClInclude Include="..\..\source\2d\sceneobject\TextObject.h">
       <Filter>2d\sceneobject</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\TextObject_ScriptBinding.h">
+      <Filter>2d\sceneobject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\math\mMath_ASM.asm">
