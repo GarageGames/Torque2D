@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="play_hImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#play_h.png" />

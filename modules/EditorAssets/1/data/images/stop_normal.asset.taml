@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="stop_normal"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#stop_normal.png" />

@@ -1,0 +1,13 @@
+<AssetManifest>
+	<AssetManifest.Search>
+		<Location
+			Path="^EditorAssets/data/animations"
+			Extension="asset.taml"/>
+		<Location		
+			Path="^EditorAssets/data/images"
+			Extension="asset.taml"/>
+        <Location
+			Path="^EditorAssets/data/audio"
+			Extension="asset.taml"/>
+	</AssetManifest.Search>
+</AssetManifest>

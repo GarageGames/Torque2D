@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="PathsImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#Paths.png" />

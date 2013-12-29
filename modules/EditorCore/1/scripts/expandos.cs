@@ -20,32 +20,11 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-function AppCore::create( %this )
+// Called to setup the base expandos
+function setupBaseExpandos()
 {
-    // Load system scripts
-    exec("./scripts/constants.cs");
-    exec("./scripts/defaultPreferences.cs");
-    exec("./scripts/canvas.cs");
-    exec("./scripts/openal.cs");
-    
-    // Initialize the canvas
-    initializeCanvas("Torque 2D");
-    
-    // Set the canvas color
-    Canvas.BackgroundColor = "CornflowerBlue";
-    Canvas.UseBackgroundColor = true;
-    
-    // Initialize audio
-    initializeOpenAL();
-    
-    ModuleDatabase.loadGroup("gameBase");
-    ModuleDatabase.loadGroup("projectTools");
+   addPathExpando("templates", getMainDotCsDir() @ "/../templates" );
+   addPathExpando("modules", getMainDotCsDir() @ "/modules" );
+   addPathExpando("tool", getMainDotCsDir() );   
+   addPathExpando("common", getMainDotCsDir() @ "/common" );
 }
-
-//-----------------------------------------------------------------------------
-
-function AppCore::destroy( %this )
-{
-
-}
-

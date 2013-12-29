@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="leftRightImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#leftRight.png" />

@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="RotateRightButtonImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#rotateRightButton.png" />

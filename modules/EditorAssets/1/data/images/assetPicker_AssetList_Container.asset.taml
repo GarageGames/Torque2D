@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="assetPicker_AssetList_ContainerImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#assetPicker_AssetList_Container.png" />

@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="redClose_iImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#redClose_i.png" />

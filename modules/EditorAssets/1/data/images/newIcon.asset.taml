@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="newIconImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#newIcon.png" />

@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="iconDeleteImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#iconDelete.png" />

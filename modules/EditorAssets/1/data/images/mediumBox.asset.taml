@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="mediumBoxImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#mediumBox.png" />

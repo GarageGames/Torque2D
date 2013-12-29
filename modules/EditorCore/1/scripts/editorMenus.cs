@@ -20,32 +20,47 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-function AppCore::create( %this )
+function EditorMenuBar::initialize( %this )
 {
-    // Load system scripts
-    exec("./scripts/constants.cs");
-    exec("./scripts/defaultPreferences.cs");
-    exec("./scripts/canvas.cs");
-    exec("./scripts/openal.cs");
-    
-    // Initialize the canvas
-    initializeCanvas("Torque 2D");
-    
-    // Set the canvas color
-    Canvas.BackgroundColor = "CornflowerBlue";
-    Canvas.UseBackgroundColor = true;
-    
-    // Initialize audio
-    initializeOpenAL();
-    
-    ModuleDatabase.loadGroup("gameBase");
-    ModuleDatabase.loadGroup("projectTools");
+   %this.clearMenus();
+   %this.menuCount = 0;
 }
 
-//-----------------------------------------------------------------------------
-
-function AppCore::destroy( %this )
+function EditorMenuBar::addMenu( %this, %name )
 {
-
+   Parent::addMenu( %this, %name, %this.menuCount );
+   %this.menuCount++;
+   %this.itemCount[%name] = 0;
 }
 
+function EditorMenuBar::addMenuItem( %this, %menu, %text, %command, %hotkey )
+{
+   %item = %this.itemCount[%menu];
+   
+   Parent::addMenuItem( %this, %menu, %text, %item, %hotkey );
+   %this.scriptCommand[%menu, %item] = %command;
+   %this.itemCount[%menu]++;
+   
+   return %item;
+}
+
+
+function detachMenuBars()
+{
+   %content = Canvas.getContent();
+   if( !isObject( %content ) || !isObject( %content.menuGroup ) )
+      return;
+      
+   if( %content.isMethod( "detachMenuGroup" ) )
+      %content.detachMenuGroup();
+}
+
+function attachMenuBars()
+{
+   %content = Canvas.getContent();
+   if( !isObject( %content ) || !isObject( %content.menuGroup ) )
+      return;
+      
+   if( %content.isMethod( "attachMenuGroup" ) )
+      %content.attachMenuGroup();   
+}

@@ -20,32 +20,12 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-function AppCore::create( %this )
+/// void(SimSet this, bool deleteObjects = false)
+/// Deletes all the objects in the set.
+/// @param this The SimSet
+function SimSet::deleteContents(%this)
 {
-    // Load system scripts
-    exec("./scripts/constants.cs");
-    exec("./scripts/defaultPreferences.cs");
-    exec("./scripts/canvas.cs");
-    exec("./scripts/openal.cs");
-    
-    // Initialize the canvas
-    initializeCanvas("Torque 2D");
-    
-    // Set the canvas color
-    Canvas.BackgroundColor = "CornflowerBlue";
-    Canvas.UseBackgroundColor = true;
-    
-    // Initialize audio
-    initializeOpenAL();
-    
-    ModuleDatabase.loadGroup("gameBase");
-    ModuleDatabase.loadGroup("projectTools");
+    // Iterate.
+    while (%this.getCount() > 0)
+        %this.getObject(0).delete();
 }
-
-//-----------------------------------------------------------------------------
-
-function AppCore::destroy( %this )
-{
-
-}
-

@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="mediumTrashCan_iImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#mediumTrashCan_i.png" />

@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="assetsIcon_hImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#assetsIcon_h.png" />

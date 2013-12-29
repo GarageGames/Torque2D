@@ -1,0 +1,51 @@
+<GuiControl
+    Name="ConsoleDlg"
+    Profile="GuiDefaultProfile"
+    HorizSizing="right"
+    VertSizing="bottom"
+    Position="0 0"
+    Extent="640 480"
+    MinExtent="8 8"
+    Visible="1"
+	HelpTag="0">
+    <GuiConsoleEditCtrl
+        Name="ConsoleEntry"
+		Profile="GuiConsoleTextEditProfile"
+		HorizSizing="width"
+		VertSizing="top"
+		Position="0 462"
+		Extent="640 18"
+		minExtent="8 8"
+		Visible="1"
+		AltCommand="ConsoleEntry::eval();"
+		HelpTag="0"
+		MaxLength="255"
+		HistorySize="40"
+		password="0"
+		TabComplete="0"
+		SinkAllKeyEvents="1"
+		UseSiblingScroller="1"
+	/>
+    <GuiScrollCtrl
+        canSaveDynamicFields="0"
+        isContainer="1"
+        Profile="ConsoleScrollProfile"
+        HorizSizing="width"
+        VertSizing="height"
+        Position="0 0"
+        Extent="640 462"
+        MinExtent="8 8"
+        canSave="1"
+        Visible="1"
+        hovertime="1000"
+        willFirstRespond="1"
+        hScrollBar="alwaysOn"
+        vScrollBar="alwaysOn"
+        constantThumbHeight="0"
+        childMargin="0 0">
+        <GuiConsole
+            Profile="GuiConsoleProfile"
+            Position="0 0"
+            Visible="1"/>
+    </GuiScrollCtrl>
+</GuiControl>

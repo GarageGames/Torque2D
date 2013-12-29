@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="stop_inactive"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#stop_inactive.png" />

@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="speaker_OffImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#speaker_Off.png" />

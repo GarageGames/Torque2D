@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="iconPlayImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#iconPlay.png" />

@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="homePageContainer_rightImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#homePageContainer_right.png" />

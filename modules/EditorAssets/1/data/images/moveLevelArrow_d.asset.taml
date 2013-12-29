@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="moveLevelArrow_dImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#moveLevelArrow_d.png" />

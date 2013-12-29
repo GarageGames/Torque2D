@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="otherObjectImageMap"
+    AssetInternal="1"
+    ImageFile="@assetFile=#ggLogo"
+    filterPad="false" />

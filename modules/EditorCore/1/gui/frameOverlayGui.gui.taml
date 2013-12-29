@@ -1,0 +1,29 @@
+<GuiControl
+    Name="FrameOverlayGui"
+    canSaveDynamicFields="0"
+    isContainer="1"
+    Profile="GuiModelessDialogProfile"
+    HorizSizing="right"
+    VertSizing="bottom"
+    Position="0 0"
+    Extent="640 480"
+    MinExtent="8 8"
+    canSave="1"
+    Visible="1"
+    hovertime="1000">
+    <GuiConsoleTextCtrl
+        Name="TextOverlayControl"
+        canSaveDynamicFields="0"
+        isContainer="0"
+        Profile="GuiTextProfile"
+        HorizSizing="right"
+        VertSizing="bottom"
+        Position="5 5"
+        Extent="130 18"
+        MinExtent="130 18"
+        canSave="1"
+        Visible="1"
+        Active="1"
+        hovertime="1000"
+        expression="10" />
+</GuiControl>

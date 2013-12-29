@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="webView_ContainerImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#webView_Container.png" />

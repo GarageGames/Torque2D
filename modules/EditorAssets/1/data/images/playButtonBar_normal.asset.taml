@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="playButtonBar_normalImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#playButtonBar_normal.png" />

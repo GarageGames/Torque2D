@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="iconAudioSamplePlayingImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#iconAudioSamplePlaying.png" />

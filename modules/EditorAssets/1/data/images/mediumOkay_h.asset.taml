@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="mediumOkay_hImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#mediumOkay_h.png" />

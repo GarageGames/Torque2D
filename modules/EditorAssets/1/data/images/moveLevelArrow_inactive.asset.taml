@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="moveLevelArrow_inactiveImage"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#moveLevelArrow_inactive.png" />

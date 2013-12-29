@@ -1,0 +1,12 @@
+<ModuleDefinition
+	ModuleId="EditorCore"
+	VersionId="1"
+	Description="Editor Core"
+	Group="baseTools"
+	Dependencies="EditorAssets=1"
+	ScriptFile="main.cs"
+	ScopeSet="EditorCoreSet"
+	CreateFunction="create"
+	DestroyFunction="destroy"
+	/>
+

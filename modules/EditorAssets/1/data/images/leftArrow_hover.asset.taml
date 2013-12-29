@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="leftArrow_hoverImage"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#leftArrow_hover.png" />

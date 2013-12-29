@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="DeleteList_ContainerImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#DeleteList_Container.png" />

@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="buttonRemove_inactiveImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#buttonRemove_inactive.png" />

@@ -1,0 +1,12 @@
+<ModuleDefinition
+	ModuleId="GuiEditorModule"
+	VersionId="1"
+	Description="GUI Editor"
+	Group="projectTools"
+	Dependencies="EditorCore=1"
+	ScriptFile="main.cs"
+	ScopeSet="GuiEditorSet"
+	CreateFunction="create"
+	DestroyFunction="destroy"
+	/>
+

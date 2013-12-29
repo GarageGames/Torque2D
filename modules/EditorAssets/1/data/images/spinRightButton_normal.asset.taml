@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="spinRightButton_normalImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#spinRightButton_normal.png" />

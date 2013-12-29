@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="test_popupImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#test_popup.png" />

@@ -20,32 +20,26 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-function AppCore::create( %this )
+function GuiEditorModule::create(%scopeSet)
 {
-    // Load system scripts
-    exec("./scripts/constants.cs");
-    exec("./scripts/defaultPreferences.cs");
-    exec("./scripts/canvas.cs");
-    exec("./scripts/openal.cs");
-    
-    // Initialize the canvas
-    initializeCanvas("Torque 2D");
-    
-    // Set the canvas color
-    Canvas.BackgroundColor = "CornflowerBlue";
-    Canvas.UseBackgroundColor = true;
-    
-    // Initialize audio
-    initializeOpenAL();
-    
-    ModuleDatabase.loadGroup("gameBase");
-    ModuleDatabase.loadGroup("projectTools");
+    // Load Scripts.
+    exec("./scripts/profiles.cs");
+    %scopeSet.add( TamlRead("./gui/guiEditorGui.gui.taml") );
+    exec("./scripts/guiEditor.cs");
+
+    %scopeSet.add( TamlRead("./gui/newGuiDialog.gui.taml") );
+    exec("./scripts/fileDialogs.cs");
+
+    %scopeSet.add( TamlRead("./gui/guiEditorPrefs.gui.taml") );
+    exec("./scripts/guiEditorPrefsDlg.cs");
+
+    %scopeSet.add( TamlRead("./gui/guiEditorPalette.gui.taml") );
+    exec("./scripts/guiEditorUndo.cs");
+
+    exec("./scripts/guiApplicationClose.cs");
+    GlobalActionMap.bind(keyboard, "f10", GuiEdit);
 }
 
-//-----------------------------------------------------------------------------
-
-function AppCore::destroy( %this )
+function GuiEditorModule::destroy()
 {
-
 }
-

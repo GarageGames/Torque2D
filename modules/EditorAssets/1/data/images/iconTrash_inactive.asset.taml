@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="iconTrash_inactiveImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#iconTrash_inactive.png" />

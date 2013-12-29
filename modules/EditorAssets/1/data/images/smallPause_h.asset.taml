@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="smallPause_hImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#smallPause_h.png" />

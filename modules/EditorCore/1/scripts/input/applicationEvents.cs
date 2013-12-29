@@ -20,32 +20,29 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-function AppCore::create( %this )
+///
+/// Public Application Events
+///
+Input::GetEventManager().registerEvent( "ClosePressed" );
+Input::GetEventManager().registerEvent( "BeginShutdown" );
+Input::GetEventManager().registerEvent( "FocusChanged" );
+
+function onClosePressed()
 {
-    // Load system scripts
-    exec("./scripts/constants.cs");
-    exec("./scripts/defaultPreferences.cs");
-    exec("./scripts/canvas.cs");
-    exec("./scripts/openal.cs");
-    
-    // Initialize the canvas
-    initializeCanvas("Torque 2D");
-    
-    // Set the canvas color
-    Canvas.BackgroundColor = "CornflowerBlue";
-    Canvas.UseBackgroundColor = true;
-    
-    // Initialize audio
-    initializeOpenAL();
-    
-    ModuleDatabase.loadGroup("gameBase");
-    ModuleDatabase.loadGroup("projectTools");
+   //error("% Application Close - User Pressed the X button on their window");
+   // If noone objects (returns false from their callback function), then quit
+   if( Input::GetEventManager().postEvent( "ClosePressed" ) == true )
+      quit();
 }
 
-//-----------------------------------------------------------------------------
-
-function AppCore::destroy( %this )
+function onPreExit()
 {
-
+   //error("% Application Close - quit called or quit message received"");
+   Input::GetEventManager().postEvent( "BeginShutdown" );   
 }
 
+function onWindowFocusChange( %focused )
+{
+   //error("% Application Close - quit called or quit message received"");
+   Input::GetEventManager().postEvent( "FocusChanged", %focused );
+}

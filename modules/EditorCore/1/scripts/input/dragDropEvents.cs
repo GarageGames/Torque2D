@@ -20,32 +20,26 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-function AppCore::create( %this )
+///
+/// Public DragDrop Events
+///
+Input::GetEventManager().registerEvent( "BeginDropFiles" );
+Input::GetEventManager().registerEvent( "DropFile" );
+Input::GetEventManager().registerEvent( "EndDropFiles" );
+
+function onDropBegin( %fileCount )
 {
-    // Load system scripts
-    exec("./scripts/constants.cs");
-    exec("./scripts/defaultPreferences.cs");
-    exec("./scripts/canvas.cs");
-    exec("./scripts/openal.cs");
-    
-    // Initialize the canvas
-    initializeCanvas("Torque 2D");
-    
-    // Set the canvas color
-    Canvas.BackgroundColor = "CornflowerBlue";
-    Canvas.UseBackgroundColor = true;
-    
-    // Initialize audio
-    initializeOpenAL();
-    
-    ModuleDatabase.loadGroup("gameBase");
-    ModuleDatabase.loadGroup("projectTools");
+   //error("% DragDrop - Beginning file dropping of" SPC %fileCount SPC " files.");
+   Input::GetEventManager().postEvent( "BeginDropFiles", %fileCount );
 }
-
-//-----------------------------------------------------------------------------
-
-function AppCore::destroy( %this )
+function onDropFile( %filePath )
 {
-
+   //error("  % DragDrop - Got File : " SPC %filePath );
+   Input::GetEventManager().postEvent( "DropFile", %filePath );
 }
-
+function onDropEnd( %fileCount )
+{
+   
+   //error("% DragDrop - Completed file dropping");
+   Input::GetEventManager().postEvent( "EndDropFiles" );
+}

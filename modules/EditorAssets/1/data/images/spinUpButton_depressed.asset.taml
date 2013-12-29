@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="spinUpButton_depressedImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#spinUpButton_depressed.png" />

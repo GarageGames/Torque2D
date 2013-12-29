@@ -20,32 +20,24 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-function AppCore::create( %this )
+function EditorAssets::create()
 {
-    // Load system scripts
-    exec("./scripts/constants.cs");
-    exec("./scripts/defaultPreferences.cs");
-    exec("./scripts/canvas.cs");
-    exec("./scripts/openal.cs");
+    //-----------------------------------------------------------------------------
+    // Execute scripts
+    //-----------------------------------------------------------------------------
+    exec("./scripts/assetGen.cs");
     
-    // Initialize the canvas
-    initializeCanvas("Torque 2D");
-    
-    // Set the canvas color
-    Canvas.BackgroundColor = "CornflowerBlue";
-    Canvas.UseBackgroundColor = true;
-    
-    // Initialize audio
-    initializeOpenAL();
-    
-    ModuleDatabase.loadGroup("gameBase");
-    ModuleDatabase.loadGroup("projectTools");
+    //-----------------------------------------------------------------------------
+    // Load GUIs
+    //----------------------------------------------------------------------------- 
+
+
+    //-----------------------------------------------------------------------------
+    // Generate asset files
+    //----------------------------------------------------------------------------- 
+    //makeAssetFiles("^{PhysicsLauncherAssets}/audio/", "sound", "", true);   
 }
 
-//-----------------------------------------------------------------------------
-
-function AppCore::destroy( %this )
+function EditorAssets::destroy()
 {
-
 }
-

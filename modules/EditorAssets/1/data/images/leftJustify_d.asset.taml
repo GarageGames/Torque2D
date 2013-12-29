@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="leftJustify_dImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#leftJustify_d.png" />

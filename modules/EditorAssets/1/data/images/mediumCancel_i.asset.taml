@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="mediumCancel_iImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#mediumCancel_i.png" />

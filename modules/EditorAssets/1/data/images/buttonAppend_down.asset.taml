@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="buttonAppend_downImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#buttonAppend_down.png" />

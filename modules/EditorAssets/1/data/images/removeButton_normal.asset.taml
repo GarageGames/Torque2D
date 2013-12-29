@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="removeButton_normalImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#removeButton_normal.png" />

@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="AddEnemyToWave_popupImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#AddEnemyToWave_popup.png" />

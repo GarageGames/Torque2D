@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="ImageViewerBackground"
+    AssetCategory="gui"
+	AssetInternal="1"
+    imageFile="@assetFile=#ImageViewerBackground.png" />

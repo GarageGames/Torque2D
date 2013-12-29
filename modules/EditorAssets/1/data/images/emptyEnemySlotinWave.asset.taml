@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="emptyEnemySlotinWaveImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#emptyEnemySlotinWave.png" />

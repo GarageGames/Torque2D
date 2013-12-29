@@ -19,33 +19,51 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
-
-function AppCore::create( %this )
+function ConsoleEntry::eval()
 {
-    // Load system scripts
-    exec("./scripts/constants.cs");
-    exec("./scripts/defaultPreferences.cs");
-    exec("./scripts/canvas.cs");
-    exec("./scripts/openal.cs");
-    
-    // Initialize the canvas
-    initializeCanvas("Torque 2D");
-    
-    // Set the canvas color
-    Canvas.BackgroundColor = "CornflowerBlue";
-    Canvas.UseBackgroundColor = true;
-    
-    // Initialize audio
-    initializeOpenAL();
-    
-    ModuleDatabase.loadGroup("gameBase");
-    ModuleDatabase.loadGroup("projectTools");
-}
+    %text = trim(ConsoleEntry.getValue());
 
-//-----------------------------------------------------------------------------
+    if(strpos(%text, "(") == -1)
+    {
+        if(strpos(%text, "=") == -1 && strpos(%text, " ") == -1)
+        {
+            if(strpos(%text, "{") == -1 && strpos(%text, "}") == -1)
+            {
+                %text = %text @ "()";
+            }
+        }
+    }
 
-function AppCore::destroy( %this )
-{
+    %pos = strlen(%text) - 1;
+    
+    if(strpos(%text, ";", %pos) == -1 && strpos(%text, "}") == -1)
+        %text = %text @ ";";
+
+    echo("==>" @ %text);
+    eval(%text);
+    ConsoleEntry.setValue("");
 
 }
 
+function ToggleConsole(%make)
+{
+    if (%make)
+    {
+        if (ConsoleDlg.isAwake())
+        {
+            // Deactivate the console.
+            if ( $enableDirectInput )
+                activateKeyboard();
+
+            Canvas.popDialog(ConsoleDlg);
+        }
+        else
+        {
+            if ( $enableDirectInput )
+                deactivateKeyboard();
+            
+            Canvas.pushDialog(ConsoleDlg, 99);         
+            ConsoleEntry.setFirstResponder();
+        }
+    }
+}

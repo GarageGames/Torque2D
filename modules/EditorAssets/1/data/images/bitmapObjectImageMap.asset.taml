@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="bitmapObjectImageMap"
+    AssetInternal="1"
+    ImageFile="@assetFile=#bitmapFont"
+    filterPad="false" />

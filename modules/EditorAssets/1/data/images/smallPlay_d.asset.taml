@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="smallPlay_dImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#smallPlay_d.png" />

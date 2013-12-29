@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="smallAdd_hImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#smallAdd_h.png" />

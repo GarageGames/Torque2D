@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="rotateArrowLeft_d"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#rotateArrowLeft_d" />

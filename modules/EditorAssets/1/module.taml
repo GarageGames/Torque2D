@@ -1,0 +1,12 @@
+<ModuleDefinition
+	ModuleId="EditorAssets"
+	VersionId="1"
+	Description="Editor Assets"
+	Group="baseTools"
+	ScriptFile="main.cs"
+	CreateFunction="create"
+	DestroyFunction="destroy"
+	Synchronized = "1"
+	DeclaredAssetManifest="^EditorAssets/DeclaredAssets.manifest.taml"
+	/>
+

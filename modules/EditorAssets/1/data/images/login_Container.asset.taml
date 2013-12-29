@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="login_ContainerImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#login_Container.png" />

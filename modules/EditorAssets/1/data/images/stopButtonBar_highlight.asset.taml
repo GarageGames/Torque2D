@@ -1,0 +1,5 @@
+<ImageAsset
+    AssetName="stopButtonBar_highlightImageMap"
+    AssetCategory="gui"
+    AssetInternal="1"
+    ImageFile="@assetFile=#stopButtonBar_highlight.png" />
