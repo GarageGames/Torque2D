@@ -26,7 +26,7 @@
 #include "platformX86UNIX/x86UNIXStdConsole.h"
 #include "platformX86UNIX/x86UNIXUtils.h"
 #include "platform/event.h"
-#include "platform/gameInterface.h"
+#include "game/gameInterface.h"
 
 #include <signal.h>
 #include <unistd.h>

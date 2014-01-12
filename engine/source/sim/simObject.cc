@@ -28,7 +28,7 @@
 #include "memory/frameAllocator.h"
 #include "io/fileStream.h"
 #include "io/fileObject.h"
-#include "console/consoleTypeValidators.h"
+#include "console/ConsoleTypeValidators.h"
 
 #include "simObject_ScriptBinding.h"
 

@@ -30,14 +30,14 @@
 #include "io/fileObject.h"
 #include "console/consoleInternal.h"
 #include "debug/profiler.h"
-#include "console/consoleTypeValidators.h"
+#include "console/ConsoleTypeValidators.h"
 #include "memory/frameAllocator.h"
 
-#include "2d/sceneObject/sceneObject.h"
-#include "2d/sceneObject/sceneObjectSet.h"
+#include "2d/sceneobject/SceneObject.h"
+#include "2d/sceneobject/SceneObjectSet.h"
 
 // Script bindings.
-#include "2d/sceneObject/sceneObjectSet_ScriptBinding.h"
+#include "2d/sceneobject/SceneObjectSet_ScriptBinding.h"
 
 //-----------------------------------------------------------------------------
 

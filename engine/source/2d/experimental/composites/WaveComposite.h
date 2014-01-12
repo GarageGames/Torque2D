@@ -24,7 +24,7 @@
 #define _WAVE_COMPOSITE_H_
 
 #ifndef _COMPOSITE_SPRITE_H_
-#include "2d/sceneObject/CompositeSprite.h"
+#include "2d/sceneobject/CompositeSprite.h"
 #endif
 
 //------------------------------------------------------------------------------  

@@ -20,10 +20,10 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#include "2d/sceneobject/particlePlayer.h"
+#include "2d/sceneobject/ParticlePlayer.h"
 
 // Script bindings.
-#include "2d/sceneobject/particlePlayer_ScriptBinding.h"
+#include "2d/sceneobject/ParticlePlayer_ScriptBinding.h"
 
 
 //------------------------------------------------------------------------------

@@ -23,11 +23,11 @@
 #include "2d/core/SpriteBatchQuery.h"
 
 #ifndef _SPRITE_BATCH_H_
-#include "2d/core/spriteBatch.h"
+#include "2d/core/SpriteBatch.h"
 #endif
 
 #ifndef _SPRITE_BATCH_ITEM_H_
-#include "2d/core/spriteBatchItem.h"
+#include "2d/core/SpriteBatchItem.h"
 #endif
 
 // Debug Profiling.

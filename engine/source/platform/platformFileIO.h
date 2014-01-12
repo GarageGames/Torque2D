@@ -26,6 +26,9 @@
 #include "platform/platform.h"
 #endif
 
+// Need to remove this once Xlib stops leaking
+#undef Status
+
 class File
 {
 public:

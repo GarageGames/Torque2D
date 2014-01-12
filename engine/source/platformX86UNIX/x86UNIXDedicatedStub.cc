@@ -93,12 +93,6 @@ void PlatformBlitInit( void ) {}
 PlatformFont *createPlatformFont(const char *name, U32 size, U32 charset) { return NULL; }
 bool x86UNIXFont::create(const char *name, U32 size, U32 charset) { return false; }
 
-// #include <X11/Xlib.h>
-
-// void NotifySelectionEvent(XEvent& event)
-// {
-// }
-
 // Input stubs
 void Input::init() {}
 void Input::destroy() {}
@@ -114,6 +108,5 @@ bool Input::isActive() { return false; }
 void Input::process() {}
 InputManager* Input::getManager() { return NULL; }
 void GLLoader::OpenGLShutdown() {}
-void InstallRedBookDevices() {}
 bool OpenGLInit() { return false; }
 

@@ -24,7 +24,7 @@
 #define _PARTICLE_ASSET_EMITTER_H_
 
 #ifndef _PARTICLE_ASSET_FIELD_H_
-#include "2d/assets/particleAssetFieldCollection.h"
+#include "2d/assets/ParticleAssetFieldCollection.h"
 #endif
 
 #ifndef _IMAGE_ASSET_H_
@@ -36,7 +36,7 @@
 #endif
 
 #ifndef _SCENE_OBJECT_H_
-#include "2d/sceneobject/sceneObject.h"
+#include "2d/sceneobject/SceneObject.h"
 #endif
 
 //-----------------------------------------------------------------------------

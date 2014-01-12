@@ -20,22 +20,20 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-
-
 #include "console/console.h"
-#include "core/fileStream.h"
+#include "io/fileStream.h"
 #include "game/resource.h"
 #include "game/version.h"
 #include "math/mRandom.h"
 #include "platformX86UNIX/platformX86UNIX.h"
 #include "platformX86UNIX/x86UNIXStdConsole.h"
 #include "platform/event.h"
-#include "platform/gameInterface.h"
+#include "game/gameInterface.h"
 #include "platform/platform.h"
 #include "platform/platformAL.h"
 #include "platform/platformInput.h"
 #include "platform/platformVideo.h"
-#include "platform/profiler.h"
+#include "debug/profiler.h"
 #include "platformX86UNIX/platformGL.h"
 #include "platformX86UNIX/x86UNIXOGLVideo.h"
 #include "platformX86UNIX/x86UNIXState.h"
@@ -67,11 +65,8 @@ LockFunc_t DisplayPtrManager::sgLockFunc = NULL;
 LockFunc_t DisplayPtrManager::sgUnlockFunc = NULL;
 
 static U32 lastTimeTick;
-static MRandomLCG sgPlatRandom;
 
 #ifndef DEDICATED
-extern void InstallRedBookDevices();
-extern void PollRedbookDevices();
 extern bool InitOpenGL();
 // This is called when some X client sends 
 // a selection event (e.g. SelectionRequest)
@@ -94,11 +89,6 @@ static S32 ParseCommandLine(S32 argc, const char **argv,
          dPrintf("%s (built on %s)\n", getVersionString(), getCompileTimeString());
          dPrintf("gcc: %s\n", __VERSION__);
          return 1;
-      }
-      if (dStrcmp(argv[i], "-cdaudio") == 0)
-      {
-         x86UNIXState->setCDAudioEnabled(true);
-         continue;
       }
       if (dStrcmp(argv[i], "-dedicated") == 0)
       {
@@ -542,13 +532,12 @@ bool Platform::AlertYesNo(const char *windowTitle, const char *message)
    }
 }
 
-
-//------------------------------------------------------------------------------
-bool Platform::excludeOtherInstances(const char *mutexName)
+// Very hacky, doesn't support buttons or icons
+S32 Platform::messageBox(const UTF8 *title, const UTF8 *message, MBButtons buttons, MBIcons icon)
 {
-   return AcquireProcessMutex(mutexName);
+   Platform::AlertOK(title, message);
+   return 0;
 }
-
 
 //------------------------------------------------------------------------------
 void Platform::enableKeyboardTranslation(void)
@@ -572,27 +561,16 @@ void Platform::disableKeyboardTranslation(void)
 }
 
 //------------------------------------------------------------------------------
-void Platform::setWindowLocked(bool locked)
-{
-#ifndef DEDICATED
-   x86UNIXState->setWindowLocked(locked);
-
-   UInputManager* uInputManager = 
-      dynamic_cast<UInputManager*>( Input::getManager() );
-
-   if ( uInputManager && uInputManager->isEnabled() && 
-      Input::isActive() )
-      uInputManager->setWindowLocked(locked);
-#endif
-}
-
-//------------------------------------------------------------------------------
 void Platform::minimizeWindow()
 {
 #ifndef DEDICATED
    if (x86UNIXState->windowCreated())
       SDL_WM_IconifyWindow();
 #endif
+}
+
+void Platform::restoreWindow()
+{
 }
 
 //------------------------------------------------------------------------------
@@ -619,11 +597,6 @@ void Platform::process()
       // process input events
       PROFILE_START(XUX_InputProcess);
       Input::process();
-      PROFILE_END();
-
-      // poll redbook state
-      PROFILE_START(XUX_PollRedbookDevices);
-      PollRedbookDevices();
       PROFILE_END();
 
       // if we're not the foreground window, sleep for 1 ms
@@ -720,14 +693,12 @@ void Platform::init()
       {
          DisplayErrorAlert("Unable to initialize SDL.");
          ImmediateShutdown(1);
+      } else {
+         Con::printf("SDL Initialized");
       }
 
       // initialize input
       Input::init();
-
-      // initialize redbook devices
-      if (x86UNIXState->getCDAudioEnabled())
-         InstallRedBookDevices();
 
       Con::printf( "Video Init:" );
 
@@ -787,12 +758,6 @@ void Platform::initWindow(const Point2I &initialSize, const char *name)
 #endif
 }
 
-//-------------------------------------------------------------------------------
-F32 Platform::getRandom()
-{
-   return sgPlatRandom.randF();
-}
-
 //------------------------------------------------------------------------------
 // Web browser function:
 //------------------------------------------------------------------------------
@@ -824,7 +789,6 @@ bool Platform::openWebBrowser( const char* webAddress )
    else if (pid == 0)
    {
       // child
-      // try to exec konqueror, then netscape
       char* argv[3];
       argv[0] = "";
       argv[1] = const_cast<char*>(webAddress);
@@ -836,9 +800,10 @@ bool Platform::openWebBrowser( const char* webAddress )
       if (webBrowser != NULL)
          ok = execvp(webBrowser, argv);
 
+      ok = execvp("xdg-open", argv);
+      ok = execvp("firefox", argv);
       ok = execvp("konqueror", argv);
       ok = execvp("mozilla", argv);
-      ok = execvp("netscape", argv);
       // use dPrintf instead of Con here since we're now in another process, 
       dPrintf("WARNING: Platform::openWebBrowser: couldn't launch a web browser\n");
       _exit(-1);     
@@ -851,20 +816,9 @@ bool Platform::openWebBrowser( const char* webAddress )
    }
 }
 
-//------------------------------------------------------------------------------
-// Login password routines:
-//------------------------------------------------------------------------------
-const char* Platform::getLoginPassword()
+void Platform::setMouseLock(bool locked)
 {
-   Con::printf("WARNING: Platform::getLoginPassword() is unimplemented");
-   return "";
-}
-
-//------------------------------------------------------------------------------
-bool Platform::setLoginPassword( const char* password )
-{
-   Con::printf("WARNING: Platform::setLoginPassword is unimplemented");
-   return false;
+  // Not implemented
 }
 
 //-------------------------------------------------------------------------------
@@ -899,15 +853,6 @@ ConsoleFunction( getDesktopResolution, const char*, 1, 1,
 }
 
 //------------------------------------------------------------------------------
-// Silly Korean registry key checker:
-//------------------------------------------------------------------------------
-ConsoleFunction( isKoreanBuild, bool, 1, 1, "isKoreanBuild()" )
-{
-   Con::printf("WARNING: isKoreanBuild() is unimplemented");
-   return false;
-}
-
-//------------------------------------------------------------------------------
 int main(S32 argc, const char **argv)
 {
    // init platform state
@@ -927,10 +872,16 @@ int main(S32 argc, const char **argv)
 
    // check to see if X is running
    DetectWindowingSystem();
+
+   Game->mainInitialize(argc, argv);
   
    // run the game
-   returnVal = Game->main(newCommandLine.size(), 
-      const_cast<const char**>(newCommandLine.address()));
+   while ( Game->isRunning() )
+   {
+      Game->mainLoop();
+   }
+
+   Game->mainShutdown();
 
    // dispose of command line
    for(U32 i = 0; i < newCommandLine.size(); i++)

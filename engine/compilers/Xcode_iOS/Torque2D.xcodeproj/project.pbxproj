@@ -2791,7 +2791,7 @@
 		867BB11916AEC9E10033868F /* Support_Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				867BB11C16AEC9FC0033868F /* box2d */,
+				867BB11C16AEC9FC0033868F /* Box2D */,
 				867BB11B16AEC9ED0033868F /* lpng */,
 				867BB11A16AEC9E90033868F /* ljpeg */,
 			);
@@ -2873,7 +2873,7 @@
 			name = lpng;
 			sourceTree = "<group>";
 		};
-		867BB11C16AEC9FC0033868F /* box2d */ = {
+		867BB11C16AEC9FC0033868F /* Box2D */ = {
 			isa = PBXGroup;
 			children = (
 				867BB11D16AEC9FC0033868F /* Box2D.h */,
@@ -2882,8 +2882,8 @@
 				867BB14416AEC9FC0033868F /* Dynamics */,
 				867BB1AC16AEC9FC0033868F /* Rope */,
 			);
-			name = box2d;
-			path = ../../source/box2d;
+			name = Box2D;
+			path = ../../source/Box2D;
 			sourceTree = "<group>";
 		};
 		867BB11E16AEC9FC0033868F /* Collision */ = {

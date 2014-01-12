@@ -36,7 +36,7 @@
 #endif
 
 #ifndef BOX2D_H
-#include "box2d/Box2D.h"
+#include "Box2D/Box2D.h"
 #endif
 
 //-----------------------------------------------------------------------------

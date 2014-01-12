@@ -23,7 +23,7 @@
 #include "platform/platform.h"
 #include "console/console.h"
 #include "console/consoleObject.h"
-#include "console/consoleTypeValidators.h"
+#include "console/ConsoleTypeValidators.h"
 #include "sim/simBase.h"
 #include <stdarg.h>
 

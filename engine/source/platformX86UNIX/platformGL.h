@@ -20,10 +20,13 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-
-
 #ifndef _PLATFORMGL_H_
 #define _PLATFORMGL_H_
+
+#define MIN_RESOLUTION_X			320
+#define MIN_RESOLUTION_Y			320
+#define MIN_RESOLUTION_BIT_DEPTH	32
+#define MIN_RESOLUTION_XY_STRING	"320 320"
 
 #ifdef __cplusplus
 extern "C" {

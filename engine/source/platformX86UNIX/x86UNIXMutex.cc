@@ -20,61 +20,18 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-
-
 #include "console/console.h"
 #include "platformX86UNIX/platformX86UNIX.h"
-#include "platform/platformMutex.h"
+#include "platform/threads/thread.h"
+#include "platform/threads/mutex.h"
 #include "platformX86UNIX/x86UNIXMutex.h"
+#include "memory/safeDelete.h"
 
 #include <pthread.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
-
-void * Mutex::createMutex()
-{
-   pthread_mutex_t *mutex;
-   pthread_mutexattr_t attr;
-
-   pthread_mutexattr_init(&attr);
-   pthread_mutexattr_settype(&attr,PTHREAD_MUTEX_RECURSIVE);
-   
-   mutex = new pthread_mutex_t;
-   pthread_mutex_init(mutex, &attr);
-   
-   return((void*)mutex);
-}
-
-void Mutex::destroyMutex(void * mutex)
-{
-   pthread_mutex_t *pt_mutex = reinterpret_cast<pthread_mutex_t*>(mutex);
-   AssertFatal(pt_mutex, "Mutex::destroyMutex: invalid mutex");
-   pthread_mutex_destroy(pt_mutex);
-   delete pt_mutex;
-}
-
-bool Mutex::lockMutex(void * mutex, bool block)
-{
-   pthread_mutex_t *pt_mutex = reinterpret_cast<pthread_mutex_t*>(mutex);
-   AssertFatal(pt_mutex, "Mutex::lockMutex: invalid mutex");
-   if(block)
-   {
-	   return pthread_mutex_lock(pt_mutex) == 0;
-   }
-   else
-   {
-	   return pthread_mutex_trylock(pt_mutex) == 0;
-   }
-}
-
-void Mutex::unlockMutex(void * mutex)
-{
-   pthread_mutex_t *pt_mutex = reinterpret_cast<pthread_mutex_t*>(mutex);
-   AssertFatal(pt_mutex, "Mutex::unlockMutex: invalid mutex");
-   pthread_mutex_unlock(pt_mutex);
-}
 
 ProcessMutex::ProcessMutex()
 {
@@ -138,17 +95,104 @@ void ProcessMutex::release()
    }
 }
 
-ConsoleFunction(debug_testx86unixmutex, void, 1, 1, "debug_testx86unixmutex()")
+//-----------------------------------------------------------------------------
+
+struct PlatformMutexData
 {
-   void* mutex = Mutex::createMutex();
-   AssertFatal(mutex, "couldn't create mutex");
-   Con::printf("created mutex");
-   Mutex::lockMutex(mutex);
-   Con::printf("locked mutex");
-   Mutex::unlockMutex(mutex);
-   Con::printf("unlocked mutex");
-   Mutex::destroyMutex(mutex);
-   Con::printf("destroyed mutex");
+    pthread_mutex_t   mMutex;
+    bool              locked;
+    U32         lockedByThread;
+};
+
+//-----------------------------------------------------------------------------
+
+Mutex::Mutex()
+{
+    bool ok;
+    
+    // Create the mutex data.
+    mData = new PlatformMutexData;
+
+    // Initialize the system mutex.
+    pthread_mutexattr_t attr;
+    ok = pthread_mutexattr_init(&attr);
+    ok = pthread_mutexattr_settype(&attr,PTHREAD_MUTEX_RECURSIVE);
+    ok = pthread_mutex_init(&(mData->mMutex),&attr);
+    
+    // Sanity!
+    AssertFatal(ok == 0, "Mutex() failed: pthread_mutex_init() failed.");
+    
+    // Set the initial mutex state.
+    mData->locked = false;
+    mData->lockedByThread = 0;
+}
+
+//-----------------------------------------------------------------------------
+
+Mutex::~Mutex()
+{
+    // Destroy the system mutex.
+    const bool ok = pthread_mutex_destroy( &(mData->mMutex) );
+    
+    // Sanity!
+    AssertFatal(ok == 0, "~Mutex() failed: pthread_mutex_destroy() failed.");
+    
+    // Delete the mutex data.
+    SAFE_DELETE( mData );
+}
+
+//-----------------------------------------------------------------------------
+
+bool Mutex::lock( bool block )
+{
+    // Is this a blocking lock?
+    if( block )
+    {
+        // Yes, so block until mutex can be locked.
+        const bool ok = pthread_mutex_lock( &(mData->mMutex) );
+        
+        // Sanity!
+        AssertFatal( ok != EINVAL, "Mutex::lockMutex() failed: invalid mutex.");
+        AssertFatal( ok != EDEADLK, "Mutex::lockMutex() failed: system detected a deadlock!");
+        AssertFatal( ok == 0, "Mutex::lockMutex() failed: pthread_mutex_lock() failed -- unknown reason.");
+    }
+    else
+    {
+        // No, so attempt to lock the thread without blocking.
+        const bool ok = pthread_mutex_trylock( &(mData->mMutex) );
+        // returns EBUSY if mutex was locked by another thread,
+        // returns EINVAL if mutex was not a valid mutex pointer,
+        // returns 0 if lock succeeded.
+        
+        // Sanity!
+        AssertFatal( ok != EINVAL, "Mutex::lockMutex(non blocking) failed: invalid mutex.");
+        
+        // Finish if we couldn't lock the mutex.
+        if( ok != 0 )
+            return false;
+        
+        AssertFatal( ok == 0, "Mutex::lockMutex(non blocking) failed: pthread_mutex_trylock() failed -- unknown reason.");
+    }
+    
+    // Flag as locked by the current thread.
+    mData->locked = true;
+    mData->lockedByThread = ThreadManager::getCurrentThreadId();
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
+void Mutex::unlock()
+{
+    // Unlock the thread.
+    const bool ok = pthread_mutex_unlock( &(mData->mMutex) );
+    
+    // Sanity!
+    AssertFatal( ok == 0, "Mutex::unlockMutex() failed: pthread_mutex_unlock() failed.");
+    
+    // Flag as unlocked.
+    mData->locked = false;
+    mData->lockedByThread = 0;
 }
 
 

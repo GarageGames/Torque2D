@@ -20,7 +20,7 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#include "2d/core/imageFrameProviderCore.h"
+#include "2d/core/ImageFrameProviderCore.h"
 
 #ifndef _SCENE_OBJECT_H_
 #include "2d/sceneobject/SceneObject.h"
@@ -39,7 +39,7 @@
 #endif
 
 #ifndef _RENDER_PROXY_H_
-#include "2d/core/renderProxy.h"
+#include "2d/core/RenderProxy.h"
 #endif
 
 // Debug Profiling.

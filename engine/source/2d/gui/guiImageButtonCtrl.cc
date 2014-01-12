@@ -21,7 +21,7 @@
 //-----------------------------------------------------------------------------
 
 #ifndef _GUIIMAGEBUTTON_H_
-#include "2d/gui/GuiImageButtonCtrl.h"
+#include "2d/gui/guiImageButtonCtrl.h"
 #endif
 
 #ifndef _RENDER_PROXY_H_

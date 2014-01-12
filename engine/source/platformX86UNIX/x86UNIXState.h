@@ -58,7 +58,6 @@ class x86UNIXPlatformState
       bool                 mWindowLocked;
       bool                 mXWindowsRunning;
       bool                 mDedicated;
-      bool                 mCDAudioEnabled;
       bool                 mDSleep;
       bool                 mUseRedirect;
 
@@ -143,9 +142,6 @@ class x86UNIXPlatformState
       bool isDedicated() { return mDedicated; }
       void setDedicated(bool dedicated) { mDedicated = dedicated; }
 
-      bool getCDAudioEnabled() { return mCDAudioEnabled; }
-      void setCDAudioEnabled(bool enabled) { mCDAudioEnabled = enabled; }
-
       bool getDSleep() { return mDSleep; }
       void setDSleep(bool enabled) { mDSleep = enabled; }
 
@@ -163,7 +159,6 @@ class x86UNIXPlatformState
          mWindowCreated = mWindowActive = mWindowLocked = false;
          mXWindowsRunning = false;
          mDedicated = false;
-         mCDAudioEnabled = false;
          mDSleep = false;
 #ifdef USE_FILE_REDIRECT
          mUseRedirect = true;
@@ -271,4 +266,3 @@ class DisplayPtrManager
          return display;
       }
 };
-

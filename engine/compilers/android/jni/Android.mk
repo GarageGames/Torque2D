@@ -60,14 +60,14 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
     				$(LOCAL_PATH)/../../../source/algorithm \
     				$(LOCAL_PATH)/../../../source/assets \
     				$(LOCAL_PATH)/../../../source/audio \
-    				$(LOCAL_PATH)/../../../source/box2d \
-    				$(LOCAL_PATH)/../../../source/box2d/Collision \
-					$(LOCAL_PATH)/../../../source/box2d/Collision/Shapes \
-					$(LOCAL_PATH)/../../../source/box2d/Common \
-					$(LOCAL_PATH)/../../../source/box2d/Dynamics \
-					$(LOCAL_PATH)/../../../source/box2d/Dynamics/Contacts \
-					$(LOCAL_PATH)/../../../source/box2d/Dynamics/Joints \
-					$(LOCAL_PATH)/../../../source/box2d/Rope \
+    				$(LOCAL_PATH)/../../../source/Box2D \
+    				$(LOCAL_PATH)/../../../source/Box2D/Collision \
+					$(LOCAL_PATH)/../../../source/Box2D/Collision/Shapes \
+					$(LOCAL_PATH)/../../../source/Box2D/Common \
+					$(LOCAL_PATH)/../../../source/Box2D/Dynamics \
+					$(LOCAL_PATH)/../../../source/Box2D/Dynamics/Contacts \
+					$(LOCAL_PATH)/../../../source/Box2D/Dynamics/Joints \
+					$(LOCAL_PATH)/../../../source/Box2D/Rope \
     				$(LOCAL_PATH)/../../../source/collection \
     				$(LOCAL_PATH)/../../../source/component \
     				$(LOCAL_PATH)/../../../source/component/behaviors \
@@ -221,52 +221,52 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/assets/declaredAssets.cc \
 					../../../source/assets/referencedAssets.cc \
 					../../../source/audio/AudioAsset.cc \
-					../../../source/box2d/Collision/b2BroadPhase.cpp \
-					../../../source/box2d/Collision/b2CollideCircle.cpp \
-					../../../source/box2d/Collision/b2CollideEdge.cpp \
-					../../../source/box2d/Collision/b2CollidePolygon.cpp \
-					../../../source/box2d/Collision/b2Collision.cpp \
-					../../../source/box2d/Collision/b2Distance.cpp \
-					../../../source/box2d/Collision/b2DynamicTree.cpp \
-					../../../source/box2d/Collision/b2TimeOfImpact.cpp \
-					../../../source/box2d/Collision/Shapes/b2ChainShape.cpp \
-					../../../source/box2d/Collision/Shapes/b2CircleShape.cpp \
-					../../../source/box2d/Collision/Shapes/b2EdgeShape.cpp \
-					../../../source/box2d/Collision/Shapes/b2PolygonShape.cpp \
-					../../../source/box2d/Common/b2BlockAllocator.cpp \
-					../../../source/box2d/Common/b2Draw.cpp \
-					../../../source/box2d/Common/b2Math.cpp \
-					../../../source/box2d/Common/b2Settings.cpp \
-					../../../source/box2d/Common/b2StackAllocator.cpp \
-					../../../source/box2d/Common/b2Timer.cpp \
-					../../../source/box2d/Dynamics/b2Body.cpp \
-					../../../source/box2d/Dynamics/b2ContactManager.cpp \
-					../../../source/box2d/Dynamics/b2Fixture.cpp \
-					../../../source/box2d/Dynamics/b2Island.cpp \
-					../../../source/box2d/Dynamics/b2World.cpp \
-					../../../source/box2d/Dynamics/b2WorldCallbacks.cpp \
-					../../../source/box2d/Dynamics/Contacts/b2ChainAndCircleContact.cpp \
-					../../../source/box2d/Dynamics/Contacts/b2ChainAndPolygonContact.cpp \
-					../../../source/box2d/Dynamics/Contacts/b2CircleContact.cpp \
-					../../../source/box2d/Dynamics/Contacts/b2Contact.cpp \
-					../../../source/box2d/Dynamics/Contacts/b2ContactSolver.cpp \
-					../../../source/box2d/Dynamics/Contacts/b2EdgeAndCircleContact.cpp \
-					../../../source/box2d/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp \
-					../../../source/box2d/Dynamics/Contacts/b2PolygonAndCircleContact.cpp \
-					../../../source/box2d/Dynamics/Contacts/b2PolygonContact.cpp \
-					../../../source/box2d/Dynamics/Joints/b2DistanceJoint.cpp \
-					../../../source/box2d/Dynamics/Joints/b2FrictionJoint.cpp \
-					../../../source/box2d/Dynamics/Joints/b2GearJoint.cpp \
-					../../../source/box2d/Dynamics/Joints/b2Joint.cpp \
-					../../../source/box2d/Dynamics/Joints/b2MotorJoint.cpp \
-					../../../source/box2d/Dynamics/Joints/b2MouseJoint.cpp \
-					../../../source/box2d/Dynamics/Joints/b2PrismaticJoint.cpp \
-					../../../source/box2d/Dynamics/Joints/b2PulleyJoint.cpp \
-					../../../source/box2d/Dynamics/Joints/b2RevoluteJoint.cpp \
-					../../../source/box2d/Dynamics/Joints/b2RopeJoint.cpp \
-					../../../source/box2d/Dynamics/Joints/b2WeldJoint.cpp \
-					../../../source/box2d/Dynamics/Joints/b2WheelJoint.cpp \
-					../../../source/box2d/Rope/b2Rope.cpp \
+					../../../source/Box2D/Collision/b2BroadPhase.cpp \
+					../../../source/Box2D/Collision/b2CollideCircle.cpp \
+					../../../source/Box2D/Collision/b2CollideEdge.cpp \
+					../../../source/Box2D/Collision/b2CollidePolygon.cpp \
+					../../../source/Box2D/Collision/b2Collision.cpp \
+					../../../source/Box2D/Collision/b2Distance.cpp \
+					../../../source/Box2D/Collision/b2DynamicTree.cpp \
+					../../../source/Box2D/Collision/b2TimeOfImpact.cpp \
+					../../../source/Box2D/Collision/Shapes/b2ChainShape.cpp \
+					../../../source/Box2D/Collision/Shapes/b2CircleShape.cpp \
+					../../../source/Box2D/Collision/Shapes/b2EdgeShape.cpp \
+					../../../source/Box2D/Collision/Shapes/b2PolygonShape.cpp \
+					../../../source/Box2D/Common/b2BlockAllocator.cpp \
+					../../../source/Box2D/Common/b2Draw.cpp \
+					../../../source/Box2D/Common/b2Math.cpp \
+					../../../source/Box2D/Common/b2Settings.cpp \
+					../../../source/Box2D/Common/b2StackAllocator.cpp \
+					../../../source/Box2D/Common/b2Timer.cpp \
+					../../../source/Box2D/Dynamics/b2Body.cpp \
+					../../../source/Box2D/Dynamics/b2ContactManager.cpp \
+					../../../source/Box2D/Dynamics/b2Fixture.cpp \
+					../../../source/Box2D/Dynamics/b2Island.cpp \
+					../../../source/Box2D/Dynamics/b2World.cpp \
+					../../../source/Box2D/Dynamics/b2WorldCallbacks.cpp \
+					../../../source/Box2D/Dynamics/Contacts/b2ChainAndCircleContact.cpp \
+					../../../source/Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.cpp \
+					../../../source/Box2D/Dynamics/Contacts/b2CircleContact.cpp \
+					../../../source/Box2D/Dynamics/Contacts/b2Contact.cpp \
+					../../../source/Box2D/Dynamics/Contacts/b2ContactSolver.cpp \
+					../../../source/Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.cpp \
+					../../../source/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp \
+					../../../source/Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.cpp \
+					../../../source/Box2D/Dynamics/Contacts/b2PolygonContact.cpp \
+					../../../source/Box2D/Dynamics/Joints/b2DistanceJoint.cpp \
+					../../../source/Box2D/Dynamics/Joints/b2FrictionJoint.cpp \
+					../../../source/Box2D/Dynamics/Joints/b2GearJoint.cpp \
+					../../../source/Box2D/Dynamics/Joints/b2Joint.cpp \
+					../../../source/Box2D/Dynamics/Joints/b2MotorJoint.cpp \
+					../../../source/Box2D/Dynamics/Joints/b2MouseJoint.cpp \
+					../../../source/Box2D/Dynamics/Joints/b2PrismaticJoint.cpp \
+					../../../source/Box2D/Dynamics/Joints/b2PulleyJoint.cpp \
+					../../../source/Box2D/Dynamics/Joints/b2RevoluteJoint.cpp \
+					../../../source/Box2D/Dynamics/Joints/b2RopeJoint.cpp \
+					../../../source/Box2D/Dynamics/Joints/b2WeldJoint.cpp \
+					../../../source/Box2D/Dynamics/Joints/b2WheelJoint.cpp \
+					../../../source/Box2D/Rope/b2Rope.cpp \
 					../../../source/collection/bitTables.cc \
 					../../../source/collection/hashTable.cc \
 					../../../source/collection/nameTags.cpp \

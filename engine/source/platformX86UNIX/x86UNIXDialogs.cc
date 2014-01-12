@@ -20,73 +20,34 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#include "SceneObjectList.h"
-#include "2d/sceneobject/SceneObject.h"
-#include "collection/findIterator.h"
+#include "platformX86UNIX/platformX86UNIX.h"
+#include "platform/nativeDialogs/fileDialog.h"
 
-//-----------------------------------------------------------------------------
-
-void SceneObjectList::pushBack(SceneObject* obj)
+bool FileDialog::Execute()
 {
-	if (find(begin(),end(),obj) == end())
-		push_back(obj);
-}	
-
-//-----------------------------------------------------------------------------
-
-void SceneObjectList::pushBackForce(SceneObject* obj)
-{
-	iterator itr = find(begin(),end(),obj);
-	if (itr == end()) 
-	{
-		push_back(obj);
-	}
-	else 
-	{
-		// Move to the back...
-		SceneObject* pBack = *itr;
-		removeStable(pBack);
-		push_back(pBack);
-	}
-}	
-
-//-----------------------------------------------------------------------------
-
-void SceneObjectList::pushFront(SceneObject* obj)
-{
-	if (find(begin(),end(),obj) == end())
-		push_front(obj);
-}	
-
-//-----------------------------------------------------------------------------
-
-void SceneObjectList::remove(SceneObject* obj)
-{
-	iterator ptr = find(begin(),end(),obj);
-	if (ptr != end()) 
-		erase(ptr);
+    return true;
 }
 
 //-----------------------------------------------------------------------------
-
-void SceneObjectList::removeStable(SceneObject* obj)
+// Default Path Property - String Validated on Write
+//-----------------------------------------------------------------------------
+bool FileDialog::setDefaultPath(void* obj, const char* data)
 {
-	iterator ptr = find(begin(),end(),obj);
-	if (ptr != end()) 
-		erase(ptr);
-}
+
+   if( !data )
+      return true;
+
+   return true;
+
+};
 
 //-----------------------------------------------------------------------------
-
-void SceneObjectList::sortId()
-{
-	dQsort(address(),size(),sizeof(value_type),compareId);
-}	
-
+// Default File Property - String Validated on Write
 //-----------------------------------------------------------------------------
-
-S32 QSORT_CALLBACK SceneObjectList::compareId(const void* a,const void* b)
+bool FileDialog::setDefaultFile(void* obj, const char* data)
 {
-   return (*reinterpret_cast<const SceneObject* const*>(a))->getId() -
-      (*reinterpret_cast<const SceneObject* const*>(b))->getId();
-}
+   if( !data )
+      return true;
+
+   return true;
+};
