@@ -1040,6 +1040,99 @@ bool DInputDevice::buildEvent( DWORD offset, S32 newData, S32 oldData )
    return true;
 }
 
+
+void DInputDevice::rumble(float x, float y)
+{
+   LONG            rglDirection[2] = { 0, 0 };
+   DICONSTANTFORCE cf              = { 0 };
+   HRESULT         result;
+
+   // Now set the new parameters and start the effect immediately.
+   if (!mForceFeedbackEffect)
+   {
+      DIEFFECT eff;
+      ZeroMemory( &eff, sizeof(eff) );
+      eff.dwSize                  = sizeof(DIEFFECT);
+      eff.dwFlags                 = DIEFF_CARTESIAN | DIEFF_OBJECTOFFSETS;
+      eff.dwDuration              = INFINITE;
+      eff.dwSamplePeriod          = 0;
+      eff.dwGain                  = DI_FFNOMINALMAX;
+      eff.dwTriggerButton         = DIEB_NOTRIGGER;
+      eff.dwTriggerRepeatInterval = 0;
+      eff.cAxes                   = mNumForceFeedbackAxes;
+      eff.rgdwAxes                = mForceFeedbackAxes;
+      eff.rglDirection            = rglDirection;
+      eff.lpEnvelope              = 0;
+      eff.cbTypeSpecificParams    = sizeof(DICONSTANTFORCE);
+      eff.lpvTypeSpecificParams   = &cf;
+      eff.dwStartDelay            = 0;
+
+      // Create the prepared effect
+      if ( FAILED( result = mDevice->CreateEffect( GUID_ConstantForce, &eff, &mForceFeedbackEffect, NULL ) ) )
+      {
+	      Con::errorf( "DInputDevice::rumbleJoystick - %s does not support force feedback.\n", mName );
+	      return;
+      }
+      else
+      {
+	      Con::printf( "DInputDevice::rumbleJoystick - %s supports force feedback.\n", mName );
+      }
+   }
+
+   // Clamp the input floats to [0 - 1]
+   x = max(0, min(1, x));
+   y = max(0, min(1, y));
+
+   if ( 1 == mNumForceFeedbackAxes )
+   {
+      cf.lMagnitude = (DWORD)( x * DI_FFNOMINALMAX );
+   }
+   else
+   {
+      rglDirection[0] = (DWORD)( x * DI_FFNOMINALMAX );
+      rglDirection[1] = (DWORD)( y * DI_FFNOMINALMAX );
+      cf.lMagnitude = (DWORD)sqrt( (double)(x * x * DI_FFNOMINALMAX * DI_FFNOMINALMAX + y * y * DI_FFNOMINALMAX * DI_FFNOMINALMAX) );
+   }
+
+   DIEFFECT eff;
+   ZeroMemory( &eff, sizeof(eff) );
+   eff.dwSize                  = sizeof(DIEFFECT);
+   eff.dwFlags                 = DIEFF_CARTESIAN | DIEFF_OBJECTOFFSETS;
+   eff.dwDuration              = INFINITE;
+   eff.dwSamplePeriod          = 0;
+   eff.dwGain                  = DI_FFNOMINALMAX;
+   eff.dwTriggerButton         = DIEB_NOTRIGGER;
+   eff.dwTriggerRepeatInterval = 0;
+   eff.cAxes                   = mNumForceFeedbackAxes;
+   eff.rglDirection            = rglDirection;
+   eff.lpEnvelope              = 0;
+   eff.cbTypeSpecificParams    = sizeof(DICONSTANTFORCE);
+   eff.lpvTypeSpecificParams   = &cf;
+   eff.dwStartDelay            = 0;
+
+   if ( FAILED( result = mForceFeedbackEffect->SetParameters( &eff, DIEP_DIRECTION | DIEP_TYPESPECIFICPARAMS | DIEP_START ) ) )
+   {
+      const char* errorString = NULL;
+      switch ( result )
+      {
+         case DIERR_INPUTLOST:
+            errorString = "DIERR_INPUTLOST";
+            break;
+
+         case DIERR_INVALIDPARAM:
+            errorString = "DIERR_INVALIDPARAM";
+            break;
+
+         case DIERR_NOTACQUIRED:
+            errorString = "DIERR_NOTACQUIRED";
+            break;
+
+         default:
+            errorString = "Unknown Error";
+      }
+      Con::errorf( "DInputDevice::rumbleJoystick - %s - Failed to start rumble effect\n", errorString );
+   }
+}
 //------------------------------------------------------------------------------
 //
 // This function translates the DirectInput scan code to the associated

@@ -495,6 +495,10 @@ void Input::echoInputState()
 		Con::printf( "- Joystick is %sabled and %sactive.",
             mgr->isJoystickEnabled() ? "en" : "dis",
             mgr->isJoystickActive() ? "" : "in" );
+
+		Con::printf( "- Xinput is %sabled and %sactive.",
+			mgr->isXInputEnabled() ? "en" : "dis",
+			mgr->isXInputActive() ? "" : "in" );
    }
    else
     {

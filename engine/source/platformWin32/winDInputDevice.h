@@ -36,8 +36,8 @@
 
 //Luma: Adding this for direct input header
 #define DIRECTINPUT_VERSION  0x0800
-
 #include <dinput.h>
+
 
 class DInputDevice : public InputDevice
 {
@@ -73,6 +73,11 @@ class DInputDevice : public InputDevice
 
       bool                 mAcquired;
       bool                 mNeedSync;
+
+	  LPDIRECTINPUTEFFECT  mForceFeedbackEffect;   ///< Holds our DirectInput FF Effect
+      DWORD                mNumForceFeedbackAxes;  ///< # axes (we only support 0, 1, or 2
+      DWORD                mForceFeedbackAxes[2];  ///< Force Feedback axes offsets into DIOBJECTFORMAT
+
 
       //--------------------------------------
       DIDEVICEOBJECTINSTANCE* mObjInstance;
@@ -123,6 +128,9 @@ class DInputDevice : public InputDevice
 
       const char* getName();
       const char* getProductName();
+
+	   // Constant Effect Force Feedback
+      void rumble( float x, float y );
 
       // Console interface functions:
       const char* getJoystickAxesString();
