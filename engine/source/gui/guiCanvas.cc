@@ -384,14 +384,14 @@ bool GuiCanvas::processInputEvent(const InputEvent *event)
 
          if (event->objType == SI_XAXIS)
          {
-            pt.x += (event->fValue * mPixelsPerMickey);
+            pt.x += (event->fValues[0] * mPixelsPerMickey);
             cursorPt.x = (F32)getMax(0, getMin((S32)pt.x, mBounds.extent.x - 1));
             if (oldpt.x != S32(cursorPt.x))
                moved = true;
          }
          else
          {
-            pt.y += (event->fValue * mPixelsPerMickey);
+            pt.y += (event->fValues[0] * mPixelsPerMickey);
             cursorPt.y = (F32)getMax(0, getMin((S32)pt.y, mBounds.extent.y - 1));
             if (oldpt.y != S32(cursorPt.y))
                moved = true;
@@ -425,7 +425,7 @@ bool GuiCanvas::processInputEvent(const InputEvent *event)
          mLastEvent.mousePoint.y = S32( cursorPt.y );
          mLastEvent.eventID = 0;
 
-            if ( event->fValue < 0.0f )
+            if ( event->fValues[0] < 0.0f )
             rootMouseWheelDown( mLastEvent );
             else
             rootMouseWheelUp( mLastEvent );

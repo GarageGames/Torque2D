@@ -82,6 +82,13 @@ class Point2I
 
    // Unary operators
    Point2I operator-() const;
+
+   //-------------------------------------- Public static constants
+  public:
+	const static Point2I One;
+	const static Point2I Zero;
+	const static Point2I Min;
+	const static Point2I Max;
 };
 
 //------------------------------------------------------------------------------
@@ -135,6 +142,11 @@ class Point3I
 
    // Unary operators
    Point3I operator-() const;
+
+   //-------------------------------------- Public static constants
+public:
+   const static Point3I One;
+   const static Point3I Zero;
 };
 
 
@@ -207,6 +219,14 @@ class Point2F
 
    // Unary operators
    Point2F operator-() const;
+
+   //-------------------------------------- Public static constants
+  public:
+	const static Point2F One;
+	const static Point2F Zero;
+	const static Point2F Min;
+	const static Point2F Max;
+
 };
 
 
@@ -277,6 +297,11 @@ class Point2D
 
    // Unary operators
    Point2D operator-() const;
+
+//-------------------------------------- Public static constants
+  public:
+    const static Point2D One;
+    const static Point2D Zero;
 };
 
 
@@ -349,6 +374,16 @@ class Point3F
 
    // Unary operators
    Point3F operator-() const;
+
+   //-------------------------------------- Public static constants
+public:
+   const static Point3F One;
+   const static Point3F Zero;
+   const static Point3F Max;
+   const static Point3F Min;
+   const static Point3F UnitX;
+   const static Point3F UnitY;
+   const static Point3F UnitZ;
 };
 
 
@@ -416,6 +451,11 @@ class Point3D
 
    // Unary operators
    Point3D operator-() const;
+
+   //-------------------------------------- Public static constants
+public:
+   const static Point3D One;
+   const static Point3D Zero;
 };
 
 
@@ -453,6 +493,11 @@ class Point4F
 
    operator F32*() { return (&x); }
    operator F32*() const { return (F32*)(&x); }
+
+   	//-------------------------------------- Public static constants
+  public:
+	const static Point4F One;
+	const static Point4F Zero;
 };
 
 

@@ -480,7 +480,7 @@ static void processKeyMessage(UINT message, WPARAM wParam, LPARAM lParam)
    event.action     = make ? (repeat ? SI_REPEAT : SI_MAKE ) : SI_BREAK;
    event.modifier   = modKey;
    event.ascii      = asciiCode;
-   event.fValue     = make ? 1.0f : 0.0f;
+   event.fValues[0]     = make ? 1.0f : 0.0f;
 
    // Store the current modifier keys
    Input::setModifierKeys(modifierKeys);
@@ -547,7 +547,7 @@ static void CheckCursorPos()
          event.action = SI_MOVE;
          event.modifier = modifierKeys;
          event.ascii = 0;
-         event.fValue = (F32)(mousePos.x - centerX);
+         event.fValues[0] = (F32)(mousePos.x - centerX);
          Game->postEvent(event);
       }
 
@@ -562,7 +562,7 @@ static void CheckCursorPos()
          event.action = SI_MOVE;
          event.modifier = modifierKeys;
          event.ascii = 0;
-         event.fValue = (F32)(mousePos.y - centerY);
+         event.fValues[0] = (F32)(mousePos.y - centerY);
          Game->postEvent(event);
       }
 
@@ -596,7 +596,7 @@ static void mouseButtonEvent(S32 action, S32 objInst)
    event.action = action;
    event.modifier = modifierKeys;
    event.ascii = 0;
-   event.fValue = action == SI_MAKE ? 1.0f : 0.0f;
+   event.fValues[0] = action == SI_MAKE ? 1.0f : 0.0f;
 
    Game->postEvent(event);
 }
@@ -619,7 +619,7 @@ static void mouseWheelEvent( S32 delta )
       event.action = SI_MOVE;
       event.modifier = modifierKeys;
       event.ascii = 0;
-      event.fValue = (F32)delta;
+      event.fValues[0] = (F32)delta;
 
       Game->postEvent( event );
    }

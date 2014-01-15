@@ -23,6 +23,7 @@
 #ifndef _ACTIONMAP_H_
 #define _ACTIONMAP_H_
 
+
 #ifndef _PLATFORM_H_
 #include "platform/platform.h"
 #endif
@@ -165,8 +166,14 @@ class ActionMap : public SimObject
    static const char* buildActionString( const InputEvent* event );
 
    bool processAction(const InputEvent*);
-
-   static bool checkBreakTable(const InputEvent*);
+   bool processLeap(const InputEvent*);
+   bool processGesture(const InputEvent*);
+   bool processTouch(const InputEvent*);
+   bool processButton(const InputEvent*);
+   bool processMove(const InputEvent*);
+   bool processMotion(const InputEvent*);
+   bool processXInput(const InputEvent*);
+   static bool checkBreakTable(const InputEvent*);   
    static bool handleEvent(const InputEvent*);
    static bool handleEventGlobal(const InputEvent*);
 
