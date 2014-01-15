@@ -482,7 +482,6 @@
 		86A9A3FE16AEC836003F01E6 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86A9A3E416AEC817003F01E6 /* OpenAL.framework */; };
 		86A9A3FF16AEC836003F01E6 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86A9A3E516AEC817003F01E6 /* OpenGLES.framework */; };
 		86A9A40016AEC836003F01E6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86A9A3E616AEC817003F01E6 /* QuartzCore.framework */; };
-		86BD161A1886F45B00EEB40E /* mPoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86BD16191886F45B00EEB40E /* mPoint.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1445,7 +1444,6 @@
 		86A9A3E416AEC817003F01E6 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		86A9A3E516AEC817003F01E6 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		86A9A3E616AEC817003F01E6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		86BD16191886F45B00EEB40E /* mPoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mPoint.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2339,7 +2337,6 @@
 		867BAEF316AEC9050033868F /* math */ = {
 			isa = PBXGroup;
 			children = (
-				86BD16191886F45B00EEB40E /* mPoint.cpp */,
 				867BAEF416AEC9050033868F /* mathIO.h */,
 				867BAEF516AEC9050033868F /* mathTypes.cc */,
 				867BAEF616AEC9050033868F /* mathTypes.h */,
@@ -3344,7 +3341,6 @@
 				867BB0D716AEC9050033868F /* netConnection.cc in Sources */,
 				867BB0D816AEC9050033868F /* netDownload.cc in Sources */,
 				867BB0D916AEC9050033868F /* netEvent.cc in Sources */,
-				86BD161A1886F45B00EEB40E /* mPoint.cpp in Sources */,
 				867BB0DA16AEC9050033868F /* netGhost.cc in Sources */,
 				867BB0DB16AEC9050033868F /* netInterface.cc in Sources */,
 				867BB0DC16AEC9050033868F /* netObject.cc in Sources */,
