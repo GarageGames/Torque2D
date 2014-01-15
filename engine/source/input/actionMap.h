@@ -61,7 +61,8 @@ class ActionMap : public SimObject
          HasScale    = BIT(1),   ///< Scaled input.
          HasDeadZone = BIT(2),   ///< Dead zone is present.
          Inverted    = BIT(3),   ///< Input is inverted.
-         BindCmd     = BIT(4)    ///< Bind a console command to this.
+		 NonLinear   = BIT(4),
+         BindCmd     = BIT(5)    ///< Bind a console command to this.
       };
 
       U32 flags;           /// @see Node::Flags
@@ -133,6 +134,9 @@ class ActionMap : public SimObject
    void enterBreakEvent(const InputEvent* pEvent, const Node* pNode);
 
    static const char* getModifierString(const U32 modifiers);
+
+   /// Pass index to a break entry, and this function will fire it off.
+   static void fireBreakEvent(U32 idx, F32 value = 0.f);
 
   public:
    ActionMap();
