@@ -37,8 +37,6 @@
 
 //-----------------------------------------------------------------------------
 
-/// @ingroup tamlGroup
-/// @see tamlGroup
 class TamlJSONReader
 {
 public:

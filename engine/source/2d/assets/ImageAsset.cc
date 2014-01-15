@@ -550,33 +550,6 @@ void ImageAsset::setCellHeight( const S32 cellheight )
     refreshAsset();
 }
 
-S32 ImageAsset::getExplicitCellWidth(const S32 cellIndex)
-{
-	if ( !getExplicitMode() )
-    {
-        // No, so warn.
-        Con::warnf( "ImageAsset() - Cannot perform explicit cell operation when not in explicit mode." );
-        return (0);
-    }
-    
-    ImageAsset::FrameArea::PixelArea thisCell = mExplicitFrames.at(cellIndex);
-    return(thisCell.mPixelWidth);
-
-}
-
-S32 ImageAsset::getExplicitCellHeight(const S32 cellIndex)
-{
-	if ( !getExplicitMode() )
-    {
-        // No, so warn.
-        Con::warnf( "ImageAsset() - Cannot perform explicit cell operation when not in explicit mode." );
-        return (0);
-	}
-	
-    ImageAsset::FrameArea::PixelArea thisCell = mExplicitFrames.at(cellIndex);
-    return(thisCell.mPixelHeight);
-
-}
 //------------------------------------------------------------------------------
 
 bool ImageAsset::clearExplicitCells( void )

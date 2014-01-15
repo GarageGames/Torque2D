@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,13 +20,9 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethodGroupBeginWithDocs(ShapeVector, SceneObject)
-
-/*! Sets the polygon scale.
-    @param width/heightScale The scale values of the given polygon. If no height is specified, the widthScale value is repeated.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ShapeVector, setPolyScale, ConsoleVoid, 3, 3, (widthScale / [heightScale]))
+ConsoleMethod(ShapeVector, setPolyScale, void, 3, 3, "(widthScale / [heightScale]) - Sets the polygon scale.\n"
+              "@param width/heightScale The scale values of the given polygon. If no height is specified, the widthScale value is repeated.\n"
+              "@return No return value.")
 {
     // Calculate Element Count.
     const U32 elementCount = Utility::mGetStringElementCount( argv[2] );
@@ -59,10 +55,8 @@ ConsoleMethodWithDocs(ShapeVector, setPolyScale, ConsoleVoid, 3, 3, (widthScale 
 
 //----------------------------------------------------------------------------
 
-/*! Sets a regular polygon primitive.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ShapeVector, setPolyPrimitive, ConsoleVoid, 3, 3, (vertexCount))
+ConsoleMethod(ShapeVector, setPolyPrimitive, void, 3, 3, "(vertexCount) Sets a regular polygon primitive.\n"
+              "@return No return value.")
 {
     // Set Polygon Primitive.
     object->setPolyPrimitive( dAtoi(argv[2]) );
@@ -70,10 +64,8 @@ ConsoleMethodWithDocs(ShapeVector, setPolyPrimitive, ConsoleVoid, 3, 3, (vertexC
 
 //----------------------------------------------------------------------------
 
-/*! Sets Custom Polygon.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ShapeVector, setPolyCustom, ConsoleVoid, 4, 4, (poly-count, poly-Definition$))
+ConsoleMethod(ShapeVector, setPolyCustom, void, 4, 4, "(poly-count, poly-Definition$) Sets Custom Polygon.\n"
+              "@return No return value.")
 {
     // Set Collision Poly Custom.
     object->setPolyCustom( dAtoi(argv[2]), argv[3] );
@@ -81,10 +73,8 @@ ConsoleMethodWithDocs(ShapeVector, setPolyCustom, ConsoleVoid, 4, 4, (poly-count
 
 //----------------------------------------------------------------------------
 
-/*! Gets Polygon.
-    @return (poly-Definition) The vertices of the polygon in object space.
-*/
-ConsoleMethodWithDocs(ShapeVector, getPoly, ConsoleString, 2, 2, ())
+ConsoleMethod(ShapeVector, getPoly, const char*, 2, 2, "() Gets Polygon.\n"
+                                                          "@return (poly-Definition) The vertices of the polygon in object space.")
 {
    // Get Collision Poly Count.
     
@@ -93,10 +83,8 @@ ConsoleMethodWithDocs(ShapeVector, getPoly, ConsoleString, 2, 2, ())
 
 //----------------------------------------------------------------------------
 
-/*! Gets Polygon points in world space.
-    @return (poly-Definition) The vertices of the polygon in world space.
-*/
-ConsoleMethodWithDocs(ShapeVector, getWorldPoly, ConsoleString, 2, 2, ())
+ConsoleMethod(ShapeVector, getWorldPoly, const char*, 2, 2, "() Gets Polygon points in world space.\n"
+                                                          "@return (poly-Definition) The vertices of the polygon in world space.")
 {
    // Get Collision Poly Count.
     
@@ -105,14 +93,12 @@ ConsoleMethodWithDocs(ShapeVector, getWorldPoly, ConsoleString, 2, 2, ())
 
 //----------------------------------------------------------------------------
 
-/*! or ( stockColorName ) - Sets the line color.
-    @param red The red value.
-    @param green The green value.
-    @param blue The blue value.
-    @param alpha The alpha value.
-    @return No return Value.
-*/
-ConsoleMethodWithDocs(ShapeVector, setLineColor, ConsoleVoid, 3, 6, (float red, float green, float blue, [float alpha = 1.0]))
+ConsoleMethod(ShapeVector, setLineColor, void, 3, 6,    "(float red, float green, float blue, [float alpha = 1.0]) or ( stockColorName ) - Sets the line color."
+                                                        "@param red The red value.\n"
+                                                        "@param green The green value.\n"
+                                                        "@param blue The blue value.\n"
+                                                        "@param alpha The alpha value.\n"
+                                                        "@return No return Value.")
 {
     // The colors.
     F32 red;
@@ -179,11 +165,9 @@ ConsoleMethodWithDocs(ShapeVector, setLineColor, ConsoleVoid, 3, 6, (float red, 
 
 //----------------------------------------------------------------------------
 
-/*! Gets the fill color.
-    @param allowColorNames Whether to allow stock color names to be returned or not.  Optional: Defaults to false.
-    @return (float red / float green / float blue / float alpha) The sprite blend color.
-*/
-ConsoleMethodWithDocs(ShapeVector, getLineColor, ConsoleString, 2, 3, (allowColorNames))
+ConsoleMethod(ShapeVector, getLineColor, const char*, 2, 3,     "(allowColorNames) Gets the fill color.\n"
+                                                                "@param allowColorNames Whether to allow stock color names to be returned or not.  Optional: Defaults to false.\n"
+                                                                "@return (float red / float green / float blue / float alpha) The sprite blend color.")
 {
     // Get line color.
     ColorF color = object->getLineColor();
@@ -204,11 +188,9 @@ ConsoleMethodWithDocs(ShapeVector, getLineColor, ConsoleString, 2, 3, (allowColo
 
 //----------------------------------------------------------------------------
 
-/*! Sets the Rendering Line Alpha (transparency).
-    @param alpha The alpha value.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ShapeVector, setLineAlpha, ConsoleVoid, 3, 3, (alpha))
+ConsoleMethod(ShapeVector, setLineAlpha, void, 3, 3, "(alpha) Sets the Rendering Line Alpha (transparency).\n"
+              "@param alpha The alpha value.\n"
+              "@return No return value.")
 {
     // Set Line Alpha.
     object->setLineAlpha( dAtof(argv[2]) );
@@ -216,14 +198,12 @@ ConsoleMethodWithDocs(ShapeVector, setLineAlpha, ConsoleVoid, 3, 3, (alpha))
 
 //----------------------------------------------------------------------------
 
-/*! or ( stockColorName ) - Sets the fill color.
-    @param red The red value.
-    @param green The green value.
-    @param blue The blue value.
-    @param alpha The alpha value.
-    @return No return Value.
-*/
-ConsoleMethodWithDocs(ShapeVector, setFillColor, ConsoleVoid, 3, 3, (float red, float green, float blue, [float alpha = 1.0]))
+ConsoleMethod(ShapeVector, setFillColor, void, 3, 3,    "(float red, float green, float blue, [float alpha = 1.0]) or ( stockColorName ) - Sets the fill color."
+                                                        "@param red The red value.\n"
+                                                        "@param green The green value.\n"
+                                                        "@param blue The blue value.\n"
+                                                        "@param alpha The alpha value.\n"
+                                                        "@return No return Value.")
 {
     // The colors.
     F32 red;
@@ -290,11 +270,9 @@ ConsoleMethodWithDocs(ShapeVector, setFillColor, ConsoleVoid, 3, 3, (float red, 
 
 //----------------------------------------------------------------------------
 
-/*! Gets the fill color.
-    @param allowColorNames Whether to allow stock color names to be returned or not.  Optional: Defaults to false.
-    @return (float red / float green / float blue / float alpha) The sprite blend color.
-*/
-ConsoleMethodWithDocs(ShapeVector, getFillColor, ConsoleString, 2, 3, (allowColorNames))
+ConsoleMethod(ShapeVector, getFillColor, const char*, 2, 3,     "(allowColorNames) Gets the fill color.\n"
+                                                                "@param allowColorNames Whether to allow stock color names to be returned or not.  Optional: Defaults to false.\n"
+                                                                "@return (float red / float green / float blue / float alpha) The sprite blend color.")
 {
     // Get line color.
     ColorF color = object->getFillColor();
@@ -315,11 +293,9 @@ ConsoleMethodWithDocs(ShapeVector, getFillColor, ConsoleString, 2, 3, (allowColo
 
 //----------------------------------------------------------------------------
 
-/*! Sets the Rendering Fill Alpha (transparency).
-    @param alpha The alpha value.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ShapeVector, setFillAlpha, ConsoleVoid, 3, 3, (alpha))
+ConsoleMethod(ShapeVector, setFillAlpha, void, 3, 3, "(alpha) Sets the Rendering Fill Alpha (transparency).\n"
+              "@param alpha The alpha value.\n"
+              "@return No return value.")
 {
     // Set Fill Alpha.
     object->setFillAlpha( dAtof(argv[2]) );
@@ -327,10 +303,8 @@ ConsoleMethodWithDocs(ShapeVector, setFillAlpha, ConsoleVoid, 3, 3, (alpha))
 
 //----------------------------------------------------------------------------
 
-/*! Sets the Rendering Fill Mode.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ShapeVector, setFillMode, ConsoleVoid, 3, 3, (fillMode?))
+ConsoleMethod(ShapeVector, setFillMode, void, 3, 3, "(fillMode?) Sets the Rendering Fill Mode.\n"
+              "@return No return value.")
 {
     // Set Fill Mode.
     object->setFillMode( dAtob(argv[2]) );
@@ -338,68 +312,54 @@ ConsoleMethodWithDocs(ShapeVector, setFillMode, ConsoleVoid, 3, 3, (fillMode?))
 
 //----------------------------------------------------------------------------
 
-/*! Gets the Rendering Fill Mode.
-    @return The fill mode as a boolean value.
-*/
-ConsoleMethodWithDocs(ShapeVector, getFillMode, ConsoleBool, 2, 2, ())
+ConsoleMethod(ShapeVector, getFillMode, bool, 2, 2, "() Gets the Rendering Fill Mode.\n"
+              "@return The fill mode as a boolean value.")
 {
     return object->getFillMode();
 }
 
 //----------------------------------------------------------------------------
 
-/*! Sets whether this shape is a circle or not.
-    @return The fill mode as a boolean value.
-*/
-ConsoleMethodWithDocs(ShapeVector, setIsCircle, ConsoleVoid, 3, 3, (isCircle?))
+ConsoleMethod(ShapeVector, setIsCircle, void, 3, 3, "(isCircle?) Sets whether this shape is a circle or not.\n"
+              "@return The fill mode as a boolean value.")
 {
     object->setIsCircle(dAtob(argv[2]));
 }
 
 //----------------------------------------------------------------------------
 
-/*! Returns whether this shape is a circle or not.
-    @return The fill mode as a boolean value.
-*/
-ConsoleMethodWithDocs(ShapeVector, getIsCircle, ConsoleBool, 2, 2, ())
+ConsoleMethod(ShapeVector, getIsCircle, bool, 2, 2, "() Returns whether this shape is a circle or not.\n"
+              "@return The fill mode as a boolean value.")
 {
     return object->getIsCircle();
 }
 
 //----------------------------------------------------------------------------
 
-/*! Returns the radius of the shape if it is a circle.
-    @return The fill mode as a boolean value.
-*/
-ConsoleMethodWithDocs(ShapeVector, getCircleRadius, ConsoleBool, 2, 2, ())
+ConsoleMethod(ShapeVector, getCircleRadius, bool, 2, 2, "() Returns the radius of the shape if it is a circle.\n"
+              "@return The fill mode as a boolean value.")
 {
     return object->getCircleRadius();
 }
 
 //----------------------------------------------------------------------------
 
-/*! Changes the radius of the shape if it is a circle.
-    @return The fill mode as a boolean value.
-*/
-ConsoleMethodWithDocs(ShapeVector, setCircleRadius, ConsoleVoid, 3, 3, (radius))
+ConsoleMethod(ShapeVector, setCircleRadius, void, 3, 3, "(radius) Changes the radius of the shape if it is a circle.\n"
+              "@return The fill mode as a boolean value.")
 {
     object->setCircleRadius(dAtof(argv[2]));
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Get the number of vertices on a polygon shape.
-*/
-ConsoleMethodWithDocs(ShapeVector, getVertexCount, ConsoleInt, 2, 2, ())
+ConsoleMethod(ShapeVector, getVertexCount, S32, 2, 2, "() Get the number of vertices on a polygon shape.\n")
 {
     return object->getPolyVertexCount();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Get a box (\width height\ that wraps around the poly vertices
-*/
-ConsoleMethodWithDocs(ShapeVector, getBoxFromPoints, ConsoleString, 2, 2, ())
+ConsoleMethod(ShapeVector, getBoxFromPoints, const char*, 2, 2, "() Get a box (\"width height\") that wraps around the poly vertices")
 {
     Vector2 box = object->getBoxFromPoints();
 
@@ -415,12 +375,10 @@ ConsoleMethodWithDocs(ShapeVector, getBoxFromPoints, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Sets shape flipping for each axis.
-    @param flipX Whether or not to flip the shape along the x (horizontal) axis.
-    @param flipY Whether or not to flip the shape along the y (vertical) axis.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ShapeVector, setFlip, ConsoleVoid, 4, 4, (bool flipX, bool flipY))
+ConsoleMethod(ShapeVector, setFlip, void, 4, 4,  "(bool flipX, bool flipY) Sets shape flipping for each axis.\n"
+                                                "@param flipX Whether or not to flip the shape along the x (horizontal) axis.\n"
+                                                "@param flipY Whether or not to flip the shape along the y (vertical) axis.\n"
+                                                "@return No return value.")
 {
     // Set Flip.
     object->setFlip( dAtob(argv[2]), dAtob(argv[3]) );
@@ -428,10 +386,8 @@ ConsoleMethodWithDocs(ShapeVector, setFlip, ConsoleVoid, 4, 4, (bool flipX, bool
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the flip for each axis.
-    @return (bool flipX/bool flipY) Whether or not the shape is flipped along the x and y axis.
-*/
-ConsoleMethodWithDocs(ShapeVector, getFlip, ConsoleString, 2, 2, ())
+ConsoleMethod(ShapeVector, getFlip, const char*, 2, 2,   "() Gets the flip for each axis.\n"
+                                                        "@return (bool flipX/bool flipY) Whether or not the shape is flipped along the x and y axis.")
 {
     // Create Returnable Buffer.
     char* pBuffer = Con::getReturnBuffer(32);
@@ -445,11 +401,9 @@ ConsoleMethodWithDocs(ShapeVector, getFlip, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Sets whether or not the shape is flipped horizontally.
-    @param flipX Whether or not to flip the shape along the x (horizontal) axis.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ShapeVector, setFlipX, ConsoleVoid, 3, 3, (bool flipX))
+ConsoleMethod(ShapeVector, setFlipX, void, 3, 3,     "(bool flipX) Sets whether or not the shape is flipped horizontally.\n"
+                                                    "@param flipX Whether or not to flip the shape along the x (horizontal) axis."
+                                                    "@return No return value.")
 {
     // Set Flip.
     object->setFlipX( dAtob(argv[2]) );
@@ -457,11 +411,9 @@ ConsoleMethodWithDocs(ShapeVector, setFlipX, ConsoleVoid, 3, 3, (bool flipX))
 
 //-----------------------------------------------------------------------------
 
-/*! Sets whether or not the shape is flipped vertically.
-    @param flipY Whether or not to flip the shape along the y (vertical) axis.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ShapeVector, setFlipY, ConsoleVoid, 3, 3, (bool flipY))
+ConsoleMethod(ShapeVector, setFlipY, void, 3, 3,     "(bool flipY) Sets whether or not the shape is flipped vertically.\n"
+                                                    "@param flipY Whether or not to flip the shape along the y (vertical) axis."
+                                                    "@return No return value.")
 {
     // Set Flip.
     object->setFlipY( dAtob(argv[2]) );
@@ -469,22 +421,16 @@ ConsoleMethodWithDocs(ShapeVector, setFlipY, ConsoleVoid, 3, 3, (bool flipY))
 
 //-----------------------------------------------------------------------------
 
-/*! Gets whether or not the shape is flipped horizontally.
-    @return (bool flipX) Whether or not the shape is flipped along the x axis.
-*/
-ConsoleMethodWithDocs(ShapeVector, getFlipX, ConsoleBool, 2, 2, ())
+ConsoleMethod(ShapeVector, getFlipX, bool, 2, 2,     "() Gets whether or not the shape is flipped horizontally.\n"
+                                                    "@return (bool flipX) Whether or not the shape is flipped along the x axis.")
 {
    return object->getFlipX();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets whether or not the shape is flipped vertically.
-    @return (bool flipY) Whether or not the shape is flipped along the y axis.
-*/
-ConsoleMethodWithDocs(ShapeVector, getFlipY, ConsoleBool, 2, 2, ())
+ConsoleMethod(ShapeVector, getFlipY, bool, 2, 2,     "() Gets whether or not the shape is flipped vertically."
+                                                    "@return (bool flipY) Whether or not the shape is flipped along the y axis.")
 {
    return object->getFlipY();
 }
-
-ConsoleMethodGroupEndWithDocs(ShapeVector)

@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,12 +20,9 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethodGroupBeginWithDocs(RemoteDebugger1, RemoteDebuggerBase)
 
-/*! Get the count of active code files.
-    @return A count of the active count files.
-*/
-ConsoleMethodWithDocs( RemoteDebugger1, getCodeFiles, ConsoleString, 2, 2, ())
+ConsoleMethod( RemoteDebugger1, getCodeFiles, const char*, 2, 2,    "() - Get the count of active code files.\n"
+                                                                    "@return A count of the active count files." )
 {
     // Fetch a return buffer.  This may be excessive but it avoids reallocation code.
     S32 bufferSize = 1024 * 65;
@@ -45,10 +42,8 @@ ConsoleMethodWithDocs( RemoteDebugger1, getCodeFiles, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Set whether to break on next statement or not.
-    @return No return value.
-*/
-ConsoleMethodWithDocs( RemoteDebugger1, setNextStatementBreak, ConsoleVoid, 3, 3, (bool enabled))
+ConsoleMethod( RemoteDebugger1, setNextStatementBreak, void, 3, 3,  "(bool enabled) - Set whether to break on next statement or not.\n"
+                                                                    "@return No return value." )
 {
     // Fetch enabled flag.
     const bool enabled = dAtob(argv[2]);
@@ -56,4 +51,3 @@ ConsoleMethodWithDocs( RemoteDebugger1, setNextStatementBreak, ConsoleVoid, 3, 3
     object->setNextStatementBreak( enabled );
 }
 
-ConsoleMethodGroupEndWithDocs(RemoteDebugger1)

@@ -34,8 +34,6 @@
 #include "memory/safeDelete.h"
 #include "math/mMath.h"
 
-#include "TextureManager_ScriptBinding.h"
-
 //---------------------------------------------------------------------------------------------------------------------
 
 S32 TextureManager::mMasterTextureKeyIndex = 0;
@@ -74,6 +72,34 @@ static const char* extArray[EXT_ARRAY_SIZE] = { "", ".jpg", ".png"};
 #endif
 
 //---------------------------------------------------------------------------------------------------------------------
+
+ConsoleFunction(setOpenGLTextureCompressionHint, void, 2, 2, " ( hint ) Use the setOpenGLTextureCompressionHint function to select the OpenGL texture compression method.\n"
+    "@param hint \"GL_DONT_CARE\", \"GL_FASTEST\", or \"GL_NICEST\". (Please refer to an OpenGL text for information on what these mean).\n"
+    "@return No return value")
+{
+    GLenum newHint        = GL_DONT_CARE;
+    const char* newString = "GL_DONT_CARE";
+
+    if (!dStricmp(argv[1], "GL_FASTEST"))
+    {
+        newHint = GL_FASTEST;
+        newString = "GL_FASTEST";
+    }
+    else if (!dStricmp(argv[1], "GL_NICEST"))
+    {
+        newHint = GL_NICEST;
+        newString = "GL_NICEST";
+    }
+
+    TextureManager::mTextureCompressionHint = newHint;
+
+#if !defined(TORQUE_OS_IOS)
+    if (dglDoesSupportTextureCompression())
+        glHint(GL_TEXTURE_COMPRESSION_HINT_ARB, TextureManager::mTextureCompressionHint);
+#endif
+}
+
+//--------------------------------------------------------------------------------------------------------------------
 
 struct EventCallbackEntry
 {
@@ -272,6 +298,14 @@ void TextureManager::flush()
 
 //--------------------------------------------------------------------------------------------------------------------
 
+ConsoleFunction( flushTextureCache, void, 1, 1, "() Use the flushTextureCache function to flush the texture cache.\n"
+                                                "@return No return value.\n")
+{
+    TextureManager::flush();
+}
+
+//--------------------------------------------------------------------------------------------------------------------
+
 StringTableEntry TextureManager::getUniqueTextureKey( void )
 {
     char textureKeyBuffer[32];
@@ -358,7 +392,7 @@ void TextureManager::getSourceDestByteFormat(GBitmap *pBitmap, U32 *sourceFormat
 {
     *byteFormat = GL_UNSIGNED_BYTE;
     U32 byteSize = 1;
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#if defined(TORQUE_OS_IOS)
     switch(pBitmap->getFormat()) 
     {
     case GBitmap::Intensity:
@@ -389,7 +423,6 @@ void TextureManager::getSourceDestByteFormat(GBitmap *pBitmap, U32 *sourceFormat
         *byteFormat   = GL_UNSIGNED_SHORT_5_5_5_1;
         byteSize = 1; // Incorrect but assume worst case.
         break;
-#ifdef TORQUE_OS_IOS
     case GBitmap::PVR2:
         *sourceFormat = GL_RGB;
         *byteFormat = GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
@@ -410,7 +443,6 @@ void TextureManager::getSourceDestByteFormat(GBitmap *pBitmap, U32 *sourceFormat
         *byteFormat = GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG;
         byteSize = 1; // Incorrect but assume worst case.
         break;
-#endif
     }
     *destFormat = *sourceFormat;
     *texelSize = byteSize;
@@ -859,7 +891,7 @@ TextureObject *TextureManager::loadTexture(const char* pTextureKey, TextureHandl
 GBitmap *TextureManager::loadBitmap( const char* pTextureKey, bool recurse, bool nocompression )
 {
     char fileNameBuffer[512];
-    Con::expandPath( fileNameBuffer, sizeof(fileNameBuffer), pTextureKey );
+    Platform::makeFullPathName( pTextureKey, fileNameBuffer, 512 );
     GBitmap *bmp = NULL;
 
     // Loop through the supported extensions to find the file.
@@ -885,6 +917,13 @@ GBitmap *TextureManager::loadBitmap( const char* pTextureKey, bool recurse, bool
     }
 
     return bmp;
+}
+
+//--------------------------------------------------------------------------------------------------------------------
+
+ConsoleFunction( dumpTextureManagerMetrics, void, 1, 1, "() Dump the texture manager metrics." )
+{
+    return TextureManager::dumpMetrics();
 }
 
 //--------------------------------------------------------------------------------------------------------------------

@@ -219,9 +219,6 @@
     
     clickLocation.y = bounds.size.height - clickLocation.y;
     
-    // Move the cursor
-    Canvas->setCursorPos(Point2I((S32) clickLocation.x, (S32) clickLocation.y));
-    
     // Grab any modifiers
     U32 modifiers = 0;
     [self getModifierKey:modifiers event:event];
@@ -236,10 +233,7 @@
     torqueEvent.modifier = modifiers;
     torqueEvent.ascii = 0;
     torqueEvent.action = action;
-    if (action == SI_BREAK)
-        torqueEvent.fValue = 0.0;
-    else
-        torqueEvent.fValue = 1.0;
+    torqueEvent.fValues[0] = 1.0;
     
     // Post the input event
     Game->postEvent(torqueEvent);
@@ -287,7 +281,7 @@
     torqueEvent.modifier = modifiers;
     torqueEvent.ascii = 0;
     torqueEvent.action = action;
-    torqueEvent.fValue = fValue;
+    torqueEvent.fValues[0] = fValue;
     torqueEvent.ascii = chars;
     
     // Post the input event
@@ -361,7 +355,7 @@
     if (!Input::isEnabled() && !Input::isMouseEnabled())
         return;
     
-    // Get the mouse location
+    // Get the mouse location in the window
     NSPoint location = [self convertPoint:[event locationInWindow] fromView:nil];
     
     // NSViews increase the Y the higher the cursor
@@ -372,10 +366,7 @@
     // Grab any modifiers
     U32 modifiers = 0;
     [self getModifierKey:modifiers event:event];
-    
-    // Move the cursor
-    Canvas->setCursorPos(Point2I((S32) location.x, (S32) location.y));
-    
+        
     // Build the mouse event
     MouseMoveEvent TorqueEvent;
     TorqueEvent.xPos = (S32) location.x;
@@ -441,7 +432,7 @@
     torqueEvent.modifier = modifiers;
     torqueEvent.ascii = 0;
     torqueEvent.action = SI_MOVE;
-    torqueEvent.fValue = deltaY;
+    torqueEvent.fValues[0] = deltaY;
     Game->postEvent(torqueEvent);
 }
 

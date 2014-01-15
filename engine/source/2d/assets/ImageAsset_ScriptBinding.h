@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,32 +20,24 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethodGroupBeginWithDocs(ImageAsset, AssetBase)
-
-/*! Sets the image file (bitmap file).
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ImageAsset, setImageFile, ConsoleVoid, 3, 3, (ImageFile))
+ConsoleMethod(ImageAsset, setImageFile, void, 3, 3,     "(ImageFile) Sets the image file (bitmap file).\n"
+                                                        "@return No return value.")
 {
     object->setImageFile( argv[2] );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the image file.
-    @return Returns the bitmap image file.
-*/
-ConsoleMethodWithDocs(ImageAsset, getImageFile, ConsoleString, 2, 2, ())
+ConsoleMethod(ImageAsset, getImageFile, const char*, 2, 2,  "() Gets the image file.\n"
+                                                            "@return Returns the bitmap image file.")
 {
     return object->getImageFile();
 }
 
 //------------------------------------------------------------------------------
 
-/*! Sets the filter mode.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ImageAsset, setFilterMode, ConsoleVoid, 3, 3, (mode))
+ConsoleMethod(ImageAsset, setFilterMode, void, 3, 3,            "(mode) Sets the filter mode.\n"
+                                                                "@return No return value.")
 {
     // Fetch Texture Filter Mode.
     const ImageAsset::TextureFilterMode filterMode = ImageAsset::getFilterModeEnum( argv[2] );
@@ -65,258 +57,192 @@ ConsoleMethodWithDocs(ImageAsset, setFilterMode, ConsoleVoid, 3, 3, (mode))
 
 //------------------------------------------------------------------------------
 
-/*! Gets the filter mode.
-    @return The filter mode.
-*/
-ConsoleMethodWithDocs(ImageAsset, getFilterMode, ConsoleString, 2, 2, ())
+ConsoleMethod(ImageAsset, getFilterMode, const char*, 2, 2,   "() Gets the filter mode.\n"
+                                                                        "@return The filter mode.")
 {
     return ImageAsset::getFilterModeDescription( object->getFilterMode() );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Sets whether 16-bit image is forced or not.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ImageAsset, setForce16Bit, ConsoleVoid, 3, 3, (force16Bit?))
+ConsoleMethod(ImageAsset, setForce16Bit, void, 3, 3,          "(force16Bit?) Sets whether 16-bit image is forced or not.\n"
+                                                                        "@return No return value.")
 {
     object->setForce16Bit( dAtob(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets whether 16-bit image is forced or not.
-    @return Whether 16-bit image is forced or not.
-*/
-ConsoleMethodWithDocs(ImageAsset, getForce16Bit, ConsoleBool, 2, 2, ())
+ConsoleMethod(ImageAsset, getForce16Bit, bool, 2, 2,          "() Gets whether 16-bit image is forced or not.\n"
+                                                                        "@return Whether 16-bit image is forced or not.")
 {
     return object->getForce16Bit();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Sets whether CELL row order should be used or not.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ImageAsset, setCellRowOrder, ConsoleVoid, 3, 3, (rowOrder?))
+ConsoleMethod(ImageAsset, setCellRowOrder, void, 3, 3,        "(rowOrder?) Sets whether CELL row order should be used or not.\n"
+                                                                        "@return No return value.")
 {
     object->setCellRowOrder( dAtob(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets whether CELL row order should be used or not.
-    @return Whether CELL row order should be used or not.
-*/
-ConsoleMethodWithDocs(ImageAsset, getCellRowOrder, ConsoleBool, 2, 2, ())
+ConsoleMethod(ImageAsset, getCellRowOrder, bool, 2, 2,        "() Gets whether CELL row order should be used or not.\n"
+                                                                        "@return Whether CELL row order should be used or not.")
 {
     return object->getCellRowOrder();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the CELL offset X.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ImageAsset, setCellOffsetX, ConsoleVoid, 3, 3, (offsetX))
+ConsoleMethod(ImageAsset, setCellOffsetX, void, 3, 3,         "(offsetX) Sets the CELL offset X.\n"
+                                                                        "@return No return value.")
 {
     object->setCellOffsetX( dAtoi(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the CELL offset X.
-    @return The CELL offset X.
-*/
-ConsoleMethodWithDocs(ImageAsset, getCellOffsetX, ConsoleInt, 2, 2, ())
+ConsoleMethod(ImageAsset, getCellOffsetX, S32, 2, 2,          "() Gets the CELL offset X.\n"
+                                                                        "@return The CELL offset X.")
 {
     return object->getCellOffsetX();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the CELL offset Y.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ImageAsset, setCellOffsetY, ConsoleVoid, 3, 3, (offsetY))
+ConsoleMethod(ImageAsset, setCellOffsetY, void, 3, 3,         "(offsetY) Sets the CELL offset Y.\n"
+                                                                        "@return No return value.")
 {
     object->setCellOffsetY( dAtoi(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the CELL offset Y.
-    @return The CELL offset Y.
-*/
-ConsoleMethodWithDocs(ImageAsset, getCellOffsetY, ConsoleInt, 2, 2, ())
+ConsoleMethod(ImageAsset, getCellOffsetY, S32, 2, 2,          "() Gets the CELL offset Y.\n"
+                                                                        "@return The CELL offset Y.")
 {
     return object->getCellOffsetY();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the CELL stride X.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ImageAsset, setCellStrideX, ConsoleVoid, 3, 3, (strideX))
+ConsoleMethod(ImageAsset, setCellStrideX, void, 3, 3,         "(strideX) Sets the CELL stride X.\n"
+                                                                        "@return No return value.")
 {
     object->setCellStrideX( dAtoi(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the CELL stride X.
-    @return The CELL stride X.
-*/
-ConsoleMethodWithDocs(ImageAsset, getCellStrideX, ConsoleInt, 2, 2, ())
+ConsoleMethod(ImageAsset, getCellStrideX, S32, 2, 2,          "() Gets the CELL stride X.\n"
+                                                                        "@return The CELL stride X.")
 {
     return object->getCellStrideX();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the CELL stride Y.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ImageAsset, setCellStrideY, ConsoleVoid, 3, 3, (strideY))
+ConsoleMethod(ImageAsset, setCellStrideY, void, 3, 3,         "(strideY) Sets the CELL stride Y.\n"
+                                                                        "@return No return value.")
 {
     object->setCellStrideY( dAtoi(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the CELL stride Y.
-    @return The CELL stride Y.
-*/
-ConsoleMethodWithDocs(ImageAsset, getCellStrideY, ConsoleInt, 2, 2, ())
+ConsoleMethod(ImageAsset, getCellStrideY, S32, 2, 2,          "() Gets the CELL stride Y.\n"
+                                                                        "@return The CELL stride Y.")
 {
     return object->getCellStrideY();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the CELL count X.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ImageAsset, setCellCountX, ConsoleVoid, 3, 3, (countX))
+ConsoleMethod(ImageAsset, setCellCountX, void, 3, 3,         "(countX) Sets the CELL count X.\n"
+                                                                        "@return No return value.")
 {
     object->setCellCountX( dAtoi(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the CELL count X.
-    @return The CELL count X.
-*/
-ConsoleMethodWithDocs(ImageAsset, getCellCountX, ConsoleInt, 2, 2, ())
+ConsoleMethod(ImageAsset, getCellCountX, S32, 2, 2,          "() Gets the CELL count X.\n"
+                                                                        "@return The CELL count X.")
 {
     return object->getCellCountX();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the CELL count Y.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ImageAsset, setCellCountY, ConsoleVoid, 3, 3, (countY))
+ConsoleMethod(ImageAsset, setCellCountY, void, 3, 3,         "(countY) Sets the CELL count Y.\n"
+                                                                        "@return No return value.")
 {
     object->setCellCountY( dAtoi(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the CELL count Y.
-    @return The CELL count Y.
-*/
-ConsoleMethodWithDocs(ImageAsset, getCellCountY, ConsoleInt, 2, 2, ())
+ConsoleMethod(ImageAsset, getCellCountY, S32, 2, 2,          "() Gets the CELL count Y.\n"
+                                                                        "@return The CELL count Y.")
 {
     return object->getCellCountY();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the CELL width.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ImageAsset, setCellWidth, ConsoleVoid, 3, 3, (Width))
+ConsoleMethod(ImageAsset, setCellWidth, void, 3, 3,           "(Width) Sets the CELL width.\n"
+                                                                        "@return No return value.")
 {
     object->setCellWidth( dAtoi(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the CELL width.
-    @return The CELL width.
-*/
-ConsoleMethodWithDocs(ImageAsset, getCellWidth, ConsoleInt, 2, 2, ())
+ConsoleMethod(ImageAsset, getCellWidth, S32, 2, 2,            "() Gets the CELL width.\n"
+                                                                        "@return The CELL width.")
 {
     return object->getCellWidth();
 }
 
-ConsoleMethod(ImageAsset, getExplicitCellWidth, S32, 3,3, "(CellIndex) Gets the CELL width in Explicit Mode.\n"
-                                                                        "@return the specified CELL width.")
-{
-	    // Fetch cell index.
-    const S32 cellIndex = dAtoi( argv[2] );
-
-    return(object->getExplicitCellWidth(cellIndex));
-}
-
-ConsoleMethod(ImageAsset, getExplicitCellHeight, S32, 3,3, "(CellIndex) Gets the CELL height in Explicit Mode.\n"
-                                                                        "@return the specified CELL height.")
-{
-	    // Fetch cell index.
-    const S32 cellIndex = dAtoi( argv[2] );
-
-    return(object->getExplicitCellHeight(cellIndex));
-
-}
 //-----------------------------------------------------------------------------
 
-/*! Sets the CELL height.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ImageAsset, setCellHeight, ConsoleVoid, 3, 3, (Height))
+ConsoleMethod(ImageAsset, setCellHeight, void, 3, 3,          "(Height) Sets the CELL height.\n"
+                                                                        "@return No return value.")
 {
     object->setCellHeight( dAtoi(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the CELL height.
-    @return The CELL height.
-*/
-ConsoleMethodWithDocs(ImageAsset, getCellHeight, ConsoleInt, 2, 2, ())
+ConsoleMethod(ImageAsset, getCellHeight, S32, 2, 2,           "() Gets the CELL height.\n"
+                                                                        "@return The CELL height.")
 {
     return object->getCellHeight();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the image width.
-    @return The image width.
-*/
-ConsoleMethodWithDocs(ImageAsset, getImageWidth, ConsoleInt, 2, 2, ())
+ConsoleMethod(ImageAsset, getImageWidth, S32, 2, 2,           "() Gets the image width.\n"
+                                                                        "@return The image width.")
 {
     return object->getImageWidth();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the image height.
-    @return The image width.
-*/
-ConsoleMethodWithDocs(ImageAsset, getImageHeight, ConsoleInt, 2, 2, ())
+ConsoleMethod(ImageAsset, getImageHeight, S32, 2, 2,          "() Gets the image height.\n"
+                                                                        "@return The image width.")
 {
     return object->getImageHeight();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the image size.
-    @return The image size.
-*/
-ConsoleMethodWithDocs(ImageAsset, getImageSize, ConsoleString, 2, 2, ())
+ConsoleMethod(ImageAsset, getImageSize, const char*, 2, 2,    "() Gets the image size.\n"
+                                                                        "@return The image size.")
 {
     // Create Returnable Buffer.
     char* pBuffer = Con::getReturnBuffer(32);
@@ -330,31 +256,25 @@ ConsoleMethodWithDocs(ImageAsset, getImageSize, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Gets whether the image has a power-of-two dimensions or not.
-    @return Whether the image has a power-of-two dimensions or not.
-*/
-ConsoleMethodWithDocs(ImageAsset, getIsImagePOT, ConsoleBool, 2, 2, ())
+ConsoleMethod(ImageAsset, getIsImagePOT, bool, 2, 2,          "() Gets whether the image has a power-of-two dimensions or not.\n"
+                                                                        "@return Whether the image has a power-of-two dimensions or not." )
 {
     return isPow2( object->getImageWidth() ) && isPow2( object->getImageHeight() );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the frame count.
-    @return The frame count.
-*/
-ConsoleMethodWithDocs(ImageAsset, getFrameCount, ConsoleInt, 2, 2, ())
+ConsoleMethod(ImageAsset, getFrameCount, S32, 2, 2,           "() Gets the frame count.\n"
+                                                                        "@return The frame count.")
 {
     return object->getFrameCount(); 
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the specified frames size.
-    @param frame The frame number to use.
-    @return The specified frames size.
-*/
-ConsoleMethodWithDocs(ImageAsset, getFrameSize, ConsoleString, 3, 3, (int frame))
+ConsoleMethod(ImageAsset, getFrameSize, const char*, 3, 3,    "(int frame) - Gets the specified frames size.\n"
+                                                                        "@param frame The frame number to use.\n"
+                                                                        "@return The specified frames size.")
 {
     // Fetch Frame.
     const S32 frame = dAtoi(argv[2]);
@@ -383,26 +303,22 @@ ConsoleMethodWithDocs(ImageAsset, getFrameSize, ConsoleString, 3, 3, (int frame)
 
 //-----------------------------------------------------------------------------
 
-/*! Clears all explicit cells.
-    The image asset stays in explicit mode however with no explicit cells a single full-frame cell becomes default.
-    @return Whether the operation was successful or not.
-*/
-ConsoleMethodWithDocs(ImageAsset, clearExplicitCells, ConsoleBool, 2, 2, ())
+ConsoleMethod(ImageAsset, clearExplicitCells, bool, 2, 2,   "() Clears all explicit cells.\n"
+                                                            "The image asset stays in explicit mode however with no explicit cells a single full-frame cell becomes default.\n"
+                                                            "@return Whether the operation was successful or not.")
 {
     return object->clearExplicitCells();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Add an explicit cell.
-    @param cellOffsetX The offset in the X axis to the top-left of the cell.
-    @param cellOffsetY The offset in the Y axis to the top-left of the cell.
-    @param cellWidth The width of the cell.
-    @param cellHeight The height of the cell.
-    The image asset must be in explicit mode for this operation to succeed.
-    @return Whether the operation was successful or not.
-*/
-ConsoleMethodWithDocs(ImageAsset, addExplicitCell, ConsoleBool, 6, 6, (int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight))
+ConsoleMethod(ImageAsset, addExplicitCell, bool, 6, 6,      "(int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight) Add an explicit cell.\n"
+                                                            "@param cellOffsetX The offset in the X axis to the top-left of the cell.\n"
+                                                            "@param cellOffsetY The offset in the Y axis to the top-left of the cell.\n"
+                                                            "@param cellWidth The width of the cell.\n"
+                                                            "@param cellHeight The height of the cell.\n"
+                                                            "The image asset must be in explicit mode for this operation to succeed.\n"
+                                                            "@return Whether the operation was successful or not.")
 {
     // Fetch offsets.
     const S32 cellOffsetX = dAtoi( argv[2] );
@@ -417,16 +333,14 @@ ConsoleMethodWithDocs(ImageAsset, addExplicitCell, ConsoleBool, 6, 6, (int cellO
 
 //-----------------------------------------------------------------------------
 
-/*! Insert an explicit cell at the specified index.
-    @param cellIndex The zero-based index to insert the cell.  This will work when no cells are present.  If the index is beyond the cell count then the cell is simply added.
-    @param cellOffsetX The offset in the X axis to the top-left of the cell.
-    @param cellOffsetY The offset in the Y axis to the top-left of the cell.
-    @param cellWidth The width of the cell.
-    @param cellHeight The height of the cell.
-    The image asset must be in explicit mode for this operation to succeed.
-    @return Whether the operation was successful or not.
-*/
-ConsoleMethodWithDocs(ImageAsset, insertExplicitCell, ConsoleBool, 7, 7, (int cellIndex, int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight))
+ConsoleMethod(ImageAsset, insertExplicitCell, bool, 7, 7,   "(int cellIndex, int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight) Insert an explicit cell at the specified index.\n"
+                                                            "@param cellIndex The zero-based index to insert the cell.  This will work when no cells are present.  If the index is beyond the cell count then the cell is simply added.\n"
+                                                            "@param cellOffsetX The offset in the X axis to the top-left of the cell.\n"
+                                                            "@param cellOffsetY The offset in the Y axis to the top-left of the cell.\n"
+                                                            "@param cellWidth The width of the cell.\n"
+                                                            "@param cellHeight The height of the cell.\n"
+                                                            "The image asset must be in explicit mode for this operation to succeed.\n"
+                                                            "@return Whether the operation was successful or not.")
 {
     // Fetch cell index.
     const S32 cellIndex = dAtoi( argv[2] );
@@ -445,11 +359,9 @@ ConsoleMethodWithDocs(ImageAsset, insertExplicitCell, ConsoleBool, 7, 7, (int ce
 
 //-----------------------------------------------------------------------------
 
-/*! Remove an explicit cell from the specified index.
-    @param cellIndex The zero-based index to remove the cell from.
-    @return Whether the operation was successful or not.
-*/
-ConsoleMethodWithDocs(ImageAsset, removeExplicitCell, ConsoleBool, 7, 7, (int cellIndex))
+ConsoleMethod(ImageAsset, removeExplicitCell, bool, 7, 7,   "(int cellIndex) Remove an explicit cell from the specified index.\n"
+                                                            "@param cellIndex The zero-based index to remove the cell from.\n"
+                                                            "@return Whether the operation was successful or not.")
 {
     // Fetch cell index.
     const S32 cellIndex = dAtoi( argv[2] );
@@ -459,16 +371,14 @@ ConsoleMethodWithDocs(ImageAsset, removeExplicitCell, ConsoleBool, 7, 7, (int ce
 
 //-----------------------------------------------------------------------------
 
-/*! Set an explicit cell at the specified index.
-    @param cellIndex The zero-based index to insert the cell.  This will work when no cells are present.  If the index is beyond the cell count then the cell is simply added.
-    @param cellOffsetX The offset in the X axis to the top-left of the cell.
-    @param cellOffsetY The offset in the Y axis to the top-left of the cell.
-    @param cellWidth The width of the cell.
-    @param cellHeight The height of the cell.
-    The image asset must be in explicit mode for this operation to succeed.
-    @return Whether the operation was successful or not.
-*/
-ConsoleMethodWithDocs(ImageAsset, setExplicitCell, ConsoleBool, 7, 7, (int cellIndex, int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight))
+ConsoleMethod(ImageAsset, setExplicitCell, bool, 7, 7,      "(int cellIndex, int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight) Set an explicit cell at the specified index.\n"
+                                                            "@param cellIndex The zero-based index to insert the cell.  This will work when no cells are present.  If the index is beyond the cell count then the cell is simply added.\n"
+                                                            "@param cellOffsetX The offset in the X axis to the top-left of the cell.\n"
+                                                            "@param cellOffsetY The offset in the Y axis to the top-left of the cell.\n"
+                                                            "@param cellWidth The width of the cell.\n"
+                                                            "@param cellHeight The height of the cell.\n"
+                                                            "The image asset must be in explicit mode for this operation to succeed.\n"
+                                                            "@return Whether the operation was successful or not.")
 {
     // Fetch cell index.
     const S32 cellIndex = dAtoi( argv[2] );
@@ -486,12 +396,10 @@ ConsoleMethodWithDocs(ImageAsset, setExplicitCell, ConsoleBool, 7, 7, (int cellI
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the explicit cell count.
-    @return The explicit cell count.
-*/
-ConsoleMethodWithDocs(ImageAsset, getExplicitCellCount, ConsoleInt, 2, 2, ())
+ConsoleMethod(ImageAsset, getExplicitCellCount, S32, 2, 2,  "() Gets the explicit cell count.\n"
+                                                            "@return The explicit cell count.")
 {
     return object->getExplicitCellCount();
 }
 
-ConsoleMethodGroupEndWithDocs(ImageAsset)
+

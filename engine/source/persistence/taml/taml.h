@@ -69,8 +69,6 @@ extern StringTableEntry tamlNamedObjectName;
 
 //-----------------------------------------------------------------------------
 
-/// @ingroup tamlGroup
-/// @see tamlGroup
 class Taml : public SimObject
 {
 public:

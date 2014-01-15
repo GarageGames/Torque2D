@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,24 +20,18 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethodGroupBeginWithDocs(RenderProxy, SimObject)
-
-/*! Gets whether the render-proxy is in static or dynamic (animated)mode.
-    @return Returns whether the render-proxy is in static or dynamic (animated)mode.
-*/
-ConsoleMethodWithDocs(RenderProxy, isStaticFrameProvider, ConsoleBool, 2, 2, ())
+ConsoleMethod(RenderProxy, isStaticFrameProvider, bool, 2, 2,    "() - Gets whether the render-proxy is in static or dynamic (animated)mode.\n"
+                                                        "@return Returns whether the render-proxy is in static or dynamic (animated)mode.")
 {
     return object->isStaticFrameProvider();
 }
 
 //------------------------------------------------------------------------------
 
-/*! Sets imageAssetId/Frame.
-    @param imageAssetId The image asset Id to display
-    @param frame The frame of the image to display
-    @return Returns true on success.
-*/
-ConsoleMethodWithDocs(RenderProxy, setImage, ConsoleBool, 3, 4, (string imageAssetId, [int frame]))
+ConsoleMethod(RenderProxy, setImage, bool, 3, 4,    "(string imageAssetId, [int frame]) - Sets imageAssetId/Frame.\n"
+                                                    "@param imageAssetId The image asset Id to display\n"
+                                                    "@param frame The frame of the image to display\n"
+                                                    "@return Returns true on success.")
 {
     // Fetch image asset Id.
     const char* pImageAssetId = argv[2];
@@ -51,10 +45,8 @@ ConsoleMethodWithDocs(RenderProxy, setImage, ConsoleBool, 3, 4, (string imageAss
 
 //------------------------------------------------------------------------------
 
-/*! Gets current image asset Id.
-    @return (string imageAssetId) The image being displayed
-*/
-ConsoleMethodWithDocs(RenderProxy, getImage, ConsoleString, 2, 2, ())
+ConsoleMethod(RenderProxy, getImage, const char*, 2, 2, "() - Gets current image asset Id.\n"
+                                                        "@return (string imageAssetId) The image being displayed")
 {
     // Are we in static mode?
     if ( !object->isStaticFrameProvider() )
@@ -70,11 +62,9 @@ ConsoleMethodWithDocs(RenderProxy, getImage, ConsoleString, 2, 2, ())
 
 //------------------------------------------------------------------------------
 
-/*! Sets image frame.
-    @param frame The frame to display
-    @return Returns true on success.
-*/
-ConsoleMethodWithDocs(RenderProxy, setImageFrame, ConsoleBool, 3, 3, (int frame))
+ConsoleMethod(RenderProxy, setImageFrame, bool, 3, 3,   "(int frame) - Sets image frame.\n"
+                                                        "@param frame The frame to display\n"
+                                                        "@return Returns true on success.")
 {
     // Are we in static mode?
     if ( !object->isStaticFrameProvider() )
@@ -90,10 +80,8 @@ ConsoleMethodWithDocs(RenderProxy, setImageFrame, ConsoleBool, 3, 3, (int frame)
 
 //------------------------------------------------------------------------------
 
-/*! Gets current image Frame.
-    @return (int frame) The frame currently being displayed
-*/
-ConsoleMethodWithDocs(RenderProxy, getImageFrame, ConsoleInt, 2, 2, ())
+ConsoleMethod(RenderProxy, getImageFrame, S32, 2, 2,    "() - Gets current image Frame.\n"
+                                                        "@return (int frame) The frame currently being displayed")
 {
     // Are we in static mode?
     if ( !object->isStaticFrameProvider() )
@@ -109,22 +97,18 @@ ConsoleMethodWithDocs(RenderProxy, getImageFrame, ConsoleInt, 2, 2, ())
 
 //------------------------------------------------------------------------------
 
-/*! Plays an animation.
-    @param animationAssetId The animation asset Id to play
-    @return Returns true on success.
-*/
-ConsoleMethodWithDocs(RenderProxy, playAnimation, ConsoleBool, 3, 3, (string animationAssetId))
-{
+ConsoleMethod(RenderProxy, playAnimation, bool, 3, 3,   "(string animationAssetId) - Plays an animation.\n"
+                                                        "@param animationAssetId The animation asset Id to play\n"
+                                                        "@return Returns true on success.")
+{    
     // Play Animation.
     return static_cast<ImageFrameProvider*>(object)->setAnimation( argv[2] );
 }   
 
 //-----------------------------------------------------------------------------
 
-/*! Pause the current animation
-    @param enable If true, pause the animation. If false, continue animating
-*/
-ConsoleMethodWithDocs(RenderProxy, pauseAnimation, ConsoleVoid, 3, 3, (bool enable))
+ConsoleMethod(RenderProxy, pauseAnimation, void, 3, 3,  "(bool enable) - Pause the current animation\n"
+                                                        "@param enable If true, pause the animation. If false, continue animating\n")
 {
     // Are we in static mode?
     if ( object->isStaticFrameProvider() )
@@ -139,10 +123,8 @@ ConsoleMethodWithDocs(RenderProxy, pauseAnimation, ConsoleVoid, 3, 3, (bool enab
 
 //-----------------------------------------------------------------------------
 
-/*! Stop the current animation
-    @return No return value.
-*/
-ConsoleMethodWithDocs(RenderProxy, stopAnimation, ConsoleVoid, 2, 2, ())
+ConsoleMethod(RenderProxy, stopAnimation, void, 2, 2,   "() - Stop the current animation\n"
+                                                        "@return No return value.")
 {
     // Are we in static mode?
     if ( object->isStaticFrameProvider() )
@@ -157,11 +139,9 @@ ConsoleMethodWithDocs(RenderProxy, stopAnimation, ConsoleVoid, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the current animation frame.
-    @param frame Which frame of the animation to display
-    @return No return value.
-*/
-ConsoleMethodWithDocs(RenderProxy, setAnimationFrame, ConsoleVoid, 3, 3, (int frame))
+ConsoleMethod(RenderProxy, setAnimationFrame, void, 3, 3, "(int frame) - Sets the current animation frame.\n"
+                                                                "@param frame Which frame of the animation to display\n"
+                                                                "@return No return value.")
 {
     // Are we in static mode?
     if ( object->isStaticFrameProvider() )
@@ -177,10 +157,8 @@ ConsoleMethodWithDocs(RenderProxy, setAnimationFrame, ConsoleVoid, 3, 3, (int fr
 
 //-----------------------------------------------------------------------------
 
-/*! Gets current animation frame.
-    @return (int frame) The current animation frame
-*/
-ConsoleMethodWithDocs(RenderProxy, getAnimationFrame, ConsoleInt, 2, 2, ())
+ConsoleMethod(RenderProxy, getAnimationFrame, S32, 2, 2,    "() - Gets current animation frame.\n"
+                                                            "@return (int frame) The current animation frame")
 {
     // Are we in static mode?
     if ( object->isStaticFrameProvider() )
@@ -196,10 +174,8 @@ ConsoleMethodWithDocs(RenderProxy, getAnimationFrame, ConsoleInt, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Gets current animation asset Id.
-    @return (string AnimationAssetId) The current animation asset Id.
-*/
-ConsoleMethodWithDocs(RenderProxy, getAnimation, ConsoleString, 2, 2, ())
+ConsoleMethod(RenderProxy, getAnimation, const char*, 2, 2, "() - Gets current animation asset Id.\n"
+                                                            "@return (string AnimationAssetId) The current animation asset Id.")
 {
     // Are we in static mode?
     if ( object->isStaticFrameProvider() )
@@ -216,10 +192,8 @@ ConsoleMethodWithDocs(RenderProxy, getAnimation, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Gets current animation time.
-    @return (float time) The current animation time
-*/
-ConsoleMethodWithDocs(RenderProxy, getAnimationTime, ConsoleFloat, 2, 2, ())
+ConsoleMethod(RenderProxy, getAnimationTime, F32, 2, 2, "() - Gets current animation time.\n"
+                                                        "@return (float time) The current animation time")
 {
     // Are we in static mode?
     if ( object->isStaticFrameProvider() )
@@ -236,10 +210,8 @@ ConsoleMethodWithDocs(RenderProxy, getAnimationTime, ConsoleFloat, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Checks animation status.
-    @return (bool finished) Whether or not the animation is finished
-*/
-ConsoleMethodWithDocs(RenderProxy, getIsAnimationFinished, ConsoleBool, 2, 2, ())
+ConsoleMethod(RenderProxy, getIsAnimationFinished, bool, 2, 2,  "() - Checks animation status.\n"
+                                                                "@return (bool finished) Whether or not the animation is finished")
 {
     // Are we in static mode?
     if ( object->isStaticFrameProvider() )
@@ -255,10 +227,8 @@ ConsoleMethodWithDocs(RenderProxy, getIsAnimationFinished, ConsoleBool, 2, 2, ()
 
 //-----------------------------------------------------------------------------
 
-/*! Change the rate of animation.
-    @param timeScale Value which will scale the frame animation speed. 1 by default.
-*/
-ConsoleMethodWithDocs(RenderProxy, setAnimationTimeScale, ConsoleVoid, 3, 3, (float timeScale))
+ConsoleMethod(RenderProxy, setAnimationTimeScale, void, 3, 3,   "(float timeScale) - Change the rate of animation.\n"
+                                                                "@param timeScale Value which will scale the frame animation speed. 1 by default.\n")
 {
     // Are we in static mode?
     if ( object->isStaticFrameProvider() )
@@ -273,10 +243,8 @@ ConsoleMethodWithDocs(RenderProxy, setAnimationTimeScale, ConsoleVoid, 3, 3, (fl
 
 //-----------------------------------------------------------------------------
 
-/*! Get the animation time scale for this render-proxy.
-    @return (float) Returns the animation time scale for this render-proxy.
-*/
-ConsoleMethodWithDocs(RenderProxy, getAnimationTimeScale, ConsoleFloat, 2, 2, ())
+ConsoleMethod(RenderProxy, getAnimationTimeScale, F32, 2, 2,    "() - Get the animation time scale for this render-proxy.\n"
+                                                                "@return (float) Returns the animation time scale for this render-proxy.\n")
 {
     // Are we in static mode?
     if ( object->isStaticFrameProvider() )
@@ -289,4 +257,3 @@ ConsoleMethodWithDocs(RenderProxy, getAnimationTimeScale, ConsoleFloat, 2, 2, ()
     return object->getAnimationTimeScale();
 }
 
-ConsoleMethodGroupEndWithDocs(RenderProxy)

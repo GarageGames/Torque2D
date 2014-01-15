@@ -51,10 +51,6 @@ public:
     ~DynamicTexture();
 
     void setSize( const U32 texelWidth, const U32 texelHeight );
-    TextureHandle getTextureHandle()
-    {
-    	return mTextureHandle;
-    }
 };
 
 #endif // _DYNAMIC_TEXTURE_H_

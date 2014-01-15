@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,23 +20,17 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethodGroupBeginWithDocs(AssetQuery, SimObject)
-
-/*! Clears all asset Id results.
-    @return () No return value.
-*/
-ConsoleMethodWithDocs(AssetQuery, clear, ConsoleVoid, 2, 2, ())
+ConsoleMethod(AssetQuery, clear, void, 2, 2,    "() - Clears all asset Id results.\n"
+                                                "@return () No return value.")
 {
     object->clear();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the asset query to a copy of the specified asset query.
-    @param assetQuery The asset query to copy.
-    @return Whether the operation succeeded or not.
-*/
-ConsoleMethodWithDocs(AssetQuery, set, ConsoleBool, 3, 3, (assetQuery))
+ConsoleMethod(AssetQuery, set, bool, 3, 3,  "(assetQuery) Sets the asset query to a copy of the specified asset query.\n"
+                                            "@param assetQuery The asset query to copy.\n"
+                                            "@return Whether the operation succeeded or not." )
 {
     // Find asset query.
     AssetQuery* pAssetQuery = Sim::findObject<AssetQuery>( argv[2] );
@@ -57,21 +51,17 @@ ConsoleMethodWithDocs(AssetQuery, set, ConsoleBool, 3, 3, (assetQuery))
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the count of asset Id results.
-    @return (int) The count of asset Id results.
-*/
-ConsoleMethodWithDocs(AssetQuery, getCount, ConsoleInt, 2, 2, ())
+ConsoleMethod(AssetQuery, getCount, S32, 2, 2,  "() - Gets the count of asset Id results.\n"
+                                                "@return (int) The count of asset Id results.")
 {
     return object->size();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the asset Id at the specified query result index.
-    @param resultIndex The query result index to use.
-    @return (assetId) The asset Id at the specified index or NULL if not valid.
-*/
-ConsoleMethodWithDocs(AssetQuery, getAsset, ConsoleString, 3, 3, (int resultIndex))
+ConsoleMethod(AssetQuery, getAsset, const char*, 3, 3,  "(int resultIndex) - Gets the asset Id at the specified query result index.\n"
+                                                        "@param resultIndex The query result index to use.\n"
+                                                        "@return (assetId) The asset Id at the specified index or NULL if not valid.")
 {
     // Fetch result index.
     const S32 resultIndex = dAtoi(argv[2]);
@@ -86,5 +76,3 @@ ConsoleMethodWithDocs(AssetQuery, getAsset, ConsoleString, 3, 3, (int resultInde
 
     return object->at(resultIndex);
 }
-
-ConsoleMethodGroupEndWithDocs(AssetQuery)

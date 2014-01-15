@@ -65,8 +65,6 @@ typedef Vector<TamlCustomField*> TamlCustomFieldVector;
 
 //-----------------------------------------------------------------------------
 
-/// @ingroup tamlGroup
-/// @see tamlGroup
 class TamlCustomField : public IFactoryObjectReset
 {
 public:
@@ -280,8 +278,6 @@ private:
 
 //-----------------------------------------------------------------------------
 
-/// @ingroup tamlGroup
-/// @see tamlGroup
 class TamlCustomNode : public IFactoryObjectReset
 {
 public:
@@ -603,8 +599,6 @@ private:
 
 //-----------------------------------------------------------------------------
 
-/// @ingroup tamlGroup
-/// @see tamlGroup
 class TamlCustomNodes : public IFactoryObjectReset
 {
 public:

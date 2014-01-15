@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,9 +26,7 @@
 
 //-----------------------------------------------------------------------------
 
-/*! Copies a behaviors values to a component
-*/
-ConsoleFunctionWithDocs( copyBehaviorToComponent, ConsoleBool, 3, 3, (behavior, component))
+ConsoleFunction( copyBehaviorToComponent, bool, 3, 3, "(behavior, component) Copies a behaviors values to a component" )
 {
     // Fetch behavior/component Ids.
     const S32 behaviorId  = dAtoi( argv[1] );
@@ -81,25 +79,19 @@ ConsoleFunctionWithDocs( copyBehaviorToComponent, ConsoleBool, 3, 3, (behavior, 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethodGroupBeginWithDocs(BehaviorComponent, DynamicConsoleMethodComponent)
-
-/*! Add a behavior to the object
-    @param bi The behavior instance to add
-    @return (bool success) Whether or not the behavior was successfully added
-*/
-ConsoleMethodWithDocs( BehaviorComponent, addBehavior, ConsoleBool, 3, 3, (BehaviorInstance bi))
+ConsoleMethod( BehaviorComponent, addBehavior, bool, 3, 3, "(BehaviorInstance bi) - Add a behavior to the object\n"
+                                                           "@param bi The behavior instance to add"
+                                                           "@return (bool success) Whether or not the behavior was successfully added")
 {
    return object->addBehavior( dynamic_cast<BehaviorInstance *>( Sim::findObject( argv[2] ) ) );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! 
-    @param bi The behavior instance to remove
-    @param deleteBehavior Whether or not to delete the behavior
-    @return (bool success) Whether the behavior was successfully removed
-*/
-ConsoleMethodWithDocs( BehaviorComponent, removeBehavior, ConsoleBool, 3, 4, (BehaviorInstance bi, [bool deleteBehavior = true]))
+ConsoleMethod( BehaviorComponent, removeBehavior, bool, 3, 4, "(BehaviorInstance bi, [bool deleteBehavior = true])\n"
+                                                              "@param bi The behavior instance to remove\n"
+                                                              "@param deleteBehavior Whether or not to delete the behavior\n"
+                                                              "@return (bool success) Whether the behavior was successfully removed")
 {
    bool deleteBehavior = true;
    if (argc > 3)
@@ -110,31 +102,25 @@ ConsoleMethodWithDocs( BehaviorComponent, removeBehavior, ConsoleBool, 3, 4, (Be
 
 //-----------------------------------------------------------------------------
 
-/*! Clear all behavior instances
-    @return No return value
-*/
-ConsoleMethodWithDocs( BehaviorComponent, clearBehaviors, ConsoleVoid, 2, 2, ())
+ConsoleMethod( BehaviorComponent, clearBehaviors, void, 2, 2, "() - Clear all behavior instances\n"
+              "@return No return value")
 {
    object->clearBehaviors();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Get the count of behaviors on an object
-    @return (int count) The number of behaviors on an object
-*/
-ConsoleMethodWithDocs( BehaviorComponent, getBehaviorCount, ConsoleInt, 2, 2, ())
+ConsoleMethod( BehaviorComponent, getBehaviorCount, S32, 2, 2, "() - Get the count of behaviors on an object\n"
+                                                               "@return (int count) The number of behaviors on an object")
 {
    return object->getBehaviorCount();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! gets a behavior
-    @param BehaviorTemplateName The name of the template of the behavior instance you want
-    @return (BehaviorInstance bi) The behavior instance you requested
-*/
-ConsoleMethodWithDocs( BehaviorComponent, getBehavior, ConsoleInt, 3, 3, (string BehaviorTemplateName))
+ConsoleMethod( BehaviorComponent, getBehavior, S32, 3, 3, "(string BehaviorTemplateName) - gets a behavior\n"
+                                                          "@param BehaviorTemplateName The name of the template of the behavior instance you want\n"
+                                                          "@return (BehaviorInstance bi) The behavior instance you requested")
 {
    BehaviorInstance* pBehaviorInstance = object->getBehavior( StringTable->insert( argv[2] ) );
 
@@ -143,11 +129,9 @@ ConsoleMethodWithDocs( BehaviorComponent, getBehavior, ConsoleInt, 3, 3, (string
 
 //-----------------------------------------------------------------------------
 
-/*! Gets a particular behavior
-    @param index The index of the behavior to get
-    @return (BehaviorInstance bi) The behavior instance you requested
-*/
-ConsoleMethodWithDocs( BehaviorComponent, getBehaviorByIndex, ConsoleInt, 3, 3, (int index))
+ConsoleMethod( BehaviorComponent, getBehaviorByIndex, S32, 3, 3, "(int index) - Gets a particular behavior\n"
+                                                                 "@param index The index of the behavior to get\n"
+                                                                 "@return (BehaviorInstance bi) The behavior instance you requested")
 {
    BehaviorInstance *bInstance = object->getBehavior( dAtoi(argv[2]) );
 
@@ -156,12 +140,10 @@ ConsoleMethodWithDocs( BehaviorComponent, getBehaviorByIndex, ConsoleInt, 3, 3, 
 
 //-----------------------------------------------------------------------------
 
-/*! 
-    @param inst The behavior instance you want to reorder
-    @param desiredIndex The index you want the behavior instance to be reordered to
-    @return (bool success) Whether or not the behavior instance was successfully reordered
-*/
-ConsoleMethodWithDocs( BehaviorComponent, reOrder, ConsoleBool, 3, 3, (BehaviorInstance inst, [int desiredIndex = 0]))
+ConsoleMethod( BehaviorComponent, reOrder, bool, 3, 3, "(BehaviorInstance inst, [int desiredIndex = 0])\n"
+                                                       "@param inst The behavior instance you want to reorder\n"
+                                                       "@param desiredIndex The index you want the behavior instance to be reordered to\n"
+                                                       "@return (bool success) Whether or not the behavior instance was successfully reordered" )
 {
    BehaviorInstance *inst = dynamic_cast<BehaviorInstance *>( Sim::findObject( argv[1] ) );
 
@@ -177,14 +159,12 @@ ConsoleMethodWithDocs( BehaviorComponent, reOrder, ConsoleBool, 3, 3, (BehaviorI
 
 //-----------------------------------------------------------------------------
 
-/*! Connects a behavior output to a behavior input.
-    @param outputBehavior The behavior that owns the output.
-    @param inputBehavior The behavior that owns the input.
-    @param outputName The output name owned by the output behavior.
-    @param inputName The input name owned by the input behavior.
-    @return (bool success) Whether the connection was successful or not.
-*/
-ConsoleMethodWithDocs( BehaviorComponent, connect, ConsoleBool, 6, 6, (outputBehavior, inputBehavior, outputName, inputName))
+ConsoleMethod( BehaviorComponent, connect, bool, 6, 6,  "(outputBehavior, inputBehavior, outputName, inputName) - Connects a behavior output to a behavior input.\n"
+                                                        "@param outputBehavior The behavior that owns the output.\n"
+                                                        "@param inputBehavior The behavior that owns the input.\n"
+                                                        "@param outputName The output name owned by the output behavior.\n"
+                                                        "@param inputName The input name owned by the input behavior.\n"
+                                                        "@return (bool success) Whether the connection was successful or not.\n")
 {
     // Find output behavior.
     BehaviorInstance* pOutputBehavior = dynamic_cast<BehaviorInstance*>( Sim::findObject( argv[2] ) );
@@ -218,14 +198,12 @@ ConsoleMethodWithDocs( BehaviorComponent, connect, ConsoleBool, 6, 6, (outputBeh
 
 //-----------------------------------------------------------------------------
 
-/*! Connects a behavior output to a behavior input.
-    @param outputBehavior The behavior that owns the output.
-    @param inputBehavior The behavior that owns the input.
-    @param outputName The output name owned by the output behavior.
-    @param inputName The input name owned by the input behavior.
-    @return (bool success) Whether the disconnection was successful or not.
-*/
-ConsoleMethodWithDocs( BehaviorComponent, disconnect, ConsoleBool, 6, 6, (outputBehavior, inputBehavior, outputName, inputName))
+ConsoleMethod( BehaviorComponent, disconnect, bool, 6, 6,   "(outputBehavior, inputBehavior, outputName, inputName) - Connects a behavior output to a behavior input.\n"
+                                                            "@param outputBehavior The behavior that owns the output.\n"
+                                                            "@param inputBehavior The behavior that owns the input.\n"
+                                                            "@param outputName The output name owned by the output behavior.\n"
+                                                            "@param inputName The input name owned by the input behavior.\n"
+                                                            "@return (bool success) Whether the disconnection was successful or not.\n")
 {
     // Find output behavior.
     BehaviorInstance* pOutputBehavior = dynamic_cast<BehaviorInstance*>( Sim::findObject( argv[2] ) );
@@ -259,13 +237,11 @@ ConsoleMethodWithDocs( BehaviorComponent, disconnect, ConsoleBool, 6, 6, (output
 
 //-----------------------------------------------------------------------------
 
-/*! Raise a signal on the behavior output on the specified behavior.
-    @param outputBehavior The behavior that owns the output.
-    @param outputName The output name owned by the output behavior.
-    @param [deltaTime] Optional time-delta (ms) when the raise should occur.
-    @return (bool success) Whether the signal raise was successful or not.
-*/
-ConsoleMethodWithDocs( BehaviorComponent, raise, ConsoleBool, 4, 5, (outputBehavior, outputName, [deltaTime]))
+ConsoleMethod( BehaviorComponent, raise, bool, 4, 5,    "(outputBehavior, outputName, [deltaTime]) - Raise a signal on the behavior output on the specified behavior.\n"
+                                                        "@param outputBehavior The behavior that owns the output.\n"
+                                                        "@param outputName The output name owned by the output behavior.\n"
+                                                        "@param [deltaTime] Optional time-delta (ms) when the raise should occur.\n"
+                                                        "@return (bool success) Whether the signal raise was successful or not.\n")
 {
     // Find output behavior.
     BehaviorInstance* pOutputBehavior = dynamic_cast<BehaviorInstance*>( Sim::findObject( argv[2] ) );
@@ -297,12 +273,10 @@ ConsoleMethodWithDocs( BehaviorComponent, raise, ConsoleBool, 4, 5, (outputBehav
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the number of connections on the behavior output on the specified behavior.
-    @param outputBehavior The behavior that owns the output.
-    @param outputName The output name owned by the output behavior.
-    @return The number of connections on the behavior output on the specified behavior.
-*/
-ConsoleMethodWithDocs( BehaviorComponent, getBehaviorConnectionCount, ConsoleInt, 4, 4, (outputBehavior, outputName))
+ConsoleMethod( BehaviorComponent, getBehaviorConnectionCount, S32, 4, 4,    "(outputBehavior, outputName) - Gets the number of connections on the behavior output on the specified behavior.\n"
+                                                                            "@param outputBehavior The behavior that owns the output.\n"
+                                                                            "@param outputName The output name owned by the output behavior.\n"
+                                                                            "@return The number of connections on the behavior output on the specified behavior.\n")
 {
     // Find output behavior.
     BehaviorInstance* pOutputBehavior = dynamic_cast<BehaviorInstance*>( Sim::findObject( argv[2] ) );
@@ -324,13 +298,11 @@ ConsoleMethodWithDocs( BehaviorComponent, getBehaviorConnectionCount, ConsoleInt
 
 //-----------------------------------------------------------------------------
 
-/*! Gets a comma-delimited list of connections on the behavior output on the specified behavior.
-    @param outputBehavior The behavior that owns the output.
-    @param outputName The output name owned by the output behavior.
-    @param connectionIndex The connection index.
-    @return Returns a comma-delimited list of connections on the behavior output on the specified behavior of the format <OutputBehavior>,<InputBehavior>,<OutputName>,<InputName>.
-*/
-ConsoleMethodWithDocs( BehaviorComponent, getBehaviorConnection, ConsoleString, 5, 5, (outputBehavior, outputName, connectionIndex))
+ConsoleMethod( BehaviorComponent, getBehaviorConnection, const char*, 5, 5,    "(outputBehavior, outputName, connectionIndex) - Gets a comma-delimited list of connections on the behavior output on the specified behavior.\n"
+                                                                                "@param outputBehavior The behavior that owns the output.\n"
+                                                                                "@param outputName The output name owned by the output behavior.\n"
+                                                                                "@param connectionIndex The connection index.\n"
+                                                                                "@return Returns a comma-delimited list of connections on the behavior output on the specified behavior of the format <OutputBehavior>,<InputBehavior>,<OutputName>,<InputName>.\n")
 {
     // Find output behavior.
     BehaviorInstance* pOutputBehavior = dynamic_cast<BehaviorInstance*>( Sim::findObject( argv[2] ) );
@@ -366,4 +338,3 @@ ConsoleMethodWithDocs( BehaviorComponent, getBehaviorConnection, ConsoleString, 
     return pBuffer;
 }
 
-ConsoleMethodGroupEndWithDocs(BehaviorComponent)

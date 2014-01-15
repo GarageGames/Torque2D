@@ -149,6 +149,12 @@ public:
    /// This is the 4th column of the matrix.
    void      setPosition( const Point3F &pos ){ setColumn( 3, pos ); }
 
+   /// Get the z axis of the matrix.
+   ///
+   /// This is the 3rd column of the matrix and is
+   /// normally considered the up vector.   
+   VectorF getUpVector() const;
+
    MatrixF&  mul(const MatrixF &a);                    ///< M * a -> M
    MatrixF&  mul(const MatrixF &a, const MatrixF &b);  ///< a * b -> M
 
@@ -450,6 +456,13 @@ inline Point3F MatrixF::getPosition() const
    Point3F pos;
    getColumn( 3, &pos );
    return pos;
+}
+
+inline VectorF MatrixF::getUpVector() const
+{
+   VectorF vec;
+   getColumn( 2, &vec );
+   return vec;
 }
 
 #endif //_MMATRIX_H_

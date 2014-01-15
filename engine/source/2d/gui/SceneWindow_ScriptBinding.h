@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,12 +20,9 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethodGroupBeginWithDocs(SceneWindow, GuiControl)
 
-/*! Fetch Window Extents (Position/Size).
-    @return Returns the window dimensions as a string formatted as follows: <position.x> <position.y> <width> <height>
-*/
-ConsoleMethodWithDocs(SceneWindow, getWindowExtents, ConsoleString, 2, 2, ())
+ConsoleMethod(SceneWindow, getWindowExtents, const char*, 2, 2, "() Fetch Window Extents (Position/Size)."
+              "@return Returns the window dimensions as a string formatted as follows: <position.x> <position.y> <width> <height>")
 {
     // Get Size Argument Buffer.
     char* pExtentsBuffer = Con::getReturnBuffer(64);
@@ -39,10 +36,8 @@ ConsoleMethodWithDocs(SceneWindow, getWindowExtents, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Returns the Scene associated with this window.
-    @return Returns the scene ID as a string
-*/
-ConsoleMethodWithDocs(SceneWindow, getScene, ConsoleString, 2, 2, ())
+ConsoleMethod(SceneWindow, getScene, const char*, 2, 2, "() - Returns the Scene associated with this window."
+              "@return Returns the scene ID as a string")
 {
    Scene* pScene = object->getScene();
 
@@ -61,11 +56,9 @@ ConsoleMethodWithDocs(SceneWindow, getScene, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Associates Scene Object.
-    @param Scene The scene ID or name.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setScene, ConsoleVoid, 2, 3, (Scene))
+ConsoleMethod(SceneWindow, setScene, void, 2, 3, "(Scene) Associates Scene Object."
+              "@param Scene The scene ID or name.\n"
+              "@return No return value.")
 {
     // No scene specified?
     if ( argc < 3 )
@@ -92,10 +85,8 @@ ConsoleMethodWithDocs(SceneWindow, setScene, ConsoleVoid, 2, 3, (Scene))
 
 //-----------------------------------------------------------------------------
 
-/*! Detaches the window from any Scene Object.
-    @return No return value
-*/
-ConsoleMethodWithDocs(SceneWindow, resetScene, ConsoleVoid, 2, 2, ())
+ConsoleMethod(SceneWindow, resetScene, void, 2, 2, "() Detaches the window from any Scene Object.\n"
+              "@return No return value")
 {
     // Reset Scene.
     object->resetScene();
@@ -103,12 +94,10 @@ ConsoleMethodWithDocs(SceneWindow, resetScene, ConsoleVoid, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Set the current camera position.
-    @param X Position along the X axis.
-    @param Y Position along the Y axis.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setCameraPosition, ConsoleVoid, 3, 4, (x , y))
+ConsoleMethod(SceneWindow, setCameraPosition, void, 3, 4,    "(x , y) - Set the current camera position.\n"
+                                                                    "@param X Position along the X axis.\n"
+                                                                    "@param Y Position along the Y axis.\n"
+                                                                    "@return No return value.")
 {
    if ( argc == 3 )
    {
@@ -121,22 +110,18 @@ ConsoleMethodWithDocs(SceneWindow, setCameraPosition, ConsoleVoid, 3, 4, (x , y)
 
 //-----------------------------------------------------------------------------
 
-/*! Get the current camera position.
-    @return The current camera position.
-*/
-ConsoleMethodWithDocs(SceneWindow, getCameraPosition, ConsoleString, 2, 2, ())
+ConsoleMethod(SceneWindow, getCameraPosition, const char*, 2, 2, "() Get the current camera position.\n"
+                                                                        "@return The current camera position.")
 {
     return object->getCameraPosition().scriptThis();
 }   
 
 //-----------------------------------------------------------------------------
 
-/*! Set the current camera position.
-    @param width Size along the X axis.
-    @param height Size along the Y axis.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setCameraSize, ConsoleVoid, 3, 4, (width , height))
+ConsoleMethod(SceneWindow, setCameraSize, void, 3, 4,    "(width , height) - Set the current camera position.\n"
+                                                                "@param width Size along the X axis.\n"
+                                                                "@param height Size along the Y axis.\n"
+                                                                "@return No return value.")
 {
    if ( argc == 3 )
    {
@@ -149,22 +134,18 @@ ConsoleMethodWithDocs(SceneWindow, setCameraSize, ConsoleVoid, 3, 4, (width , he
 
 //-----------------------------------------------------------------------------
 
-/*! Get the current camera size.
-    @return The current camera width and height.
-*/
-ConsoleMethodWithDocs(SceneWindow, getCameraSize, ConsoleString, 2, 2, ())
+ConsoleMethod(SceneWindow, getCameraSize, const char*, 2, 2, "() Get the current camera size.\n"
+                                                                    "@return The current camera width and height.")
 {
     return object->getCameraSize().scriptThis();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Set the current camera area.
-    @param x1,y1,x2,y2 The coordinates of the minimum and maximum points (top left, bottom right)
-    The input can be formatted as either \x1 y1 x2 y2\, \x1 y1, x2 y2\, \x1, y1, x2, y2\
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setCameraArea, ConsoleVoid, 3, 6, (x1 / y1 / x2 / y2))
+ConsoleMethod(SceneWindow, setCameraArea, void, 3, 6, "(x1 / y1 / x2 / y2) - Set the current camera area."
+              "@param x1,y1,x2,y2 The coordinates of the minimum and maximum points (top left, bottom right)\n"
+              "The input can be formatted as either \"x1 y1 x2 y2\", \"x1 y1, x2 y2\", \"x1, y1, x2, y2\"\n"
+              "@return No return value.")
 {
    // Upper left bound.
    Vector2 v1;
@@ -215,10 +196,8 @@ ConsoleMethodWithDocs(SceneWindow, setCameraArea, ConsoleVoid, 3, 6, (x1 / y1 / 
 
 //-----------------------------------------------------------------------------
 
-/*! Get the current camera Area.
-    @return The camera area formatted as \x1 y1 x2 y2\
-*/
-ConsoleMethodWithDocs(SceneWindow, getCameraArea, ConsoleString, 2, 2, ())
+ConsoleMethod(SceneWindow, getCameraArea, const char*, 2, 2, "() Get the current camera Area.\n"
+              "@return The camera area formatted as \"x1 y1 x2 y2\"")
 {
     // Fetch Camera Window.
     const RectF cameraWindow = object->getCameraArea();
@@ -235,52 +214,42 @@ ConsoleMethodWithDocs(SceneWindow, getCameraArea, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Set the current camera Zoom Factor.
-    @param zoomFactor A float value representing the zoom factor
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setCameraZoom, ConsoleVoid, 3, 3, (zoomFactor))
+ConsoleMethod(SceneWindow, setCameraZoom, void, 3, 3,    "(zoomFactor) - Set the current camera Zoom Factor.\n"
+                                                                "@param zoomFactor A float value representing the zoom factor\n"
+                                                                "@return No return value.")
 {
     object->setCameraZoom( dAtof(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Get the current camera Zoom.
-    @return The current camera zoom.
-*/
-ConsoleMethodWithDocs(SceneWindow, getCameraZoom, ConsoleFloat, 2, 2, ())
+ConsoleMethod(SceneWindow, getCameraZoom, F32, 2, 2, "() Get the current camera Zoom.\n"
+                                                            "@return The current camera zoom.")
 {
     return object->getCameraZoom();
 } 
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the current camera angle.
-    @param angle The current camera angle in degrees.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setCameraAngle, ConsoleVoid, 3, 3, (angle))
+ConsoleMethod(SceneWindow, setCameraAngle, void, 3, 3, "(angle) - Sets the current camera angle.\n"
+                                                              "@param angle The current camera angle in degrees.\n"
+                                                              "@return No return value.")
 {
     object->setCameraAngle( mDegToRad(dAtof(argv[2])) );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the current camera angle.
-    @return The current camera angle in degrees.
-*/
-ConsoleMethodWithDocs(SceneWindow, getCameraAngle, ConsoleFloat, 2, 2, ())
+ConsoleMethod(SceneWindow, getCameraAngle, F32, 2, 2,    "() Gets the current camera angle.\n"
+                                                                "@return The current camera angle in degrees.")
 {
     return object->getCameraAngle();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Get current camera scale to world.
-    @return Returns the cameras window width/height scale to world as a string formatted as \widthScale heightScale\
-*/
-ConsoleMethodWithDocs(SceneWindow, getCameraWorldScale, ConsoleString, 2, 2, ())
+ConsoleMethod(SceneWindow, getCameraWorldScale, const char*, 2, 2, "() Get current camera scale to world.\n"
+              "@return Returns the cameras window width/height scale to world as a string formatted as \"widthScale heightScale\"")
 {
     // Fetch camera window
     const Vector2 cameraWindowScale = object->getCameraWindowScale();
@@ -290,20 +259,16 @@ ConsoleMethodWithDocs(SceneWindow, getCameraWorldScale, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Get current camera position post-view-limit clamping.
-    @return The current camera render position.
-*/
-ConsoleMethodWithDocs(SceneWindow, getCameraRenderPosition, ConsoleString, 2, 2, ())
+ConsoleMethod(SceneWindow, getCameraRenderPosition, const char*, 2, 2,   "() Get current camera position post-view-limit clamping.\n"
+                                                                                "@return The current camera render position.")
 {
     return object->getCameraRenderPosition().scriptThis();
 } 
 
 //-----------------------------------------------------------------------------
 
-/*! Get current camera scale to render.
-    @return Returns the cameras window width/height scale to render as a string formatted as \widthScale heightScale\
-*/
-ConsoleMethodWithDocs(SceneWindow, getCameraRenderScale, ConsoleString, 2, 2, ())
+ConsoleMethod(SceneWindow, getCameraRenderScale, const char*, 2, 2, "() Get current camera scale to render.\n"
+              "@return Returns the cameras window width/height scale to render as a string formatted as \"widthScale heightScale\"")
 {
     // Fetch camera window scale.
     Vector2 cameraWindowScale = object->getCameraWindowScale();
@@ -316,12 +281,10 @@ ConsoleMethodWithDocs(SceneWindow, getCameraRenderScale, ConsoleString, 2, 2, ()
 
 //-----------------------------------------------------------------------------
 
-/*! Set the target camera position.
-    @param X Position along the X axis.
-    @param Y Position along the Y axis.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setTargetCameraPosition, ConsoleVoid, 3, 4, (x , y))
+ConsoleMethod(SceneWindow, setTargetCameraPosition, void, 3, 4,     "(x , y) - Set the target camera position.\n"
+                                                                    "@param X Position along the X axis.\n"
+                                                                    "@param Y Position along the Y axis.\n"
+                                                                    "@return No return value.")
 {
    if ( argc == 3 )
    {
@@ -335,22 +298,18 @@ ConsoleMethodWithDocs(SceneWindow, setTargetCameraPosition, ConsoleVoid, 3, 4, (
 
 //-----------------------------------------------------------------------------
 
-/*! Get the target camera position.
-    @return The target camera position.
-*/
-ConsoleMethodWithDocs(SceneWindow, getTargetCameraPosition, ConsoleString, 2, 2, ())
+ConsoleMethod(SceneWindow, getTargetCameraPosition, const char*, 2, 2,  "() Get the target camera position.\n"
+                                                                        "@return The target camera position.")
 {
     return object->getTargetCameraPosition().scriptThis();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Set the target camera position.
-    @param width Size along the X axis.
-    @param height Size along the Y axis.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setTargetCameraSize, ConsoleVoid, 3, 4, (width , height))
+ConsoleMethod(SceneWindow, setTargetCameraSize, void, 3, 4,    "(width , height) - Set the target camera position.\n"
+                                                                "@param width Size along the X axis.\n"
+                                                                "@param height Size along the Y axis.\n"
+                                                                "@return No return value.")
 {
    if ( argc == 3 )
    {
@@ -363,20 +322,16 @@ ConsoleMethodWithDocs(SceneWindow, setTargetCameraSize, ConsoleVoid, 3, 4, (widt
 
 //-----------------------------------------------------------------------------
 
-/*! Get the target camera size.
-    @return The target camera width and height.
-*/
-ConsoleMethodWithDocs(SceneWindow, getTargetCameraSize, ConsoleString, 2, 2, ())
+ConsoleMethod(SceneWindow, getTargetCameraSize, const char*, 2, 2, "() Get the target camera size.\n"
+                                                                    "@return The target camera width and height.")
 {
     return object->getTargetCameraSize().scriptThis();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Set the target camera area.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setTargetCameraArea, ConsoleVoid, 3, 6, (x / y / width / height))
+ConsoleMethod(SceneWindow, setTargetCameraArea, void, 3, 6, "(x / y / width / height) - Set the target camera area."
+              "@return No return value.")
 {
    // Upper left bound.
    Vector2 v1;
@@ -427,10 +382,8 @@ ConsoleMethodWithDocs(SceneWindow, setTargetCameraArea, ConsoleVoid, 3, 6, (x / 
 
 //-----------------------------------------------------------------------------
 
-/*! Get the target camera Area.
-    @return The camera area formatted as \x1 y1 x2 y2\
-*/
-ConsoleMethodWithDocs(SceneWindow, getTargetCameraArea, ConsoleString, 2, 2, ())
+ConsoleMethod(SceneWindow, getTargetCameraArea, const char*, 2, 2, "() Get the target camera Area.\n"
+              "@return The camera area formatted as \"x1 y1 x2 y2\"")
 {
     // Fetch Camera Window.
     const RectF cameraWindow = object->getTargetCameraArea();
@@ -447,51 +400,41 @@ ConsoleMethodWithDocs(SceneWindow, getTargetCameraArea, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Set the target camera Zoom Factor.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setTargetCameraZoom, ConsoleVoid, 3, 3, (zoomFactor))
+ConsoleMethod(SceneWindow, setTargetCameraZoom, void, 3, 3, "(zoomFactor) - Set the target camera Zoom Factor."
+                                                            "@return No return value.")
 {
     object->setTargetCameraZoom( dAtof(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Get the target camera Zoom.
-    @return The current camera zoom.
-*/
-ConsoleMethodWithDocs(SceneWindow, getTargetCameraZoom, ConsoleFloat, 2, 2, ())
+ConsoleMethod(SceneWindow, getTargetCameraZoom, F32, 2, 2, "() Get the target camera Zoom.\n"
+                                                            "@return The current camera zoom.")
 {
     return object->getTargetCameraZoom();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the target camera angle.
-    @param angle The target camera angle in degrees.
-     @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setTargetCameraAngle, ConsoleVoid, 3, 3, (angle))
+ConsoleMethod(SceneWindow, setTargetCameraAngle, void, 3, 3,    "(angle) - Sets the target camera angle.\n"
+                                                                "@param angle The target camera angle in degrees.\n"
+                                                              " @return No return value.")
 {
     object->setTargetCameraAngle( mDegToRad(dAtof(argv[2])) );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the target camera angle.
-    @return The target camera angle in degrees.
-*/
-ConsoleMethodWithDocs(SceneWindow, getTargetCameraAngle, ConsoleFloat, 2, 2, ())
+ConsoleMethod(SceneWindow, getTargetCameraAngle, F32, 2, 2,    "() Gets the target camera angle.\n"
+                                                                "@return The target camera angle in degrees.")
 {
     return object->getTargetCameraAngle();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Set camera interpolation time.
-    @return No return value
-*/
-ConsoleMethodWithDocs(SceneWindow, setCameraInterpolationTime, ConsoleVoid, 3, 3, (interpolationTime))
+ConsoleMethod(SceneWindow, setCameraInterpolationTime, void, 3, 3, "(interpolationTime) - Set camera interpolation time."
+              "@return No return value")
 {
     // Set Camera Interpolation Time.
     object->setCameraInterpolationTime( dAtof(argv[2]) );
@@ -499,10 +442,8 @@ ConsoleMethodWithDocs(SceneWindow, setCameraInterpolationTime, ConsoleVoid, 3, 3
 
 //-----------------------------------------------------------------------------
 
-/*! Set camera interpolation mode.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setCameraInterpolationMode, ConsoleVoid, 3, 3, (interpolationMode))
+ConsoleMethod(SceneWindow, setCameraInterpolationMode, void, 3, 3, "(interpolationMode) - Set camera interpolation mode."
+              "@return No return value.")
 {
     // Set Camera Interpolation Mode.
     object->setCameraInterpolationMode( SceneWindow::getInterpolationModeEnum(argv[2]) );
@@ -510,10 +451,8 @@ ConsoleMethodWithDocs(SceneWindow, setCameraInterpolationMode, ConsoleVoid, 3, 3
 
 //-----------------------------------------------------------------------------
 
-/*! Start Camera Move.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, startCameraMove, ConsoleVoid, 2, 3, ([interpolationTime]))
+ConsoleMethod(SceneWindow, startCameraMove, void, 2, 3, "([interpolationTime]) - Start Camera Move."
+              "@return No return value.")
 {
     F32 interpolationTime;
 
@@ -529,10 +468,8 @@ ConsoleMethodWithDocs(SceneWindow, startCameraMove, ConsoleVoid, 2, 3, ([interpo
 
 //-----------------------------------------------------------------------------
 
-/*! Stops current camera movement
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, stopCameraMove, ConsoleVoid, 2, 2, ())
+ConsoleMethod(SceneWindow, stopCameraMove, void, 2, 2, "() Stops current camera movement"
+              "@return No return value.")
 {
     // Stop Camera Move.
     object->stopCameraMove();
@@ -540,10 +477,8 @@ ConsoleMethodWithDocs(SceneWindow, stopCameraMove, ConsoleVoid, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Moves camera directly to target.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, completeCameraMove, ConsoleVoid, 2, 2, ())
+ConsoleMethod(SceneWindow, completeCameraMove, void, 2, 2, "() Moves camera directly to target.\n"
+              "@return No return value.")
 {
     // Complete Camera Move.
     object->completeCameraMove();
@@ -551,10 +486,8 @@ ConsoleMethodWithDocs(SceneWindow, completeCameraMove, ConsoleVoid, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Reverses previous camera movement.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, undoCameraMove, ConsoleVoid, 2, 3, ([interpolationTime]))
+ConsoleMethod(SceneWindow, undoCameraMove, void, 2, 3, "([interpolationTime]) - Reverses previous camera movement."
+              "@return No return value.")
 {
     F32 interpolationTime;
 
@@ -570,10 +503,8 @@ ConsoleMethodWithDocs(SceneWindow, undoCameraMove, ConsoleVoid, 2, 3, ([interpol
 
 //-----------------------------------------------------------------------------
 
-/*! Check the camera moving status.
-    @return Returns a boolean value as to whether or not the camera is moving.
-*/
-ConsoleMethodWithDocs(SceneWindow, getIsCameraMoving, ConsoleBool, 2, 2, ())
+ConsoleMethod(SceneWindow, getIsCameraMoving, bool, 2, 2, "() Check the camera moving status.\n"
+              "@return Returns a boolean value as to whether or not the camera is moving.")
 {
     // Is Camera Moving?
     return object->isCameraMoving();
@@ -581,10 +512,8 @@ ConsoleMethodWithDocs(SceneWindow, getIsCameraMoving, ConsoleBool, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Check the camera mounted status.
-    @return Returns a boolean value as to whether or not the camera is mounted.
-*/
-ConsoleMethodWithDocs(SceneWindow, getIsCameraMounted, ConsoleBool, 2, 2, ())
+ConsoleMethod(SceneWindow, getIsCameraMounted, bool, 2, 2, "() Check the camera mounted status.\n"
+              "@return Returns a boolean value as to whether or not the camera is mounted.")
 {
     // Is Camera Mounted.
     return object->isCameraMounted();
@@ -592,12 +521,10 @@ ConsoleMethodWithDocs(SceneWindow, getIsCameraMounted, ConsoleBool, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Starts the camera shaking.
-    @param shakeMagnitude The intensity of the shaking
-    @param time The length of the shake
-    @return No return value
-*/
-ConsoleMethodWithDocs(SceneWindow, startCameraShake, ConsoleVoid, 4, 4, (shakeMagnitude, time))
+ConsoleMethod(SceneWindow, startCameraShake, void, 4, 4, "(shakeMagnitude, time) - Starts the camera shaking."
+              "@param shakeMagnitude The intensity of the shaking\n"
+              "@param time The length of the shake"
+              "@return No return value")
 {
     // Start Camera Shake.
     object->startCameraShake( dAtof(argv[2]), dAtof(argv[3]) );
@@ -605,10 +532,8 @@ ConsoleMethodWithDocs(SceneWindow, startCameraShake, ConsoleVoid, 4, 4, (shakeMa
 
 //-----------------------------------------------------------------------------
 
-/*! Stops the camera shaking.
-    @return No return value
-*/
-ConsoleMethodWithDocs(SceneWindow, stopCameraShake, ConsoleVoid, 2, 2, ())
+ConsoleMethod(SceneWindow, stopCameraShake, void, 2, 2, "() Stops the camera shaking."
+              "@return No return value")
 {
     // Stop Camera Shake.
     object->stopCameraShake();
@@ -616,15 +541,13 @@ ConsoleMethodWithDocs(SceneWindow, stopCameraShake, ConsoleVoid, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Mounts the camera onto the specified object.
-    @param sceneObject The scene object to mount the camera to.
-    @param offsetX / offsetY The offset from the objects position to mount the camera to.  Optional: Defaults to no offset.
-    @param mountForce The force to use to keep the camera mounted to the object.  Zero is a rigid mount.  Optional: Defaults to zero.
-    @param sendToMount Whether to immediately move the camera to the objects position or not.  Optional: Defaults to true.
-    @param mountAngle Whether to mount the cameras angle to the objects angle or not.  Optional: Defaults to false.
-    @return No return value
-*/
-ConsoleMethodWithDocs(SceneWindow, mount, ConsoleVoid, 3, 8, (sceneObject, [offsetX / offsetY], [mountForce], [sendToMount?], [mountAngle?]))
+ConsoleMethod(SceneWindow, mount, void, 3, 8,   "(sceneObject, [offsetX / offsetY], [mountForce], [sendToMount?], [mountAngle?]) - Mounts the camera onto the specified object."
+                                                "@param sceneObject The scene object to mount the camera to.\n"
+                                                "@param offsetX / offsetY The offset from the objects position to mount the camera to.  Optional: Defaults to no offset.\n"
+                                                "@param mountForce The force to use to keep the camera mounted to the object.  Zero is a rigid mount.  Optional: Defaults to zero.\n"
+                                                "@param sendToMount Whether to immediately move the camera to the objects position or not.  Optional: Defaults to true.\n"
+                                                "@param mountAngle Whether to mount the cameras angle to the objects angle or not.  Optional: Defaults to false.\n"
+                                                "@return No return value")
 {
     // Grab the object. Always specified.
     SceneObject* pSceneObject = dynamic_cast<SceneObject*>(Sim::findObject(argv[2]));
@@ -686,10 +609,8 @@ ConsoleMethodWithDocs(SceneWindow, mount, ConsoleVoid, 3, 8, (sceneObject, [offs
 
 //-----------------------------------------------------------------------------
 
-/*! Dismounts Camera from object.
-    @return No return value
-*/
-ConsoleMethodWithDocs(SceneWindow, dismount, ConsoleVoid, 2, 2, ())
+ConsoleMethod(SceneWindow, dismount, void, 2, 2, "() Dismounts Camera from object."
+              "@return No return value")
 {
     // Dismount Object.
     object->dismount();
@@ -713,10 +634,8 @@ void SceneWindow::dismountMe( SceneObject* pSceneObject )
 
 //-----------------------------------------------------------------------------
 
-/*! Set View Limit On.
-    @return No return value
-*/
-ConsoleMethodWithDocs(SceneWindow, setViewLimitOn, ConsoleVoid, 3, 6, ([minX / minY / maxX / maxY]))
+ConsoleMethod(SceneWindow, setViewLimitOn, void, 3, 6, "([minX / minY / maxX / maxY]) - Set View Limit On."
+              "@return No return value")
 {
    // Upper left bound.
    Vector2 v1;
@@ -767,10 +686,8 @@ ConsoleMethodWithDocs(SceneWindow, setViewLimitOn, ConsoleVoid, 3, 6, ([minX / m
 
 //-----------------------------------------------------------------------------
 
-/*! Set View Limit Off.
-    @return No return value
-*/
-ConsoleMethodWithDocs(SceneWindow, setViewLimitOff, ConsoleVoid, 2, 2, ())
+ConsoleMethod(SceneWindow, setViewLimitOff, void, 2, 2, "() Set View Limit Off."
+              "@return No return value")
 {
     // Set View Limit Off.
     object->setViewLimitOff();
@@ -778,22 +695,18 @@ ConsoleMethodWithDocs(SceneWindow, setViewLimitOff, ConsoleVoid, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Clamps the current camera to the current view limit.
-    Nothing will happen if the view-limit is not active or the camera is moving.
-    @return No return value
-*/
-ConsoleMethodWithDocs(SceneWindow, clampCameraViewLimit, ConsoleVoid, 2, 2, ())
+ConsoleMethod(SceneWindow, clampCameraViewLimit, void, 2, 2, "() Clamps the current camera to the current view limit.\n"
+                                                                    "Nothing will happen if the view-limit is not active or the camera is moving.\n"
+                                                                    "@return No return value")
 {
     object->clampCameraViewLimit();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the render group(s).
-    @param groups The list of groups you wish to set.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setRenderGroups, ConsoleVoid, 3, 2 + MASK_BITCOUNT, (groups$))
+ConsoleMethod(SceneWindow, setRenderGroups, void, 3, 2 + MASK_BITCOUNT, "(groups$) - Sets the render group(s).\n"
+              "@param groups The list of groups you wish to set.\n"
+              "@return No return value.")
 {
    // The mask.
    U32 mask = 0;
@@ -851,11 +764,9 @@ ConsoleMethodWithDocs(SceneWindow, setRenderGroups, ConsoleVoid, 3, 2 + MASK_BIT
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the render layers(s).
-    @param The layer numbers you wish to set.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setRenderLayers, ConsoleVoid, 3, 2 + MASK_BITCOUNT, (layers$))
+ConsoleMethod(SceneWindow, setRenderLayers, void, 3, 2 + MASK_BITCOUNT, "(layers$) - Sets the render layers(s)."
+              "@param The layer numbers you wish to set.\n"
+              "@return No return value.")
 {
    // The mask.
    U32 mask = 0;
@@ -913,12 +824,10 @@ ConsoleMethodWithDocs(SceneWindow, setRenderLayers, ConsoleVoid, 3, 2 + MASK_BIT
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the layer/group mask which control what is rendered.
-    @param layermask The bitmask for setting the layers to render
-    @param groupmask The bitmask for setting the groups to render
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setRenderMasks, ConsoleVoid, 3, 4, (layerMask, groupMask))
+ConsoleMethod(SceneWindow, setRenderMasks, void, 3, 4, "(layerMask, groupMask) - Sets the layer/group mask which control what is rendered."
+              "@param layermask The bitmask for setting the layers to render\n"
+              "@param groupmask The bitmask for setting the groups to render\n"
+              "@return No return value.")
 {
     // Set Render Masks.
    if( argc < 4 )
@@ -929,34 +838,28 @@ ConsoleMethodWithDocs(SceneWindow, setRenderMasks, ConsoleVoid, 3, 4, (layerMask
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the layer mask which controls what is rendered.
-    @returns The bit mask corresponding to the layers which are to be rendered
-*/
-ConsoleMethodWithDocs(SceneWindow, getRenderLayerMask, ConsoleInt, 2, 2, ())
+ConsoleMethod(SceneWindow, getRenderLayerMask, S32, 2, 2, "() - Gets the layer mask which controls what is rendered."
+              "@returns The bit mask corresponding to the layers which are to be rendered")
 {
    return object->getRenderLayerMask();
 }   
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the group mask which controls what is rendered.
-    @returns The bit mask corresponding to the groups which are to be rendered
-*/
-ConsoleMethodWithDocs(SceneWindow, getRenderGroupMask, ConsoleInt, 2, 2, ())
+ConsoleMethod(SceneWindow, getRenderGroupMask, S32, 2, 2, "() - Gets the group mask which controls what is rendered."
+              "@returns The bit mask corresponding to the groups which are to be rendered")
 {
    return object->getRenderGroupMask();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! or ( stockColorName )  - Sets the background color for the scene.
-    @param red The red value.
-    @param green The green value.
-    @param blue The blue value.
-    @param alpha The alpha value.
-    @return No return Value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setBackgroundColor, ConsoleVoid, 3, 6, (float red, float green, float blue, [float alpha = 1.0]))
+ConsoleMethod(SceneWindow, setBackgroundColor, void, 3, 6,  "(float red, float green, float blue, [float alpha = 1.0]) or ( stockColorName )  - Sets the background color for the scene."
+                                                            "@param red The red value.\n"
+                                                            "@param green The green value.\n"
+                                                            "@param blue The blue value.\n"
+                                                            "@param alpha The alpha value.\n"
+                                                            "@return No return Value.")
 {
     // The colors.
     F32 red;
@@ -1023,10 +926,8 @@ ConsoleMethodWithDocs(SceneWindow, setBackgroundColor, ConsoleVoid, 3, 6, (float
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the background color for the scene.
-    @return (float red / float green / float blue / float alpha) The background color for the scene.
-*/
-ConsoleMethodWithDocs(SceneWindow, getBackgroundColor, ConsoleString, 2, 2, (...))
+ConsoleMethod(SceneWindow, getBackgroundColor, const char*, 2, 2,   "Gets the background color for the scene.\n"
+                                                                    "@return (float red / float green / float blue / float alpha) The background color for the scene.")
 {
     // Get the background color.
     const ColorF& color = object->getBackgroundColor();
@@ -1050,11 +951,9 @@ ConsoleMethodWithDocs(SceneWindow, getBackgroundColor, ConsoleString, 2, 2, (...
 
 //-----------------------------------------------------------------------------
 
-/*! Sets whether to use the scene background color or not.
-    @param useBackgroundColor Whether to use the scene background color or not.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setUseBackgroundColor, ConsoleVoid, 3, 3, (...))
+ConsoleMethod(SceneWindow, setUseBackgroundColor, void, 3, 3,   "Sets whether to use the scene background color or not.\n"
+                                                                "@param useBackgroundColor Whether to use the scene background color or not.\n"
+                                                                "@return No return value." )
 {
     // Fetch flag.
     const bool useBackgroundColor = dAtob(argv[2]);
@@ -1065,10 +964,8 @@ ConsoleMethodWithDocs(SceneWindow, setUseBackgroundColor, ConsoleVoid, 3, 3, (..
 
 //-----------------------------------------------------------------------------
 
-/*! Gets whether the scene background color is in use or not.
-    @return Whether the scene background color is in use or not.
-*/
-ConsoleMethodWithDocs(SceneWindow, getUseBackgroundColor, ConsoleBool, 2, 2, (...))
+ConsoleMethod(SceneWindow, getUseBackgroundColor, bool, 2, 2,   "Gets whether the scene background color is in use or not.\n"
+                                                                "@return Whether the scene background color is in use or not." )
 {
     // Get the flag.
     return object->getUseBackgroundColor();
@@ -1076,52 +973,42 @@ ConsoleMethodWithDocs(SceneWindow, getUseBackgroundColor, ConsoleBool, 2, 2, (..
 
 //-----------------------------------------------------------------------------
 
-/*! Sets whether input events are monitored by the window or not.
-    @param inputStatus Whether input events are processed by the window or not.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setUseWindowInputEvents, ConsoleVoid, 3, 3, (inputStatus))
+ConsoleMethod(SceneWindow, setUseWindowInputEvents, void, 3, 3, "(inputStatus) Sets whether input events are monitored by the window or not.\n"
+              "@param inputStatus Whether input events are processed by the window or not.\n"
+              "@return No return value.")
 {
     object->setUseWindowInputEvents( dAtob(argv[2]) );
 }   
 
 //-----------------------------------------------------------------------------
 
-/*! Gets whether input events are monitored by the window or not.
-    @return Whether input events are monitored by the window or not.
-*/
-ConsoleMethodWithDocs(SceneWindow, getUseWindowInputEvents, ConsoleBool, 2, 2, ())
+ConsoleMethod(SceneWindow, getUseWindowInputEvents, bool, 2, 2, "() Gets whether input events are monitored by the window or not.\n"
+              "@return Whether input events are monitored by the window or not.")
 {
     return object->getUseWindowInputEvents();
 }   
 
 //-----------------------------------------------------------------------------
 
-/*! Sets whether input events are passed onto scene objects or not.
-    @param mouseStatus Whether input events are passed onto scene objects or not.
-*/
-ConsoleMethodWithDocs(SceneWindow, setUseObjectInputEvents, ConsoleVoid, 3, 3, (inputStatus))
+ConsoleMethod(SceneWindow, setUseObjectInputEvents, void, 3, 3, "(inputStatus) Sets whether input events are passed onto scene objects or not.\n"
+              "@param mouseStatus Whether input events are passed onto scene objects or not.\n")
 {
     object->setUseObjectInputEvents( dAtob(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Gets whether input events are passed onto scene objects or not.
-    @return Whether input events are passed onto scene objects or not..
-*/
-ConsoleMethodWithDocs(SceneWindow, getUseObjectInputEvents, ConsoleBool, 2, 2, ())
+ConsoleMethod(SceneWindow, getUseObjectInputEvents, bool, 2, 2, "() Gets whether input events are passed onto scene objects or not.\n"
+              "@return Whether input events are passed onto scene objects or not..")
 {
     return object->getUseObjectInputEvents();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the input events group filter.
-    @param List of groups to filter input events with.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setObjectInputEventGroupFilter, ConsoleVoid, 3, 2 + MASK_BITCOUNT, (groups$))
+ConsoleMethod(SceneWindow, setObjectInputEventGroupFilter, void, 3, 2 + MASK_BITCOUNT, "(groups$) Sets the input events group filter.\n"
+              "@param List of groups to filter input events with.\n"
+              "@return No return value.")
 {
    // The mask.
    U32 mask = 0;
@@ -1180,11 +1067,9 @@ ConsoleMethodWithDocs(SceneWindow, setObjectInputEventGroupFilter, ConsoleVoid, 
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the input events layer filter.
-    @param The list of layers to filter input events with.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setObjectInputEventLayerFilter, ConsoleVoid, 3, 2 + MASK_BITCOUNT, (layers$))
+ConsoleMethod(SceneWindow, setObjectInputEventLayerFilter, void, 3, 2 + MASK_BITCOUNT, "(layers$) Sets the input events layer filter."
+              "@param The list of layers to filter input events with.\n"
+              "@return No return value.")
 {
    // The mask.
    U32 mask = 0;
@@ -1243,9 +1128,7 @@ ConsoleMethodWithDocs(SceneWindow, setObjectInputEventLayerFilter, ConsoleVoid, 
 
 //-----------------------------------------------------------------------------
 
-/*! Sets input filter for input events.
-*/
-ConsoleMethodWithDocs(SceneWindow, setObjectInputEventFilter, ConsoleVoid, 4, 5, (groupMask, layerMask, [useInvisibleFilter?]))
+ConsoleMethod(SceneWindow, setObjectInputEventFilter, void, 4, 5, "(groupMask, layerMask, [useInvisibleFilter?]) Sets input filter for input events.")
 {
     // Calculate Use Invisible Flag.
     bool useInvisible = argc >= 5 ? dAtob(argv[4]) : true;
@@ -1256,20 +1139,16 @@ ConsoleMethodWithDocs(SceneWindow, setObjectInputEventFilter, ConsoleVoid, 4, 5,
 
 //-----------------------------------------------------------------------------
 
-/*! Sets whether invisible objects should be filtered for input events or not.
-*/
-ConsoleMethodWithDocs(SceneWindow, setObjectInputEventInvisibleFilter, ConsoleVoid, 3, 3, (bool useInvisibleFilter))
+ConsoleMethod(SceneWindow, setObjectInputEventInvisibleFilter, void, 3, 3, "(bool useInvisibleFilter) Sets whether invisible objects should be filtered for input events or not.")
 {
    object->setObjectInputEventInvisibleFilter(dAtob(argv[2]));
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Adds an object as an input listener.
-    @param inputListener The object to add as an input listener.
-    @return Whether the object was added as an input event listener or not.
-*/
-ConsoleMethodWithDocs(SceneWindow, addInputListener, ConsoleBool, 3, 3, (inputListener))
+ConsoleMethod(SceneWindow, addInputListener, bool, 3, 3,    "(inputListener) Adds an object as an input listener.\n"
+                                                            "@param inputListener The object to add as an input listener.\n"
+                                                            "@return Whether the object was added as an input event listener or not.")
 {
     // Find the SimObject
     SimObject* pSimObject = Sim::findObject( argv[2] );
@@ -1290,11 +1169,9 @@ ConsoleMethodWithDocs(SceneWindow, addInputListener, ConsoleBool, 3, 3, (inputLi
 
 //-----------------------------------------------------------------------------
 
-/*! Removes an object from being an input listener.
-    @param inputListener The object to remove as an input listener.
-    @return Whether the object was removed as an input event listener or not.
-*/
-ConsoleMethodWithDocs(SceneWindow, removeInputListener, ConsoleBool, 3, 3, (inputListener))
+ConsoleMethod(SceneWindow, removeInputListener, bool, 3, 3, "(inputListener) Removes an object from being an input listener.\n"
+                                                            "@param inputListener The object to remove as an input listener.\n"
+                                                            "@return Whether the object was removed as an input event listener or not.")
 {
     // Find the SimObject
     SimObject* pSimObject = Sim::findObject( argv[2] );
@@ -1315,10 +1192,8 @@ ConsoleMethodWithDocs(SceneWindow, removeInputListener, ConsoleBool, 3, 3, (inpu
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the window mouse-lock status.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneWindow, setLockMouse, ConsoleVoid, 3, 3, (bool lockSet))
+ConsoleMethod(SceneWindow, setLockMouse, void, 3, 3, "(bool lockSet) Sets the window mouse-lock status."
+              "@return No return value.")
 {
     // Set Lock Mouse.
     object->setLockMouse( dAtob(argv[2]) );
@@ -1326,9 +1201,7 @@ ConsoleMethodWithDocs(SceneWindow, setLockMouse, ConsoleVoid, 3, 3, (bool lockSe
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the window mouse-lock status.
-*/
-ConsoleMethodWithDocs(SceneWindow, getLockMouse, ConsoleBool, 2, 2, ())
+ConsoleMethod(SceneWindow, getLockMouse, bool, 2, 2, "() Gets the window mouse-lock status.")
 {
     // Get Lock Mouse.
     return object->getLockMouse();
@@ -1336,10 +1209,8 @@ ConsoleMethodWithDocs(SceneWindow, getLockMouse, ConsoleBool, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Sets Current Mouse Position.
-    @param x,y The coordinates to set the mouse cursor. Accepts either (x,y) or (\x y\
-*/
-ConsoleMethodWithDocs(SceneWindow, setMousePosition, ConsoleVoid, 3, 4, (x/y))
+ConsoleMethod(SceneWindow, setMousePosition, void, 3, 4, "(x/y) Sets Current Mouse Position."
+              "@param x,y The coordinates to set the mouse cursor. Accepts either (x,y) or (\"x y\")")
 {
    // The new position.
    Vector2 position;
@@ -1368,10 +1239,8 @@ ConsoleMethodWithDocs(SceneWindow, setMousePosition, ConsoleVoid, 3, 4, (x/y))
 
 //-----------------------------------------------------------------------------
 
-/*! Gets Current Mouse Position.
-    @return Returns a string with the current mouse cursor coordinates formatted as \x y\
-*/
-ConsoleMethodWithDocs(SceneWindow, getMousePosition, ConsoleString, 2, 2, ())
+ConsoleMethod(SceneWindow, getMousePosition, const char*, 2, 2, "() Gets Current Mouse Position."
+              "@return Returns a string with the current mouse cursor coordinates formatted as \"x y\"")
 {
     // Fetch Mouse Position.
     Vector2 worldMousePoint = object->getMousePosition();
@@ -1388,11 +1257,9 @@ ConsoleMethodWithDocs(SceneWindow, getMousePosition, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Returns World coordinate of Window coordinate.
-    @param x,y The coordinates in window coordinates you wish to convert to world coordinates. Accepts either (x,y) or (\x y\
-    @return Returns the desired world coordinates as a string formatted as \x y\
-*/
-ConsoleMethodWithDocs(SceneWindow, getWorldPoint, ConsoleString, 3, 4, (X / Y))
+ConsoleMethod(SceneWindow, getWorldPoint, const char*, 3, 4, "(X / Y) - Returns World coordinate of Window coordinate."
+              "@param x,y The coordinates in window coordinates you wish to convert to world coordinates. Accepts either (x,y) or (\"x y\")"
+              "@return Returns the desired world coordinates as a string formatted as \"x y\"")
 {
    // The new position.
    Vector2 srcPoint;
@@ -1426,11 +1293,9 @@ ConsoleMethodWithDocs(SceneWindow, getWorldPoint, ConsoleString, 3, 4, (X / Y))
 
 //-----------------------------------------------------------------------------
 
-/*! Returns Window coordinate of World coordinate.
-    @param x,y The coordinates in world coordinates you wish to convert to window coordinates. Accepts either (x,y) or (\x y\
-    @return Returns the desired window coordinates as a string formatted as \x y\
-*/
-ConsoleMethodWithDocs(SceneWindow, getWindowPoint, ConsoleString, 3, 4, (X / Y))
+ConsoleMethod(SceneWindow, getWindowPoint, const char*, 3, 4, "(X / Y) - Returns Window coordinate of World coordinate."
+              "@param x,y The coordinates in world coordinates you wish to convert to window coordinates. Accepts either (x,y) or (\"x y\")"
+              "@return Returns the desired window coordinates as a string formatted as \"x y\"")
 {
    // The new position.
    Vector2 srcPoint;
@@ -1464,11 +1329,9 @@ ConsoleMethodWithDocs(SceneWindow, getWindowPoint, ConsoleString, 3, 4, (X / Y))
 
 //-----------------------------------------------------------------------------
 
-/*! Returns Canvas coordinate of Window coordinate.
-    @param x,y The coordinates in world coordinates you wish to convert to window coordinates. Accepts either (x,y) or (\x y\
-    @return Returns the desired canvas coordinates as a string formatted as \x y\
-*/
-ConsoleMethodWithDocs(SceneWindow, getCanvasPoint, ConsoleString, 3, 4, (X / Y))
+ConsoleMethod(SceneWindow, getCanvasPoint, const char*, 3, 4, "(X / Y) - Returns Canvas coordinate of Window coordinate."
+               "@param x,y The coordinates in world coordinates you wish to convert to window coordinates. Accepts either (x,y) or (\"x y\")"
+              "@return Returns the desired canvas coordinates as a string formatted as \"x y\"")
 {
    // The new position.
    Point2I srcPoint;
@@ -1507,11 +1370,9 @@ ConsoleMethodWithDocs(SceneWindow, getCanvasPoint, ConsoleString, 3, 4, (X / Y))
 
 //-----------------------------------------------------------------------------
 
-/*! Checks if World coordinate is inside Window.
-    @param x,y The coordinates in world coordinates you wish to check. Accepts either (x,y) or (\x y\
-    @return Returns true if the coordinates are within the window, and false otherwise.
-*/
-ConsoleMethodWithDocs(SceneWindow, getIsWindowPoint, ConsoleBool, 3, 4, (X / Y))
+ConsoleMethod(SceneWindow, getIsWindowPoint, bool, 3, 4, "(X / Y) Checks if World coordinate is inside Window."
+               "@param x,y The coordinates in world coordinates you wish to check. Accepts either (x,y) or (\"x y\")"
+              "@return Returns true if the coordinates are within the window, and false otherwise.")
 {
    // The new position.
    Vector2 srcPoint;
@@ -1542,5 +1403,3 @@ ConsoleMethodWithDocs(SceneWindow, getIsWindowPoint, ConsoleBool, 3, 4, (X / Y))
     // Check if point is in window bounds.
     return object->mBounds.pointInRect( Point2I( S32(mFloor(dstPoint.x)+object->mBounds.point.x), S32(mFloor(dstPoint.y)+object->mBounds.point.y )) );
 }
-
-ConsoleMethodGroupEndWithDocs(SceneWindow)

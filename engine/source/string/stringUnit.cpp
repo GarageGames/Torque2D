@@ -24,8 +24,6 @@
 #include "string/stringUnit.h"
 #include "string/stringTable.h"
 
-#include "stringUnit_ScriptBinding.h"
-
 namespace StringUnit
 {
    static char _returnBuffer[4096];

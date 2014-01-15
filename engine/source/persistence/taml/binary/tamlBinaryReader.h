@@ -33,8 +33,6 @@
 
 //-----------------------------------------------------------------------------
 
-/// @ingroup tamlGroup
-/// @see tamlGroup
 class TamlBinaryReader
 {
 public:

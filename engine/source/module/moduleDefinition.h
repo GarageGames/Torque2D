@@ -28,7 +28,7 @@
 #endif
 
 #ifndef _SIMSET_H_
-#include "sim/simSet.h"
+#include "sim/simSet.h""
 #endif
 
 #ifndef _SIMBASE_H_
@@ -49,8 +49,6 @@ class ModuleManager;
 
 //-----------------------------------------------------------------------------
 
-/// @ingroup moduleGroup
-/// @see moduleGroup
 class ModuleDefinition : public SimSet
 {
     friend class ModuleManager;

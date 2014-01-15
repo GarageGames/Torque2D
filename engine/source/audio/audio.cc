@@ -102,7 +102,6 @@ struct LoopingImage
 static F32 mMasterVolume = 1.f;           // traped from AL_LISTENER gain (miles has difficulties with 3d sources)
 
 static ALuint                 mSource[MAX_AUDIOSOURCES];                   // ALSources
-static ALint                  mResumePosition[MAX_AUDIOSOURCES];           // Ensures Pause resumes from the correct position
 static AUDIOHANDLE            mHandle[MAX_AUDIOSOURCES];                   // unique handles
 static Resource<AudioBuffer>  mBuffer[MAX_AUDIOSOURCES];                   // each of the playing buffers (needed for AudioThread)
 static F32                    mScore[MAX_AUDIOSOURCES];                    // for figuring out which sources to cull/uncull
@@ -581,8 +580,6 @@ static void alxSourcePlay(AudioStreamSource *streamSource)
    ALuint source = streamSource->mSource;
    Audio::Description& desc = streamSource->mDescription;
 
-   streamSource->initStream();
-
    alSourcef(source, AL_GAIN, Audio::linearToDB(desc.mVolume * mAudioChannelVolumes[desc.mVolumeChannel] * mMasterVolume));
 //   alSourcei(source, AL_LOOPING, AL_FALSE);
    alSourcef(source, AL_PITCH, 1.f);
@@ -968,17 +965,30 @@ bool alxPause( AUDIOHANDLE handle )
 
     alSourcePause( mSource[index] );
 
-    ALint state;
-	alGetSourcei(mSource[index], AL_SOURCE_STATE, &state);
-
-	if( state==AL_PAUSED)
-	{
-		mResumePosition[index] = -1;
-		return true;
-	}
-
-	alGetSourcei(mSource[index], AL_SAMPLE_OFFSET, &mResumePosition[index]);
-	return alxCheckError("alxPause()","alGetSourcei");
+    ALenum error = 0;
+    if ( (error = alGetError()) == AL_NO_ERROR)
+        return true;
+    switch (error)
+    {
+        case AL_INVALID_NAME:
+            Con::errorf("alxPause - OpenAL AL_INVALID_NAME error code returned");
+            break;
+        case AL_INVALID_ENUM:
+            Con::errorf("alxPause - OpenAL AL_INVALID_ENUM error code returned");
+            break;
+        case AL_INVALID_VALUE:
+            Con::errorf("alxPause - OpenAL AL_INVALID_VALUE error code returned");
+            break;
+        case AL_INVALID_OPERATION:
+            Con::errorf("alxPause - OpenAL AL_INVALID_OPERATION error code returned");
+            break;
+        case AL_OUT_OF_MEMORY:
+            Con::errorf("alxPause - OpenAL AL_OUT_OF_MEMORY error code returned");
+            break;
+        default:
+            Con::errorf("alxPause - OpenAL has encountered a problem and won't tell us what it is.");
+    };
+    return false;
 }
 
 void alxUnPause( AUDIOHANDLE handle )
@@ -986,18 +996,7 @@ void alxUnPause( AUDIOHANDLE handle )
     if(handle == NULL_AUDIOHANDLE)
         return;
     
-	U32 index = alxFindIndex(handle);
-	ALuint source = mSource[index];
-
-	if( mResumePosition[index] != -1 )
-	{
-		alSourcei( source, AL_SAMPLE_OFFSET, mResumePosition[index]);
-		mResumePosition[index] = -1;
-	}
-	alxCheckError("alxUnPause()","alSourcei");
-
-	alSourcePlay( source );
-	alxCheckError("alxUnPause()","alSourcePlay");
+    alxPlay( handle );
 }
 //--------------------------------------------------------------------------
 void alxStop(AUDIOHANDLE handle)
@@ -1921,7 +1920,7 @@ void alxCloseHandles()
 
       ALint state = 0;
       alGetSourcei(mSource[i], AL_SOURCE_STATE, &state);
-      if(state == AL_PLAYING || state == AL_PAUSED)
+      if(state == AL_PLAYING)
          continue;
 
       if(!(mHandle[i] & AUDIOHANDLE_INACTIVE_BIT))
@@ -1979,11 +1978,6 @@ void alxUpdateScores(bool sourcesOnly)
          mScore[i] = 0.f;
          continue;
       }
-
-	  ALint state = 0;
-	  alGetSourcei(mSource[i], AL_SOURCE_STATE, &state);
-	  if(state==AL_PAUSED)
-		  continue;
 
       // grab the volume.. (not attenuated by master for score)
       F32 volume = mSourceVolume[i] * mAudioChannelVolumes[mType[i]];
@@ -2165,36 +2159,6 @@ ALuint alxGetWaveLen(ALuint buffer)
    return(len);
 }
 
-bool alxCheckError(const char* sourceFuncName, const char* alFuncName)
-{
-  ALenum errorVal = alGetError();
-  switch (errorVal)
-  {
-    case AL_NO_ERROR:
-      break;
-    case AL_INVALID_NAME:
-      Con::errorf("%s - %s OpenAL AL_INVALID_NAME error code returned", sourceFuncName, alFuncName);
-      break;
-    case AL_INVALID_ENUM:
-      Con::errorf("%s - %s OpenAL AL_INVALID_ENUM error code returned", sourceFuncName, alFuncName);
-      break;
-    case AL_INVALID_VALUE:
-      Con::errorf("%s - %s OpenAL AL_INVALID_VALUE error code returned", sourceFuncName, alFuncName);
-      break;
-    case AL_INVALID_OPERATION:
-      Con::errorf("%s - %s OpenAL AL_INVALID_OPERATION error code returned", sourceFuncName, alFuncName);
-      break;
-    case AL_OUT_OF_MEMORY:
-      Con::errorf("%s - %s OpenAL AL_OUT_OF_MEMORY error code returned", sourceFuncName, alFuncName);
-      break;
-    default:
-      Con::errorf("%s - %s OpenAL has encountered a problem and won't tell us what it is. %d", errorVal, sourceFuncName, alFuncName);
-  };
-  if (errorVal == AL_NO_ERROR)
-    return true;
-  else
-    return false;
-}
 
 //--------------------------------------------------------------------------
 // Environment:
@@ -2474,8 +2438,6 @@ bool OpenALInit()
 
 #elif defined(TORQUE_OS_OSX)
    mDevice = alcOpenDevice((const ALCchar*)NULL);
-#elif defined(TORQUE_OS_ANDROID)
-   mDevice = alcOpenDevice("openal-soft");
 #else
    mDevice = (ALCvoid *)alcOpenDevice((const ALCchar*)NULL);
 #endif
@@ -2500,8 +2462,6 @@ bool OpenALInit()
       0
    };
    mContext = alcCreateContext(mDevice,attrlist);
-#elif TORQUE_OS_ANDROID
-   mContext = alcCreateContext((ALCdevice*)mDevice, NULL);
 #else
    mContext = alcCreateContext(mDevice,NULL);
 #endif
@@ -2509,11 +2469,8 @@ bool OpenALInit()
       return false;
 
    // Make this context the active context
-#ifdef TORQUE_OS_ANDROID
-   alcMakeContextCurrent((ALCcontext*)mContext);
-#else
    alcMakeContextCurrent(mContext);
-#endif
+
    ALenum err = alGetError();
    mRequestSources = MAX_AUDIOSOURCES;	
    while(true)
@@ -2574,42 +2531,20 @@ void OpenALShutdown()
       delete mLoopingFreeList.last();
       mLoopingFreeList.pop_back();
    }
-   
-   //clear error buffer
-   alGetError();
 
    for(U32 i = 0; i < MAX_AUDIOSOURCES; i++)
-   {
-	   ALint tempbuff = 0;
-	   alGetSourcei( mSource[i], AL_BUFFER, &tempbuff);
-
-	   if (alIsBuffer(tempbuff) && tempbuff !=0)
-	   {
-		   ALuint buffer = tempbuff;
-		   alSourceUnqueueBuffers( mSource[i], 1, &buffer);
-		   alxCheckError("OpenALShutdown()","alSourceUnqueueBuffers");
-	   }
-   }
+      mBuffer[i] = 0;
 
    alDeleteSources(mNumSources, mSource);
 
    if (mContext)
    {
-#ifdef TORQUE_OS_ANDROID
-	   alcDestroyContext((ALCcontext*)mContext);
-#else
-	   alcDestroyContext(mContext);
-#endif
-
+      alcDestroyContext(mContext);
       mContext = NULL;
    }
    if (mDevice)
    {
-#ifdef TORQUE_OS_ANDROID
-	   alcCloseDevice((ALCdevice*)mDevice);
-#else
-	   alcCloseDevice(mDevice);
-#endif
+      alcCloseDevice(mDevice);
       mDevice = NULL;
    }
 

@@ -39,8 +39,6 @@
 #include "memory/safeDelete.h"
 #include "io/bitStream.h"
 
-#include "message_ScriptBinding.h"
-
 //////////////////////////////////////////////////////////////////////////
 
 namespace Sim
@@ -113,4 +111,28 @@ void Message::freeReference()
          delete this;
       return;
    }
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Console Methods
+//////////////////////////////////////////////////////////////////////////
+
+ConsoleMethod(Message, getType, const char *, 2, 2, "() Get message type (script class name or C++ class name if no script defined class)"
+			  "@return The type as a string")
+{
+   return object->getType();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+ConsoleMethod(Message, addReference, void, 2, 2, "() Increment the reference count for this message\n"
+			  "@return No Return Value.")
+{
+   object->addReference();
+}
+
+ConsoleMethod(Message, freeReference, void, 2, 2, "() Decrement the reference count for this message\n"
+			  "@return No Return Value.")
+{
+   object->freeReference();
 }

@@ -23,8 +23,3 @@
 #ifndef _PLATFORM_H_
 #include "platform/platform.h"
 #endif
-
-#include "console/console.h"
-
-#include "platform_ScriptBinding.h"
-#include "platformString_ScriptBinding.h"

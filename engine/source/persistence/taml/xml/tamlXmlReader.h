@@ -37,8 +37,6 @@
 
 //-----------------------------------------------------------------------------
 
-/// @ingroup tamlGroup
-/// @see tamlGroup
 class TamlXmlReader
 {
 public:

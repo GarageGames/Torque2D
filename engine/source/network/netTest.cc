@@ -87,19 +87,15 @@ public:
 
 IMPLEMENT_CO_NETOBJECT_V1(SimpleNetObject);
 
-/*! Sets the object message to the provide string
-	@param msg The string you wish as the message
-	@return No return value
-*/
-ConsoleMethodWithDocs( SimpleNetObject, setMessage, void, 3, 3, (string msg)) 
+ConsoleMethod( SimpleNetObject, setMessage, void, 3, 3, "(string msg) Sets the object message to the provide string\n"
+              "@param msg The string you wish as the message\n"
+              "@return No return value")
 {
    object->setMessage(argv[2]);
 }
 
-/*! Send a SimpleNetObject message to the specified connection
-*/
-
-ConsoleFunctionWithDocs( msg, void, 3, 3, (NetConnection id, string message))
+ConsoleFunction( msg, void, 3, 3, "(NetConnection id, string message)"
+                "Send a SimpleNetObject message to the specified connection.")
 {
    NetConnection *con = (NetConnection *) Sim::findObject(argv[1]);
    if(con)

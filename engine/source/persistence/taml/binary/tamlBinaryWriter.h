@@ -29,8 +29,6 @@
 
 //-----------------------------------------------------------------------------
 
-/// @ingroup tamlGroup
-/// @see tamlGroup
 class TamlBinaryWriter
 {
 public:

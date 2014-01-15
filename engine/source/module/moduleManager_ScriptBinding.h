@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,13 +20,9 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethodGroupBeginWithDocs(ModuleManager, SimObject)
-
-/*! Set the module extension used to scan for modules.  The default is 'module'.
-    @param moduleExtension The module extension used to scan for modules.  Do not use a period character.
-    @return Whether setting the module extension was successful or not.
-*/
-ConsoleMethodWithDocs(ModuleManager, setModuleExtension, ConsoleBool, 3, 3, (moduleExtension))
+ConsoleMethod(ModuleManager, setModuleExtension, bool, 3, 3,    "(moduleExtension) - Set the module extension used to scan for modules.  The default is 'module'.\n"
+                                                                "@param moduleExtension The module extension used to scan for modules.  Do not use a period character.\n"
+                                                                "@return Whether setting the module extension was successful or not.")
 {
     // Set module extension.
     return object->setModuleExtension( argv[2] );
@@ -34,12 +30,10 @@ ConsoleMethodWithDocs(ModuleManager, setModuleExtension, ConsoleBool, 3, 3, (mod
 
 //-----------------------------------------------------------------------------
 
-/*! Scans for modules which are sub-directories of the specified path.
-    @param moduleRootPath The root directory to scan for sub-directories containing modules.
-    @param rootOnly [Optional] - Specifies whether to only scan the root path or not when searching for modules.
-    @return Whether the scan was successful or not.  A successful scan can still find zero modules.
-*/
-ConsoleMethodWithDocs(ModuleManager, scanModules, ConsoleBool, 3, 4, (moduleRootPath, [rootOnly = false]))
+ConsoleMethod(ModuleManager, scanModules, bool, 3, 4,   "(moduleRootPath, [rootOnly = false]) - Scans for modules which are sub-directories of the specified path.\n"
+                                                        "@param moduleRootPath The root directory to scan for sub-directories containing modules.\n"
+                                                        "@param rootOnly [Optional] - Specifies whether to only scan the root path or not when searching for modules.\n"
+                                                        "@return Whether the scan was successful or not.  A successful scan can still find zero modules.")
 {
     // Fetch root path.
     const char* pRootPath = argv[2];
@@ -60,12 +54,10 @@ ConsoleMethodWithDocs(ModuleManager, scanModules, ConsoleBool, 3, 4, (moduleRoot
 
 //-----------------------------------------------------------------------------
 
-/*! Unregister the specified module.
-    @param moduleId The module Id to unregister.
-    @param versionId The version Id to unregister.
-    @return Whether the module was unregister or not.
-*/
-ConsoleMethodWithDocs(ModuleManager, unregisterModule, ConsoleBool, 4, 4, (moduleId, versionId))
+ConsoleMethod(ModuleManager, unregisterModule, bool, 4, 4,  "(moduleId, versionId) - Unregister the specified module.\n"
+                                                            "@param moduleId The module Id to unregister.\n"
+                                                            "@param versionId The version Id to unregister.\n"
+                                                            "@return Whether the module was unregister or not.")
 {
     // Fetch the module Id.
     const char* pModuleId = argv[2];
@@ -79,11 +71,9 @@ ConsoleMethodWithDocs(ModuleManager, unregisterModule, ConsoleBool, 4, 4, (modul
 
 //-----------------------------------------------------------------------------
 
-/*! Load the specified module group.
-    @param moduleGroup The module group to load.
-    @return Whether the module group was loaded or not.
-*/
-ConsoleMethodWithDocs(ModuleManager, loadGroup, ConsoleBool, 3, 3, (moduleGroup))
+ConsoleMethod(ModuleManager, loadGroup, bool, 3, 3,     "(moduleGroup) - Load the specified module group.\n"
+                                                        "@param moduleGroup The module group to load.\n"
+                                                        "@return Whether the module group was loaded or not.")
 {
     // Load module group.
     return object->loadModuleGroup( argv[2] );
@@ -91,11 +81,9 @@ ConsoleMethodWithDocs(ModuleManager, loadGroup, ConsoleBool, 3, 3, (moduleGroup)
 
 //-----------------------------------------------------------------------------
 
-/*! Unload the specified module group.
-    @param moduleGroup The module group to unload.
-    @return Whether the module group was unloaded or not.
-*/
-ConsoleMethodWithDocs(ModuleManager, unloadGroup, ConsoleBool, 3, 3, (moduleGroup))
+ConsoleMethod(ModuleManager, unloadGroup, bool, 3, 3,   "(moduleGroup) - Unload the specified module group.\n"
+                                                        "@param moduleGroup The module group to unload.\n"
+                                                        "@return Whether the module group was unloaded or not.")
 {
     // Unload module group.
     return object->unloadModuleGroup( argv[2] );
@@ -103,12 +91,10 @@ ConsoleMethodWithDocs(ModuleManager, unloadGroup, ConsoleBool, 3, 3, (moduleGrou
 
 //-----------------------------------------------------------------------------
 
-/*! Load the specified module explicitly.
-    @param moduleId The module Id to load.
-    @param versionId The version Id to load.  Optional:  Will load the latest version.
-    @return Whether the module Id was loaded or not.
-*/
-ConsoleMethodWithDocs(ModuleManager, loadExplicit, ConsoleBool, 3, 4, (moduleId, [versionId]))
+ConsoleMethod(ModuleManager, loadExplicit, bool, 3, 4,  "(moduleId, [versionId]) - Load the specified module explicitly.\n"
+                                                        "@param moduleId The module Id to load.\n"
+                                                        "@param versionId The version Id to load.  Optional:  Will load the latest version.\n"
+                                                        "@return Whether the module Id was loaded or not.")
 {
     // Fetch the module Id.
     const char* pModuleId = argv[2];
@@ -126,11 +112,9 @@ ConsoleMethodWithDocs(ModuleManager, loadExplicit, ConsoleBool, 3, 4, (moduleId,
 
 //-----------------------------------------------------------------------------
 
-/*! Unload the specified module explicitly.
-    @param moduleId The module Id to unload.
-    @return Whether the module Id was unloaded or not.
-*/
-ConsoleMethodWithDocs(ModuleManager, unloadExplicit, ConsoleBool, 3, 3, (moduleId))
+ConsoleMethod(ModuleManager, unloadExplicit, bool, 3, 3,    "(moduleId) - Unload the specified module explicitly.\n"
+                                                            "@param moduleId The module Id to unload.\n"
+                                                            "@return Whether the module Id was unloaded or not.")
 {
     // Unload module Id explicitly.
     return object->unloadModuleExplicit( argv[2] );
@@ -138,12 +122,10 @@ ConsoleMethodWithDocs(ModuleManager, unloadExplicit, ConsoleBool, 3, 3, (moduleI
 
 //-----------------------------------------------------------------------------
 
-/*! Find the specific module Id optionally at the specified version Id.
-    @param moduleId The module Id to find.
-    @param versionId The version Id to find.
-    @return The module definition object or NULL if not found.
-*/
-ConsoleMethodWithDocs(ModuleManager, findModule, ConsoleString, 4, 4, (moduleId, versionId))
+ConsoleMethod(ModuleManager, findModule, const char*, 4, 4,     "(moduleId, versionId) - Find the specific module Id optionally at the specified version Id.\n"
+                                                                "@param moduleId The module Id to find.\n"
+                                                                "@param versionId The version Id to find.\n"
+                                                                "@return The module definition object or NULL if not found.")
 {
     // Fetch module Id.
     const char* pModuleId = argv[2];
@@ -163,11 +145,9 @@ ConsoleMethodWithDocs(ModuleManager, findModule, ConsoleString, 4, 4, (moduleId,
 
 //-----------------------------------------------------------------------------
 
-/*! Find all the modules registered with the specified loaded state.
-    @param loadedOnly Whether to return only modules that are loaded or not.
-    @return A list of space-separated module definition object Ids.
-*/
-ConsoleMethodWithDocs(ModuleManager, findModules, ConsoleString, 3, 3, (loadedOnly?))
+ConsoleMethod(ModuleManager, findModules, const char*, 3, 3,    "(loadedOnly?) - Find all the modules registered with the specified loaded state.\n"
+                                                                "@param loadedOnly Whether to return only modules that are loaded or not.\n"
+                                                                "@return A list of space-separated module definition object Ids.")
 {
     // Fetch loaded only.
     const bool loadedOnly = dAtob(argv[2]);
@@ -215,12 +195,10 @@ ConsoleMethodWithDocs(ModuleManager, findModules, ConsoleString, 3, 3, (loadedOn
 
 //-----------------------------------------------------------------------------
 
-/*! Find the modules registered with the specified module type.
-    @param moduleType The module type to search for.
-    @param loadedOnly Whether to return only modules that are loaded or not.
-    @return A list of space-separated module definition object Ids.
-*/
-ConsoleMethodWithDocs(ModuleManager, findModuleTypes, ConsoleString, 4, 4, (moduleType, loadedOnly?))
+ConsoleMethod(ModuleManager, findModuleTypes, const char*, 4, 4,    "(moduleType, loadedOnly?) - Find the modules registered with the specified module type.\n"
+                                                                    "@param moduleType The module type to search for.\n"
+                                                                    "@param loadedOnly Whether to return only modules that are loaded or not.\n"
+                                                                    "@return A list of space-separated module definition object Ids.")
 {
     // Fetch module type.
     const char* pModuleType = argv[2];
@@ -271,14 +249,12 @@ ConsoleMethodWithDocs(ModuleManager, findModuleTypes, ConsoleString, 4, 4, (modu
 
 //-----------------------------------------------------------------------------
 
-/*! Copy the module to a new location with a new module Id.
-    @param sourceModuleDefinition The module definition to copy.
-    @param targetModuleId The module Id to rename the copied module to including all references to the source module Id.  It is valid to specifiy the source module Id to produce an identical copy.
-    @param targetPath The target path to copy the module to.  Addition folders will be created depending on whether 'useVersionPathing' is used or not.
-    @param useVersionPathing Whether to add a '/targetModuleId/versionId' folder to the target path or not.  This allows copying multiple versions of the same module Id.
-    @return The new module definition file if copy was successful or NULL if not.
-*/
-ConsoleMethodWithDocs(ModuleManager, copyModule, ConsoleString, 6, 6, (sourceModuleDefinition, targetModuleId, targetPath, useVersionPathing?))
+ConsoleMethod(ModuleManager, copyModule, const char*, 6, 6, "(sourceModuleDefinition, targetModuleId, targetPath, useVersionPathing?) - Copy the module to a new location with a new module Id.\n"
+                                                            "@param sourceModuleDefinition The module definition to copy.\n"
+                                                            "@param targetModuleId The module Id to rename the copied module to including all references to the source module Id.  It is valid to specifiy the source module Id to produce an identical copy.\n"
+                                                            "@param targetPath The target path to copy the module to.  Addition folders will be created depending on whether 'useVersionPathing' is used or not.\n"
+                                                            "@param useVersionPathing Whether to add a '/targetModuleId/versionId' folder to the target path or not.  This allows copying multiple versions of the same module Id.\n"
+                                                            "@return The new module definition file if copy was successful or NULL if not.")
 {
     // Find the source module definition.
     ModuleDefinition* pSourceModuleDefinition = dynamic_cast<ModuleDefinition*>( Sim::findObject( argv[2] ) );
@@ -306,12 +282,10 @@ ConsoleMethodWithDocs(ModuleManager, copyModule, ConsoleString, 6, 6, (sourceMod
 
 //-----------------------------------------------------------------------------
 
-/*! Synchronize the module dependencies of a module definition to a target dependency folder.
-    @param rootModuleDefinition The module definition used to determine dependencies.
-    @param targetDependencyPath The target dependency folder to copy dependencies to.
-    @return Whether the module dependencies were synchronized correctly or not.
-*/
-ConsoleMethodWithDocs(ModuleManager, synchronizeDependencies, ConsoleBool, 4, 4, (rootModuleDefinition, targetDependencyPath))
+ConsoleMethod(ModuleManager, synchronizeDependencies, bool, 4, 4,   "(rootModuleDefinition, targetDependencyPath) - Synchronize the module dependencies of a module definition to a target dependency folder.\n"
+                                                                    "@param rootModuleDefinition The module definition used to determine dependencies.\n"
+                                                                    "@param targetDependencyPath The target dependency folder to copy dependencies to.\n"
+                                                                    "@return Whether the module dependencies were synchronized correctly or not.")
 {
     // Find the root module definition.
     ModuleDefinition* pRootModuleDefinition = dynamic_cast<ModuleDefinition*>( Sim::findObject( argv[2] ) );
@@ -333,10 +307,8 @@ ConsoleMethodWithDocs(ModuleManager, synchronizeDependencies, ConsoleBool, 4, 4,
 
 //-----------------------------------------------------------------------------
 
-/*! Checks whether a module merge definition file is available or not.
-    @return Whether a module merge definition file is available or not.
-*/
-ConsoleMethodWithDocs(ModuleManager, isModuleMergeAvailable, ConsoleBool, 2, 2, ())
+ConsoleMethod(ModuleManager, isModuleMergeAvailable, bool, 2, 2,   "() - Checks whether a module merge definition file is available or not.\n"
+                                                                    "@return Whether a module merge definition file is available or not.")
 {
     // Check if module merge is available or not.
     return object->isModuleMergeAvailable();
@@ -344,11 +316,9 @@ ConsoleMethodWithDocs(ModuleManager, isModuleMergeAvailable, ConsoleBool, 2, 2, 
 
 //-----------------------------------------------------------------------------
 
-/*! Checks whether a module merge using the modules in the source path can current happen or not.
-    @param mergeSourcePath The path where modules to be merged are located.
-    @return Whether a module merge using the modules in the source path can current happen or not.
-*/
-ConsoleMethodWithDocs(ModuleManager, canMergeModules, ConsoleBool, 3, 3, (mergeSourcePath))
+ConsoleMethod(ModuleManager, canMergeModules, bool, 3, 3,           "(mergeSourcePath) - Checks whether a module merge using the modules in the source path can current happen or not.\n"
+                                                                    "@param mergeSourcePath The path where modules to be merged are located.\n"
+                                                                    "@return Whether a module merge using the modules in the source path can current happen or not.")
 {
     // Check whether the merge modules can current happen or not.
     return object->canMergeModules( argv[2] );
@@ -356,13 +326,11 @@ ConsoleMethodWithDocs(ModuleManager, canMergeModules, ConsoleBool, 3, 3, (mergeS
 
 //-----------------------------------------------------------------------------
 
-/*! Performs a module merge into the selected target path.
-    @param mergeTargetPath The path where modules will be merged into.
-    @param removeMergeDefinition Whether to remove any merge definition found or not if merge is successful.
-    @param registerNewModules Whether new (not replaced or updated) modules should be registered or not.
-    @return Whether the module merge was successful or not.  Failure here could result in a corrupt module state.  Reinstall is recommended or at least advised to the user is recommended.
-*/
-ConsoleMethodWithDocs(ModuleManager, mergeModules, ConsoleBool, 5, 5, (mergeTargetPath, removeMergeDefinition, registerNewModules))
+ConsoleMethod(ModuleManager, mergeModules, bool, 5, 5,              "(mergeTargetPath, removeMergeDefinition, registerNewModules) - Performs a module merge into the selected target path.\n"
+                                                                    "@param mergeTargetPath The path where modules will be merged into.\n"
+                                                                    "@param removeMergeDefinition Whether to remove any merge definition found or not if merge is successful.\n"
+                                                                    "@param registerNewModules Whether new (not replaced or updated) modules should be registered or not.\n"
+                                                                    "@return Whether the module merge was successful or not.  Failure here could result in a corrupt module state.  Reinstall is recommended or at least advised to the user is recommended.")
 {
     // Fetch merge target path.
     const char* pMergeTargetPath = argv[2];
@@ -379,11 +347,9 @@ ConsoleMethodWithDocs(ModuleManager, mergeModules, ConsoleBool, 5, 5, (mergeTarg
 
 //-----------------------------------------------------------------------------
 
-/*! Registers the specified object as a listener for module notifications.
-    @param listenerObject The object to start receiving module notifications.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ModuleManager, addListener, ConsoleVoid, 3, 3, (listenerObject))
+ConsoleMethod(ModuleManager, addListener, void, 3, 3,      "(listenerObject) - Registers the specified object as a listener for module notifications.\n"
+                                                                "@param listenerObject The object to start receiving module notifications.\n"
+                                                                "@return No return value.")
 {
     // Find object.
     SimObject* pListener = Sim::findObject( argv[2] );
@@ -401,11 +367,9 @@ ConsoleMethodWithDocs(ModuleManager, addListener, ConsoleVoid, 3, 3, (listenerOb
 
 //-----------------------------------------------------------------------------
 
-/*! Unregisters the specified object as a listener for module notifications.
-    @param listenerObject The object to stop receiving module notifications.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ModuleManager, removeListener, ConsoleVoid, 3, 3, (listenerObject))
+ConsoleMethod(ModuleManager, removeListener, void, 3, 3,   "(listenerObject) - Unregisters the specified object as a listener for module notifications.\n"
+                                                                "@param listenerObject The object to stop receiving module notifications.\n"
+                                                                "@return No return value.")
 {
     // Find object.
     SimObject* pListener = Sim::findObject( argv[2] );
@@ -421,4 +385,3 @@ ConsoleMethodWithDocs(ModuleManager, removeListener, ConsoleVoid, 3, 3, (listene
     object->removeListener( pListener );
 }
 
-ConsoleMethodGroupEndWithDocs(ModuleManager)

@@ -33,9 +33,6 @@
 #include "debug/profiler.h"
 #include "string/unicode.h"
 
-#include "dglMac_Scriptbinding.h"
-#include "dgl_ScriptBinding.h"
-
 namespace {
 
 ColorI sg_bitmapModulation(255, 255, 255, 255);
@@ -175,7 +172,7 @@ void dglDrawBitmapStretchSR(TextureObject* texture,
              sg_bitmapModulation.blue,
              sg_bitmapModulation.alpha);
 
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#ifdef TORQUE_OS_IOS
 
     GLfloat verts[] = {
         (GLfloat)scrPoints[0].x, (GLfloat)scrPoints[0].y,
@@ -348,7 +345,7 @@ U32 dglDrawTextN(GFont*          font,
 
 //-----------------------------------------------------------------------------
 
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#ifdef TORQUE_OS_IOS
 U32 dglDrawTextN(GFont*          font,
                  const Point2I&  ptDraw,
                  const UTF16*    in_string,
@@ -780,7 +777,7 @@ void dglDrawLine(S32 x1, S32 y1, S32 x2, S32 y2, const ColorI &color)
    glDisable(GL_TEXTURE_2D);
 
    glColor4ub(color.red, color.green, color.blue, color.alpha);
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#ifdef TORQUE_OS_IOS
     GLfloat verts[] = {
         (GLfloat)(x1 + 0.5f), (GLfloat)(y1 + 0.5f),
         (GLfloat)(x2 + 0.5f), (GLfloat)(y2 + 0.5f),
@@ -814,7 +811,7 @@ void dglDrawRect(const Point2I &upperL, const Point2I &lowerR, const ColorI &col
    glLineWidth(lineWidth);
 
    glColor4ub(color.red, color.green, color.blue, color.alpha);
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#ifdef TORQUE_OS_IOS
     GLfloat verts[] = {
         (GLfloat)(upperL.x), (GLfloat)(upperL.y),
         (GLfloat)(lowerR.x), (GLfloat)(upperL.y),
@@ -853,7 +850,7 @@ void dglDrawRectFill(const Point2I &upperL, const Point2I &lowerR, const ColorI 
    glDisable(GL_TEXTURE_2D);
 
    glColor4ub(color.red, color.green, color.blue, color.alpha);
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#ifdef TORQUE_OS_IOS
     GLfloat vertices[] = {
         (GLfloat)upperL.x, (GLfloat)upperL.y,
         (GLfloat)upperL.x, (GLfloat)lowerR.y,
@@ -895,7 +892,7 @@ void dglDraw2DSquare( const Point2F &screenPoint, F32 width, F32 spinAngle )
       points[i] += offset;
    }
 
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#ifdef TORQUE_OS_IOS
     GLfloat verts[] = {
         0.0, 0.0,
         1.0, 0.0,
@@ -960,7 +957,7 @@ void dglDrawBillboard( const Point3F &position, F32 width, F32 spinAngle )
    }
 
 
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#ifdef TORQUE_OS_IOS
     GLfloat verts[] = {
         0.0, 1.0,
         0.0, 0.0,
@@ -1016,7 +1013,7 @@ void dglWireCube(const Point3F & extent, const Point3F & center)
 
    glDisable(GL_CULL_FACE);
 
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#ifdef TORQUE_OS_IOS
 //PUAP -Mat untested
    for (S32 i = 0; i < 6; i++)
    {
@@ -1071,7 +1068,7 @@ void dglSolidCube(const Point3F & extent, const Point3F & center)
       { 3, 2, 6, 7 }, { 7, 6, 4, 5 }, { 3, 7, 5, 1 }
    };
 
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#ifdef TORQUE_OS_IOS
 //PUAP -Mat untested
    for (S32 i = 0; i < 6; i++)
    {
@@ -1118,7 +1115,7 @@ void dglSetClipRect(const RectI &clipRect)
 
    U32 screenHeight = Platform::getWindowSize().y;
 
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#ifdef TORQUE_OS_IOS
    glOrthof(clipRect.point.x, clipRect.point.x + clipRect.extent.x,
            clipRect.extent.y, 0,
            0, 1);
@@ -1146,7 +1143,7 @@ const RectI& dglGetClipRect()
 
 bool dglPointToScreen( Point3F &point3D, Point3F &screenPoint )
 {
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#ifdef TORQUE_OS_IOS
    GLfloat       glMV[16];
    GLfloat       glPR[16];
    GLint          glVP[4];
@@ -1228,7 +1225,7 @@ bool dglIsInCanonicalState()
    ret &= glIsEnabled(GL_BLEND) == GL_FALSE;
    ret &= glIsEnabled(GL_CULL_FACE) == GL_FALSE;
    GLint temp;
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#ifdef TORQUE_OS_IOS
 // PUAP -Mat removed unsupported textureARB and Fog stuff
    if (dglDoesSupportARBMultitexture() == true) {
       //glActiveTextureARB(GL_TEXTURE1_ARB);
@@ -1300,7 +1297,7 @@ bool dglIsInCanonicalState()
 
 void dglSetCanonicalState()
 {
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#ifdef TORQUE_OS_IOS
 // PUAP -Mat removed unsupported textureARB and Fog stuff
    glDisable(GL_BLEND);
    glDisable(GL_CULL_FACE);
@@ -1365,7 +1362,7 @@ void dglGetTransformState(S32* mvDepth,
    glGetFloatv(GL_TEXTURE_MATRIX, t0Matrix);
    if (dglDoesSupportARBMultitexture())
    {
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#ifdef TORQUE_OS_IOS
 // PUAP -Mat removed unsupported textureARB stuff
       //glActiveTextureARB(GL_TEXTURE1_ARB);
       glGetIntegerv(GL_TEXTURE_STACK_DEPTH, (GLint*)t1Depth);
@@ -1411,7 +1408,7 @@ bool dglCheckState(const S32 mvDepth, const S32 pDepth,
    glGetFloatv(GL_TEXTURE_MATRIX, t0m);
    if (dglDoesSupportARBMultitexture())
    {
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#ifdef TORQUE_OS_IOS
 // PUAP -Mat removed unsupported textureARB and Fog stuff
       //glActiveTextureARB(GL_TEXTURE1_ARB);
       glGetIntegerv(GL_TEXTURE_STACK_DEPTH, &t1d);
@@ -1445,7 +1442,198 @@ bool dglCheckState(const S32 mvDepth, const S32 pDepth,
             (v.extent.y == vp[3])));
 }
 
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
+// Advanced hardware functionality.
+
+// now owns the global stuff for FSAA, rather than sceneGraph.
+
+// define the globals first.  don't bracket them, as it doesn't hurt to have
+// them defined always...
+
+S32 gFSAASamples = 1; ///< 1==no FSAA.
+
+#if defined(TORQUE_OS_OSX)
+// new FSAA simple-method handling
+
+ConsoleFunctionGroupBegin( MacFSAA, "Mac-specific FSAA control functions.");
+
+//------------------------------------------------------------------------------
+ConsoleFunction( setFSAA, void, 2, 2, "setFSAA(int);")
+{
+   gFSAASamples = dAtoi(argv[1]);
+   if (gFSAASamples<1)
+      gFSAASamples = 1;
+   else if (gFSAASamples>gGLState.maxFSAASamples)
+      gFSAASamples = gGLState.maxFSAASamples;
+   dglSetFSAASamples(gFSAASamples);
+}
+
+//------------------------------------------------------------------------------
+ConsoleFunction( increaseFSAA, void, 1, 1, "increaseFSAA()" )
+{
+   if (gFSAASamples<gGLState.maxFSAASamples)
+   {
+      gFSAASamples<<=1;
+      dglSetFSAASamples(gFSAASamples);
+   }
+}
+
+//------------------------------------------------------------------------------
+ConsoleFunction( decreaseFSAA, void, 1, 1, "decreaseFSAA()" )
+{
+   if (gFSAASamples>1)
+   {
+      gFSAASamples>>=1;
+      dglSetFSAASamples(gFSAASamples);
+   }
+}
+
+ConsoleFunctionGroupEnd( MacFSAA );
+
+#endif
+
+//------------------------------------------------------------------------------
+ConsoleFunction(png2jpg, S32, 2, 3, "( pngFilename [ , quality ] ) Use the png2jpg function to save a PNG file specified by pngFilename as a similarly named JPEG file with the optionally specified quality.\n"
+                                                                "@param pngFilename The path and file name of the PNG file to convert.\n"
+                                                                "@param quality An optional quality between 0 and 100. The default quality is 90.\n"
+                                                                "@return Returns -1 if the file could not be opened, 0 on other failures, and 1 if the conversion worked")
+{
+   extern U32 gJpegQuality;
+   const char * rgbname = NULL;
+   const char * alphaname = NULL;
+   const char * bmpname = argv[1];
+   if(argc == 3)
+      gJpegQuality = dAtoi(argv[2]);
+   else
+      gJpegQuality = 90;
+
+   Con::printf("Converting file: %s", argv[1]);
+
+   if (!rgbname)
+   {
+      char * buf = new char[dStrlen(bmpname)+32];
+      dStrcpy(buf,bmpname);
+      char * pos = dStrstr((const char*)buf,".png");
+      if (!pos)
+         pos = buf + dStrlen(buf);
+      dStrcpy(pos,".jpg");
+      rgbname = buf;
+   }
+   if (!alphaname)
+   {
+      char * buf = new char[dStrlen(bmpname)+32];
+      dStrcpy(buf,bmpname);
+      char * pos = dStrstr((const char*)buf,".png");
+      if (!pos)
+         pos = buf + dStrlen(buf);
+      dStrcpy(pos,".alpha.jpg");
+      alphaname = buf;
+   }
+   GBitmap bmp;
+   FileStream fs;
+   if (fs.open(bmpname, FileStream::Read) == false) {
+      Con::printf("Error: unable to open file: %s for reading\n", bmpname);
+      return -1;
+   }
+   if (bmp.readPNG(fs) == false) {
+      Con::printf("Error: unable to read %s as a .PNG\n", bmpname);
+      return -1;
+   }
+   fs.close();
+
+   if (bmp.getFormat() != GBitmap::RGB &&
+       bmp.getFormat() != GBitmap::RGBA) {
+      Con::printf("Error: %s is not a 24 or 32-bit .PNG\n", bmpname);
+      return false;
+   }
+
+   GBitmap * outRGB = NULL;
+   GBitmap * outAlpha = NULL;
+   GBitmap workRGB, workAlpha;
+   if (bmp.getFormat() == GBitmap::RGB)
+      outRGB = &bmp;
+   else
+   {
+      S32 w = bmp.getWidth();
+      S32 h = bmp.getHeight();
+      workRGB.allocateBitmap(w,h,false,GBitmap::RGB);
+      workAlpha.allocateBitmap(w,h,false,GBitmap::Alpha);
+
+      U8 * rgbBits = workRGB.getWritableBits();
+      U8 * alphaBits = workAlpha.getWritableBits();
+      U8 * bmpBits = bmp.getWritableBits();
+      for (S32 i=0; i<w; i++)
+      {
+         for (S32 j=0; j<h; j++)
+         {
+            rgbBits[i*3 + j*3*w + 0] = bmpBits[i*4 + j*4*w + 0];
+            rgbBits[i*3 + j*3*w + 1] = bmpBits[i*4 + j*4*w + 1];
+            rgbBits[i*3 + j*3*w + 2] = bmpBits[i*4 + j*4*w + 2];
+            alphaBits[i + j*w]       = bmpBits[i*4 + j*4*w + 3];
+         }
+      }
+      Con::printf("texture: width=%i, height=%i\n",w,h);
+      outRGB = &workRGB;
+      outAlpha = &workAlpha;
+   }
+
+   if (outRGB)
+   {
+      FileStream fws;
+      if (fws.open(rgbname, FileStream::Write) == false)
+      {
+         Con::printf("Error: unable to open file: %s for writing\n", rgbname);
+         return -1;
+      }
+
+      if (dStrstr(rgbname,".png"))
+      {
+         if (outRGB->writePNG(fws) == false)
+         {
+            fws.close();
+            Con::printf("Error: couldn't write RGB as a png\n");
+            return -1;
+         }
+      }
+      else if (outRGB->writeJPEG(fws) == false)
+      {
+         Con::printf("Error: couldn't write RGB as a jpg\n");
+         return -1;
+      }
+      fws.close();
+   }
+   if (outAlpha)
+   {
+      gJpegQuality = 60;
+      FileStream fws;
+      if (fws.open(alphaname, FileStream::Write) == false)
+      {
+         Con::printf("Error: unable to open file: %s for writing\n", alphaname);
+         return -1;
+      }
+
+      if (dStrstr(alphaname,".png"))
+      {
+         if (outAlpha->writePNG(fws) == false)
+         {
+            fws.close();
+            Con::printf("Error: couldn't write alpha as a png\n");
+            return -1;
+         }
+      }
+      else if (outAlpha->writeJPEG(fws) == false)
+      {
+         Con::printf("Error: couldn't write alpha as a jpg\n");
+         return -1;
+      }
+      fws.close();
+   }
+
+   return(0);
+}
+
+#ifdef TORQUE_OS_IOS
 GLfloat gVertexFloats[8];
 GLfloat gTextureVerts[8];
 #endif

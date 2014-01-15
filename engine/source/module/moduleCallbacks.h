@@ -29,8 +29,6 @@
 
 //-----------------------------------------------------------------------------
 
-/// @ingroup moduleGroup
-/// @see moduleGroup
 class ModuleCallbacks
 {
     friend class ModuleManager;

@@ -99,7 +99,7 @@ void dglSetFrustum(F64 left, F64 right, F64 bottom, F64 top, F64 nearPlane, F64 
    isOrtho = ortho;
    if (ortho)
    {
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#ifdef TORQUE_OS_IOS
       glOrthof(left, right, bottom, top, nearPlane, farPlane);
 #else
       glOrtho(left, right, bottom, top, nearPlane, farPlane);

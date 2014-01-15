@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,13 +20,9 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethodGroupBeginWithDocs(PickingSceneController, SimObject)
-
-/*! Sets the control group(s).
-    @param groups A list of groups that are affected by the controller.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(PickingSceneController, setControlGroups, ConsoleVoid, 3, 2 + MASK_BITCOUNT, (groups$))
+ConsoleMethod(PickingSceneController, setControlGroups, void, 3, 2 + MASK_BITCOUNT, "(groups$) - Sets the control group(s).\n"
+                                                                                    "@param groups A list of groups that are affected by the controller.\n"
+                                                                                    "@return No return value.")
 {
     // The mask.
     U32 mask = 0;
@@ -84,10 +80,8 @@ ConsoleMethodWithDocs(PickingSceneController, setControlGroups, ConsoleVoid, 3, 
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the control groups.
-    @return (controlGroups) A list of groups that are affected by the controller.
-*/
-ConsoleMethodWithDocs(PickingSceneController, getControlGroups, ConsoleString, 2, 2, ())
+ConsoleMethod(PickingSceneController, getControlGroups, const char*, 2, 2,  "() - Gets the control groups.\n"
+                                                                            "@return (controlGroups) A list of groups that are affected by the controller.")
 {
     U32 mask = object->getControlGroupMask();
 
@@ -110,11 +104,9 @@ ConsoleMethodWithDocs(PickingSceneController, getControlGroups, ConsoleString, 2
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the control layers(s).
-    @param layers A list of layers that are affected by the controller.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(PickingSceneController, setControlLayers, ConsoleVoid, 3, 2 + MASK_BITCOUNT, (layers$))
+ConsoleMethod(PickingSceneController, setControlLayers, void, 3, 2 + MASK_BITCOUNT, "(layers$) - Sets the control layers(s).\n"
+                                                                                    "@param layers A list of layers that are affected by the controller.\n"
+                                                                                    "@return No return value.")
 {
     // The mask.
     U32 mask = 0;
@@ -172,10 +164,8 @@ ConsoleMethodWithDocs(PickingSceneController, setControlLayers, ConsoleVoid, 3, 
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the control layers.
-    @return (controlLayers) A list of layers that are affected by the controller.
-*/
-ConsoleMethodWithDocs(PickingSceneController, getControlLayers, ConsoleString, 2, 2, ())
+ConsoleMethod(PickingSceneController, getControlLayers, const char*, 2, 2,  "() - Gets the control layers.\n"
+                                                                            "@return (controlLayers) A list of layers that are affected by the controller.")
 {
     U32 mask = object->getControlLayerMask();
 
@@ -195,5 +185,3 @@ ConsoleMethodWithDocs(PickingSceneController, getControlLayers, ConsoleString, 2
 
     return bits;
 }
-
-ConsoleMethodGroupEndWithDocs(PickingSceneController)

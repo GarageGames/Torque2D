@@ -25,7 +25,34 @@
 #include "string/unicode.h"
 #include "math/mMath.h"
 
-#include "stringBuffer_ScriptBinding.h"
+
+#if defined(TORQUE_DEBUG)
+   class StringBufferManager
+   {
+      public:
+         static StringBufferManager& getManager();
+         Vector<StringBuffer*> strings;
+         U64 request8;
+         U64 request16;
+         
+         void add(StringBuffer* s);
+         void remove(StringBuffer* s);
+         void updateStats();
+         void dumpStats();
+         void dumpAllStrings();
+   };
+
+   ConsoleFunction(sbmDumpStats, void, 1, 1, "")
+   {
+      StringBufferManager::getManager().dumpStats();
+   }
+
+   ConsoleFunction(sbmDumpStrings, void, 1, 1, "")
+   {
+      StringBufferManager::getManager().dumpAllStrings();
+   }
+#endif // TORQUE_DEBUG
+
 
 #if defined(TORQUE_DEBUG)
 #define SBMAddThisStringBuffer() \

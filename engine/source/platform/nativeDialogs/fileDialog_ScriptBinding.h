@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,14 +22,8 @@
 #include "platform/nativeDialogs/fileDialog.h"
 #include "console/console.h"
 
-ConsoleMethodGroupBeginWithDocs(FileDialog, SimObject)
-
-/*! Executes the dialog
-    @return Returns true on success and false otherwise
-*/
-ConsoleMethodWithDocs( FileDialog, Execute, ConsoleBool, 2, 2, ())
+ConsoleMethod( FileDialog, Execute, bool, 2, 2, "() Executes the dialog\n"
+			  "@return Returns true on success and false otherwise")
 {
    return object->Execute();
 }
-
-ConsoleMethodGroupEndWithDocs(FileDialog)

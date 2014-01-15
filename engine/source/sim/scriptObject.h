@@ -27,19 +27,11 @@
 #include "console/consoleInternal.h"
 #endif
 
-#ifndef _BEHAVIOR_COMPONENT_H_
-#include "component/behaviors/behaviorComponent.h"
-#endif
-
-#ifndef _BEHAVIORINSTANCE_H_
-#include "component/behaviors/behaviorInstance.h"
-#endif
-
 //-----------------------------------------------------------------------------
 
-class ScriptObject : public BehaviorComponent
+class ScriptObject : public SimObject
 {
-   typedef BehaviorComponent Parent;
+   typedef SimObject Parent;
 
 public:
    ScriptObject();

@@ -427,7 +427,7 @@ int dSprintf(char *buffer, dsize_t bufferSize, const char *format, ...)
 
 //-----------------------------------------------------------------------------
 
-int dVsprintf(char *buffer, dsize_t bufferSize, const char *format, va_list arglist)
+int dVsprintf(char *buffer, dsize_t bufferSize, const char *format, void *arglist)
 {
 	S32 len = vsprintf(buffer, format, (char*)arglist);
 

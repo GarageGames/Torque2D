@@ -22,8 +22,6 @@
 #include "console/consoleLogger.h"
 #include "console/consoleTypes.h"
 
-#include "consoleLogger_ScriptBinding.h"
-
 Vector<ConsoleLogger *> ConsoleLogger::mActiveLoggers;
 bool ConsoleLogger::smInitialized = false;
 
@@ -220,3 +218,19 @@ void ConsoleLogger::log( const char *consoleLine )
 }
 
 //-----------------------------------------------------------------------------
+
+ConsoleMethod( ConsoleLogger, attach, bool, 2, 2, "() Attaches this object to the console and begins logging\n"
+			  "@return Returns true on success, and false on failure.")
+{
+   ConsoleLogger *logger = static_cast<ConsoleLogger *>( object );
+   return logger->attach();
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod( ConsoleLogger, detach, bool, 2, 2, "() Detaches this object from the console and stops logging\n" 
+			  "@return Returns true on success, and false on failure.")
+{
+   ConsoleLogger *logger = static_cast<ConsoleLogger *>( object );
+   return logger->detach();
+}

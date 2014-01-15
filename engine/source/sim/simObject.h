@@ -449,6 +449,9 @@ public:
     /// @name Initialization
     /// @{
 
+    ///added this so that you can print the entire class hierarchy, including script objects, 
+    //from the console or C++.
+    virtual void			dumpClassHierarchy();
     ///
     SimObject( const U8 namespaceLinkMask = LinkSuperClassName | LinkClassName );
     virtual ~SimObject();
@@ -719,9 +722,6 @@ public:
     void setModStaticFields(bool sta) { if(sta) mFlags.set(ModStaticFields); else mFlags.clear(ModStaticFields); }
 
     /// @}
-
-	virtual void			dump();
-    virtual void			dumpClassHierarchy();
 
     static void initPersistFields();
     SimObject* clone( const bool copyDynamicFields );

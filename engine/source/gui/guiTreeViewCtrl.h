@@ -36,7 +36,7 @@ class GuiTreeViewCtrl : public GuiArrayCtrl
       typedef GuiArrayCtrl Parent;
 
    public:
-      /// @section GuiTreeViewCtrl_Intro Introduction
+      /// @section GuiControl_Intro Introduction
       /// @nosubgrouping
 
       ///

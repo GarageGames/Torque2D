@@ -30,8 +30,6 @@ class SimObject;
 
 //-----------------------------------------------------------------------------
 
-/// @ingroup tamlGroup
-/// @see tamlGroup
 class TamlCallbacks
 {
     friend class Taml;

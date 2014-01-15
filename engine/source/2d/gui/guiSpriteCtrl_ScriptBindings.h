@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,33 +20,25 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethodGroupBeginWithDocs(GuiSpriteCtrl, GuiControl)
-
-/*! Gets whether the control is in static or dynamic (animated)mode.
-    @return Returns whether the control is in static or dynamic (animated)mode.
-*/
-ConsoleMethodWithDocs( GuiSpriteCtrl, isStaticFrameProvider, ConsoleBool, 2, 2, ())
+ConsoleMethod( GuiSpriteCtrl, isStaticFrameProvider, bool, 2, 2, "() - Gets whether the control is in static or dynamic (animated)mode.\n"
+                                                        "@return Returns whether the control is in static or dynamic (animated)mode.")
 {
     return object->isStaticFrameProvider();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the image asset Id to use as the image.
-    @param imageAssetId The image asset Id to use as the image.
-    @return No return value.
-*/
-ConsoleMethodWithDocs( GuiSpriteCtrl, setImage, ConsoleVoid, 3, 3, (imageAssetId))
+ConsoleMethod( GuiSpriteCtrl, setImage, void, 3, 3, "(imageAssetId) Sets the image asset Id to use as the image.\n"
+                                                    "@param imageAssetId The image asset Id to use as the image.\n"
+                                                    "@return No return value.")
 {
    object->setImage( argv[2] );
 }
 
 //------------------------------------------------------------------------------
 
-/*! Gets current image asset Id.
-    @return (string imageAssetId) The image being displayed.
-*/
-ConsoleMethodWithDocs( GuiSpriteCtrl, getImage, ConsoleString, 2, 2, ())
+ConsoleMethod( GuiSpriteCtrl, getImage, const char*, 2, 2,  "() - Gets current image asset Id.\n"
+                                                            "@return (string imageAssetId) The image being displayed.")
 {
     // Are we in static mode?
     if ( !object->isStaticFrameProvider() )
@@ -62,21 +54,17 @@ ConsoleMethodWithDocs( GuiSpriteCtrl, getImage, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the image frame to use as the image.
-    @param imageFrame The image frame to use as the image.
-    @return No return value.
-*/
-ConsoleMethodWithDocs( GuiSpriteCtrl, setImageFrame, ConsoleVoid, 3, 3, (int imageFrame))
+ConsoleMethod( GuiSpriteCtrl, setImageFrame, void, 3, 3,    "(int imageFrame) Sets the image frame to use as the image.\n"
+                                                            "@param imageFrame The image frame to use as the image.\n"
+                                                            "@return No return value.")
 {
    object->setImageFrame( dAtoi(argv[2]) );
 }
 
 //------------------------------------------------------------------------------
 
-/*! Gets current image Frame.
-    @return (int frame) The frame currently being displayed.
-*/
-ConsoleMethodWithDocs( GuiSpriteCtrl, getImageFrame, ConsoleInt, 2, 2, ())
+ConsoleMethod( GuiSpriteCtrl, getImageFrame, S32, 2, 2, "() - Gets current image Frame.\n"
+                                                        "@return (int frame) The frame currently being displayed.")
 {
     // Are we in static mode?
     if ( !object->isStaticFrameProvider() )
@@ -92,22 +80,18 @@ ConsoleMethodWithDocs( GuiSpriteCtrl, getImageFrame, ConsoleInt, 2, 2, ())
 
 //------------------------------------------------------------------------------
 
-/*! Sets the animation asset Id to display.
-    @param animationAssetId The animation asset Id to play
-    @return No return value.
-*/
-ConsoleMethodWithDocs( GuiSpriteCtrl, setAnimation, ConsoleVoid, 3, 3, (string animationAssetId))
-{
+ConsoleMethod( GuiSpriteCtrl, setAnimation, void, 3, 3, "(string animationAssetId) - Sets the animation asset Id to display.\n"
+                                                        "@param animationAssetId The animation asset Id to play\n"
+                                                        "@return No return value.")
+{    
     // Set animation.
     object->setAnimation( argv[2] );
 }
 
 //------------------------------------------------------------------------------
 
-/*! Gets the current animation asset Id.
-    @return (string ianimationAssetId) The animation being displayed.
-*/
-ConsoleMethodWithDocs( GuiSpriteCtrl, getAnimation, ConsoleString, 2, 2, ())
+ConsoleMethod( GuiSpriteCtrl, getAnimation, const char*, 2, 2,  "() - Gets the current animation asset Id.\n"
+                                                                "@return (string ianimationAssetId) The animation being displayed.")
 {
     // Are we in static mode?
     if ( object->isStaticFrameProvider() )
@@ -120,5 +104,3 @@ ConsoleMethodWithDocs( GuiSpriteCtrl, getAnimation, ConsoleString, 2, 2, ())
     // Get animation.
     return DYNAMIC_VOID_CAST_TO(GuiSpriteCtrl, ImageFrameProvider, object)->getAnimation();
 }
-
-ConsoleMethodGroupEndWithDocs(GuiSpriteCtrl)

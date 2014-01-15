@@ -20,15 +20,9 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-class Trigger;
-
-ConsoleMethodGroupBeginWithDocs(Trigger, SceneObject)
-
-/*! Set whether trigger checks onEnter events
-	@param setting Default is true.
-	@return No return value.
-*/
-ConsoleMethodWithDocs(Trigger, setEnterCallback, ConsoleVoid, 2, 3, ([setting]?))
+ConsoleMethod(Trigger, setEnterCallback, void, 2, 3, "([setting]) Set whether trigger checks onEnter events\n"
+              "@param setting Default is true.\n"
+              "@return No return value.")
 {
    // If the value isn't specified, the default is true.
    bool callback = true;
@@ -40,11 +34,9 @@ ConsoleMethodWithDocs(Trigger, setEnterCallback, ConsoleVoid, 2, 3, ([setting]?)
 
 //-----------------------------------------------------------------------------
 
-/*! Set whether trigger checks onStay events
-	@param setting Default is true.
-	@return No return value.
-*/
-ConsoleMethodWithDocs(Trigger, setStayCallback, ConsoleVoid, 2, 3, ([setting]?))
+ConsoleMethod(Trigger, setStayCallback, void, 2, 3, "([setting]) Set whether trigger checks onStay events\n"
+              "@param setting Default is true.\n"
+              "@return No return value.")
 {
    // If the value isn't specified, the default is true.
    bool callback = true;
@@ -56,11 +48,9 @@ ConsoleMethodWithDocs(Trigger, setStayCallback, ConsoleVoid, 2, 3, ([setting]?))
 
 //-----------------------------------------------------------------------------
 
-/*! Set whether trigger checks onLeave events
-    @param setting Default is true.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(Trigger, setLeaveCallback, ConsoleVoid, 2, 3, ([setting]?))
+ConsoleMethod(Trigger, setLeaveCallback, void, 2, 3, "([setting]) Set whether trigger checks onLeave events\n"
+              "@param setting Default is true.\n"
+              "@return No return value.")
 {
    // If the value isn't specified, the default is true.
    bool callback = true;
@@ -72,34 +62,22 @@ ConsoleMethodWithDocs(Trigger, setLeaveCallback, ConsoleVoid, 2, 3, ([setting]?)
 
 //-----------------------------------------------------------------------------
 
-/*!
-	@return Returns whether trigger checks onEnter events
-*/
-ConsoleMethodWithDocs(Trigger, getEnterCallback, ConsoleBool, 2, 2, ())
+ConsoleMethod(Trigger, getEnterCallback, bool, 2, 2, "() \n @return Returns whether trigger checks onEnter events")
 {
    return object->getEnterCallback();
 }
 
 //-----------------------------------------------------------------------------
 
-/*!
-	@return Returns whether trigger checks onStay events
-*/
-ConsoleMethodWithDocs(Trigger, getStayCallback, ConsoleBool, 2, 2, ())
+ConsoleMethod(Trigger, getStayCallback, bool, 2, 2, "() \n @return Returns whether trigger checks onStay events")
 {
    return object->getStayCallback();
 }
 
 //-----------------------------------------------------------------------------
 
-/*!
-	@return Returns whether trigger checks onLeave events
-*/
-ConsoleMethodWithDocs(Trigger, getLeaveCallback, ConsoleBool, 2, 2, ())
+ConsoleMethod(Trigger, getLeaveCallback, bool, 2, 2, "() \n @return Returns whether trigger checks onLeave events")
 {
    return object->getLeaveCallback();
 }
 
-//-----------------------------------------------------------------------------
-
-ConsoleMethodGroupEndWithDocs(Trigger)

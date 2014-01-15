@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,12 +20,8 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethodGroupBeginWithDocs(SceneObjectSet, SimObject)
-
-/*! Dumps the object data within the set
-    @return No return value
-*/
-ConsoleMethodWithDocs(SceneObjectSet, dumpObjects, ConsoleVoid, 2, 2, ())
+ConsoleMethod(SceneObjectSet, dumpObjects, void, 2, 2, "() Dumps the object data within the set\n"
+              "@return No return value")
 {
    SceneObjectSet::iterator itr;
    for(itr = object->begin(); itr != object->end(); itr++)
@@ -42,11 +38,9 @@ ConsoleMethodWithDocs(SceneObjectSet, dumpObjects, ConsoleVoid, 2, 2, ())
    }
 }
 
-/*! Adds given list of objects to the SceneObjectSet.
-    @param obj_i (i is unilimited) Variable list of objects to add
-    @return No return value
-*/
-ConsoleMethodWithDocs(SceneObjectSet, add, ConsoleVoid, 3, 0, (obj1,...))
+ConsoleMethod(SceneObjectSet, add, void, 3, 0, "(obj1,...) Adds given list of objects to the SceneObjectSet.\n"
+              "@param obj_i (i is unilimited) Variable list of objects to add\n"
+              "@return No return value")
 {
    for(S32 i = 2; i < argc; i++)
    {
@@ -58,11 +52,9 @@ ConsoleMethodWithDocs(SceneObjectSet, add, ConsoleVoid, 3, 0, (obj1,...))
    }
 }
 
-/*! Removes given listy of objects from the SceneObjectSet.
-    @param obj_i (i is unilimited) Variable list of objects to remove
-    @return No return value
-*/
-ConsoleMethodWithDocs(SceneObjectSet, remove, ConsoleVoid, 3, 0, (obj1,...))
+ConsoleMethod(SceneObjectSet, remove, void, 3, 0, "(obj1,...) Removes given listy of objects from the SceneObjectSet.\n"
+              "@param obj_i (i is unilimited) Variable list of objects to remove\n"
+              "@return No return value")
 {
    for(S32 i = 2; i < argc; i++)
    {
@@ -76,45 +68,38 @@ ConsoleMethodWithDocs(SceneObjectSet, remove, ConsoleVoid, 3, 0, (obj1,...))
 
 //-----------------------------------------------------------------------------
 
-/*! Deletes all the objects in the SceneObjectSet.
-    @return No return value
-*/
-ConsoleMethodWithDocs(SceneObjectSet, deleteObjects, ConsoleVoid, 2, 2, ())
+ConsoleMethod(SceneObjectSet, deleteObjects, void, 2, 2,    "() Deletes all the objects in the SceneObjectSet.\n"
+                                                    "@return No return value")
 {
     object->deleteObjects();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Clears the SceneObjectSet
-    @return No return value
-*/
-ConsoleMethodWithDocs(SceneObjectSet, clear, ConsoleVoid, 2, 2, ())
+ConsoleMethod(SceneObjectSet, clear, void, 2, 2, "() Clears the SceneObjectSet\n"
+              "@return No return value")
 {
    object->clear();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Call a method on all objects contained in the set.
-   @param method The name of the method to call.
-   @param args The arguments to the method.
-   @note This method recurses into all SimSets that are children to the set.
-   @see callOnChildrenNoRecurse
-*/
-ConsoleMethodWithDocs( SceneObjectSet, callOnChildren, ConsoleVoid, 3, 0, ( string method, string args... ))
+ConsoleMethod( SceneObjectSet, callOnChildren, void, 3, 0,
+   "( string method, string args... ) Call a method on all objects contained in the set.\n\n"
+   "@param method The name of the method to call.\n"
+   "@param args The arguments to the method.\n\n"
+   "@note This method recurses into all SimSets that are children to the set.\n\n"
+   "@see callOnChildrenNoRecurse" )
 {
    object->callOnChildren( argv[2], argc - 3, argv + 3 );
 }
 
 //-----------------------------------------------------------------------------
 
-/*! Uses SceneObjectSet reorder to push child 1 before child 2 - both must already be child controls of this control
-    @param child1 The child you wish to set first
-    @param child2 The child you wish to set after child1
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneObjectSet, reorderChild, ConsoleVoid, 4,4,  (child1, child2))
+ConsoleMethod(SceneObjectSet, reorderChild, void, 4,4," (child1, child2) Uses SceneObjectSet reorder to push child 1 before child 2 - both must already be child controls of this control\n"
+              "@param child1 The child you wish to set first\n"
+              "@param child2 The child you wish to set after child1\n"
+              "@return No return value.")
 {
    SceneObject* pObject = Sim::findObject<SceneObject>(argv[2]);
    SceneObject* pTarget	 = Sim::findObject<SceneObject>(argv[3]);
@@ -127,18 +112,14 @@ ConsoleMethodWithDocs(SceneObjectSet, reorderChild, ConsoleVoid, 4,4,  (child1, 
 
 //-----------------------------------------------------------------------------
 
-/*! @return Returns the number of objects in the SceneObjectSet
-*/
-ConsoleMethodWithDocs(SceneObjectSet, getCount, ConsoleInt, 2, 2, ())
+ConsoleMethod(SceneObjectSet, getCount, S32, 2, 2, "() @return Returns the number of objects in the SceneObjectSet")
 {
    return object->size();
 }
 
 //-----------------------------------------------------------------------------
 
-/*! @return Returns the ID of the desired object or -1 on failure
-*/
-ConsoleMethodWithDocs(SceneObjectSet, getObject, ConsoleInt, 3, 3, (objIndex))
+ConsoleMethod(SceneObjectSet, getObject, S32, 3, 3, "(objIndex) @return Returns the ID of the desired object or -1 on failure")
 {
    S32 objectIndex = dAtoi(argv[2]);
    if(objectIndex < 0 || objectIndex >= S32(object->size()))
@@ -151,9 +132,7 @@ ConsoleMethodWithDocs(SceneObjectSet, getObject, ConsoleInt, 3, 3, (objIndex))
 
 //-----------------------------------------------------------------------------
 
-/*! @return Returns true if specified object is a member of the set, and false otherwise
-*/
-ConsoleMethodWithDocs(SceneObjectSet, isMember, ConsoleBool, 3, 3, (object))
+ConsoleMethod(SceneObjectSet, isMember, bool, 3, 3, "(object) @return Returns true if specified object is a member of the set, and false otherwise")
 {
    SceneObject *testObject = Sim::findObject<SceneObject>(argv[2]);
    if(!testObject)
@@ -175,12 +154,10 @@ ConsoleMethodWithDocs(SceneObjectSet, isMember, ConsoleBool, 3, 3, (object))
 
 //-----------------------------------------------------------------------------
 
-/*! Returns the object with given internal name
-    @param name The internal name of the object you wish to find
-    @param searchChildren Set this true if you wish to search all children as well.
-    @return Returns the ID of the object.
-*/
-ConsoleMethodWithDocs( SceneObjectSet, findObjectByInternalName, ConsoleInt, 3, 4, (string name, [bool searchChildren]))
+ConsoleMethod( SceneObjectSet, findObjectByInternalName, S32, 3, 4, "(string name, [bool searchChildren]) Returns the object with given internal name\n"
+              "@param name The internal name of the object you wish to find\n"
+              "@param searchChildren Set this true if you wish to search all children as well.\n"
+              "@return Returns the ID of the object.")
 {
 
    StringTableEntry pcName = StringTable->insert(argv[2]);
@@ -196,10 +173,8 @@ ConsoleMethodWithDocs( SceneObjectSet, findObjectByInternalName, ConsoleInt, 3, 
 
 //-----------------------------------------------------------------------------
 
-/*! Brings object to front of set.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneObjectSet, bringToFront, ConsoleVoid, 3, 3, (object))
+ConsoleMethod(SceneObjectSet, bringToFront, void, 3, 3, "(object) Brings object to front of set.\n"
+              "@return No return value.")
 {
    SceneObject *obj = Sim::findObject<SceneObject>(argv[2]);
    if(!obj)
@@ -209,15 +184,11 @@ ConsoleMethodWithDocs(SceneObjectSet, bringToFront, ConsoleVoid, 3, 3, (object))
 
 //-----------------------------------------------------------------------------
 
-/*! Sends item to back of set.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SceneObjectSet, pushToBack, ConsoleVoid, 3, 3, (object))
+ConsoleMethod(SceneObjectSet, pushToBack, void, 3, 3, "(object) Sends item to back of set.\n"
+              "@return No return value.")
 {
    SceneObject *obj = Sim::findObject<SceneObject>(argv[2]);
    if(!obj)
       return;
    object->pushObjectToBack(obj);
 }
-
-ConsoleMethodGroupEndWithDocs(SceneObjectSet)

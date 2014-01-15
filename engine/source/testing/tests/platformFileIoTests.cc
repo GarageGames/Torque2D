@@ -41,6 +41,7 @@
 #define PLATFORM_UNITTEST_FILEIO_FILEMESSAGE    "Write a line of text."
 
 //-----------------------------------------------------------------------------
+
 TEST( PlatformFileIOTests, FileWriteRead )
 {
     File testWriteFile;
@@ -120,6 +121,7 @@ TEST( PlatformFileIOTests, FileWriteRead )
     // Check the file has been deleted.
     ASSERT_TRUE( Platform::fileDelete( PLATFORM_UNITTEST_FILEIO_FILE ) );
 }
+
 //-----------------------------------------------------------------------------
 
 #endif // TORQUE_SHIPPING

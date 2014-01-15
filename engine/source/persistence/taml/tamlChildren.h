@@ -33,8 +33,6 @@ class SimObject;
 
 //-----------------------------------------------------------------------------
 
-/// @ingroup tamlGroup
-/// @see tamlGroup
 class TamlChildren
 {
 public:

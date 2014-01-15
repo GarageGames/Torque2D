@@ -25,9 +25,7 @@
 #include "io/bitStream.h"
 #include "console/consoleTypes.h"
 
-static bool gLogToConsole = false;
-
-#include "connectionProtocol_ScriptBinding.h"
+bool gLogToConsole = false;
 
 S32 gNetBitsReceived = 0;
 
@@ -45,6 +43,14 @@ static const char *packetTypeNames[] =
    "PingPacket",
    "AckPacket",
 };
+
+//-----------------------------------------------------------------
+//-----------------------------------------------------------------
+//-----------------------------------------------------------------
+ConsoleFunction(DNetSetLogging, void, 2, 2, "(bool enabled)")
+{
+   gLogToConsole = dAtob(argv[1]);
+}
 
 ConnectionProtocol::ConnectionProtocol()
 {
