@@ -116,12 +116,6 @@ public:
 
 IMPLEMENT_CO_NETEVENT_V1(GhostAlwaysObjectEvent);
 
-ConsoleMethod( NetConnection, getGhostsActive, S32, 2, 2, "() Use the getGhostsActive method to determine how many ghosts are active on a particular connection.\n"
-                                                                "@return Returns an integer value between 0 and inf, specifying how many objects are being ghosted to a client on the other side of a specific connection")
-{
-    return object->getGhostsActive();
-}
-
 void NetConnection::setGhostTo(bool ghostTo)
 {
    if(mLocalGhosts) // if ghosting to this is already enabled, silently return

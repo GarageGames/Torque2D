@@ -401,14 +401,10 @@ void ParticlePlayer::integrateObject( const F32 totalTime, const F32 elapsedTime
     // Fetch the particle life-mode.
     const ParticleAsset::LifeMode lifeMode = pParticleAsset->getLifeMode();
 
-    // Finish if the particle player is in "infinite" mode.
-    if ( lifeMode == ParticleAsset::INFINITE )
-        return;
-
     // Are we waiting for particles and there are non left?
     if ( mWaitingForParticles )
     {
-        // Yes, so are there any particles left?
+		// Yes, so are there any particles left?
         if ( activeParticleCount == 0 )
         {
             // No, so stop the player immediately.
@@ -417,6 +413,10 @@ void ParticlePlayer::integrateObject( const F32 totalTime, const F32 elapsedTime
 
         return;
     }
+
+	// Finish if the particle player is in "infinite" mode.
+    if ( lifeMode == ParticleAsset::INFINITE )
+        return;
 
     // Fetch the particle lifetime.
     const F32 lifetime = pParticleAsset->getLifetime();
@@ -793,7 +793,7 @@ bool ParticlePlayer::play( const bool resetParticles )
     {
         // Fetch the emitter node.
         EmitterNode* pEmitterNode = *emitterItr;
-
+		pEmitterNode->setPaused(false);
         // Reset the time since last generation.
         pEmitterNode->setTimeSinceLastGeneration( 0.0f );
     }
@@ -1432,14 +1432,14 @@ void ParticlePlayer::integrateParticle( EmitterNode* pEmitterNode, ParticleSyste
     if ( pParticleAssetEmitter->getKeepAligned() && pParticleAssetEmitter->getOrientationType() == ParticleAssetEmitter::ALIGNED_ORIENTATION )
     {
         // Yes, so calculate last movement direction.
-        F32 movementAngle = mRadToDeg( mAtan( pParticleNode->mVelocity.x, -pParticleNode->mVelocity.y ) );
+        F32 movementAngle = mRadToDeg( mAtan( pParticleNode->mVelocity.x, pParticleNode->mVelocity.y ) );
 
         // Adjust for negative ArcTan quadrants.
         if ( movementAngle < 0.0f )
             movementAngle += 360.0f;
 
         // Set new Orientation Angle.
-        pParticleNode->mOrientationAngle = -movementAngle - pParticleAssetEmitter->getAlignedAngleOffset();
+        pParticleNode->mOrientationAngle = movementAngle - pParticleAssetEmitter->getAlignedAngleOffset();
 
     }
     else

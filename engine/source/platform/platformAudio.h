@@ -101,6 +101,7 @@ void alxStopAll();
 // one-shot helper alxPlay functions, create and play in one call
 AUDIOHANDLE alxPlay(const AudioAsset *profile, const MatrixF *transform=NULL, const Point3F *velocity=NULL);
 
+
 // Source
 void alxSourcef(AUDIOHANDLE handle, ALenum pname, ALfloat value);
 void alxSourcefv(AUDIOHANDLE handle, ALenum pname, ALfloat *values);
@@ -115,6 +116,7 @@ void alxGetSourcei(AUDIOHANDLE handle, ALenum pname, ALint *value);
 
 /**   alSource3f access extension for use with Point3F's
 */
+
 inline void alxSourcePoint3F(AUDIOHANDLE handle, ALenum pname, const Point3F *value)
 {
    alxSource3f(handle, pname, value->x, value->y, value->z);
@@ -122,12 +124,14 @@ inline void alxSourcePoint3F(AUDIOHANDLE handle, ALenum pname, const Point3F *va
 
 /**   alGetSource3f access extension for use with Point3F's
 */
+
 inline void alxSourceGetPoint3F(AUDIOHANDLE handle, ALenum pname, Point3F * value)
 {
    alxGetSource3f(handle, pname, &value->x, &value->y, &value->z);
 }
 
 // Listener
+
 void alxListenerMatrixF(const MatrixF *transform);
 void alxListenerf(ALenum param, ALfloat value);
 void alxGetListenerf(ALenum param, ALfloat *value);
@@ -135,6 +139,7 @@ void alxGetListenerf(ALenum param, ALfloat *value);
 
 /**   alListener3f access extension for use with Point3F's
 */
+
 inline void alxListenerPoint3F(ALenum pname, const Point3F *value)
 {
    alListener3f(pname, value->x, value->y, value->z);   
@@ -142,6 +147,7 @@ inline void alxListenerPoint3F(ALenum pname, const Point3F *value)
 
 /**   alGetListener3f access extension for use with Point3F's
 */
+
 inline void alxGetListenerPoint3F(ALenum pname, Point3F *value)
 {
    alGetListener3f(pname, &value->x, &value->y, &value->z);

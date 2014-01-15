@@ -27,6 +27,8 @@
 #include "string/stringTable.h"
 #include "io/resource/resourceManager.h"
 
+#include "platformFileIO_ScriptBinding.h"
+
 //-----------------------------------------------------------------------------
 
 StringTableEntry Platform::getTemporaryDirectory()
@@ -37,12 +39,6 @@ StringTableEntry Platform::getTemporaryDirectory()
       path = Platform::getCurrentDirectory();
 
    return path;
-}
-
-ConsoleFunction(getTemporaryDirectory, const char *, 1, 1, "() Gets the path to the system's temporary directory\n"
-                "@return Returns the path to the temporary directory as a string")
-{
-   return Platform::getTemporaryDirectory();
 }
 
 StringTableEntry Platform::getTemporaryFileName()
@@ -57,12 +53,6 @@ StringTableEntry Platform::getTemporaryFileName()
       return Platform::getTemporaryFileName();
 
    return StringTable->insert(buf);
-}
-
-ConsoleFunction(getTemporaryFileName, const char *, 1, 1, "() Generates a temporary filename for use.\n"
-                "@return Returns the formatted temporary filename for use")
-{
-   return Platform::getTemporaryFileName();
 }
 
 //-----------------------------------------------------------------------------
@@ -417,7 +407,7 @@ StringTableEntry Platform::stripBasePath(const char *path)
 StringTableEntry Platform::getPrefsPath(const char *file /* = NULL */)
 {
     char buf[1024];
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
     
     if ( file )
     {
@@ -464,16 +454,3 @@ StringTableEntry Platform::getPrefsPath(const char *file /* = NULL */)
 }
 
 //-----------------------------------------------------------------------------
-
-ConsoleFunction(getUserDataDirectory, const char*, 1, 1, "()\n"
-                "@return Returns a string to the directory storing the user's data")
-{
-   return Platform::getUserDataDirectory();
-}
-
-ConsoleFunction(getUserHomeDirectory, const char*, 1, 1, "() \n"
-                "@return Returns the path to the user's home directory.")
-{
-   return Platform::getUserHomeDirectory();
-}
-

@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,10 +20,14 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(AmbientForceController, setForce, void, 3, 4,     "(float x, float y) - Sets the ambient force to use.\n"
-                                                                "@param x The component of the ambient force along the horizontal (world) axis.\n"
-                                                                "@param y The component of the ambient force along the vertical (world) axis.\n"
-                                                                "@return No return value.")
+ConsoleMethodGroupBeginWithDocs(AmbientForceController, GroupedSceneController)
+
+/*! Sets the ambient force to use.
+    @param x The component of the ambient force along the horizontal (world) axis.
+    @param y The component of the ambient force along the vertical (world) axis.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(AmbientForceController, setForce, ConsoleVoid, 3, 4, (float x, float y))
 {
     // The new force.
     b2Vec2 force;
@@ -51,9 +55,12 @@ ConsoleMethod(AmbientForceController, setForce, void, 3, 4,     "(float x, float
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(AmbientForceController, getForce, const char*, 2, 2, "() Gets the ambient force being used.\n"
-                                                                    "@return The ambient force being used.")
+/*! Gets the ambient force being used.
+    @return The ambient force being used.
+*/
+ConsoleMethodWithDocs(AmbientForceController, getForce, ConsoleString, 2, 2, ())
 {
     return object->getForce().scriptThis();
 }
 
+ConsoleMethodGroupEndWithDocs(AmbientForceController)

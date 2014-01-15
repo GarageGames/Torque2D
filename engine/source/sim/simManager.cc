@@ -33,10 +33,6 @@
 
 //---------------------------------------------------------------------------
 
-// We comment out the implementation of the Con namespace when doxygenizing because
-// otherwise Doxygen decides to ignore our docs in console.h
-#ifndef DOXYGENIZING
-
 namespace Sim
 {
 //---------------------------------------------------------------------------
@@ -129,6 +125,11 @@ U32 postEvent(SimObject *destObject, SimEvent* event,U32 time)
 //---------------------------------------------------------------------------
 // event cancellation
 
+/*! cancel a previously scheduled event.
+	@param eventSequence The numeric ID of a previously scheduled event.
+	@return No return value.
+	@sa getEventTimeLeft, getScheduleDuration, getTimeSinceStart, isEventPending, schedule, obj.schedule
+*/
 void cancelEvent(U32 eventSequence)
 {
    Mutex::lockMutex(gEventQueueMutex);
@@ -175,6 +176,14 @@ void cancelPendingEvents(SimObject *obj)
 //---------------------------------------------------------------------------
 // event pending test
 
+/*!	see if the event associated with eventID is still pending.
+
+	When an event passes, the eventID is removed from the event queue, becoming invalid, so there is no discernable difference between a completed event and a bad event ID.
+	@param eventID The numeric ID of a previously scheduled event.
+	@return true if this event is still outstanding and false if it has passed or eventID is invalid.
+
+	@sa cancel, getEventTimeLeft, getScheduleDuration, getTimeSinceStart, schedule, obj.schedule
+*/
 bool isEventPending(U32 eventSequence)
 {
    Mutex::lockMutex(gEventQueueMutex);
@@ -189,6 +198,13 @@ bool isEventPending(U32 eventSequence)
    return false;
 }
 
+/*!
+	determines how much time remains until the event specified by eventID occurs.
+
+    @param eventID The numeric ID of a previously scheduled event.
+    @return a non-zero integer value equal to the milliseconds until the event specified by eventID will occur. However, if eventID is invalid, or the event has passed, this function will return zero.
+    @sa cancel, getScheduleDuration, getTimeSinceStart, isEventPending, schedule, SimObject::schedule
+*/
 U32 getEventTimeLeft(U32 eventSequence)
 {
    Mutex::lockMutex(gEventQueueMutex);
@@ -206,6 +222,13 @@ U32 getEventTimeLeft(U32 eventSequence)
    return 0;   
 }
 
+/*!
+	Determines how long the event associated with eventID was scheduled for.
+
+	@param eventID The numeric ID of a previously scheduled event.
+	@return a non-zero integer value equal to the milliseconds used in the schedule call that created this event. However, if eventID is invalid, this function will return zero.
+	@sa cancel, getEventTimeLeft, getTimeSinceStart, isEventPending, schedule, SimObject::schedule
+*/
 U32 getScheduleDuration(U32 eventSequence)
 {
    for(SimEvent *walk = gEventQueue; walk; walk = walk->nextEvent)
@@ -214,6 +237,13 @@ U32 getScheduleDuration(U32 eventSequence)
    return 0;
 }
 
+/*!
+	Determines how much time has passed since the event specified by eventID was scheduled.
+
+    @param eventID The numeric ID of a previously scheduled event.
+    @return a non-zero integer value equal to the milliseconds that have passed since this event was scheduled. However, if eventID is invalid, or the event has passed, this function will return zero.
+    @sa cancel, getEventTimeLeft, getScheduleDuration, isEventPending, schedule, SimObject::schedule
+*/
 U32 getTimeSinceStart(U32 eventSequence)
 {
    for(SimEvent *walk = gEventQueue; walk; walk = walk->nextEvent)
@@ -253,6 +283,11 @@ void advanceTime(SimTime delta)
    advanceToTime(getCurrentTime() + delta);
 }
 
+/*! get the time, in ticks, that has elapsed since the engine started executing.
+
+    @return the time in ticks since the engine was started.
+    @sa getRealTime
+*/
 U32 getCurrentTime()
 {
    if(gEventQueueMutex)
@@ -399,9 +434,6 @@ void shutdown()
 }
 
 } // Sim Namespace.
-
-
-#endif // DOXYGENIZING.
 
 SimDataBlockGroup::SimDataBlockGroup()
 {

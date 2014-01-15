@@ -23,6 +23,8 @@
 #include "console/console.h"
 #include "platformWin32/platformWin32.h"
 
+#include "cardProfile_ScriptBinding.h"
+
 void initDisplayDeviceInfo()
 {
    Con::printf( "Reading Display Device information..." );
@@ -70,12 +72,4 @@ void initDisplayDeviceInfo()
    // the file etc in script using getField and so on.
    Con::setVariable( "$PCI_VEN", ven );
    Con::setVariable( "$PCI_DEV", dev );
-}
-
-ConsoleFunction( initDisplayDeviceInfo, void, 1, 1, "() Prints display device info to console and sets them to console variables:\n"
-                "\tVendor->$PCI_VEN\n"
-                "\tDevice_ID->$PCI_DEV\n"
-                "@return No Return Value")
-{
-   initDisplayDeviceInfo();
 }

@@ -543,7 +543,7 @@ void ParticleAssetField::onTamlCustomWrite( TamlCustomNode* pCustomNode )
         const DataKey& dataKey = mDataKeys[index];
 
         // Add a key node.
-        TamlCustomNode* pKeyNode = pCustomNode->addNode( particleAssetFieldDataKeyName );
+        TamlCustomNode* pKeyNode = pAssetField->addNode( particleAssetFieldDataKeyName );
 
         // Add key fields.
         pKeyNode->addField( particleAssetFieldDataKeyTimeName, dataKey.mTime );

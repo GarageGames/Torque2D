@@ -248,7 +248,7 @@ void GuiGridControl::AdjustGridItems(S32 size, Vector<StringTableEntry>& strItem
 	S32 idx =0;
 
 	//First step : Convert the string based column data into a GridItem vector.
-	for(auto col = strItems.begin(); col != strItems.end(); ++col, idx++)
+	for(Vector<char const*>::iterator col = strItems.begin(); col != strItems.end(); ++col, idx++)
 	{
 		StringTableEntry str = *col;
 

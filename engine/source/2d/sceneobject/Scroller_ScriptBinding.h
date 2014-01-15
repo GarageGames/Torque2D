@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,99 +20,127 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Scroller, setRepeatX, void, 3, 3, "(repeatX) Sets the number of times to repeat the texture over x direction\n"
-              "@return No return value.")
+ConsoleMethodGroupBeginWithDocs(Scroller, SpriteBase)
+
+/*! Sets the number of times to repeat the texture over x direction
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Scroller, setRepeatX, ConsoleVoid, 3, 3, (repeatX))
 {
    object->setRepeatX( dAtof(argv[2]) );
 }
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(Scroller, setRepeatY, void, 3, 3, "(repeatY) Sets the number of times to repeat the texture in y direction.\n"
-              "@return No return value.")
+/*! Sets the number of times to repeat the texture in y direction.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Scroller, setRepeatY, ConsoleVoid, 3, 3, (repeatY))
 {
    object->setRepeatY( dAtof(argv[2]) );
 }
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(Scroller, getRepeatX, F32, 2, 2, "() \n @return Returns repeat X value")
+/*!  @return Returns repeat X value
+*/
+ConsoleMethodWithDocs(Scroller, getRepeatX, ConsoleFloat, 2, 2, ())
 {
    return object->getRepeatX();
 }
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(Scroller, getRepeatY, F32, 2, 2, "() \n @return Returns repeat Y value")
+/*!  @return Returns repeat Y value
+*/
+ConsoleMethodWithDocs(Scroller, getRepeatY, ConsoleFloat, 2, 2, ())
 {
    return object->getRepeatY();
 }
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(Scroller, setScrollX, void, 3, 3, "(ScrollX) Sets the scroll speed in x direction\n"
-              "@return No return value.")
+/*! Sets the scroll speed in x direction
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Scroller, setScrollX, ConsoleVoid, 3, 3, (ScrollX))
 {
    object->setScroll(dAtof(argv[2]), object->getScrollY());
 }
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(Scroller, setScrollY, void, 3, 3, "(ScrollY) Sets the scroll speed in the Y direction\n"
-              "@return No return value.")
+/*! Sets the scroll speed in the Y direction
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Scroller, setScrollY, ConsoleVoid, 3, 3, (ScrollY))
 {
    object->setScroll(object->getScrollX(), dAtof(argv[2]));
 }
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(Scroller, getScrollX, F32, 2, 2, "() \n @return Returns Scroll speed in x direction.")
+/*!  @return Returns Scroll speed in x direction.
+*/
+ConsoleMethodWithDocs(Scroller, getScrollX, ConsoleFloat, 2, 2, ())
 {
    return object->getScrollX();
 }
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(Scroller, getScrollY, F32, 2, 2, "() \n @return Returns Scroll speed in y direction.")
+/*!  @return Returns Scroll speed in y direction.
+*/
+ConsoleMethodWithDocs(Scroller, getScrollY, ConsoleFloat, 2, 2, ())
 {
    return object->getScrollY();
 }
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(Scroller, setScrollPositionX, void, 3, 3, "(ScrollPositionX) Set the texture's position in x direction\n"
-              "@return No return value.")
+/*! Set the texture's position in x direction
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Scroller, setScrollPositionX, ConsoleVoid, 3, 3, (ScrollPositionX))
 {
    object->setScrollPosition(dAtof(argv[2]), object->getScrollPositionY());
 }
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(Scroller, setScrollPositionY, void, 3, 3, "(ScrollPositionY) Set the texture's position in y direction\n"
-              "@return No return value.")
+/*! Set the texture's position in y direction
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Scroller, setScrollPositionY, ConsoleVoid, 3, 3, (ScrollPositionY))
 {
    object->setScrollPosition(object->getScrollPositionX(), dAtof(argv[2]));
 }
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(Scroller, getScrollPositionX, F32, 2, 2, "() \nReturns  texture's position in x direction")
+/*! Returns  texture's position in x direction
+*/
+ConsoleMethodWithDocs(Scroller, getScrollPositionX, ConsoleFloat, 2, 2, ())
 {
    return object->getScrollPositionX();
 }
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(Scroller, getScrollPositionY, F32, 2, 2, "() \nReturns texture's position in y direction")
+/*! Returns texture's position in y direction
+*/
+ConsoleMethodWithDocs(Scroller, getScrollPositionY, ConsoleFloat, 2, 2, ())
 {
    return object->getScrollPositionY();
 }
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(Scroller, setRepeat, void, 3, 4, "(float repeatX / float repeatY) Sets the Repeat X/Y repetition in each direction.\n"
-                                                  "@param repeatX/Y The number of times to repeat in each direction as either (\"x y\") or (x, y)\n"
-                                                  "@return No return value.")
+/*! Sets the Repeat X/Y repetition in each direction.
+    @param repeatX/Y The number of times to repeat in each direction as either (\x y\ or (x, y)
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Scroller, setRepeat, ConsoleVoid, 3, 4, (float repeatX / float repeatY))
 {
    // The new position.
    F32 repeatX;
@@ -148,9 +176,11 @@ ConsoleMethod(Scroller, setRepeat, void, 3, 4, "(float repeatX / float repeatY) 
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(Scroller, setScroll, void, 3, 4, "(offsetX / offsetY) Sets the Scroll speed."
-              "@param offsetX/Y The scroll speed in each direction as either (\"x y\") or (x, y)\n"
-              "@return No return value.")
+/*! Sets the Scroll speed.
+    @param offsetX/Y The scroll speed in each direction as either (\x y\ or (x, y)
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Scroller, setScroll, ConsoleVoid, 3, 4, (offsetX / offsetY))
 {
    // The new position.
    F32 scrollX;
@@ -186,10 +216,12 @@ ConsoleMethod(Scroller, setScroll, void, 3, 4, "(offsetX / offsetY) Sets the Scr
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(Scroller, setScrollPolar, void, 4, 4, "(angle, scrollSpeed) Sets Auto-Pan Polarwise.\n"
-              "@param angle Polar angle.\n"
-              "@param scrollSpeed Speed as polar magnitude\n"
-              "@return No return value.")
+/*! Sets Auto-Pan Polarwise.
+    @param angle Polar angle.
+    @param scrollSpeed Speed as polar magnitude
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Scroller, setScrollPolar, ConsoleVoid, 4, 4, (angle, scrollSpeed))
 {
     // Renormalise Angle.
     F32 angle = mFmod(dAtof(argv[2]), 360.0f);
@@ -197,14 +229,16 @@ ConsoleMethod(Scroller, setScrollPolar, void, 4, 4, "(angle, scrollSpeed) Sets A
     F32 scrollSpeed = dAtof(argv[3]);
 
     // Set Scroll.
-    object->setScroll( mSin(mDegToRad(angle))*scrollSpeed, -mCos(mDegToRad(angle))*scrollSpeed );
+    object->setScroll( mCos(mDegToRad(angle))*scrollSpeed, mSin(mDegToRad(angle))*scrollSpeed );
 }
 
 //------------------------------------------------------------------------------
 
-ConsoleMethod(Scroller, setScrollPosition, void, 3, 4, "(positionX / positionY) Sets the Scroll position X/Y."
-              "@param positionX/Y The scroll texture position as either (\"x y\") or (x, y)\n"
-              "@return No return value.")
+/*! Sets the Scroll position X/Y.
+    @param positionX/Y The scroll texture position as either (\x y\ or (x, y)
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Scroller, setScrollPosition, ConsoleVoid, 3, 4, (positionX / positionY))
 {
    // The new position.
    F32 scrollX;
@@ -238,3 +272,4 @@ ConsoleMethod(Scroller, setScrollPosition, void, 3, 4, "(positionX / positionY) 
    object->setScrollPosition(scrollX, scrollY);
 }
 
+ConsoleMethodGroupEndWithDocs(Scroller)

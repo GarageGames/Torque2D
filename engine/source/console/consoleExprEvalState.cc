@@ -34,6 +34,8 @@
 #include "io/fileStream.h"
 #include "console/compiler.h"
 
+#include "consoleExprEvalState_ScriptBinding.h"
+
 extern ExprEvalState gEvalState;
 
 void ExprEvalState::pushFrame(StringTableEntry frameName, Namespace *ns)
@@ -70,32 +72,4 @@ ExprEvalState::~ExprEvalState()
 {
    while(stack.size())
       popFrame();
-}
-
-ConsoleFunction(backtrace, void, 1, 1, "() Use the backtrace function to print the current callstack to the console. This is used to trace functions called from withing functions and can help discover what functions were called (and not yet exited) before the current point in your scripts.\n"
-                                                                "@return No return value")
-{
-   U32 totalSize = 1;
-
-   for(U32 i = 0; i < (U32)gEvalState.stack.size(); i++)
-   {
-      totalSize += dStrlen(gEvalState.stack[i]->scopeName) + 3;
-      if(gEvalState.stack[i]->scopeNamespace && gEvalState.stack[i]->scopeNamespace->mName)
-         totalSize += dStrlen(gEvalState.stack[i]->scopeNamespace->mName) + 2;
-   }
-
-   char *buf = Con::getReturnBuffer(totalSize);
-   buf[0] = 0;
-   for(U32 i = 0; i < (U32)gEvalState.stack.size(); i++)
-   {
-      dStrcat(buf, "->");
-      if(gEvalState.stack[i]->scopeNamespace && gEvalState.stack[i]->scopeNamespace->mName)
-      {
-         dStrcat(buf, gEvalState.stack[i]->scopeNamespace->mName);
-         dStrcat(buf, "::");
-      }
-      dStrcat(buf, gEvalState.stack[i]->scopeName);
-   }
-   Con::printf("BackTrace: %s", buf);
-
 }

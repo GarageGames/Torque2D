@@ -31,6 +31,8 @@ class TamlParser;
 
 //-----------------------------------------------------------------------------
 
+/// @ingroup tamlGroup
+/// @see tamlGroup
 class TamlVisitor
 {
 public:

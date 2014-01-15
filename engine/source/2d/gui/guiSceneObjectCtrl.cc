@@ -404,7 +404,7 @@ void GuiSceneObjectCtrl::onRender(Point2I offset, const RectI& updateRect)
       }
 
       // Setup Orthographic Projection for Object Area.
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
       glOrthof( x1, x2, y1, y2, 0.0f, MAX_LAYERS_SUPPORTED );
 #else
       glOrtho( x1, x2, y1, y2, 0.0f, MAX_LAYERS_SUPPORTED );
