@@ -1519,7 +1519,7 @@ bool ActionMap::processButton(const InputEvent* pEvent)
 
 bool ActionMap::processMove(const InputEvent* pEvent)
 {
-    static const char *argv[2];
+    static const char *argv[4];
 
     if (pEvent->deviceType == MouseDeviceType)
     {

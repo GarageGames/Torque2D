@@ -453,6 +453,7 @@
 		867BB28116AECA110033868F /* jquant2.c in Sources */ = {isa = PBXBuildFile; fileRef = 867BB25316AECA110033868F /* jquant2.c */; };
 		867BB28216AECA110033868F /* jutils.c in Sources */ = {isa = PBXBuildFile; fileRef = 867BB25416AECA110033868F /* jutils.c */; };
 		867BB44416AED2850033868F /* iOSGL2ES.mm in Sources */ = {isa = PBXBuildFile; fileRef = 867BB44316AED2840033868F /* iOSGL2ES.mm */; };
+		8698388618872BF500D370A0 /* mPoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8698388518872BF500D370A0 /* mPoint.cpp */; };
 		869A879216C15A3A00AE96AE /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 869A879116C15A3A00AE96AE /* Default-Portrait~ipad.png */; };
 		869A879416C15A4300AE96AE /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 869A879316C15A4300AE96AE /* Default-Portrait@2x~ipad.png */; };
 		869A879616C15A4900AE96AE /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 869A879516C15A4900AE96AE /* Default-Landscape~ipad.png */; };
@@ -1413,6 +1414,7 @@
 		867BB25416AECA110033868F /* jutils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jutils.c; path = ../../lib/ljpeg/jutils.c; sourceTree = "<group>"; };
 		867BB44216AED2840033868F /* iOSGL2ES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iOSGL2ES.h; sourceTree = "<group>"; };
 		867BB44316AED2840033868F /* iOSGL2ES.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = iOSGL2ES.mm; sourceTree = "<group>"; };
+		8698388518872BF500D370A0 /* mPoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mPoint.cpp; sourceTree = "<group>"; };
 		869A879116C15A3A00AE96AE /* Default-Portrait~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait~ipad.png"; sourceTree = "<group>"; };
 		869A879316C15A4300AE96AE /* Default-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
 		869A879516C15A4900AE96AE /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
@@ -2433,6 +2435,7 @@
 		867BAEF316AEC9050033868F /* math */ = {
 			isa = PBXGroup;
 			children = (
+				8698388518872BF500D370A0 /* mPoint.cpp */,
 				B350D19E174F063200033EBB /* box_ScriptBinding.h */,
 				B350D19F174F063200033EBB /* math_ScriptBinding.cc */,
 				B350D1A0174F063200033EBB /* matrix_ScriptBinding.h */,
@@ -3424,6 +3427,7 @@
 				867BB0A516AEC9050033868F /* resourceDictionary.cc in Sources */,
 				867BB0A616AEC9050033868F /* resourceManager.cc in Sources */,
 				867BB0A716AEC9050033868F /* streamObject.cc in Sources */,
+				8698388618872BF500D370A0 /* mPoint.cpp in Sources */,
 				867BB0A816AEC9050033868F /* centralDir.cc in Sources */,
 				867BB0A916AEC9050033868F /* compressor.cc in Sources */,
 				867BB0AA16AEC9050033868F /* deflate.cc in Sources */,

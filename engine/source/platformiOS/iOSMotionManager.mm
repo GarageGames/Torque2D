@@ -172,7 +172,7 @@ void (^accelerometerHandler)(CMAccelerometerData*, NSError*) = ^(CMAccelerometer
             InputEvent event;
             
             event.deviceInst = 0;
-            event.fValue = userAcc[i];
+            event.fValues[0] = userAcc[i];
             event.deviceType = AccelerometerDeviceType;
             event.objType = accelAxes[i];
             event.objInst = i;
@@ -222,7 +222,7 @@ void (^motionHandler)(CMDeviceMotion*, NSError*) = ^(CMDeviceMotion *motionData,
             InputEvent event;
         
             event.deviceInst = 0;
-            event.fValue = userAcc[i];
+            event.fValues[0] = userAcc[i];
             event.deviceType = AccelerometerDeviceType;
             event.objType = accelAxes[i];
             event.objInst = i;
@@ -249,7 +249,7 @@ void (^motionHandler)(CMDeviceMotion*, NSError*) = ^(CMDeviceMotion *motionData,
             InputEvent event;
             
             event.deviceInst = 0;
-            event.fValue = gyroData[i];
+            event.fValues[0] = gyroData[i];
             event.deviceType = GyroscopeDeviceType;
             event.objType = gyroAxes[i];
             event.objInst = i;
