@@ -1338,6 +1338,9 @@
     <ClCompile Include="..\..\source\console\Package.cc">
       <Filter>console</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\2d\sceneobject\TextObject.cc">
+      <Filter>2d\sceneobject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\audio\audio.h">
@@ -2978,6 +2981,12 @@
     </ClInclude>
     <ClInclude Include="..\..\source\console\Package.h">
       <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\TextObject.h">
+      <Filter>2d\sceneobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\TextObject_ScriptBinding.h">
+      <Filter>2d\sceneobject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
