@@ -140,7 +140,7 @@
                     buttonType="ToggleButton"
                     useMouseEvents="0"
                     buttonMargin="4 2"
-                    iconBitmap="^UtilityGui/gui/images/iconNew.png"
+                    iconBitmap="^EditorAssets/data/images/iconNew.png"
                     iconLocation="Left"
                     sizeIconToButton="0"
                     textLocation="Center"
