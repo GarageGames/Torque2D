@@ -226,7 +226,7 @@ void GuiTextEditSliderCtrl::onRender(Point2I offset, const RectI &updateRect)
                Point2I(start.x+14,midPoint.y),
                mProfile->mFontColor);
 
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_EMSCRIPTEN)
 
    glColor4f(0,0,0,255);
 	

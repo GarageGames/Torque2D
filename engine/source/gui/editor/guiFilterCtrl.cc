@@ -163,7 +163,7 @@ void GuiFilterCtrl::onRender(Point2I offset, const RectI &updateRect)
    ext.x -= 4;
    ext.y -= 4;
 
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_EMSCRIPTEN)
 	//this was the same drawing as dglDrawLine		<Mat>
 	dglDrawLine( (pos.x), (pos.y+ext.y), (pos.x+ext.x), (pos.y), ColorI(255 *0.9, 255 *0.9, 255 *0.9, 255 *1) );
 

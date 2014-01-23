@@ -316,6 +316,9 @@ void Scroller::sceneRender( const SceneRenderState* pSceneRenderState, const Sce
     // Flush any existing batches.
     pBatchRenderer->flush();
 
+    // jamesu - no clip planes in webgl
+#ifndef TORQUE_OS_EMSCRIPTEN
+
     // Set-up a set of clip-planes against the OOBB.
     GLdouble left[4] = {1, 0, 0, -renderOOBB0.x};
     GLdouble right[4] = {-1, 0, 0, renderOOBB1.x};
@@ -342,6 +345,8 @@ void Scroller::sceneRender( const SceneRenderState* pSceneRenderState, const Sce
     	glEnable(GL_CLIP_PLANE2);
     if (maxClip > 3)
     	glEnable(GL_CLIP_PLANE3);
+
+#endif
 
     // Render repeat Y.
     for ( S32 repeatIndexY = 0; repeatIndexY < wholeRegionY; ++repeatIndexY )
@@ -385,6 +390,7 @@ void Scroller::sceneRender( const SceneRenderState* pSceneRenderState, const Sce
     // Flush the scroller batches.
     pBatchRenderer->flush();
 
+#ifndef TORQUE_OS_EMSCRIPTEN
     // Disable the OOBB clip-planes.
     glDisable(GL_CLIP_PLANE0);
     if (maxClip > 1)
@@ -393,6 +399,8 @@ void Scroller::sceneRender( const SceneRenderState* pSceneRenderState, const Sce
     	glDisable(GL_CLIP_PLANE2);
     if (maxClip > 3)
     	glDisable(GL_CLIP_PLANE3);
+
+#endif
 }
 
 //------------------------------------------------------------------------------

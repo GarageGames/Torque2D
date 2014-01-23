@@ -38,6 +38,19 @@
 #elif defined(TORQUE_OS_IOS)
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
+#elif defined(DUMMY_PLATFORM)
+#include "al/altypes.h"
+#include "al/alctypes.h"
+#include "al/eaxtypes.h"
+#define AL_FUNCTION(fn_return,fn_name,fn_args, fn_value) extern fn_return (FN_CDECL *fn_name)fn_args;
+#include "al/al_func.h"
+#include "al/alc_func.h"
+#include "al/eax_func.h"
+#undef AL_FUNCTION
+#elif defined(TORQUE_OS_EMSCRIPTEN)
+#include <AL/al.h>
+#include <AL/alc.h>
+#include "platform/eaxtypes.h"
 #else
 // declare externs of the AL fns here.
 #include "al/altypes.h"

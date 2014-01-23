@@ -32,6 +32,9 @@ typedef char ALCboolean;
 /** ALC 8bit signed byte. */
 typedef char ALCbyte;
 
+/** character */
+typedef char ALCchar;
+
 /** ALC 8bit unsigned byte. */
 typedef unsigned char ALCubyte;
 
