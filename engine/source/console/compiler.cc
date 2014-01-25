@@ -172,7 +172,7 @@ U32 CompilerStringTable::add(const char *str, bool caseSens, bool tag)
    
 #ifdef EMSCRIPTEN
    consoleAlloc(2);
-   Con::printf("CompilerStringTable::add(%s) %s %s @ %u:%u", str, caseSens ? "CASE" : "NOCASE", tag ? "TAG" : "NOTAG", newStr->string, len);
+   //Con::printf("CompilerStringTable::add(%s) %s %s @ %u:%u", str, caseSens ? "CASE" : "NOCASE", tag ? "TAG" : "NOTAG", newStr->string, len);
 #endif
 
    return newStr->start;
