@@ -177,11 +177,8 @@ struct ScreenTouchEvent : public Event
 struct InputEvent : public Event
 {
    U32   deviceInst;  ///< Device instance: joystick0, joystick1, etc
-   F32   fValue;      ///< Value ranges from -1.0 to 1.0
-   F32   fValue2;
-   F32   fValue3;
-   F32   fValue4;
-   S32   iValue;
+   S32 iValue;        ///< Handy for tracking IDs of things like fingers, hands, etc
+   float fValues[7];  ///< Stores the evemt data. Sometimes only one with a range of -1.0 - 1.0 is needed, other times it might be multiple vectors
    U16   deviceType;  ///< One of mouse, keyboard, joystick, unknown
    U16   objType;     ///< One of SI_XAXIS, SI_BUTTON, SI_KEY ...
    U16   ascii;       ///< ASCII character code if this is a keyboard event.
@@ -190,13 +187,30 @@ struct InputEvent : public Event
    U8    modifier;    ///< Modifier to action: SI_LSHIFT, SI_LCTRL, etc.
 
    // iOS specific
-   char touchesX[256];    ///< Collection of x-coordinates for touches
-   char touchesY[256];    ///< Collection of y-coordinates for touches
-   char touchIDs[256];    ///< Collection of touch IDs
+   char fingersX[256];    ///< Collection of x-coordinates for fingers
+   char fingersY[256];    ///< Collection of y-coordinates for fingers
+   char fingersZ[256];    ///< Collection of Z-coordinates for fingers
+
+   char fingerIDs[256];    ///< Collection of touch IDs
     
-   InputEvent() { type = InputEventType; size = sizeof(InputEvent); dMemset(touchesX, 0, sizeof(touchesX)); 
-                                                                    dMemset(touchesY, 0, sizeof(touchesY));
-                                                                    dMemset(touchIDs, 0, sizeof(touchIDs));}
+    InputEvent()
+    { 
+        type = InputEventType; 
+        size = sizeof(InputEvent); 
+        deviceInst = 0;
+        iValue     = -1;
+        objType    = 0;
+        ascii      = 0;
+        objInst    = 0;
+        action     = 0;
+        modifier   = 0;
+        dMemset(fValues, 0, sizeof(fValues));
+        dMemset(fingersX, 0, sizeof(fingersX));
+        dMemset(fingersY, 0, sizeof(fingersY));
+        dMemset(fingersZ, 0, sizeof(fingersZ));
+        dMemset(fingerIDs, 0, sizeof(fingerIDs));
+    }
+
 };
 
 /// @defgroup input_constants Input system constants
@@ -447,9 +461,24 @@ enum TouchCodes
    SI_TOUCHDOWN   = 0x30C,
    SI_TOUCHUP     = 0x30D,
    SI_TOUCHMOVE   = 0x30E,
-   SI_PINCH       = 0x30F,
-   SI_SCALE       = 0x401,
-   SI_TAP         = 0x402
+};
+
+enum GestureCodes
+{
+    SI_CIRCLE_GESTURE    = 0x403,
+    SI_SWIPE_GESTURE     = 0x404,
+    SI_KEYTAP_GESTURE    = 0x405,
+    SI_SCREENTAP_GESTURE = 0x406,
+    SI_PINCH_GESTURE     = 0x407,
+    SI_SCALE_GESTURE     = 0x408
+};
+
+enum LeapMotionCodes
+{
+    LM_HANDAXIS          = 0x409,
+    LM_HANDROT           = 0x40A,
+    LM_HANDPOS           = 0x40B,
+    LM_FINGERPOS         = 0x40C,
 };
 
 /// Input device types
@@ -463,8 +492,8 @@ enum InputDeviceTypes
    XInputDeviceType,
    ScreenTouchDeviceType,
    AccelerometerDeviceType,
-   GyroscopeDeviceType
-
+   GyroscopeDeviceType,
+   LeapMotionDeviceType
 };
 
 /// Device Event Action Types
@@ -474,17 +503,16 @@ enum InputDeviceTypes
 #define SI_REPEAT    0x04
 #define SI_VALUE	 0x05
 
-//Device Event Types
-#define SI_UNKNOWN   0x01
-#define SI_BUTTON    0x02
-#define SI_POV       0x03
-#define SI_KEY       0x0A
-#define SI_TEXT      0x0B
-#define SI_TOUCH     0x0C
-#define SI_GESTURE   0x0D
-#define SI_MOTION    0x0F
-
-
+///Device Event Types
+#define SI_UNKNOWN           0x01
+#define SI_BUTTON            0x02
+#define SI_POV               0x03
+#define SI_KEY               0x0A
+#define SI_TEXT              0x0B
+#define SI_TOUCH             0x0C
+#define SI_GESTURE           0x0D
+#define SI_MOTION            0x0F
+#define SI_LEAP              0x11
 
 /// Event SubTypes
 #define SI_ANY       0xff

@@ -917,7 +917,7 @@ bool DInputDevice::buildEvent( DWORD offset, S32 newData, S32 oldData )
          newEvent.action = SI_MOVE;
          if ( newEvent.deviceType == MouseDeviceType )
          {
-            newEvent.fValue = float( newData );
+            newEvent.fValues[0] = float( newData );
 
          }
          else  // Joystick or other device:
@@ -926,11 +926,11 @@ bool DInputDevice::buildEvent( DWORD offset, S32 newData, S32 oldData )
             if ( objInfo.mMin != DIPROPRANGE_NOMIN && objInfo.mMax != DIPROPRANGE_NOMAX )
             {
                float range = float( objInfo.mMax - objInfo.mMin );
-               //newEvent.fValue = float( newData - objInfo.mMin ) / range;
-               newEvent.fValue = float( ( 2 * newData ) - objInfo.mMax - objInfo.mMin ) / range;
+               //newEvent.fValues[0] = float( newData - objInfo.mMin ) / range;
+               newEvent.fValues[0] = float( ( 2 * newData ) - objInfo.mMax - objInfo.mMin ) / range;
             }
             else
-               newEvent.fValue = (F32)newData;
+               newEvent.fValues[0] = (F32)newData;
          }
 
          Game->postEvent( newEvent );
@@ -938,14 +938,14 @@ bool DInputDevice::buildEvent( DWORD offset, S32 newData, S32 oldData )
 
       case SI_BUTTON:
          newEvent.action   = ( newData & 0x80 ) ? SI_MAKE : SI_BREAK;
-         newEvent.fValue   = ( newEvent.action == SI_MAKE ) ? 1.0f : 0.0f;
+         newEvent.fValues[0]   = ( newEvent.action == SI_MAKE ) ? 1.0f : 0.0f;
 
          Game->postEvent( newEvent );
          break;
 
       case SI_KEY:
          newEvent.action   = ( newData & 0x80 ) ? SI_MAKE : SI_BREAK;
-         newEvent.fValue   = ( newEvent.action == SI_MAKE ) ? 1.0f : 0.0f;
+         newEvent.fValues[0]   = ( newEvent.action == SI_MAKE ) ? 1.0f : 0.0f;
          processKeyEvent( newEvent );
 
          Game->postEvent( newEvent );
@@ -975,7 +975,7 @@ bool DInputDevice::buildEvent( DWORD offset, S32 newData, S32 oldData )
             if ( clearkeys )
             {
                newEvent.action = SI_BREAK;
-               newEvent.fValue = 0.0f;
+               newEvent.fValues[0] = 0.0f;
                // post events for all buttons that need to be cleared.
                if( clearkeys & POV_up)
                {
@@ -1006,7 +1006,7 @@ bool DInputDevice::buildEvent( DWORD offset, S32 newData, S32 oldData )
             if ( setkeys )
             {
                newEvent.action = SI_MAKE;
-               newEvent.fValue = 1.0f;
+               newEvent.fValues[0] = 1.0f;
                // post events for all buttons that need to be set.
                if( setkeys & POV_up)
                {

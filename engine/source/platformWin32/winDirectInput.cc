@@ -652,7 +652,7 @@ InputEvent newEvent;
    newEvent.objType = objType;
    newEvent.objInst = objInst;
    newEvent.action = action;
-   newEvent.fValue = fValue;
+   newEvent.fValues[0] = fValue;
    //we need to find the gameinterface object from here
 
    Game->postEvent(newEvent);

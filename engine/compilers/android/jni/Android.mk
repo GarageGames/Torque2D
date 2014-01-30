@@ -83,6 +83,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
     				$(LOCAL_PATH)/../../../source/gui/editor \
     				$(LOCAL_PATH)/../../../source/gui/language \
     				$(LOCAL_PATH)/../../../source/input \
+					$(LOCAL_PATH)/../../../source/input/leapMotion \
     				$(LOCAL_PATH)/../../../source/io \
     				$(LOCAL_PATH)/../../../source/io/resource \
     				$(LOCAL_PATH)/../../../source/io/zip \
@@ -337,6 +338,8 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/gui/language/lang.cc \
 					../../../source/gui/messageVector.cc \
 					../../../source/input/actionMap.cc \
+					../../../source/input/leapMotion/leapMotionManager.cc \
+					../../../source/input/leapMotion/leapMotionUtil.cpp \
 					../../../source/io/bitStream.cc \
 					../../../source/io/bufferStream.cc \
 					../../../source/io/fileObject.cc \
@@ -446,6 +449,7 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/math/mRandom.cc \
 					../../../source/math/mSolver.cc \
 					../../../source/math/mSplinePatch.cc \
+					../../../source/math/mPoint.cpp \
 					../../../source/persistence/SimXMLDocument.cpp \
 					../../../source/platform/CursorManager.cc \
 					../../../source/platform/nativeDialogs/fileDialog.cc \
