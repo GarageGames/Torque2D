@@ -253,24 +253,32 @@ ConsoleMethodWithDocs(ImageAsset, getCellWidth, ConsoleInt, 2, 2, ())
     return object->getCellWidth();
 }
 
-ConsoleMethod(ImageAsset, getExplicitCellWidth, S32, 3,3, "(CellIndex) Gets the CELL width in Explicit Mode.\n"
-                                                                        "@return the specified CELL width.")
+//-----------------------------------------------------------------------------
+
+/*! Gets the CELL width in Explicit Mode.
+    @return the specified CELL width.
+*/
+ConsoleMethodWithDocs(ImageAsset, getExplicitCellWidth, ConsoleInt, 3,3, (CellIndex))
 {
-	    // Fetch cell index.
+    // Fetch cell index.
     const S32 cellIndex = dAtoi( argv[2] );
 
     return(object->getExplicitCellWidth(cellIndex));
 }
 
-ConsoleMethod(ImageAsset, getExplicitCellHeight, S32, 3,3, "(CellIndex) Gets the CELL height in Explicit Mode.\n"
-                                                                        "@return the specified CELL height.")
+//-----------------------------------------------------------------------------
+
+/*! Gets the CELL height in Explicit Mode.
+    @return the specified CELL height.
+*/
+ConsoleMethodWithDocs(ImageAsset, getExplicitCellHeight, ConsoleInt, 3,3, (CellIndex))
 {
-	    // Fetch cell index.
+    // Fetch cell index.
     const S32 cellIndex = dAtoi( argv[2] );
 
     return(object->getExplicitCellHeight(cellIndex));
-
 }
+
 //-----------------------------------------------------------------------------
 
 /*! Sets the CELL height.
@@ -399,10 +407,11 @@ ConsoleMethodWithDocs(ImageAsset, clearExplicitCells, ConsoleBool, 2, 2, ())
     @param cellOffsetY The offset in the Y axis to the top-left of the cell.
     @param cellWidth The width of the cell.
     @param cellHeight The height of the cell.
+    @param cellName The name of the cell's region.
     The image asset must be in explicit mode for this operation to succeed.
     @return Whether the operation was successful or not.
 */
-ConsoleMethodWithDocs(ImageAsset, addExplicitCell, ConsoleBool, 6, 6, (int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight))
+ConsoleMethodWithDocs(ImageAsset, addExplicitCell, ConsoleBool, 7, 7, (int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight, string cellName))
 {
     // Fetch offsets.
     const S32 cellOffsetX = dAtoi( argv[2] );
@@ -412,7 +421,7 @@ ConsoleMethodWithDocs(ImageAsset, addExplicitCell, ConsoleBool, 6, 6, (int cellO
     const S32 cellWidth = dAtoi( argv[4] );
     const S32 cellHeight = dAtoi (argv[5] );
 
-    return object->addExplicitCell( cellOffsetX, cellOffsetY, cellWidth, cellHeight );
+    return object->addExplicitCell( cellOffsetX, cellOffsetY, cellWidth, cellHeight, argv[6] );
 }
 
 //-----------------------------------------------------------------------------
@@ -423,10 +432,11 @@ ConsoleMethodWithDocs(ImageAsset, addExplicitCell, ConsoleBool, 6, 6, (int cellO
     @param cellOffsetY The offset in the Y axis to the top-left of the cell.
     @param cellWidth The width of the cell.
     @param cellHeight The height of the cell.
+    @param cellName The name of the cell's region.
     The image asset must be in explicit mode for this operation to succeed.
     @return Whether the operation was successful or not.
 */
-ConsoleMethodWithDocs(ImageAsset, insertExplicitCell, ConsoleBool, 7, 7, (int cellIndex, int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight))
+ConsoleMethodWithDocs(ImageAsset, insertExplicitCell, ConsoleBool, 8, 8, (int cellIndex, int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight, string cellName))
 {
     // Fetch cell index.
     const S32 cellIndex = dAtoi( argv[2] );
@@ -439,7 +449,7 @@ ConsoleMethodWithDocs(ImageAsset, insertExplicitCell, ConsoleBool, 7, 7, (int ce
     const S32 cellWidth = dAtoi( argv[5] );
     const S32 cellHeight = dAtoi (argv[6] );
 
-    return object->insertExplicitCell( cellIndex, cellOffsetX, cellOffsetY, cellWidth, cellHeight );
+    return object->insertExplicitCell( cellIndex, cellOffsetX, cellOffsetY, cellWidth, cellHeight, argv[7] );
 }
 
 
@@ -465,10 +475,11 @@ ConsoleMethodWithDocs(ImageAsset, removeExplicitCell, ConsoleBool, 7, 7, (int ce
     @param cellOffsetY The offset in the Y axis to the top-left of the cell.
     @param cellWidth The width of the cell.
     @param cellHeight The height of the cell.
+    @param cellName The name of the cell's region.
     The image asset must be in explicit mode for this operation to succeed.
     @return Whether the operation was successful or not.
 */
-ConsoleMethodWithDocs(ImageAsset, setExplicitCell, ConsoleBool, 7, 7, (int cellIndex, int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight))
+ConsoleMethodWithDocs(ImageAsset, setExplicitCell, ConsoleBool, 8, 8, (int cellIndex, int cellOffsetX, int cellOffsetY, int cellWidth, int cellHeight, string cellName))
 {
     // Fetch cell index.
     const S32 cellIndex = dAtoi( argv[2] );
@@ -481,7 +492,7 @@ ConsoleMethodWithDocs(ImageAsset, setExplicitCell, ConsoleBool, 7, 7, (int cellI
     const S32 cellWidth = dAtoi( argv[5] );
     const S32 cellHeight = dAtoi (argv[6] );
 
-    return object->setExplicitCell( cellIndex, cellOffsetX, cellOffsetY, cellWidth, cellHeight );
+    return object->setExplicitCell( cellIndex, cellOffsetX, cellOffsetY, cellWidth, cellHeight, argv[7] );
 }
 
 //-----------------------------------------------------------------------------

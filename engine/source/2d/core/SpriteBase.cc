@@ -56,6 +56,7 @@ void SpriteBase::initPersistFields()
 
     addProtectedField("Image", TypeImageAssetPtr, Offset(mImageAsset, SpriteBase), &setImage, &getImage, &writeImage, "");
     addProtectedField("Frame", TypeS32, Offset(mImageFrame, SpriteBase), &setImageFrame, &defaultProtectedGetFn, &writeImageFrame, "");
+    addProtectedField("FrameName", TypeString, Offset(mImageFrame, SpriteBase), &setImageNameFrame, &defaultProtectedGetFn, &writeImageNameFrame, "");
     addProtectedField("Animation", TypeAnimationAssetPtr, Offset(mAnimationAsset, SpriteBase), &setAnimation, &getAnimation, &writeAnimation, "");
 }
 
