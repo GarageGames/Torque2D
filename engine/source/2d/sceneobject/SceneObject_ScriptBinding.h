@@ -1156,7 +1156,7 @@ ConsoleMethodWithDocs(SceneObject, getContact, ConsoleString, 3, 3, (contactInde
     {
         dSprintf(pReturnBuffer, 128,
             "%d %d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
-            pSceneObjectCollider,
+            pSceneObjectCollider->getId(),
             shapeIndexThis, shapeIndexCollider,
             normal.x, normal.y,
             point1.x, point1.y,
@@ -1170,7 +1170,7 @@ ConsoleMethodWithDocs(SceneObject, getContact, ConsoleString, 3, 3, (contactInde
     {
         dSprintf(pReturnBuffer, 128,
             "%d %d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
-            pSceneObjectCollider,
+            pSceneObjectCollider->getId(),
             shapeIndexThis, shapeIndexCollider,
             normal.x, normal.y,
             point1.x, point1.y,
@@ -1181,7 +1181,7 @@ ConsoleMethodWithDocs(SceneObject, getContact, ConsoleString, 3, 3, (contactInde
 	{
         dSprintf(pReturnBuffer, 64,
             "%d %d %d",
-            pSceneObjectCollider,
+            pSceneObjectCollider->getId(),
             shapeIndexThis, shapeIndexCollider );
 	}
 
