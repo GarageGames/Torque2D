@@ -517,10 +517,28 @@ ConsoleMethodWithDocs(ParticleAssetEmitter, getOldestInFront, ConsoleBool, 2, 2,
 */
 ConsoleMethodWithDocs(ParticleAssetEmitter, setImage, ConsoleBool, 3, 4, (imageAssetId, [frame]))
 {
-    // Fetch the frame.
-    const U32 frame = argc >= 4 ? dAtoi(argv[3]) : 0;
-
-    return object->setImage( argv[2], frame );
+    // Was a frame specified?
+    if (argc >= 4)
+    {
+        // Was it a number or a string?
+        if (!dIsalpha(*argv[3]))
+        {
+            // Fetch the numerical frame and set the image
+            const U32 frame = argc >= 4 ? dAtoi(argv[3]) : 0;
+            return object->setImage(argv[2], frame);
+        }
+        else
+        {
+            // Set the image and pass the named frame string
+            return object->setImage(argv[2], argv[3]);
+        }
+    }
+    else
+    {
+        // Frame was not specified, use default 0 and set the image
+        const U32 frame = 0;
+        return object->setImage( argv[2], frame);
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -573,6 +591,27 @@ ConsoleMethodWithDocs(ParticleAssetEmitter, setRandomImageFrame, ConsoleVoid, 3,
 ConsoleMethodWithDocs(ParticleAssetEmitter, getRandomImageFrame, ConsoleBool, 2, 2, ())
 {
     return object->getRandomImageFrame();
+}
+
+//------------------------------------------------------------------------------
+
+/*! Sets the emitter to use the specified image frame by name.
+    @param frame String containing the name of the frame in the image to use.
+    @return Whether the operation was successful or not.
+*/
+ConsoleMethodWithDocs(ParticleAssetEmitter, setImageFrameName, ConsoleBool, 3, 3,  (frame))
+{
+    return object->setImageFrameName( argv[2] );
+}
+
+//------------------------------------------------------------------------------
+
+/*! Gets the asset Id of the image asset assigned to the emitter.
+    @return The asset Id of the image asset assigned to the emitter or nothing if no image is assigned.
+*/
+ConsoleMethodWithDocs(ParticleAssetEmitter, getImageFrameName, ConsoleString, 2, 2, ())
+{
+    return object->getImageFrameName();
 }
 
 //------------------------------------------------------------------------------
