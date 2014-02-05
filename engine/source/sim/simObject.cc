@@ -1128,7 +1128,7 @@ void SimObject::copyTo(SimObject* object)
 {
    object->mClassName = mClassName;
    object->mSuperClassName = mSuperClassName;
-
+   object->mNameSpace = NULL;
    object->linkNamespaces();
 }
 
