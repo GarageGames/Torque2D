@@ -20,8 +20,6 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-
-
 #include "platformX86UNIX/platformX86UNIX.h"
 #include "platform/platformInput.h"
 #include "platform/platformVideo.h"
@@ -34,7 +32,6 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
-#include <X11/keysym.h>
 
 #include <SDL/SDL.h>
 
@@ -296,24 +293,6 @@ InputManager* Input::getManager()
 {
    return smManager;
 }
-
-#ifdef LOG_INPUT
-//------------------------------------------------------------------------------
-void Input::log( const char* format, ... )
-{
-   if ( gInputLog == -1)
-      return;
-   
-   va_list argptr;
-   va_start( argptr, format );
-
-   const int BufSize = 4096;
-   char buffer[BufSize];
-   dVsprintf( buffer, BufSize, format, argptr );
-   x86UNIXWrite(gInputLog, buffer, dStrlen( buffer ));
-   va_end( argptr );
-}
-#endif // LOG_INPUT
 
 //------------------------------------------------------------------------------
 void NotifySelectionEvent(XEvent& event)

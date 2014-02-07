@@ -50,9 +50,6 @@
 #include <time.h> // nanosleep
 
 #ifndef DEDICATED
-#include <X11/Xlib.h>
-#include <X11/Xos.h>
-
 #include <SDL/SDL.h>
 #include <SDL/SDL_syswm.h>
 #include <SDL/SDL_version.h>
@@ -790,7 +787,7 @@ bool Platform::openWebBrowser( const char* webAddress )
    {
       // child
       char* argv[3];
-      argv[0] = "";
+      argv[0] = 0;
       argv[1] = const_cast<char*>(webAddress);
       argv[2] = 0;
 

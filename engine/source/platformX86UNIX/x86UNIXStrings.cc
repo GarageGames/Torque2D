@@ -352,6 +352,7 @@ void dPrintf(const char *format, ...)
    va_list args;
    va_start(args, format);
    vprintf(format, args);
+   va_end(args);
 }   
 
 S32 dVprintf(const char *format, void *arglist)
@@ -365,23 +366,19 @@ S32 dSprintf(char *buffer, U32 bufferSize, const char *format, ...)
    va_list args;
    va_start(args, format);
 
-   S32 len = vsprintf(buffer, format, args);
+   S32 len = vsnprintf(buffer, bufferSize, format, args);
 
-   // Sanity!
-   AssertFatal(len <= bufferSize, "dSprintf - String format exceeded buffer size.  This will cause corruption.");
+   va_end(args);
 
-   return (len);
+   return len;
 }   
 
 
 S32 dVsprintf(char *buffer, U32 bufferSize, const char *format, va_list arglist)
 {
-   S32 len = vsprintf(buffer, format, arglist);
+   S32 len = vsnprintf(buffer, bufferSize, format, arglist);
 
-   // Sanity!
-   AssertFatal(len <= bufferSize, "dSprintf - String format exceeded buffer size.  This will cause corruption.");
-
-   return (len);
+   return len;
 }
 
 S32 dStrrev(char *str)

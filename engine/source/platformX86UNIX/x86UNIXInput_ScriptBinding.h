@@ -27,7 +27,6 @@
 */
 ConsoleFunctionWithDocs( isJoystickDetected, ConsoleBool, 1, 1, () )
 {
-   argc; argv;
    UInputManager* manager = dynamic_cast<UInputManager*>(Input::getManager());
    if (manager)
       return manager->joystickDetected();
@@ -43,18 +42,9 @@ ConsoleFunctionWithDocs( isJoystickDetected, ConsoleBool, 1, 1, () )
 */
 ConsoleFunctionWithDocs( getJoystickAxes, ConsoleString, 2, 2, (instance) )
 {
-   argc; argv;
    UInputManager* manager = dynamic_cast<UInputManager*>(Input::getManager());
    if (manager)
       return manager->getJoystickAxesString(dAtoi(argv[1]));
    else
       return "";
 }
-
-#ifdef LOG_INPUT
-ConsoleFunction( inputLog, ConsoleVoid, 2, 2, "inputLog( string )" )
-{
-   argc;
-   Input::log( "%s\n", argv[1] );
-}
-#endif //LOG_INPUT

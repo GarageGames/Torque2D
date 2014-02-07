@@ -45,8 +45,6 @@ struct AsciiData
    KeyData goofy;
 };
 
-typedef struct _SDL_Joystick;
-
 struct JoystickAxisInfo
 {
       S32 type;

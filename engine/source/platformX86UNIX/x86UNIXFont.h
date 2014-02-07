@@ -27,11 +27,6 @@
 
 #ifndef _X86UNIXFONT_H_
 #define _X86UNIXFONT_H_
-// Needed by createFont
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xos.h>
-#include <X11/Xatom.h>
 
 class x86UNIXFont : public PlatformFont
 {
