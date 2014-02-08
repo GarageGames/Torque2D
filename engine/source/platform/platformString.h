@@ -85,7 +85,7 @@ extern int dFflushStdout();
 extern int dFflushStderr();
 
 extern void dPrintf(const char *format, ...);
-extern int dVprintf(const char *format, void *arglist);
+extern int dVprintf(const char *format, va_list arglist);
 extern int dSprintf(char *buffer, dsize_t bufferSize, const char *format, ...);
 extern int dVsprintf(char *buffer, dsize_t bufferSize, const char *format, va_list arglist);
 

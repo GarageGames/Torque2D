@@ -23,6 +23,7 @@
 #ifndef INCLUDED_TYPES_VISUALC_H
 #define INCLUDED_TYPES_VISUALC_H
 
+#include <stdarg.h> // for va_list
 
 // For more information on VisualC++ predefined macros
 // http://support.microsoft.com/default.aspx?scid=kb;EN-US;q65472
@@ -72,7 +73,17 @@ typedef unsigned _int64 U64;
 #  define TORQUE_SUPPORTS_NASM
 #  define TORQUE_SUPPORTS_VC_INLINE_X86_ASM
 #else
+
+#if defined(_M_AMD64)
+#  define TORQUE_CPU_STRING "x86_64"
+#  define TORQUE_64
+#  define TORQUE_LITTLE_ENDIAN
+//#  define TORQUE_SUPPORTS_NASM
+//#  define TORQUE_SUPPORTS_VC_INLINE_X86_ASM
+#  else
 #  error "VC: Unsupported Target CPU"
+#endif
+
 #endif
 
 

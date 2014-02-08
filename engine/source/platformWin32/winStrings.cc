@@ -308,13 +308,13 @@ void dPrintf(const char *format, ...)
    vprintf(format, args);
 }
 
-S32 dVprintf(const char *format, void *arglist)
+S32 dVprintf(const char *format, va_list arglist)
 {
-   S32 len = vprintf(format, (char*)arglist);
+   S32 len = vprintf(format, arglist);
    return (len);
 }
 
-S32 dSprintf(char *buffer, U32 bufferSize, const char *format, ...)
+S32 dSprintf(char *buffer, dsize_t bufferSize, const char *format, ...)
 {
    va_list args;
    va_start(args, format);
@@ -327,9 +327,9 @@ S32 dSprintf(char *buffer, U32 bufferSize, const char *format, ...)
 }
 
 
-S32 dVsprintf(char *buffer, U32 bufferSize, const char *format, va_list arglist)
+S32 dVsprintf(char *buffer, dsize_t bufferSize, const char *format, va_list arglist)
 {
-   S32 len = vsnprintf(buffer, bufferSize, format, (char*)arglist);
+   S32 len = vsnprintf(buffer, bufferSize, format, arglist);
     
    AssertFatal( (U32)len < bufferSize, "dVsprintf wrote to more memory than the specified buffer size - Stack Corruption Possible" );
 

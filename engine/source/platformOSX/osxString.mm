@@ -404,9 +404,9 @@ void dPrintf(const char *format, ...)
 
 //-----------------------------------------------------------------------------
 
-int dVprintf(const char *format, void *arglist)
+int dVprintf(const char *format, va_list arglist)
 {
-    S32 len = vprintf(format, (char*)arglist);
+    S32 len = vprintf(format, arglist);
     
     return (len);
 }
@@ -429,7 +429,7 @@ int dSprintf(char *buffer, dsize_t bufferSize, const char *format, ...)
 
 int dVsprintf(char *buffer, dsize_t bufferSize, const char *format, va_list arglist)
 {
-	S32 len = vsprintf(buffer, format, (char*)arglist);
+	S32 len = vsprintf(buffer, format, arglist);
 
     // Sanity!
     AssertFatal(len <= bufferSize, "dSprintf - String format exceeded buffer size.  This will cause corruption.");
