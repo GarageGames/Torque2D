@@ -34,16 +34,33 @@ ConsoleMethodWithDocs(SpriteBase, isStaticFrameProvider, ConsoleBool, 2, 2, ())
 
 /*! Sets the sprite image and optionally frame.
     @param imageAssetId The image asset Id to display
-    @param frame The frame of the image to display
+    @param frame The numerical or named frame of the image to display
     @return Returns true on success.
 */
-ConsoleMethodWithDocs(SpriteBase, setImage, ConsoleBool, 3, 4, (string imageAssetId, [int frame]))
+ConsoleMethodWithDocs(SpriteBase, setImage, ConsoleBool, 3, 4, (imageAssetId, [frame]))
 {
-    // Calculate Frame.
-    U32 frame = argc >= 4 ? dAtoi(argv[3]) : 0;
-
-    // Set image.
-    return static_cast<ImageFrameProvider*>(object)->setImage( argv[2], frame );
+    // Was a frame specified?
+    if (argc >= 4)
+    {
+        // Was it a number or a string?
+        if (!dIsalpha(*argv[3]))
+        {
+            // Fetch the numerical frame and set the image
+            const U32 frame = argc >= 4 ? dAtoi(argv[3]) : 0;
+            return static_cast<ImageFrameProvider*>(object)->setImage( argv[2], frame );
+        }
+        else
+        {
+            // Set the image and pass the named frame string
+            return static_cast<ImageFrameProvider*>(object)->setImage( argv[2], argv[3] );
+        }
+    }
+    else
+    {
+        // Frame was not specified, use default 0 and set the image
+        const U32 frame = 0;
+        return static_cast<ImageFrameProvider*>(object)->setImage( argv[2], frame );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -102,6 +119,45 @@ ConsoleMethodWithDocs(SpriteBase, getImageFrame, ConsoleInt, 2, 2, ())
 
     // Get image Frame.
     return static_cast<ImageFrameProvider*>(object)->getImageFrame();
+}
+
+//------------------------------------------------------------------------------
+
+/*! Sets the image frame using a string.
+    @param frame - The name of the frame.
+    @return True on success.
+*/
+ConsoleMethodWithDocs(SpriteBase, setImageFrameName, ConsoleBool, 3, 3,  (frame))
+{
+    // Are we in static mode?
+    if ( !object->isStaticFrameProvider() )
+    {
+        // No, so warn.
+        Con::warnf( "SpriteBase::setImageFrameName() - Method invalid, not in static mode." );
+        return false;
+    }
+    
+    // Set image Frame.
+    return static_cast<ImageFrameProvider*>(object)->setImageFrameByName( argv[2] );
+}
+
+//------------------------------------------------------------------------------
+
+/*! Gets the current image frame name.
+    @return The current image frame name.
+*/
+ConsoleMethodWithDocs(SpriteBase, getImageFrameName, ConsoleString, 2, 2, ())
+{
+    // Are we in static mode?
+    if ( !object->isStaticFrameProvider() )
+    {
+        // No, so warn.
+        Con::warnf( "SpriteBase::getImageFrameName() - Method invalid, not in static mode." );
+        return false;
+    }
+    
+    // Get image Frame.
+    return static_cast<ImageFrameProvider*>(object)->getImageFrameByName();
 }
 
 //------------------------------------------------------------------------------

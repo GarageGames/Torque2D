@@ -94,8 +94,12 @@ void SpriteBatchItem::resetState( void )
     mLogicalPosition.resetState();
 
     mVisible = true;
+    mExplicitMode = false;
 
     mLocalPosition.SetZero();
+    for (U32 i = 0; i < 4; i++)
+        mExplicitVerts[i].SetZero();
+
     mDepth = 0.0f;
     mLocalAngle = 0.0f;
     setSize( Vector2( 1.0f, 1.0f ) );
@@ -226,6 +230,18 @@ void SpriteBatchItem::render( BatchRender* pBatchRenderer, const SceneRenderRequ
 
 //------------------------------------------------------------------------------
 
+void SpriteBatchItem::setExplicitVertices( const Vector2* explicitVertices )
+{
+    mExplicitMode = true;
+
+    mExplicitVerts[0] = explicitVertices[0];
+    mExplicitVerts[1] = explicitVertices[1];
+    mExplicitVerts[2] = explicitVertices[2];
+    mExplicitVerts[3] = explicitVertices[3];
+}
+
+//------------------------------------------------------------------------------
+
 void SpriteBatchItem::updateLocalTransform( void )
 {
     // Debug Profiling.
@@ -248,10 +264,20 @@ void SpriteBatchItem::updateLocalTransform( void )
     const F32 halfHeight = mSize.y * 0.5f;
 
     // Set local size vertices.
-    mLocalOOBB[0].Set( -halfWidth, -halfHeight );
-    mLocalOOBB[1].Set( +halfWidth, -halfHeight );
-    mLocalOOBB[2].Set( +halfWidth, +halfHeight );
-    mLocalOOBB[3].Set( -halfWidth, +halfHeight );
+    if (!mExplicitMode)
+    {
+        mLocalOOBB[0].Set( -halfWidth, -halfHeight );
+        mLocalOOBB[1].Set( +halfWidth, -halfHeight );
+        mLocalOOBB[2].Set( +halfWidth, +halfHeight );
+        mLocalOOBB[3].Set( -halfWidth, +halfHeight );
+    }
+    else
+    {
+        mLocalOOBB[0] = mExplicitVerts[0];
+        mLocalOOBB[1] = mExplicitVerts[1];
+        mLocalOOBB[2] = mExplicitVerts[2];
+        mLocalOOBB[3] = mExplicitVerts[3];
+    }
 
     // Calculate local OOBB.
     CoreMath::mCalculateOOBB( mLocalOOBB, localTransform, mLocalOOBB );

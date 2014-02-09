@@ -1023,6 +1023,34 @@ SpriteBatchItem* SpriteBatch::createSprite( void )
 
 //------------------------------------------------------------------------------
 
+SpriteBatchItem* SpriteBatch::createSprite( const Vector2* explicitVertices  )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(SpriteBatch_CreateSprite);
+
+    // Allocate batch Id.
+    const U32 batchId = ++mMasterBatchId;
+
+    // Create sprite batch item,
+    SpriteBatchItem* pSpriteBatchItem = SpriteBatchItemFactory.createObject();
+
+    // Set batch parent.
+    pSpriteBatchItem->setBatchParent( this, batchId );
+
+    // Set explicit mode.
+    pSpriteBatchItem->setExplicitMode( true );
+
+    // Set explicit vertices.
+
+
+    // Create sprite batch item,
+    mSprites.insert( batchId, pSpriteBatchItem );
+
+    return pSpriteBatchItem;
+}
+
+//------------------------------------------------------------------------------
+
 SpriteBatchItem* SpriteBatch::findSpritePosition( const SpriteBatchItem::LogicalPosition& logicalPosition )
 {
     // Debug Profiling.

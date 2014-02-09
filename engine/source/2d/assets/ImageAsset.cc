@@ -107,11 +107,15 @@ ConsoleSetType( TypeImageAssetPtr )
 
 //------------------------------------------------------------------------------
 
-static StringTableEntry cellCustomNodeName          = StringTable->insert( "Cells" );
+static StringTableEntry cellCustomNodeCellsName     = StringTable->insert( "Cells" );
 static StringTableEntry cellNodeName                = StringTable->insert( "Cell" );
+static StringTableEntry cellRegionName              = StringTable->insert( "RegionName" );
 static StringTableEntry cellOffsetName              = StringTable->insert( "Offset" );
+static StringTableEntry cellOffsetXName             = StringTable->insert( "OffsetX" );
+static StringTableEntry cellOffsetYName             = StringTable->insert( "OffsetY" );
 static StringTableEntry cellWidthName               = StringTable->insert( "Width" );
 static StringTableEntry cellHeightName              = StringTable->insert( "Height" );
+static StringTableEntry cellNameEntryName           = StringTable->insert( "Name" );
 
 //------------------------------------------------------------------------------
 
@@ -133,7 +137,7 @@ ImageAsset::TextureFilterMode ImageAsset::getFilterModeEnum(const char* label)
             return((ImageAsset::TextureFilterMode)textureFilterLookup[i].index);
 
     // Warn.
-    Con::warnf("ImageAsset::getFilterModeEnum() - Invalid filter-mode '%s'", label );
+    Con::warnf( "ImageAsset::getFilterModeEnum() - Invalid filter-mode '%s'", label );
 
     return ImageAsset::FILTER_INVALID;
 }
@@ -148,7 +152,7 @@ const char* ImageAsset::getFilterModeDescription( ImageAsset::TextureFilterMode 
             return textureFilterLookup[i].label;
 
     // Warn.
-    Con::warnf("ImageAsset::getFilterModeDescription() - Invalid filter-mode." );
+    Con::warnf( "ImageAsset::getFilterModeDescription() - Invalid filter-mode." );
 
     return StringTable->EmptyString;
 }
@@ -159,7 +163,6 @@ ImageAsset::ImageAsset() :  mImageFile(StringTable->EmptyString),
                             mForce16Bit(false),
                             mLocalFilterMode(FILTER_INVALID),
                             mExplicitMode(false),
-
                             mCellRowOrder(true),
                             mCellOffsetX(0),
                             mCellOffsetY(0),
@@ -294,7 +297,7 @@ void ImageAsset::copyTo(SimObject* object)
         const FrameArea::PixelArea& pixelArea = getImageFrameArea( index ).mPixelArea;
 
         // Add the explicit cell.
-        pAsset->addExplicitCell( pixelArea.mPixelOffset.x, pixelArea.mPixelOffset.y, pixelArea.mPixelWidth, pixelArea.mPixelHeight );
+        pAsset->addExplicitCell( pixelArea.mPixelOffset.x, pixelArea.mPixelOffset.y, pixelArea.mPixelWidth, pixelArea.mPixelHeight, pixelArea.mRegionName );
     }
 }
 
@@ -550,6 +553,8 @@ void ImageAsset::setCellHeight( const S32 cellheight )
     refreshAsset();
 }
 
+//------------------------------------------------------------------------------
+
 S32 ImageAsset::getExplicitCellWidth(const S32 cellIndex)
 {
 	if ( !getExplicitMode() )
@@ -564,6 +569,8 @@ S32 ImageAsset::getExplicitCellWidth(const S32 cellIndex)
 
 }
 
+//------------------------------------------------------------------------------
+
 S32 ImageAsset::getExplicitCellHeight(const S32 cellIndex)
 {
 	if ( !getExplicitMode() )
@@ -577,6 +584,27 @@ S32 ImageAsset::getExplicitCellHeight(const S32 cellIndex)
     return(thisCell.mPixelHeight);
 
 }
+
+//------------------------------------------------------------------------------
+
+bool ImageAsset::containsNamedRegion(const char* regionName)
+{
+    for( typeFrameAreaVector::iterator frameItr = mFrames.begin(); frameItr != mFrames.end(); ++frameItr )
+    {
+        // Grab the current pixelArea
+        const FrameArea::PixelArea& pixelArea = frameItr->mPixelArea;
+            
+        // Check to see if the name matches the argument
+        if (!dStrcmp(pixelArea.mRegionName, regionName))
+        {
+            // Found it, so erase it and return success
+            return true;
+        }
+    }
+    
+    return false;
+}
+
 //------------------------------------------------------------------------------
 
 bool ImageAsset::clearExplicitCells( void )
@@ -600,33 +628,42 @@ bool ImageAsset::clearExplicitCells( void )
 
 //------------------------------------------------------------------------------
 
-bool ImageAsset::addExplicitCell( const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight )
+bool ImageAsset::addExplicitCell( const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight, const char* regionName )
 {
     // Are we in explicit mode?
     if ( !getExplicitMode() )
     {
         // No, so warn.
-        Con::warnf( "ImageAsset::addCell() - Cannot perform explicit cell operation when not in explicit mode." );
+        Con::warnf( "ImageAsset::addExplicitCell() - Cannot perform explicit cell operation when not in explicit mode." );
         return false;
     }
 
     // Fetch the original image dimensions.
     const S32 imageWidth = getImageWidth();
     const S32 imageHeight = getImageHeight();
+    
+    // The region name cannot be empty
+    if ( regionName == StringTable->EmptyString )
+    {
+        Con::warnf( "ImageAsset::addExplicitCell() - Cell name of '%s' is invalid or was not set.", regionName );
+        U32 currentIndex = mExplicitFrames.size();
+        Con::warnf( "- Setting to the next index in the frame list: '%i'", currentIndex );
+        dSscanf(regionName, "%i", currentIndex);
+    }
 
     // The Cell Offset X needs to be within the image.
     if ( cellOffsetX < 0 || cellOffsetX >= imageWidth )
     {
         // Warn.
-        Con::warnf("ImageAsset::addCell() - Invalid Cell OffsetX of %d.", cellOffsetX );
+        Con::warnf( "ImageAsset::addExplicitCell() - Invalid Cell OffsetX of %d.", cellOffsetX );
         return false;
     }
 
     // The Cell Offset Y needs to be within the image.
-    if ( cellOffsetY < 0 || cellOffsetY >= imageWidth )
+    if ( cellOffsetY < 0 || cellOffsetY >= imageHeight )
     {
         // Warn.
-        Con::warnf("ImageAsset::addCell() - Invalid Cell OffsetY of %d.", cellOffsetY );
+        Con::warnf( "ImageAsset::addExplicitCell() - Invalid Cell OffsetY of %d.", cellOffsetY );
         return false;
     }
 
@@ -634,7 +671,7 @@ bool ImageAsset::addExplicitCell( const S32 cellOffsetX, const S32 cellOffsetY, 
     if ( cellWidth <= 0 || (cellOffsetX+cellWidth) > imageWidth )
     {
         // Warn.
-        Con::warnf("ImageAsset::addCell() - Invalid Cell Width of %d.", cellWidth );
+        Con::warnf( "ImageAsset::addExplicitCell() - Invalid Cell Width of %d.", cellWidth );
         return false;
     }
 
@@ -642,12 +679,12 @@ bool ImageAsset::addExplicitCell( const S32 cellOffsetX, const S32 cellOffsetY, 
     if ( cellHeight <= 0 || (cellOffsetY+cellHeight) > imageHeight )
     {
         // Warn.
-        Con::warnf("ImageAsset::addCell() - Invalid Cell Width of %d.", cellHeight );
+        Con::warnf( "ImageAsset::addExplicitCell() - Invalid Cell Width of %d.", cellHeight );
         return false;
     }
 
     // Store frame.
-    FrameArea::PixelArea pixelArea( cellOffsetX, cellOffsetY, cellWidth, cellHeight );
+    FrameArea::PixelArea pixelArea( cellOffsetX, cellOffsetY, cellWidth, cellHeight, regionName );
     mExplicitFrames.push_back( pixelArea );
 
     // Refresh the asset.
@@ -658,13 +695,13 @@ bool ImageAsset::addExplicitCell( const S32 cellOffsetX, const S32 cellOffsetY, 
 
 //------------------------------------------------------------------------------
 
-bool ImageAsset::insertExplicitCell( const S32 cellIndex, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight )
+bool ImageAsset::insertExplicitCell( const S32 cellIndex, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight, const char* regionName )
 {
     // Are we in explicit mode?
     if ( !getExplicitMode() )
     {
         // No, so warn.
-        Con::warnf( "ImageAsset::insertCell() - Cannot perform explicit cell operation when not in explicit mode." );
+        Con::warnf( "ImageAsset::insertExplicitCell() - Cannot perform explicit cell operation when not in explicit mode." );
         return false;
     }
 
@@ -674,12 +711,20 @@ bool ImageAsset::insertExplicitCell( const S32 cellIndex, const S32 cellOffsetX,
 
     // Fetch the explicit frame count.
     const S32 explicitFramelCount = mExplicitFrames.size();
+    
+    // Region cannot be empty
+    if ( regionName == StringTable->EmptyString )
+    {
+        Con::warnf( "ImageAsset::insertExplicitCell() - Cell name of '%s' is invalid or was not set.", regionName );
+        Con::warnf( "- Setting to the next index in the frame list: '%i'", explicitFramelCount );
+        dSscanf(regionName, "%i", explicitFramelCount);
+    }
 
     // The cell index needs to be in range.
     if ( cellIndex < 0 )
     {
         // Warn.
-        Con::warnf("ImageAsset::insertCell() - Invalid Cell Index of %d.", cellIndex );
+        Con::warnf( "ImageAsset::insertExplicitCell() - Invalid Cell Index of %d.", cellIndex );
         return false;
     }
 
@@ -687,15 +732,15 @@ bool ImageAsset::insertExplicitCell( const S32 cellIndex, const S32 cellOffsetX,
     if ( cellOffsetX < 0 || cellOffsetX >= imageWidth )
     {
         // Warn.
-        Con::warnf("ImageAsset::insertCell() - Invalid Cell OffsetX of %d.", cellOffsetX );
+        Con::warnf( "ImageAsset::insertExplicitCell() - Invalid Cell OffsetX of %d.", cellOffsetX );
         return false;
     }
 
     // The Cell Offset Y needs to be within the image.
-    if ( cellOffsetY < 0 || cellOffsetY >= imageWidth )
+    if ( cellOffsetY < 0 || cellOffsetY >= imageHeight )
     {
         // Warn.
-        Con::warnf("ImageAsset::insertCell() - Invalid Cell OffsetY of %d.", cellOffsetY );
+        Con::warnf( "ImageAsset::insertExplicitCell() - Invalid Cell OffsetY of %d.", cellOffsetY );
         return false;
     }
 
@@ -703,7 +748,7 @@ bool ImageAsset::insertExplicitCell( const S32 cellIndex, const S32 cellOffsetX,
     if ( cellWidth <= 0 || (cellOffsetX+cellWidth) > imageWidth )
     {
         // Warn.
-        Con::warnf("ImageAsset::insertCell() - Invalid Cell Width of %d.", cellWidth );
+        Con::warnf( "ImageAsset::insertExplicitCell() - Invalid Cell Width of %d.", cellWidth );
         return false;
     }
 
@@ -711,12 +756,12 @@ bool ImageAsset::insertExplicitCell( const S32 cellIndex, const S32 cellOffsetX,
     if ( cellHeight <= 0 || (cellOffsetY+cellHeight) > imageHeight )
     {
         // Warn.
-        Con::warnf("ImageAsset::insertCell() - Invalid Cell Width of %d.", cellHeight );
+        Con::warnf( "ImageAsset::insertExplicitCell() - Invalid Cell Width of %d.", cellHeight );
         return false;
     }
 
     // Configure frame.
-    FrameArea::PixelArea pixelArea( cellOffsetX, cellOffsetY, cellWidth, cellHeight );
+    FrameArea::PixelArea pixelArea( cellOffsetX, cellOffsetY, cellWidth, cellHeight, regionName );
 
     // Insert frame appropriately.
     if ( cellIndex >= explicitFramelCount )
@@ -737,13 +782,13 @@ bool ImageAsset::insertExplicitCell( const S32 cellIndex, const S32 cellOffsetX,
 
 //------------------------------------------------------------------------------
 
-bool ImageAsset::setExplicitCell( const S32 cellIndex, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight )
+bool ImageAsset::setExplicitCell( const S32 cellIndex, const S32 cellOffsetX, const S32 cellOffsetY, const S32 cellWidth, const S32 cellHeight, const char* regionName )
 {
     // Are we in explicit mode?
     if ( !getExplicitMode() )
     {
         // No, so warn.
-        Con::warnf( "ImageAsset::setCell() - Cannot perform explicit cell operation when not in explicit mode." );
+        Con::warnf( "ImageAsset::setExplicitCell() - Cannot perform explicit cell operation when not in explicit mode." );
         return false;
     }
 
@@ -753,12 +798,20 @@ bool ImageAsset::setExplicitCell( const S32 cellIndex, const S32 cellOffsetX, co
 
     // Fetch the explicit frame count.
     const S32 explicitFrameCount = mExplicitFrames.size();
+    
+    // Region cannot be empty
+    if ( regionName == StringTable->EmptyString )
+    {
+        Con::warnf( "ImageAsset::setExplicitCell() - Cell name of '%s' is invalid or was not set.", regionName );
+        Con::warnf( "- Setting to the next index in the frame list: '%i'", explicitFrameCount );
+        dSscanf(regionName, "%i", explicitFrameCount);
+    }
 
     // The cell index needs to be in range.
     if ( cellIndex < 0 || cellIndex >= explicitFrameCount )
     {
         // Warn.
-        Con::warnf("ImageAsset::setCell() - Invalid Cell Index of %d.", cellIndex );
+        Con::warnf( "ImageAsset::setExplicitCell() - Invalid Cell Index of %d.", cellIndex );
         return false;
     }
 
@@ -766,15 +819,15 @@ bool ImageAsset::setExplicitCell( const S32 cellIndex, const S32 cellOffsetX, co
     if ( cellOffsetX < 0 || cellOffsetX >= imageWidth )
     {
         // Warn.
-        Con::warnf("ImageAsset::setCell() - Invalid Cell OffsetX of %d.", cellOffsetX );
+        Con::warnf( "ImageAsset::setExplicitCell() - Invalid Cell OffsetX of %d.", cellOffsetX );
         return false;
     }
 
     // The Cell Offset Y needs to be within the image.
-    if ( cellOffsetY < 0 || cellOffsetY >= imageWidth )
+    if ( cellOffsetY < 0 || cellOffsetY >= imageHeight )
     {
         // Warn.
-        Con::warnf("ImageAsset::setCell() - Invalid Cell OffsetY of %d.", cellOffsetY );
+        Con::warnf( "ImageAsset::setExplicitCell() - Invalid Cell OffsetY of %d.", cellOffsetY );
         return false;
     }
 
@@ -782,7 +835,7 @@ bool ImageAsset::setExplicitCell( const S32 cellIndex, const S32 cellOffsetX, co
     if ( cellWidth <= 0 || (cellOffsetX+cellWidth) > imageWidth )
     {
         // Warn.
-        Con::warnf("ImageAsset::setCell() - Invalid Cell Width of %d.", cellWidth );
+        Con::warnf( "ImageAsset::setExplicitCell() - Invalid Cell Width of %d.", cellWidth );
         return false;
     }
 
@@ -790,12 +843,12 @@ bool ImageAsset::setExplicitCell( const S32 cellIndex, const S32 cellOffsetX, co
     if ( cellHeight <= 0 || (cellOffsetY+cellHeight) > imageHeight )
     {
         // Warn.
-        Con::warnf("ImageAsset::setCell() - Invalid Cell Width of %d.", cellHeight );
+        Con::warnf( "ImageAsset::setExplicitCell() - Invalid Cell Width of %d.", cellHeight );
         return false;
     }
 
     // Configure frame.
-    FrameArea::PixelArea pixelArea( cellOffsetX, cellOffsetY, cellWidth, cellHeight );
+    FrameArea::PixelArea pixelArea( cellOffsetX, cellOffsetY, cellWidth, cellHeight, regionName );
 
     // Set cell.
     mExplicitFrames[cellIndex] = pixelArea;
@@ -814,7 +867,7 @@ bool ImageAsset::removeExplicitCell( const S32 cellIndex )
     if ( !getExplicitMode() )
     {
         // No, so warn.
-        Con::warnf( "ImageAsset::removeCell() - Cannot perform explicit cell operation when not in explicit mode." );
+        Con::warnf( "ImageAsset::removeExplicitCell() - Cannot perform explicit cell operation when not in explicit mode." );
         return false;
     }
 
@@ -825,7 +878,7 @@ bool ImageAsset::removeExplicitCell( const S32 cellIndex )
     if ( cellIndex < 0 || cellIndex >= explicitFrameCount )
     {
         // Warn.
-        Con::warnf("ImageAsset::removeCell() - Invalid Cell Index of %d.", cellIndex );
+        Con::warnf( "ImageAsset::removeExplicitCell() - Invalid Cell Index of %d.", cellIndex );
         return false;
     }
 
@@ -836,6 +889,69 @@ bool ImageAsset::removeExplicitCell( const S32 cellIndex )
     refreshAsset();
 
     return true;
+}
+
+//------------------------------------------------------------------------------
+
+bool ImageAsset::removeExplicitCell( const char* regionName )
+{
+    // Are we in explicit mode?
+    if ( !getExplicitMode() )
+    {
+        // No, so warn.
+        Con::warnf( "ImageAsset::removeExplicitCell() - Cannot perform explicit cell operation when not in explicit mode." );
+        return false;
+    }
+
+    // Interate through the vector
+    for( typeExplicitFrameAreaVector::iterator frameItr = mExplicitFrames.begin(); frameItr != mExplicitFrames.end(); ++frameItr )
+    {
+        // Grab the current pixelArea
+        const FrameArea::PixelArea& pixelArea = *frameItr;
+        
+        // Check to see if the name matches the argument
+        if (pixelArea.mRegionName == regionName)
+        {
+            // Found it, so erase it and return success
+            mExplicitFrames.erase(frameItr);
+            return true;
+        }
+    }
+
+    // Didn't find it, so warn
+    Con::warnf( "ImageAsset::removeExplicitCell() - Cannot find %s cell to remove.", regionName );
+    return false;
+}
+
+//------------------------------------------------------------------------------
+
+ImageAsset::FrameArea& ImageAsset::getCellByName( const char* cellName)
+{
+    // If the cellName was empty
+    if (cellName == StringTable->EmptyString)
+    {
+        // Warn and return a bad frame
+        Con::warnf( "ImageAsset::getCellByName() - Empty cell name was passed." );
+        return BadFrameArea;
+    }
+    
+    // Interate through the vector
+    for( typeFrameAreaVector::iterator frameItr = mFrames.begin(); frameItr != mFrames.end(); ++frameItr )
+    {
+        // Grab the current pixelArea
+        const FrameArea::PixelArea& pixelArea = frameItr->mPixelArea;
+        
+        // Check to see if the name matches the argument
+        if (pixelArea.mRegionName == cellName)
+        {
+            // Found it, so erase it and return success
+            return *frameItr;
+        }
+    }
+
+    // Didn't find it, so warn and return a bad frame
+    Con::warnf( "ImageAsset::getCellByName() - Cannot find %s cell.", cellName );
+    return BadFrameArea;
 }
 
 //------------------------------------------------------------------------------
@@ -1021,7 +1137,7 @@ void ImageAsset::calculateImplicitMode( void )
     if ( mCellWidth < 1 || mCellWidth > imageWidth )
     {
         // Warn.
-        Con::warnf("ImageAsset::calculateImage() - Invalid Cell Width of %d.", mCellWidth );
+        Con::warnf( "ImageAsset::calculateImage() - Invalid Cell Width of %d.", mCellWidth );
         return;
     }
 
@@ -1029,7 +1145,7 @@ void ImageAsset::calculateImplicitMode( void )
     if ( mCellHeight < 1 || mCellHeight > imageHeight )
     {
         // Warn.
-        Con::warnf("ImageAsset::calculateImage() - Invalid Cell Height of %d.", mCellHeight );
+        Con::warnf( "ImageAsset::calculateImage() - Invalid Cell Height of %d.", mCellHeight );
         return;
     }
 
@@ -1037,7 +1153,7 @@ void ImageAsset::calculateImplicitMode( void )
     if ( mCellOffsetX < 0 || mCellOffsetX >= imageWidth )
     {
         // Warn.
-        Con::warnf("ImageAsset::calculateImage() - Invalid Cell OffsetX of %d.", mCellOffsetX );
+        Con::warnf( "ImageAsset::calculateImage() - Invalid Cell OffsetX of %d.", mCellOffsetX );
         return;
     }
 
@@ -1045,10 +1161,9 @@ void ImageAsset::calculateImplicitMode( void )
     if ( mCellOffsetY < 0 || mCellOffsetY >= imageHeight )
     {
         // Warn.
-        Con::warnf("ImageAsset::calculateImage() - Invalid Cell OffsetY of %d.", mCellOffsetY );
+        Con::warnf( "ImageAsset::calculateImage() - Invalid Cell OffsetY of %d.", mCellOffsetY );
         return;
     }
-
 
     // Are we using Cell-StrideX?
     S32 cellStepX;
@@ -1082,14 +1197,14 @@ void ImageAsset::calculateImplicitMode( void )
     if ( cellFinalPositionX < 0 )
     {
         // Warn.
-        Con::warnf("ImageAsset::calculateImage() - Invalid Cell OffsetX(%d)/Width(%d)/CountX(%d); off image left-hand-side.", mCellOffsetX, mCellWidth, mCellCountX );
+        Con::warnf( "ImageAsset::calculateImage() - Invalid Cell OffsetX(%d)/Width(%d)/CountX(%d); off image left-hand-side.", mCellOffsetX, mCellWidth, mCellCountX );
         return;
     }
     // Off Right?
     else if ( cellFinalPositionX > imageWidth )
     {
         // Warn.
-        Con::warnf("ImageAsset::calculateImage() - Invalid Cell OffsetX(%d)/Width(%d)/CountX(%d); off image right-hand-side.", mCellOffsetX, mCellWidth, mCellCountX );
+        Con::warnf( "ImageAsset::calculateImage() - Invalid Cell OffsetX(%d)/Width(%d)/CountX(%d); off image right-hand-side.", mCellOffsetX, mCellWidth, mCellCountX );
         return;
     }
 
@@ -1099,14 +1214,14 @@ void ImageAsset::calculateImplicitMode( void )
     if ( cellFinalPositionY < 0 )
     {
         // Warn.
-        Con::warnf("ImageAsset::calculateImage() - Invalid Cell OffsetY(%d)/Height(%d)/CountY(%d); off image top-side.", mCellOffsetY, mCellHeight, mCellCountY );
+        Con::warnf( "ImageAsset::calculateImage() - Invalid Cell OffsetY(%d)/Height(%d)/CountY(%d); off image top-side.", mCellOffsetY, mCellHeight, mCellCountY );
         return;
     }
     // Off Bottom?
     else if ( cellFinalPositionY > imageHeight )
     {
         // Warn.
-        Con::warnf("ImageAsset::calculateImage() - Invalid Cell OffsetY(%d)/Height(%d)/CountY(%d); off image bottom-side.", mCellOffsetY, mCellHeight, mCellCountY );
+        Con::warnf( "ImageAsset::calculateImage() - Invalid Cell OffsetY(%d)/Height(%d)/CountY(%d); off image bottom-side.", mCellOffsetY, mCellHeight, mCellCountY );
         return;
     }
 
@@ -1187,7 +1302,7 @@ void ImageAsset::calculateExplicitMode( void )
         const FrameArea::PixelArea& pixelArea = *frameItr;
 
         // Set frame area.
-        FrameArea frameArea( pixelArea.mPixelOffset.x, pixelArea.mPixelOffset.y, pixelArea.mPixelWidth, pixelArea.mPixelHeight, texelWidthScale, texelHeightScale );
+        FrameArea frameArea( pixelArea.mPixelOffset.x, pixelArea.mPixelOffset.y, pixelArea.mPixelWidth, pixelArea.mPixelHeight, texelWidthScale, texelHeightScale, pixelArea.mRegionName );
 
         // Store frame.
         mFrames.push_back( frameArea );
@@ -1216,22 +1331,26 @@ void ImageAsset::onTamlCustomWrite( TamlCustomNodes& customNodes )
     if ( !mExplicitMode )
         return;
 
-    // Add cell custom node.
-    TamlCustomNode* pCustomCellNodes = customNodes.addNode( cellCustomNodeName );
-
-    // Iterate explicit frames.
-    for( typeExplicitFrameAreaVector::iterator frameItr = mExplicitFrames.begin(); frameItr != mExplicitFrames.end(); ++frameItr )
+    if (mExplicitFrames.size() > 0)
     {
-        // Fetch pixel area.
-        const FrameArea::PixelArea& pixelArea = *frameItr;
+        // Add cell custom node.
+        TamlCustomNode* pCustomCellNodes = customNodes.addNode( cellCustomNodeCellsName );
 
-        // Add cell alias.
-        TamlCustomNode* pCellNode = pCustomCellNodes->addNode( cellNodeName );
+        // Iterate explicit frames.
+        for( typeExplicitFrameAreaVector::iterator frameItr = mExplicitFrames.begin(); frameItr != mExplicitFrames.end(); ++frameItr )
+        {
+            // Fetch pixel area.
+            const FrameArea::PixelArea& pixelArea = *frameItr;
 
-        // Add cell properties.
-        pCellNode->addField( cellOffsetName, pixelArea.mPixelOffset );
-        pCellNode->addField( cellWidthName, pixelArea.mPixelWidth );
-        pCellNode->addField( cellHeightName, pixelArea.mPixelHeight );
+            // Add cell alias.
+            TamlCustomNode* pCellNode = pCustomCellNodes->addNode( cellNodeName );
+
+            // Add cell properties.
+            pCellNode->addField( cellRegionName, pixelArea.mRegionName );
+            pCellNode->addField( cellOffsetName, pixelArea.mPixelOffset );
+            pCellNode->addField( cellWidthName, pixelArea.mPixelWidth );
+            pCellNode->addField( cellHeightName, pixelArea.mPixelHeight );
+        }
     }
 }
 
@@ -1241,104 +1360,129 @@ void ImageAsset::onTamlCustomRead( const TamlCustomNodes& customNodes )
 {
     // Debug Profiling.
     PROFILE_SCOPE(ImageAsset_OnTamlCustomRead);
-
+    
     // Call parent.
     Parent::onTamlCustomRead( customNodes );
-
+    
     // Find cell custom node.
-    const TamlCustomNode* pCustomCellNodes = customNodes.findNode( cellCustomNodeName );
-
-    // Finish if we don't have explicit cells.
-    if ( pCustomCellNodes == NULL )
-        return;
-
-    // Set explicit mode.
-    mExplicitMode = true;
-
-    // Fetch children cell nodes.
-    const TamlCustomNodeVector& cellNodes = pCustomCellNodes->getChildren();
-
-    // Iterate cells.
-    for( TamlCustomNodeVector::const_iterator cellNodeItr = cellNodes.begin(); cellNodeItr != cellNodes.end(); ++cellNodeItr )
+    const TamlCustomNode* pCustomCellNodes = customNodes.findNode( cellCustomNodeCellsName );
+    
+    // Continue if we have explicit cells.
+    if ( pCustomCellNodes != NULL )
     {
-        // Fetch cell node.
-        TamlCustomNode* pCellNode = *cellNodeItr;
-
-        // Fetch node name.
-        StringTableEntry nodeName = pCellNode->getNodeName();
-
-        // Is this a valid alias?
-        if ( nodeName != cellNodeName )
+        // Set explicit mode.
+        mExplicitMode = true;
+        
+        // Fetch children cell nodes.
+        const TamlCustomNodeVector& cellNodes = pCustomCellNodes->getChildren();
+        
+        // Iterate cells.
+        for( TamlCustomNodeVector::const_iterator cellNodeItr = cellNodes.begin(); cellNodeItr != cellNodes.end(); ++cellNodeItr )
         {
-            // No, so warn.
-            Con::warnf( "ImageAsset::onTamlCustomRead() - Encountered an unknown custom name of '%s'.  Only '%s' is valid.", nodeName, cellNodeName );
-            continue;
-        }
-
-        Point2I cellOffset(-1, -1);
-        S32 cellWidth = 0;
-        S32 cellHeight = 0;
-
-        // Fetch fields.
-        const TamlCustomFieldVector& fields = pCellNode->getFields();
-
-        // Iterate property fields.
-        for ( TamlCustomFieldVector::const_iterator fieldItr = fields.begin(); fieldItr != fields.end(); ++fieldItr )
-        {
-            // Fetch field.
-            const TamlCustomField* pField = *fieldItr;
-
-            // Fetch field name.
-            StringTableEntry fieldName = pField->getFieldName();
-
-            // Check common fields.
-            if ( fieldName == cellOffsetName )
+            // Fetch cell node.
+            TamlCustomNode* pCellNode = *cellNodeItr;
+            
+            // Fetch node name.
+            StringTableEntry nodeName = pCellNode->getNodeName();
+            
+            // Is this a valid alias?
+            if ( nodeName != cellNodeName )
             {
-                pField->getFieldValue( cellOffset );
-            }
-            else if ( fieldName == cellWidthName )
-            {
-                pField->getFieldValue( cellWidth );
-            }
-            else if ( fieldName == cellHeightName )
-            {
-                pField->getFieldValue( cellHeight );
-            }
-            else
-            {
-                // Unknown name so warn.
-                Con::warnf( "ImageAsset::onTamlCustomRead() - Encountered an unknown custom field name of '%s'.", fieldName );
+                // No, so warn.
+                Con::warnf( "ImageAsset::onTamlCustomRead() - Encountered an unknown custom name of '%s'.  Only '%s' is valid.", nodeName, cellNodeName );
                 continue;
             }
+            
+            Point2I cellOffset(-1, -1);
+            S32 cellWidth = 0;
+            S32 cellHeight = 0;
+            const char* regionName = StringTable->EmptyString;
+            
+            // Fetch fields.
+            const TamlCustomFieldVector& fields = pCellNode->getFields();
+            
+            // Iterate property fields.
+            for ( TamlCustomFieldVector::const_iterator fieldItr = fields.begin(); fieldItr != fields.end(); ++fieldItr )
+            {
+                // Fetch field.
+                const TamlCustomField* pField = *fieldItr;
+                
+                // Fetch field name.
+                StringTableEntry fieldName = pField->getFieldName();
+                
+                // Check common fields.
+                if ( fieldName == cellRegionName )
+                {
+                    regionName = pField->getFieldValue();
+                }
+                else if ( fieldName == cellOffsetName )
+                {
+                    pField->getFieldValue( cellOffset );
+                }
+                else if ( fieldName == cellOffsetXName )
+                {
+                    pField->getFieldValue( cellOffset.x );
+                }
+                else if ( fieldName == cellOffsetYName )
+                {
+                    pField->getFieldValue( cellOffset.y );
+                }
+                else if ( fieldName == cellWidthName )
+                {
+                    pField->getFieldValue( cellWidth );
+                }
+                else if ( fieldName == cellHeightName )
+                {
+                    pField->getFieldValue( cellHeight );
+                }
+                else
+                {
+                    // Unknown name so warn.
+                    Con::warnf( "ImageAsset::onTamlCustomRead() - Encountered an unknown custom field name of '%s'.", fieldName );
+                    continue;
+                }
+            }
+            
+            // Does the region have a name
+            if ( regionName == StringTable->EmptyString )
+            {
+                // No, so warn and set it to the next index
+                Con::warnf( "ImageAsset::onTamlCustomRead() - Cell name of '%s' is invalid or was not set.", regionName );
+                
+                U32 currentIndex = mExplicitFrames.size();
+                Con::warnf( "- Setting to the next index in the frame list: '%i'", currentIndex );
+                
+                dSscanf(regionName, "%i", currentIndex);
+            }
+            
+            // Is cell offset valid?
+            if ( cellOffset.x < 0 || cellOffset.y < 0 )
+            {
+                // No, so warn.
+                Con::warnf( "ImageAsset::onTamlCustomRead() - Cell offset of '(%d,%d)' is invalid or was not set.", cellOffset.x, cellOffset.y );
+                continue;
+            }
+            
+            // Is cell width valid?
+            if ( cellWidth <= 0 )
+            {
+                // No, so warn.
+                Con::warnf( "ImageAsset::onTamlCustomRead() - Cell width of '%d' is invalid or was not set.", cellWidth );
+                continue;
+            }
+            
+            // Is cell height valid?
+            if ( cellHeight <= 0 )
+            {
+                // No, so warn.
+                Con::warnf( "ImageAsset::onTamlCustomRead() - Cell height of '%d' is invalid or was not set.", cellHeight );
+                continue;
+            }
+            
+            // Add explicit frame.
+            FrameArea::PixelArea pixelArea( cellOffset.x, cellOffset.y, cellWidth, cellHeight, regionName );
+            mExplicitFrames.push_back( pixelArea );
         }
-
-        // Is cell offset valid?
-        if ( cellOffset.x < 0 || cellOffset.y < 0 )
-        {
-            // No, so warn.
-            Con::warnf( "ImageAsset::onTamlCustomRead() - Cell offset of '(%d,%d)' is invalid or was not set.", cellOffset.x, cellOffset.y );
-            continue;
-        }
-
-        // Is cell width valid?
-        if ( cellWidth <= 0 )
-        {
-            // No, so warn.
-            Con::warnf( "ImageAsset::onTamlCustomRead() - Cell width of '%d' is invalid or was not set.", cellWidth );
-            continue;
-        }
-
-        // Is cell height valid?
-        if ( cellHeight <= 0 )
-        {
-            // No, so warn.
-            Con::warnf( "ImageAsset::onTamlCustomRead() - Cell height of '%d' is invalid or was not set.", cellHeight );
-            continue;
-        }
-
-        // Add explicit frame.
-        FrameArea::PixelArea pixelArea( cellOffset.x, cellOffset.y, cellWidth, cellHeight );
-        mExplicitFrames.push_back( pixelArea );
     }
 }
 
@@ -1354,7 +1498,7 @@ static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlEleme
 
     // Create ImageAsset node element.
     TiXmlElement* pImageAssetNodeElement = new TiXmlElement( "xs:element" );
-    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), cellCustomNodeName );
+    dSprintf( buffer, sizeof(buffer), "%s.%s", pClassRep->getClassName(), cellCustomNodeCellsName );
     pImageAssetNodeElement->SetAttribute( "name", buffer );
     pImageAssetNodeElement->SetAttribute( "minOccurs", 0 );
     pImageAssetNodeElement->SetAttribute( "maxOccurs", 1 );
@@ -1381,6 +1525,12 @@ static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlEleme
     TiXmlElement* pImageAssetComplexTypeElement = new TiXmlElement( "xs:complexType" );
     pImageAssetElement->LinkEndChild( pImageAssetComplexTypeElement );
 
+    // Create "RegionName" attribute.
+    TiXmlElement* pImageRegionName = new TiXmlElement( "xs:attribute" );
+    pImageRegionName->SetAttribute( "name", cellRegionName );
+    pImageRegionName->SetAttribute( "type", "xs:string" );
+    pImageAssetComplexTypeElement->LinkEndChild( pImageRegionName );
+    
     // Create "Offset" attribute.
     TiXmlElement* pImageAssetOffset = new TiXmlElement( "xs:attribute" );
     pImageAssetOffset->SetAttribute( "name", cellOffsetName );

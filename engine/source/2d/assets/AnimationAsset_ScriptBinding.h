@@ -48,6 +48,14 @@ ConsoleMethodWithDocs(AnimationAsset, getImage, ConsoleString, 2, 2, ())
 */
 ConsoleMethodWithDocs(AnimationAsset, setAnimationFrames, ConsoleVoid, 3, 3, (animationFrames))
 {
+    // Are we in named cells mode?
+    if ( object->getNamedCellsMode() )
+    {
+        // Yes, so warn.
+        Con::warnf( "AnimationAsset::setAnimationFrames() - Method invalid, in named cells mode." );
+        return;
+    }
+
     object->setAnimationFrames( argv[2] );
 }
 
@@ -59,6 +67,14 @@ ConsoleMethodWithDocs(AnimationAsset, setAnimationFrames, ConsoleVoid, 3, 3, (an
 */
 ConsoleMethodWithDocs(AnimationAsset, getAnimationFrames, ConsoleString, 2, 3, ([bool validatedFrames]))
 {
+    // Are we in named cells mode?
+    if ( object->getNamedCellsMode() )
+    {
+        // Yes, so warn.
+        Con::warnf( "AnimationAsset::getAnimationFrames() - Method invalid, in named cells mode." );
+        return StringTable->EmptyString;
+    }
+
     // Fetch a return buffer.
     S32 bufferSize = 4096;
     char* pBuffer = Con::getReturnBuffer( bufferSize );
@@ -93,11 +109,105 @@ ConsoleMethodWithDocs(AnimationAsset, getAnimationFrames, ConsoleString, 2, 3, (
 */
 ConsoleMethodWithDocs(AnimationAsset, getAnimationFrameCount, ConsoleInt, 2, 3, ([bool validatedFrames]))
 {
+    // Are we in named cells mode?
+    if ( object->getNamedCellsMode() )
+    {
+        // Yes, so warn.
+        Con::warnf( "AnimationAsset::getAnimationFrameCount() - Method invalid, in named cells mode." );
+        return -1;
+    }
+
     // Fetch validated frames flag.
     const bool validatedFrames = argc >= 3 ? dAtob( argv[2] ) : false;
 
     // Fetch specified frames.
     const Vector<S32>& frames = validatedFrames ? object->getValidatedAnimationFrames() : object->getSpecifiedAnimationFrames();
+
+    return frames.size();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Sets the named image frames that compose the animation.
+    @param animationFrames A set of named image frames that compose the animation.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(AnimationAsset, setNamedAnimationFrames, ConsoleVoid, 3, 3, (animationFrames))
+{
+    // Are we in named cells mode?
+    if ( !object->getNamedCellsMode() )
+    {
+        // No, so warn.
+        Con::warnf( "AnimationAsset::setNamedAnimationFrames() - Method invalid, not in named cells mode." );
+        return;
+    }
+
+    object->setNamedAnimationFrames( argv[2] );
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets the named frames that compose the animation or optionally only the ones validated against the image asset.
+    @param validatedFrames - Whether to return only the validated frames or not.  Optional: Default is false.
+    @return The named image frames that compose the animation or optionally only the ones validated against the image asset.
+*/
+ConsoleMethodWithDocs(AnimationAsset, getNamedAnimationFrames, ConsoleString, 2, 3, ([bool validatedFrames]))
+{
+    // Are we in named cells mode?
+    if ( !object->getNamedCellsMode() )
+    {
+        // No, so warn.
+        Con::warnf( "AnimationAsset::getNamedAnimationFrames() - Method invalid, not in named cells mode." );
+        return StringTable->EmptyString;
+    }
+
+    // Fetch a return buffer.
+    S32 bufferSize = 4096;
+    char* pBuffer = Con::getReturnBuffer( bufferSize );
+    char* pReturnBuffer = pBuffer;    
+
+    // Fetch validated frames flag.
+    const bool validatedFrames = argc >= 3 ? dAtob( argv[2] ) : false;
+
+    // Fetch specified frames.
+    const Vector<StringTableEntry>& frames = validatedFrames ? object->getValidatedNamedAnimationFrames() : object->getSpecifiedNamedAnimationFrames();
+
+    // Fetch frame count.
+    const U32 frameCount = (U32)frames.size();
+
+    // Format frames.
+    for ( U32 frameIndex = 0; frameIndex < frameCount; ++frameIndex )
+    {
+        const S32 offset = dSprintf( pBuffer, bufferSize, "%d ", frames[frameIndex] );
+        pBuffer += offset;
+        bufferSize -= offset;
+    }
+
+    // Return frames.
+    return pReturnBuffer;
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets the count of named frames that compose the animation or optionally only the ones validated against the image asset.
+    @param validatedFrames - Whether to return only the validated frames or not.  Optional: Default is false.
+    @return The named image frames that compose the animation or optionally only the ones validated against the image asset.
+*/
+ConsoleMethodWithDocs(AnimationAsset, getNamedAnimationFrameCount, ConsoleInt, 2, 3, ([bool validatedFrames]))
+{
+    // Are we in named cells mode?
+    if ( !object->getNamedCellsMode() )
+    {
+        // No, so warn.
+        Con::warnf( "AnimationAsset::getNamedAnimationFrameCount() - Method invalid, not in named cells mode." );
+        return -1;
+    }
+
+    // Fetch validated frames flag.
+    const bool validatedFrames = argc >= 3 ? dAtob( argv[2] ) : false;
+
+    // Fetch specified frames.
+    const Vector<StringTableEntry>& frames = validatedFrames ? object->getValidatedNamedAnimationFrames() : object->getSpecifiedNamedAnimationFrames();
 
     return frames.size();
 }
@@ -143,6 +253,27 @@ ConsoleMethodWithDocs(AnimationAsset, setAnimationCycle, ConsoleVoid, 3, 3, (boo
 ConsoleMethodWithDocs(AnimationAsset, getAnimationCycle, ConsoleBool, 2, 2, ())
 {
     return object->getAnimationCycle();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Sets whether the animation uses names for cells, instead of numerical index.
+    @param namedCellsMode True if it should be using named cells.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(AnimationAsset, setNamedCellsMode, ConsoleVoid, 3, 3, ())
+{
+    object->setNamedCellsMode( dAtob(argv[2] ) );
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets whether the animation is using names for its cells.
+    @return True if the animation is using named cells.
+*/
+ConsoleMethodWithDocs(AnimationAsset, getNamedCellsMode, ConsoleBool, 2, 2, ())
+{
+    return object->getNamedCellsMode();
 }
 
 ConsoleMethodGroupEndWithDocs(AnimationAsset)

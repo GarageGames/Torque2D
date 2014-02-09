@@ -125,7 +125,7 @@ bool GuiSpriteCtrl::setImage( const char* pImageAssetId )
 		return true;
 
 	// Call parent.
-	if ( !ImageFrameProvider::setImage( pImageAssetId, 0 ) )
+	if ( !ImageFrameProvider::setImage( pImageAssetId, mImageFrame ) )
 		return false;
 
     // Update control.
