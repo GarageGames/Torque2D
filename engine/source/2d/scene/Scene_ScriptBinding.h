@@ -1985,8 +1985,8 @@ ConsoleMethodWithDocs(Scene, createPulleyJoint, ConsoleInt, 9, 16, (sceneObjectA
 
     if ( worldGroundAnchorAElementCount == 1 && argc > 5 )
     {
-        worldGroundAnchorA.Set( dAtof(argv[nextArg]), dAtof(argv[nextArg++]) );
-        nextArg += 2;
+        worldGroundAnchorA.Set( dAtof(argv[nextArg]), dAtof(argv[nextArg+1]) );
+        nextArg += 3;
     }
     else if ( worldGroundAnchorAElementCount == 2 )
     {
