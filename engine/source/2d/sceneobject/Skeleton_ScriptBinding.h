@@ -48,12 +48,12 @@ ConsoleMethodWithDocs(Skeleton, getSkeletonAsset, ConsoleString, 2, 2, ())
     @param cycle Optional bool to determine whether the animation should loop.
     @return Returns true on success."
 */
-ConsoleMethodWithDocs(Skeleton, setAnimation, ConsoleBool, 3, 4, (animationName, [cycle]))
+ConsoleMethodWithDocs(Skeleton, setAnimationName, ConsoleBool, 3, 4, (animationName, [cycle]))
 {
     // Determine looping
     bool shouldLoop = argc >= 4 ? dAtob(argv[3]) : false;
     
-    return object->setCurrentAnimation(argv[2], shouldLoop);
+    return object->setAnimationName(argv[2], shouldLoop);
 }
 
 //-----------------------------------------------------------------------------
@@ -61,9 +61,9 @@ ConsoleMethodWithDocs(Skeleton, setAnimation, ConsoleBool, 3, 4, (animationName,
 /*! Gets the name of the current animation.
     @return String containing the animation name.
 */
-ConsoleMethodWithDocs(Skeleton, getAnimation, ConsoleString, 2, 2, ())
+ConsoleMethodWithDocs(Skeleton, getAnimationName, ConsoleString, 2, 2, ())
 {
-    return object->getCurrentAnimation();
+    return object->getAnimationName();
 }
 
 //-----------------------------------------------------------------------------
@@ -96,27 +96,27 @@ ConsoleMethodWithDocs(Skeleton, getSkin, ConsoleString, 2, 2, ())
 ConsoleMethodWithDocs(Skeleton, setRootBoneScale, ConsoleVoid, 3, 4, (float scaleX, float scaleY))
 {
     F32 scaleX, scaleY;
-
+    
     const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
-
+    
     // ("width height")
     if ((elementCount == 2) && (argc == 3))
     {
         scaleX = dAtof(Utility::mGetStringElement(argv[2], 0));
         scaleY = dAtof(Utility::mGetStringElement(argv[2], 1));
     }
-
+    
     // (width, [height])
     else if (elementCount == 1)
     {
         scaleX = dAtof(argv[2]);
-
+        
         if (argc > 3)
             scaleY = dAtof(argv[3]);
         else
             scaleY = scaleX;
     }
-
+    
     // Invalid
     else
     {
@@ -124,9 +124,9 @@ ConsoleMethodWithDocs(Skeleton, setRootBoneScale, ConsoleVoid, 3, 4, (float scal
         return;
     }
     
-    // Set Size.
-    object->setSkeletonScale(Vector2(scaleX, scaleY));
-}  
+    // Set Scale.
+    object->setRootBoneScale(Vector2(scaleX, scaleY));
+}
 
 //-----------------------------------------------------------------------------
 
@@ -135,7 +135,7 @@ ConsoleMethodWithDocs(Skeleton, setRootBoneScale, ConsoleVoid, 3, 4, (float scal
 */
 ConsoleMethodWithDocs(Skeleton, getRootBoneScale, ConsoleString, 2, 2, ())
 {
-    return object->getSkeletonScale().scriptThis();
+    return object->getRootBoneScale().scriptThis();
 }
 
 //-----------------------------------------------------------------------------
@@ -148,27 +148,27 @@ ConsoleMethodWithDocs(Skeleton, getRootBoneScale, ConsoleString, 2, 2, ())
 ConsoleMethodWithDocs(Skeleton, setRootBoneOffset, ConsoleVoid, 3, 4, (float x, float y))
 {
     F32 x, y;
-
+    
     const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
-
+    
     // ("x y")
     if ((elementCount == 2) && (argc == 3))
     {
         x = dAtof(Utility::mGetStringElement(argv[2], 0));
         y = dAtof(Utility::mGetStringElement(argv[2], 1));
     }
-
+    
     // (x, [y])
     else if (elementCount == 1)
     {
         x = dAtof(argv[2]);
-
+        
         if (argc > 3)
             y = dAtof(argv[3]);
         else
             y = x;
     }
-
+    
     // Invalid
     else
     {
@@ -177,8 +177,8 @@ ConsoleMethodWithDocs(Skeleton, setRootBoneOffset, ConsoleVoid, 3, 4, (float x, 
     }
     
     // Set Size.
-    object->setSkeletonOffset(Vector2(x, y));
-}  
+    object->setRootBoneOffset(Vector2(x, y));
+}
 
 //-----------------------------------------------------------------------------
 
@@ -187,7 +187,102 @@ ConsoleMethodWithDocs(Skeleton, setRootBoneOffset, ConsoleVoid, 3, 4, (float x, 
 */
 ConsoleMethodWithDocs(Skeleton, getRootBoneOffset, ConsoleString, 2, 2, ())
 {
-    return object->getSkeletonOffset().scriptThis();
+    return object->getRootBoneOffset().scriptThis();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Sets whether the animation cycles or not.
+    @param cycle Bool to determine whether the animation should loop.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Skeleton, setAnimationCycle, ConsoleVoid, 3, 3, (bool cycle))
+{
+    object->setAnimationCycle( dAtob(argv[2] ) );
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets whether the animation cycles or not.
+    @return Whether the animation cycles or not.
+*/
+ConsoleMethodWithDocs(Skeleton, getAnimationCycle, ConsoleBool, 2, 2, ())
+{
+    return object->getAnimationCycle();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Sets the sprite texture flipping for each axis.
+    @param flipX Whether or not to flip the texture along the x (horizontal) axis.
+    @param flipY Whether or not to flip the texture along the y (vertical) axis.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Skeleton, setFlip, ConsoleVoid, 4, 4, (bool flipX, bool flipY))
+{
+    // Set Flip.
+    object->setFlip( dAtob(argv[2]), dAtob(argv[3]) );
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets the flip for each axis.
+    @return (bool flipX/bool flipY) Whether or not the texture is flipped along the x and y axis.
+*/
+ConsoleMethodWithDocs(Skeleton, getFlip, ConsoleString, 2, 2, ())
+{
+    // Create Returnable Buffer.
+    char* pBuffer = Con::getReturnBuffer(32);
+    
+    // Format Buffer.
+    dSprintf(pBuffer, 32, "%d %d", object->getFlipX(), object->getFlipY());
+    
+    // Return Buffer.
+    return pBuffer;
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Sets whether or not the texture is flipped horizontally.
+    @param flipX Whether or not to flip the texture along the x (horizontal) axis.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Skeleton, setFlipX, ConsoleVoid, 3, 3, (bool flipX))
+{
+    // Set Flip.
+    object->setFlipX( dAtob(argv[2]) );
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Sets whether or not the texture is flipped vertically.
+    @param flipY Whether or not to flip the texture along the y (vertical) axis.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Skeleton, setFlipY, ConsoleVoid, 3, 3, (bool flipY))
+{
+    // Set Flip.
+    object->setFlipY( dAtob(argv[2]) );
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets whether or not the texture is flipped horizontally.
+    @return (bool flipX) Whether or not the texture is flipped along the x axis.
+*/
+ConsoleMethodWithDocs(Skeleton, getFlipX, ConsoleBool, 2, 2, ())
+{
+    return object->getFlipX();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets whether or not the texture is flipped vertically.
+    @return (bool flipY) Whether or not the texture is flipped along the y axis.
+*/
+ConsoleMethodWithDocs(Skeleton, getFlipY, ConsoleBool, 2, 2, ())
+{
+    return object->getFlipY();
 }
 
 //-----------------------------------------------------------------------------

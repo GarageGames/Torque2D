@@ -55,7 +55,9 @@ Skeleton::Skeleton() :      mPreTickTime( 0.0f ),
                             mState(NULL),
                             mAnimationCycle(false),
                             mAnimationFinished(true),
-                            mAnimationDuration(0.0)
+                            mAnimationDuration(0.0),
+                            mFlipX(false),
+                            mFlipY(false)
 {
     mCurrentAnimation = StringTable->insert("");
     mSkeletonScale.SetZero();
@@ -84,11 +86,13 @@ void Skeleton::initPersistFields()
     Parent::initPersistFields();
     
     addProtectedField("Asset", TypeSkeletonAssetPtr, Offset(mSkeletonAsset, Skeleton), &setSkeletonAsset, &getSkeletonAsset, &writeSkeletonAsset, "The skeleton asset ID used for the skeleton.");
-    addProtectedField("AnimationName", TypeString, Offset(mCurrentAnimation, Skeleton), &setCurrentAnimation, &getCurrentAnimation, &writeCurrentAnimation, "The animation name to play.");
+    addProtectedField("AnimationName", TypeString, Offset(mCurrentAnimation, Skeleton), &setAnimationName, &getAnimationName, &writeAnimationName, "The animation name to play.");
     addProtectedField("Skin", TypeString, Offset(mCurrentSkin, Skeleton), &setCurrentSkin, &getCurrentSkin, &writeCurrentSkin, "The skin to use.");
-    addProtectedField("RootBoneScale", TypeVector2, NULL, &setSkeletonScale, &getSkeletonScale, &writeSkeletonScale, "Scaling of the skeleton's root bone");
-    addProtectedField("RootBoneOffset", TypeVector2, NULL, &setSkeletonOffset, &getSkeletonOffset, &writeSkeletonOffset, "X/Y offset of the skeleton's root bone");
+    addProtectedField("RootBoneScale", TypeVector2, NULL, &setRootBoneScale, &getRootBoneScale, &writeRootBoneScale, "Scaling of the skeleton's root bone");
+    addProtectedField("RootBoneOffset", TypeVector2, NULL, &setRootBoneOffset, &getRootBoneOffset, &writeRootBoneOffset, "X/Y offset of the skeleton's root bone");
     addProtectedField("AnimationCycle", TypeBool, Offset(mAnimationCycle, Skeleton), &setAnimationCycle, &defaultProtectedGetFn, &writeAnimationCycle, "Whether the animation loops or not");
+    addField("FlipX", TypeBool, Offset(mFlipX, Skeleton), &writeFlipX, "");
+    addField("FlipY", TypeBool, Offset(mFlipY, Skeleton), &writeFlipY, "");
 }
 
 //-----------------------------------------------------------------------------
@@ -168,10 +172,10 @@ void Skeleton::copyTo(SimObject* object)
     
     // Copy state.
     pComposite->setSkeletonAsset( getSkeletonAsset() );
-    pComposite->setCurrentAnimation( getCurrentAnimation(), getAnimationCycle() );
+    pComposite->setAnimationName( getAnimationName(), getAnimationCycle() );
     pComposite->setCurrentSkin( getCurrentSkin() );
-    pComposite->setSkeletonScale( getSkeletonScale() );
-    pComposite->setSkeletonOffset( getSkeletonOffset() );
+    pComposite->setRootBoneScale( getRootBoneScale() );
+    pComposite->setRootBoneOffset( getRootBoneOffset() );
 }
 
 //-----------------------------------------------------------------------------
@@ -188,7 +192,7 @@ void Skeleton::sceneRender( const SceneRenderState* pSceneRenderState, const Sce
 {
     // Render.
     SpriteBatch::render( pSceneRenderState, pSceneRenderRequest, pBatchRenderer );
-
+    
 }
 
 //-----------------------------------------------------------------------------
@@ -209,20 +213,20 @@ bool Skeleton::setSkeletonAsset( const char* pSkeletonAssetId )
 
 //-----------------------------------------------------------------------------
 
-bool Skeleton::setCurrentAnimation( const char* pAnimation, const bool isLooping )
+bool Skeleton::setAnimationName( const char* pAnimation, const bool isLooping )
 {
     // Make sure an asset was loaded.
     if (mSkeletonAsset.isNull())
         return false;
-
+    
     // Set the animation.
     mCurrentAnimation = StringTable->insert(pAnimation);
-
+    
     mAnimationCycle = isLooping;
     
     // Generate composition.
     generateComposition();
-
+    
     return true;
 }
 
@@ -249,8 +253,8 @@ bool Skeleton::setMix( const char* pFromAnimation, const char* pToAnimation, flo
     }
     
     // Check to see if the "to animation" is valid
-	spAnimation* to = spSkeletonData_findAnimation(mSkeleton->data, pToAnimation);
-	
+    spAnimation* to = spSkeletonData_findAnimation(mSkeleton->data, pToAnimation);
+    
     if (!to)
     {
         Con::warnf("Skeleton::setMix() - Animation %s does not exist.", pToAnimation);
@@ -277,9 +281,9 @@ bool Skeleton::setCurrentSkin( const char* pSkin )
         Con::errorf("Skeleton::setCurrentSkin() - Skeleton Asset was null or skeleton was not built");
         return false;
     }
-
+    
     S32 result = spSkeleton_setSkinByName(mSkeleton, pSkin);
-
+    
     if (result)
     {
         spSkeleton_setSlotsToSetupPose(mSkeleton);
@@ -294,13 +298,13 @@ bool Skeleton::setCurrentSkin( const char* pSkin )
 
 //-----------------------------------------------------------------------------
 
-void Skeleton::setSkeletonScale(const Vector2& scale)
+void Skeleton::setRootBoneScale(const Vector2& scale)
 {
     mSkeletonScale = scale;
-
+    
     if (!mSkeleton)
         return;
-
+    
     if (mSkeletonScale.notZero())
     {
         spBone* rootBone = mSkeleton->root;
@@ -311,13 +315,13 @@ void Skeleton::setSkeletonScale(const Vector2& scale)
 
 //-----------------------------------------------------------------------------
 
-void Skeleton::setSkeletonOffset(const Vector2& offset)
+void Skeleton::setRootBoneOffset(const Vector2& offset)
 {
     mSkeletonOffset = offset;
-
-     if (!mSkeleton)
+    
+    if (!mSkeleton)
         return;
-
+    
     if (mSkeletonOffset.notZero())
     {
         spBone* rootBone = mSkeleton->root;
@@ -333,24 +337,24 @@ void Skeleton::generateComposition( void )
     // Clear existing visualization
     clearSprites();
     mSkeletonSprites.clear();
-
+    
     // Finish if skeleton asset isn't available.
     if ( mSkeletonAsset.isNull() )
         return;
-
-    // Generate visualization.  
+    
+    // Generate visualization.
     if ((*mSkeletonAsset).mImageAsset.isNull())
     {
         Con::warnf( "Skeleton::generateComposition() - Image asset was NULL, so nothing can be added to the composition.");
         return;
     }
-
+    
     if (!mSkeleton)
         mSkeleton = spSkeleton_create(mSkeletonAsset->mSkeletonData);
-
+    
     if (!mState)
         mState = spAnimationState_create(mSkeletonAsset->mStateData);
-
+    
     if (mCurrentAnimation != StringTable->EmptyString)
     {
         spAnimationState_setAnimationByName(mState, 0, mCurrentAnimation, mAnimationCycle);
@@ -381,7 +385,7 @@ void Skeleton::updateComposition( const F32 time )
     // Update position/orientation/state of visualization
     float delta = (time - mLastFrameTime) * mTimeScale;
     mLastFrameTime = time;
-
+    
     spSkeleton_update(mSkeleton, delta);
     
     if (!mAnimationFinished)
@@ -389,16 +393,16 @@ void Skeleton::updateComposition( const F32 time )
         spAnimationState_update(mState, delta);
         spAnimationState_apply(mState, mSkeleton);
     }
-
+    
     spSkeleton_updateWorldTransform(mSkeleton);
-
+    
     // Get the ImageAsset used by the sprites
     StringTableEntry assetId = (*mSkeletonAsset).mImageAsset.getAssetId();
-
+    
     clearSprites();
-
+    
     Vector2 vertices[4];
-
+    
     F32 vertexPositions[8];
     for (int i = 0; i < mSkeleton->slotCount; ++i)
     {
@@ -410,12 +414,17 @@ void Skeleton::updateComposition( const F32 time )
         
         spRegionAttachment* regionAttachment = (spRegionAttachment*)attachment;
         spRegionAttachment_computeWorldVertices(regionAttachment, slot->skeleton->x, slot->skeleton->y, slot->bone, vertexPositions);
-
+        
         SpriteBatchItem* pSprite = SpriteBatch::createSprite();
-		  
-        pSprite->setSrcBlendFactor(GL_ONE);
-        pSprite->setDstBlendFactor(GL_ONE_MINUS_SRC_ALPHA);
-
+        
+        pSprite->setSrcBlendFactor(mSrcBlendFactor);
+        pSprite->setDstBlendFactor(mDstBlendFactor);
+        
+        mSkeleton->r = mBlendColor.red;
+        mSkeleton->g = mBlendColor.green;
+        mSkeleton->b = mBlendColor.blue;
+        mSkeleton->a = mBlendColor.alpha;
+        
         F32 alpha = mSkeleton->a * slot->a;
         pSprite->setBlendColor(ColorF(
             mSkeleton->r * slot->r * alpha,
@@ -423,7 +432,10 @@ void Skeleton::updateComposition( const F32 time )
             mSkeleton->b * slot->b * alpha,
             alpha
         ));
-
+        
+        mSkeleton->flipX = getFlipX();
+        mSkeleton->flipY = getFlipY();
+        
         vertices[0].x = vertexPositions[VERTEX_X1];
         vertices[0].y = vertexPositions[VERTEX_Y1];
         vertices[1].x = vertexPositions[VERTEX_X4];
@@ -433,11 +445,11 @@ void Skeleton::updateComposition( const F32 time )
         vertices[3].x = vertexPositions[VERTEX_X2];
         vertices[3].y = vertexPositions[VERTEX_Y2];
         pSprite->setExplicitVertices(vertices);
-
+        
         pSprite->setImage(assetId);
         pSprite->setImageFrameByName(attachment->name);
     }
-
+    
     if (mLastFrameTime >= mTotalAnimationTime)
         mAnimationFinished = true;
     
