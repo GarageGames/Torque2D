@@ -786,7 +786,7 @@ void DInputDevice::syncKeyboardState()
 
 
    U8* keyBuffer = new U8[mObjBufferSize];
-   dMemset( keyBuffer, 0, sizeof( keyBuffer ) );
+   dMemset( keyBuffer, 0, sizeof( U8 ) * mObjBufferSize );
    HRESULT result = mDevice->GetDeviceState( mObjBufferSize, keyBuffer );
    if ( SUCCEEDED( result ) )
    {

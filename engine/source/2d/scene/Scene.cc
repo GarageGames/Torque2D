@@ -4615,20 +4615,23 @@ void Scene::onTamlPostRead( const TamlCustomNodes& customNodes )
     }
 
     // Find controller custom node.
-    const TamlCustomNode* pControllerNode = customNodes.findNode( controllerCustomNodeName );
+    const TamlCustomNode* pControllerCustomNode = customNodes.findNode( controllerCustomNodeName );
 
     // Do we have any controllers?
-    if ( pControllerNode != NULL )
+    if ( pControllerCustomNode != NULL )
     {
         // Yes, so fetch the scene controllers.
         SimSet* pControllerSet = getControllers();
 
         // Fetch children controller nodes.
-        const TamlCustomNodeVector& controllerChildren = pControllerNode->getChildren();
+        const TamlCustomNodeVector& controllerChildren = pControllerCustomNode->getChildren();
 
         // Iterate controllers.
         for( TamlCustomNodeVector::const_iterator controllerNodeItr = controllerChildren.begin(); controllerNodeItr != controllerChildren.end(); ++controllerNodeItr )
         {
+            // Fetch controller node.
+            TamlCustomNode* pControllerNode = *controllerNodeItr;
+            
             // Is the node a proxy object?
             if ( !pControllerNode->isProxyObject() )
             {
