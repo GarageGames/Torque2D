@@ -135,7 +135,8 @@ CGLContextObj getContextForCapsCheck()
 // Find out which extensions are available for this renderer. 
 void getGLCapabilities()
 {
-    osxPlatState * platState = [osxPlatState sharedPlatState];
+    osxPlatState * platState;
+    platState = [osxPlatState sharedPlatState];
     
     AssertFatal([platState cgDisplay], "getGLCapabilities() was called before a monitor was chosen!");
     

@@ -75,7 +75,8 @@ void BuoyancyController::copyTo(SimObject* object)
     Parent::copyTo(object);
 
     // Cast to controller.
-    BuoyancyController* pController = static_cast<BuoyancyController*>(object);
+    BuoyancyController* pController;
+    pController = static_cast<BuoyancyController*>(object);
 
     // Sanity!
     AssertFatal(pController != NULL, "BuoyancyController::copyTo() - Object is not the correct type.");
