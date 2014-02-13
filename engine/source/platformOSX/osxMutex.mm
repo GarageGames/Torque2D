@@ -35,7 +35,7 @@ struct PlatformMutexData
 {
     pthread_mutex_t   mMutex;
     bool              locked;
-    U32         lockedByThread;
+    U32               lockedByThread;
 };
 
 //-----------------------------------------------------------------------------
@@ -66,7 +66,8 @@ Mutex::Mutex()
 Mutex::~Mutex()
 {
     // Destroy the system mutex.
-    const bool ok = pthread_mutex_destroy( &(mData->mMutex) );
+    bool ok;
+    ok = pthread_mutex_destroy( &(mData->mMutex) );
     
     // Sanity!
     AssertFatal(ok == 0, "~Mutex() failed: pthread_mutex_destroy() failed.");
@@ -83,7 +84,8 @@ bool Mutex::lock( bool block )
     if( block )
     {
         // Yes, so block until mutex can be locked.
-        const bool ok = pthread_mutex_lock( &(mData->mMutex) );
+        bool ok;
+        ok = pthread_mutex_lock( &(mData->mMutex) );
         
         // Sanity!
         AssertFatal( ok != EINVAL, "Mutex::lockMutex() failed: invalid mutex.");
@@ -119,7 +121,8 @@ bool Mutex::lock( bool block )
 void Mutex::unlock()
 {
     // Unlock the thread.
-    const bool ok = pthread_mutex_unlock( &(mData->mMutex) );
+    bool ok;
+    ok = pthread_mutex_unlock( &(mData->mMutex) );
     
     // Sanity!
     AssertFatal( ok == 0, "Mutex::unlockMutex() failed: pthread_mutex_unlock() failed.");
