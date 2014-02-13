@@ -138,7 +138,7 @@ static StringTableEntry jointMotorMaxTorqueName           = jointRevoluteMotorMa
 static StringTableEntry jointMotorCorrectionFactorName    = StringTable->insert( "CorrectionFactor" );
 
 // Controller custom node names.
-static StringTableEntry controllerCustomNodeName	      = StringTable->insert( "Controllers" );
+static StringTableEntry controllerCustomNodeName          = StringTable->insert( "Controllers" );
 
 // Asset preload custom node names.
 static StringTableEntry assetPreloadNodeName              = StringTable->insert( "AssetPreloads" );
@@ -1617,7 +1617,8 @@ S32 Scene::createJoint( b2JointDef* pJointDef )
     const S32 jointId = mJointMasterId++;
 
     // Insert joint.
-    typeJointHash::iterator itr = mJoints.insert( jointId, pJoint );
+    typeJointHash::iterator itr;
+    itr = mJoints.insert( jointId, pJoint );
 
     // Sanity!
     AssertFatal( itr != mJoints.end(), "Joint already in hash table." );
@@ -2183,7 +2184,7 @@ F32 Scene::getRevoluteJointAngle( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-F32	Scene::getRevoluteJointSpeed( const U32 jointId )
+F32 Scene::getRevoluteJointSpeed( const U32 jointId )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
