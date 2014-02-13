@@ -212,7 +212,7 @@ function AngleToy::createMathematicalObjects( %this )
 
 //-----------------------------------------------------------------------------
 
-function AngleToy::onTouchDragged(%this, %touchID, %worldPosition)
+function AngleToy::onTouchMoved(%this, %touchID, %worldPosition)
 {
     // Used to let the repointing target kno  
     AngleToy.repointTarget = %worldPosition;
