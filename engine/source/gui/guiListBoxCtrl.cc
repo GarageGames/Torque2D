@@ -1028,7 +1028,7 @@ const char* GuiListBoxCtrl::getStringElement( const char* inString, const U32 in
                 static char buffer[4096];
 
                 // Calculate word length.
-                const U32 length = inString - pWordStart - ((*inString)?1:0);
+                const U32 length = (const U32)(inString - pWordStart - ((*inString)?1:0));
 
                 // Copy Word.
                 dStrncpy( buffer, pWordStart, length);

@@ -83,7 +83,7 @@ bool Mutex::lock( bool block )
     if( block )
     {
         // Yes, so block until mutex can be locked.
-        const bool ok = pthread_mutex_lock( &(mData->mMutex) );
+        const int ok = pthread_mutex_lock( &(mData->mMutex) );
         
         // Sanity!
         AssertFatal( ok != EINVAL, "Mutex::lockMutex() failed: invalid mutex.");
@@ -93,7 +93,7 @@ bool Mutex::lock( bool block )
     else
     {
         // No, so attempt to lock the thread without blocking.
-        const bool ok = pthread_mutex_trylock( &(mData->mMutex) );
+        const int ok = pthread_mutex_trylock( &(mData->mMutex) );
         // returns EBUSY if mutex was locked by another thread,
         // returns EINVAL if mutex was not a valid mutex pointer,
         // returns 0 if lock succeeded.

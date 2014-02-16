@@ -240,9 +240,9 @@ char* dStrncpy(char *dst, const char *src, dsize_t len)
 
 //-----------------------------------------------------------------------------
 
-dsize_t dStrlen(const char *str)
+U32 dStrlen(const char *str)
 {
-    return str ? strlen(str) : 0;
+    return str ? (U32)strlen(str) : 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -305,16 +305,16 @@ char* dStrrchr(char *str, int c)
 
 //-----------------------------------------------------------------------------
 
-dsize_t dStrspn(const char *str, const char *set)
+U32 dStrspn(const char *str, const char *set)
 {
-    return(strspn(str, set));
+    return((U32)strspn(str, set));
 }
 
 //-----------------------------------------------------------------------------
 
-dsize_t dStrcspn(const char *str, const char *set)
+U32 dStrcspn(const char *str, const char *set)
 {
-    return strcspn(str, set);
+    return (U32)strcspn(str, set);
 }
 
 //-----------------------------------------------------------------------------

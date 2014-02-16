@@ -779,7 +779,7 @@ bool GFont::write(Stream& stream)
 
          // Write out.
          stream.write((U32)destLen);
-         stream.write(destLen, outBuff);
+         stream.write((U32)destLen, outBuff);
       }
 
       // Put us back to normal.

@@ -314,7 +314,7 @@ static void getPaths (const char *fullPath, StringTableEntry & path,
    }
    else
    {
-      S32 len = ptr - fullPath;
+      S32 len = (S32)(ptr - fullPath);
       dStrncpy (buf, fullPath, len);
       buf[len] = 0;
       fileName = StringTable->insert (ptr + 1);
@@ -1097,9 +1097,9 @@ struct ResourceObjectIndex
       const ResourceObjectIndex *r2 = (ResourceObjectIndex *) s2;
 
       if (r1->ro->path != r2->ro->path)
-         return r1->ro->path - r2->ro->path;
+         return (S32)(r1->ro->path - r2->ro->path);
       if (r1->ro->name != r2->ro->name)
-         return r1->ro->name - r2->ro->name;
+         return (S32)(r1->ro->name - r2->ro->name);
       return r1->ro->fileOffset - r2->ro->fileOffset;
    }
 };

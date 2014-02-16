@@ -322,7 +322,7 @@ U32 File::getPosition() const
     AssertFatal(handle != NULL, "File::getPosition: invalid file handle");
         
     // Return the position (aka, offset)
-    return ftell((FILE*)handle);
+    return (U32)ftell((FILE*)handle);
 }
 
 //-----------------------------------------------------------------------------
@@ -348,7 +348,7 @@ File::Status File::setPosition( S32 position, bool absolutePos )
         
         // Position beyond EOS is OK
         fseek((FILE*)handle, position, SEEK_SET);
-        finalPos = ftell((FILE*)handle);
+        finalPos = (U32)ftell((FILE*)handle);
     }
     else
     {
@@ -357,7 +357,7 @@ File::Status File::setPosition( S32 position, bool absolutePos )
         
         // Position beyond EOS is OK
         fseek((FILE*)handle, position, SEEK_CUR);
-        finalPos = ftell((FILE*)handle);
+        finalPos = (U32)ftell((FILE*)handle);
     }
     
     // ftell returns -1 on error. set error status
@@ -487,7 +487,7 @@ File::Status File::read(U32 size, char *dst, U32 *bytesRead)
         return currentStatus;
     
     // read from stream
-    U32 nBytes = fread(dst, 1, size, (FILE*)handle);
+    U32 nBytes = (U32)fread(dst, 1, size, (FILE*)handle);
     
     // did we hit the end of the stream?
     if( nBytes != size)
@@ -518,7 +518,7 @@ File::Status File::write(U32 size, const char *src, U32 *bytesWritten)
         return currentStatus;
     
     // write bytes to the stream
-    U32 nBytes = fwrite(src, 1, size,(FILE*)handle);
+    U32 nBytes = (U32)fwrite(src, 1, size,(FILE*)handle);
     
     // if we couldn't write everything, we've got a problem. set error status.
     if(nBytes != size)
@@ -969,7 +969,7 @@ S32 Platform::getFileSize(const char* pFilePath)
     }
     
     // Get the file size
-    U32 fileLength = [[attributes objectForKey:NSFileSize] integerValue];
+    U32 fileLength = (U32)[[attributes objectForKey:NSFileSize] integerValue];
     
     // Clean up temp string
     [pool drain];

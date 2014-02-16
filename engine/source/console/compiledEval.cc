@@ -283,7 +283,7 @@ static void setUnit(const char *string, U32 index, const char *replace, const ch
          string += (sz + 1);
    }
    // copy first chunk
-   sz = string-start;
+   sz = (U32)(string-start);
    dStrncpy(val, start, sz);
    for(U32 i = 0; i < padCount; i++)
       val[sz++] = set[0];
