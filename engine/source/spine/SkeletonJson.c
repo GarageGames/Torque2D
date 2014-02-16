@@ -63,7 +63,7 @@ void _spSkeletonJson_setError (spSkeletonJson* self, Json* root, const char* val
 	int length;
 	FREE(self->error);
 	strcpy(message, value1);
-	length = strlen(value1);
+	length = (int)strlen(value1);
 	if (value2) strncat(message + length, value2, 256 - length);
 	MALLOC_STR(self->error, message);
 	if (root) Json_dispose(root);
