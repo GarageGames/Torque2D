@@ -158,7 +158,7 @@ void PopupMenu::checkRadioItem(S32 firstPos, S32 lastPos, S32 checkPos)
 //-----------------------------------------------------------------------------
 bool PopupMenu::isItemChecked(S32 pos)
 {
-    S32 state = [[[mData->mController menu] itemAtIndex:pos] state];
+    S32 state = (S32)[[[mData->mController menu] itemAtIndex:pos] state];
 
     return (state == NSOnState);
 }

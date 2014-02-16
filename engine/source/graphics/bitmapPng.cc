@@ -66,7 +66,7 @@ static void pngReadDataFn(png_structp  /*png_ptr*/,
    AssertFatal(sg_pStream != NULL, "No stream?");
 
    bool success;
-   success = sg_pStream->read(length, data);
+   success = sg_pStream->read((U32)length, data);
     
    AssertFatal(success, "PNG read catastrophic error!");
 }
@@ -79,7 +79,7 @@ static void pngWriteDataFn(png_structp /*png_ptr*/,
 {
    AssertFatal(sg_pStream != NULL, "No stream?");
 
-   sg_pStream->write(length, data);
+   sg_pStream->write((U32)length, data);
 }
 
 
@@ -92,7 +92,7 @@ static void pngFlushDataFn(png_structp /*png_ptr*/)
 static png_voidp pngMallocFn(png_structp /*png_ptr*/, png_size_t size)
 {
 #ifndef _WIN64
-   return FrameAllocator::alloc(size);
+   return FrameAllocator::alloc((U32)size);
 #else
    return (png_voidp)dMalloc(size);
 #endif
@@ -253,7 +253,7 @@ bool GBitmap::readPNG(Stream& io_rStream)
    png_set_interlace_handling(png_ptr);
    png_read_update_info(png_ptr, info_ptr);
 
-   png_uint_32 rowBytes = png_get_rowbytes(png_ptr, info_ptr);
+   png_uint_32 rowBytes = (png_uint_32)png_get_rowbytes(png_ptr, info_ptr);
    if (format == RGB) {
       AssertFatal(rowBytes == width * 3,
                   "Error, our rowbytes are incorrect for this transform... (3)");

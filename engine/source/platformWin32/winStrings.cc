@@ -176,9 +176,9 @@ char* dStrncpy(char *dst, const char *src, dsize_t len)
    return strncpy((char*)dst,(char*)src,len);
 } */  
 
-dsize_t dStrlen(const char *str)
+U32 dStrlen(const char *str)
 {
-   return (dsize_t)strlen(str);
+   return (U32)strlen(str);
 }   
 
 /*dsize_t dStrlen(const UTF8 *str)
@@ -191,9 +191,9 @@ dsize_t dStrlen(const char *str)
     return c;
 }*/
 
-dsize_t dStrlen(const UTF16 *str)
+U32 dStrlen(const UTF16 *str)
 {
-    return (dsize_t)wcslen(str);
+    return (U32)wcslen(str);
 }
 
 char* dStrupr(char *str)
@@ -236,14 +236,14 @@ char* dStrrchr(char *str, S32 c)
    return strrchr(str,c);
 }
 
-dsize_t dStrspn(const char *str, const char *set)
+U32 dStrspn(const char *str, const char *set)
 {
-   return (dsize_t)strspn(str, set);
+   return (U32)strspn(str, set);
 }
 
-dsize_t dStrcspn(const char *str, const char *set)
+U32 dStrcspn(const char *str, const char *set)
 {
-   return (dsize_t)strcspn(str, set);
+   return (U32)strcspn(str, set);
 }
 
 

@@ -42,7 +42,7 @@ namespace Hash
    inline U32 hash(const void *data)
    {
 #ifdef TORQUE_64
-      return (U64)data;
+      return (U32)((U64)data);
 #else
       return (U32)data;
 #endif

@@ -139,7 +139,7 @@ public:
         operator const U32() const
         {
 #ifdef TORQUE_64
-            return (U64)(mArgString) * (U32)2654435761;
+            return (U32)((U64)(mArgString) * (U32)2654435761);
 #else
             return (U32)(mArgString) * (U32)2654435761;
 #endif
