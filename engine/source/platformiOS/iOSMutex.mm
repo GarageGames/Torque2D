@@ -62,7 +62,7 @@ Mutex::~Mutex()
  
 bool Mutex::lock( bool block)
 {
-   bool ok;
+   int ok;
 
    if(block)
    {
