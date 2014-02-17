@@ -159,7 +159,7 @@ void Dictionary::deleteVariables(const char *varString)
    }
 }
 
-S32 HashPointer(StringTableEntry ptr)
+U32 HashPointer(StringTableEntry ptr)
 {
    return (U32)(((dsize_t)ptr) >> 2);
 }

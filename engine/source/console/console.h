@@ -641,7 +641,7 @@ namespace Con
 
 extern void expandEscape(char *dest, const char *src);
 extern bool collapseEscape(char *buf);
-extern S32 HashPointer(StringTableEntry ptr);
+extern U32 HashPointer(StringTableEntry ptr);
 
 /// This is the backend for the ConsoleMethod()/ConsoleFunction() macros.
 ///

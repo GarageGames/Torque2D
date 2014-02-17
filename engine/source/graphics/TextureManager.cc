@@ -229,7 +229,8 @@ void TextureManager::resurrectManager( void )
                     AssertISV(pBitmap != NULL, "Error resurrecting the texture cache.\n""Possible cause: a bitmap was deleted during the course of gameplay.");
 
                     // Register texture.
-                    TextureObject* pTextureObject = registerTexture(probe->mTextureKey, pBitmap, probe->mHandleType, probe->mClamp);
+                    TextureObject* pTextureObject;
+                    pTextureObject = registerTexture(probe->mTextureKey, pBitmap, probe->mHandleType, probe->mClamp);
 
                     // Sanity!
                     AssertFatal(pTextureObject == probe, "A new texture was returned during resurrection.");
@@ -415,7 +416,7 @@ void TextureManager::getSourceDestByteFormat(GBitmap *pBitmap, U32 *sourceFormat
     *destFormat = *sourceFormat;
     *texelSize = byteSize;
     return;
-#else	
+#else   
     switch(pBitmap->getFormat()) 
     {
     case GBitmap::Intensity:
@@ -681,7 +682,8 @@ void TextureManager::refresh( const char *textureName )
         return;
 
     // Register texture.
-    TextureObject* pNewTextureObject = registerTexture(pTextureObject->mTextureKey, pBitmap, pTextureObject->mHandleType, pTextureObject->mClamp);
+    TextureObject* pNewTextureObject;
+    pNewTextureObject = registerTexture(pTextureObject->mTextureKey, pBitmap, pTextureObject->mHandleType, pTextureObject->mClamp);
 
     // Sanity!
     AssertFatal(pNewTextureObject == pTextureObject, "A new texture was returned during refresh.");
