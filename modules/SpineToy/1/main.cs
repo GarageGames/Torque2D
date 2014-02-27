@@ -93,7 +93,7 @@ function SpineToy::createGoblin(%this)
     %goblin.Skin = %this.skin;
         
     // Set the animation name
-    %goblin.setAnimation(%this.animation, true);
+    %goblin.setAnimationName(%this.animation, true);
     
     %goblin.RootBoneScale = 0.025;
     %goblin.setRootBoneOffset(0, -5);
@@ -121,7 +121,7 @@ function SpineToy::createSpineBoy(%this)
     };
 
     %object.Asset = "SpineToy:TestSkeleton";
-    %object.setAnimation("walk", true);
+    %object.setAnimationName("walk", true);
     %object.RootBoneScale = 0.025;
 
     %object.SceneLayer = 29;
@@ -140,7 +140,7 @@ function SpineBoy::onAnimationFinished(%this, %animationName)
 {
     if (%animationName $= "jump")
     {
-        %this.setAnimation("walk", true);
+        %this.setAnimationName("walk", true);
         %this.schedule(4000, "doJump");
     }
 }
@@ -149,7 +149,7 @@ function SpineBoy::onAnimationFinished(%this, %animationName)
 
 function SpineBoy::doJump(%this)
 {
-    %this.setAnimation("jump", false);
+    %this.setAnimationName("jump", false);
 }
 
 //-----------------------------------------------------------------------------
@@ -197,9 +197,9 @@ function SpineToy::createBackground(%this)
     %animatedMenu.Asset = "SpineToy:spinosaurus";
 
     // Set properties    
-    %animatedMenu.setAnimation("Animation", false);
+    %animatedMenu.setAnimationName("Animation", false);
     %duration = %animatedMenu.getAnimationDuration();
-    %animatedMenu.schedule(%duration*1000, "setAnimation", "loop", true);
+    %animatedMenu.schedule(%duration*1000, "setAnimationName", "loop", true);
     %animatedMenu.position = "0 0";
     %animatedMenu.SceneLayer = 30;
     %animatedMenu.RootBoneScale = 0.025;
@@ -220,7 +220,7 @@ function SpineToy::createPowerup(%this, %xPos, %yPos)
     %powerup.Asset = "SpineToy:powerup";
 
     // Set properties    
-    %powerup.setAnimation("Animation", true);    
+    %powerup.setAnimationName("Animation", true);    
     %powerup.position = %xPos SPC %yPos;
     %powerup.SceneLayer = 30;
     
