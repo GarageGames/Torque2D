@@ -156,7 +156,7 @@ function PickingToy::createRaycastOverlay( %this )
 
 //-----------------------------------------------------------------------------
 
-function PickingToy::onTouchMoved(%this, %touchID, %worldPosition)
+function PickingToy::onTouchDragged(%this, %touchID, %worldPosition)
 {
     // Update cursor position.
     PickingToy.CursorObject.Position = %worldPosition;
