@@ -130,7 +130,7 @@ function RotateToToy::onTouchDown(%this, %touchID, %worldPosition)
 
 //-----------------------------------------------------------------------------
 
-function RotateToToy::onTouchMoved(%this, %touchID, %worldPosition)
+function RotateToToy::onTouchDragged(%this, %touchID, %worldPosition)
 {
     // Finish if not tracking the mouse.
     if ( !RotateToToy.trackMouse )
