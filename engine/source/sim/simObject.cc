@@ -1314,14 +1314,16 @@ void SimObject::unlinkNamespaces()
 
 void SimObject::setClassNamespace( const char *classNamespace )
 {
-   mClassName = StringTable->insert( classNamespace );
-   linkNamespaces();
+    mClassName = StringTable->insert( classNamespace );
+    if (mFlags.test(Added))
+        linkNamespaces();
 }
 
 void SimObject::setSuperClassNamespace( const char *superClassNamespace )
-{  
-   mSuperClassName = StringTable->insert( superClassNamespace );
-   linkNamespaces();
+{
+    mSuperClassName = StringTable->insert( superClassNamespace );
+    if (mFlags.test(Added))
+        linkNamespaces();
 }
 
 static S32 QSORT_CALLBACK compareFields(const void* a,const void* b)
