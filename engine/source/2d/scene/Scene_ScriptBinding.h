@@ -1895,7 +1895,7 @@ ConsoleMethodWithDocs(Scene, getPrismaticJointMotor, ConsoleString, 3, 3, (joint
 
 //-----------------------------------------------------------------------------
 
-/*! Creates a prismatic joint.
+/*! Creates a pulley joint.
     @param sceneObjectA The first scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.
     @param sceneObjectB The second scene object to connect to the joint.  Use an empty string to indicate the Scene ground body.
     @param localAnchorA The local point of the first scene object where the joint connects.
@@ -1983,9 +1983,9 @@ ConsoleMethodWithDocs(Scene, createPulleyJoint, ConsoleInt, 9, 16, (sceneObjectA
 
     b2Vec2 worldGroundAnchorA;
 
-    if ( worldGroundAnchorAElementCount == 1 && argc > 5 )
+    if ( worldGroundAnchorAElementCount == 1 && argc > (nextArg+1) )
     {
-        worldGroundAnchorA.Set( dAtof(argv[nextArg]), dAtof(argv[nextArg++]) );
+        worldGroundAnchorA.Set( dAtof(argv[nextArg]), dAtof(argv[nextArg+1]) );
         nextArg += 2;
     }
     else if ( worldGroundAnchorAElementCount == 2 )
