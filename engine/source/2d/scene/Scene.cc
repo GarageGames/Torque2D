@@ -1592,7 +1592,7 @@ S32 Scene::findJointId( b2Joint* pJoint )
     AssertFatal( pJoint != NULL, "Joint cannot be NULL." );
 
     // Find joint.
-    typeReverseJointHash::iterator itr = mReverseJoints.find( (U64)pJoint );
+    typeReverseJointHash::iterator itr = mReverseJoints.find( (U32)((U64)pJoint) );
 
     if ( itr == mReverseJoints.end() )
     {
@@ -1624,7 +1624,7 @@ S32 Scene::createJoint( b2JointDef* pJointDef )
     AssertFatal( itr != mJoints.end(), "Joint already in hash table." );
 
     // Insert reverse joint.
-    mReverseJoints.insert( (U64)pJoint, jointId );
+    mReverseJoints.insert( (U32)((U64)pJoint), jointId );
 
     return jointId;
 }
@@ -3776,7 +3776,7 @@ void Scene::SayGoodbye( b2Joint* pJoint )
 
     // Remove joint references.
     mJoints.erase( jointId );
-    mReverseJoints.erase( (U64)pJoint );
+    mReverseJoints.erase( (U32)((U64)pJoint) );
 }
 
 //-----------------------------------------------------------------------------
