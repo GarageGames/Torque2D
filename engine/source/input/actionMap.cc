@@ -1653,7 +1653,7 @@ bool ActionMap::processMove(const InputEvent* pEvent)
         argv[1] = Con::getFloatArg( value );
             
         if (pNode->object)
-            Con::executef(pNode->object, S32(argv[0]), argv[1]);
+            Con::executef(pNode->object, 2, argv[0], argv[1]);
         else
             Con::execute(2, argv);
 

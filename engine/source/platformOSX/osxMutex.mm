@@ -35,7 +35,7 @@ struct PlatformMutexData
 {
     pthread_mutex_t   mMutex;
     bool              locked;
-    U32               lockedByThread;
+    ThreadIdent       lockedByThread;
 };
 
 //-----------------------------------------------------------------------------
@@ -84,7 +84,7 @@ bool Mutex::lock( bool block )
     if( block )
     {
         // Yes, so block until mutex can be locked.
-        bool ok;
+        int ok;
         ok = pthread_mutex_lock( &(mData->mMutex) );
         
         // Sanity!
@@ -95,7 +95,7 @@ bool Mutex::lock( bool block )
     else
     {
         // No, so attempt to lock the thread without blocking.
-        const bool ok = pthread_mutex_trylock( &(mData->mMutex) );
+        const int ok = pthread_mutex_trylock( &(mData->mMutex) );
         // returns EBUSY if mutex was locked by another thread,
         // returns EINVAL if mutex was not a valid mutex pointer,
         // returns 0 if lock succeeded.

@@ -273,7 +273,7 @@ char * Platform::makeFullPathName(const char *path, char *buffer, U32 size, cons
          }
          else if(endptr)
          {
-            catPath(endptr, ptr, size - (endptr - buffer));
+            catPath(endptr, ptr, (U32)(size - (endptr - buffer)));
             endptr += dStrlen(endptr) - 1;
          }
          
@@ -283,7 +283,7 @@ char * Platform::makeFullPathName(const char *path, char *buffer, U32 size, cons
       {
          // File
 
-         catPath(endptr, ptr, size - (endptr - buffer));
+         catPath(endptr, ptr, (U32)(size - (endptr - buffer)));
          endptr += dStrlen(endptr) - 1;
       }
 

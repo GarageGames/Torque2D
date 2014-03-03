@@ -157,7 +157,7 @@ namespace StringUnit
             string += (sz + 1);
       }
       // copy first chunk
-      sz = string-start;
+      sz = (U32)(string-start);
       dStrncpy(ret, start, sz);
       for(U32 i = 0; i < padCount; i++)
          ret[sz++] = set[0];
@@ -196,7 +196,7 @@ namespace StringUnit
             string += (sz + 1);
       }
       // copy first chunk
-      sz = string-start;
+      sz = (U32)(string-start);
       dStrncpy(ret, start, sz);
       ret[sz] = 0;
 

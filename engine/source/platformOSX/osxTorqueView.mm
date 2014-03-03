@@ -193,7 +193,7 @@
      NSDeviceIndependentModifierFlagsMask = 0xffff0000U
      */
     
-    U32 keyMods = [event modifierFlags];
+    U32 keyMods = (U32)[event modifierFlags];
     
     if (keyMods & NSShiftKeyMask)
         modifiers |= SI_SHIFT;

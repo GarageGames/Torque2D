@@ -32,7 +32,7 @@ Resolution Video::getDesktopResolution()
 
     // Get the screen depth. You cannot access depth directly. It must be passed
     // into a function that will return the bpp
-    int bpp = NSBitsPerPixelFromDepth([mainScreen depth]);
+    int bpp = (int)NSBitsPerPixelFromDepth([mainScreen depth]);
     
     // Build the return resolution
     Resolution resolution;

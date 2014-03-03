@@ -3775,6 +3775,7 @@
 		865A20AF165152EA00527C44 /* Shipping */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LIBRARY = "libc++";
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = ../../..;
@@ -3805,6 +3806,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = /usr/lib/libz.dylib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Shipping;
@@ -3879,6 +3881,7 @@
 		869FF8D71651518C002FE082 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LIBRARY = "libc++";
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = ../../..;
@@ -3911,6 +3914,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = /usr/lib/libz.dylib;
 				PRODUCT_NAME = "$(TARGET_NAME)_DEBUG";
+				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -3918,6 +3922,7 @@
 		869FF8D81651518C002FE082 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LIBRARY = "libc++";
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = ../../..;
@@ -3965,6 +3970,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = /usr/lib/libz.dylib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -266,7 +266,7 @@ ConsoleFunctionWithDocs(firstWord, ConsoleString, 2, 2, ( sourceString ))
    if(word == NULL)
       len = dStrlen(argv[1]);
    else
-      len = word - argv[1];
+      len = (U32)(word - argv[1]);
    char *ret = Con::getReturnBuffer(len + 1);
    dStrncpy(ret, argv[1], len);
    ret[len - 1] = 0;
