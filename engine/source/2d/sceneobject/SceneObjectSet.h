@@ -24,7 +24,7 @@
 #define _SCENE_OBJECT_SET_H_
 
 #ifndef _SCENE_OBJECT_LIST_H_
-#include "2d/sceneObject/sceneObjectList.h"
+#include "2d/sceneobject/SceneObjectList.h"
 #endif
 
 #ifndef _FIND_ITERATOR_H_

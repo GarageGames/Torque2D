@@ -20,13 +20,11 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-
-
 #ifndef _X86UNIXMESSAGEBOX_H_
 #define _X86UNIXMESSAGEBOX_H_
 
 #include <X11/Xlib.h>
-#include "core/tVector.h"
+#include "collection/vector.h"
 
 class XMessageBoxButton
 {

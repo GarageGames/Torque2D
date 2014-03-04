@@ -23,7 +23,7 @@
 #include "2d/assets/ParticleAssetField.h"
 
 #ifndef _CORE_MATH_H_
-#include "2d/core/coreMath.h"
+#include "2d/core/CoreMath.h"
 #endif
 
 #ifndef _MMATH_H_

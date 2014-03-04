@@ -25,7 +25,7 @@
 #endif
 
 #ifndef _SPRITE_BATCH_QUERY_H_
-#include "2d/core/spriteBatchQuery.h"
+#include "2d/core/SpriteBatchQuery.h"
 #endif
 
 #ifndef _RENDER_PROXY_H_

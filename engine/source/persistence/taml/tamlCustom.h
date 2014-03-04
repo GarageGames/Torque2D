@@ -36,7 +36,7 @@
 #endif
 
 #ifndef B2_MATH_H
-#include "box2d/Common/b2Math.h"
+#include "Box2D/Common/b2Math.h"
 #endif
 
 #ifndef _COLOR_H_

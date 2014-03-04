@@ -2462,16 +2462,7 @@ bool OpenALInit()
    alcMakeContextCurrent(mContext);
     AssertNoOALError("Error setting current OpenAL context");
 
-
     //now request the number of audio sources we want, if we can't get that many decrement until we have a number we can get
-#elif defined(TORQUE_OS_LINUX)
-   const char* deviceSpecifier =
-     Con::getVariable("Pref::Unix::OpenALSpecifier");
-   if (dStrlen(deviceSpecifier) == 0)
-     // use SDL for audio output by default
-     deviceSpecifier = "'((devices '(sdl)))";
-   mDevice = (ALCvoid *)alcOpenDevice(deviceSpecifier);
-
 #elif defined(TORQUE_OS_OSX)
    mDevice = alcOpenDevice((const ALCchar*)NULL);
 #elif defined(TORQUE_OS_ANDROID)
@@ -2499,7 +2490,7 @@ bool OpenALInit()
       0x100, freq,
       0
    };
-   mContext = alcCreateContext(mDevice,attrlist);
+   mContext = alcCreateContext((ALCdevice*)mDevice,attrlist);
 #elif TORQUE_OS_ANDROID
    mContext = alcCreateContext((ALCdevice*)mDevice, NULL);
 #else
@@ -2509,7 +2500,7 @@ bool OpenALInit()
       return false;
 
    // Make this context the active context
-#ifdef TORQUE_OS_ANDROID
+#if defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_LINUX)
    alcMakeContextCurrent((ALCcontext*)mContext);
 #else
    alcMakeContextCurrent(mContext);
@@ -2595,7 +2586,7 @@ void OpenALShutdown()
 
    if (mContext)
    {
-#ifdef TORQUE_OS_ANDROID
+#if defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_LINUX)
 	   alcDestroyContext((ALCcontext*)mContext);
 #else
 	   alcDestroyContext(mContext);
@@ -2605,7 +2596,7 @@ void OpenALShutdown()
    }
    if (mDevice)
    {
-#ifdef TORQUE_OS_ANDROID
+#if defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_LINUX)
 	   alcCloseDevice((ALCdevice*)mDevice);
 #else
 	   alcCloseDevice(mDevice);

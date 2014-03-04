@@ -27,8 +27,6 @@
 #include "platform/platform.h"
 #endif
 
-#ifndef NO_AUDIO_SUPPORT
-
 #ifndef _PLATFORMAL_H_
 #include "platform/platformAL.h"
 #endif
@@ -169,7 +167,5 @@ bool alxIsPlaying(AUDIOHANDLE handle);
 void alxUpdate();
 F32 alxGetStreamPosition( AUDIOHANDLE handle );
 F32 alxGetStreamDuration( AUDIOHANDLE handle );
-
-#endif // NO_AUDIO_SUPPORT
 
 #endif  // _H_PLATFORMAUDIO_

@@ -36,7 +36,7 @@
 #endif
 
 #ifndef _TAML_H_
-#include "persistence/Taml/taml.h"
+#include "persistence/taml/taml.h"
 #endif
 
 // Script bindings.

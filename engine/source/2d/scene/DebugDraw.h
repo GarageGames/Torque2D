@@ -24,7 +24,7 @@
 #define _DEBUG_DRAW_H_
 
 #ifndef BOX2D_H
-#include "box2d/Box2D.h"
+#include "Box2D/Box2D.h"
 #endif
 
 #ifndef _MMATH_H_

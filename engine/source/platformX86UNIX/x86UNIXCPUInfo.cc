@@ -25,13 +25,11 @@
 #include "platform/platform.h"
 #include "platformX86UNIX/platformX86UNIX.h"
 #include "console/console.h"
-#include "core/stringTable.h"
+#include "string/stringTable.h"
 #include <math.h>
 
-Platform::SystemInfo_struct Platform::SystemInfo;
-
 extern void PlatformBlitInit();
-extern void SetProcessorInfo(Platform::SystemInfo_struct::Processor& pInfo, 
+extern void SetProcessorInfo(TorqueSystemInfo::Processor& pInfo, 
    char* vendor, U32 processor, U32 properties); // platform/platformCPU.cc
 
 // asm cpu detection routine from platform code
@@ -46,8 +44,8 @@ static U32 clockticks = 0;
 static char vendor[13] = {0,};
 static U32 properties = 0;
 static U32 processor  = 0;
-static U32 timeHi = 0;
-static U32 timeLo = 0;
+static U32 timeLo1, timeHi1 = 0;
+static U32 timeLo2, timeHi2 = 0;
 
 void Processor::init()
 {
@@ -56,27 +54,29 @@ void Processor::init()
    //    www.amd.com
    //    www.intel.com
    //       http://developer.intel.com/design/PentiumII/manuals/24512701.pdf
-   Platform::SystemInfo.processor.type = CPU_X86Compatible;
-   Platform::SystemInfo.processor.name = StringTable->insert("Unknown x86 Compatible");
-   Platform::SystemInfo.processor.mhz  = 0;
-   Platform::SystemInfo.processor.properties = CPU_PROP_C;
+   PlatformSystemInfo.processor.type = CPU_X86Compatible;
+   PlatformSystemInfo.processor.name = StringTable->insert("Unknown x86 Compatible");
+   PlatformSystemInfo.processor.mhz  = 0;
+   PlatformSystemInfo.processor.properties = CPU_PROP_C;
 
    clockticks = properties = processor = time[0] = 0;
    dStrcpy(vendor, "");
 
    detectX86CPUInfo(vendor, &processor, &properties);
-   SetProcessorInfo(Platform::SystemInfo.processor, 
+   SetProcessorInfo(PlatformSystemInfo.processor, 
       vendor, processor, properties);
+
+   U32 mhz = 0;
 
    //--------------------------------------
    // if RDTSC support calculate the aproximate Mhz of the CPU
-   if (Platform::SystemInfo.processor.properties & CPU_PROP_RDTSC && 
-       Platform::SystemInfo.processor.properties & CPU_PROP_FPU)
+   if (PlatformSystemInfo.processor.properties & CPU_PROP_RDTSC && 
+       PlatformSystemInfo.processor.properties & CPU_PROP_FPU)
    {
-      const U32 MS_INTERVAL = 750;
+      const U32 MS_INTERVAL = 250; // Bigger = more accurate, but slower startup
       
 #if defined(TORQUE_COMPILER_GCC) && ((__GNUC__ >= 3) && (__GNUC_MINOR__ >=4)) || ((__GNUC__ >= 4) && (__GNUC_MINOR__ >=0))
-      asm("rdtsc" : "=a" (timeLo), "=d" (timeHi));
+      asm("rdtsc" : "=a" (timeLo1), "=d" (timeHi1));
 #else
       __asm__(
          "pushl  %eax\n"
@@ -92,17 +92,11 @@ void Processor::init()
       while ( Platform::getRealMilliseconds() < ms+MS_INTERVAL )
       { /* empty */ }
       ms = Platform::getRealMilliseconds()-ms;
+
 #if defined(TORQUE_COMPILER_GCC) && ((__GNUC__ >= 3) && (__GNUC_MINOR__ >= 4)) || ((__GNUC__ >= 4) && (__GNUC_MINOR__ >=0))
-      asm(
-         "pushl  %eax\n"
-         "pushl  %edx\n"
-         "rdtsc\n"
-         "sub    (timeHi), %edx\n"
-         "sbb    (timeLo), %eax\n"
-         "mov    %eax, (clockticks)\n"
-         "popl   %edx\n"
-         "popl   %eax\n"
-         );
+      asm("rdtsc" : "=a" (timeLo2), "=d" (timeHi2));
+      // TODO: This will need to be fixed for x64 support to include bits from timeHi
+      clockticks = timeLo2 - timeLo1;
 #else      
       asm(
          "pushl  %eax\n"
@@ -115,8 +109,7 @@ void Processor::init()
          "popl   %eax\n"
          );
 #endif
-      U32 mhz = static_cast<U32>(F32(clockticks) / F32(ms) / 1000.0f);
-      
+      mhz = (U32)(F32(clockticks) / F32(ms) / 1000.0f);
       // catch-22 the timing method used above to calc Mhz is generally
       // wrong by a few percent so we want to round to the nearest clock
       // multiple but we also want to be careful to not touch overclocked 
@@ -129,27 +122,38 @@ void Processor::init()
       U32 bucket50 = mhz % 50;
       
       if (bucket50 < 8 || bucket50 > 42)
-         Platform::SystemInfo.processor.mhz = 
+         PlatformSystemInfo.processor.mhz = 
             U32((mhz+(50.0f/2.0f))/50.0f) * 50; 
       else if (bucket25 < 5 || bucket25 > 20)
-         Platform::SystemInfo.processor.mhz = 
+         PlatformSystemInfo.processor.mhz = 
             U32((mhz+(25.0f/2.0f))/25.0f) * 25; 
       else if (bucket33 < 5 || bucket33 > 28)
-         Platform::SystemInfo.processor.mhz = 
+         PlatformSystemInfo.processor.mhz = 
             U32((mhz+(33.0f/2.0f))/33.0f) * 33; 
       else 
-         Platform::SystemInfo.processor.mhz = U32(mhz); 
+         PlatformSystemInfo.processor.mhz = U32(mhz); 
    }
 
    Con::printf("Processor Init:");
-   Con::printf("   %s, %d Mhz", Platform::SystemInfo.processor.name, Platform::SystemInfo.processor.mhz);
-   if (Platform::SystemInfo.processor.properties & CPU_PROP_FPU)
+   if (PlatformSystemInfo.processor.mhz >= 1000) {
+      Con::printf("   %s, %.2f Ghz", PlatformSystemInfo.processor.name, ((float)PlatformSystemInfo.processor.mhz)/1000.0f);
+   } else {
+      Con::printf("   %s, %d Mhz", PlatformSystemInfo.processor.name, PlatformSystemInfo.processor.mhz);
+   }
+   if (PlatformSystemInfo.processor.mhz != mhz) {
+      if (mhz >= 1000) {
+         Con::printf("     (timed at roughly %.2f Ghz)", ((float)mhz)/1000.0f);
+      } else {
+         Con::printf("     (timed at roughly %d Mhz)", mhz);
+      }
+   }
+   if (PlatformSystemInfo.processor.properties & CPU_PROP_FPU)
       Con::printf("   FPU detected");
-   if (Platform::SystemInfo.processor.properties & CPU_PROP_MMX)
+   if (PlatformSystemInfo.processor.properties & CPU_PROP_MMX)
       Con::printf("   MMX detected");
-   if (Platform::SystemInfo.processor.properties & CPU_PROP_3DNOW)
+   if (PlatformSystemInfo.processor.properties & CPU_PROP_3DNOW)
       Con::printf("   3DNow detected");
-   if (Platform::SystemInfo.processor.properties & CPU_PROP_SSE)
+   if (PlatformSystemInfo.processor.properties & CPU_PROP_SSE)
       Con::printf("   SSE detected");
    Con::printf(" ");
 

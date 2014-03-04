@@ -23,7 +23,7 @@
 #include "graphics/dgl.h"
 #include "console/consoleTypes.h"
 #include "gui/guiDefaultControlRender.h"
-#include "GuiSceneObjectCtrl.h"
+#include "guiSceneObjectCtrl.h"
 #include "debug/profiler.h"
 
 // -----------------------------------------------------------------------------
