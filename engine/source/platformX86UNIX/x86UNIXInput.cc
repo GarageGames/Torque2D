@@ -566,28 +566,28 @@ void Input::setCursorPos(S32 x, S32 y)
 
 void Input::pushCursor(S32 cursorID)
 {
-   //CursorManager* cm = getCursorManager();
-   //if (cm)
-   //   cm->pushCursor(cursorID);
+   CursorManager* cm = getCursorManager();
+   if (cm)
+     cm->pushCursor(cursorID);
 }
 
 void Input::popCursor()
 {
-   //CursorManager* cm = getCursorManager();
-   //if (cm)
-   //   cm->popCursor();
+   CursorManager* cm = getCursorManager();
+   if (cm)
+     cm->popCursor();
 }
 
 void Input::refreshCursor()
 {
-   //CursorManager* cm = getCursorManager();
-   //if (cm)
-   //   cm->refreshCursor();
+   CursorManager* cm = getCursorManager();
+   if (cm)
+     cm->refreshCursor();
 }
 
 void Input::setCursorState(bool on)
 {
-   //SDL_ShowCursor(on ? SDL_ENABLE : SDL_DISABLE);
+   SDL_ShowCursor(on ? SDL_ENABLE : SDL_DISABLE);
 }
 
 void Input::setCursorShape(U32 cursorID)

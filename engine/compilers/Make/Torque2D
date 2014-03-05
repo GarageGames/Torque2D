@@ -1,67 +1,6 @@
 APPNAME := ../../../Torque2D
 
-SOURCES := ../../lib/ljpeg/jcapimin.c \
-	../../lib/ljpeg/jcapistd.c \
-	../../lib/ljpeg/jccoefct.c \
-	../../lib/ljpeg/jccolor.c \
-	../../lib/ljpeg/jcdctmgr.c \
-	../../lib/ljpeg/jchuff.c \
-	../../lib/ljpeg/jcinit.c \
-	../../lib/ljpeg/jcmainct.c \
-	../../lib/ljpeg/jcmarker.c \
-	../../lib/ljpeg/jcmaster.c \
-	../../lib/ljpeg/jcomapi.c \
-	../../lib/ljpeg/jcparam.c \
-	../../lib/ljpeg/jcphuff.c \
-	../../lib/ljpeg/jcprepct.c \
-	../../lib/ljpeg/jcsample.c \
-	../../lib/ljpeg/jctrans.c \
-	../../lib/ljpeg/jdapimin.c \
-	../../lib/ljpeg/jdapistd.c \
-	../../lib/ljpeg/jdatadst.c \
-	../../lib/ljpeg/jdatasrc.c \
-	../../lib/ljpeg/jdcoefct.c \
-	../../lib/ljpeg/jdcolor.c \
-	../../lib/ljpeg/jddctmgr.c \
-	../../lib/ljpeg/jdhuff.c \
-	../../lib/ljpeg/jdinput.c \
-	../../lib/ljpeg/jdmainct.c \
-	../../lib/ljpeg/jdmarker.c \
-	../../lib/ljpeg/jdmaster.c \
-	../../lib/ljpeg/jdmerge.c \
-	../../lib/ljpeg/jdphuff.c \
-	../../lib/ljpeg/jdpostct.c \
-	../../lib/ljpeg/jdsample.c \
-	../../lib/ljpeg/jdtrans.c \
-	../../lib/ljpeg/jerror.c \
-	../../lib/ljpeg/jfdctflt.c \
-	../../lib/ljpeg/jfdctfst.c \
-	../../lib/ljpeg/jfdctint.c \
-	../../lib/ljpeg/jidctflt.c \
-	../../lib/ljpeg/jidctfst.c \
-	../../lib/ljpeg/jidctint.c \
-	../../lib/ljpeg/jidctred.c \
-	../../lib/ljpeg/jmemansi.c \
-	../../lib/ljpeg/jmemmgr.c \
-	../../lib/ljpeg/jquant1.c \
-	../../lib/ljpeg/jquant2.c \
-	../../lib/ljpeg/jutils.c \
-	../../lib/lpng/png.c \
-	../../lib/lpng/pngerror.c \
-	../../lib/lpng/pngget.c \
-	../../lib/lpng/pngmem.c \
-	../../lib/lpng/pngpread.c \
-	../../lib/lpng/pngread.c \
-	../../lib/lpng/pngrio.c \
-	../../lib/lpng/pngrtran.c \
-	../../lib/lpng/pngrutil.c \
-	../../lib/lpng/pngset.c \
-	../../lib/lpng/pngtrans.c \
-	../../lib/lpng/pngwio.c \
-	../../lib/lpng/pngwrite.c \
-	../../lib/lpng/pngwtran.c \
-	../../lib/lpng/pngwutil.c \
-	../../source/2d/assets/AnimationAsset.cc \
+SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/2d/assets/ImageAsset.cc \
 	../../source/2d/assets/ParticleAsset.cc \
 	../../source/2d/assets/ParticleAssetEmitter.cc \
@@ -500,7 +439,7 @@ OBJS_DEBUG := $(filter %.o,$(OBJS_DEBUG))
 
 $(APP_TARGETS): $(OBJS) $(LIB_TARGETS)
 	@echo Linking release
-	$(LD) $(LBFLAGS) -o $@ $(OBJS) $(LIB_TARGETS) $(LDLIBS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS) $(LIB_TARGETS) $(LDLIBS)
 
 $(APP_TARGETS_DEBUG): $(OBJS_DEBUG) $(LIB_TARGETS_DEBUG)
 	@echo Linking debug
