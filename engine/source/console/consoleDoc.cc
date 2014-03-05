@@ -254,7 +254,7 @@ void Namespace::printNamespaceEntries(Namespace * g, bool dumpScript, bool dumpE
 
             use++;
             
-            U32 len = end - use;
+            U32 len = (U32)(end - use);
             dStrncpy(buffer, use, len);
             buffer[len] = 0;
 
@@ -268,7 +268,7 @@ void Namespace::printNamespaceEntries(Namespace * g, bool dumpScript, bool dumpE
          if(dot < bgn && bgn < end)  // And they're in the order dot, bgn, end...
          {
             use++;
-            U32 len = end - bgn - 1;
+            U32 len = (U32)(end - bgn - 1);
             dStrncpy(buffer, bgn+1, len);
             buffer[len] = 0;
 
@@ -281,7 +281,7 @@ void Namespace::printNamespaceEntries(Namespace * g, bool dumpScript, bool dumpE
          char* func_pos = dStrstr(use, funcName);
          if((func_pos) && (func_pos < bgn) && (end > bgn))
          {
-            U32 len = end - bgn - 1;
+            U32 len = (U32)(end - bgn - 1);
             dStrncpy(buffer, bgn+1, len);
             buffer[len] = 0;
 
@@ -536,7 +536,7 @@ void Namespace::dumpClasses( bool dumpScript, bool dumpEngine )
             // Grab the length of the doc string.
             S32 docLen = dStrlen( field );
             if( nextKeyword )
-               docLen = nextKeyword - field;
+               docLen = (U32)(nextKeyword - field);
 
             // Make sure it will fit in the buffer.
             if( docLen > 1023 )

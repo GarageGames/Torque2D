@@ -170,7 +170,7 @@ function MoveToToy::onTouchDown(%this, %touchID, %worldPosition)
 
 //-----------------------------------------------------------------------------
 
-function MoveToToy::onTouchMoved(%this, %touchID, %worldPosition)
+function MoveToToy::onTouchDragged(%this, %touchID, %worldPosition)
 {
     // Finish if not tracking the mouse.
     if ( !MoveToToy.trackMouse )

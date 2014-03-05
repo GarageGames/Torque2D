@@ -33,6 +33,12 @@ struct PlatformThreadData;
 // Typedefs
 typedef void (*ThreadRunFunction)(void *data);
 
+#ifdef TORQUE_64
+typedef U64 ThreadIdent;
+#else
+typedef U32 ThreadIdent;
+#endif
+
 class Thread
 {
 protected:
@@ -82,7 +88,7 @@ public:
    bool isAlive();
 
    /// Returns the platform specific thread id for this thread.
-   U32 getId();
+   ThreadIdent getId();
 };
 
 class ThreadManager 
@@ -101,18 +107,18 @@ class ThreadManager
 public:
 
    /// Returns true if threadId is the same as the calling thread's id.
-   static bool isCurrentThread(U32 threadId);
+   static bool isCurrentThread(ThreadIdent threadId);
 
    /// Returns true if the 2 thread ids represent the same thread. Some thread
    /// APIs return an opaque object as a thread id, so the == operator cannot
    /// reliably compare thread ids.
    // this comparator is needed by pthreads and ThreadManager.
-   static bool compare(U32 threadId_1, U32 threadId_2);
+   static bool compare(ThreadIdent threadId_1, ThreadIdent threadId_2);
       
    /// Returns the platform specific thread id of the calling thread. Some 
    /// platforms do not guarantee that this ID stays the same over the life of 
    /// the thread, so use ThreadManager::compare() to compare thread ids.
-   static U32 getCurrentThreadId();
+   static ThreadIdent getCurrentThreadId();
    
    /// Each thread should add itself to the thread pool the first time it runs.
    
@@ -131,7 +137,7 @@ public:
       ThreadManager &manager = *singleton();
       manager.poolLock.lock();
       
-      U32 threadID = thread->getId();
+      ThreadIdent threadID = thread->getId();
       for( U32 i = 0;i < (U32)manager.threadPool.size();++i)
       {
          if(manager.threadPool[i]->getId() == threadID)
@@ -146,7 +152,7 @@ public:
    
    /// Searches the pool of known threads for a thread whose id is equivalent to
    /// the given threadid. Compares thread ids with ThreadManager::compare().
-   static Thread* getThreadById(U32 threadid)
+   static Thread* getThreadById(ThreadIdent threadid)
    {
       AssertFatal(threadid != 0, "ThreadManager::getThreadById() Searching for a bad thread id.");
       Thread* ret = NULL;
@@ -172,9 +178,9 @@ public:
    }
 };
 
-inline bool ThreadManager::isCurrentThread(U32 threadId)
+inline bool ThreadManager::isCurrentThread(ThreadIdent threadId)
 {
-   U32 current = getCurrentThreadId();
+   ThreadIdent current = getCurrentThreadId();
    return compare(current, threadId);
 }
 

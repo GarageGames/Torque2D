@@ -61,7 +61,7 @@ ConsoleFunctionWithDocs(call, ConsoleString, 2, 0, ( funcName, [args ... ]?))
 static StringTableEntry getDSOPath(const char *scriptPath)
 {
    const char *slash = dStrrchr(scriptPath, '/');
-   return StringTable->insertn(scriptPath, slash - scriptPath, true);
+   return StringTable->insertn(scriptPath, (U32)(slash - scriptPath), true);
 }
 
 /*! Returns the DSO path of the given filename

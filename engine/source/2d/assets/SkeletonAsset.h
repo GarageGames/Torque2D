@@ -50,11 +50,10 @@ private:
 public:
     StringTableEntry                mSkeletonFile;
     StringTableEntry                mAtlasFile;
-    F32                           mScale;
     AssetPtr<ImageAsset>            mImageAsset;
-    spAtlas*                 mAtlas;
-    spSkeletonData*          mSkeletonData;
-    spAnimationStateData*    mStateData;
+    spAtlas*                        mAtlas;
+    spSkeletonData*                 mSkeletonData;
+    spAnimationStateData*           mStateData;
 
 public:
     SkeletonAsset();
@@ -71,9 +70,6 @@ public:
 
     void                    setAtlasFile( const char* pAtlasFile );
     inline StringTableEntry getAtlasFile( void ) const                      { return mAtlasFile; }
-
-    void                    setScale( const F32 fScale );
-    inline F32              getScale( void ) const                          { return mScale; }
     
     virtual bool            isAssetValid( void ) const;
 
@@ -100,8 +96,6 @@ protected:
     static bool writeSkeletonFile( void* obj, StringTableEntry pFieldName ) { return static_cast<SkeletonAsset*>(obj)->getSkeletonFile() != StringTable->EmptyString; }
     static bool setAtlasFile( void* obj, const char* data )                 { static_cast<SkeletonAsset*>(obj)->setAtlasFile(data); return false; }
     static bool writeAtlasFile( void* obj, StringTableEntry pFieldName )    { return static_cast<SkeletonAsset*>(obj)->getAtlasFile() != StringTable->EmptyString; }
-    static bool setScale( void* obj, const char* data )                     { static_cast<SkeletonAsset*>(obj)->setScale(dAtof(data)); return false; }
-    static bool writeScale( void* obj, StringTableEntry pFieldName )        { return static_cast<SkeletonAsset*>(obj)->getScale() != 1.0f; }
 };
 
 #endif // _SKELETON_ASSET_H_

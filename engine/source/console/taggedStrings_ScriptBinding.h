@@ -63,7 +63,7 @@ ConsoleFunctionWithDocs(getTag, ConsoleString, 2, 2, ( taggedString ))
 
       U32 len;
       if(space)
-         len = space - argv[1];
+         len = (U32)(space - argv[1]);
       else
          len = dStrlen(argv[1]) + 1;
 

@@ -240,9 +240,9 @@ char* dStrncpy(char *dst, const char *src, dsize_t len)
 
 //-----------------------------------------------------------------------------
 
-dsize_t dStrlen(const char *str)
+U32 dStrlen(const char *str)
 {
-    return str ? strlen(str) : 0;
+    return str ? (U32)strlen(str) : 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -305,16 +305,16 @@ char* dStrrchr(char *str, int c)
 
 //-----------------------------------------------------------------------------
 
-dsize_t dStrspn(const char *str, const char *set)
+U32 dStrspn(const char *str, const char *set)
 {
-    return(strspn(str, set));
+    return((U32)strspn(str, set));
 }
 
 //-----------------------------------------------------------------------------
 
-dsize_t dStrcspn(const char *str, const char *set)
+U32 dStrcspn(const char *str, const char *set)
 {
-    return strcspn(str, set);
+    return (U32)strcspn(str, set);
 }
 
 //-----------------------------------------------------------------------------
@@ -404,9 +404,9 @@ void dPrintf(const char *format, ...)
 
 //-----------------------------------------------------------------------------
 
-int dVprintf(const char *format, void *arglist)
+int dVprintf(const char *format, va_list arglist)
 {
-    S32 len = vprintf(format, (char*)arglist);
+    S32 len = vprintf(format, arglist);
     
     return (len);
 }
@@ -429,7 +429,7 @@ int dSprintf(char *buffer, dsize_t bufferSize, const char *format, ...)
 
 int dVsprintf(char *buffer, dsize_t bufferSize, const char *format, va_list arglist)
 {
-	S32 len = vsprintf(buffer, format, (char*)arglist);
+	S32 len = vsprintf(buffer, format, arglist);
 
     // Sanity!
     AssertFatal(len <= bufferSize, "dSprintf - String format exceeded buffer size.  This will cause corruption.");

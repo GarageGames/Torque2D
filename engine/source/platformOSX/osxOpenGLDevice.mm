@@ -56,7 +56,7 @@ bool osxOpenGLDevice::enumDisplayModes( CGDirectDisplayID display )
     CFArrayRef modeArray = CGDisplayCopyAllDisplayModes(display, NULL);
     
     // Fetch the mode count.
-    const S32 modeCount = CFArrayGetCount(modeArray);
+    const S32 modeCount = (const S32)CFArrayGetCount(modeArray);
     
     // Iterate the modes.
     for( S32 modeIndex = 0; modeIndex < modeCount; modeIndex++ )
@@ -65,10 +65,10 @@ bool osxOpenGLDevice::enumDisplayModes( CGDirectDisplayID display )
         CGDisplayModeRef mode = (CGDisplayModeRef)CFArrayGetValueAtIndex(modeArray, modeIndex);
         
         // Get the mode width.
-        const S32 width = CGDisplayModeGetWidth(mode);
+        const S32 width = (const S32)CGDisplayModeGetWidth(mode);
         
         // Get the mode height.
-        const S32 height = CGDisplayModeGetHeight(mode);
+        const S32 height = (const S32)CGDisplayModeGetHeight(mode);
         
         // Get the pixel encoding.
         CFStringRef pixelEncoding = CGDisplayModeCopyPixelEncoding(mode);

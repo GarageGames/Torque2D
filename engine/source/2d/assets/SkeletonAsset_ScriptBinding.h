@@ -62,26 +62,4 @@ ConsoleMethodWithDocs(SkeletonAsset, getSkeletonFile, ConsoleString, 2, 2, ())
 
 //------------------------------------------------------------------------------
 
-/*! Sets the scale for the skeleton size.
-	@param scale The scale for the skeleton size.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(SkeletonAsset, setScale, ConsoleVoid, 3, 3, (float scale))
-{
-    // Compilier complains that setScale can't be found. Not sure how to fix.
-    //object->setScale( argv[2] );
-}
-
-//-----------------------------------------------------------------------------
-
-/*! Gets the scale for the skeleton size.
-    @return Returns the scale for the skeleton size.
-*/
-ConsoleMethodWithDocs(SkeletonAsset, getScale, ConsoleFloat, 2, 2, ())
-{
-    return object->getScale();
-}
-
-//------------------------------------------------------------------------------
-
 ConsoleMethodGroupEndWithDocs(SkeletonAsset)

@@ -156,7 +156,59 @@ function PickingToy::createRaycastOverlay( %this )
 
 //-----------------------------------------------------------------------------
 
-function PickingToy::onTouchMoved(%this, %touchID, %worldPosition)
+function PickingToy::onTouchDown(%this, %touchID, %worldPosition)
+{
+    // Update cursor position.
+    PickingToy.CursorObject.Position = %worldPosition;
+    
+    // Are we in ray mode?
+    if ( PickingToy.PickType $= "ray" )
+    {
+        // Yes, so update the ray geometry.
+        PickingToy.RaycastOverlay.PolyList = PickingToy.RayStart SPC %worldPosition;
+    }    
+    
+    // Handle picking mode appropriately.
+    switch$( PickingToy.PickType )
+    {
+        case "point":
+            %picked = SandboxScene.pickPoint( %worldPosition, "", "", PickingToy.PickMode );
+        
+        case "area":
+            %halfSize = PickingToy.PickAreaSize * 0.5;
+            %lower = (%worldPosition._0 - %halfSize) SPC(%worldPosition._1 - %halfSize);    
+            %upper = (%worldPosition._0 + %halfSize) SPC(%worldPosition._1 + %halfSize);    
+            %picked = SandboxScene.pickArea( %lower, %upper, "", "", PickingToy.PickMode );
+            
+        case "ray":
+            %picked = SandboxScene.pickRay( PickingToy.RayStart, %worldPosition, "", "", PickingToy.PickMode );
+            
+        case "circle":
+            %halfSize = PickingToy.PickAreaSize * 0.5;
+            %picked = SandboxScene.pickCircle( %worldPosition, %halfSize, "", "", PickingToy.PickMode );
+    }
+        
+    // Fetch pick count.
+    %pickCount = %picked.Count;
+    
+    // See if the target object is amongst those picked.
+    for( %i = 0; %i < %pickCount; %i++ )
+    {
+        // If this is the target object then make it opaque.
+        if ( getWord( %picked, %i ) == PickingToy.TargetObject )
+        {
+            PickingToy.TargetObject.setBlendAlpha( 1.0 );
+            return;
+        }
+    }
+    
+    // Target not picked so make it transparent.
+    PickingToy.TargetObject.setBlendAlpha( 0.25 );
+}
+
+//-----------------------------------------------------------------------------
+
+function PickingToy::onTouchDragged(%this, %touchID, %worldPosition)
 {
     // Update cursor position.
     PickingToy.CursorObject.Position = %worldPosition;

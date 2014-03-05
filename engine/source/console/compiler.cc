@@ -71,20 +71,25 @@ namespace Compiler
    void setBreakCodeBlock(CodeBlock *cb)  { gCurBreakBlock = cb;   }
 
    //------------------------------------------------------------
-
-   U32 evalSTEtoU32(StringTableEntry ste, U32)
+   
+   void evalSTEtoCode(StringTableEntry ste, U32 ip, U32 *codeStream)
    {
-      return *((U32 *) &ste);
+#ifdef TORQUE_64
+      *((U64*)(codeStream+ip)) = (U64)ste;
+#else
+      codeStream[ip] = (U32)ste;
+#endif
    }
-
-   U32 compileSTEtoU32(StringTableEntry ste, U32 ip)
+   
+   void compileSTEtoCode(StringTableEntry ste, U32 ip, U32 *codeStream)
    {
       if(ste)
          getIdentTable().add(ste, ip);
-      return 0;
+      codeStream[ip] = 0;
+      codeStream[ip+1] = 0;
    }
 
-   U32 (*STEtoU32)(StringTableEntry ste, U32 ip) = evalSTEtoU32;
+   void (*STEtoCode)(StringTableEntry ste, U32 ip, U32 *codeStream) = evalSTEtoCode;
 
    //------------------------------------------------------------
 

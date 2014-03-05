@@ -212,7 +212,52 @@ function AngleToy::createMathematicalObjects( %this )
 
 //-----------------------------------------------------------------------------
 
-function AngleToy::onTouchMoved(%this, %touchID, %worldPosition)
+function AngleToy::onTouchDown(%this, %touchID, %worldPosition)
+{
+    // Used to let the repointing target kno  
+    AngleToy.repointTarget = %worldPosition;
+
+    // Calculate the angle to the mouse.
+    %angle = mAtan( %worldPosition );
+    
+    // "Point" particles towards cursor
+    AngleToy.EmitterParameters.selectField( "EmissionAngle" );
+    AngleToy.EmitterParameters.addDataKey( 0, %angle );
+    AngleToy.EmitterParameters.deselectField();
+    
+    // Show Sin, Cos, Tan
+    %sin = mSin( %angle );
+    %cos = mCos( %angle );
+    %tan = mTan( %angle );
+
+    // Find the vector that's 20/21 units from the center in the direction of
+    // %worldPosition.  Here are a couple of ways to do that:
+    %worldPositionAtRadius20 = Vector2Direction( %angle, 20 );
+    %worldPositionAtRadius21 = Vector2Scale( Vector2Normalize( %worldPosition ), 21 );
+
+    // Draw the Sine    
+    %onYAxis = setWord( %worldPositionAtRadius20, 0, 0 ); // Set the X-component to 0
+    AngleToy.SinLineSegment.draw( %worldPositionAtRadius20, %onYAxis );
+    AngleToy.SinLabel.setPosition( Vector2Add( %onYAxis, "0 -1" ) );
+    AngleToy.SinLabel.setText( mFloatLength( %sin, 4 ) );
+    
+    // Draw the Cosine
+    %onXAxis = setWord( %worldPositionAtRadius20, 1, 0 ); // Set the Y-component to 0
+    AngleToy.CosLineSegment.draw( %worldPositionAtRadius20, %onXAxis );
+    AngleToy.CosLabel.setPosition( Vector2Add( %onXAxis, "-1 0" ) );
+    AngleToy.CosLabel.setAngle( 90 );
+    AngleToy.CosLabel.setText( mFloatLength( %cos, 4 ) );
+    
+    // Draw the Tangent
+    AngleToy.TanLineSegment.drawTangent( %worldPositionAtRadius20, %tan, %angle );
+    AngleToy.TanLabel.setPosition( %worldPositionAtRadius21 );
+    AngleToy.TanLabel.setAngle( %angle - 90 );
+    AngleToy.TanLabel.setText( mFloatLength( %tan, 4 ) );
+}
+
+//-----------------------------------------------------------------------------
+
+function AngleToy::onTouchDragged(%this, %touchID, %worldPosition)
 {
     // Used to let the repointing target kno  
     AngleToy.repointTarget = %worldPosition;

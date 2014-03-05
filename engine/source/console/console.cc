@@ -213,7 +213,7 @@ static U32 completionBaseStart;
 static U32 completionBaseLen;
 
 #ifdef TORQUE_MULTITHREAD
-static S32 gMainThreadID = -1;
+static ThreadIdent gMainThreadID = -1;
 #endif
 
 /// Current script file name and root, these are registered as

@@ -99,7 +99,6 @@ ConsoleSetType( TypeSkeletonAssetPtr )
 
 SkeletonAsset::SkeletonAsset() :    mSkeletonFile(StringTable->EmptyString),
                                     mAtlasFile(StringTable->EmptyString),
-                                    mScale(1),
                                     mAtlasDirty(true),
                                     mAtlas(NULL),
                                     mSkeletonData(NULL),
@@ -126,7 +125,6 @@ void SkeletonAsset::initPersistFields()
     // Fields.
     addProtectedField("AtlasFile", TypeAssetLooseFilePath, Offset(mAtlasFile, SkeletonAsset), &setAtlasFile, &defaultProtectedGetFn, &writeAtlasFile, "The loose file pointing to the .atlas file used for skinning");
     addProtectedField("SkeletonFile", TypeAssetLooseFilePath, Offset(mSkeletonFile, SkeletonAsset), &setSkeletonFile, &defaultProtectedGetFn, &writeSkeletonFile, "The loose file produced by the editor, which is fed into this asset");
-    addProtectedField("Scale", TypeF32, Offset(mScale, SkeletonAsset), &setScale, &defaultProtectedGetFn, &writeScale, "");
 }
 
 //------------------------------------------------------------------------------
@@ -193,20 +191,6 @@ void SkeletonAsset::setAtlasFile( const char* pAtlasFile )
 
 //------------------------------------------------------------------------------
 
-void SkeletonAsset::setScale( F32 fScale)
-{
-    // Ignore no change.
-    if (fScale == mScale )
-        return;
-
-    mScale = fScale;
-
-    // Scale has been set, refresh the asset based on this
-    refreshAsset();
-}
-
-//------------------------------------------------------------------------------
-
 void SkeletonAsset::copyTo(SimObject* object)
 {
     // Call to parent.
@@ -221,7 +205,6 @@ void SkeletonAsset::copyTo(SimObject* object)
     // Copy state.
     pAsset->setAtlasFile( getAtlasFile() );
     pAsset->setSkeletonFile( getSkeletonFile() );
-    pAsset->setScale( getScale() );
 }
 
 //------------------------------------------------------------------------------
@@ -329,7 +312,6 @@ void SkeletonAsset::buildSkeletonData( void )
         spSkeletonData_dispose(mSkeletonData);
     
     spSkeletonJson* json = spSkeletonJson_create(mAtlas);
-    json->scale = mScale;
     mSkeletonData = spSkeletonJson_readSkeletonDataFile(json, mSkeletonFile);
 
     if (!mSkeletonData)

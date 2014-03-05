@@ -138,7 +138,7 @@ static StringTableEntry jointMotorMaxTorqueName           = jointRevoluteMotorMa
 static StringTableEntry jointMotorCorrectionFactorName    = StringTable->insert( "CorrectionFactor" );
 
 // Controller custom node names.
-static StringTableEntry controllerCustomNodeName	      = StringTable->insert( "Controllers" );
+static StringTableEntry controllerCustomNodeName          = StringTable->insert( "Controllers" );
 
 // Asset preload custom node names.
 static StringTableEntry assetPreloadNodeName              = StringTable->insert( "AssetPreloads" );
@@ -1592,11 +1592,11 @@ S32 Scene::findJointId( b2Joint* pJoint )
     AssertFatal( pJoint != NULL, "Joint cannot be NULL." );
 
     // Find joint.
-    typeReverseJointHash::iterator itr = mReverseJoints.find( (U32)pJoint );
+    typeReverseJointHash::iterator itr = mReverseJoints.find( pJoint );
 
     if ( itr == mReverseJoints.end() )
     {
-        Con::warnf("The joint Id could not be found via a joint reference of %x", (U32)pJoint);
+        Con::warnf("The joint Id could not be found via a joint reference of %x", pJoint);
         return 0;
     }
 
@@ -1617,13 +1617,14 @@ S32 Scene::createJoint( b2JointDef* pJointDef )
     const S32 jointId = mJointMasterId++;
 
     // Insert joint.
-    typeJointHash::iterator itr = mJoints.insert( jointId, pJoint );
+    typeJointHash::iterator itr;
+    itr = mJoints.insert( jointId, pJoint );
 
     // Sanity!
     AssertFatal( itr != mJoints.end(), "Joint already in hash table." );
 
     // Insert reverse joint.
-    mReverseJoints.insert( (U32)pJoint, jointId );
+    mReverseJoints.insert( pJoint, jointId );
 
     return jointId;
 }
@@ -2183,7 +2184,7 @@ F32 Scene::getRevoluteJointAngle( const U32 jointId )
 
 //-----------------------------------------------------------------------------
 
-F32	Scene::getRevoluteJointSpeed( const U32 jointId )
+F32 Scene::getRevoluteJointSpeed( const U32 jointId )
 {
     // Fetch joint.
     b2Joint* pJoint = findJoint( jointId );
@@ -3775,7 +3776,7 @@ void Scene::SayGoodbye( b2Joint* pJoint )
 
     // Remove joint references.
     mJoints.erase( jointId );
-    mReverseJoints.erase( (U32)pJoint );
+    mReverseJoints.erase( pJoint );
 }
 
 //-----------------------------------------------------------------------------

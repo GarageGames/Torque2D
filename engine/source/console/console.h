@@ -201,7 +201,8 @@ namespace Con
       //  02/16/07 - THB - 40->41 newmsg operator
       //  02/16/07 - PAUP - 41->42 DSOs are read with a pointer before every string(ASTnodes changed). Namespace and HashTable revamped
       //  05/17/10 - Luma - 42-43 Adding proper sceneObject physics flags, fixes in general
-      DSOVersion = 43,
+      //  02/07/13 - JU   - 43->44 Expanded the width of stringtable entries to  64bits 
+      DSOVersion = 44,
       MaxLineLength = 512,  ///< Maximum length of a line of console input.
       MaxDataTypes = 256    ///< Maximum number of registered data types.
    };
@@ -640,7 +641,7 @@ namespace Con
 
 extern void expandEscape(char *dest, const char *src);
 extern bool collapseEscape(char *buf);
-extern S32 HashPointer(StringTableEntry ptr);
+extern U32 HashPointer(StringTableEntry ptr);
 
 /// This is the backend for the ConsoleMethod()/ConsoleFunction() macros.
 ///

@@ -355,9 +355,9 @@ void dPrintf(const char *format, ...)
    va_end(args);
 }   
 
-S32 dVprintf(const char *format, void *arglist)
+S32 dVprintf(const char *format, va_list arglist)
 {
-   S32 len = vprintf(format, (char*)arglist);
+   S32 len = vprintf(format, arglist);
    return (len);
 }   
 

@@ -37,7 +37,7 @@ ProfilerRootData *ProfilerRootData::sRootList = NULL;
 Profiler *gProfiler = NULL;
 
 #ifdef TORQUE_MULTITHREAD
-U32 gMainThread = 0;
+ThreadIdent gMainThread = 0;
 #endif
 
 #if defined(TORQUE_SUPPORTS_VC_INLINE_X86_ASM)
