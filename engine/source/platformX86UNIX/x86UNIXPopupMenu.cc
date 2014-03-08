@@ -20,45 +20,66 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _GROUPED_SCENE_CONTROLLER_H_
-#define _GROUPED_SCENE_CONTROLLER_H_
+#include "platformX86UNIX/platformX86UNIX.h"
+#include "platform/menus/popupMenu.h"
 
-#ifndef _CONSOLETYPES_H_
-#include "console/consoleTypes.h"
-#endif
-
-#ifndef _SCENE_OBJECT_SET_H_
-#include "2d/sceneobject/SceneObjectSet.h"
-#endif
-
-#ifndef _SCENE_OBJECT_H_
-#include "2d/sceneobject/SceneObject.h"
-#endif
-
-#ifndef _SCENE_CONTROLLER_H_
-#include "2d/controllers/core/SceneController.h"
-#endif
-
-//------------------------------------------------------------------------------
-
-class GroupedSceneController : public SceneObjectSet, public SceneController
+void PopupMenu::createPlatformPopupMenuData()
 {
-    typedef SceneObjectSet Parent;
+}
 
-public:
-    GroupedSceneController() {}
-    virtual ~GroupedSceneController() {}
+void PopupMenu::deletePlatformPopupMenuData()
+{
+}
 
-    virtual void copyTo(SimObject* object);
+void PopupMenu::createPlatformMenu()
+{
+}
 
-    /// Integration.
-    virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats ) {}
+S32 PopupMenu::insertItem(S32 pos, const char *title, const char *accel)
+{
+   return 0;
+}
 
-    // Scene render.
-    virtual void renderOverlay( Scene* pScene, const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer ) {}
+S32 PopupMenu::insertSubMenu(S32 pos, const char *title, PopupMenu *submenu)
+{
+   return 0;
+}
 
-    /// Declare Console Object.
-    DECLARE_CONOBJECT( GroupedSceneController );
-};
+void PopupMenu::removeItem(S32 itemPos)
+{
+}
 
-#endif // _GROUPED_SCENE_CONTROLLER_H_
+void PopupMenu::enableItem(S32 pos, bool enable)
+{
+}
+
+void PopupMenu::checkItem(S32 pos, bool checked)
+{
+}
+
+void PopupMenu::checkRadioItem(S32 pos, S32 lastPos, S32 checkPos)
+{
+}
+
+bool PopupMenu::isItemChecked(S32 pos)
+{
+   return false;
+}
+
+bool PopupMenu::handleSelect(U32 command, const char *text)
+{
+   return false;
+}
+
+void PopupMenu::showPopup(S32 x, S32 y)
+{
+}
+
+void PopupMenu::attachToMenuBar(S32 pos, const char *title)
+{
+}
+
+void PopupMenu::removeFromMenuBar()
+{
+}
+

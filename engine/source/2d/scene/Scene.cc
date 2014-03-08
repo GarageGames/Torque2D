@@ -53,7 +53,7 @@
 #endif
 
 #ifndef _PARTICLE_SYSTEM_H_
-#include "2d/core/particleSystem.h"
+#include "2d/core/ParticleSystem.h"
 #endif
 
 // Script bindings.

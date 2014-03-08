@@ -83,10 +83,10 @@ void Math::init(U32 properties)
 {
    if (!properties)
       // detect what's available
-      properties = Platform::SystemInfo.processor.properties;  
+      properties = PlatformSystemInfo.processor.properties;  
    else
       // Make sure we're not asking for anything that's not supported
-      properties &= Platform::SystemInfo.processor.properties;  
+      properties &= PlatformSystemInfo.processor.properties;  
 
    Con::printf("Math Init:");
    Con::printf("   Installing Standard C extensions");
@@ -120,6 +120,13 @@ void Math::init(U32 properties)
 
    Con::printf(" ");
 }   
+
+//-------------------------------------------------------------------------------
+F32 Platform::getRandom()
+{
+   RandomLCG* random = new RandomLCG();
+   return random->randF();
+}
 
 
 

@@ -20,12 +20,10 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-
-
 #ifndef _X86UNIXINPUTMANAGER_H_
 #define _X86UNIXINPUTMANAGER_H_
 
-#include "core/tVector.h"
+#include "collection/vector.h"
 #include "platform/platformInput.h"
 #include "platformX86UNIX/platformX86UNIX.h"
 
@@ -46,8 +44,6 @@ struct AsciiData
    KeyData lower;
    KeyData goofy;
 };
-
-typedef struct _SDL_Joystick;
 
 struct JoystickAxisInfo
 {

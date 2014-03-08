@@ -24,11 +24,11 @@
 #define _PARTICLE_PLAYER_H_
 
 #ifndef _PARTICLE_ASSET_H_
-#include "2d/assets/particleAsset.h"
+#include "2d/assets/ParticleAsset.h"
 #endif
 
 #ifndef _PARTICLE_SYSTEM_H_
-#include "2d/core/particleSystem.h"
+#include "2d/core/ParticleSystem.h"
 #endif
 
 //-----------------------------------------------------------------------------

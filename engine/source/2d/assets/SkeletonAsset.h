@@ -28,7 +28,7 @@
 #endif
 
 #ifndef _IMAGE_ASSET_H_
-#include "2d/assets/imageAsset.h"
+#include "2d/assets/ImageAsset.h"
 #endif
 
 #ifndef SPINE_SPINE_H_

@@ -24,7 +24,7 @@
 #define _PARTICLE_SYSTEM_H_
 
 #ifndef _IMAGE_FRAME_PROVIDER_H
-#include "2d/core/imageFrameProvider.h"
+#include "2d/core/ImageFrameProvider.h"
 #endif
 
 //-----------------------------------------------------------------------------

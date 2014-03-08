@@ -27,26 +27,29 @@
 
 #include <dlfcn.h>
 
-#include <al/altypes.h>
-#include <al/alctypes.h>
+#include <AL/al.h>
+#include <AL/alc.h>
+
+//#include <al/altypes.h>
+//#include <al/alctypes.h>
 #define INITGUID
-#include <al/eaxtypes.h>
+//#include <al/eaxtypes.h>
 
 
 // Define the OpenAL and Extension Stub functions
 #define AL_FUNCTION(fn_return, fn_name, fn_args, fn_value) fn_return stub_##fn_name fn_args{ fn_value }
-#include <al/al_func.h>
-#include <al/alc_func.h>
-#include <al/eax_func.h>
+//#include <al/al_func.h>
+//#include <al/alc_func.h>
+//#include <al/eax_func.h>
 #undef AL_FUNCTION
 
 
 // Declare the OpenAL and Extension Function pointers
 // And initialize them to the stub functions
 #define AL_FUNCTION(fn_return,fn_name,fn_args, fn_value) fn_return (*fn_name)fn_args = stub_##fn_name;
-#include <al/al_func.h>
-#include <al/alc_func.h>
-#include <al/eax_func.h>
+//#include <al/al_func.h>
+//#include <al/alc_func.h>
+//#include <al/eax_func.h>
 #undef AL_FUNCTION
 
 // Declarations for the "emulated" functions (al functions that don't 
@@ -105,7 +108,7 @@ static bool bindFunction( void *&fnAddress, const char *name )
 */
 static bool bindExtensionFunction( void *&fnAddress, const char *name )
 {
-   fnAddress = alGetProcAddress( (ALubyte*)name );
+   fnAddress = alGetProcAddress( name );
    if( !fnAddress )
       Con::errorf(ConsoleLogEntry::General, " Missing OpenAL Extension function '%s'", name);
    return (fnAddress != NULL);
@@ -117,8 +120,8 @@ static bool bindOpenALFunctions()
 {
    bool result = true;
    #define AL_FUNCTION(fn_return, fn_name, fn_args, fn_value) result &= bindFunction( *(void**)&fn_name, #fn_name);
-   #include <al/al_func.h>
-   #include <al/alc_func.h>
+   //#include <al/al_func.h>
+   //#include <al/alc_func.h>
    #undef AL_FUNCTION
    return result;
 }
@@ -128,9 +131,9 @@ static bool bindOpenALFunctions()
 static void unbindOpenALFunctions()
 {
    #define AL_FUNCTION(fn_return, fn_name, fn_args, fn_value) fn_name = stub_##fn_name;
-   #include <al/al_func.h>
-   #include <al/alc_func.h>
-   #include <al/eax_func.h>
+   //#include <al/al_func.h>
+   //#include <al/alc_func.h>
+   //#include <al/eax_func.h>
    #undef AL_FUNCTION
 }
 
@@ -140,7 +143,7 @@ static bool bindEAXFunctions()
 {
    bool result = true;
    #define AL_FUNCTION(fn_return, fn_name, fn_args, fn_value) result &= bindExtensionFunction( *(void**)&fn_name, #fn_name);
-   #include <al/eax_func.h>
+   //#include <al/eax_func.h>
    #undef AL_FUNCTION
    return result;
 }
@@ -225,25 +228,30 @@ bool OpenALDLLInit()
 {
    OpenALDLLShutdown();
 
-   const char* libName = "libopenal.so";
+   const char* libName = "libopenal.so.1";
 
    // these are relative to the current working directory
    const char* searchPath[] = {
       "lib",
-      "tplib", // superceeded by "lib", here for backass compatibility
       "", // i.e.: current working directory
       NULL // this must be last
    }; 
 
    char openalPath[4096];
    for (int i = 0; searchPath[i] != NULL; ++i)
-   {   
-      dSprintf(openalPath, sizeof(openalPath), "%s/%s/%s",
-         Platform::getCurrentDirectory(), 
-         searchPath[i],
-         libName);
+   {
+      if (*searchPath[i] == 0) {
+         dSprintf(openalPath, sizeof(openalPath), "%s/%s",
+            Platform::getCurrentDirectory(),
+            libName);
+      } else {
+         dSprintf(openalPath, sizeof(openalPath), "%s/%s/%s",
+            Platform::getCurrentDirectory(), 
+            searchPath[i],
+            libName);
+      }
          
-      Con::printf("		Searching for OpenAl at location : %s", openalPath);
+      Con::printf("		Searching for OpenAL at location : %s", openalPath);
       dlHandle = dlopen(openalPath, RTLD_NOW);
       if (dlHandle != NULL)
       {
@@ -263,12 +271,16 @@ bool OpenALDLLInit()
 
    if (dlHandle != NULL)
    {
+      Con::printf("OpenAL library loaded.");
+
       // if the DLL loaded bind the OpenAL function pointers
       if(bindOpenALFunctions())
       {
          // if EAX is available bind it's function pointers
-         if (alIsExtensionPresent((ALubyte*)"EAX" ))
+         if (alIsExtensionPresent( "EAX" ))
             bindEAXFunctions();
+
+         Con::printf("OpenAL functions binded.");
          return(true);
       }
 

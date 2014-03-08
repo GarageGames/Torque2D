@@ -20,45 +20,31 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _GROUPED_SCENE_CONTROLLER_H_
-#define _GROUPED_SCENE_CONTROLLER_H_
-
-#ifndef _CONSOLETYPES_H_
-#include "console/consoleTypes.h"
-#endif
-
-#ifndef _SCENE_OBJECT_SET_H_
-#include "2d/sceneobject/SceneObjectSet.h"
-#endif
-
-#ifndef _SCENE_OBJECT_H_
-#include "2d/sceneobject/SceneObject.h"
-#endif
-
-#ifndef _SCENE_CONTROLLER_H_
-#include "2d/controllers/core/SceneController.h"
-#endif
+/*! Use the isJoystickDetected function to determine if one or more joysticks are connected to the system.
+    This doesn't tell us how many joysticks there are, just that there are joysticks. It is our job to find out how many and to attach them.
+    @return Returns true if one or more joysticks are attached and detected, false otherwise.
+    @sa disableJoystick, enableJoystick, getJoystickAxes
+*/
+ConsoleFunctionWithDocs( isJoystickDetected, ConsoleBool, 1, 1, () )
+{
+   UInputManager* manager = dynamic_cast<UInputManager*>(Input::getManager());
+   if (manager)
+      return manager->joystickDetected();
+   else
+      return false;
+}
 
 //------------------------------------------------------------------------------
-
-class GroupedSceneController : public SceneObjectSet, public SceneController
+/*! Use the getJoystickAxes function to get the current axes position (x and y ) of any intance of a joystick.
+    @param instance A non-negative number value selecting a specific joystick instance attached to this computer.
+    @return Returns a string containing the \x y\ position of the joystick.
+    @sa disableJoystick, enableJoystick, isJoystickDetected
+*/
+ConsoleFunctionWithDocs( getJoystickAxes, ConsoleString, 2, 2, (instance) )
 {
-    typedef SceneObjectSet Parent;
-
-public:
-    GroupedSceneController() {}
-    virtual ~GroupedSceneController() {}
-
-    virtual void copyTo(SimObject* object);
-
-    /// Integration.
-    virtual void integrate( Scene* pScene, const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats ) {}
-
-    // Scene render.
-    virtual void renderOverlay( Scene* pScene, const SceneRenderState* pSceneRenderState, BatchRender* pBatchRenderer ) {}
-
-    /// Declare Console Object.
-    DECLARE_CONOBJECT( GroupedSceneController );
-};
-
-#endif // _GROUPED_SCENE_CONTROLLER_H_
+   UInputManager* manager = dynamic_cast<UInputManager*>(Input::getManager());
+   if (manager)
+      return manager->getJoystickAxesString(dAtoi(argv[1]));
+   else
+      return "";
+}

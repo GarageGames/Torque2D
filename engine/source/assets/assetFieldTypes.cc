@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _AUDIO_ASSET_H_
-#include "audio/audioAsset.h"
+#include "audio/AudioAsset.h"
 #endif
 
 #ifndef _STRINGUNIT_H_

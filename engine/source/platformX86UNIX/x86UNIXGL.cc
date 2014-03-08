@@ -25,6 +25,8 @@
 #include "platformX86UNIX/platformGL.h"
 #include "platformX86UNIX/platformX86UNIX.h"
 #include "console/console.h"
+#include "math/mMatrix.h"
+#include "math/mPoint.h"
 
 #include <dlfcn.h>
 #include <SDL/SDL.h>
@@ -389,6 +391,39 @@ bool GL_EXT_Init( )
    }
 
    return true;
+}
+
+#define CHECK_GL_ERROR() ({ int __error = glGetError(); if(__error) Con::printf("OpenGL error 0x%04X in %s\n", __error, __FUNCTION__); (__error ? 0 : 1); })
+// define this to print out glErrors, un-define to get rid of it
+#define TEST_FOR_OPENGL_ERRORS CHECK_GL_ERROR();
+
+GLint gluProject( GLdouble objx, GLdouble objy, GLdouble objz, const F64 *model, const F64 * proj, const GLint * vp, F64 * winx, F64 * winy, F64 * winz )
+{
+   Vector4F v = Vector4F( objx, objy, objz, 1.0f );
+   MatrixF pmat = MatrixF( false );
+     for (int i=0; i<16; i++) { ((F32*)pmat)[i] = (float)proj[i]; }
+   MatrixF mmat = MatrixF( false );
+     for (int i=0; i<16; i++) { ((F32*)mmat)[i] = (float)model[i]; }
+
+   mmat.transpose();
+   pmat.transpose();
+   (pmat.mul(mmat)).mul(v);
+
+   if (v.w == 0.0f) {
+     return GL_FALSE;
+   }
+
+   F32 invW = 1.0f / v.w;
+   v.x *= invW;
+   v.y *= invW;
+   v.z *= invW;
+     
+   *winx = (GLfloat)vp[0] + (GLfloat)vp[2] * (v.x + 1.0f) * 0.5f;
+   *winy = (GLfloat)vp[1] + (GLfloat)vp[3] * (v.y + 1.0f) * 0.5f;
+   *winz = (v.z + 1.0f) * 0.5f;
+   int glError;
+   glError = TEST_FOR_OPENGL_ERRORS
+   return GL_TRUE;
 }
 
 

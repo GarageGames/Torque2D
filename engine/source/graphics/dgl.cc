@@ -33,7 +33,7 @@
 #include "debug/profiler.h"
 #include "string/unicode.h"
 
-#include "dglMac_Scriptbinding.h"
+#include "dglMac_ScriptBinding.h"
 #include "dgl_ScriptBinding.h"
 
 namespace {

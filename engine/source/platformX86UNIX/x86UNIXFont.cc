@@ -20,12 +20,11 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-
-#include "dgl/gFont.h"
-#include "dgl/gBitmap.h"
+#include "graphics/gFont.h"
+#include "graphics/gBitmap.h"
 #include "math/mRect.h"
 #include "console/console.h"
-#include "core/unicode.h"
+#include "string/unicode.h"
 #include "platformX86UNIX/platformX86UNIX.h"
 #include "platformX86UNIX/x86UNIXFont.h"
 
@@ -39,6 +38,7 @@
 
 // Needed for getenv in createFont
 #include <stdlib.h>
+
 XftFont *loadFont(const char *name, S32 size, Display *display)
 {
   XftFont *fontInfo = NULL;
@@ -81,109 +81,6 @@ XftFont *loadFont(const char *name, S32 size, Display *display)
 
   return fontInfo;
 }
-
-
-GOldFont* createFont(const char *name, dsize_t size, U32 charset)
-{
-  Display *display = XOpenDisplay(getenv("DISPLAY"));
-  int screen;
-
-  if (!display)
-    AssertFatal(false, "createFont: cannot connect to X server");
-  screen = DefaultScreen(display);
-
-  XftFont *font = loadFont (name, size, display);
-  if (!font) // This should almost never trigger anymore.
-    AssertFatal(false, "createFont: cannot load font");
-
-  // Create the pixmap to draw on.
-  Pixmap pixmap = XCreatePixmap(display,
-                                DefaultRootWindow(display),
-                                font->max_advance_width,
-                                font->height,
-                                DefaultDepth(display, screen));
-  // And the Xft wrapper around it.
-  XftDraw *draw = XftDrawCreate(display,
-                                pixmap,
-                                DefaultVisual(display, screen),
-                                DefaultColormap(display, screen));
-  // Allocate some colors, we don't use XftColorAllocValue here as that
-  // Don't appear to function correctly (or I'm using it wrong) As we only do
-  // this twice per new un cached font it isn't that big of a penalty. (Each
-  // call to XftColorAllocName involves a round trip to the X Server)
-  XftColor black, white;
-  XftColorAllocName(display,
-                    DefaultVisual(display, screen),
-                    DefaultColormap(display, screen),
-                    "black",
-                    &black);
-  // White
-  XftColorAllocName(display,
-                    DefaultVisual(display, screen),
-                    DefaultColormap(display, screen),
-                    "white",
-                    &white);
-  
-  // The font.
-  GOldFont *retFont = new GOldFont;
-  static U8 scratchPad[65536];
-  int x, y;
-  // insert bitmaps into the font for each character
-  for(U16 i = 32; i < 256; i++)
-  {
-    XGlyphInfo extent;
-    FT_UInt glyph;
-    if (!XftCharExists(display, font, i))
-      {
-	retFont->insertBitmap(i, scratchPad, 0, 0, 0, 0, 0, font->max_advance_width);
-	continue;
-      }
-    // Get the glyph and its extents.
-    glyph = XftCharIndex(display, font, i);
-    XftGlyphExtents (display, font, &glyph, 1, &extent);
-    // Clear the bounding box and draw the glyph
-    XftDrawRect (draw, &black, 0, 0, font->max_advance_width, font->height);
-    XftDrawGlyphs (draw, &white, font, 0, font->ascent, &glyph, 1);
-    // Grab the rendered image ...
-    XImage *ximage = XGetImage(display, pixmap, 0, 0,
-			       extent.xOff, font->height,
-			       AllPlanes, XYPixmap);
-    if (ximage == NULL)
-      AssertFatal(false, "cannot get x image");
-    // And store each pixel in the scratchPad for insertion into the bitmap.
-    // We grab the full height of the pixmap.
-    for(y = 0; y < font->height; y++)
-      {
-	// and the width of the glyph and its padding.
-	for(x = 0; x < extent.xOff; x++)
-	    scratchPad[y * extent.xOff + x] = static_cast<U8>(XGetPixel(ximage, x, y));
-      }
-    // Done with the image.
-    XDestroyImage(ximage);
-    // Add it to the bitmap.
-    retFont->insertBitmap(i,                   // index
-			  scratchPad,          // src
-			  extent.xOff,         // stride
-			  extent.xOff,         // width
-			  font->height,        // height
-			  0,                   // xOrigin
-			  font->ascent,        // yOrigin
-			  extent.xOff);        // xIncrement
-    
-  }
-  retFont->pack(font->height, font->ascent);
-  XftFontClose(display, font);
-
-  XftColorFree(display, DefaultVisual(display, screen),
-               DefaultColormap(display, screen), &black);
-  XftColorFree(display, DefaultVisual(display, screen),
-               DefaultColormap(display, screen), &white);
-  XftDrawDestroy(draw);
-  XFreePixmap(display, pixmap);
-  XCloseDisplay(display);
-  return retFont;
-}
-
 
 // XA: New class for the unix unicode font
 PlatformFont *createPlatformFont(const char *name, U32 size, U32 charset /* = TGE_ANSI_CHARSET */)

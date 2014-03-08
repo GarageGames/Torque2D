@@ -1498,7 +1498,7 @@ bool expandPath( char* pDstPath, U32 size, const char* pSrcPath, const char* pWo
         }
 
         // Yes, so use it as the prefix.
-        dStrcpy(pathBuffer, codeblockFullPath );
+        dStrncpy(pathBuffer, codeblockFullPath, sizeof(pathBuffer) - 1);
 
         // Find the final slash in the code-block.
         pSlash = dStrrchr(pathBuffer, '/');
@@ -1519,7 +1519,8 @@ bool expandPath( char* pDstPath, U32 size, const char* pSrcPath, const char* pWo
         }
            
         // Format the output path.
-        dSprintf( pathBuffer, sizeof(pathBuffer), "%s/%s", pathBuffer, pSrc );
+        dStrncat(pathBuffer, "/", sizeof(pathBuffer) - 1 - strlen(pathBuffer));
+        dStrncat(pathBuffer, pSrc, sizeof(pathBuffer) - 1 - strlen(pathBuffer));
 
         // Are we ensuring the trailing slash?
         if ( ensureTrailingSlash )

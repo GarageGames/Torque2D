@@ -148,7 +148,7 @@ private:
     void sendWindowInputEvent( StringTableEntry name, const GuiEvent& event );
     void sendObjectInputEvent( StringTableEntry, const GuiEvent& event );
 
-    inline void calculateCameraView( CameraView* pCameraView );
+    void calculateCameraView( CameraView* pCameraView );
 
 public:
 

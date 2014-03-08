@@ -26,7 +26,7 @@
 #include "algorithm/crc.h"
 #include "console/console.h"
 #include "console/consoleInternal.h"
-#include "console/consoleTypeValidators.h"
+#include "console/ConsoleTypeValidators.h"
 #include "math/mMath.h"
 
 AbstractClassRep *                 AbstractClassRep::classLinkList = NULL;

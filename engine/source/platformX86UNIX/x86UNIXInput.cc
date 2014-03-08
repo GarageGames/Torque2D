@@ -20,20 +20,18 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-
-
 #include "platformX86UNIX/platformX86UNIX.h"
 #include "platform/platformInput.h"
 #include "platform/platformVideo.h"
 #include "platform/event.h"
-#include "platform/gameInterface.h"
+#include "game/gameInterface.h"
 #include "console/console.h"
 #include "platformX86UNIX/x86UNIXState.h"
 #include "platformX86UNIX/x86UNIXInputManager.h"
+#include "platformX86UNIX/x86UNIXInput_ScriptBinding.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
-#include <X11/keysym.h>
 
 #include <SDL/SDL.h>
 
@@ -73,7 +71,8 @@ class XClipboard
 };
 
 // Static class variables:
-InputManager*  Input::smManager;
+InputManager*  Input::smManager; //= 0;
+CursorManager* Input::smCursorManager = 0;
 
 // smActive is not maintained under unix.  Use Input::isActive()
 // instead
@@ -128,28 +127,6 @@ void Input::init()
 
    Con::printf("   Input initialized");
    Con::printf(" ");
-}
-
-//------------------------------------------------------------------------------
-ConsoleFunction( isJoystickDetected, bool, 1, 1, "isJoystickDetected()" )
-{
-   argc; argv;
-   UInputManager* manager = dynamic_cast<UInputManager*>(Input::getManager());
-   if (manager)
-      return manager->joystickDetected();
-   else
-      return false;
-}
-
-//------------------------------------------------------------------------------
-ConsoleFunction( getJoystickAxes, const char*, 2, 2, "getJoystickAxes( instance )" )
-{
-   argc; argv;
-   UInputManager* manager = dynamic_cast<UInputManager*>(Input::getManager());
-   if (manager)
-      return manager->getJoystickAxesString(dAtoi(argv[1]));
-   else
-      return "";
 }
 
 //------------------------------------------------------------------------------
@@ -316,30 +293,6 @@ InputManager* Input::getManager()
 {
    return smManager;
 }
-
-#ifdef LOG_INPUT
-//------------------------------------------------------------------------------
-void Input::log( const char* format, ... )
-{
-   if ( gInputLog == -1)
-      return;
-   
-   va_list argptr;
-   va_start( argptr, format );
-
-   const int BufSize = 4096;
-   char buffer[BufSize];
-   dVsprintf( buffer, BufSize, format, argptr );
-   x86UNIXWrite(gInputLog, buffer, dStrlen( buffer ));
-   va_end( argptr );
-}
-
-ConsoleFunction( inputLog, void, 2, 2, "inputLog( string )" )
-{
-   argc;
-   Input::log( "%s\n", argv[1] );
-}
-#endif // LOG_INPUT
 
 //------------------------------------------------------------------------------
 void NotifySelectionEvent(XEvent& event)
@@ -611,3 +564,48 @@ void Input::setCursorPos(S32 x, S32 y)
 	SDL_WarpMouse((S16)x, (S16)y);
 }
 
+void Input::pushCursor(S32 cursorID)
+{
+   CursorManager* cm = getCursorManager();
+   if (cm)
+     cm->pushCursor(cursorID);
+}
+
+void Input::popCursor()
+{
+   CursorManager* cm = getCursorManager();
+   if (cm)
+     cm->popCursor();
+}
+
+void Input::refreshCursor()
+{
+   CursorManager* cm = getCursorManager();
+   if (cm)
+     cm->refreshCursor();
+}
+
+void Input::setCursorState(bool on)
+{
+   SDL_ShowCursor(on ? SDL_ENABLE : SDL_DISABLE);
+}
+
+void Input::setCursorShape(U32 cursorID)
+{
+}
+
+U32 Input::getDoubleClickTime()
+{
+   return 1000;
+}
+
+S32 Input::getDoubleClickWidth()
+{
+   // Arbitrary value
+   return 10;
+}
+
+S32 Input::getDoubleClickHeight()
+{
+   return Input::getDoubleClickWidth();
+}

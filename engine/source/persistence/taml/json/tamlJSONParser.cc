@@ -20,7 +20,7 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#include "persistence/taml/json/TamlJSONParser.h"
+#include "persistence/taml/json/tamlJSONParser.h"
 #include "persistence/taml/tamlVisitor.h"
 #include "console/console.h"
 #include "io/fileStream.h"
