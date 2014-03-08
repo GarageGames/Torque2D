@@ -513,6 +513,16 @@ ConsoleMethodWithDocs(CompositeSprite, getSpriteLocalPosition, ConsoleString, 2,
 
 //-----------------------------------------------------------------------------
 
+/*! Gets the sprite logical position.
+    @return The sprite logical position.
+*/
+ConsoleMethodWithDocs(CompositeSprite, getSpriteLogicalPosition, ConsoleString, 2, 2, ())
+{
+    return object->getSpriteLogicalPosition().getString();
+}
+
+//-----------------------------------------------------------------------------
+
 /*! Sets the sprites local angle.
     @param localAngle The sprite local angle.
     @return No return value.
