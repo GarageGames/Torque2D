@@ -1,0 +1,19 @@
+<Sprite
+    SceneLayer="1"
+    Size="2 2"
+    Position="14 13"
+    UseInputEvents="true"
+    Image="AudioToy:Play" >
+    <Sprite.Behaviors>
+        <ButtonBehavior />
+        <MusicBehavior />
+    </Sprite.Behaviors>
+    <Sprite.CollisionShapes>
+        <Polygon>
+            <Point>-1 -1</Point>
+            <Point>1 -1</Point>
+            <Point>1 1</Point>
+            <Point>-1 1</Point>
+        </Polygon>
+    </Sprite.CollisionShapes>
+</Sprite>
