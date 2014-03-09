@@ -254,7 +254,7 @@ void GuiSliderCtrl::onRender(Point2I offset, const RectI &updateRect)
             pos += Point2I(1, 0);
             glColor4f(0, 0, 0, 1);
 
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_EMSCRIPTEN)
             // tick marks
             for (U32 t = 0; t <= (mTicks + 1); t++)
             {
@@ -354,7 +354,7 @@ void GuiSliderCtrl::onRender(Point2I offset, const RectI &updateRect)
                 mid.set(ext.x, mThumbSize.y / 2);
 
             glColor4f(0, 0, 0, 1);
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_EMSCRIPTEN)
             // tick marks
             for (U32 t = 0; t <= (mTicks + 1); t++)
             {

@@ -126,7 +126,7 @@ bool initializeLibraries()
     // Create the stock colors.
     StockColor::create();
     
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_EMSCRIPTEN)
    //3MB default is way too big for iPhone!!!
 #ifdef	TORQUE_SHIPPING
     FrameAllocator::init(256 * 1024);	//256KB for now... but let's test and see!
@@ -343,6 +343,11 @@ bool DefaultGame::mainInitialize(int argc, const char **argv)
 {
     if(!initializeLibraries())
         return false;
+    
+#ifdef TORQUE_OS_EMSCRIPTEN
+    // temp hack
+    argc = 0;
+#endif
     
     // Set up the command line args for the console scripts...
     Con::setIntVariable("$GameProject::argc", argc);

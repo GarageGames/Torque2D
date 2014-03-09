@@ -175,6 +175,7 @@ void GBitmap::allocateBitmap(const U32 in_width, const U32 in_height, const bool
       break;
      case RGBA:       bytesPerPixel = 4;
       break;
+     case LuminanceAlpha:
      case RGB565:
      case RGB5551:    bytesPerPixel = 2;
       break;
@@ -436,6 +437,7 @@ void GBitmap::extrudeMipLevels(bool clearBorders)
       
       case Intensity:
       case Luminance:
+      case LuminanceAlpha:
       case Alpha:
       case RGB565:
 #ifdef TORQUE_OS_IOS
@@ -626,6 +628,11 @@ bool GBitmap::getColor(const U32 x, const U32 y, ColorI& rColor) const
      case RGBA:
       rColor.set( pLoc[0], pLoc[1], pLoc[2], pLoc[3] );
       break;
+         
+     case LuminanceAlpha:
+      rColor.set( pLoc[0], pLoc[0], pLoc[0], pLoc[1] );
+      break;
+         
 
      case RGB5551:
 #if defined(TORQUE_BIG_ENDIAN)
@@ -670,6 +677,12 @@ bool GBitmap::setColor(const U32 x, const U32 y, ColorI& rColor)
      case Luminance:
       *pLoc = rColor.alpha;
       break;
+         
+     case LuminanceAlpha:
+      *pLoc = rColor.red;
+      *(pLoc+1) = rColor.alpha;
+      break;
+         
 
      case RGB:
       dMemcpy( pLoc, &rColor, 3 * sizeof( U8 ) );

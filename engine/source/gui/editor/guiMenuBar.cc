@@ -1145,7 +1145,7 @@ void GuiMenuTextListCtrl::onRenderCell(Point2I offset, Point2I cell, bool select
    idx = mList[cell.y].text[1];
    if(idx != 1)
    {
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_EMSCRIPTEN)
 // PUAP -Mat untested	
 //How are these used/made? cannot create in TGB GUI editor
        if(selected || mouseOver)

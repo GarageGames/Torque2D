@@ -229,7 +229,7 @@ bool GFont::loadCharInfo(const UTF16 ch)
         mCharInfoList.push_back(ci);
         mRemapTable[ch] = mCharInfoList.size() - 1;
 //don't save UFTs on the iPhone or android device
-#if !defined(TORQUE_OS_IOS) && !defined(TORQUE_OS_ANDROID)
+#if !defined(TORQUE_OS_IOS) && !defined(TORQUE_OS_ANDROID) && !defined(TORQUE_OS_EMSCRIPTEN)
         mNeedSave = true;
 #endif
 
