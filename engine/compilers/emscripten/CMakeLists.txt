@@ -102,52 +102,52 @@ SET(T2D_SRCS
     ../../lib/ljpeg/jidctred.c
     ../../source/2d/scene/SceneRenderFactories.cpp
 	../../source/2d/scene/SceneRenderQueue.cpp
-	../../source/box2d/Collision/b2BroadPhase.cpp
-	../../source/box2d/Collision/b2CollideCircle.cpp
-	../../source/box2d/Collision/b2CollideEdge.cpp
-	../../source/box2d/Collision/b2CollidePolygon.cpp
-	../../source/box2d/Collision/b2Collision.cpp
-	../../source/box2d/Collision/b2Distance.cpp
-	../../source/box2d/Collision/b2DynamicTree.cpp
-	../../source/box2d/Collision/b2TimeOfImpact.cpp
-	../../source/box2d/Collision/Shapes/b2ChainShape.cpp
-	../../source/box2d/Collision/Shapes/b2CircleShape.cpp
-	../../source/box2d/Collision/Shapes/b2EdgeShape.cpp
-	../../source/box2d/Collision/Shapes/b2PolygonShape.cpp
-	../../source/box2d/Common/b2BlockAllocator.cpp
-	../../source/box2d/Common/b2Draw.cpp
-	../../source/box2d/Common/b2Math.cpp
-	../../source/box2d/Common/b2Settings.cpp
-	../../source/box2d/Common/b2StackAllocator.cpp
-	../../source/box2d/Common/b2Timer.cpp
-	../../source/box2d/Dynamics/b2Body.cpp
-	../../source/box2d/Dynamics/b2ContactManager.cpp
-	../../source/box2d/Dynamics/b2Fixture.cpp
-	../../source/box2d/Dynamics/b2Island.cpp
-	../../source/box2d/Dynamics/b2World.cpp
-	../../source/box2d/Dynamics/b2WorldCallbacks.cpp
-	../../source/box2d/Dynamics/Contacts/b2ChainAndCircleContact.cpp
-	../../source/box2d/Dynamics/Contacts/b2ChainAndPolygonContact.cpp
-	../../source/box2d/Dynamics/Contacts/b2CircleContact.cpp
-	../../source/box2d/Dynamics/Contacts/b2Contact.cpp
-	../../source/box2d/Dynamics/Contacts/b2ContactSolver.cpp
-	../../source/box2d/Dynamics/Contacts/b2EdgeAndCircleContact.cpp
-	../../source/box2d/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp
-	../../source/box2d/Dynamics/Contacts/b2PolygonAndCircleContact.cpp
-	../../source/box2d/Dynamics/Contacts/b2PolygonContact.cpp
-	../../source/box2d/Dynamics/Joints/b2DistanceJoint.cpp
-	../../source/box2d/Dynamics/Joints/b2FrictionJoint.cpp
-	../../source/box2d/Dynamics/Joints/b2GearJoint.cpp
-	../../source/box2d/Dynamics/Joints/b2Joint.cpp
-	../../source/box2d/Dynamics/Joints/b2MotorJoint.cpp
-	../../source/box2d/Dynamics/Joints/b2MouseJoint.cpp
-	../../source/box2d/Dynamics/Joints/b2PrismaticJoint.cpp
-	../../source/box2d/Dynamics/Joints/b2PulleyJoint.cpp
-	../../source/box2d/Dynamics/Joints/b2RevoluteJoint.cpp
-	../../source/box2d/Dynamics/Joints/b2RopeJoint.cpp
-	../../source/box2d/Dynamics/Joints/b2WeldJoint.cpp
-	../../source/box2d/Dynamics/Joints/b2WheelJoint.cpp
-	../../source/box2d/Rope/b2Rope.cpp
+	../../source/Box2D/Collision/b2BroadPhase.cpp
+	../../source/Box2D/Collision/b2CollideCircle.cpp
+	../../source/Box2D/Collision/b2CollideEdge.cpp
+	../../source/Box2D/Collision/b2CollidePolygon.cpp
+	../../source/Box2D/Collision/b2Collision.cpp
+	../../source/Box2D/Collision/b2Distance.cpp
+	../../source/Box2D/Collision/b2DynamicTree.cpp
+	../../source/Box2D/Collision/b2TimeOfImpact.cpp
+	../../source/Box2D/Collision/Shapes/b2ChainShape.cpp
+	../../source/Box2D/Collision/Shapes/b2CircleShape.cpp
+	../../source/Box2D/Collision/Shapes/b2EdgeShape.cpp
+	../../source/Box2D/Collision/Shapes/b2PolygonShape.cpp
+	../../source/Box2D/Common/b2BlockAllocator.cpp
+	../../source/Box2D/Common/b2Draw.cpp
+	../../source/Box2D/Common/b2Math.cpp
+	../../source/Box2D/Common/b2Settings.cpp
+	../../source/Box2D/Common/b2StackAllocator.cpp
+	../../source/Box2D/Common/b2Timer.cpp
+	../../source/Box2D/Dynamics/b2Body.cpp
+	../../source/Box2D/Dynamics/b2ContactManager.cpp
+	../../source/Box2D/Dynamics/b2Fixture.cpp
+	../../source/Box2D/Dynamics/b2Island.cpp
+	../../source/Box2D/Dynamics/b2World.cpp
+	../../source/Box2D/Dynamics/b2WorldCallbacks.cpp
+	../../source/Box2D/Dynamics/Contacts/b2ChainAndCircleContact.cpp
+	../../source/Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.cpp
+	../../source/Box2D/Dynamics/Contacts/b2CircleContact.cpp
+	../../source/Box2D/Dynamics/Contacts/b2Contact.cpp
+	../../source/Box2D/Dynamics/Contacts/b2ContactSolver.cpp
+	../../source/Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.cpp
+	../../source/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp
+	../../source/Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.cpp
+	../../source/Box2D/Dynamics/Contacts/b2PolygonContact.cpp
+	../../source/Box2D/Dynamics/Joints/b2DistanceJoint.cpp
+	../../source/Box2D/Dynamics/Joints/b2FrictionJoint.cpp
+	../../source/Box2D/Dynamics/Joints/b2GearJoint.cpp
+	../../source/Box2D/Dynamics/Joints/b2Joint.cpp
+	../../source/Box2D/Dynamics/Joints/b2MotorJoint.cpp
+	../../source/Box2D/Dynamics/Joints/b2MouseJoint.cpp
+	../../source/Box2D/Dynamics/Joints/b2PrismaticJoint.cpp
+	../../source/Box2D/Dynamics/Joints/b2PulleyJoint.cpp
+	../../source/Box2D/Dynamics/Joints/b2RevoluteJoint.cpp
+	../../source/Box2D/Dynamics/Joints/b2RopeJoint.cpp
+	../../source/Box2D/Dynamics/Joints/b2WeldJoint.cpp
+	../../source/Box2D/Dynamics/Joints/b2WheelJoint.cpp
+	../../source/Box2D/Rope/b2Rope.cpp
 	../../source/collection/nameTags.cpp
 	../../source/component/behaviors/behaviorComponent.cpp
 	../../source/component/behaviors/behaviorInstance.cpp
@@ -171,6 +171,7 @@ SET(T2D_SRCS
 	../../source/2d/assets/ParticleAssetEmitter.cc
 	../../source/2d/assets/ParticleAssetField.cc
 	../../source/2d/assets/ParticleAssetFieldCollection.cc
+	../../source/2d/assets/SkeletonAsset.cc
 	../../source/2d/controllers/AmbientForceController.cc
 	../../source/2d/controllers/BuoyancyController.cc
 	../../source/2d/controllers/core/GroupedSceneController.cc
@@ -205,6 +206,7 @@ SET(T2D_SRCS
 	../../source/2d/sceneobject/SceneObjectSet.cc
 	../../source/2d/sceneobject/Scroller.cc
 	../../source/2d/sceneobject/ShapeVector.cc
+	../../source/2d/sceneobject/Skeleton.cc
 	../../source/2d/sceneobject/Sprite.cc
 	../../source/2d/sceneobject/Trigger.cc
 	../../source/algorithm/crc.cc
@@ -435,6 +437,28 @@ SET(T2D_SRCS
 	../../source/sim/simObject.cc
 	../../source/sim/SimObjectList.cc
 	../../source/sim/simSet.cc
+	../../source/spine/Animation.c
+	../../source/spine/AnimationState.c
+	../../source/spine/AnimationStateData.c
+	../../source/spine/Atlas.c
+	../../source/spine/AtlasAttachmentLoader.c
+	../../source/spine/Attachment.c
+	../../source/spine/AttachmentLoader.c
+	../../source/spine/Bone.c
+	../../source/spine/BoneData.c
+	../../source/spine/BoundingBoxAttachment.c
+	../../source/spine/Event.c
+	../../source/spine/EventData.c
+	../../source/spine/extension.c
+	../../source/spine/Json.c
+	../../source/spine/RegionAttachment.c
+	../../source/spine/Skeleton.c
+	../../source/spine/SkeletonBounds.c
+	../../source/spine/SkeletonData.c
+	../../source/spine/SkeletonJson.c
+	../../source/spine/Skin.c
+	../../source/spine/Slot.c
+	../../source/spine/SlotData.c
 	../../source/string/findMatch.cc
 	../../source/string/stringBuffer.cc
 	../../source/string/stringStack.cc
