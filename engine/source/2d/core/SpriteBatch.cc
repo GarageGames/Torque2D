@@ -604,6 +604,18 @@ Vector2 SpriteBatch::getSpriteLocalPosition( void )
 
 //------------------------------------------------------------------------------
 
+const SpriteBatchItem::LogicalPosition SpriteBatch::getSpriteLogicalPosition( void ) const
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return NULL;
+    
+    // Get logical position.
+    return mSelectedSprite->getLogicalPosition();
+}
+
+//------------------------------------------------------------------------------
+
 void SpriteBatch::setSpriteAngle( const F32 localAngle )
 {
     // Finish if a sprite is not selected.

@@ -135,6 +135,8 @@ public:
     void setSpriteLocalPosition( const Vector2& localPosition );
     Vector2 getSpriteLocalPosition( void );
 
+    const SpriteBatchItem::LogicalPosition getSpriteLogicalPosition( void ) const;
+
     void setSpriteAngle( const F32 localAngle );
     F32 getSpriteAngle( void ) const;
 
