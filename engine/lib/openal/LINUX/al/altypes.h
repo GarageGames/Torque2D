@@ -234,6 +234,13 @@ typedef int ALenum;
 #define AL_BUFFERS_QUEUED                        0x1015
 #define AL_BUFFERS_PROCESSED                     0x1016
 
+/**
+ * Source buffer position information
+ */
+#define AL_SEC_OFFSET                             0x1024
+#define AL_SAMPLE_OFFSET                          0x1025
+#define AL_BYTE_OFFSET                            0x1026
+
 /** Sound buffers: format specifier. */
 #define AL_FORMAT_MONO8                          0x1100
 #define AL_FORMAT_MONO16                         0x1101

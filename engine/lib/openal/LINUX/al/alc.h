@@ -34,8 +34,8 @@ extern "C" {
 ALCAPI ALCubyte*  ALCAPIENTRY alcGetString(ALCdevice *device,ALCenum param);
 ALCAPI ALCvoid    ALCAPIENTRY alcGetIntegerv(ALCdevice *device,ALCenum param,ALCsizei size,ALCint *data);
 
-ALCAPI ALCdevice* ALCAPIENTRY alcOpenDevice(ALCubyte *deviceName);
-ALCAPI ALCvoid    ALCAPIENTRY alcCloseDevice(ALCdevice *device);
+ALC_API ALCdevice *     ALC_APIENTRY alcOpenDevice( const ALCchar *devicename );
+ALC_API ALCboolean      ALC_APIENTRY alcCloseDevice( ALCdevice *device );
 
 ALCAPI ALCcontext*ALCAPIENTRY alcCreateContext(ALCdevice *device,ALCint *attrList);
 ALCAPI ALCboolean ALCAPIENTRY alcMakeContextCurrent(ALCcontext *context);
