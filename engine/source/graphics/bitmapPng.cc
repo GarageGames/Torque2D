@@ -129,7 +129,7 @@ bool GBitmap::readPNG(Stream& io_rStream)
    U8 header[cs_headerBytesChecked];
    io_rStream.read(cs_headerBytesChecked, header);
 
-   bool isPng = png_check_sig(header, cs_headerBytesChecked) != 0;
+   bool isPng = (png_check_sig(header, cs_headerBytesChecked)) != 0;
    if (isPng == false) 
    {
       AssertWarn(false, "GBitmap::readPNG: stream doesn't contain a PNG");

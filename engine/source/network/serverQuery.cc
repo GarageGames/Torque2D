@@ -127,7 +127,7 @@ static const S32 gMaxConcurrentQueries = 2;
 static const S32 gPingRetryCount = 4;
 static const S32 gPingTimeout = 800;
 static const S32 gQueryRetryCount = 4;
-static const S32 gQueryTimeout = 1000;
+//static const S32 gQueryTimeout = 1000;
 
 // State variables:
 static bool sgServerQueryActive = false;

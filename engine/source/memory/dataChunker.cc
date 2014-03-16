@@ -51,7 +51,8 @@ void *DataChunker::alloc(S32 size)
    }
    void *ret = curBlock->data + curBlock->curIndex;
    
-   S32 index = curBlock->curIndex;
+   S32 index;
+   index = curBlock->curIndex;
    curBlock->curIndex += ((U32)size + 3) & ~3; // dword align
    
 #ifdef EMSCRIPTEN

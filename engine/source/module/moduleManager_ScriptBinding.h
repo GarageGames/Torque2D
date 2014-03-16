@@ -288,7 +288,7 @@ ConsoleMethodWithDocs(ModuleManager, copyModule, ConsoleString, 6, 6, (sourceMod
     {
         // No, so warn.
         Con::warnf( "ModuleManager::copyModule() - Could not find source module definition '%s'.", argv[2] );
-        return false;
+        return StringTable->EmptyString;
     }
 
     // Fetch the target module Id.
