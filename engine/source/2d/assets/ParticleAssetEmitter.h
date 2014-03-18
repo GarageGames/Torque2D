@@ -258,7 +258,7 @@ public:
 
 private:
     void setOwner( ParticleAsset* pParticleAsset );
-    inline void refreshAsset( void );
+    void refreshAsset( void );
 
 protected:
     virtual void onAssetRefreshed( AssetPtrBase* pAssetPtrBase );

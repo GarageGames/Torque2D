@@ -562,7 +562,7 @@ bool ParticleAssetEmitter::setAnimation( const char* pAnimationAssetId )
 
 //------------------------------------------------------------------------------
 
-inline void ParticleAssetEmitter::refreshAsset( void )
+void ParticleAssetEmitter::refreshAsset( void )
 {
     // Finish if no owner.
     if ( mOwner == NULL )

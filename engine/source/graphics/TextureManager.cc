@@ -456,6 +456,9 @@ void TextureManager::getSourceDestByteFormat(GBitmap *pBitmap, U32 *sourceFormat
     case GBitmap::Luminance:
         *sourceFormat = GL_LUMINANCE;
         break;
+    case GBitmap::LuminanceAlpha:
+        *sourceFormat = GL_LUMINANCE_ALPHA;
+        break;
     case GBitmap::RGB:
         *sourceFormat = GL_RGB;
         break;
