@@ -69,10 +69,10 @@ class GBitmap: public ResourceInstance
       Luminance  = 7,
       LuminanceAlpha = 8
 #ifdef TORQUE_OS_IOS
-       , PVR2 = 8,
-       PVR2A = 9,
-       PVR4 = 10,
-       PVR4A = 11
+       , PVR2 = 9,
+       PVR2A = 10,
+       PVR4 = 11,
+       PVR4A = 12
 #endif
    };
 
