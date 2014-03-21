@@ -20,8 +20,8 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _SKELETON_H_
-#define _SKELETON_H_
+#ifndef _SKELETONOBJECT_H_
+#define _SKELETONOBJECT_H_
 
 #ifndef _SPRITE_BATCH_H_
 #include "2d/core/SpriteBatch.h"
@@ -37,7 +37,7 @@
 
 //------------------------------------------------------------------------------
 
-class Skeleton : public SceneObject, public SpriteBatch
+class SkeletonObject : public SceneObject, public SpriteBatch
 {
 protected:
     typedef SceneObject Parent;
@@ -71,8 +71,8 @@ private:
     
     
 public:
-    Skeleton();
-    virtual ~Skeleton();
+    SkeletonObject();
+    virtual ~SkeletonObject();
     
     static void initPersistFields();
     
@@ -124,38 +124,38 @@ public:
     void onAnimationFinished();
     
     /// Declare Console Object.
-    DECLARE_CONOBJECT( Skeleton );
+    DECLARE_CONOBJECT( SkeletonObject );
     
 protected:
     void generateComposition( void );
     void updateComposition( const F32 time );
     
 protected:
-    static bool setSkeletonAsset( void* obj, const char* data )                  { static_cast<Skeleton*>(obj)->setSkeletonAsset(data); return false; }
-    static const char* getSkeletonAsset(void* obj, const char* data)             { return static_cast<Skeleton*>(obj)->getSkeletonAsset(); }
-    static bool writeSkeletonAsset( void* obj, StringTableEntry pFieldName )     { return static_cast<Skeleton*>(obj)->mSkeletonAsset.notNull(); }
+    static bool setSkeletonAsset( void* obj, const char* data )                  { static_cast<SkeletonObject*>(obj)->setSkeletonAsset(data); return false; }
+    static const char* getSkeletonAsset(void* obj, const char* data)             { return static_cast<SkeletonObject*>(obj)->getSkeletonAsset(); }
+    static bool writeSkeletonAsset( void* obj, StringTableEntry pFieldName )     { return static_cast<SkeletonObject*>(obj)->mSkeletonAsset.notNull(); }
     
-    static bool setAnimationName( void* obj, const char* data )                  { static_cast<Skeleton*>(obj)->setAnimationName(data, static_cast<Skeleton*>(obj)->getAnimationCycle()); return false; }
-    static const char* getAnimationName(void* obj, const char* data)             { return static_cast<Skeleton*>(obj)->getAnimationName(); }
-    static bool writeAnimationName( void*obj, StringTableEntry pAnimation )      { return static_cast<Skeleton*>(obj)->getAnimationName() != StringTable->EmptyString; }
+    static bool setAnimationName( void* obj, const char* data )                  { static_cast<SkeletonObject*>(obj)->setAnimationName(data, static_cast<SkeletonObject*>(obj)->getAnimationCycle()); return false; }
+    static const char* getAnimationName(void* obj, const char* data)             { return static_cast<SkeletonObject*>(obj)->getAnimationName(); }
+    static bool writeAnimationName( void*obj, StringTableEntry pAnimation )      { return static_cast<SkeletonObject*>(obj)->getAnimationName() != StringTable->EmptyString; }
     
-    static bool setCurrentSkin( void* obj, const char* data )                    { static_cast<Skeleton*>(obj)->setCurrentSkin(data); return false; }
-    static const char* getCurrentSkin(void* obj, const char* data)               { return static_cast<Skeleton*>(obj)->getCurrentSkin(); }
-    static bool writeCurrentSkin( void*obj, StringTableEntry pSkin )             { return static_cast<Skeleton*>(obj)->getCurrentSkin() != StringTable->EmptyString; }
+    static bool setCurrentSkin( void* obj, const char* data )                    { static_cast<SkeletonObject*>(obj)->setCurrentSkin(data); return false; }
+    static const char* getCurrentSkin(void* obj, const char* data)               { return static_cast<SkeletonObject*>(obj)->getCurrentSkin(); }
+    static bool writeCurrentSkin( void*obj, StringTableEntry pSkin )             { return static_cast<SkeletonObject*>(obj)->getCurrentSkin() != StringTable->EmptyString; }
     
-    static bool setRootBoneScale(void* obj, const char* data)                    { static_cast<Skeleton*>(obj)->setRootBoneScale(Vector2(data)); return false; }
-    static const char* getRootBoneScale(void* obj, const char* data)             { return static_cast<Skeleton*>(obj)->getRootBoneScale().scriptThis(); }
-    static bool writeRootBoneScale( void* obj, StringTableEntry pFieldName )     { return static_cast<Skeleton*>(obj)->getRootBoneScale().notZero(); }
+    static bool setRootBoneScale(void* obj, const char* data)                    { static_cast<SkeletonObject*>(obj)->setRootBoneScale(Vector2(data)); return false; }
+    static const char* getRootBoneScale(void* obj, const char* data)             { return static_cast<SkeletonObject*>(obj)->getRootBoneScale().scriptThis(); }
+    static bool writeRootBoneScale( void* obj, StringTableEntry pFieldName )     { return static_cast<SkeletonObject*>(obj)->getRootBoneScale().notZero(); }
     
-    static bool setRootBoneOffset(void* obj, const char* data)                   { static_cast<Skeleton*>(obj)->setRootBoneOffset(Vector2(data)); return false; }
-    static const char* getRootBoneOffset(void* obj, const char* data)            { return static_cast<Skeleton*>(obj)->getRootBoneOffset().scriptThis(); }
-    static bool writeRootBoneOffset( void* obj, StringTableEntry pFieldName )    { return static_cast<Skeleton*>(obj)->getRootBoneOffset().notZero(); }
+    static bool setRootBoneOffset(void* obj, const char* data)                   { static_cast<SkeletonObject*>(obj)->setRootBoneOffset(Vector2(data)); return false; }
+    static const char* getRootBoneOffset(void* obj, const char* data)            { return static_cast<SkeletonObject*>(obj)->getRootBoneOffset().scriptThis(); }
+    static bool writeRootBoneOffset( void* obj, StringTableEntry pFieldName )    { return static_cast<SkeletonObject*>(obj)->getRootBoneOffset().notZero(); }
     
-    static bool setAnimationCycle( void* obj, const char* data )                 { static_cast<Skeleton*>(obj)->setAnimationCycle( dAtob(data) ); return false; }
-    static bool writeAnimationCycle( void* obj, StringTableEntry pFieldName )    { return static_cast<Skeleton*>(obj)->getAnimationCycle() == false; }
+    static bool setAnimationCycle( void* obj, const char* data )                 { static_cast<SkeletonObject*>(obj)->setAnimationCycle( dAtob(data) ); return false; }
+    static bool writeAnimationCycle( void* obj, StringTableEntry pFieldName )    { return static_cast<SkeletonObject*>(obj)->getAnimationCycle() == false; }
     
-    static bool writeFlipX( void* obj, StringTableEntry pFieldName )             { return static_cast<Skeleton*>(obj)->getFlipX() == true; }
-    static bool writeFlipY( void* obj, StringTableEntry pFieldName )             { return static_cast<Skeleton*>(obj)->getFlipY() == true; }
+    static bool writeFlipX( void* obj, StringTableEntry pFieldName )             { return static_cast<SkeletonObject*>(obj)->getFlipX() == true; }
+    static bool writeFlipY( void* obj, StringTableEntry pFieldName )             { return static_cast<SkeletonObject*>(obj)->getFlipY() == true; }
 };
 
-#endif // _SKELETON_H_
+#endif // _SKELETONOBJECT_H_

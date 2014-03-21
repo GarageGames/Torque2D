@@ -56,16 +56,14 @@
 #include <AL/alc.h>
 #include "platform/eaxtypes.h"
 #else
-#include <AL/al.h>
-#include <AL/alc.h>
 // declare externs of the AL fns here.
-//#include "al/altypes.h"
-//#include "al/alctypes.h"
+#include "al/altypes.h"
+#include "al/alctypes.h"
 #include "al/eaxtypes.h"
 #define AL_FUNCTION(fn_return,fn_name,fn_args, fn_value) extern fn_return (FN_CDECL *fn_name)fn_args;
-//#include "al/al_func.h"
-//#include "al/alc_func.h"
-//#include "al/eax_func.h"
+#include "al/al_func.h"
+#include "al/alc_func.h"
+#include "al/eax_func.h"
 #undef AL_FUNCTION
 #endif
 

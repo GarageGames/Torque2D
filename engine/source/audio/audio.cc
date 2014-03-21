@@ -2468,7 +2468,7 @@ bool OpenALInit()
 #elif defined(TORQUE_OS_ANDROID)
    mDevice = alcOpenDevice("openal-soft");
 #else
-   mDevice = (ALCvoid *)alcOpenDevice((ALCubyte*)NULL);
+   mDevice = (ALCvoid *)alcOpenDevice((const ALCchar*)NULL);
 #endif
    if (mDevice == (ALCvoid *)NULL)
       return false;

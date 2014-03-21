@@ -86,7 +86,7 @@ function SpineToy::setSkin(%this, %value)
 function SpineToy::createGoblin(%this)
 {
     // Create the skeleton object
-    %goblin = new Skeleton();
+    %goblin = new SkeletonObject();
     
     // Assign it an asset
     %goblin.Asset = %this.asset;
@@ -115,7 +115,7 @@ function SpineToy::createGoblin(%this)
 function SpineToy::createSpineBoy(%this)
 {
     // Create the skeleton object
-    %object = new Skeleton()
+    %object = new SkeletonObject()
     {
         class = "SpineBoy";
     };
@@ -191,7 +191,7 @@ function SpineToy::createBackground(%this)
     %this.createPowerup(14, 6);
     
     // Create the skeleton object
-    %animatedMenu = new Skeleton();
+    %animatedMenu = new SkeletonObject();
     
     // Assign it an asset
     %animatedMenu.Asset = "SpineToy:spinosaurus";
@@ -214,7 +214,7 @@ function SpineToy::createBackground(%this)
 function SpineToy::createPowerup(%this, %xPos, %yPos)
 {
     // Create the skeleton object
-    %powerup = new Skeleton();
+    %powerup = new SkeletonObject();
     
     // Assign it an asset
     %powerup.Asset = "SpineToy:powerup";

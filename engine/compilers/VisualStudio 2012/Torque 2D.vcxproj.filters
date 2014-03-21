@@ -1422,7 +1422,7 @@
     <ClCompile Include="..\..\source\2d\assets\SkeletonAsset.cc">
       <Filter>2d\assets</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\2d\sceneobject\Skeleton.cc">
+    <ClCompile Include="..\..\source\2d\sceneobject\SkeletonObject.cc">
       <Filter>2d\sceneobject</Filter>
     </ClCompile>
   </ItemGroup>
@@ -3153,10 +3153,10 @@
     <ClInclude Include="..\..\source\2d\assets\SkeletonAsset_ScriptBinding.h">
       <Filter>2d\assets</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\2d\sceneobject\Skeleton.h">
+    <ClInclude Include="..\..\source\2d\sceneobject\Skeleton_ScriptBinding.h">
       <Filter>2d\sceneobject</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\2d\sceneobject\Skeleton_ScriptBinding.h">
+    <ClInclude Include="..\..\source\2d\sceneobject\SkeletonObject.h">
       <Filter>2d\sceneobject</Filter>
     </ClInclude>
   </ItemGroup>

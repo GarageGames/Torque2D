@@ -276,7 +276,7 @@
     <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectSet.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Scroller.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\ShapeVector.cc" />
-    <ClCompile Include="..\..\source\2d\sceneobject\Skeleton.cc" />
+    <ClCompile Include="..\..\source\2d\sceneobject\SkeletonObject.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Sprite.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Trigger.cc" />
     <ClCompile Include="..\..\source\2d\scene\ContactFilter.cc" />
@@ -715,7 +715,7 @@
     <ClInclude Include="..\..\source\2d\sceneobject\Scroller_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\ShapeVector.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\ShapeVector_ScriptBinding.h" />
-    <ClInclude Include="..\..\source\2d\sceneobject\Skeleton.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\SkeletonObject.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Skeleton_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Sprite.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Sprite_ScriptBinding.h" />
