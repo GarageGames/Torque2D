@@ -1163,7 +1163,7 @@ void GuiCanvas::renderFrame(bool preRenderOnly, bool bufferSwap /* = true */)
 {
    PROFILE_START(CanvasPreRender);
 
-#if !defined TORQUE_OS_IOS && !defined TORQUE_OS_ANDROID
+#if !defined TORQUE_OS_IOS && !defined TORQUE_OS_ANDROID && !defined TORQUE_OS_EMSCRIPTEN
     
    if(mRenderFront)
       glDrawBuffer(GL_FRONT);
@@ -1297,7 +1297,7 @@ void GuiCanvas::renderFrame(bool preRenderOnly, bool bufferSwap /* = true */)
       //temp draw the mouse
       if (cursorON && mShowCursor && !mouseCursor)
       {
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_EMSCRIPTEN)
          glColor4ub(255, 0, 0, 255);
          GLfloat vertices[] = {
               (GLfloat)(cursorPt.x),(GLfloat)(cursorPt.y),

@@ -1,0 +1,22 @@
+<Sprite
+    SceneLayer="5"
+    Size="4 4"
+    Position="5 -6.9"
+    UseInputEvents="true"
+    Animation="ToyAssets:TD_Wizard_WalkSouth" >
+    <Sprite.Behaviors>
+        <ButtonBehavior />
+        <AnimationBehavior 
+            DeathAnimation="ToyAssets:TD_Wizard_Death" />
+        <SoundBehavior
+            DeathSound="ToyAssets:WizardDeathSound" />
+    </Sprite.Behaviors>
+    <Sprite.CollisionShapes>
+        <Polygon>
+            <Point>-2 -2</Point>
+            <Point>2 -2</Point>
+            <Point>2 2</Point>
+            <Point>-2 2</Point>
+        </Polygon>
+    </Sprite.CollisionShapes>
+</Sprite>

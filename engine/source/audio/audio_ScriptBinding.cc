@@ -39,7 +39,7 @@
 #endif
 
 #ifndef _AUDIO_ASSET_H_
-#include "audio/audioAsset.h"
+#include "audio/AudioAsset.h"
 #endif
 
 #ifdef TORQUE_OS_IOS
@@ -594,7 +594,7 @@ ConsoleFunctionWithDocs(alListener3f, ConsoleVoid, 3, 5, ( ALEnum , x , y , z))
       pos.z = dAtof(argv[4]);
    }
 
-   alListener3f(e, pos.x, pos.y, pos.z);
+   alxListenerPoint3F(e, &pos);
 }
 
 
@@ -636,11 +636,11 @@ ConsoleFunctionWithDocs(alGetListener3f, ConsoleString, 2, 2, ( ALEnum ))
       return("0 0 0");
    }
 
-   F32 value1, value2, value3;
-   alGetListener3f(e, &value1, &value2, &value3);
+   Point3F v;
+   alxGetListenerPoint3F(e, &v);
 
    char * ret = Con::getReturnBuffer(64);
-   dSprintf(ret, 64, "%7.3f %7.3 %7.3", value1, value2, value3);
+   dSprintf(ret, 64, "%7.3f %7.3 %7.3", v.x, v.y, v.z);
    return(ret);
 }
 

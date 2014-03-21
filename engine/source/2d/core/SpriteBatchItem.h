@@ -24,7 +24,7 @@
 #define _SPRITE_BATCH_ITEM_H_
 
 #ifndef _IMAGE_FRAME_PROVIDER_H
-#include "2d/core/imageFrameProvider.h"
+#include "2d/core/ImageFrameProvider.h"
 #endif
 
 //------------------------------------------------------------------------------  
@@ -138,7 +138,11 @@ public:
         // This should be as unique as possible as it is used for hashing.
         operator const U32() const
         {
+#ifdef TORQUE_64
+            return (U32)((U64)(mArgString) * (U32)2654435761);
+#else
             return (U32)(mArgString) * (U32)2654435761;
+#endif
         }
 
         /// Value equality check for hashing.

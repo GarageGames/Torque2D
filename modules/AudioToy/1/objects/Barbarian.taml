@@ -1,0 +1,22 @@
+<Sprite
+    SceneLayer="5"
+    Size="4 4"
+    Position="-15 -6.9"
+    UseInputEvents="true"
+    Animation="ToyAssets:TD_Barbarian_WalkSouth" >
+    <Sprite.Behaviors>
+        <ButtonBehavior />
+        <AnimationBehavior 
+            DeathAnimation="ToyAssets:TD_Barbarian_Death" />
+        <SoundBehavior
+            DeathSound="ToyAssets:BarbarianDeathSound" />
+    </Sprite.Behaviors>
+    <Sprite.CollisionShapes>
+        <Polygon>
+            <Point>-2 -2</Point>
+            <Point>2 -2</Point>
+            <Point>2 2</Point>
+            <Point>-2 2</Point>
+        </Polygon>
+    </Sprite.CollisionShapes>
+</Sprite>

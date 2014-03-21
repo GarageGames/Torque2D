@@ -100,7 +100,7 @@ void GuiColorPickerCtrl::initPersistFields()
 
 //--------------------------------------------------------------------------
 // Function to draw a box which can have 4 different colors in each corner blended together
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_EMSCRIPTEN)
 void dglDrawBlendBox(RectI &bounds, ColorF &c1, ColorF &c2, ColorF &c3, ColorF &c4)
 {
    S32 left = bounds.point.x, right = bounds.point.x + bounds.extent.x - 1;

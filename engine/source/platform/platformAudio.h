@@ -27,8 +27,6 @@
 #include "platform/platform.h"
 #endif
 
-#ifndef NO_AUDIO_SUPPORT
-
 #ifndef _PLATFORMAL_H_
 #include "platform/platformAL.h"
 #endif
@@ -142,7 +140,11 @@ void alxGetListenerf(ALenum param, ALfloat *value);
 
 inline void alxListenerPoint3F(ALenum pname, const Point3F *value)
 {
-   alListener3f(pname, value->x, value->y, value->z);   
+   ALfloat ptArray[10];
+   ptArray[0] = value->x;
+   ptArray[1] = value->y;
+   ptArray[2] = value->z;
+   alListenerfv(pname, ptArray);
 }
 
 /**   alGetListener3f access extension for use with Point3F's
@@ -150,7 +152,14 @@ inline void alxListenerPoint3F(ALenum pname, const Point3F *value)
 
 inline void alxGetListenerPoint3F(ALenum pname, Point3F *value)
 {
-   alGetListener3f(pname, &value->x, &value->y, &value->z);
+   ALfloat ptArray[10];
+   ptArray[0] = value->x;
+   ptArray[1] = value->y;
+   ptArray[2] = value->z;
+   alGetListenerfv(pname, ptArray);
+   value->x = ptArray[0];
+   value->y = ptArray[1];
+   value->z = ptArray[2];
 }
 
 // Environment
@@ -169,7 +178,5 @@ bool alxIsPlaying(AUDIOHANDLE handle);
 void alxUpdate();
 F32 alxGetStreamPosition( AUDIOHANDLE handle );
 F32 alxGetStreamDuration( AUDIOHANDLE handle );
-
-#endif // NO_AUDIO_SUPPORT
 
 #endif  // _H_PLATFORMAUDIO_

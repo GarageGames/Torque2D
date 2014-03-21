@@ -78,7 +78,7 @@
 #endif
 
 #ifndef _PARTICLE_SYSTEM_H_
-#include "2d/core/particleSystem.h"
+#include "2d/core/ParticleSystem.h"
 #endif
 
 #ifdef TORQUE_OS_IOS
@@ -126,7 +126,7 @@ bool initializeLibraries()
     // Create the stock colors.
     StockColor::create();
     
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_EMSCRIPTEN)
    //3MB default is way too big for iPhone!!!
 #ifdef	TORQUE_SHIPPING
     FrameAllocator::init(256 * 1024);	//256KB for now... but let's test and see!
@@ -343,6 +343,11 @@ bool DefaultGame::mainInitialize(int argc, const char **argv)
 {
     if(!initializeLibraries())
         return false;
+    
+#ifdef TORQUE_OS_EMSCRIPTEN
+    // temp hack
+    argc = 0;
+#endif
     
     // Set up the command line args for the console scripts...
     Con::setIntVariable("$GameProject::argc", argc);
@@ -643,11 +648,8 @@ AndroidProfilerStart("SERVER_PROC");
    Tickable::advanceTime(elapsedTime);	
    PROFILE_END();
 
-    // This is based on PW's stuff
-#ifndef NO_AUDIO_SUPPORT
-
-    // Milliseconds between audio updates.
-    const U32 AudioUpdatePeriod = 125;
+   // Milliseconds between audio updates.
+   const U32 AudioUpdatePeriod = 125;
 
    // alxUpdate is somewhat expensive and does not need to be updated constantly,
    // though it does need to be updated in real time
@@ -658,7 +660,6 @@ AndroidProfilerStart("SERVER_PROC");
       alxUpdate();
       lastAudioUpdate = realTime;
    }
-#endif
 
 #ifdef TORQUE_OS_IOS_PROFILE
     iPhoneProfilerEnd("CLIENT_PROC");

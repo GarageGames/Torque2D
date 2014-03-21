@@ -453,13 +453,18 @@ bool CodeBlock::read(StringTableEntry fileName, Stream &st)
          ste = StringTable->insert(globalStrings + offset);
       else
          ste = StringTable->EmptyString;
+      
       U32 count;
       st.read(&count);
       while(count--)
       {
          U32 ip;
          st.read(&ip);
-         code[ip] = *((U32 *) &ste);
+#ifdef TORQUE_64
+         *(U64*)(code+ip) = (U64)ste;
+#else
+         code[ip] = (U32)ste;
+#endif
       }
    }
 
@@ -476,7 +481,7 @@ bool CodeBlock::compile(const char *codeFileName, StringTableEntry fileName, con
 
    consoleAllocReset();
 
-   STEtoU32 = compileSTEtoU32;
+   STEtoCode = compileSTEtoCode;
 
    statementList = NULL;
 
@@ -566,7 +571,7 @@ bool CodeBlock::compile(const char *codeFileName, StringTableEntry fileName, con
 
 const char *CodeBlock::compileExec(StringTableEntry fileName, const char *string, bool noCalls, int setFrame)
 {
-   STEtoU32 = evalSTEtoU32;
+   STEtoCode = evalSTEtoCode;
    consoleAllocReset();
 
    name = fileName;

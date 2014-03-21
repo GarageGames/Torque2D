@@ -24,7 +24,7 @@
 #define _PARTICLE_ASSET_H_
 
 #ifndef _PARTICLE_ASSET_EMITTER_H_
-#include "2d/assets/particleAssetEmitter.h"
+#include "2d/assets/ParticleAssetEmitter.h"
 #endif
 
 #ifndef _TAML_CHILDREN_H_

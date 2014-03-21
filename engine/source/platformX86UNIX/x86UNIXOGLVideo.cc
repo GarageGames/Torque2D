@@ -24,7 +24,8 @@
 
 #include "console/console.h"
 #include "platform/event.h"
-#include "platform/gameInterface.h"
+#include "platform/types.h"
+#include "game/gameInterface.h"
 
 #include "platformX86UNIX/platformX86UNIX.h"
 #include "platformX86UNIX/platformGL.h"

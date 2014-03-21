@@ -30,7 +30,7 @@
 #include "io/fileObject.h"
 #include "console/consoleInternal.h"
 #include "debug/profiler.h"
-#include "console/consoleTypeValidators.h"
+#include "console/ConsoleTypeValidators.h"
 #include "memory/frameAllocator.h"
 
 #include "simSet_ScriptBinding.h"

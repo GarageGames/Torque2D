@@ -30,11 +30,11 @@
 #include "io/fileObject.h"
 #include "console/consoleInternal.h"
 #include "debug/profiler.h"
-#include "console/consoleTypeValidators.h"
+#include "console/ConsoleTypeValidators.h"
 #include "memory/frameAllocator.h"
 
 // Script bindings.
-#include "SimBase_ScriptBinding.h"
+#include "simBase_ScriptBinding.h"
 
 namespace Sim
 {

@@ -21,7 +21,7 @@
 //-----------------------------------------------------------------------------
 
 #ifndef _AUDIO_ASSET_H_
-#include "audioAsset.h"
+#include "AudioAsset.h"
 #endif
 
 #ifndef _ASSET_PTR_H_

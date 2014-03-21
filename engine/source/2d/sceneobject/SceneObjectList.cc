@@ -20,8 +20,8 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#include "sceneObjectList.h"
-#include "2d/sceneObject/sceneObject.h"
+#include "SceneObjectList.h"
+#include "2d/sceneobject/SceneObject.h"
 #include "collection/findIterator.h"
 
 //-----------------------------------------------------------------------------

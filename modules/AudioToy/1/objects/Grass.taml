@@ -1,0 +1,6 @@
+<Sprite
+    Size="40 2"
+    Position="0 -8.5"
+    BodyType="Static"
+    Image="@asset=ToyAssets:grassForeground"
+    Frame="0" />

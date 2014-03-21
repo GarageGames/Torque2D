@@ -50,7 +50,17 @@ void *DataChunker::alloc(S32 size)
       curBlock = temp;
    }
    void *ret = curBlock->data + curBlock->curIndex;
-   curBlock->curIndex += (size + 3) & ~3; // dword align
+   
+   S32 index;
+   index = curBlock->curIndex;
+   curBlock->curIndex += ((U32)size + 3) & ~3; // dword align
+   
+#ifdef EMSCRIPTEN
+   if (curBlock->curIndex < index || ((curBlock->data + curBlock->curIndex) - (U8*)ret) < size) {
+      AssertFatal(false, "Something weird is going on here");
+   }
+#endif
+
    return ret;
 }
 

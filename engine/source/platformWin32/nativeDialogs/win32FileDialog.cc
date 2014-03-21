@@ -112,7 +112,11 @@ static UINT_PTR CALLBACK FolderHookProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPA
             SendMessage(hParent, CDM_HIDECONTROL, cmb1, 0);
             SendMessage(hParent, CDM_HIDECONTROL, stc2, 0);
 
+#ifdef _WIN64
+            LONG oldProc = SetWindowLongPtr(hParent, GWLP_WNDPROC, (LONG_PTR)OKBtnFolderHackProc);
+#else
             LONG oldProc = SetWindowLong(hParent, GWL_WNDPROC, (LONG)OKBtnFolderHackProc);
+#endif
             SetProp(hParent, dT("OldWndProc"), (HANDLE)oldProc);
             SetProp(hParent, dT("OFN"), (HANDLE)lpofn);
          }
@@ -237,10 +241,10 @@ bool FileDialog::Execute()
    UTF16 pszFilter[1024];
    UTF16 pszFileTitle[MAX_PATH];
    // Convert parameters to UTF16*'s
-   convertUTF8toUTF16((UTF8 *)mData.mDefaultFile, pszFile, sizeof(pszFile));
-   convertUTF8toUTF16((UTF8 *)mData.mDefaultPath, pszInitialDir, sizeof(pszInitialDir));
-   convertUTF8toUTF16((UTF8 *)mData.mTitle, pszTitle, sizeof(pszTitle));
-   convertUTF8toUTF16((UTF8 *)mData.mFilters, pszFilter, sizeof(pszFilter) );
+   if(mData.mDefaultFile != StringTable->EmptyString)    convertUTF8toUTF16((UTF8 *)mData.mDefaultFile, pszFile, sizeof(pszFile));
+   if(mData.mDefaultPath != StringTable->EmptyString)    convertUTF8toUTF16((UTF8 *)mData.mDefaultPath, pszInitialDir, sizeof(pszInitialDir));
+   if(mData.mTitle != StringTable->EmptyString)			 convertUTF8toUTF16((UTF8 *)mData.mTitle, pszTitle, sizeof(pszTitle));
+   if(mData.mFilters != StringTable->EmptyString)		 convertUTF8toUTF16((UTF8 *)mData.mFilters, pszFilter, sizeof(pszFilter) );
 #else
    // Not Unicode, All char*'s!
    char pszFile[MAX_PATH];

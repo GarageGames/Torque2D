@@ -20,10 +20,10 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#include "2d/assets/particleAssetEmitter.h"
+#include "2d/assets/ParticleAssetEmitter.h"
 
 #ifndef _PARTICLE_ASSET_H_
-#include "2d/assets/particleAsset.h"
+#include "2d/assets/ParticleAsset.h"
 #endif
 
 #ifndef _CONSOLETYPES_H_
@@ -562,7 +562,7 @@ bool ParticleAssetEmitter::setAnimation( const char* pAnimationAssetId )
 
 //------------------------------------------------------------------------------
 
-inline void ParticleAssetEmitter::refreshAsset( void )
+void ParticleAssetEmitter::refreshAsset( void )
 {
     // Finish if no owner.
     if ( mOwner == NULL )

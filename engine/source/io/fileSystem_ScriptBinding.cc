@@ -520,7 +520,7 @@ ConsoleFunctionWithDocs(filePath, ConsoleString, 2, 2, (fileName))
    const char *path = dStrrchr(szPathCopy, '/');
    if(!path)
       return "";
-   U32 len = path - (char*)szPathCopy;
+   U32 len = (U32)(path - (char*)szPathCopy);
    char *ret = Con::getReturnBuffer(len + 1);
    dStrncpy(ret, szPathCopy, len);
    ret[len] = 0;

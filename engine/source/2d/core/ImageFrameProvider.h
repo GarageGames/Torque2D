@@ -24,7 +24,7 @@
 #define _IMAGE_FRAME_PROVIDER_H
 
 #ifndef _IMAGE_FRAME_PROVIDER_CORE_H
-#include "2d/core/imageFrameProviderCore.h"
+#include "2d/core/ImageFrameProviderCore.h"
 #endif
 
 ///-----------------------------------------------------------------------------

@@ -25,7 +25,7 @@
 #endif
 
 #ifndef _SPRITE_BATCH_QUERY_H_
-#include "2d/core/spriteBatchQuery.h"
+#include "2d/core/SpriteBatchQuery.h"
 #endif
 
 #ifndef _SCENE_RENDER_OBJECT_H_
@@ -600,6 +600,18 @@ Vector2 SpriteBatch::getSpriteLocalPosition( void )
 
     // Get local position.
     return mSelectedSprite->getLocalPosition();
+}
+
+//------------------------------------------------------------------------------
+
+const SpriteBatchItem::LogicalPosition SpriteBatch::getSpriteLogicalPosition( void ) const
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return NULL;
+    
+    // Get logical position.
+    return mSelectedSprite->getLogicalPosition();
 }
 
 //------------------------------------------------------------------------------

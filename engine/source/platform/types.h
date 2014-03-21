@@ -140,7 +140,7 @@ inline U32 endianSwap(const U32 in_swap)
 
 // define all the variants of Offset that we might use
 #define _Offset_Normal(x, cls) ((dsize_t)((const char *)&(((cls *)1)->x)-(const char *)1))
-#define _Offset_Variant_1(x, cls) ((int)(&((cls *)1)->x) - 1)
+#define _Offset_Variant_1(x, cls) ((dsize_t)(&((cls *)1)->x) - 1)
 #define _Offset_Variant_2(x, cls) offsetof(cls, x) // also requires #include <stddef.h>
 
 // now, for each compiler type, define the Offset macros that should be used.

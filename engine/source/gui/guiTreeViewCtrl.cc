@@ -1142,7 +1142,7 @@ bool GuiTreeViewCtrl::buildIconTable(const char * icons)
 
    // Figure the size of the buffer we need...
    const char* temp = dStrchr( icons, '\t' );
-   U32 textLen = temp ? ( temp - icons ) : dStrlen( icons );
+   U32 textLen = temp ? (U32)( temp - icons ) : dStrlen( icons );
 
    // Allocate temporary space.
    FrameAllocatorMarker txtBuff;

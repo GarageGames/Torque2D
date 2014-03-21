@@ -50,12 +50,12 @@
  #endif
  
  #include "platformX86UNIX/platformX86UNIX.h"
- #include "core/fileio.h"
- #include "core/tVector.h"
- #include "core/stringTable.h"
+ #include "platform/platformFileIO.h"
+ #include "collection/vector.h"
+ #include "string/stringTable.h"
  #include "console/console.h"
- #include "core/resManager.h"
- #include "platform/gameInterface.h" 
+ #include "io/resource/resourceManager.h"
+ #include "game/gameInterface.h" 
 
  #if defined(__FreeBSD__)
     #include <sys/types.h>
@@ -608,8 +608,8 @@ bool dPathCopy(const char *fromName, const char *toName, bool nooverwrite)
      
      if (Ok == currentStatus || EOS == currentStatus)
      {
-    long	currentOffset = getPosition();                  // keep track of our current position
-    long	fileSize;
+    long currentOffset = getPosition();                  // keep track of our current position
+    long fileSize;
     lseek(*((int *)handle), 0, SEEK_END);                     // seek to the end of the file
     fileSize = getPosition();                               // get the file size
     lseek(*((int *)handle), currentOffset, SEEK_SET);         // seek back to our old offset
@@ -1182,5 +1182,74 @@ void Platform::restartInstance()
         }
 
         exit(0);
+}
+
+//-----------------------------------------------------------------------------
+StringTableEntry Platform::getCurrentDirectory()
+{
+   // get the current directory, the one that would be opened if we did a fopen(".")
+   char* cwd = getcwd(NULL, 0);
+   StringTableEntry ret = StringTable->insert(cwd);
+   free(cwd);
+   return ret;
+}
+
+//-----------------------------------------------------------------------------
+StringTableEntry Platform::getExecutablePath()
+{
+   // No obvious ways to find this with what we have
+   return Platform::getCurrentDirectory();
+}
+
+//-----------------------------------------------------------------------------
+bool Platform::setCurrentDirectory(StringTableEntry newDir)
+{
+   return (chdir(newDir) == 0);
+}
+
+//-----------------------------------------------------------------------------
+const char* Platform::getUserDataDirectory() 
+{
+	return StringTable->insert("~/");
+
+}
+
+//-----------------------------------------------------------------------------
+const char* Platform::getUserHomeDirectory() 
+{
+	return StringTable->insert("~/");
+}
+
+//-----------------------------------------------------------------------------
+StringTableEntry Platform::osGetTemporaryDirectory()
+{
+	return StringTable->insert("~/");
+}
+
+bool Platform::pathCopy(const char* source, const char* dest, bool nooverwrite)
+{
+   return false;
+}
+
+bool Platform::fileRename(const char* source, const char* dest)
+{
+   return false;
+}
+
+bool Platform::fileDelete(const char* name)
+{
+   if (!name)
+      return false;
+
+   if (dStrlen(name) > MaxPath) {
+      Con::warnf("Platform::fileDelete() - Filename is pretty long...");
+   }
+
+   return (remove(name) == 0);
+  return false;
+}
+
+void Platform::openFolder(const char* path)
+{
 }
 

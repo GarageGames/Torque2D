@@ -520,7 +520,7 @@ StringTableEntry AssetManager::getAssetPath( const char* pAssetId )
     AssertFatal( pFinalSlash != NULL, "Should always be able to find final slash in the asset file-path." );
 
     // Fetch asset path.
-    return StringTable->insertn( assetFilePath, pFinalSlash - assetFilePath );
+    return StringTable->insertn( assetFilePath, (U32)(pFinalSlash - assetFilePath) );
 }
 
 //-----------------------------------------------------------------------------
@@ -2222,7 +2222,7 @@ S32 AssetManager::findAssetLooseFile( AssetQuery* pAssetQuery, const char* pLoos
 
     // Expand loose file.
     char looseFileBuffer[1024];
-    Con::expandPath(looseFileBuffer, sizeof(looseFileBuffer), pLooseFile, false );
+    Con::expandPath(looseFileBuffer, sizeof(looseFileBuffer), pLooseFile, NULL, false );
 
     // Fetch asset loose file.
     StringTableEntry looseFile = StringTable->insert( looseFileBuffer );

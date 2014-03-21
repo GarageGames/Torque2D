@@ -340,7 +340,7 @@ ConsoleMethodWithDocs( BehaviorComponent, getBehaviorConnection, ConsoleString, 
     {
         // No, so warn.
         Con::warnf("BehaviorComponent::getBehaviorConnections() - Could not find output behavior '%s'.", argv[2] );
-        return false;
+        return NULL;
     }
 
     // Fetch output name.

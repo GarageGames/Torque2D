@@ -75,7 +75,7 @@ ConsoleFunctionWithDocs(strstr, ConsoleInt, 3, 3, ( sourceString , searchString 
    const char *retpos = dStrstr(argv[1], argv[2]);
    if(!retpos)
       return -1;
-   return retpos - argv[1];
+   return (S32)(retpos - argv[1]);
 }
 
 /*! Use the strPos function to locate the first instance of searchString in sourceString, starting at character 0, or at an optional offset.
@@ -288,7 +288,7 @@ ConsoleFunctionWithDocs(strreplace, ConsoleString, 4, 4, ( sourceString , from ,
          dStrcpy(ret + dstp, argv[1] + scanp);
          return ret;
       }
-      U32 len = scan - (argv[1] + scanp);
+      U32 len = (U32)(scan - (argv[1] + scanp));
       dStrncpy(ret + dstp, argv[1] + scanp, len);
       dstp += len;
       dStrcpy(ret + dstp, argv[3]);

@@ -296,7 +296,7 @@ void AnimationAsset::setRandomStart( const bool randomStart )
 void AnimationAsset::setNamedCellsMode( const bool namedCellsMode )
 {
     // Ignore no change.
-    if ( mNamedCellsMode == mNamedCellsMode)
+    if ( namedCellsMode == mNamedCellsMode)
         return;
 
     // Update.

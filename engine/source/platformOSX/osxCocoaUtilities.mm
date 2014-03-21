@@ -281,7 +281,7 @@
     // Get the index
     NSMenu* menu = [sender menu];
 
-    S32 index = [menu indexOfItemWithTitle:itemTitle];
+    S32 index = (S32)[menu indexOfItemWithTitle:itemTitle];
 
     _owner->handleSelect(index, [[_menu title] UTF8String]);
 }

@@ -20,118 +20,128 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-
-
-#include "platform/platformThread.h"
+#include <pthread.h>
+#include "platform/threads/thread.h"
 #include "platformX86UNIX/platformX86UNIX.h"
 #include "platform/platformSemaphore.h"
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_thread.h>
-#include "pthread.h"
-
 //--------------------------------------------------------------------------
-struct x86UNIXThreadData
+struct PlatformThreadData
 {
   ThreadRunFunction       mRunFunc;
-  S32                     mRunArg;
-  Thread *                mThread;
-  void *                  mSemaphore;
-  SDL_Thread              *mTheThread;
-
-   x86UNIXThreadData()
-   {
-      mRunFunc    = 0;
-      mRunArg     = 0;
-      mThread     = 0;
-      mSemaphore  = 0;
-   };
+  void*                   mRunArg;
+  Thread*                 mThread;
+  Semaphore               mGateway;
+  pthread_t               mThreadID;
+  bool                    mDead;
 };
 
 //--------------------------------------------------------------------------
-Thread::Thread(ThreadRunFunction func, S32 arg, bool start_thread)
+Thread::Thread(ThreadRunFunction func, void* arg, bool start_thread, bool autodelete)
 {
-  x86UNIXThreadData * threadData = new x86UNIXThreadData();
-  threadData->mRunFunc   = func;
-  threadData->mRunArg    = arg;
-  threadData->mThread    = this;
-  threadData->mSemaphore = Semaphore::createSemaphore();
-  threadData->mTheThread = NULL;
+  mData = new PlatformThreadData;
+  mData->mRunFunc   = func;
+  mData->mRunArg    = arg;
+  mData->mThread    = this;
+  mData->mThreadID = 0;
+  mData->mDead = false;
+  autoDelete = autodelete;
 
-  mData = reinterpret_cast<void*>(threadData);
   if (start_thread)
     start();
 }
 
 Thread::~Thread()
 {
-  join();
-  
-  x86UNIXThreadData * threadData = reinterpret_cast<x86UNIXThreadData*>(mData);
-  Semaphore::destroySemaphore(threadData->mSemaphore);
-  delete threadData;
+  stop();
+  if (isAlive())
+      join();
+
+  delete mData;
 }
 
-static int ThreadRunHandler(void * arg)
+//-----------------------------------------------------------------------------
+// Function:    ThreadRunHandler
+// Summary:     Calls Thread::run() with the thread's specified run argument.
+//               Neccesary because Thread::run() is provided as a non-threaded
+//               way to execute the thread's run function. So we have to keep
+//               track of the thread's lock here.
+static void *ThreadRunHandler(void * arg)
 {
-   x86UNIXThreadData * threadData = reinterpret_cast<x86UNIXThreadData*>(arg);
-   threadData->mThread->run(threadData->mRunArg);
-   Semaphore::releaseSemaphore(threadData->mSemaphore);
-   return 0;
+   PlatformThreadData *mData = reinterpret_cast<PlatformThreadData*>(arg);
+   Thread *thread = mData->mThread;
+
+   // mThreadID is filled in twice, once here and once in pthread_create().
+   // We fill in mThreadID here as well as in pthread_create() because addThread()
+   // can execute before pthread_create() returns and sets mThreadID.
+   // The value from pthread_create() and pthread_self() are guaranteed to be equivalent (but not identical)
+   mData->mThreadID = pthread_self();
+   
+   ThreadManager::addThread(thread);
+   thread->run(mData->mRunArg);
+   ThreadManager::removeThread(thread);
+
+   bool autoDelete = thread->autoDelete;
+   
+   mData->mThreadID = 0;
+   mData->mDead = true;
+   mData->mGateway.release();
+   
+   if( autoDelete )
+      delete thread;
+      
+   // return value for pthread lib's benefit
+   return NULL;
+   // the end of this function is where the created pthread will die.
 }
 
 void Thread::start()
 {
-   if(isAlive())
-      return;
-   x86UNIXThreadData *threadData = reinterpret_cast<x86UNIXThreadData*>(mData);
-   Semaphore::acquireSemaphore(threadData->mSemaphore);
-   threadData->mTheThread = SDL_CreateThread(ThreadRunHandler, mData);
+   mData->mGateway.acquire();
+
+   shouldStop = false;
+
+   mData->mDead = false;
+
+   pthread_create(&mData->mThreadID, NULL, ThreadRunHandler, mData);
 }
 
 bool Thread::join()
 { 
-  if(!isAlive())
-    return(false);
-
-
-  x86UNIXThreadData * threadData = reinterpret_cast<x86UNIXThreadData*>(mData);
-  //
-  // (SDL 1.2.7) Even after the procedure started in the thread returns, there 
-  // still exist some resources allocated to the thread. To free these 
-  // resources, use SDL_WaitThread to wait for the thread to finish and 
-  // obtain the status code of the thread. If not done so, SDL_CreateThread 
-  // will hang after about 1010 successfully created threads 
-  // (tested on GNU/Linux).
-  //
-  SDL_WaitThread(threadData->mTheThread, NULL);
-  threadData->mTheThread = NULL;
-  return (Semaphore::acquireSemaphore(threadData->mSemaphore, true));
+   // not using pthread_join here because pthread_join cannot deal
+   // with multiple simultaneous calls.
+   
+   mData->mGateway.acquire();
+   AssertFatal( !isAlive(), "Thread::join() - thread not dead after join()" );
+   mData->mGateway.release();
+   
+   return true;
 }
 
-void Thread::run(S32 arg)
+void Thread::run(void* arg)
 {
-  x86UNIXThreadData * threadData = reinterpret_cast<x86UNIXThreadData*>(mData);
-  if(threadData->mRunFunc)
-    threadData->mRunFunc(arg);
+  if(mData->mRunFunc)
+    mData->mRunFunc(arg);
 }
 
 bool Thread::isAlive()
 {
-  x86UNIXThreadData * threadData = reinterpret_cast<x86UNIXThreadData*>(mData);
-  if (threadData->mTheThread)
-    {
-      bool signal = Semaphore::acquireSemaphore(threadData->mSemaphore, false);
-      if (signal)
-	Semaphore::releaseSemaphore(threadData->mSemaphore);
-      return (!signal);
-    }
-  return false;
+  return ( !mData->mDead );
 }
 
-U32 Thread::getCurrentThreadId()
+U32 Thread::getId()
 {
-   return (U32)SDL_ThreadID();
+   return (U32)mData->mThreadID;
+}
+
+ThreadIdent ThreadManager::getCurrentThreadId()
+{
+   return pthread_self();
+}
+
+bool ThreadManager::compare(U32 threadId_1, U32 threadId_2)
+{
+   return pthread_equal((pthread_t)threadId_1, (pthread_t)threadId_2);
 }
 
 class PlatformThreadStorage

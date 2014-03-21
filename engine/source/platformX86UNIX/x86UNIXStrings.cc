@@ -23,6 +23,7 @@
 
 
 #include "platformX86UNIX/platformX86UNIX.h"
+#include "platform/platform.h"
 #include <stdarg.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -190,7 +191,28 @@ char* dStrcpyl(char *dst, U32 dstSize, ...)
 S32 dStrcmp(const char *str1, const char *str2)
 {
    return strcmp(str1, str2);   
-}  
+}
+
+S32 dStrcmp(const UTF16 *str1, const UTF16 *str2)
+{
+   int ret;
+   const UTF16 *a, *b;
+   a = str1;
+   b = str2;
+
+   while (*a && *b && (ret = *a - *b) == 0)
+   {
+      a++, b++;
+   }
+
+   if (*a == 0 && *b != 0)
+      return -1;
+
+   if (*b == 0 && *a != 0)
+      return 1;
+
+   return ret;
+}
  
 S32 dStricmp(const char *str1, const char *str2)
 {
@@ -275,12 +297,12 @@ U32 dStrcspn(const char *str, const char *set)
 
 char* dStrstr(char *str1, char *str2)
 {
-	   return strstr(str1,str2);
+   return strstr(str1,str2);
 }
 
 char* dStrstr(const char *str1, const char *str2)
 {
-	   return strstr(str1,str2);
+   return strstr((char *)str1,str2);
 }
 
 char* dStrtok(char *str, const char *sep)
@@ -330,11 +352,12 @@ void dPrintf(const char *format, ...)
    va_list args;
    va_start(args, format);
    vprintf(format, args);
+   va_end(args);
 }   
 
-S32 dVprintf(const char *format, void *arglist)
+S32 dVprintf(const char *format, va_list arglist)
 {
-   S32 len = vprintf(format, (char*)arglist);
+   S32 len = vprintf(format, arglist);
    return (len);
 }   
 
@@ -344,16 +367,56 @@ S32 dSprintf(char *buffer, U32 bufferSize, const char *format, ...)
    va_start(args, format);
 
    S32 len = vsnprintf(buffer, bufferSize, format, args);
-   return (len);
+
+   va_end(args);
+
+   return len;
 }   
 
 
 S32 dVsprintf(char *buffer, U32 bufferSize, const char *format, va_list arglist)
 {
-   S32 len = vsnprintf(buffer, bufferSize, format, (char*)arglist);
-   return (len);
-}   
+   S32 len = vsnprintf(buffer, bufferSize, format, arglist);
 
+   return len;
+}
+
+S32 dStrrev(char *str)
+{
+   // Get string length
+   S32 l = dStrlen(str) - 1;
+   
+   for (int x = 0; x < 1; x++,l--)
+   {
+      // triple XOR trick
+      str[x]^=str[l];
+
+      str[l]^=str[x];
+      str[x]^=str[l];
+   }
+
+   return l;
+}
+
+S32 dItoa(S32 n, char s[])
+{
+   S32 i, sign;
+
+   if ((sign = n) < 0)
+	n = -n;
+
+   i = 0;
+   do {
+      s[i++] = n % 10 + '0';
+   } while((n /= 10) > 0);
+
+   if (sign < 0)
+      s[i++] = '-';
+
+   dStrrev(s);
+
+   return dStrlen(s);
+} 
 
 S32 dSscanf(const char *buffer, const char *format, ...)
 {
@@ -422,5 +485,10 @@ S32 dFflushStderr()
 void dQsort(void *base, U32 nelem, U32 width, S32 (QSORT_CALLBACK *fcmp)(const void *, const void *))
 {
    qsort(base, nelem, width, fcmp);
-}   
+}
+
+StringTableEntry Platform::createUUID(void)
+{
+   return NULL;
+}
 

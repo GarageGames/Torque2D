@@ -312,7 +312,7 @@ void GuiMessageVectorCtrl::createSpecialMarkers(SpecialMarkers& rSpecial, const 
       if (pMinMatch[0] != '\0') {
          AssertFatal(minMatchType != 0xFFFFFFFF, "Hm, that's bad");
          // Found a match...
-         U32 start = pMinMatch - pLCCopy;
+         U32 start = (U32)(pMinMatch - pLCCopy);
          U32 j;
          for (j = 0; pLCCopy[start + j] != '\0'; j++) {
             if (pLCCopy[start + j] == '\n' ||

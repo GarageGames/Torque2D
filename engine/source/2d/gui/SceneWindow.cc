@@ -1763,13 +1763,17 @@ void SceneWindow::renderMetricsOverlay( Point2I offset, const RectI& updateRect 
     // Calculate Debug Banner Offset.
     Point2I bannerOffset = updateRect.point + Point2I(8,8);
 
-    // Draw Banner Background.
-    glBegin(GL_TRIANGLE_STRIP);
-        glVertex2i( updateRect.point.x, updateRect.point.y );
-        glVertex2i( updateRect.point.x + updateRect.extent.x, updateRect.point.y );
-        glVertex2i( updateRect.point.x, updateRect.point.y + bannerHeight + 16);
-        glVertex2i( updateRect.point.x + updateRect.extent.x, updateRect.point.y + bannerHeight + 16);
-    glEnd();
+    static GLfloat sWindowVertices[] = {
+        (GLfloat)updateRect.point.x, (GLfloat)updateRect.point.y,
+        (GLfloat)updateRect.point.x + updateRect.extent.x, (GLfloat)updateRect.point.y,
+        (GLfloat)updateRect.point.x, (GLfloat)updateRect.point.y + bannerHeight + 16,
+        (GLfloat)updateRect.point.x + updateRect.extent.x, (GLfloat)updateRect.point.y + bannerHeight + 16
+    };
+    
+    glVertexPointer(2, GL_FLOAT, 0, sWindowVertices);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glDisableClientState(GL_VERTEX_ARRAY);
 
     // Disable Banner Blending.
     glDisable       ( GL_BLEND );
