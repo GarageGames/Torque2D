@@ -20,13 +20,13 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethodGroupBeginWithDocs(Skeleton, SceneObject)
+ConsoleMethodGroupBeginWithDocs(SkeletonObject, SceneObject)
 
 /*! Sets the skeleton asset Id to use.
     @param skeletonAssetId The skeleton asset Id to use.
     @return No return value.
 */
-ConsoleMethodWithDocs(Skeleton, setSkeletonAsset, ConsoleVoid, 3, 3, (skeletonAssetId?))
+ConsoleMethodWithDocs(SkeletonObject, setSkeletonAsset, ConsoleVoid, 3, 3, (skeletonAssetId?))
 {
     object->setSkeletonAsset( argv[2] );
 }
@@ -36,7 +36,7 @@ ConsoleMethodWithDocs(Skeleton, setSkeletonAsset, ConsoleVoid, 3, 3, (skeletonAs
 /*! Gets the skeleton asset Id.
     @return The skeleton asset Id.
 */
-ConsoleMethodWithDocs(Skeleton, getSkeletonAsset, ConsoleString, 2, 2, ())
+ConsoleMethodWithDocs(SkeletonObject, getSkeletonAsset, ConsoleString, 2, 2, ())
 {
     return object->getSkeletonAsset();
 }
@@ -48,7 +48,7 @@ ConsoleMethodWithDocs(Skeleton, getSkeletonAsset, ConsoleString, 2, 2, ())
     @param cycle Optional bool to determine whether the animation should loop.
     @return Returns true on success."
 */
-ConsoleMethodWithDocs(Skeleton, setAnimationName, ConsoleBool, 3, 4, (animationName, [cycle]))
+ConsoleMethodWithDocs(SkeletonObject, setAnimationName, ConsoleBool, 3, 4, (animationName, [cycle]))
 {
     // Determine looping
     bool shouldLoop = argc >= 4 ? dAtob(argv[3]) : false;
@@ -61,7 +61,7 @@ ConsoleMethodWithDocs(Skeleton, setAnimationName, ConsoleBool, 3, 4, (animationN
 /*! Gets the name of the current animation.
     @return String containing the animation name.
 */
-ConsoleMethodWithDocs(Skeleton, getAnimationName, ConsoleString, 2, 2, ())
+ConsoleMethodWithDocs(SkeletonObject, getAnimationName, ConsoleString, 2, 2, ())
 {
     return object->getAnimationName();
 }
@@ -71,7 +71,7 @@ ConsoleMethodWithDocs(Skeleton, getAnimationName, ConsoleString, 2, 2, ())
 /*! Sets the skin for the skeleton.
     @return No return value.
 */
-ConsoleMethodWithDocs(Skeleton, setSkin, ConsoleVoid, 3, 3, (skinName))
+ConsoleMethodWithDocs(SkeletonObject, setSkin, ConsoleVoid, 3, 3, (skinName))
 {
     object->setCurrentSkin(argv[2]);
 }
@@ -81,7 +81,7 @@ ConsoleMethodWithDocs(Skeleton, setSkin, ConsoleVoid, 3, 3, (skinName))
 /*! Gets the name of the current skin.
     @return String containing the skin name.
 */
-ConsoleMethodWithDocs(Skeleton, getSkin, ConsoleString, 2, 2, ())
+ConsoleMethodWithDocs(SkeletonObject, getSkin, ConsoleString, 2, 2, ())
 {
     return object->getCurrentSkin();
 }
@@ -93,7 +93,7 @@ ConsoleMethodWithDocs(Skeleton, getSkin, ConsoleString, 2, 2, ())
     @param scaleY Base y coordinate scale.
     @return No return value.
 */
-ConsoleMethodWithDocs(Skeleton, setRootBoneScale, ConsoleVoid, 3, 4, (float scaleX, float scaleY))
+ConsoleMethodWithDocs(SkeletonObject, setRootBoneScale, ConsoleVoid, 3, 4, (float scaleX, float scaleY))
 {
     F32 scaleX, scaleY;
     
@@ -133,7 +133,7 @@ ConsoleMethodWithDocs(Skeleton, setRootBoneScale, ConsoleVoid, 3, 4, (float scal
 /*! Gets the skeleton's root bone scale.
     @return (float x/y height) The x and y scale of the object's root bone.
 */
-ConsoleMethodWithDocs(Skeleton, getRootBoneScale, ConsoleString, 2, 2, ())
+ConsoleMethodWithDocs(SkeletonObject, getRootBoneScale, ConsoleString, 2, 2, ())
 {
     return object->getRootBoneScale().scriptThis();
 }
@@ -145,7 +145,7 @@ ConsoleMethodWithDocs(Skeleton, getRootBoneScale, ConsoleString, 2, 2, ())
     @param y Base y coordinate.
     @return No return value.
 */
-ConsoleMethodWithDocs(Skeleton, setRootBoneOffset, ConsoleVoid, 3, 4, (float x, float y))
+ConsoleMethodWithDocs(SkeletonObject, setRootBoneOffset, ConsoleVoid, 3, 4, (float x, float y))
 {
     F32 x, y;
     
@@ -185,7 +185,7 @@ ConsoleMethodWithDocs(Skeleton, setRootBoneOffset, ConsoleVoid, 3, 4, (float x, 
 /*! Gets the skeleton's root bone offset.
     @return (float x/y) The x and y offset of the object's root bone.
 */
-ConsoleMethodWithDocs(Skeleton, getRootBoneOffset, ConsoleString, 2, 2, ())
+ConsoleMethodWithDocs(SkeletonObject, getRootBoneOffset, ConsoleString, 2, 2, ())
 {
     return object->getRootBoneOffset().scriptThis();
 }
@@ -196,7 +196,7 @@ ConsoleMethodWithDocs(Skeleton, getRootBoneOffset, ConsoleString, 2, 2, ())
     @param cycle Bool to determine whether the animation should loop.
     @return No return value.
 */
-ConsoleMethodWithDocs(Skeleton, setAnimationCycle, ConsoleVoid, 3, 3, (bool cycle))
+ConsoleMethodWithDocs(SkeletonObject, setAnimationCycle, ConsoleVoid, 3, 3, (bool cycle))
 {
     object->setAnimationCycle( dAtob(argv[2] ) );
 }
@@ -206,7 +206,7 @@ ConsoleMethodWithDocs(Skeleton, setAnimationCycle, ConsoleVoid, 3, 3, (bool cycl
 /*! Gets whether the animation cycles or not.
     @return Whether the animation cycles or not.
 */
-ConsoleMethodWithDocs(Skeleton, getAnimationCycle, ConsoleBool, 2, 2, ())
+ConsoleMethodWithDocs(SkeletonObject, getAnimationCycle, ConsoleBool, 2, 2, ())
 {
     return object->getAnimationCycle();
 }
@@ -218,7 +218,7 @@ ConsoleMethodWithDocs(Skeleton, getAnimationCycle, ConsoleBool, 2, 2, ())
     @param flipY Whether or not to flip the texture along the y (vertical) axis.
     @return No return value.
 */
-ConsoleMethodWithDocs(Skeleton, setFlip, ConsoleVoid, 4, 4, (bool flipX, bool flipY))
+ConsoleMethodWithDocs(SkeletonObject, setFlip, ConsoleVoid, 4, 4, (bool flipX, bool flipY))
 {
     // Set Flip.
     object->setFlip( dAtob(argv[2]), dAtob(argv[3]) );
@@ -229,7 +229,7 @@ ConsoleMethodWithDocs(Skeleton, setFlip, ConsoleVoid, 4, 4, (bool flipX, bool fl
 /*! Gets the flip for each axis.
     @return (bool flipX/bool flipY) Whether or not the texture is flipped along the x and y axis.
 */
-ConsoleMethodWithDocs(Skeleton, getFlip, ConsoleString, 2, 2, ())
+ConsoleMethodWithDocs(SkeletonObject, getFlip, ConsoleString, 2, 2, ())
 {
     // Create Returnable Buffer.
     char* pBuffer = Con::getReturnBuffer(32);
@@ -247,7 +247,7 @@ ConsoleMethodWithDocs(Skeleton, getFlip, ConsoleString, 2, 2, ())
     @param flipX Whether or not to flip the texture along the x (horizontal) axis.
     @return No return value.
 */
-ConsoleMethodWithDocs(Skeleton, setFlipX, ConsoleVoid, 3, 3, (bool flipX))
+ConsoleMethodWithDocs(SkeletonObject, setFlipX, ConsoleVoid, 3, 3, (bool flipX))
 {
     // Set Flip.
     object->setFlipX( dAtob(argv[2]) );
@@ -259,7 +259,7 @@ ConsoleMethodWithDocs(Skeleton, setFlipX, ConsoleVoid, 3, 3, (bool flipX))
     @param flipY Whether or not to flip the texture along the y (vertical) axis.
     @return No return value.
 */
-ConsoleMethodWithDocs(Skeleton, setFlipY, ConsoleVoid, 3, 3, (bool flipY))
+ConsoleMethodWithDocs(SkeletonObject, setFlipY, ConsoleVoid, 3, 3, (bool flipY))
 {
     // Set Flip.
     object->setFlipY( dAtob(argv[2]) );
@@ -270,7 +270,7 @@ ConsoleMethodWithDocs(Skeleton, setFlipY, ConsoleVoid, 3, 3, (bool flipY))
 /*! Gets whether or not the texture is flipped horizontally.
     @return (bool flipX) Whether or not the texture is flipped along the x axis.
 */
-ConsoleMethodWithDocs(Skeleton, getFlipX, ConsoleBool, 2, 2, ())
+ConsoleMethodWithDocs(SkeletonObject, getFlipX, ConsoleBool, 2, 2, ())
 {
     return object->getFlipX();
 }
@@ -280,7 +280,7 @@ ConsoleMethodWithDocs(Skeleton, getFlipX, ConsoleBool, 2, 2, ())
 /*! Gets whether or not the texture is flipped vertically.
     @return (bool flipY) Whether or not the texture is flipped along the y axis.
 */
-ConsoleMethodWithDocs(Skeleton, getFlipY, ConsoleBool, 2, 2, ())
+ConsoleMethodWithDocs(SkeletonObject, getFlipY, ConsoleBool, 2, 2, ())
 {
     return object->getFlipY();
 }
@@ -290,7 +290,7 @@ ConsoleMethodWithDocs(Skeleton, getFlipY, ConsoleBool, 2, 2, ())
 /*! Gets the duration of the current animation.
     @return Duration of the animation in seconds.
 */
-ConsoleMethodWithDocs(Skeleton, getAnimationDuration, ConsoleFloat, 2, 2, ())
+ConsoleMethodWithDocs(SkeletonObject, getAnimationDuration, ConsoleFloat, 2, 2, ())
 {
     return object->getAnimationDuration();
 }
@@ -301,11 +301,11 @@ ConsoleMethodWithDocs(Skeleton, getAnimationDuration, ConsoleFloat, 2, 2, ())
     @param animation The name of the animation to mix.
     @param time The time to start mixing.
 */
-ConsoleMethodWithDocs(Skeleton, setMix, ConsoleBool, 5, 5, (fromAnimation, toAnimation, time))
+ConsoleMethodWithDocs(SkeletonObject, setMix, ConsoleBool, 5, 5, (fromAnimation, toAnimation, time))
 {
     Con::printf("Mixing %s with %s at %f", argv[2], argv[3], dAtof(argv[4]));
     
     return object->setMix(argv[2], argv[3], dAtof(argv[4]));
 }
 
-ConsoleMethodGroupEndWithDocs(Skeleton)
+ConsoleMethodGroupEndWithDocs(SkeletonObject)

@@ -20,8 +20,8 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _SKELETON_H_
-#include "2d/sceneobject/Skeleton.h"
+#ifndef _SKELETONOBJECT_H_
+#include "2d/sceneobject/SkeletonObject.h"
 #endif
 
 #include "spine/extension.h"
@@ -31,22 +31,22 @@
 
 //-----------------------------------------------------------------------------
 
-void _spAtlasPage_createTexture (spAtlasPage* self, const char* path) {
-}
-void _spAtlasPage_disposeTexture (spAtlasPage* self) {
-}
-
-char* _spUtil_readFile (const char* path, int* length) {
-    return _readFile(path, length);
-}
+//void _spAtlasPage_createTexture (spAtlasPage* self, const char* path) {
+//}
+//void _spAtlasPage_disposeTexture (spAtlasPage* self) {
+//}
+//
+//char* _spUtil_readFile (const char* path, int* length) {
+//    return _readFile(path, length);
+//}
 
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_CONOBJECT(Skeleton);
+IMPLEMENT_CONOBJECT(SkeletonObject);
 
 //------------------------------------------------------------------------------
 
-Skeleton::Skeleton() :      mPreTickTime( 0.0f ),
+SkeletonObject::SkeletonObject() :      mPreTickTime( 0.0f ),
                             mPostTickTime( 0.0f ),
                             mTimeScale(1),
                             mLastFrameTime(0),
@@ -66,7 +66,7 @@ Skeleton::Skeleton() :      mPreTickTime( 0.0f ),
 
 //------------------------------------------------------------------------------
 
-Skeleton::~Skeleton()
+SkeletonObject::~SkeletonObject()
 {
     if (mSkeleton) {
         spSkeleton_dispose(mSkeleton);
@@ -80,24 +80,24 @@ Skeleton::~Skeleton()
 
 //------------------------------------------------------------------------------
 
-void Skeleton::initPersistFields()
+void SkeletonObject::initPersistFields()
 {
     // Call parent.
     Parent::initPersistFields();
     
-    addProtectedField("Asset", TypeSkeletonAssetPtr, Offset(mSkeletonAsset, Skeleton), &setSkeletonAsset, &getSkeletonAsset, &writeSkeletonAsset, "The skeleton asset ID used for the skeleton.");
-    addProtectedField("AnimationName", TypeString, Offset(mCurrentAnimation, Skeleton), &setAnimationName, &getAnimationName, &writeAnimationName, "The animation name to play.");
-    addProtectedField("Skin", TypeString, Offset(mCurrentSkin, Skeleton), &setCurrentSkin, &getCurrentSkin, &writeCurrentSkin, "The skin to use.");
+    addProtectedField("Asset", TypeSkeletonAssetPtr, Offset(mSkeletonAsset, SkeletonObject), &setSkeletonAsset, &getSkeletonAsset, &writeSkeletonAsset, "The skeleton asset ID used for the skeleton.");
+    addProtectedField("AnimationName", TypeString, Offset(mCurrentAnimation, SkeletonObject), &setAnimationName, &getAnimationName, &writeAnimationName, "The animation name to play.");
+    addProtectedField("Skin", TypeString, Offset(mCurrentSkin, SkeletonObject), &setCurrentSkin, &getCurrentSkin, &writeCurrentSkin, "The skin to use.");
     addProtectedField("RootBoneScale", TypeVector2, NULL, &setRootBoneScale, &getRootBoneScale, &writeRootBoneScale, "Scaling of the skeleton's root bone");
     addProtectedField("RootBoneOffset", TypeVector2, NULL, &setRootBoneOffset, &getRootBoneOffset, &writeRootBoneOffset, "X/Y offset of the skeleton's root bone");
-    addProtectedField("AnimationCycle", TypeBool, Offset(mAnimationCycle, Skeleton), &setAnimationCycle, &defaultProtectedGetFn, &writeAnimationCycle, "Whether the animation loops or not");
-    addField("FlipX", TypeBool, Offset(mFlipX, Skeleton), &writeFlipX, "");
-    addField("FlipY", TypeBool, Offset(mFlipY, Skeleton), &writeFlipY, "");
+    addProtectedField("AnimationCycle", TypeBool, Offset(mAnimationCycle, SkeletonObject), &setAnimationCycle, &defaultProtectedGetFn, &writeAnimationCycle, "Whether the animation loops or not");
+    addField("FlipX", TypeBool, Offset(mFlipX, SkeletonObject), &writeFlipX, "");
+    addField("FlipY", TypeBool, Offset(mFlipY, SkeletonObject), &writeFlipY, "");
 }
 
 //-----------------------------------------------------------------------------
 
-void Skeleton::preIntegrate( const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats )
+void SkeletonObject::preIntegrate( const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats )
 {
     // Note tick times.
     mPreTickTime = mPostTickTime;
@@ -126,7 +126,7 @@ void Skeleton::preIntegrate( const F32 totalTime, const F32 elapsedTime, DebugSt
 
 //-----------------------------------------------------------------------------
 
-void Skeleton::integrateObject( const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats )
+void SkeletonObject::integrateObject( const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats )
 {
     // Call Parent.
     Parent::integrateObject( totalTime, elapsedTime, pDebugStats );
@@ -141,7 +141,7 @@ void Skeleton::integrateObject( const F32 totalTime, const F32 elapsedTime, Debu
 
 //-----------------------------------------------------------------------------
 
-void Skeleton::interpolateObject( const F32 timeDelta )
+void SkeletonObject::interpolateObject( const F32 timeDelta )
 {
     // Call parent.
     Parent::interpolateObject( timeDelta );
@@ -159,13 +159,13 @@ void Skeleton::interpolateObject( const F32 timeDelta )
 
 //------------------------------------------------------------------------------
 
-void Skeleton::copyTo(SimObject* object)
+void SkeletonObject::copyTo(SimObject* object)
 {
     // Call to parent.
     Parent::copyTo(object);
     
     // Fetch object.
-    Skeleton* pComposite = dynamic_cast<Skeleton*>(object);
+    SkeletonObject* pComposite = dynamic_cast<SkeletonObject*>(object);
     
     // Sanity!
     AssertFatal(pComposite != NULL, "Skeleton::copyTo() - Object is not the correct type.");
@@ -180,7 +180,7 @@ void Skeleton::copyTo(SimObject* object)
 
 //-----------------------------------------------------------------------------
 
-void Skeleton::scenePrepareRender( const SceneRenderState* pSceneRenderState, SceneRenderQueue* pSceneRenderQueue )
+void SkeletonObject::scenePrepareRender( const SceneRenderState* pSceneRenderState, SceneRenderQueue* pSceneRenderQueue )
 {
     // Prepare render.
     SpriteBatch::prepareRender( this, pSceneRenderState, pSceneRenderQueue );
@@ -188,7 +188,7 @@ void Skeleton::scenePrepareRender( const SceneRenderState* pSceneRenderState, Sc
 
 //-----------------------------------------------------------------------------
 
-void Skeleton::sceneRender( const SceneRenderState* pSceneRenderState, const SceneRenderRequest* pSceneRenderRequest, BatchRender* pBatchRenderer )
+void SkeletonObject::sceneRender( const SceneRenderState* pSceneRenderState, const SceneRenderRequest* pSceneRenderRequest, BatchRender* pBatchRenderer )
 {
     // Render.
     SpriteBatch::render( pSceneRenderState, pSceneRenderRequest, pBatchRenderer );
@@ -197,7 +197,7 @@ void Skeleton::sceneRender( const SceneRenderState* pSceneRenderState, const Sce
 
 //-----------------------------------------------------------------------------
 
-bool Skeleton::setSkeletonAsset( const char* pSkeletonAssetId )
+bool SkeletonObject::setSkeletonAsset( const char* pSkeletonAssetId )
 {
     // Sanity!
     AssertFatal( pSkeletonAssetId != NULL, "Cannot use a NULL asset Id." );
@@ -213,7 +213,7 @@ bool Skeleton::setSkeletonAsset( const char* pSkeletonAssetId )
 
 //-----------------------------------------------------------------------------
 
-bool Skeleton::setAnimationName( const char* pAnimation, const bool isLooping )
+bool SkeletonObject::setAnimationName( const char* pAnimation, const bool isLooping )
 {
     // Make sure an asset was loaded.
     if (mSkeletonAsset.isNull())
@@ -232,7 +232,7 @@ bool Skeleton::setAnimationName( const char* pAnimation, const bool isLooping )
 
 //-----------------------------------------------------------------------------
 
-bool Skeleton::setMix( const char* pFromAnimation, const char* pToAnimation, float time)
+bool SkeletonObject::setMix( const char* pFromAnimation, const char* pToAnimation, float time)
 {
     if (mSkeletonAsset.isNull())
     {
@@ -274,7 +274,7 @@ bool Skeleton::setMix( const char* pFromAnimation, const char* pToAnimation, flo
 
 //-----------------------------------------------------------------------------
 
-bool Skeleton::setCurrentSkin( const char* pSkin )
+bool SkeletonObject::setCurrentSkin( const char* pSkin )
 {
     if (mSkeletonAsset.isNull() || !mSkeleton)
     {
@@ -298,7 +298,7 @@ bool Skeleton::setCurrentSkin( const char* pSkin )
 
 //-----------------------------------------------------------------------------
 
-void Skeleton::setRootBoneScale(const Vector2& scale)
+void SkeletonObject::setRootBoneScale(const Vector2& scale)
 {
     mSkeletonScale = scale;
     
@@ -315,7 +315,7 @@ void Skeleton::setRootBoneScale(const Vector2& scale)
 
 //-----------------------------------------------------------------------------
 
-void Skeleton::setRootBoneOffset(const Vector2& offset)
+void SkeletonObject::setRootBoneOffset(const Vector2& offset)
 {
     mSkeletonOffset = offset;
     
@@ -332,7 +332,7 @@ void Skeleton::setRootBoneOffset(const Vector2& offset)
 
 //-----------------------------------------------------------------------------
 
-void Skeleton::generateComposition( void )
+void SkeletonObject::generateComposition( void )
 {
     // Clear existing visualization
     clearSprites();
@@ -380,7 +380,7 @@ void Skeleton::generateComposition( void )
 
 //-----------------------------------------------------------------------------
 
-void Skeleton::updateComposition( const F32 time )
+void SkeletonObject::updateComposition( const F32 time )
 {
     // Update position/orientation/state of visualization
     float delta = (time - mLastFrameTime) * mTimeScale;
@@ -463,7 +463,7 @@ void Skeleton::updateComposition( const F32 time )
     }
 }
 
-void Skeleton::onAnimationFinished()
+void SkeletonObject::onAnimationFinished()
 {
     // Do script callback.
     Con::executef( this, 2, "onAnimationFinished", mCurrentAnimation );
