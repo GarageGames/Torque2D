@@ -30,7 +30,7 @@
 		27908E0E18A3F8CB002D41BD /* Slot.c in Sources */ = {isa = PBXBuildFile; fileRef = 27908DF518A3F8CB002D41BD /* Slot.c */; };
 		27908E0F18A3F8CB002D41BD /* SlotData.c in Sources */ = {isa = PBXBuildFile; fileRef = 27908DF718A3F8CB002D41BD /* SlotData.c */; };
 		27908E1318A3F904002D41BD /* SkeletonAsset.cc in Sources */ = {isa = PBXBuildFile; fileRef = 27908E1118A3F904002D41BD /* SkeletonAsset.cc */; };
-		27908E1718A3F91F002D41BD /* Skeleton.cc in Sources */ = {isa = PBXBuildFile; fileRef = 27908E1518A3F91F002D41BD /* Skeleton.cc */; };
+		27908E1718A3F91F002D41BD /* SkeletonObject.cc in Sources */ = {isa = PBXBuildFile; fileRef = 27908E1518A3F91F002D41BD /* SkeletonObject.cc */; };
 		2A03300D165D1D2100E9CD70 /* unitTesting.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2A03300B165D1D2100E9CD70 /* unitTesting.cc */; };
 		2A033011165D1D4100E9CD70 /* platformFileIoTests.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2A033010165D1D4100E9CD70 /* platformFileIoTests.cc */; };
 		2A25739016A48DAC00363C6F /* ParticlePlayer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2A25738E16A48DAC00363C6F /* ParticlePlayer.cc */; };
@@ -544,9 +544,9 @@
 		27908E1018A3F904002D41BD /* SkeletonAsset_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonAsset_ScriptBinding.h; sourceTree = "<group>"; };
 		27908E1118A3F904002D41BD /* SkeletonAsset.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SkeletonAsset.cc; sourceTree = "<group>"; };
 		27908E1218A3F904002D41BD /* SkeletonAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonAsset.h; sourceTree = "<group>"; };
-		27908E1418A3F91F002D41BD /* Skeleton_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skeleton_ScriptBinding.h; sourceTree = "<group>"; };
-		27908E1518A3F91F002D41BD /* Skeleton.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Skeleton.cc; sourceTree = "<group>"; };
-		27908E1618A3F91F002D41BD /* Skeleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skeleton.h; sourceTree = "<group>"; };
+		27908E1418A3F91F002D41BD /* SkeletonObject_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonObject_ScriptBinding.h; sourceTree = "<group>"; };
+		27908E1518A3F91F002D41BD /* SkeletonObject.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SkeletonObject.cc; sourceTree = "<group>"; };
+		27908E1618A3F91F002D41BD /* SkeletonObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonObject.h; sourceTree = "<group>"; };
 		2797C9E117F4E12500625B51 /* eaxtypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eaxtypes.h; sourceTree = "<group>"; };
 		2A03300B165D1D2100E9CD70 /* unitTesting.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = unitTesting.cc; path = ../../../source/testing/unitTesting.cc; sourceTree = "<group>"; };
 		2A03300C165D1D2100E9CD70 /* unitTesting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = unitTesting.h; path = ../../../source/testing/unitTesting.h; sourceTree = "<group>"; };
@@ -2298,9 +2298,9 @@
 				86BC7ED116518D4600D96ADF /* ShapeVector.cc */,
 				86BC7ED216518D4600D96ADF /* ShapeVector.h */,
 				86BC7ED316518D4600D96ADF /* ShapeVector_ScriptBinding.h */,
-				27908E1518A3F91F002D41BD /* Skeleton.cc */,
-				27908E1618A3F91F002D41BD /* Skeleton.h */,
-				27908E1418A3F91F002D41BD /* Skeleton_ScriptBinding.h */,
+				27908E1518A3F91F002D41BD /* SkeletonObject.cc */,
+				27908E1618A3F91F002D41BD /* SkeletonObject.h */,
+				27908E1418A3F91F002D41BD /* SkeletonObject_ScriptBinding.h */,
 				86BC7ED416518D4600D96ADF /* Sprite.cc */,
 				86BC7ED516518D4600D96ADF /* Sprite.h */,
 				86BC7ED616518D4600D96ADF /* Sprite_ScriptBinding.h */,
@@ -3357,7 +3357,7 @@
 				86D77046165687220046D71F /* memStream.cc in Sources */,
 				86D77047165687220046D71F /* nStream.cc in Sources */,
 				86D77048165687220046D71F /* resizeStream.cc in Sources */,
-				27908E1718A3F91F002D41BD /* Skeleton.cc in Sources */,
+				27908E1718A3F91F002D41BD /* SkeletonObject.cc in Sources */,
 				86D77049165687220046D71F /* resourceDictionary.cc in Sources */,
 				27908E0018A3F8CB002D41BD /* AttachmentLoader.c in Sources */,
 				86D7704A165687220046D71F /* resourceManager.cc in Sources */,

@@ -206,7 +206,7 @@ SET(T2D_SRCS
 	../../source/2d/sceneobject/SceneObjectSet.cc
 	../../source/2d/sceneobject/Scroller.cc
 	../../source/2d/sceneobject/ShapeVector.cc
-	../../source/2d/sceneobject/Skeleton.cc
+	../../source/2d/sceneobject/SkeletonObject.cc
 	../../source/2d/sceneobject/Sprite.cc
 	../../source/2d/sceneobject/Trigger.cc
 	../../source/algorithm/crc.cc
