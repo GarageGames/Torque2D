@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		27908E1B18A3FA9C002D41BD /* SkeletonAsset.cc in Sources */ = {isa = PBXBuildFile; fileRef = 27908E1918A3FA9C002D41BD /* SkeletonAsset.cc */; };
-		27908E1F18A3FAB1002D41BD /* Skeleton.cc in Sources */ = {isa = PBXBuildFile; fileRef = 27908E1D18A3FAB1002D41BD /* Skeleton.cc */; };
+		27908E1F18A3FAB1002D41BD /* SkeletonObject.cc in Sources */ = {isa = PBXBuildFile; fileRef = 27908E1D18A3FAB1002D41BD /* SkeletonObject.cc */; };
 		27908E4E18A3FAE1002D41BD /* Animation.c in Sources */ = {isa = PBXBuildFile; fileRef = 27908E2118A3FAE1002D41BD /* Animation.c */; };
 		27908E4F18A3FAE1002D41BD /* AnimationState.c in Sources */ = {isa = PBXBuildFile; fileRef = 27908E2318A3FAE1002D41BD /* AnimationState.c */; };
 		27908E5018A3FAE1002D41BD /* AnimationStateData.c in Sources */ = {isa = PBXBuildFile; fileRef = 27908E2518A3FAE1002D41BD /* AnimationStateData.c */; };
@@ -514,9 +514,9 @@
 		27908E1818A3FA9C002D41BD /* SkeletonAsset_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonAsset_ScriptBinding.h; sourceTree = "<group>"; };
 		27908E1918A3FA9C002D41BD /* SkeletonAsset.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SkeletonAsset.cc; sourceTree = "<group>"; };
 		27908E1A18A3FA9C002D41BD /* SkeletonAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonAsset.h; sourceTree = "<group>"; };
-		27908E1C18A3FAB1002D41BD /* Skeleton_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skeleton_ScriptBinding.h; sourceTree = "<group>"; };
-		27908E1D18A3FAB1002D41BD /* Skeleton.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Skeleton.cc; sourceTree = "<group>"; };
-		27908E1E18A3FAB1002D41BD /* Skeleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skeleton.h; sourceTree = "<group>"; };
+		27908E1C18A3FAB1002D41BD /* SkeletonObject_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonObject_ScriptBinding.h; sourceTree = "<group>"; };
+		27908E1D18A3FAB1002D41BD /* SkeletonObject.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SkeletonObject.cc; sourceTree = "<group>"; };
+		27908E1E18A3FAB1002D41BD /* SkeletonObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonObject.h; sourceTree = "<group>"; };
 		27908E2118A3FAE1002D41BD /* Animation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Animation.c; path = ../../../source/spine/Animation.c; sourceTree = "<group>"; };
 		27908E2218A3FAE1002D41BD /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Animation.h; path = ../../../source/spine/Animation.h; sourceTree = "<group>"; };
 		27908E2318A3FAE1002D41BD /* AnimationState.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = AnimationState.c; path = ../../../source/spine/AnimationState.c; sourceTree = "<group>"; };
@@ -1986,9 +1986,9 @@
 		867BAD4516AEC9050033868F /* sceneobject */ = {
 			isa = PBXGroup;
 			children = (
-				27908E1C18A3FAB1002D41BD /* Skeleton_ScriptBinding.h */,
-				27908E1D18A3FAB1002D41BD /* Skeleton.cc */,
-				27908E1E18A3FAB1002D41BD /* Skeleton.h */,
+				27908E1C18A3FAB1002D41BD /* SkeletonObject_ScriptBinding.h */,
+				27908E1D18A3FAB1002D41BD /* SkeletonObject.cc */,
+				27908E1E18A3FAB1002D41BD /* SkeletonObject.h */,
 				2AA6866516D69968003CEF0A /* SceneObjectList.cc */,
 				2AA6866616D69968003CEF0A /* SceneObjectList.h */,
 				2AA6866716D69968003CEF0A /* SceneObjectSet_ScriptBinding.h */,
@@ -3521,7 +3521,7 @@
 				867BB07116AEC9050033868F /* guiFilterCtrl.cc in Sources */,
 				867BB07316AEC9050033868F /* guiImageList.cc in Sources */,
 				867BB07416AEC9050033868F /* guiInspector.cc in Sources */,
-				27908E1F18A3FAB1002D41BD /* Skeleton.cc in Sources */,
+				27908E1F18A3FAB1002D41BD /* SkeletonObject.cc in Sources */,
 				867BB07516AEC9050033868F /* guiInspectorTypes.cc in Sources */,
 				27908E5F18A3FAE1002D41BD /* SkeletonData.c in Sources */,
 				867BB07616AEC9050033868F /* guiMenuBar.cc in Sources */,
