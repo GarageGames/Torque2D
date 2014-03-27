@@ -56,8 +56,6 @@
 #include <AL/alc.h>
 #include "platform/eaxtypes.h"
 #else
-#include <AL/al.h>
-#include <AL/alc.h>
 // declare externs of the AL fns here.
 #include "al/altypes.h"
 #include "al/alctypes.h"
