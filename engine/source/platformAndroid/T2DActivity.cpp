@@ -346,7 +346,7 @@ void androidKeyboardEvent(int keyval, bool make) {
    event.action     = make ? SI_MAKE : SI_BREAK;
    event.modifier   = 0;
    event.ascii      = keyCode;
-   event.fValue     = make ? 1.0f : 0.0f;
+   event.fValue[0]  = make ? 1.0f : 0.0f;
 
    Game->postEvent(event);
 }
@@ -1261,7 +1261,7 @@ void android_main(struct android_app* state) {
 						double userAcc[6] = { event.acceleration.x, event.acceleration.y, event.acceleration.z,0,0,0};
 
 						inputEvent.deviceInst = 0;
-						inputEvent.fValue = userAcc[i];
+						inputEvent.fValue[0] = userAcc[i];
 						inputEvent.deviceType = AccelerometerDeviceType;
 						inputEvent.objType = accelAxes[i];
 						inputEvent.objInst = i;
