@@ -75,7 +75,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../../Lib/LeapSDK/include;../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../Source;../../Source/persistence/rapidjson/include;../../Source/persistence/libjson;../../source/testing/googleTest;../../source/testing/googleTest/include;../../source/testing/googleTest;../../source/testing/googleTest/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Lib/LeapSDK/include;../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../source;../../source/persistence/rapidjson/include;../../source/persistence/libjson;../../source/testing/googleTest;../../source/testing/googleTest/include;../../source/spine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>TORQUE_DEBUG;TORQUE_DEBUG_GUARD;_CRT_SECURE_NO_DEPRECATE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -124,7 +124,7 @@
     <ClCompile>
       <Optimization>MinSpace</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>../../Lib/LeapSDK/include;../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../Source;../../Source/persistence/rapidjson/include;../../Source/persistence/libjson;../../source/testing/googleTest;../../source/testing/googleTest/include;../../source/testing/googleTest;../../source/testing/googleTest/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Lib/LeapSDK/include;../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../source;../../source/persistence/rapidjson/include;../../source/persistence/libjson;../../source/testing/googleTest;../../source/testing/googleTest/include;../../source/spine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>UNICODE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -245,6 +245,7 @@
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetEmitter.cc" />
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetField.cc" />
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetFieldCollection.cc" />
+    <ClCompile Include="..\..\source\2d\assets\SkeletonAsset.cc" />
     <ClCompile Include="..\..\source\2d\controllers\AmbientForceController.cc" />
     <ClCompile Include="..\..\source\2d\controllers\core\GroupedSceneController.cc" />
     <ClCompile Include="..\..\source\2d\controllers\core\PickingSceneController.cc" />
@@ -275,6 +276,7 @@
     <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectSet.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Scroller.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\ShapeVector.cc" />
+    <ClCompile Include="..\..\source\2d\sceneobject\SkeletonObject.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Sprite.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Trigger.cc" />
     <ClCompile Include="..\..\source\2d\scene\ContactFilter.cc" />
@@ -583,6 +585,28 @@
     <ClCompile Include="..\..\source\sim\SimObjectList.cc" />
     <ClCompile Include="..\..\source\sim\simSerialize.cpp" />
     <ClCompile Include="..\..\source\sim\simSet.cc" />
+    <ClCompile Include="..\..\source\spine\Animation.c" />
+    <ClCompile Include="..\..\source\spine\AnimationState.c" />
+    <ClCompile Include="..\..\source\spine\AnimationStateData.c" />
+    <ClCompile Include="..\..\source\spine\Atlas.c" />
+    <ClCompile Include="..\..\source\spine\AtlasAttachmentLoader.c" />
+    <ClCompile Include="..\..\source\spine\Attachment.c" />
+    <ClCompile Include="..\..\source\spine\AttachmentLoader.c" />
+    <ClCompile Include="..\..\source\spine\Bone.c" />
+    <ClCompile Include="..\..\source\spine\BoneData.c" />
+    <ClCompile Include="..\..\source\spine\BoundingBoxAttachment.c" />
+    <ClCompile Include="..\..\source\spine\Event.c" />
+    <ClCompile Include="..\..\source\spine\EventData.c" />
+    <ClCompile Include="..\..\source\spine\extension.c" />
+    <ClCompile Include="..\..\source\spine\Json.c" />
+    <ClCompile Include="..\..\source\spine\RegionAttachment.c" />
+    <ClCompile Include="..\..\source\spine\Skeleton.c" />
+    <ClCompile Include="..\..\source\spine\SkeletonBounds.c" />
+    <ClCompile Include="..\..\source\spine\SkeletonData.c" />
+    <ClCompile Include="..\..\source\spine\SkeletonJson.c" />
+    <ClCompile Include="..\..\source\spine\Skin.c" />
+    <ClCompile Include="..\..\source\spine\Slot.c" />
+    <ClCompile Include="..\..\source\spine\SlotData.c" />
     <ClCompile Include="..\..\source\string\findMatch.cc" />
     <ClCompile Include="..\..\source\string\stringBuffer.cc" />
     <ClCompile Include="..\..\source\string\stringStack.cc" />
@@ -635,6 +659,8 @@
     <ClInclude Include="..\..\source\2d\assets\ParticleAssetField.h" />
     <ClInclude Include="..\..\source\2d\assets\ParticleAssetFieldCollection.h" />
     <ClInclude Include="..\..\source\2d\assets\ParticleAsset_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\assets\SkeletonAsset.h" />
+    <ClInclude Include="..\..\source\2d\assets\SkeletonAsset_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\controllers\AmbientForceController.h" />
     <ClInclude Include="..\..\source\2d\controllers\AmbientForceController_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\controllers\core\GroupedSceneController.h" />
@@ -689,6 +715,8 @@
     <ClInclude Include="..\..\source\2d\sceneobject\Scroller_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\ShapeVector.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\ShapeVector_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\SkeletonObject.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\SkeletonObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Sprite.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Sprite_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Trigger.h" />
@@ -1137,6 +1165,29 @@
     <ClInclude Include="..\..\source\sim\simSerialize_ScriptBinding.h" />
     <ClInclude Include="..\..\source\sim\simSet.h" />
     <ClInclude Include="..\..\source\sim\simSet_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\spine\Animation.h" />
+    <ClInclude Include="..\..\source\spine\AnimationState.h" />
+    <ClInclude Include="..\..\source\spine\AnimationStateData.h" />
+    <ClInclude Include="..\..\source\spine\Atlas.h" />
+    <ClInclude Include="..\..\source\spine\AtlasAttachmentLoader.h" />
+    <ClInclude Include="..\..\source\spine\Attachment.h" />
+    <ClInclude Include="..\..\source\spine\AttachmentLoader.h" />
+    <ClInclude Include="..\..\source\spine\Bone.h" />
+    <ClInclude Include="..\..\source\spine\BoneData.h" />
+    <ClInclude Include="..\..\source\spine\BoundingBoxAttachment.h" />
+    <ClInclude Include="..\..\source\spine\Event.h" />
+    <ClInclude Include="..\..\source\spine\EventData.h" />
+    <ClInclude Include="..\..\source\spine\extension.h" />
+    <ClInclude Include="..\..\source\spine\Json.h" />
+    <ClInclude Include="..\..\source\spine\RegionAttachment.h" />
+    <ClInclude Include="..\..\source\spine\Skeleton.h" />
+    <ClInclude Include="..\..\source\spine\SkeletonBounds.h" />
+    <ClInclude Include="..\..\source\spine\SkeletonData.h" />
+    <ClInclude Include="..\..\source\spine\SkeletonJson.h" />
+    <ClInclude Include="..\..\source\spine\Skin.h" />
+    <ClInclude Include="..\..\source\spine\Slot.h" />
+    <ClInclude Include="..\..\source\spine\SlotData.h" />
+    <ClInclude Include="..\..\source\spine\spine.h" />
     <ClInclude Include="..\..\source\string\findMatch.h" />
     <ClInclude Include="..\..\source\string\stringBuffer.h" />
     <ClInclude Include="..\..\source\string\stringBuffer_ScriptBinding.h" />
