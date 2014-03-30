@@ -555,9 +555,25 @@ void ImageAsset::setCellHeight( const S32 cellheight )
 
 //------------------------------------------------------------------------------
 
+Vector2 ImageAsset::getExplicitCellOffset(const S32 cellIndex)
+{
+    if ( !getExplicitMode() )
+    {
+        // No, so warn.
+        Con::warnf( "ImageAsset() - Cannot perform explicit cell operation when not in explicit mode." );
+        return NULL;
+    }
+    
+    ImageAsset::FrameArea::PixelArea thisCell = mExplicitFrames.at(cellIndex);
+    return(thisCell.mPixelOffset);
+
+}
+
+//------------------------------------------------------------------------------
+
 S32 ImageAsset::getExplicitCellWidth(const S32 cellIndex)
 {
-	if ( !getExplicitMode() )
+    if ( !getExplicitMode() )
     {
         // No, so warn.
         Con::warnf( "ImageAsset() - Cannot perform explicit cell operation when not in explicit mode." );
@@ -573,16 +589,70 @@ S32 ImageAsset::getExplicitCellWidth(const S32 cellIndex)
 
 S32 ImageAsset::getExplicitCellHeight(const S32 cellIndex)
 {
-	if ( !getExplicitMode() )
+    if ( !getExplicitMode() )
     {
         // No, so warn.
         Con::warnf( "ImageAsset() - Cannot perform explicit cell operation when not in explicit mode." );
         return (0);
-	}
-	
+    }
+    
     ImageAsset::FrameArea::PixelArea thisCell = mExplicitFrames.at(cellIndex);
     return(thisCell.mPixelHeight);
 
+}
+
+//------------------------------------------------------------------------------
+
+StringTableEntry ImageAsset::getExplicitCellName(const S32 cellIndex)
+{
+    if ( !getExplicitMode() )
+    {
+        // No, so warn.
+        Con::warnf( "ImageAsset() - Cannot perform explicit cell operation when not in explicit mode." );
+        return NULL;
+    }
+    
+    ImageAsset::FrameArea::PixelArea thisCell = mExplicitFrames.at(cellIndex);
+    return(thisCell.mRegionName);
+
+}
+
+//------------------------------------------------------------------------------
+
+S32 ImageAsset::getExplicitCellIndex(const char* regionName)
+{
+    if ( !getExplicitMode() )
+    {
+        // No, so warn.
+        Con::warnf( "ImageAsset() - Cannot perform explicit cell operation when not in explicit mode." );
+        return NULL;
+    }
+    
+    // Set up a frame counter
+    S32 frameCounter = 0;
+    
+    // Interate through the vector
+    for( typeExplicitFrameAreaVector::iterator frameItr = mExplicitFrames.begin(); frameItr != mExplicitFrames.end(); ++frameItr )
+    {
+        // Grab the current pixelArea
+        const FrameArea::PixelArea& pixelArea = *frameItr;
+        
+        // Check to see if the name matches the argument
+        if (!dStrcmp(pixelArea.mRegionName, regionName))
+        {
+            // Found it, so return the frame
+            return frameCounter;
+        }
+        else
+        {
+            ++frameCounter;
+        }
+    }
+    
+    // Didn't find it, so warn
+    Con::warnf( "ImageAsset::getExplicitCellIndex() - Cannot find %s cell.", regionName );
+    return NULL;
+    
 }
 
 //------------------------------------------------------------------------------
@@ -910,7 +980,7 @@ bool ImageAsset::removeExplicitCell( const char* regionName )
         const FrameArea::PixelArea& pixelArea = *frameItr;
         
         // Check to see if the name matches the argument
-        if (pixelArea.mRegionName == regionName)
+        if (!dStrcmp(pixelArea.mRegionName, regionName))
         {
             // Found it, so erase it and return success
             mExplicitFrames.erase(frameItr);
@@ -935,14 +1005,13 @@ ImageAsset::FrameArea& ImageAsset::getCellByName( const char* cellName)
         return BadFrameArea;
     }
     
-    // Interate through the vector
     for( typeFrameAreaVector::iterator frameItr = mFrames.begin(); frameItr != mFrames.end(); ++frameItr )
     {
         // Grab the current pixelArea
         const FrameArea::PixelArea& pixelArea = frameItr->mPixelArea;
         
         // Check to see if the name matches the argument
-        if (pixelArea.mRegionName == cellName)
+        if (!dStrcmp(pixelArea.mRegionName, cellName))
         {
             // Found it, so erase it and return success
             return *frameItr;

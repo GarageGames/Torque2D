@@ -447,7 +447,7 @@ void SkeletonObject::updateComposition( const F32 time )
         pSprite->setExplicitVertices(vertices);
         
         pSprite->setImage(assetId);
-        pSprite->setImageFrameByName(attachment->name);
+        pSprite->setNamedImageFrame(attachment->name);
     }
     
     if (mLastFrameTime >= mTotalAnimationTime)

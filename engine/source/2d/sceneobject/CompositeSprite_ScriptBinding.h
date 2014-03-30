@@ -367,12 +367,30 @@ ConsoleMethodWithDocs(CompositeSprite, isSpriteSelected, ConsoleBool, 2, 2, ())
     @param imageFrame The image frame of the imageAssetId to set the sprite to.
     @return No return value.
 */
-ConsoleMethodWithDocs(CompositeSprite, setSpriteImage, ConsoleVoid, 3, 4, (imageAssetId, [int imageFrame]))
+ConsoleMethodWithDocs(CompositeSprite, setSpriteImage, ConsoleVoid, 3, 4, (imageAssetId, [imageFrame]))
 {
-    // Fetch frame.
-    const U32 frame = argc >=4 ? dAtoi(argv[3]) : 0;
-
-    object->setSpriteImage( argv[2], frame );
+    // Was a frame specified?
+    if (argc >= 4)
+    {
+        // Was it a number or a string?
+        if (!dIsalpha(*argv[3]))
+        {
+            // Fetch the numerical frame and set the image
+            const U32 frame = argc >= 4 ? dAtoi(argv[3]) : 0;
+            object->setSpriteImage( argv[2], frame );
+        }
+        else
+        {
+            // Set the image and pass the named frame string
+            object->setSpriteImage( argv[2], argv[3] );
+        }
+    }
+    else
+    {
+        // Frame was not specified, use default 0 and set the image
+        const U32 frame = 0;
+        object->setSpriteImage( argv[2], frame );
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -407,6 +425,27 @@ ConsoleMethodWithDocs(CompositeSprite, setSpriteImageFrame, ConsoleVoid, 3, 3, (
 ConsoleMethodWithDocs(CompositeSprite, getSpriteImageFrame, ConsoleInt, 2, 2, ())
 {
     return object->getSpriteImageFrame();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Sets the sprite named image frame.
+    @param namedFrame The named image frame to set the sprite to.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(CompositeSprite, setSpriteNamedImageFrame, ConsoleVoid, 3, 3, (namedFrame))
+{
+    object->setSpriteNamedImageFrame( argv[2] );
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets the sprite named image frame.
+    @return The sprite named image frame.
+*/
+ConsoleMethodWithDocs(CompositeSprite, getSpriteNamedImageFrame, ConsoleString, 2, 2, ())
+{
+    return object->getSpriteNamedImageFrame();
 }
 
 //-----------------------------------------------------------------------------
@@ -1172,16 +1211,16 @@ ConsoleMethodWithDocs(CompositeSprite, pickArea, ConsoleString, 4, 6, (startx/y,
     aabb.upperBound.x = getMax( v1.x, v2.x );
     aabb.upperBound.y = getMax( v1.y, v2.y );
 
-	// Calculate local OOBB.
+    // Calculate local OOBB.
     b2Vec2 localOOBB[4];
     CoreMath::mAABBtoOOBB( aabb, localOOBB );
     CoreMath::mCalculateInverseOOBB( localOOBB, object->getRenderTransform(), localOOBB );
 
-	// Calculate local AABB.
+    // Calculate local AABB.
     b2AABB localAABB;
     CoreMath::mOOBBtoAABB( localOOBB, localAABB );
   
-	// Convert OOBB to a PolygonShape
+    // Convert OOBB to a PolygonShape
     b2PolygonShape oobb_polygon;
     oobb_polygon.Set(localOOBB, 4);
 

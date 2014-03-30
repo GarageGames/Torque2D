@@ -553,28 +553,60 @@ ConsoleMethodWithDocs(ParticleAssetEmitter, getImage, ConsoleString, 2, 2, ())
 
 //------------------------------------------------------------------------------
 
-/*! Sets the emitter to use the specified image frame.
-    @param frame The frame of the image to use..
+/*! Sets the emitter to use the specified numerical image frame.
+    @param frame The frame index of the image to use..
     @return Whether the operation was successful or not.
 */
 ConsoleMethodWithDocs(ParticleAssetEmitter, setImageFrame, ConsoleBool, 3, 3, (frame))
 {
+    // Are we in static mode?
+    if ( !object->isStaticFrameProvider() )
+    {
+        // No, so warn.
+        Con::warnf( "ParticleAssetEmitter::setImageFrame() - Method invalid, not in static mode." );
+        return false;
+    }
+
+    // Are we using named frames?
+    if ( object->isUsingNamedImageFrame() )
+    {
+        // Yes, so warn.
+        Con::warnf( "ParticleAssetEmitter::setImageFrame() - Method invalid, using named frames." );
+        return false;
+    }
+
     return object->setImageFrame( dAtoi(argv[2]) );
 }
 
 //------------------------------------------------------------------------------
 
-/*! Gets the asset Id of the image asset assigned to the emitter.
-    @return The asset Id of the image asset assigned to the emitter or nothing if no image is assigned.
+/*! Gets the frame index of the image asset assigned to the emitter.
+    @return The frame index of the image asset assigned to the emitter or nothing if no image is assigned.
 */
 ConsoleMethodWithDocs(ParticleAssetEmitter, getImageFrame, ConsoleInt, 2, 2, ())
 {
+    // Are we in static mode?
+    if ( !object->isStaticFrameProvider() )
+    {
+        // No, so warn.
+        Con::warnf( "ParticleAssetEmitter::getImageFrame() - Method invalid, not in static mode." );
+        return -1;
+    }
+
+    // Are we using named frames?
+    if ( object->isUsingNamedImageFrame() )
+    {
+        // Yes, so warn.
+        Con::warnf( "ParticleAssetEmitter::getImageFrame() - Method invalid, using named frames." );
+        return -1;
+    }
+
     return object->getImageFrame();
 }
 
 //------------------------------------------------------------------------------
 
-/*! Disables the Frame field and uses a random frame from the specified ImageAsset.
+/*! Disables the Frame and NamedFrame fields and uses a random frame from the specified ImageAsset.
     @param randomImageFrame Whether to use a random image frame or not.
     @return No return value.
 */
@@ -599,9 +631,25 @@ ConsoleMethodWithDocs(ParticleAssetEmitter, getRandomImageFrame, ConsoleBool, 2,
     @param frame String containing the name of the frame in the image to use.
     @return Whether the operation was successful or not.
 */
-ConsoleMethodWithDocs(ParticleAssetEmitter, setImageFrameName, ConsoleBool, 3, 3,  (frame))
+ConsoleMethodWithDocs(ParticleAssetEmitter, setNamedImageFrame, ConsoleBool, 3, 3,  (frame))
 {
-    return object->setImageFrameName( argv[2] );
+    // Are we in static mode?
+    if ( !object->isStaticFrameProvider() )
+    {
+        // No, so warn.
+        Con::warnf( "ParticleAssetEmitter::setNamedImageFrame() - Method invalid, not in static mode." );
+        return false;
+    }
+
+    // Are we using named frames?
+    if ( !object->isUsingNamedImageFrame() )
+    {
+        // No, so warn.
+        Con::warnf( "ParticleAssetEmitter::setNamedImageFrame() - Method invalid, not using named frames." );
+        return false;
+    }
+
+    return object->setNamedImageFrame( argv[2] );
 }
 
 //------------------------------------------------------------------------------
@@ -609,9 +657,35 @@ ConsoleMethodWithDocs(ParticleAssetEmitter, setImageFrameName, ConsoleBool, 3, 3
 /*! Gets the asset Id of the image asset assigned to the emitter.
     @return The asset Id of the image asset assigned to the emitter or nothing if no image is assigned.
 */
-ConsoleMethodWithDocs(ParticleAssetEmitter, getImageFrameName, ConsoleString, 2, 2, ())
+ConsoleMethodWithDocs(ParticleAssetEmitter, getNamedImageFrame, ConsoleString, 2, 2, ())
 {
-    return object->getImageFrameName();
+    // Are we in static mode?
+    if ( !object->isStaticFrameProvider() )
+    {
+        // No, so warn.
+        Con::warnf( "ParticleAssetEmitter::getNamedImageFrame() - Method invalid, not in static mode." );
+        return NULL;
+    }
+
+    // Are we using named frames?
+    if ( !object->isUsingNamedImageFrame() )
+    {
+        // No, so warn.
+        Con::warnf( "ParticleAssetEmitter::getNamedImageFrame() - Method invalid, not using named frames." );
+        return NULL;
+    }
+
+    return object->getNamedImageFrame();
+}
+
+//------------------------------------------------------------------------------
+
+/*! Gets whether the emitter is using a numerical or named image frame.
+    @return Returns true when using a named frame, false when using a numerical index.
+*/
+ConsoleMethodWithDocs(ParticleAssetEmitter, isUsingNamedImageFrame, ConsoleBool, 2, 2, ())
+{
+    return object->isUsingNamedImageFrame();
 }
 
 //------------------------------------------------------------------------------

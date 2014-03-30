@@ -255,32 +255,6 @@ ConsoleMethodWithDocs(ImageAsset, getCellWidth, ConsoleInt, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the CELL width in Explicit Mode.
-    @return the specified CELL width.
-*/
-ConsoleMethodWithDocs(ImageAsset, getExplicitCellWidth, ConsoleInt, 3,3, (CellIndex))
-{
-    // Fetch cell index.
-    const S32 cellIndex = dAtoi( argv[2] );
-
-    return(object->getExplicitCellWidth(cellIndex));
-}
-
-//-----------------------------------------------------------------------------
-
-/*! Gets the CELL height in Explicit Mode.
-    @return the specified CELL height.
-*/
-ConsoleMethodWithDocs(ImageAsset, getExplicitCellHeight, ConsoleInt, 3,3, (CellIndex))
-{
-    // Fetch cell index.
-    const S32 cellIndex = dAtoi( argv[2] );
-
-    return(object->getExplicitCellHeight(cellIndex));
-}
-
-//-----------------------------------------------------------------------------
-
 /*! Sets the CELL height.
     @return No return value.
 */
@@ -470,7 +444,7 @@ ConsoleMethodWithDocs(ImageAsset, removeExplicitCell, ConsoleBool, 7, 7, (int ce
 //-----------------------------------------------------------------------------
 
 /*! Set an explicit cell at the specified index.
-    @param cellIndex The zero-based index to insert the cell.  This will work when no cells are present.  If the index is beyond the cell count then the cell is simply added.
+    @param cellIndex The zero-based index to set the cell.
     @param cellOffsetX The offset in the X axis to the top-left of the cell.
     @param cellOffsetY The offset in the Y axis to the top-left of the cell.
     @param cellWidth The width of the cell.
@@ -503,6 +477,112 @@ ConsoleMethodWithDocs(ImageAsset, setExplicitCell, ConsoleBool, 8, 8, (int cellI
 ConsoleMethodWithDocs(ImageAsset, getExplicitCellCount, ConsoleInt, 2, 2, ())
 {
     return object->getExplicitCellCount();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets the CELL offset in Explicit Mode.
+    @param cell The cell index or cell name to use to find the specific offset.
+    @return The specified CELL width.
+*/
+ConsoleMethodWithDocs(ImageAsset, getExplicitCellOffset, ConsoleString, 3, 3, (cell))
+{
+    // Was it a number or a string?
+    if (!dIsalpha(*argv[2]))
+    {
+        // Using cell index.
+        const S32 cellIndex = dAtoi(argv[2]);
+        
+        return object->getExplicitCellOffset(cellIndex).scriptThis();
+    }
+    else
+    {
+        // Using cell name.
+        ImageAsset::FrameArea& frameRegion = object->getCellByName(argv[2]);
+        
+        const Vector2 offset = frameRegion.mPixelArea.mPixelOffset;
+        
+        return offset.scriptThis();
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets the CELL width in Explicit Mode.
+    @param cell The cell index or cell name to use to find the specific width.
+    @return The specified CELL width.
+*/
+ConsoleMethodWithDocs(ImageAsset, getExplicitCellWidth, ConsoleInt, 3, 3, (cell))
+{
+    S32 cellIndex;
+    
+    // Was it a number or a string?
+    if (!dIsalpha(*argv[2]))
+    {
+        // Using cell index.
+        cellIndex = dAtoi(argv[2]);
+        
+        return object->getExplicitCellWidth(cellIndex);
+    }
+    else
+    {
+        // Using cell name.
+        ImageAsset::FrameArea& frameRegion = object->getCellByName(argv[2]);
+        
+        return frameRegion.mPixelArea.mPixelWidth;
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets the CELL height in Explicit Mode.
+    @param cell The cell index or cell name to use to find the specific height.
+    @return The specified CELL height.
+*/
+ConsoleMethodWithDocs(ImageAsset, getExplicitCellHeight, ConsoleInt, 3, 3, (cell))
+{
+    S32 cellIndex;
+    
+    // Was it a number or a string?
+    if (!dIsalpha(*argv[2]))
+    {
+        // Using cell index.
+        cellIndex = dAtoi(argv[2]);
+        
+        return object->getExplicitCellHeight(cellIndex);
+    }
+    else
+    {
+        // Using cell name.
+        ImageAsset::FrameArea& frameRegion = object->getCellByName(argv[2]);
+        
+        return frameRegion.mPixelArea.mPixelHeight;
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets the CELL region name in Explicit Mode.
+    @param cell The cell index to use to find the specific name.
+    @return The specified CELL region name.
+*/
+ConsoleMethodWithDocs(ImageAsset, getExplicitCellName, ConsoleString, 3, 3, (cell))
+{
+    // Fetch cell index.
+    const S32 cellIndex = dAtoi(argv[2]);
+
+    return object->getExplicitCellName(cellIndex);
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets the CELL index number in Explicit Mode.
+    @param cellName The cell name to use to find the specific index.
+    @return The specified CELL index number.
+*/
+ConsoleMethodWithDocs(ImageAsset, getExplicitCellIndex, ConsoleInt, 3, 3, (cellName))
+{
+    return object->getExplicitCellIndex( argv[2] );
 }
 
 ConsoleMethodGroupEndWithDocs(ImageAsset)

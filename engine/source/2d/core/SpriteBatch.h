@@ -121,10 +121,13 @@ public:
     inline void deselectSprite( void ) { mSelectedSprite = NULL; }
     bool isSpriteSelected( void ) const { return mSelectedSprite != NULL; }
 
-    void setSpriteImage( const char* pAssetId, const U32 imageFrame = 0 );
+    void setSpriteImage( const char* pAssetId, const U32 imageFrame );
+    void setSpriteImage( const char* pAssetId, const char* namedFrame );
     StringTableEntry getSpriteImage( void ) const;
     void setSpriteImageFrame( const U32 imageFrame );
     U32 getSpriteImageFrame( void ) const;
+    void setSpriteNamedImageFrame( const char* namedFrame );
+    StringTableEntry getSpriteNamedImageFrame( void ) const;
     void setSpriteAnimation( const char* pAssetId );
     StringTableEntry getSpriteAnimation( void ) const;
     void clearSpriteAsset( void );

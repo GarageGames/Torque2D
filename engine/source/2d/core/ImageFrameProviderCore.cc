@@ -119,7 +119,7 @@ void ImageFrameProviderCore::copyTo( ImageFrameProviderCore* pImageFrameProvider
             if ( !isUsingNamedImageFrame() )
                 pImageFrameProviderCore->setImage( getImage(), getImageFrame() );
             else
-                pImageFrameProviderCore->setImage( getImage(), getImageFrameByName() );
+                pImageFrameProviderCore->setImage( getImage(), getNamedImageFrame() );
         }
     }
     else if ( mpAnimationAsset->notNull() )
@@ -187,7 +187,7 @@ bool ImageFrameProviderCore::validRender( void ) const
         if (!isUsingNamedImageFrame())
             return mpImageAsset->notNull() && ( getImageFrame() < (*mpImageAsset)->getFrameCount() );
         else
-            return mpImageAsset->notNull() && getImageFrameByName() != StringTable->EmptyString && ( (*mpImageAsset)->containsFrame(getImageFrameByName()) );
+            return mpImageAsset->notNull() && getNamedImageFrame() != StringTable->EmptyString && ( (*mpImageAsset)->containsFrame(getNamedImageFrame()) );
     }
 
     // No, so if the animation must be valid.
@@ -206,10 +206,10 @@ const ImageAsset::FrameArea& ImageFrameProviderCore::getProviderImageFrameArea( 
     // If it is a static frame and it's using named frames, get the image area based on mImageNameFrame
     // Otherwise, get the current animation frame
     if (isStaticFrameProvider())
-        return !isUsingNamedImageFrame() ? (*mpImageAsset)->getImageFrameArea(mImageFrame) : (*mpImageAsset)->getImageFrameArea(mImageNameFrame);
+        return !isUsingNamedImageFrame() ? (*mpImageAsset)->getImageFrameArea(mImageFrame) : (*mpImageAsset)->getImageFrameArea(mNamedImageFrame);
     else
         return !(*mpAnimationAsset)->getNamedCellsMode() ? (*mpAnimationAsset)->getImage()->getImageFrameArea(getCurrentAnimationFrame()) :
-                                                           (*mpAnimationAsset)->getImage()->getImageFrameArea(getCurrentAnimationFrameName());
+                                                           (*mpAnimationAsset)->getImage()->getImageFrameArea(getCurrentNamedAnimationFrame());
     
     // If we got here for some reason, that's bad. So return a bad area frame
     return BadFrameArea;
@@ -308,14 +308,8 @@ bool ImageFrameProviderCore::setImage( const char* pImageAssetId, const U32 fram
     if ( mpImageAsset->notNull() )
         setImageFrame( frame );
 
-    // Set Frame.
-    mImageFrame = frame;
-
     // Set as static provider.
     mStaticProvider = true;
-    
-    // Using a numerical frame index.
-    mUsingNameFrame = false;
 
     // Turn-off tick processing.
     setProcessTicks( false );
@@ -326,7 +320,7 @@ bool ImageFrameProviderCore::setImage( const char* pImageAssetId, const U32 fram
 
 //------------------------------------------------------------------------------
 
-bool ImageFrameProviderCore::setImage( const char* pImageAssetId, const char* pNameFrame )
+bool ImageFrameProviderCore::setImage( const char* pImageAssetId, const char* pNamedFrame )
 {
     // Finish if invalid image asset.
     if ( pImageAssetId == NULL )
@@ -337,16 +331,10 @@ bool ImageFrameProviderCore::setImage( const char* pImageAssetId, const char* pN
     
     // Set the image frame if the image asset was set.
     if ( mpImageAsset->notNull() )
-        setImageFrameByName( pNameFrame );
-    
-    // Set Frame.
-    mImageNameFrame = StringTable->insert(pNameFrame);
+        setNamedImageFrame( pNamedFrame );
     
     // Set as static provider.
     mStaticProvider = true;
-    
-    // Using a named frame index.
-    mUsingNameFrame = true;
     
     // Turn-off tick processing.
     setProcessTicks( false );
@@ -382,7 +370,7 @@ bool ImageFrameProviderCore::setImageFrame( const U32 frame )
     mImageFrame = frame;
 
     // Using a numerical frame index.
-    mUsingNameFrame = false;
+    mUsingNamedFrame = false;
 
     // Return Okay.
     return true;
@@ -390,30 +378,30 @@ bool ImageFrameProviderCore::setImageFrame( const U32 frame )
 
 //-----------------------------------------------------------------------------
 
-bool ImageFrameProviderCore::setImageFrameByName(const char* frame)
+bool ImageFrameProviderCore::setNamedImageFrame(const char* pNamedFrame)
 {
     // Check Existing Image.
     if ( mpImageAsset->isNull() )
     {
         // Warn.
-        Con::warnf("ImageFrameProviderCore::setImageNameFrame() - Cannot set Frame without existing asset Id.");
+        Con::warnf("ImageFrameProviderCore::setNamedImageFrame() - Cannot set Frame without existing asset Id.");
         
         // Return Here.
         return false;
     }
     
     // Check Frame Validity.
-    if ( frame == StringTable->EmptyString )
+    if ( pNamedFrame == StringTable->EmptyString )
     {
         // Warn.
-        Con::warnf( "ImageFrameProviderCore::setImageNameFrame() - Invalid Frame %s for asset Id '%s'.", frame, mpImageAsset->getAssetId() );
+        Con::warnf( "ImageFrameProviderCore::setNamedImageFrame() - Invalid Frame %s for asset Id '%s'.", pNamedFrame, mpImageAsset->getAssetId() );
         // Return Here.
         return false;
     }
     
     // Set Frame.
-    mImageNameFrame = StringTable->insert(frame);
-    mUsingNameFrame = true;
+    mNamedImageFrame = StringTable->insert(pNamedFrame);
+    mUsingNamedFrame = true;
     
     // Return Okay.
     return true;
@@ -437,7 +425,7 @@ const U32 ImageFrameProviderCore::getCurrentAnimationFrame( void ) const
 
 //-----------------------------------------------------------------------------
 
-const char* ImageFrameProviderCore::getCurrentAnimationFrameName( void ) const
+const char* ImageFrameProviderCore::getCurrentNamedAnimationFrame( void ) const
 {
     // Sanity!
     AssertFatal( mpAnimationAsset->notNull(), "Animation controller requested current image frame but no animation asset assigned." );
@@ -489,7 +477,7 @@ bool ImageFrameProviderCore::isAnimationValid( void ) const
     else
     {
         // Fetch the current name frame.
-        const char* frameName = getCurrentAnimationFrameName();
+        const char* frameName = getCurrentNamedAnimationFrame();
 
         if (!imageAsset->containsFrame(frameName))
             return false;
@@ -704,7 +692,7 @@ void ImageFrameProviderCore::clearAssets( void )
 
     // Reset remaining state.
     mImageFrame = 0;
-    mImageNameFrame = StringTable->EmptyString;
+    mNamedImageFrame = StringTable->EmptyString;
     mStaticProvider = true;
     setProcessTicks( false );
 }

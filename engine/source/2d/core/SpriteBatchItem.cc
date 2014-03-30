@@ -54,6 +54,7 @@ static StringTableEntry spriteBlendColorName        = StringTable->insert("Blend
 static StringTableEntry spriteAlphaTestName         = StringTable->insert("AlphaTest");
 static StringTableEntry spriteImageName             = StringTable->insert("Image");
 static StringTableEntry spriteImageFrameName        = StringTable->insert("Frame");
+static StringTableEntry spriteNamedImageFrameName   = StringTable->insert("NamedFrame");
 static StringTableEntry spriteAnimationName         = StringTable->insert("Animation");
 static StringTableEntry spriteDataObjectName        = StringTable->insert("DataObject");
 
@@ -350,8 +351,11 @@ void SpriteBatchItem::onTamlCustomWrite( TamlCustomNode* pParentNode )
             // Yes, so write image asset Id.
             pSpriteNode->addField( spriteImageName, assetId );
 
-            // Write image frame.
-            pSpriteNode->addField( spriteImageFrameName, getImageFrame() );
+            // Write the image frame.
+            if ( isUsingNamedImageFrame() )
+                pSpriteNode->addField( spriteNamedImageFrameName, getNamedImageFrame() );
+            else
+                pSpriteNode->addField( spriteImageFrameName, getImageFrame() );
         }
     }
     else
@@ -473,6 +477,11 @@ void SpriteBatchItem::onTamlCustomRead( const TamlCustomNode* pSpriteNode )
             // Set image frame if image is available.
             if ( getImage() != StringTable->EmptyString )
                 setImageFrame( imageFrame );
+        }
+        else if ( fieldName == spriteNamedImageFrameName )
+        {
+            if ( getImage() != StringTable->EmptyString )
+                setNamedImageFrame( pSpriteField->getFieldValue() );
         }
         else if ( fieldName == spriteAnimationName )
         {
