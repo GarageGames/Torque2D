@@ -98,7 +98,7 @@ void toggleSplashScreen(bool show)
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/SplashScreen");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.SplashScreen");
 	jclass SplashScreenClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jmethodID MethodSplashScreen = lJNIEnv->GetStaticMethodID(SplashScreenClass, "ToggleSplashScreen", "(Landroid/content/Context;ZII)V");
 	lJNIEnv->CallStaticVoidMethod(SplashScreenClass, MethodSplashScreen, lNativeActivity, (jboolean)show, (jint)platState.engine->width, (jint)platState.engine->height);
@@ -346,7 +346,7 @@ void androidKeyboardEvent(int keyval, bool make) {
    event.action     = make ? SI_MAKE : SI_BREAK;
    event.modifier   = 0;
    event.ascii      = keyCode;
-   event.fValue     = make ? 1.0f : 0.0f;
+   event.fValues[0]  = make ? 1.0f : 0.0f;
 
    Game->postEvent(event);
 }
@@ -1022,10 +1022,10 @@ void T2DActivity::enumerateFonts() {
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FontManager");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.FontManager");
 	jclass FontManagerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jmethodID MethodFontManager = lJNIEnv->GetStaticMethodID(FontManagerClass, "enumerateFonts", "(Landroid/content/Context;)V");
-	lJNIEnv->CallStaticObjectMethod(FontManagerClass, MethodFontManager, lNativeActivity);
+	lJNIEnv->CallStaticVoidMethod(FontManagerClass, MethodFontManager, lNativeActivity);
 	lJNIEnv->DeleteLocalRef(strClassName);
 
 	// Finished with the JVM.
@@ -1058,10 +1058,10 @@ void T2DActivity::dumpFontList() {
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FontManager");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.FontManager");
 	jclass FontManagerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jmethodID MethodFontManager = lJNIEnv->GetStaticMethodID(FontManagerClass, "dumpFontList", "()V");
-	lJNIEnv->CallStaticObjectMethod(FontManagerClass, MethodFontManager);
+	lJNIEnv->CallStaticVoidMethod(FontManagerClass, MethodFontManager);
 	lJNIEnv->DeleteLocalRef(strClassName);
 
 	// Finished with the JVM.
@@ -1094,7 +1094,7 @@ void T2DActivity::getFontPath(const char* fontName, char* fontPath) {
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FontManager");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.FontManager");
 	jstring strFontName = lJNIEnv->NewStringUTF(fontName);
 	jclass FontManagerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jmethodID MethodFontManager = lJNIEnv->GetStaticMethodID(FontManagerClass, "getFont", "(Ljava/lang/String;)Ljava/lang/String;");
@@ -1261,7 +1261,7 @@ void android_main(struct android_app* state) {
 						double userAcc[6] = { event.acceleration.x, event.acceleration.y, event.acceleration.z,0,0,0};
 
 						inputEvent.deviceInst = 0;
-						inputEvent.fValue = userAcc[i];
+						inputEvent.fValues[0] = userAcc[i];
 						inputEvent.deviceType = AccelerometerDeviceType;
 						inputEvent.objType = accelAxes[i];
 						inputEvent.objInst = i;
@@ -1329,7 +1329,7 @@ bool android_DumpDirectoriesExtra(Vector<StringTableEntry> &directoryVector)
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FileWalker");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.FileWalker");
 	jclass FileWalkerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jmethodID MethodExtraPaths = lJNIEnv->GetStaticMethodID(FileWalkerClass, "getRestOfDump", "()[Ljava/lang/String;");
 	jobjectArray stringArray = (jobjectArray)lJNIEnv->CallStaticObjectMethod(FileWalkerClass, MethodExtraPaths);
@@ -1397,7 +1397,7 @@ bool android_DumpDirectories(const char *basePath, const char *path, Vector<Stri
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FileWalker");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.FileWalker");
 	jclass FileWalkerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strDirName = lJNIEnv->NewStringUTF(basePath);
 	jstring strDirName2 = lJNIEnv->NewStringUTF(path);
@@ -1487,7 +1487,7 @@ bool android_DumpPathExtra(Vector<Platform::FileInfo>& fileVector)
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FileWalker");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.FileWalker");
 	jclass FileWalkerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jmethodID MethodExtraPaths = lJNIEnv->GetStaticMethodID(FileWalkerClass, "getRestOfDump", "()[Ljava/lang/String;");
 	jobjectArray stringArray = (jobjectArray)lJNIEnv->CallStaticObjectMethod(FileWalkerClass, MethodExtraPaths);
@@ -1636,7 +1636,7 @@ bool android_DumpPath(const char* dir, Vector<Platform::FileInfo>& fileVector, U
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FileWalker");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.FileWalker");
 	jclass FileWalkerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strDirName = lJNIEnv->NewStringUTF(dir);
 	jmethodID MethodFileWalker = lJNIEnv->GetStaticMethodID(FileWalkerClass, "DumpPath", "(Landroid/content/Context;Ljava/lang/String;Z)[Ljava/lang/String;");
@@ -1734,7 +1734,7 @@ void android_InitDirList(const char* dir)
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FileWalker");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.FileWalker");
 	jclass FileWalkerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strDirName = lJNIEnv->NewStringUTF(dir);
 	jmethodID MethodFileWalker = lJNIEnv->GetStaticMethodID(FileWalkerClass, "InitDirList", "(Landroid/content/Context;Ljava/lang/String;)V");
@@ -1775,7 +1775,7 @@ void android_GetNextDir(const char* pdir, char *dir)
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FileWalker");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.FileWalker");
 	jclass FileWalkerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strDirName = lJNIEnv->NewStringUTF(pdir);
 	jmethodID MethodFileWalker = lJNIEnv->GetStaticMethodID(FileWalkerClass, "GetNextDir", "(Ljava/lang/String;)Ljava/lang/String;");
@@ -1826,7 +1826,7 @@ void android_GetNextFile(const char* pdir, char *file)
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FileWalker");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.FileWalker");
 	jclass FileWalkerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strDirName = lJNIEnv->NewStringUTF(pdir);
 	jmethodID MethodFileWalker = lJNIEnv->GetStaticMethodID(FileWalkerClass, "GetNextFile", "(Ljava/lang/String;)Ljava/lang/String;");
@@ -1877,7 +1877,7 @@ bool android_IsFile(const char* path)
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FileWalker");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.FileWalker");
 	jclass FileWalkerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strDirName = lJNIEnv->NewStringUTF(path);
 	jmethodID MethodFileWalker = lJNIEnv->GetStaticMethodID(FileWalkerClass, "IsFile", "(Landroid/content/Context;Ljava/lang/String;)Z");
@@ -1929,7 +1929,7 @@ bool android_IsDir(const char* path)
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FileWalker");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.FileWalker");
 	jclass FileWalkerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strDirName = lJNIEnv->NewStringUTF(path);
 	jmethodID MethodFileWalker = lJNIEnv->GetStaticMethodID(FileWalkerClass, "IsDir", "(Landroid/content/Context;Ljava/lang/String;)Z");
@@ -1981,7 +1981,7 @@ U32 android_GetFileSize(const char* pFilePath)
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/FileWalker");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.FileWalker");
 	jclass FileWalkerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strFileName = lJNIEnv->NewStringUTF(pFilePath);
 	jmethodID MethodFileWalker = lJNIEnv->GetStaticMethodID(FileWalkerClass, "GetFileSize", "(Landroid/content/Context;Ljava/lang/String;)I");
@@ -2050,7 +2050,7 @@ bool Platform::openWebBrowser(const char *webAddress)
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/T2DUtilities");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.T2DUtilities");
 	jclass T2DUtilitiesClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strURL = lJNIEnv->NewStringUTF(webAddress);
 	jmethodID MethodT2DUtilities = lJNIEnv->GetStaticMethodID(T2DUtilitiesClass, "OpenURL", "(Landroid/content/Context;Ljava/lang/String;)V");
@@ -2091,7 +2091,7 @@ void android_AlertOK(const char *title, const char *message)
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/T2DUtilities");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.T2DUtilities");
 	jclass T2DUtilitiesClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strTitle = lJNIEnv->NewStringUTF(title);
 	jstring strMessage = lJNIEnv->NewStringUTF(message);
@@ -2132,7 +2132,7 @@ int android_checkAlert()
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/T2DUtilities");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.T2DUtilities");
 	jclass T2DUtilitiesClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jmethodID MethodT2DUtilities = lJNIEnv->GetStaticMethodID(T2DUtilitiesClass, "CheckAlert", "()I");
 	jint jret = lJNIEnv->CallStaticIntMethod(T2DUtilitiesClass, MethodT2DUtilities);
@@ -2174,7 +2174,7 @@ void android_AlertOKCancel(const char *title, const char *message)
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/T2DUtilities");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.T2DUtilities");
 	jclass T2DUtilitiesClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strTitle = lJNIEnv->NewStringUTF(title);
 	jstring strMessage = lJNIEnv->NewStringUTF(message);
@@ -2216,7 +2216,7 @@ void android_AlertRetry(const char *title, const char *message)
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/T2DUtilities");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.T2DUtilities");
 	jclass T2DUtilitiesClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strTitle = lJNIEnv->NewStringUTF(title);
 	jstring strMessage = lJNIEnv->NewStringUTF(message);
@@ -2258,7 +2258,7 @@ void android_AlertYesNo(const char *title, const char *message)
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/T2DUtilities");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.T2DUtilities");
 	jclass T2DUtilitiesClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strTitle = lJNIEnv->NewStringUTF(title);
 	jstring strMessage = lJNIEnv->NewStringUTF(message);
@@ -2300,7 +2300,7 @@ void android_LoadMusicTrack( const char *mFilename )
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/StreamingAudioPlayer");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.StreamingAudioPlayer");
 	jclass StreamingAudioPlayerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jstring strFilename = lJNIEnv->NewStringUTF(mFilename);
 	jmethodID MethodStreamingAudioPlayer = lJNIEnv->GetStaticMethodID(StreamingAudioPlayerClass, "LoadMusicTrack", "(Landroid/content/Context;Ljava/lang/String;)V");
@@ -2340,7 +2340,7 @@ void android_UnLoadMusicTrack()
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/StreamingAudioPlayer");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.StreamingAudioPlayer");
 	jclass StreamingAudioPlayerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jmethodID MethodStreamingAudioPlayer = lJNIEnv->GetStaticMethodID(StreamingAudioPlayerClass, "UnLoadMusicTrack", "()V");
 	lJNIEnv->CallStaticVoidMethod(StreamingAudioPlayerClass, MethodStreamingAudioPlayer);
@@ -2378,7 +2378,7 @@ bool android_isMusicTrackPlaying()
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/StreamingAudioPlayer");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.StreamingAudioPlayer");
 	jclass StreamingAudioPlayerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jmethodID MethodStreamingAudioPlayer = lJNIEnv->GetStaticMethodID(StreamingAudioPlayerClass, "isMusicTrackPlaying", "()Z");
 	jboolean jret = lJNIEnv->CallStaticBooleanMethod(StreamingAudioPlayerClass, MethodStreamingAudioPlayer);
@@ -2420,7 +2420,7 @@ void android_StartMusicTrack()
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/StreamingAudioPlayer");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.StreamingAudioPlayer");
 	jclass StreamingAudioPlayerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jmethodID MethodStreamingAudioPlayer = lJNIEnv->GetStaticMethodID(StreamingAudioPlayerClass, "startMusicTrack", "()V");
 	lJNIEnv->CallStaticVoidMethod(StreamingAudioPlayerClass, MethodStreamingAudioPlayer);
@@ -2458,7 +2458,7 @@ void android_StopMusicTrack()
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/StreamingAudioPlayer");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.StreamingAudioPlayer");
 	jclass StreamingAudioPlayerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jmethodID MethodStreamingAudioPlayer = lJNIEnv->GetStaticMethodID(StreamingAudioPlayerClass, "stopMusicTrack", "()V");
 	lJNIEnv->CallStaticVoidMethod(StreamingAudioPlayerClass, MethodStreamingAudioPlayer);
@@ -2496,7 +2496,7 @@ void android_setMusicTrackVolume(F32 volume)
 	jobject cls = lJNIEnv->CallObjectMethod(lNativeActivity, getClassLoader);
 	jclass classLoader = lJNIEnv->FindClass("java/lang/ClassLoader");
 	jmethodID findClass = lJNIEnv->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
-	jstring strClassName = lJNIEnv->NewStringUTF("com/garagegames/torque2d/StreamingAudioPlayer");
+	jstring strClassName = lJNIEnv->NewStringUTF("com.garagegames.torque2d.StreamingAudioPlayer");
 	jclass StreamingAudioPlayerClass = (jclass)lJNIEnv->CallObjectMethod(cls, findClass, strClassName);
 	jmethodID MethodStreamingAudioPlayer = lJNIEnv->GetStaticMethodID(StreamingAudioPlayerClass, "setMusicTrackVolume", "(F)V");
 	lJNIEnv->CallStaticVoidMethod(StreamingAudioPlayerClass, MethodStreamingAudioPlayer, (jfloat)volume);

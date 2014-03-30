@@ -83,7 +83,6 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
     				$(LOCAL_PATH)/../../../source/gui/editor \
     				$(LOCAL_PATH)/../../../source/gui/language \
     				$(LOCAL_PATH)/../../../source/input \
-					$(LOCAL_PATH)/../../../source/input/leapMotion \
     				$(LOCAL_PATH)/../../../source/io \
     				$(LOCAL_PATH)/../../../source/io/resource \
     				$(LOCAL_PATH)/../../../source/io/zip \
@@ -102,6 +101,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
     				$(LOCAL_PATH)/../../../source/platform/nativeDialogs \
     				$(LOCAL_PATH)/../../../source/platformAndroid \
     				$(LOCAL_PATH)/../../../source/sim \
+    				$(LOCAL_PATH)/../../../source/spine \
     				$(LOCAL_PATH)/../../../source/string 
 #    				$(LOCAL_PATH)/../../../source/testing \
 #    				$(LOCAL_PATH)/../../../source/testing/tests \
@@ -174,6 +174,7 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/2d/assets/ParticleAssetEmitter.cc \
 					../../../source/2d/assets/ParticleAssetField.cc \
 					../../../source/2d/assets/ParticleAssetFieldCollection.cc \
+					../../../source/2d/assets/SkeletonAsset.cc \
 					../../../source/2d/controllers/AmbientForceController.cc \
 					../../../source/2d/controllers/BuoyancyController.cc \
 					../../../source/2d/controllers/core/GroupedSceneController.cc \
@@ -204,6 +205,7 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/2d/sceneobject/SceneObjectSet.cc \
 					../../../source/2d/sceneobject/Scroller.cc \
 					../../../source/2d/sceneobject/ShapeVector.cc \
+					../../../source/2d/sceneobject/SkeletonObject.cc \
 					../../../source/2d/sceneobject/Sprite.cc \
 					../../../source/2d/sceneobject/Trigger.cc \
 					../../../source/2d/scene/ContactFilter.cc \
@@ -338,8 +340,6 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/gui/language/lang.cc \
 					../../../source/gui/messageVector.cc \
 					../../../source/input/actionMap.cc \
-					../../../source/input/leapMotion/leapMotionManager.cc \
-					../../../source/input/leapMotion/leapMotionUtil.cpp \
 					../../../source/io/bitStream.cc \
 					../../../source/io/bufferStream.cc \
 					../../../source/io/fileObject.cc \
@@ -509,6 +509,28 @@ LOCAL_SRC_FILES :=  ../../../lib/ljpeg/jcapimin.c \
 					../../../source/sim/SimObjectList.cc \
 					../../../source/sim/simSerialize.cpp \
 					../../../source/sim/simSet.cc \
+					../../../source/spine/Animation.c \
+					../../../source/spine/AnimationState.c \
+					../../../source/spine/AnimationStateData.c \
+					../../../source/spine/Atlas.c \
+					../../../source/spine/AtlasAttachmentLoader.c \
+					../../../source/spine/Attachment.c \
+					../../../source/spine/AttachmentLoader.c \
+					../../../source/spine/Bone.c \
+					../../../source/spine/BoneData.c \
+					../../../source/spine/BoundingBoxAttachment.c \
+					../../../source/spine/Event.c \
+					../../../source/spine/EventData.c \
+					../../../source/spine/extension.c \
+					../../../source/spine/Json.c \
+					../../../source/spine/RegionAttachment.c \
+					../../../source/spine/Skeleton.c \
+					../../../source/spine/SkeletonBounds.c \
+					../../../source/spine/SkeletonData.c \
+					../../../source/spine/SkeletonJson.c \
+					../../../source/spine/Skin.c \
+					../../../source/spine/Slot.c \
+					../../../source/spine/SlotData.c \
 					../../../source/string/findMatch.cc \
 					../../../source/string/stringBuffer.cc \
 					../../../source/string/stringStack.cc \
