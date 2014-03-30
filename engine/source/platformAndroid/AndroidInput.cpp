@@ -27,7 +27,7 @@
 #include "platform/event.h"
 #include "console/console.h"
 #include "game/gameInterface.h"
-#include "string/Unicode.h"
+#include "string/unicode.h"
 #include "gui/guiCanvas.h"
 
 
