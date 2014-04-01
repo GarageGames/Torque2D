@@ -26,7 +26,7 @@
 #include "platform/threads/mutex.h"
 #include "memory/safeDelete.h"
 #include "math/mMath.h"
-#include "string/Unicode.h"
+#include "string/unicode.h"
 #include "console/consoleTypes.h"
 #include "platform/threads/thread.h"
 

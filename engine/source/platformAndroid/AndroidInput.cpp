@@ -27,7 +27,7 @@
 #include "platform/event.h"
 #include "console/console.h"
 #include "game/gameInterface.h"
-#include "string/Unicode.h"
+#include "string/unicode.h"
 #include "gui/guiCanvas.h"
 
 
@@ -683,9 +683,9 @@ int processMultipleTouches()
         touchEvent.action = SI_TOUCH;
         touchEvent.objType = SI_TOUCHDOWN;
         
-        dStrcpy(touchEvent.touchesX, posX);
-        dStrcpy(touchEvent.touchesY, posY);
-        dStrcpy(touchEvent.touchIDs, touchNums);
+        dStrcpy(touchEvent.fingersX, posX);
+        dStrcpy(touchEvent.fingersY, posY);
+        dStrcpy(touchEvent.fingerIDs, touchNums);
         
         touchEvent.modifier = 0;
         
@@ -728,9 +728,9 @@ int processMultipleTouches()
         touchEvent.action = SI_TOUCH;
         touchEvent.objType = SI_TOUCHMOVE;
         
-        dStrcpy(touchEvent.touchesX, posX);
-        dStrcpy(touchEvent.touchesY, posY);
-        dStrcpy(touchEvent.touchIDs, touchNums);
+        dStrcpy(touchEvent.fingersX, posX);
+        dStrcpy(touchEvent.fingersY, posY);
+        dStrcpy(touchEvent.fingerIDs, touchNums);
         
         touchEvent.modifier = 0;
         
@@ -788,9 +788,9 @@ int processMultipleTouches()
         touchEvent.action = SI_TOUCH;
         touchEvent.objType = SI_TOUCHUP;
         
-        dStrcpy(touchEvent.touchesX, posX);
-        dStrcpy(touchEvent.touchesY, posY);
-        dStrcpy(touchEvent.touchIDs, touchNums);
+        dStrcpy(touchEvent.fingersX, posX);
+        dStrcpy(touchEvent.fingersY, posY);
+        dStrcpy(touchEvent.fingerIDs, touchNums);
         
         touchEvent.modifier = 0;
         
