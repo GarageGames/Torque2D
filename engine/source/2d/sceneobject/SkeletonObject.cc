@@ -416,6 +416,8 @@ void SkeletonObject::updateComposition( const F32 time )
         spRegionAttachment_computeWorldVertices(regionAttachment, slot->skeleton->x, slot->skeleton->y, slot->bone, vertexPositions);
         
         SpriteBatchItem* pSprite = SpriteBatch::createSprite();
+
+        pSprite->setDepth(mSceneLayerDepth);
         
         pSprite->setSrcBlendFactor(mSrcBlendFactor);
         pSprite->setDstBlendFactor(mDstBlendFactor);
