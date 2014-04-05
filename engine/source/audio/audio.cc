@@ -2496,6 +2496,7 @@ bool OpenALInit()
    mContext = alcCreateContext((ALCdevice*)mDevice, NULL);
 #elif defined(TORQUE_OS_EMSCRIPTEN)
    mContext = alcCreateContext((ALCdevice*)mDevice, NULL);;
+#elif defined(TORQUE_OS_IOS)
 #else
    mContext = alcCreateContext(mDevice,NULL);
 #endif
