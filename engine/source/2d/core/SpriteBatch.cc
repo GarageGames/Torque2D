@@ -475,6 +475,24 @@ void SpriteBatch::setSpriteImage( const char* pAssetId, const U32 imageFrame )
 
 //------------------------------------------------------------------------------
 
+void SpriteBatch::setSpriteImage( const char* pAssetId, const char* namedFrame )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(SpriteBatch_SetSpriteImage);
+
+    // Sanity!
+    AssertFatal( pAssetId, "Cannot set sprite image using a NULL asset Id." );
+
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return;
+
+    // Set image and frame.
+    mSelectedSprite->setImage( pAssetId, namedFrame );
+}
+
+//------------------------------------------------------------------------------
+
 StringTableEntry SpriteBatch::getSpriteImage( void ) const
 {
     // Finish if a sprite is not selected.
@@ -503,10 +521,34 @@ U32 SpriteBatch::getSpriteImageFrame( void ) const
 {
     // Finish if a sprite is not selected.
     if ( !checkSpriteSelected() )
-        return 0;
+        return NULL;
 
     // Get image frame.
     return mSelectedSprite->getImageFrame();
+}
+
+//------------------------------------------------------------------------------
+
+void SpriteBatch::setSpriteNamedImageFrame( const char* namedFrame )
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return;
+
+    // Set image frame.
+    mSelectedSprite->setNamedImageFrame( namedFrame );
+}
+
+//------------------------------------------------------------------------------
+
+StringTableEntry SpriteBatch::getSpriteNamedImageFrame( void ) const
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return NULL;
+
+    // Get image frame.
+    return mSelectedSprite->getNamedImageFrame();
 }
 
 //------------------------------------------------------------------------------

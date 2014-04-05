@@ -32,6 +32,16 @@ ConsoleMethodWithDocs(SpriteBase, isStaticFrameProvider, ConsoleBool, 2, 2, ())
 
 //------------------------------------------------------------------------------
 
+/*! Gets whether the sprite is using a numerical or named image frame.
+    @return Returns true when using a named frame, false when using a numerical index.
+*/
+ConsoleMethodWithDocs(SpriteBase, isUsingNamedImageFrame, ConsoleBool, 2, 2, ())
+{
+    return object->isUsingNamedImageFrame();
+}
+
+//------------------------------------------------------------------------------
+
 /*! Sets the sprite image and optionally frame.
     @param imageAssetId The image asset Id to display
     @param frame The numerical or named frame of the image to display
@@ -84,8 +94,8 @@ ConsoleMethodWithDocs(SpriteBase, getImage, ConsoleString, 2, 2, ())
 
 //------------------------------------------------------------------------------
 
-/*! Sets the image frame.
-    @param frame The frame to display
+/*! Sets the image frame using a numerical index.
+    @param frame The numerical frame to display
     @return Returns true on success.
 */
 ConsoleMethodWithDocs(SpriteBase, setImageFrame, ConsoleBool, 3, 3, (frame))
@@ -98,14 +108,14 @@ ConsoleMethodWithDocs(SpriteBase, setImageFrame, ConsoleBool, 3, 3, (frame))
         return false;
     }
 
-    // Set image Frame.
+    // Set the numerical frame
     return static_cast<ImageFrameProvider*>(object)->setImageFrame( dAtoi(argv[2]) );
 }
 
 //------------------------------------------------------------------------------
 
-/*! Gets the current image Frame.
-    @return The current image frame.
+/*! Gets the current numerical or named image frame.
+    @return The current numerical or named image frame.
 */
 ConsoleMethodWithDocs(SpriteBase, getImageFrame, ConsoleInt, 2, 2, ())
 {
@@ -117,47 +127,61 @@ ConsoleMethodWithDocs(SpriteBase, getImageFrame, ConsoleInt, 2, 2, ())
         return -1;
     }
 
-    // Get image Frame.
+    // Are we using a named image frame?
+    if ( object->isUsingNamedImageFrame() )
+    {
+        // Yes, so warn.
+        Con::warnf( "SpriteBase::getImageFrame() - Method invalid, using a named image frame." );
+        return -1;
+    }
+
     return static_cast<ImageFrameProvider*>(object)->getImageFrame();
 }
 
 //------------------------------------------------------------------------------
 
-/*! Sets the image frame using a string.
-    @param frame - The name of the frame.
-    @return True on success.
+/*! Sets the image frame using a named string.
+    @param frame The named frame to display
+    @return Returns true on success.
 */
-ConsoleMethodWithDocs(SpriteBase, setImageFrameName, ConsoleBool, 3, 3,  (frame))
+ConsoleMethodWithDocs(SpriteBase, setNamedImageFrame, ConsoleBool, 3, 3, (frame))
 {
     // Are we in static mode?
     if ( !object->isStaticFrameProvider() )
     {
         // No, so warn.
-        Con::warnf( "SpriteBase::setImageFrameName() - Method invalid, not in static mode." );
+        Con::warnf( "SpriteBase::setNamedImageFrame() - Method invalid, not in static mode." );
         return false;
     }
-    
-    // Set image Frame.
-    return static_cast<ImageFrameProvider*>(object)->setImageFrameByName( argv[2] );
+
+    // Set the numerical frame
+    return static_cast<ImageFrameProvider*>(object)->setNamedImageFrame( argv[2] );
 }
 
 //------------------------------------------------------------------------------
 
-/*! Gets the current image frame name.
-    @return The current image frame name.
+/*! Gets the current named image frame.
+    @return The current named image frame.
 */
-ConsoleMethodWithDocs(SpriteBase, getImageFrameName, ConsoleString, 2, 2, ())
+ConsoleMethodWithDocs(SpriteBase, getNamedImageFrame, ConsoleString, 2, 2, ())
 {
     // Are we in static mode?
     if ( !object->isStaticFrameProvider() )
     {
         // No, so warn.
-        Con::warnf( "SpriteBase::getImageFrameName() - Method invalid, not in static mode." );
+        Con::warnf( "SpriteBase::getNamedImageFrame() - Method invalid, not in static mode." );
         return NULL;
     }
-    
-    // Get image Frame.
-    return static_cast<ImageFrameProvider*>(object)->getImageFrameByName();
+
+    // Are we using a named image frame?
+    if ( !object->isUsingNamedImageFrame() )
+    {
+        // No, so warn.
+        Con::warnf( "SpriteBase::getNamedImageFrame() - Method invalid, not using a named image frame." );
+        return NULL;
+    }
+
+    return static_cast<ImageFrameProvider*>(object)->getNamedImageFrame();
 }
 
 //------------------------------------------------------------------------------
@@ -211,7 +235,7 @@ ConsoleMethodWithDocs(SpriteBase, stopAnimation, ConsoleVoid, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the current animation frame.
+/*! Sets the current animation frame. IMPORTANT: this is not the image frame number used in the animation!
     @param frame Which frame of the animation to display
     @return No return value.
 */
@@ -231,8 +255,8 @@ ConsoleMethodWithDocs(SpriteBase, setAnimationFrame, ConsoleVoid, 3, 3, (int fra
 
 //-----------------------------------------------------------------------------
 
-/*! Gets current animation frame.
-    @return (int frame) The current animation frame
+/*! Gets current frame index used in the animation. IMPORTANT: this is not the image frame number!
+    @return The current numerical animation frame
 */
 ConsoleMethodWithDocs(SpriteBase, getAnimationFrame, ConsoleInt, 2, 2, ())
 {
@@ -245,7 +269,67 @@ ConsoleMethodWithDocs(SpriteBase, getAnimationFrame, ConsoleInt, 2, 2, ())
     }
 
     // Get Animation Frame.
+    return object->getAnimationFrame();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets current numerical image frame used in the animation.
+    @return The current numerical animation frame
+*/
+ConsoleMethodWithDocs(SpriteBase, getAnimationImageFrame, ConsoleInt, 2, 2, ())
+{
+    // Are we in static mode?
+    if ( object->isStaticFrameProvider() )
+    {
+        // Yes, so warn.
+        Con::warnf( "SpriteBase::getAnimationImageFrame() - Method invalid, not in dynamic (animated) mode." );
+        return -1;
+    }
+
+    // Get the current animation asset
+    const AnimationAsset* asset = object->getCurrentAnimation();
+    
+    // Are we using named animation frames?
+    if (asset->getNamedCellsMode())
+    {
+        // Yes, so warn.
+        Con::warnf( "SpriteBase::getAnimationImageFrame() - Method invalid, animation is in named cells mode." );
+        return -1;
+    }
+
+    // Get Image Frame.
     return object->getCurrentAnimationFrame();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets current named image frame used in the animation.
+    @return The current named animation frame
+*/
+ConsoleMethodWithDocs(SpriteBase, getAnimationNamedImageFrame, ConsoleString, 2, 2, ())
+{
+    // Are we in static mode?
+    if ( object->isStaticFrameProvider() )
+    {
+        // Yes, so warn.
+        Con::warnf( "SpriteBase::getAnimationNamedImageFrame() - Method invalid, not in dynamic (animated) mode." );
+        return NULL;
+    }
+    
+    // Get the current animation asset
+    const AnimationAsset* asset = object->getCurrentAnimation();
+
+    // Are we using named animation frames?
+    if (!asset->getNamedCellsMode())
+    {
+        // No, so warn.
+        Con::warnf( "SpriteBase::getAnimationNamedImageFrame() - Method invalid, animation not in named cells mode." );
+        return NULL;
+    }
+
+    // Get Image Frame.
+    return object->getCurrentNamedAnimationFrame();
 }
 
 //-----------------------------------------------------------------------------

@@ -163,7 +163,7 @@ private:
 
     /// Configuration.
     StringTableEntry            mImageFile;
-    bool						mForce16Bit;
+    bool                        mForce16Bit;
     TextureFilterMode           mLocalFilterMode;
     bool                        mExplicitMode;
     bool                        mCellRowOrder;
@@ -225,12 +225,16 @@ public:
     inline S32              getCellCountY( void ) const                     { return mCellCountY; }
 
     void                    setCellWidth( const S32 cellWidth );
-    inline S32              getCellWidth( void ) const						{ return mCellWidth; }
-    S32                     getExplicitCellWidth(const S32 cellIndex);
+    inline S32              getCellWidth( void ) const                      { return mCellWidth; }
 
     void                    setCellHeight( const S32 cellheight );
-    S32                     getCellHeight( void) const						{ return mCellHeight; }
+    inline S32              getCellHeight( void) const                      { return mCellHeight; }
+    
+    Vector2                 getExplicitCellOffset(const S32 cellIndex);
+    S32                     getExplicitCellWidth(const S32 cellIndex);
     S32                     getExplicitCellHeight(const S32 cellIndex);
+    StringTableEntry        getExplicitCellName(const S32 cellIndex);
+    S32                     getExplicitCellIndex(const char* regionName);
     
     bool                    containsNamedRegion(const char* regionName);
 

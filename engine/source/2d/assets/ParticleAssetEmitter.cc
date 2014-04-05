@@ -204,7 +204,7 @@ ParticleAssetEmitter::ParticleAssetEmitter() :
     mImageAsset.registerRefreshNotify( this );
     mAnimationAsset.registerRefreshNotify( this );
     
-    mImageFrameName = "";
+    mNamedImageFrame = "";
 }
 
 //------------------------------------------------------------------------------
@@ -248,7 +248,7 @@ void ParticleAssetEmitter::initPersistFields()
 
     addProtectedField("Image", TypeImageAssetPtr, Offset(mImageAsset, ParticleAssetEmitter), &setImage, &getImage, &writeImage, "");
     addProtectedField("Frame", TypeS32, Offset(mImageFrame, ParticleAssetEmitter), &setImageFrame, &defaultProtectedGetFn, &writeImageFrame, "");
-    addProtectedField("FrameName", TypeString, Offset(mImageFrameName, ParticleAssetEmitter), &setImageFrameName, &defaultProtectedGetFn, &writeImageFrameName, "");
+    addProtectedField("NamedFrame", TypeString, Offset(mNamedImageFrame, ParticleAssetEmitter), &setNamedImageFrame, &defaultProtectedGetFn, &writeNamedImageFrame, "");
     addProtectedField("RandomImageFrame", TypeBool, Offset(mRandomImageFrame, ParticleAssetEmitter), &setRandomImageFrame, &defaultProtectedGetFn, &writeRandomImageFrame, "");
     addProtectedField("Animation", TypeAnimationAssetPtr, Offset(mAnimationAsset, ParticleAssetEmitter), &setAnimation, &getAnimation, &writeAnimation, "");
 }
@@ -300,7 +300,7 @@ void ParticleAssetEmitter::copyTo(SimObject* object)
    {
         // Named image frame?
         if ( pParticleAssetEmitter->isUsingNamedImageFrame() )
-            pParticleAssetEmitter->setImage( getImage(), getImageFrameName() );
+            pParticleAssetEmitter->setImage( getImage(), getNamedImageFrame() );
         else
             pParticleAssetEmitter->setImage( getImage(), getImageFrame() );
    }
@@ -409,7 +409,7 @@ bool ParticleAssetEmitter::setImage( const char* pAssetId, U32 frame )
     }
 
     // Using a numerical frame index
-    mUsingFrameName = false;
+    mUsingNamedFrame = false;
 
     // Refresh the asset.
     refreshAsset();
@@ -446,17 +446,17 @@ bool ParticleAssetEmitter::setImage( const char* pAssetId, const char* frameName
         else
         {
         // Yes, so set the frame.
-        mImageFrameName = StringTable->insert(frameName);
+        mNamedImageFrame = StringTable->insert(frameName);
         }
     }
     else
     {
         // No, so reset the image frame.
-        mImageFrameName = StringTable->insert(StringTable->EmptyString);
+        mNamedImageFrame = StringTable->insert(StringTable->EmptyString);
     }
 
     // Using a named frame index
-    mUsingFrameName = true;
+    mUsingNamedFrame = true;
     
     // Refresh the asset.
     refreshAsset();
@@ -492,7 +492,7 @@ bool ParticleAssetEmitter::setImageFrame( const U32 frame )
     mImageFrame = frame;
 
     // Using a numerical frame index.
-    mUsingFrameName = false;
+    mUsingNamedFrame = false;
 
     // Refresh the asset.
     refreshAsset();
@@ -503,33 +503,33 @@ bool ParticleAssetEmitter::setImageFrame( const U32 frame )
 
 //------------------------------------------------------------------------------
 
-bool ParticleAssetEmitter::setImageFrameName( const char* nameFrame )
+bool ParticleAssetEmitter::setNamedImageFrame( const char* frameName )
 {
     // Check Existing Image.
     if ( mImageAsset.isNull() )
     {
         // Warn.
-        Con::warnf("ParticleAssetEmitter::setImageNameFrame() - Cannot set Frame without existing asset Id.");
+        Con::warnf("ParticleAssetEmitter::setNamedImageFrame() - Cannot set Frame without existing asset Id.");
         
         // Return Here.
         return false;
     }
     
     // Check Frame Validity.
-    if ( !mImageAsset->containsFrame(nameFrame) )
+    if ( !mImageAsset->containsFrame(frameName) )
     {
         // Warn.
-        Con::warnf( "ParticleAssetEmitter::setImageFrameName() - Invalid Frame %s for asset Id '%s'.", nameFrame, mImageAsset.getAssetId() );
+        Con::warnf( "ParticleAssetEmitter::setNamedImageFrame() - Invalid Frame %s for asset Id '%s'.", frameName, mImageAsset.getAssetId() );
         
         // Return Here.
         return false;
     }
     
     // Set frame.
-    mImageFrameName = StringTable->insert(nameFrame);
+    mNamedImageFrame = StringTable->insert(frameName);
 
     // Using a named frame index
-    mUsingFrameName = true;
+    mUsingNamedFrame = true;
     
     // Refresh the asset.
     refreshAsset();
