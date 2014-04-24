@@ -446,80 +446,81 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 
     if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
 
-        if ((AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK) == AMOTION_EVENT_ACTION_DOWN) {
+        int32_t eventValue = (AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK);
 
-        	size_t touchCount = AMotionEvent_getPointerCount(event);
-        	for (U8 i = 0; i < touchCount; i++)
-        	{
-        		Point2I point;
-        		point.x = AMotionEvent_getX(event, i);
-        		point.y = AMotionEvent_getY(event, i);
+        if (eventValue == AMOTION_EVENT_ACTION_DOWN || eventValue == AMOTION_EVENT_ACTION_POINTER_DOWN) {
 
+            size_t touchCount = AMotionEvent_getPointerCount(event);
+            for (U8 i = 0; i < touchCount; i++)
+            {
+                Point2I point;
+                point.x = AMotionEvent_getX(event, i);
+                point.y = AMotionEvent_getY(event, i);
 
-        		rawLastTouches[i].x = point.x;
-        		rawLastTouches[i].y = point.y;
+                rawLastTouches[i].x = point.x;
+                rawLastTouches[i].y = point.y;
 
-        	    createMouseDownEvent(i, point.x, point.y, touchCount);
-        	}
+                createMouseDownEvent(i, point.x, point.y, touchCount);
+            }
 
         }
 
-        if ((AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK) == AMOTION_EVENT_ACTION_UP) {
+        if (eventValue == AMOTION_EVENT_ACTION_UP || eventValue == AMOTION_EVENT_ACTION_POINTER_UP) {
 
-        	size_t touchCount = AMotionEvent_getPointerCount(event);
-			for (U8 i = 0; i < touchCount; i++)
-			{
-				Point2I point;
-				point.x = AMotionEvent_getX(event, i);
-				point.y = AMotionEvent_getY(event, i);
-				Point2I prevPoint = rawLastTouches[i];
+            size_t touchCount = AMotionEvent_getPointerCount(event);
+            for (U8 i = 0; i < touchCount; i++)
+            {
+                Point2I point;
+                point.x = AMotionEvent_getX(event, i);
+                point.y = AMotionEvent_getY(event, i);
+                Point2I prevPoint = rawLastTouches[i];
 
-				createMouseUpEvent(i, point.x, point.y, prevPoint.x, prevPoint.y, touchCount);
+                createMouseUpEvent(i, point.x, point.y, prevPoint.x, prevPoint.y, touchCount);
 
-    	        if (touchCount > 0)
-    	        {
-    	            // this was a tap, so create a tap event
-    	            createMouseTapEvent(touchCount, (int) point.x, (int) point.y);
-    	        }
-			}
+                if (touchCount > 0)
+                {
+                    // this was a tap, so create a tap event
+                    createMouseTapEvent(touchCount, (int) point.x, (int) point.y);
+                }
+            }
         }
 
-        if ((AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK) == AMOTION_EVENT_ACTION_MOVE) {
+        if (eventValue == AMOTION_EVENT_ACTION_MOVE) {
 
-        	size_t touchCount = AMotionEvent_getPointerCount(event);
-			for (U8 i = 0; i < touchCount; i++)
-			{
-				Point2I point;
-				point.x = AMotionEvent_getX(event, i);
-				point.y = AMotionEvent_getY(event, i);
-				Point2I prevPoint = rawLastTouches[i];
+            size_t touchCount = AMotionEvent_getPointerCount(event);
+            for (U8 i = 0; i < touchCount; i++)
+            {
+                Point2I point;
+                point.x = AMotionEvent_getX(event, i);
+                point.y = AMotionEvent_getY(event, i);
+                Point2I prevPoint = rawLastTouches[i];
 
-				createMouseMoveEvent(i, point.x, point.y, prevPoint.x, prevPoint.y);
+                createMouseMoveEvent(i, point.x, point.y, prevPoint.x, prevPoint.y);
 
-				rawLastTouches[i].x = point.x;
-				rawLastTouches[i].y = point.y;
+                rawLastTouches[i].x = point.x;
+                rawLastTouches[i].y = point.y;
 
-			}
+            }
         }
 
-        if ((AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK) == AMOTION_EVENT_ACTION_CANCEL) {
+        if (eventValue == AMOTION_EVENT_ACTION_CANCEL) {
 
-        	size_t touchCount = AMotionEvent_getPointerCount(event);
-			for (U8 i = 0; i < touchCount; i++)
-			{
-				Point2I point;
-				point.x = AMotionEvent_getX(event, i);
-				point.y = AMotionEvent_getY(event, i);
-				Point2I prevPoint = rawLastTouches[i];
+            size_t touchCount = AMotionEvent_getPointerCount(event);
+            for (U8 i = 0; i < touchCount; i++)
+            {
+                Point2I point;
+                point.x = AMotionEvent_getX(event, i);
+                point.y = AMotionEvent_getY(event, i);
+                Point2I prevPoint = rawLastTouches[i];
 
-				createMouseUpEvent(i, point.x, point.y, prevPoint.x, prevPoint.y, touchCount);
+                createMouseUpEvent(i, point.x, point.y, prevPoint.x, prevPoint.y, touchCount);
 
-				if (touchCount > 0)
-				{
-					// this was a tap, so create a tap event
-					createMouseTapEvent(touchCount, (int) point.x, (int) point.y);
-				}
-			}
+                if (touchCount > 0)
+                {
+                    // this was a tap, so create a tap event
+                    createMouseTapEvent(touchCount, (int) point.x, (int) point.y);
+                }
+            }
         }
 
         return 1;
