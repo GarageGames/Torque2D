@@ -23,7 +23,7 @@
 #include "platform/platform.h"
 #include "platformAndroid/platformAndroid.h"
 #include "platformAndroid/AndroidFont.h"
-#include "string/Unicode.h"
+#include "string/unicode.h"
 #include <sstream>
 
 //------------------------------------------------------------------------------
