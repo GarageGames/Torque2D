@@ -25,6 +25,8 @@
 #include "sim/scriptObject.h"
 #include "sim/simDatablock.h"
 
+#include "simDatablock_ScriptBinding.h"
+
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_CO_DATABLOCK_V1(SimDataBlock);
@@ -93,19 +95,4 @@ void SimDataBlock::unpackData(BitStream*)
 bool SimDataBlock::preload(bool, char[256])
 {
    return true;
-}
-
-ConsoleFunction(deleteDataBlocks, void, 1, 1, "() Use the deleteDataBlocks function to cause a server to delete all datablocks that have thus far been loaded and defined.\n"
-                                                                "This is usually done in preparation of downloading a new set of datablocks, such as occurs on a mission change, but it's also good post-mission cleanup\n"
-                                                                "@return No return value.")
-{
-   // delete from last to first:
-   SimGroup *grp = Sim::getDataBlockGroup();
-   for(S32 i = grp->size() - 1; i >= 0; i--)
-   {
-      SimObject *obj = (*grp)[i];
-      obj->deleteObject();
-   }
-   SimDataBlock::sNextObjectId = DataBlockObjectIdFirst;
-   SimDataBlock::sNextModifiedKey = 0;
 }

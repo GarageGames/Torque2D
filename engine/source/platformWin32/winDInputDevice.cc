@@ -786,7 +786,7 @@ void DInputDevice::syncKeyboardState()
 
 
    U8* keyBuffer = new U8[mObjBufferSize];
-   dMemset( keyBuffer, 0, sizeof( keyBuffer ) );
+   dMemset( keyBuffer, 0, sizeof( U8 ) * mObjBufferSize );
    HRESULT result = mDevice->GetDeviceState( mObjBufferSize, keyBuffer );
    if ( SUCCEEDED( result ) )
    {
@@ -917,7 +917,7 @@ bool DInputDevice::buildEvent( DWORD offset, S32 newData, S32 oldData )
          newEvent.action = SI_MOVE;
          if ( newEvent.deviceType == MouseDeviceType )
          {
-            newEvent.fValue = float( newData );
+            newEvent.fValues[0] = float( newData );
 
          }
          else  // Joystick or other device:
@@ -926,11 +926,11 @@ bool DInputDevice::buildEvent( DWORD offset, S32 newData, S32 oldData )
             if ( objInfo.mMin != DIPROPRANGE_NOMIN && objInfo.mMax != DIPROPRANGE_NOMAX )
             {
                float range = float( objInfo.mMax - objInfo.mMin );
-               //newEvent.fValue = float( newData - objInfo.mMin ) / range;
-               newEvent.fValue = float( ( 2 * newData ) - objInfo.mMax - objInfo.mMin ) / range;
+               //newEvent.fValues[0] = float( newData - objInfo.mMin ) / range;
+               newEvent.fValues[0] = float( ( 2 * newData ) - objInfo.mMax - objInfo.mMin ) / range;
             }
             else
-               newEvent.fValue = (F32)newData;
+               newEvent.fValues[0] = (F32)newData;
          }
 
          Game->postEvent( newEvent );
@@ -938,14 +938,14 @@ bool DInputDevice::buildEvent( DWORD offset, S32 newData, S32 oldData )
 
       case SI_BUTTON:
          newEvent.action   = ( newData & 0x80 ) ? SI_MAKE : SI_BREAK;
-         newEvent.fValue   = ( newEvent.action == SI_MAKE ) ? 1.0f : 0.0f;
+         newEvent.fValues[0]   = ( newEvent.action == SI_MAKE ) ? 1.0f : 0.0f;
 
          Game->postEvent( newEvent );
          break;
 
       case SI_KEY:
          newEvent.action   = ( newData & 0x80 ) ? SI_MAKE : SI_BREAK;
-         newEvent.fValue   = ( newEvent.action == SI_MAKE ) ? 1.0f : 0.0f;
+         newEvent.fValues[0]   = ( newEvent.action == SI_MAKE ) ? 1.0f : 0.0f;
          processKeyEvent( newEvent );
 
          Game->postEvent( newEvent );
@@ -975,7 +975,7 @@ bool DInputDevice::buildEvent( DWORD offset, S32 newData, S32 oldData )
             if ( clearkeys )
             {
                newEvent.action = SI_BREAK;
-               newEvent.fValue = 0.0f;
+               newEvent.fValues[0] = 0.0f;
                // post events for all buttons that need to be cleared.
                if( clearkeys & POV_up)
                {
@@ -1006,7 +1006,7 @@ bool DInputDevice::buildEvent( DWORD offset, S32 newData, S32 oldData )
             if ( setkeys )
             {
                newEvent.action = SI_MAKE;
-               newEvent.fValue = 1.0f;
+               newEvent.fValues[0] = 1.0f;
                // post events for all buttons that need to be set.
                if( setkeys & POV_up)
                {
@@ -1040,6 +1040,99 @@ bool DInputDevice::buildEvent( DWORD offset, S32 newData, S32 oldData )
    return true;
 }
 
+
+void DInputDevice::rumble(float x, float y)
+{
+   LONG            rglDirection[2] = { 0, 0 };
+   DICONSTANTFORCE cf              = { 0 };
+   HRESULT         result;
+
+   // Now set the new parameters and start the effect immediately.
+   if (!mForceFeedbackEffect)
+   {
+      DIEFFECT eff;
+      ZeroMemory( &eff, sizeof(eff) );
+      eff.dwSize                  = sizeof(DIEFFECT);
+      eff.dwFlags                 = DIEFF_CARTESIAN | DIEFF_OBJECTOFFSETS;
+      eff.dwDuration              = INFINITE;
+      eff.dwSamplePeriod          = 0;
+      eff.dwGain                  = DI_FFNOMINALMAX;
+      eff.dwTriggerButton         = DIEB_NOTRIGGER;
+      eff.dwTriggerRepeatInterval = 0;
+      eff.cAxes                   = mNumForceFeedbackAxes;
+      eff.rgdwAxes                = mForceFeedbackAxes;
+      eff.rglDirection            = rglDirection;
+      eff.lpEnvelope              = 0;
+      eff.cbTypeSpecificParams    = sizeof(DICONSTANTFORCE);
+      eff.lpvTypeSpecificParams   = &cf;
+      eff.dwStartDelay            = 0;
+
+      // Create the prepared effect
+      if ( FAILED( result = mDevice->CreateEffect( GUID_ConstantForce, &eff, &mForceFeedbackEffect, NULL ) ) )
+      {
+	      Con::errorf( "DInputDevice::rumbleJoystick - %s does not support force feedback.\n", mName );
+	      return;
+      }
+      else
+      {
+	      Con::printf( "DInputDevice::rumbleJoystick - %s supports force feedback.\n", mName );
+      }
+   }
+
+   // Clamp the input floats to [0 - 1]
+   x = max(0, min(1, x));
+   y = max(0, min(1, y));
+
+   if ( 1 == mNumForceFeedbackAxes )
+   {
+      cf.lMagnitude = (DWORD)( x * DI_FFNOMINALMAX );
+   }
+   else
+   {
+      rglDirection[0] = (DWORD)( x * DI_FFNOMINALMAX );
+      rglDirection[1] = (DWORD)( y * DI_FFNOMINALMAX );
+      cf.lMagnitude = (DWORD)sqrt( (double)(x * x * DI_FFNOMINALMAX * DI_FFNOMINALMAX + y * y * DI_FFNOMINALMAX * DI_FFNOMINALMAX) );
+   }
+
+   DIEFFECT eff;
+   ZeroMemory( &eff, sizeof(eff) );
+   eff.dwSize                  = sizeof(DIEFFECT);
+   eff.dwFlags                 = DIEFF_CARTESIAN | DIEFF_OBJECTOFFSETS;
+   eff.dwDuration              = INFINITE;
+   eff.dwSamplePeriod          = 0;
+   eff.dwGain                  = DI_FFNOMINALMAX;
+   eff.dwTriggerButton         = DIEB_NOTRIGGER;
+   eff.dwTriggerRepeatInterval = 0;
+   eff.cAxes                   = mNumForceFeedbackAxes;
+   eff.rglDirection            = rglDirection;
+   eff.lpEnvelope              = 0;
+   eff.cbTypeSpecificParams    = sizeof(DICONSTANTFORCE);
+   eff.lpvTypeSpecificParams   = &cf;
+   eff.dwStartDelay            = 0;
+
+   if ( FAILED( result = mForceFeedbackEffect->SetParameters( &eff, DIEP_DIRECTION | DIEP_TYPESPECIFICPARAMS | DIEP_START ) ) )
+   {
+      const char* errorString = NULL;
+      switch ( result )
+      {
+         case DIERR_INPUTLOST:
+            errorString = "DIERR_INPUTLOST";
+            break;
+
+         case DIERR_INVALIDPARAM:
+            errorString = "DIERR_INVALIDPARAM";
+            break;
+
+         case DIERR_NOTACQUIRED:
+            errorString = "DIERR_NOTACQUIRED";
+            break;
+
+         default:
+            errorString = "Unknown Error";
+      }
+      Con::errorf( "DInputDevice::rumbleJoystick - %s - Failed to start rumble effect\n", errorString );
+   }
+}
 //------------------------------------------------------------------------------
 //
 // This function translates the DirectInput scan code to the associated

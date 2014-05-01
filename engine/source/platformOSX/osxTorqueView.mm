@@ -193,7 +193,7 @@
      NSDeviceIndependentModifierFlagsMask = 0xffff0000U
      */
     
-    U32 keyMods = [event modifierFlags];
+    U32 keyMods = (U32)[event modifierFlags];
     
     if (keyMods & NSShiftKeyMask)
         modifiers |= SI_SHIFT;
@@ -236,7 +236,10 @@
     torqueEvent.modifier = modifiers;
     torqueEvent.ascii = 0;
     torqueEvent.action = action;
-    torqueEvent.fValue = 1.0;
+    if (action == SI_BREAK)
+        torqueEvent.fValues[0] = 0.0;
+    else
+        torqueEvent.fValues[0] = 1.0;
     
     // Post the input event
     Game->postEvent(torqueEvent);
@@ -284,7 +287,7 @@
     torqueEvent.modifier = modifiers;
     torqueEvent.ascii = 0;
     torqueEvent.action = action;
-    torqueEvent.fValue = fValue;
+    torqueEvent.fValues[0] = fValue;
     torqueEvent.ascii = chars;
     
     // Post the input event
@@ -438,7 +441,7 @@
     torqueEvent.modifier = modifiers;
     torqueEvent.ascii = 0;
     torqueEvent.action = SI_MOVE;
-    torqueEvent.fValue = deltaY;
+    torqueEvent.fValues[0] = deltaY;
     Game->postEvent(torqueEvent);
 }
 

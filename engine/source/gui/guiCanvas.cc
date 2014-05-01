@@ -32,386 +32,22 @@
 #include "gui/guiCanvas.h"
 #include "game/gameInterface.h"
 
+#include "guiCanvas_ScriptBinding.h"
+
+extern int _AndroidGetScreenWidth();
+extern int _AndroidGetScreenHeight();
+
+
 IMPLEMENT_CONOBJECT(GuiCanvas);
 
 GuiCanvas *Canvas = NULL;
-
-ConsoleMethod( GuiCanvas, getContent, S32, 2, 2, "() Use the getContent method to get the ID of the control which is being used as the current canvas content.\n"
-                                                                "@return Returns the ID of the current canvas content (a control), or 0 meaning the canvas is empty")
-{
-   GuiControl *ctrl = object->getContentControl();
-   if(ctrl)
-      return ctrl->getId();
-   return -1;
-}
-
-ConsoleMethod( GuiCanvas, setContent, void, 3, 3, "( handle ) Use the setContent method to set the control identified by handle as the current canvas content.\n"
-                                                                "@param handle The numeric ID or name of the control to be made the canvas contents.\n"
-                                                                "@return No return value")
-{
-   GuiControl *gui = NULL;
-   if(argv[2][0])
-   {
-      if (!Sim::findObject(argv[2], gui))
-      {
-         Con::printf("%s(): Invalid control: %s", argv[0], argv[2]);
-         return;
-      }
-   }
-
-   //set the new content control
-   Canvas->setContentControl(gui);
-}
-
-ConsoleMethod( GuiCanvas, pushDialog, void, 3, 4, "( handle [ , layer ] ) Use the pushDialog method to open a dialog on a specific canvas layer, or in the same layer the last openned dialog. Newly placed dialogs placed in a layer with another dialog(s) will overlap the prior dialog(s).\n"
-                                                                "@param handle The numeric ID or name of the dialog to be opened.\n"
-                                                                "@param layer A integer value in the range [ 0 , inf ) specifying the canvas layer to place the dialog in.\n"
-                                                                "@return No return value")
-{
-   GuiControl *gui;
-
-   if (!	Sim::findObject(argv[2], gui))
-   {
-      Con::printf("%s(): Invalid control: %s", argv[0], argv[2]);
-      return;
-   }
-
-   //find the layer
-   S32 layer = 0;
-   if (argc == 4)
-      layer = dAtoi(argv[3]);
-
-   //set the new content control
-   Canvas->pushDialogControl(gui, layer);
-}
-
-ConsoleMethod( GuiCanvas, popDialog, void, 2, 3, "( handle ) Use the popDialog method to remove a currently showing dialog. If no handle is provided, the top most dialog is popped.\n"
-                                                                "@param handle The ID or a previously pushed dialog.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa pushDialog, popLayer")
-{
-   // Must initialize this to NULL to avoid crash on the if (gui) statement further down [KNM | 07/28/11 | ITGB-120]
-   //GuiControl * gui;
-   GuiControl * gui = NULL;
-   if (argc == 3)
-   {
-      if (!Sim::findObject(argv[2], gui))
-      {
-         Con::printf("%s(): Invalid control: %s", argv[0], argv[2]);
-         return;
-      }
-   }
-
-   if (gui)
-      Canvas->popDialogControl(gui);
-   else
-      Canvas->popDialogControl();
-}
-
-ConsoleMethod( GuiCanvas, popLayer, void, 2, 3, "( layer ) Use the popLayer method to remove (close) all dialogs in the specified canvas �layer�.\n"
-                                                                "@param layer A integer value in the range [ 0 , inf ) specifying the canvas layer to clear.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa pushDialog, popDialog")
-{
-   S32 layer = 0;
-   if (argc == 3)
-      layer = dAtoi(argv[2]);
-
-   Canvas->popDialogControl(layer);
-}
-
-ConsoleMethod(GuiCanvas, cursorOn, void, 2, 2, "() Use the cursorOn method to enable the cursor.\n"
-                                                                "@return No return value")
-{
-   Canvas->setCursorON(true);
-}
-
-ConsoleMethod(GuiCanvas, cursorOff, void, 2, 2, "() Use the cursorOff method to disable the cursor.\n"
-                                                                "@return No return value")
-{
-   Canvas->setCursorON(false);
-}
-
-ConsoleMethod( GuiCanvas, setCursor, void, 3, 3, "( cursorHandle ) Use the setCursor method to select the current cursor.\n"
-                                                                "@param cursorHandle The ID of a previously defined GuiCursor object.\n"
-                                                                "@return No return value")
-{
-   GuiCursor *curs = NULL;
-   if(argv[2][0])
-   {
-      if(!Sim::findObject(argv[2], curs))
-      {
-         Con::printf("%s is not a valid cursor.", argv[2]);
-         return;
-      }
-   }
-   Canvas->setCursor(curs);
-}
-
-ConsoleMethod( GuiCanvas, renderFront, void, 3, 3, "(bool enable)")
-{
-   Canvas->setRenderFront(dAtob(argv[2]));
-}
-
-ConsoleMethod( GuiCanvas, showCursor, void, 2, 2, "")
-{
-   Canvas->showCursor(true);
-}
-
-ConsoleMethod( GuiCanvas, hideCursor, void, 2, 2, "")
-{
-   Canvas->showCursor(false);
-}
-
-ConsoleMethod( GuiCanvas, isCursorOn, bool, 2, 2, "")
-{
-   return Canvas->isCursorON();
-}
-
-ConsoleMethod( GuiCanvas, setDoubleClickDelay, void, 3, 3, "")
-{
-   Canvas->setDoubleClickTime(dAtoi(argv[2]));
-}
-
-ConsoleMethod( GuiCanvas, setDoubleClickMoveBuffer, void, 4, 4, "")
-{
-   Canvas->setDoubleClickWidth(dAtoi(argv[2]));
-   Canvas->setDoubleClickHeight(dAtoi(argv[3]));
-}
-
-ConsoleMethod( GuiCanvas, repaint, void, 2, 2, "() Use the repaint method to force the canvas to redraw all elements.\n"
-                                                                "@return No return value")
-{
-   Canvas->paint();
-}
-
-ConsoleMethod( GuiCanvas, reset, void, 2, 2, "() Use the reset method to reset the current canvas update region.\n"
-                                                                "@return No return value")
-{
-   Canvas->resetUpdateRegions();
-}
-
-ConsoleMethod( GuiCanvas, getCursorPos, const char*, 2, 2, "() Use the getCursorPos method to retrieve the current position of the mouse pointer.\n"
-                                                                "@return Returns a vector containing the �x y� coordinates of the cursor in the canvas")
-{
-   Point2I pos = Canvas->getCursorPos();
-   char * ret = Con::getReturnBuffer(32);
-   dSprintf(ret, 32, "%d %d", pos.x, pos.y);
-   return(ret);
-}
-
-ConsoleMethod( GuiCanvas, setCursorPos, void, 3, 4, "( ) Use the setCursorPos method to set the position of the cursor in the cavas.\n"
-                                                                "@param position An \"x y\" position vector specifying the new location of the cursor.\n"
-                                                                "@return No return value")
-{
-   Point2I pos(0,0);
-
-   if(argc == 4)
-      pos.set(dAtoi(argv[2]), dAtoi(argv[3]));
-   else
-      dSscanf(argv[2], "%d %d", &pos.x, &pos.y);
-
-   Canvas->setCursorPos(pos);
-}
-
-ConsoleMethod( GuiCanvas, getMouseControl, S32, 2, 2, "Gets the gui control under the mouse.")
-{
-   GuiControl* control = object->getMouseControl();
-   if (control)
-      return control->getId();
-   
-   return NULL;
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(GuiCanvas, setBackgroundColor, void, 3, 6,    "(float red, float green, float blue, [float alpha = 1.0]) - Sets the background color for the canvas."
-                                                            "@param red The red value.\n"
-                                                            "@param green The green value.\n"
-                                                            "@param blue The blue value.\n"
-                                                            "@param alpha The alpha value.\n"
-                                                            "@return No return Value.")
-{
-    // The colors.
-    F32 red;
-    F32 green;
-    F32 blue;
-    F32 alpha = 1.0f;
-
-    // Space separated.
-    if (argc == 3)
-    {
-        // Grab the element count.
-        const U32 elementCount = Utility::mGetStringElementCount(argv[2]);
-
-        // Has a single argument been specified?
-        if ( elementCount == 1 )
-        {
-            object->setDataField( StringTable->insert("BackgroundColor"), NULL, argv[2] );
-            return;
-        }
-
-        // ("R G B [A]")
-        if ((elementCount == 3) || (elementCount == 4))
-        {
-            // Extract the color.
-            red   = dAtof(Utility::mGetStringElement(argv[2], 0));
-            green = dAtof(Utility::mGetStringElement(argv[2], 1));
-            blue  = dAtof(Utility::mGetStringElement(argv[2], 2));
-
-            // Grab the alpha if it's there.
-            if (elementCount > 3)
-                alpha = dAtof(Utility::mGetStringElement(argv[2], 3));
-        }
-
-        // Invalid.
-        else
-        {
-            Con::warnf("GuiCanvas::setBackgroundColor() - Invalid Number of parameters!");
-            return;
-        }
-    }
-
-    // (R, G, B)
-    else if (argc >= 5)
-    {
-        red   = dAtof(argv[2]);
-        green = dAtof(argv[3]);
-        blue  = dAtof(argv[4]);
-
-        // Grab the alpha if it's there.
-        if (argc > 5)
-            alpha = dAtof(argv[5]);
-    }
-
-    // Invalid.
-    else
-    {
-        Con::warnf("GuiCanvas::setBackgroundColor() - Invalid Number of parameters!");
-        return;
-    }
-
-    // Set background color.
-    object->setBackgroundColor(ColorF(red, green, blue, alpha) );
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(GuiCanvas, getBackgroundColor, const char*, 2, 2, "Gets the background color for the canvas.\n"
-                                                                "@return (float red / float green / float blue / float alpha) The background color for the canvas.")
-{
-    // Get the background color.
-    const ColorF& color = object->getBackgroundColor();
-
-    // Fetch color name.
-    StringTableEntry colorName = StockColor::name( color );
-
-    // Return the color name if it's valid.
-    if ( colorName != StringTable->EmptyString )
-        return colorName;
-
-    // Create Returnable Buffer.
-    char* pBuffer = Con::getReturnBuffer(64);
-
-    // Format Buffer.
-    dSprintf(pBuffer, 64, "%g %g %g %g", color.red, color.green, color.blue, color.alpha );
-
-    // Return buffer.
-    return pBuffer;
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(GuiCanvas, setUseBackgroundColor, void, 3, 3, "Sets whether to use the canvas background color or not.\n"
-                                                            "@param useBackgroundColor Whether to use the canvas background color or not.\n"
-                                                            "@return No return value." )
-{
-    // Fetch flag.
-    const bool useBackgroundColor = dAtob(argv[2]);
-
-    // Set the flag.
-    object->setUseBackgroundColor( useBackgroundColor );
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(GuiCanvas, getUseBackgroundColor, bool, 2, 2, "Gets whether the canvas background color is in use or not.\n"
-                                                            "@return Whether the canvas background color is in use or not." )
-{
-    // Get the flag.
-    return object->getUseBackgroundColor();
-}
-
-
-ConsoleFunction( createCanvas, bool, 2, 2, "( WindowTitle ) Use the createCanvas function to initialize the canvas.\n"
-                                                                "@return Returns true on success, false on failure.\n"
-                                                                "@sa createEffectCanvas")
-{
-    AssertISV(!Canvas, "CreateCanvas: canvas has already been instantiated");
-
-    Platform::initWindow(Point2I(MIN_RESOLUTION_X, MIN_RESOLUTION_Y), argv[1]);
-
-
-    if (!Video::getResolutionList())
-        return false;
-
-    // create the canvas, and add it to the manager
-    Canvas = new GuiCanvas();
-    Canvas->registerObject("Canvas"); // automatically adds to GuiGroup
-    return true;
-}
-
-ConsoleFunction( setCanvasTitle, void, 2, 2, "(string windowTitle) Sets the title to the provided string\n" 
-                "@param windowTitle The desired title\n"
-                "@return No Return Value")
-{
-   Platform::setWindowTitle( argv[1] );
-}
-
-ConsoleFunction(screenShot, void, 3, 3, "(string file, string format)"
-                "Take a screenshot.\n\n"
-                "@param format One of JPEG or PNG.")
-{
-#ifndef TORQUE_OS_IOS
-// PUAP -Mat no screenshots on iPhone can do it from Xcode
-    FileStream fStream;
-   if(!fStream.open(argv[1], FileStream::Write))
-   {   
-      Con::printf("Failed to open file '%s'.", argv[1]);
-      return;
-   }
-    
-   glReadBuffer(GL_FRONT);
-   
-   Point2I extent = Canvas->getExtent();
-   U8 * pixels = new U8[extent.x * extent.y * 4];
-   glReadPixels(0, 0, extent.x, extent.y, GL_RGB, GL_UNSIGNED_BYTE, pixels);
-   
-   GBitmap * bitmap = new GBitmap;
-   bitmap->allocateBitmap(U32(extent.x), U32(extent.y));
-   
-   // flip the rows
-   for(U32 y = 0; y < (U32)extent.y; y++)
-      dMemcpy(bitmap->getAddress(0, extent.y - y - 1), pixels + y * extent.x * 3, U32(extent.x * 3));
-
-   if ( dStrcmp( argv[2], "JPEG" ) == 0 )
-      bitmap->writeJPEG(fStream);
-   else if( dStrcmp( argv[2], "PNG" ) == 0)
-      bitmap->writePNG(fStream);
-   else
-      bitmap->writePNG(fStream);
-
-   fStream.close();
-   delete [] pixels;
-   delete bitmap;
-#endif
-}
-
 
 GuiCanvas::GuiCanvas()
 {
 #ifdef TORQUE_OS_IOS
    mBounds.set(0, 0, IOS_DEFAULT_RESOLUTION_X, IOS_DEFAULT_RESOLUTION_Y);
+#elif TORQUE_OS_ANDROID
+   mBounds.set(0, 0, _AndroidGetScreenWidth(), _AndroidGetScreenHeight());
 #else
    mBounds.set(0, 0, MIN_RESOLUTION_X, MIN_RESOLUTION_Y);
 #endif
@@ -748,14 +384,14 @@ bool GuiCanvas::processInputEvent(const InputEvent *event)
 
          if (event->objType == SI_XAXIS)
          {
-            pt.x += (event->fValue * mPixelsPerMickey);
+            pt.x += (event->fValues[0] * mPixelsPerMickey);
             cursorPt.x = (F32)getMax(0, getMin((S32)pt.x, mBounds.extent.x - 1));
             if (oldpt.x != S32(cursorPt.x))
                moved = true;
          }
          else
          {
-            pt.y += (event->fValue * mPixelsPerMickey);
+            pt.y += (event->fValues[0] * mPixelsPerMickey);
             cursorPt.y = (F32)getMax(0, getMin((S32)pt.y, mBounds.extent.y - 1));
             if (oldpt.y != S32(cursorPt.y))
                moved = true;
@@ -789,7 +425,7 @@ bool GuiCanvas::processInputEvent(const InputEvent *event)
          mLastEvent.mousePoint.y = S32( cursorPt.y );
          mLastEvent.eventID = 0;
 
-            if ( event->fValue < 0.0f )
+            if ( event->fValues[0] < 0.0f )
             rootMouseWheelDown( mLastEvent );
             else
             rootMouseWheelUp( mLastEvent );
@@ -1084,7 +720,7 @@ void GuiCanvas::rootMouseDragged(const GuiEvent &event)
       if(!mMouseCapturedControl.isNull())
             mMouseCapturedControl->onMouseDragged(event);
        //Luma: Mouse dragged calls mouse Moved on iPhone
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
        mMouseCapturedControl->onMouseMove(event);
 #endif //TORQUE_OS_IOS
    }
@@ -1094,7 +730,7 @@ void GuiCanvas::rootMouseDragged(const GuiEvent &event)
       if(bool(mMouseControl))
       {
           mMouseControl->onMouseDragged(event);
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
           mMouseControl->onMouseMove(event);
 #endif //TORQUE_OS_IOS
           
@@ -1527,7 +1163,7 @@ void GuiCanvas::renderFrame(bool preRenderOnly, bool bufferSwap /* = true */)
 {
    PROFILE_START(CanvasPreRender);
 
-#ifndef TORQUE_OS_IOS
+#if !defined TORQUE_OS_IOS && !defined TORQUE_OS_ANDROID && !defined TORQUE_OS_EMSCRIPTEN
     
    if(mRenderFront)
       glDrawBuffer(GL_FRONT);
@@ -1661,7 +1297,7 @@ void GuiCanvas::renderFrame(bool preRenderOnly, bool bufferSwap /* = true */)
       //temp draw the mouse
       if (cursorON && mShowCursor && !mouseCursor)
       {
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_EMSCRIPTEN)
          glColor4ub(255, 0, 0, 255);
          GLfloat vertices[] = {
               (GLfloat)(cursorPt.x),(GLfloat)(cursorPt.y),

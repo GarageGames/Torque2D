@@ -115,7 +115,7 @@ HEXDIGIT [a-fA-F0-9]
 "SPC"       {CMDlval.i = ' '; return '@'; }
 "@"         {CMDlval.i = 0; return '@'; }
 "/*" {
-         register int c = 0, l;
+         int c = 0, l;
          for ( ; ; )
          {
             l = c;

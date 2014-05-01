@@ -109,7 +109,7 @@ U32 hash(register U8 *k, register U32 length, register U32 initval)
     // Debug Profiling.
     PROFILE_SCOPE(HashFunction);
 
-   register U32 a, b, c, len;
+   U32 a, b, c, len;
 
    /* Set up the internal state */
    len = length;

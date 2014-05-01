@@ -36,7 +36,7 @@
 #endif
 
 #ifndef _TAML_H_
-#include "persistence/Taml/taml.h"
+#include "persistence/taml/taml.h"
 #endif
 
 // Script bindings.
@@ -44,9 +44,10 @@
 
 //-----------------------------------------------------------------------------
 
-#define BEHAVIOR_ID_FIELD_NAME                  "Id"
-#define BEHAVIOR_NODE_NAME                      "Behaviors"
-#define BEHAVIOR_CONNECTION_TYPE_NAME           "Connection"
+static StringTableEntry behaviorIdFieldName         = StringTable->insert( "Id" );
+static StringTableEntry behaviorNodeName            = StringTable->insert( "Behaviors" );
+static StringTableEntry behaviorConnectionTypeName  = StringTable->insert( "Connection" );
+static StringTableEntry behaviorTemplateAssetName   = StringTable->insert( "Asset" );
 
 //-----------------------------------------------------------------------------
 
@@ -1077,10 +1078,10 @@ void BehaviorComponent::onTamlCustomWrite( TamlCustomNodes& customNodes )
         return;
 
     // Fetch behavior template asset field type.
-    StringTableEntry behaviorTemplateAssetFieldType = StringTable->insert( BEHAVIORTEMPLATE_ASSET_FIELDTYPE );
+    StringTableEntry behaviorTemplateAssetFieldType = StringTable->insert( behaviorTemplateAssetName );
 
     // Add custom behaviors node.
-    TamlCustomNode* pCustomBehaviorNode = customNodes.addNode( BEHAVIOR_NODE_NAME );
+    TamlCustomNode* pCustomBehaviorNode = customNodes.addNode( behaviorNodeName );
 
     // Iterate behaviors.
     for( SimSet::iterator behaviorItr = mBehaviors.begin(); behaviorItr != mBehaviors.end(); ++behaviorItr )
@@ -1095,7 +1096,7 @@ void BehaviorComponent::onTamlCustomWrite( TamlCustomNodes& customNodes )
         TamlCustomNode* pBehaviorNode = pCustomBehaviorNode->addNode( pBehaviorInstance->getTemplateName() );
 
         // Add behavior Id field.
-        pBehaviorNode->addField( BEHAVIOR_ID_FIELD_NAME, pBehaviorInstance->getBehaviorId() );
+        pBehaviorNode->addField( behaviorIdFieldName, pBehaviorInstance->getBehaviorId() );
 
         // Fetch field count,
         const U32 behaviorFieldCount = pBehaviorTemplate->getBehaviorFieldCount();
@@ -1150,7 +1151,7 @@ void BehaviorComponent::onTamlCustomWrite( TamlCustomNodes& customNodes )
                 BehaviorPortConnection* pConnection = connectionItr;
 
                 // Add connectionnode.
-                TamlCustomNode* pConnectionNode = pCustomBehaviorNode->addNode( BEHAVIOR_CONNECTION_TYPE_NAME );
+                TamlCustomNode* pConnectionNode = pCustomBehaviorNode->addNode( behaviorConnectionTypeName );
 
                 // Add behavior field.
                 pConnectionNode->addField( pConnection->mOutputName, pConnection->mOutputInstance->getBehaviorId() );
@@ -1168,7 +1169,7 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
     Parent::onTamlCustomRead( customNodes );
 
     // Find custom behaviors node.
-    const TamlCustomNode* pCustomBehaviorNode = customNodes.findNode( BEHAVIOR_NODE_NAME );
+    const TamlCustomNode* pCustomBehaviorNode = customNodes.findNode( behaviorNodeName );
 
     // Do we have the property?
     if ( pCustomBehaviorNode != NULL )
@@ -1177,10 +1178,10 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
         S32 maximumBehaviorId = 0;
 
         // Fetch behavior Id field name.
-        StringTableEntry behaviorFieldIdName = StringTable->insert( BEHAVIOR_ID_FIELD_NAME );
+        StringTableEntry behaviorFieldIdName = StringTable->insert( behaviorIdFieldName );
 
         // Fetch behavior template asset field type.
-        StringTableEntry behaviorTemplateAssetFieldType = StringTable->insert( BEHAVIORTEMPLATE_ASSET_FIELDTYPE );
+        StringTableEntry behaviorTemplateAssetFieldType = StringTable->insert( behaviorTemplateAssetName );
 
         // Fetch children behavior nodes.
         const TamlCustomNodeVector& behaviorNodes = pCustomBehaviorNode->getChildren();
@@ -1191,7 +1192,7 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
             // Fetch behavior node.
             TamlCustomNode* pBehaviorNode = *behaviorNodeItr;
 
-            if ( pBehaviorNode->getNodeName() == BEHAVIOR_CONNECTION_TYPE_NAME )
+            if ( pBehaviorNode->getNodeName() == behaviorConnectionTypeName )
             {
                 // Fetch field nodes.
                 const TamlCustomFieldVector& connectionFieldNodes = pBehaviorNode->getFields();
@@ -1390,9 +1391,12 @@ void BehaviorComponent::onTamlCustomRead( const TamlCustomNodes& customNodes )
                 // Add behavior.
                 addBehavior( pBehaviorInstance );
 
-                // Override the automatically allocated behavior Id when adding the behavior.
+                // Override the automatically allocated behavior Id if the Id field is already defined in the TAML file.
                 // NOTE: This must be done after adding the behavior.
-                pBehaviorInstance->setBehaviorId( behaviorId );
+                if (behaviorId != 0)
+                {
+                    pBehaviorInstance->setBehaviorId( behaviorId );
+                }
             }
         }
 
@@ -1410,7 +1414,7 @@ static void WriteCustomTamlSchema( const AbstractClassRep* pClassRep, TiXmlEleme
     AssertFatal( pParentElement != NULL,  "BehaviorComponent::WriteCustomTamlSchema() - Parent Element cannot be NULL." );
 
     // Write an unrestricted custom Taml schema.
-    Taml::WriteUnrestrictedCustomTamlSchema( BEHAVIOR_NODE_NAME, pClassRep, pParentElement );
+    Taml::WriteUnrestrictedCustomTamlSchema( behaviorNodeName, pClassRep, pParentElement );
 }
 
 //-----------------------------------------------------------------------------

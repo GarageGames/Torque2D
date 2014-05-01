@@ -102,7 +102,7 @@ void GuiGraphCtrl::onRender(Point2I offset, const RectI &updateRect)
 		if (mPlots[k].mGraphData.size() == 0)
 			continue;
 
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_EMSCRIPTEN)
 		// Bar graph
 		if(mPlots[k].mGraphType == Bar)
 		{

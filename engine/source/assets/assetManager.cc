@@ -520,7 +520,7 @@ StringTableEntry AssetManager::getAssetPath( const char* pAssetId )
     AssertFatal( pFinalSlash != NULL, "Should always be able to find final slash in the asset file-path." );
 
     // Fetch asset path.
-    return StringTable->insertn( assetFilePath, pFinalSlash - assetFilePath );
+    return StringTable->insertn( assetFilePath, (U32)(pFinalSlash - assetFilePath) );
 }
 
 //-----------------------------------------------------------------------------
@@ -795,7 +795,7 @@ bool AssetManager::renameDeclaredAsset( const char* pAssetIdFrom, const char* pA
     assetDeclaredUpdateVisitor.setAssetIdTo( assetIdTo );
 
     // Update asset file declaration.
-    if ( !assetDeclaredUpdateVisitor.parse( pAssetDefinition->mAssetBaseFilePath ) )
+    if ( !mTaml.parse( pAssetDefinition->mAssetBaseFilePath, assetDeclaredUpdateVisitor ) )
     {
         // No, so warn.
         Con::warnf("Asset Manager: Cannot rename declared asset Id '%s' to asset Id '%s' as the declared asset file could not be parsed: %s",
@@ -1192,7 +1192,7 @@ bool AssetManager::refreshAsset( const char* pAssetId )
             TamlAssetDeclaredVisitor assetDeclaredVisitor;
 
             // Parse the filename.
-            if ( !assetDeclaredVisitor.parse( pAssetDefinition->mAssetBaseFilePath ) )
+            if ( !mTaml.parse( pAssetDefinition->mAssetBaseFilePath, assetDeclaredVisitor ) )
             {
                 // Warn.
                 Con::warnf( "Asset Manager: Failed to parse file containing asset declaration: '%s'.\nDependencies are now incorrect!", pAssetDefinition->mAssetBaseFilePath );
@@ -2222,7 +2222,7 @@ S32 AssetManager::findAssetLooseFile( AssetQuery* pAssetQuery, const char* pLoos
 
     // Expand loose file.
     char looseFileBuffer[1024];
-    Con::expandPath(looseFileBuffer, sizeof(looseFileBuffer), pLooseFile, false );
+    Con::expandPath(looseFileBuffer, sizeof(looseFileBuffer), pLooseFile, NULL, false );
 
     // Fetch asset loose file.
     StringTableEntry looseFile = StringTable->insert( looseFileBuffer );
@@ -2381,7 +2381,7 @@ bool AssetManager::scanDeclaredAssets( const char* pPath, const char* pExtension
         dSprintf( assetFileBuffer, sizeof(assetFileBuffer), "%s/%s", fileInfo.pFullPath, fileInfo.pFileName );
 
         // Parse the filename.
-        if ( !assetDeclaredVisitor.parse( assetFileBuffer ) )
+        if ( !mTaml.parse( assetFileBuffer, assetDeclaredVisitor ) )
         {
             // Warn.
             Con::warnf( "Asset Manager: Failed to parse file containing asset declaration: '%s'.", assetFileBuffer );
@@ -2575,7 +2575,7 @@ bool AssetManager::scanReferencedAssets( const char* pPath, const char* pExtensi
         typeReferenceFilePath referenceFilePath = StringTable->insert( assetFileBuffer );
 
         // Parse the filename.
-        if ( !assetReferencedVisitor.parse( referenceFilePath ) )
+        if ( !mTaml.parse( referenceFilePath, assetReferencedVisitor ) )
         {
             // Warn.
             Con::warnf( "Asset Manager: Failed to parse file containing asset references: '%s'.", referenceFilePath );
@@ -2730,7 +2730,7 @@ void AssetManager::renameAssetReferences( StringTableEntry assetIdFrom, StringTa
         }
 
         // Update asset file declaration.
-        if ( !assetReferencedUpdateVisitor.parse( referencedAssetItr->value ) )
+        if ( !mTaml.parse( referencedAssetItr->value, assetReferencedUpdateVisitor ) )
         {
             // No, so warn.
             Con::warnf("Asset Manager: Cannot rename referenced asset Id '%s' to asset Id '%s' as the referenced asset file could not be parsed: %s",
@@ -2780,7 +2780,7 @@ void AssetManager::removeAssetReferences( StringTableEntry assetId )
         }
 
         // Update asset file declaration.
-        if ( !assetReferencedUpdateVisitor.parse( referencedAssetItr->value ) )
+        if ( !mTaml.parse( referencedAssetItr->value, assetReferencedUpdateVisitor ) )
         {
             // No, so warn.
             Con::warnf("Asset Manager: Cannot remove referenced asset Id '%s' as the referenced asset file could not be parsed: %s",

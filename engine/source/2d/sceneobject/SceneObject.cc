@@ -1656,7 +1656,7 @@ bool SceneObject::rotateTo( const F32 targetAngle, const F32 speed, const bool a
     const F32 relativeAngle = targetAngle - getAngle();
 
     // Calculate delta angle.
-    const F32 deltaAngle = mAtan( mSin( relativeAngle ), mCos( relativeAngle ) );
+    const F32 deltaAngle = mAtan( mCos( relativeAngle ), mSin( relativeAngle ) );
 
     // Set angular velocity.
     setAngularVelocity( deltaAngle > 0.0f ? speed : -speed );

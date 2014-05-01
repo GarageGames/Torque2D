@@ -576,42 +576,15 @@ F32 SceneWindow::interpolate( F32 from, F32 to, F32 delta )
 {
     // Linear.
     if ( mCameraInterpolationMode == LINEAR )
-        return linearInterpolate( from, to, delta );
+        return mLerp( from, to, delta );
     // Sigmoid.
     else if ( mCameraInterpolationMode == SIGMOID )
-        return sigmoidInterpolate( from, to, delta );
+        return mSmoothStep( from, to, delta );
     // Hmmm...
     else
         return from;
 }
 
-//-----------------------------------------------------------------------------
-
-F32 SceneWindow::linearInterpolate( F32 from, F32 to, F32 delta )
-{
-    // Clamp if we're over/under time.
-    if ( delta <= 0.0f )
-        return from;
-    else if ( delta >= 1.0f )
-        return to;
-
-    // Calculate resultant interpolation.
-    return ( from * ( 1.0f - delta ) ) + ( to * delta );
-}
-
-//-----------------------------------------------------------------------------
-
-F32 SceneWindow::sigmoidInterpolate( F32 from, F32 to, F32 delta )
-{
-    // Range Expand/Clamp Delta to (-1 -> +1).
-    delta = mClampF( (delta - 0.5f) * 2.0f, -1.0f, 1.0f );
-
-    // Calculate interpolator value using sigmoid function.
-    F32 sigmoid = mClampF ( 1.0f / (1.0f + mPow(2.718282f, -15.0f * delta)), 0.0f, 1.0f );
-
-    // Calculate resultant interpolation.
-    return ( from * ( 1.0f - sigmoid ) ) + ( to * sigmoid );
-}
 
 //-----------------------------------------------------------------------------
 
@@ -1790,13 +1763,17 @@ void SceneWindow::renderMetricsOverlay( Point2I offset, const RectI& updateRect 
     // Calculate Debug Banner Offset.
     Point2I bannerOffset = updateRect.point + Point2I(8,8);
 
-    // Draw Banner Background.
-    glBegin(GL_TRIANGLE_STRIP);
-        glVertex2i( updateRect.point.x, updateRect.point.y );
-        glVertex2i( updateRect.point.x + updateRect.extent.x, updateRect.point.y );
-        glVertex2i( updateRect.point.x, updateRect.point.y + bannerHeight + 16);
-        glVertex2i( updateRect.point.x + updateRect.extent.x, updateRect.point.y + bannerHeight + 16);
-    glEnd();
+    static GLfloat sWindowVertices[] = {
+        (GLfloat)updateRect.point.x, (GLfloat)updateRect.point.y,
+        (GLfloat)updateRect.point.x + updateRect.extent.x, (GLfloat)updateRect.point.y,
+        (GLfloat)updateRect.point.x, (GLfloat)updateRect.point.y + bannerHeight + 16,
+        (GLfloat)updateRect.point.x + updateRect.extent.x, (GLfloat)updateRect.point.y + bannerHeight + 16
+    };
+    
+    glVertexPointer(2, GL_FLOAT, 0, sWindowVertices);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glDisableClientState(GL_VERTEX_ARRAY);
 
     // Disable Banner Blending.
     glDisable       ( GL_BLEND );
@@ -1866,13 +1843,12 @@ void SceneWindow::renderMetricsOverlay( Point2I offset, const RectI& updateRect 
 
         // Batching #1.
         dglDrawText( font, bannerOffset + Point2I(0,(S32)linePositionY), "Batching", NULL );
-        dSprintf( mDebugText, sizeof( mDebugText ), "- %sTris=%d<%d>, MaxTriDraw=%d, MaxVerts=%d, Single=%d<%d>, Mult=%d<%d>, Sorted=%d<%d>",
+        dSprintf( mDebugText, sizeof( mDebugText ), "- %sTris=%d<%d>, MaxTriDraw=%d, MaxVerts=%d, Strict=%d<%d>, Sorted=%d<%d>",
             pScene->getBatchingEnabled() ? "" : "(OFF) ",
             debugStats.batchTrianglesSubmitted, debugStats.maxBatchTrianglesSubmitted,
             debugStats.batchMaxTriangleDrawn,
             debugStats.batchMaxVertexBuffer,
-            debugStats.batchDrawCallsStrictSingle, debugStats.maxBatchDrawCallsStrictSingle,
-            debugStats.batchDrawCallsStrictMultiple, debugStats.maxBatchDrawCallsStrictMultiple,
+            debugStats.batchDrawCallsStrict, debugStats.maxBatchDrawCallsStrict,
             debugStats.batchDrawCallsSorted, debugStats.maxBatchDrawCallsSorted                   
             );
         dglDrawText( font, bannerOffset + Point2I(metricsOffset,(S32)linePositionY), mDebugText, NULL );

@@ -30,8 +30,11 @@
 #include "io/fileObject.h"
 #include "console/consoleInternal.h"
 #include "debug/profiler.h"
-#include "console/consoleTypeValidators.h"
+#include "console/ConsoleTypeValidators.h"
 #include "memory/frameAllocator.h"
+
+// Script bindings.
+#include "simBase_ScriptBinding.h"
 
 namespace Sim
 {
@@ -52,108 +55,3 @@ namespace Sim
 }   
 
 //-----------------------------------------------------------------------------
-
-ConsoleFunction( getSimTime, S32, 1, 1, "() Use the getSimTime function to get the time, in ticks, that has elapsed since the engine started executing.\n"
-                                                                "@return Returns the time in ticks since the engine was started.\n"
-                                                                "@sa getRealTime")
-{
-   return Sim::getCurrentTime();
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleFunctionGroupBegin ( SimFunctions, "Functions relating to Sim.");
-
-ConsoleFunction(nameToID, S32, 2, 2, "( objectName ) Use the nameToID function to convert an object name into an object ID.\n"
-                                                                "This function is a helper for those odd cases where a string will not covert properly, but generally this can be replaced with a statement like: (\"someName\")\n"
-                                                                "@param objectName A string containing the name of an object.\n"
-                                                                "@return Returns a positive non-zero value if the name corresponds to an object, or a -1 if it does not.")
-{
-   SimObject *obj = Sim::findObject(argv[1]);
-   if(obj)
-      return obj->getId();
-   else
-      return -1;
-}
-
-ConsoleFunction(isObject, bool, 2, 2, "( handle ) Use the isObject function to check if the name or ID specified in handle is a valid object.\n"
-                                                                "@param handle A name or ID of a possible object.\n"
-                                                                "@return Returns true if handle refers to a valid object, false otherwise")
-{
-   if (!dStrcmp(argv[1], "0") || !dStrcmp(argv[1], ""))
-      return false;
-   else
-      return (Sim::findObject(argv[1]) != NULL);
-}
-
-ConsoleFunction(cancel,void,2,2,"( eventID ) Use the cancel function to cancel a previously scheduled event as specified by eventID.\n"
-                                                                "@param eventID The numeric ID of a previously scheduled event.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa getEventTimeLeft, getScheduleDuration, getTimeSinceStart, isEventPending, schedule, obj.schedule")
-{
-   Sim::cancelEvent(dAtoi(argv[1]));
-}
-
-ConsoleFunction(isEventPending, bool, 2, 2, "( eventID ) Use the isEventPending function to see if the event associated with eventID is still pending.\n"
-                                                                "When an event passes, the eventID is removed from the event queue, becoming invalid, so there is no discnerable difference between a completed event and a bad event ID.\n"
-                                                                "@param eventID The numeric ID of a previously scheduled event.\n"
-                                                                "@return Returns true if this event is still outstanding and false if it has passed or eventID is invalid.\n"
-                                                                "@sa cancel, getEventTimeLeft, getScheduleDuration, getTimeSinceStart, schedule, obj.schedule")
-{
-   return Sim::isEventPending(dAtoi(argv[1]));
-}
-
-ConsoleFunction(getEventTimeLeft, S32, 2, 2, "( eventID ) Use the getEventTimeLeft function to determine how much time remains until the event specified by eventID occurs.\n"
-                                                                "@param eventID The numeric ID of a previously scheduled event.\n"
-                                                                "@return Returns a non-zero integer value equal to the milliseconds until the event specified by eventID will occur. However, if eventID is invalid, or the event has passed, this function will return zero.\n"
-                                                                "@sa cancel, getScheduleDuration, getTimeSinceStart, isEventPending, schedule, obj.schedule")
-{
-   return Sim::getEventTimeLeft(dAtoi(argv[1]));
-}
-
-ConsoleFunction(getScheduleDuration, S32, 2, 2, " ( eventID ) Use the getScheduleDuration function to determine how long the event associated with eventID was scheduled for.\n"
-                                                                "@param eventID The numeric ID of a previously scheduled event.\n"
-                                                                "@return Returns a non-zero integer value equal to the milliseconds used in the schedule call that created this event. However, if eventID is invalid, this function will return zero.\n"
-                                                                "@sa cancel, getEventTimeLeft, getTimeSinceStart, isEventPending, schedule, obj.schedule")
-{
-   S32 ret = Sim::getScheduleDuration(dAtoi(argv[1]));
-   return ret;
-}
-
-ConsoleFunction(getTimeSinceStart, S32, 2, 2, "( eventID ) Use the getTimeSinceStart function to determine how much time has passed since the event specified by eventID was scheduled.\n"
-                                                                "@param eventID The numeric ID of a previously scheduled event.\n"
-                                                                "@return Returns a non-zero integer value equal to the milliseconds that have passed since this event was scheduled. However, if eventID is invalid, or the event has passed, this function will return zero.\n"
-                                                                "@sa cancel, getEventTimeLeft, getScheduleDuration, isEventPending, schedule, obj.schedule")
-{
-   S32 ret = Sim::getTimeSinceStart(dAtoi(argv[1]));
-   return ret;
-}
-
-ConsoleFunction(schedule, S32, 4, 0, "( t , objID || 0 , functionName, arg0, ... , argN ) Use the schedule function to schedule functionName to be executed with optional arguments at time t (specified in milliseconds) in the future. This function may be associated with an object ID or not. If it is associated with an object ID and the object is deleted prior to this event occurring, the event is automatically canceled.\n"
-                                                                "@param t The time to wait (in milliseconds) before executing functionName.\n"
-                                                                "@param objID An optional ID to associate this event with.\n"
-                                                                "@param functionName An unadorned (flat) function name.\n"
-                                                                "@param arg0, .. , argN - Any number of optional arguments to be passed to functionName.\n"
-                                                                "@return Returns a non-zero integer representing the event ID for the scheduled event.\n"
-                                                                "@sa cancel, getEventTimeLeft, getScheduleDuration, getTimeSinceStart, isEventPending, obj.schedule")
-{
-   U32 timeDelta = U32(dAtof(argv[1]));
-   SimObject *refObject = Sim::findObject(argv[2]);
-   if(!refObject)
-   {
-      if(argv[2][0] != '0')
-         return 0;
-
-      refObject = Sim::getRootGroup();
-   }
-   SimConsoleEvent *evt = new SimConsoleEvent(argc - 3, argv + 3, false);
-
-   S32 ret = Sim::postEvent(refObject, evt, Sim::getCurrentTime() + timeDelta);
-// #ifdef DEBUG
-//    Con::printf("ref %s schedule(%s) = %d", argv[2], argv[3], ret);
-//    Con::executef(1, "backtrace");
-// #endif
-   return ret;
-}
-
-ConsoleFunctionGroupEnd( SimFunctions );

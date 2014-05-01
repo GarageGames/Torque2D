@@ -1263,8 +1263,8 @@ StringTableEntry ModuleManager::copyModule( ModuleDefinition* pSourceModuleDefin
             char parseFileBuffer[1024];
             dSprintf( parseFileBuffer, sizeof(parseFileBuffer), "%s/%s", pFileInfo->pFullPath, pFilename );
 
-            // Parse file.
-            if ( !moduleIdUpdateVisitor.parse( parseFileBuffer ) )
+            // Parse file.            
+            if ( !mTaml.parse( parseFileBuffer, moduleIdUpdateVisitor ) )
             {
                 // Warn.
                 Con::warnf("Module Manager: Failed to parse file '%s' whilst copying module Id '%s' using target directory '%s'.",

@@ -36,7 +36,7 @@
 #endif
 
 #ifndef B2_MATH_H
-#include "box2d/Common/b2Math.h"
+#include "Box2D/Common/b2Math.h"
 #endif
 
 #ifndef _COLOR_H_
@@ -65,6 +65,8 @@ typedef Vector<TamlCustomField*> TamlCustomFieldVector;
 
 //-----------------------------------------------------------------------------
 
+/// @ingroup tamlGroup
+/// @see tamlGroup
 class TamlCustomField : public IFactoryObjectReset
 {
 public:
@@ -278,6 +280,8 @@ private:
 
 //-----------------------------------------------------------------------------
 
+/// @ingroup tamlGroup
+/// @see tamlGroup
 class TamlCustomNode : public IFactoryObjectReset
 {
 public:
@@ -334,6 +338,7 @@ public:
         // Sanity!
         AssertFatal( pProxyObject != NULL, "Field object cannot be NULL." );
         AssertFatal( mpProxyWriteNode == NULL, "Field write node must be NULL." );
+        AssertFatal( *mNodeText.getFieldValue() == 0, "Cannot add node that has node text." );
 
         // Create a custom node.
         TamlCustomNode* pCustomNode = TamlCustomNodeFactory.createObject();
@@ -352,6 +357,9 @@ public:
 
     inline TamlCustomNode* addNode( const char* pNodeName, const bool ignoreEmpty = true )
     {
+        // Sanity!
+        AssertFatal( *mNodeText.getFieldValue() == 0, "Cannot add node that has node text." );
+
         // Create a custom node.
         TamlCustomNode* pCustomNode = TamlCustomNodeFactory.createObject();
 
@@ -501,6 +509,8 @@ public:
     inline void setNodeText( const char* pNodeText )
     {
         AssertFatal( dStrlen( pNodeText ) < MAX_TAML_NODE_FIELDVALUE_LENGTH, "Custom node text is too long." );
+        AssertFatal( mChildren.size() == 0, "Cannot have node text with children." );
+        AssertFatal( mFields.size() == 0, "Cannot have node text with fields." );
 
         mNodeText.set( StringTable->EmptyString, pNodeText );
     }
@@ -539,6 +549,9 @@ public:
 private:
     inline TamlCustomField* registerField( TamlCustomField* pCustomField )
     {
+        // Sanity!
+        AssertFatal( *mNodeText.getFieldValue() == 0, "Cannot add field to a node that has node text." );
+
 #if TORQUE_DEBUG
         // Ensure a field name conflict does not exist.
         for( Vector<TamlCustomField*>::iterator nodeFieldItr = mFields.begin(); nodeFieldItr != mFields.end(); ++nodeFieldItr )
@@ -590,6 +603,8 @@ private:
 
 //-----------------------------------------------------------------------------
 
+/// @ingroup tamlGroup
+/// @see tamlGroup
 class TamlCustomNodes : public IFactoryObjectReset
 {
 public:

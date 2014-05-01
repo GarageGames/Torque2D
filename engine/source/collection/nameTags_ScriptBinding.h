@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,19 +29,25 @@
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(NameTags, createTag, S32, 3, 3,           "(tagName) Creates a tag.\n"
-                                                        "@param tagName The tag name to create.\n"
-                                                        "@return The tag Id created." )
+ConsoleMethodGroupBeginWithDocs(NameTags, SimSet)
+
+/*! Creates a tag.
+    @param tagName The tag name to create.
+    @return The tag Id created.
+*/
+ConsoleMethodWithDocs(NameTags, createTag, ConsoleInt, 3, 3, (tagName))
 {
     return object->createTag( argv[2] );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(NameTags, renameTag, S32, 4, 4,           "(tagId, newTagName) Renames an existing tag.\n"
-                                                        "@param tagId The tag Id to use.\n"
-                                                        "@param newTagName The new tag name to assign.\n"
-                                                        "@return The tag Id confirms the rename else 0 indicates an error." )
+/*! Renames an existing tag.
+    @param tagId The tag Id to use.
+    @param newTagName The new tag name to assign.
+    @return The tag Id confirms the rename else 0 indicates an error.
+*/
+ConsoleMethodWithDocs(NameTags, renameTag, ConsoleInt, 4, 4, (tagId, newTagName))
 {
     // Fetch tag Id.
     const NameTags::TagId tagId = dAtoi(argv[2]);
@@ -61,9 +67,11 @@ ConsoleMethod(NameTags, renameTag, S32, 4, 4,           "(tagId, newTagName) Ren
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(NameTags, deleteTag, S32, 3, 3,           "(tagId) Deletes a tag.\n"
-                                                        "@param tagId The tag Id to use.\n"
-                                                        "@return The tag Id confirms the delete else 0 indicates an error." )
+/*! Deletes a tag.
+    @param tagId The tag Id to use.
+    @return The tag Id confirms the delete else 0 indicates an error.
+*/
+ConsoleMethodWithDocs(NameTags, deleteTag, ConsoleInt, 3, 3, (tagId))
 {
     // Fetch tag Id.
     const NameTags::TagId tagId = dAtoi(argv[2]);
@@ -80,17 +88,21 @@ ConsoleMethod(NameTags, deleteTag, S32, 3, 3,           "(tagId) Deletes a tag.\
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(NameTags, getTagCount, S32, 2, 2,         "() Gets the total tag count.\n"
-                                                        "@return No return value.")
+/*! Gets the total tag count.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(NameTags, getTagCount, ConsoleInt, 2, 2, ())
 {
     return object->getTagCount();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(NameTags, getTagName, const char*, 3, 3,  "(tagId) Gets the tag name associated with the tag Id.\n"
-                                                        "@param tagId The tag Id to use.\n"
-                                                        "@return The tag name associated with the tag Id or empty string if the tag Id was not found." )
+/*! Gets the tag name associated with the tag Id.
+    @param tagId The tag Id to use.
+    @return The tag name associated with the tag Id or empty string if the tag Id was not found.
+*/
+ConsoleMethodWithDocs(NameTags, getTagName, ConsoleString, 3, 3, (tagId))
 {
     // Fetch tag Id.
     const NameTags::TagId tagId = dAtoi(argv[2]);
@@ -107,17 +119,21 @@ ConsoleMethod(NameTags, getTagName, const char*, 3, 3,  "(tagId) Gets the tag na
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(NameTags, getTagId, S32, 3, 3,            "(tagName) Gets the tag Id associated with the tag name.\n"
-                                                        "@param tagName The tag name to associated with the tag Id.\n"
-                                                        "@return The tag Id associated with the tag name or 0 if the tag name was not found." )
+/*! Gets the tag Id associated with the tag name.
+    @param tagName The tag name to associated with the tag Id.
+    @return The tag Id associated with the tag name or 0 if the tag name was not found.
+*/
+ConsoleMethodWithDocs(NameTags, getTagId, ConsoleInt, 3, 3, (tagName))
 {
     return object->getTagId( argv[2] );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(NameTags, getAllTags, const char*, 2, 2,  "() Gets all the tag Id / tag name pairs.\n"
-                                                        "@return [tag Id / tag Name] pairs")
+/*! Gets all the tag Id / tag name pairs.
+    @return [tag Id / tag Name] pairs
+*/
+ConsoleMethodWithDocs(NameTags, getAllTags, ConsoleString, 2, 2, ())
 {
     // Get buffer.
     const U32 bufferLength = 4096;
@@ -137,10 +153,12 @@ ConsoleMethod(NameTags, getAllTags, const char*, 2, 2,  "() Gets all the tag Id 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(NameTags, tag, bool, 4, 4,            "(object, tagIds) Adds the tag Id(s) to the object.\n"
-                                                    "@param object The object to use.\n"
-                                                    "@param tagIds The tag Id(s) to use.\n"
-                                                    "@return Whether the tag operation was successful or not." )
+/*! Adds the tag Id(s) to the object.
+    @param object The object to use.
+    @param tagIds The tag Id(s) to use.
+    @return Whether the tag operation was successful or not.
+*/
+ConsoleMethodWithDocs(NameTags, tag, ConsoleBool, 4, 4, (object, tagIds))
 {
     // Fetch object Id.
     const SimObjectId objectId = (SimObjectId)dAtoi(argv[2]);
@@ -171,10 +189,12 @@ ConsoleMethod(NameTags, tag, bool, 4, 4,            "(object, tagIds) Adds the t
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(NameTags, untag, bool, 4, 4,          "(object, tagIds) Removes the tag Id(s) from the object.\n"
-                                                    "@param object The object to use.\n"
-                                                    "@param tagIds The tag Id(s) to use.\n"
-                                                    "@return Whether the un-tag operation was successful or not." )
+/*! Removes the tag Id(s) from the object.
+    @param object The object to use.
+    @param tagIds The tag Id(s) to use.
+    @return Whether the un-tag operation was successful or not.
+*/
+ConsoleMethodWithDocs(NameTags, untag, ConsoleBool, 4, 4, (object, tagIds))
 {
     // Fetch object Id.
     const SimObjectId objectId = (SimObjectId)dAtoi(argv[2]);
@@ -205,10 +225,12 @@ ConsoleMethod(NameTags, untag, bool, 4, 4,          "(object, tagIds) Removes th
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(NameTags, hasTag, bool, 4, 4,         "(object, tagId) Checks whether the object is tagged with any of the tag Ids or not.\n"
-                                                    "@param object The object to use.\n"
-                                                    "@param tagId The tag Id(s) to use.\n"
-                                                    "@return Whether the object is tagged with any of the tag Ids or not." )
+/*! Checks whether the object is tagged with any of the tag Ids or not.
+    @param object The object to use.
+    @param tagId The tag Id(s) to use.
+    @return Whether the object is tagged with any of the tag Ids or not.
+*/
+ConsoleMethodWithDocs(NameTags, hasTag, ConsoleBool, 4, 4, (object, tagId))
 {
     // Fetch object Id.
     const SimObjectId objectId = (SimObjectId)dAtoi(argv[2]);
@@ -239,10 +261,12 @@ ConsoleMethod(NameTags, hasTag, bool, 4, 4,         "(object, tagId) Checks whet
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(NameTags, queryTags, const char*, 3, 4,   "(tagIds, [excluded]) Finds any objects added to this instance that are tagged with any of the specified tag(s).\n"                                            
-                                                        "@param tagId The tag Id to use.\n"
-                                                        "@param excluded Optionally inverts the query resulting in objects that are excluded i.e. objects that are NOT tagged with any of the specified tag(s).\n"
-                                                        "@return Any objects added to this instance that are tagged with any of the specified tag(s)." )
+/*! Finds any objects added to this instance that are tagged with any of the specified tag(s).    
+    @param tagId The tag Id to use.
+    @param excluded Optionally inverts the query resulting in objects that are excluded i.e. objects that are NOT tagged with any of the specified tag(s).
+    @return Any objects added to this instance that are tagged with any of the specified tag(s).
+*/
+ConsoleMethodWithDocs(NameTags, queryTags, ConsoleString, 3, 4, (tagIds, [excluded]))
 {
     // Fetch tag Id.
     const NameTags::TagId tagId = dAtoi(argv[2]);
@@ -251,7 +275,7 @@ ConsoleMethod(NameTags, queryTags, const char*, 3, 4,   "(tagIds, [excluded]) Fi
     if ( tagId == 0 )
     {
         Con::warnf("Invalid tag Id.\n");
-        return false;
+        return NULL;
     }
 
     // Query tags.
@@ -271,7 +295,7 @@ ConsoleMethod(NameTags, queryTags, const char*, 3, 4,   "(tagIds, [excluded]) Fi
     // Format results.
     U32 bufferSize = 8192;
     char* pReturnBuffer = Con::getReturnBuffer( bufferSize );
-    dSprintf(pReturnBuffer, sizeof(pReturnBuffer), "%s", "");
+    dSprintf(pReturnBuffer, bufferSize * sizeof(char), "%s", "");
     char* pBuffer = pReturnBuffer;
 
     for( NameTags::queryType::iterator itr = results.begin(); itr != results.end(); ++itr )
@@ -284,5 +308,6 @@ ConsoleMethod(NameTags, queryTags, const char*, 3, 4,   "(tagIds, [excluded]) Fi
     return pReturnBuffer;
 }
 
+ConsoleMethodGroupEndWithDocs(NameTags)
 
 #endif // _NAMETAGS_SCRIPTBINDING_H_

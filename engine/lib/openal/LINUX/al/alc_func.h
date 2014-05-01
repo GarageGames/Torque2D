@@ -2,7 +2,7 @@
 //AL_FUNCTION(ALCubyte*,   alcGetString, (ALCdevice *device,ALCenum param), return NULL; )
 //AL_FUNCTION(ALCvoid,     alcGetIntegerv, (ALCdevice * device,ALCenum param,ALCsizei size,ALCint *data), return; )
 
-AL_FUNCTION(ALCdevice*,  alcOpenDevice, (ALubyte *deviceName), return NULL; )
+AL_FUNCTION(ALCdevice*,  alcOpenDevice, (const ALCchar *deviceName), return NULL; )
 AL_FUNCTION(ALCvoid,     alcCloseDevice, (ALCdevice *device), return; )
 
 AL_FUNCTION(ALCcontext*, alcCreateContext, (ALCdevice *device,ALCint *attrList), return NULL; )

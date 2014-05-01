@@ -34,47 +34,12 @@
 #include "console/compiler.h"
 #include "memory/frameAllocator.h"
 
+#include "consoleDoc_ScriptBinding.h"
+
 //--- Information pertaining to this page... ------------------
 /// @file
 ///
 /// For specifics on using the consoleDoc functionality, see @ref console_autodoc
-
-ConsoleFunctionGroupBegin(ConsoleDoc, "Console self-documentation functions. These output psuedo C++ suitable for feeeding through Doxygen or another auto documentation tool.");
-
-ConsoleFunction(dumpConsoleClasses, void, 1, 3, "(bool dumpScript = true, bool dumpEngine = true) dumps all declared console classes to the console.\n"
-																"This will dump all classes and methods that were registered from within the engine, AND from the console via scripts.\n"
-                "@param dumpScript Specifies whether or not classes defined in script should be dumped.\n"
-                "@param dumpEngine Specifies whether or not classes defined in the engine should be dumped.")
-{
-   bool dumpScript = true;
-   if( argc > 1 )
-      dumpScript = dAtob( argv[1] );
-   
-   bool dumpEngine = true;
-   if( argc > 2 )
-      dumpEngine = dAtob( argv[2] );
-
-   Namespace::dumpClasses( dumpScript, dumpEngine );
-}
-
-ConsoleFunction(dumpConsoleFunctions, void, 1, 3, "(bool dumpScript = true, bool dumpEngine = true) Dumps all declared console functions to the console.\n"
-				"This will dump all funtions that were registered from within the engine, AND from the console via scripts.\n"
-                "@param dumpScript Specifies whether or not functions defined in script should be dumped.\n"
-                "@param dumpEngine Specifies whether or not functions defined in the engine should be dumped."
-				"@sa dumpConsoleMethods")
-{
-   bool dumpScript = true;
-   if( argc > 1 )
-      dumpScript = dAtob( argv[1] );
-   
-   bool dumpEngine = true;
-   if( argc > 2 )
-      dumpEngine = dAtob( argv[2] );
-
-   Namespace::dumpFunctions( dumpScript, dumpEngine );
-}
-
-ConsoleFunctionGroupEnd(ConsoleDoc);
 
 /// Helper table to convert type ids to human readable names.
 const char *typeNames[] = 
@@ -289,7 +254,7 @@ void Namespace::printNamespaceEntries(Namespace * g, bool dumpScript, bool dumpE
 
             use++;
             
-            U32 len = end - use;
+            U32 len = (U32)(end - use);
             dStrncpy(buffer, use, len);
             buffer[len] = 0;
 
@@ -303,7 +268,7 @@ void Namespace::printNamespaceEntries(Namespace * g, bool dumpScript, bool dumpE
          if(dot < bgn && bgn < end)  // And they're in the order dot, bgn, end...
          {
             use++;
-            U32 len = end - bgn - 1;
+            U32 len = (U32)(end - bgn - 1);
             dStrncpy(buffer, bgn+1, len);
             buffer[len] = 0;
 
@@ -316,7 +281,7 @@ void Namespace::printNamespaceEntries(Namespace * g, bool dumpScript, bool dumpE
          char* func_pos = dStrstr(use, funcName);
          if((func_pos) && (func_pos < bgn) && (end > bgn))
          {
-            U32 len = end - bgn - 1;
+            U32 len = (U32)(end - bgn - 1);
             dStrncpy(buffer, bgn+1, len);
             buffer[len] = 0;
 
@@ -571,7 +536,7 @@ void Namespace::dumpClasses( bool dumpScript, bool dumpEngine )
             // Grab the length of the doc string.
             S32 docLen = dStrlen( field );
             if( nextKeyword )
-               docLen = nextKeyword - field;
+               docLen = (U32)(nextKeyword - field);
 
             // Make sure it will fit in the buffer.
             if( docLen > 1023 )

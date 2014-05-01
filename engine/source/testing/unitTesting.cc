@@ -38,7 +38,6 @@
 #include "src/gtest-printers.cc"
 #include "src/gtest-test-part.cc"
 #include "src/gtest-typed-test.cc"
-
 //-----------------------------------------------------------------------------
 
 class TorqueUnitTestListener : public ::testing::EmptyTestEventListener
@@ -80,42 +79,6 @@ class TorqueUnitTestListener : public ::testing::EmptyTestEventListener
     }
 };
 
-//-----------------------------------------------------------------------------
-
-ConsoleFunction( runAllUnitTests, S32, 1, 1, "() - Runs all the registered unit tests." )
-{
-    // Set-up some empty arguments.
-    S32 testArgc = 0;
-    char** testArgv = NULL;
-
-    // Initialize Google Test.
-    testing::InitGoogleTest( &testArgc, testArgv );
-
-    // Fetch the unit test instance.
-    testing::UnitTest& unitTest = *testing::UnitTest::GetInstance();
-
-    // Fetch the unit test event listeners.
-    testing::TestEventListeners& listeners = unitTest.listeners();
-
-    // Release the default listener.
-    delete listeners.Release( listeners.default_result_printer() );
-
-    // Add the Torque unit test listener.
-    listeners.Append( new TorqueUnitTestListener );
-
-    Con::printBlankLine();
-    Con::printSeparator();
-    Con::printf( "Unit Tests Starting..." );
-    Con::printBlankLine();
-
-    const S32 result RUN_ALL_TESTS();
-
-    Con::printBlankLine();
-    Con::printf( "... Unit Tests Ended." );
-    Con::printSeparator();
-    Con::printBlankLine();
-
-    return result;
-}
+#include "unitTesting_ScriptBinding.h"
 
 #endif // TORQUE_SHIPPING

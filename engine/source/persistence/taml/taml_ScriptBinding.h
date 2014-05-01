@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,9 +20,13 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Taml, setFormat, void, 3, 3,  "(format) - Sets the format that Taml should use to read/write.\n"
-                                            "@param format The format to use: 'xml' or 'binary'.\n"
-                                            "@return No return value.")
+ConsoleMethodGroupBeginWithDocs(Taml, SimObject)
+
+/*! Sets the format that Taml should use to read/write.
+    @param format The format to use: 'xml' or 'binary'.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Taml, setFormat, ConsoleVoid, 3, 3, (format))
 {
     // Fetch format mode.
     const Taml::TamlFormatMode formatMode = Taml::getFormatModeEnum(argv[2]);
@@ -41,8 +45,10 @@ ConsoleMethod(Taml, setFormat, void, 3, 3,  "(format) - Sets the format that Tam
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Taml, getFormat, const char*, 2, 2,   "() - Gets the format that Taml should use to read/write.\n"
-                                                    "@return The format that Taml should use to read/write.")
+/*! Gets the format that Taml should use to read/write.
+    @return The format that Taml should use to read/write.
+*/
+ConsoleMethodWithDocs(Taml, getFormat, ConsoleString, 2, 2, ())
 {
     // Fetch format mode.
     return Taml::getFormatModeDescription( object->getFormatMode() );
@@ -50,95 +56,117 @@ ConsoleMethod(Taml, getFormat, const char*, 2, 2,   "() - Gets the format that T
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Taml, setAutoFormat, void, 3, 3,  "(autoFormat) Sets whether the format type is automatically determined by the filename extension or not.\n"
-                                                "@param autoFormat Whether the format type is automatically determined by the filename extension or not.\n"
-                                                "@return No return value." )
+/*! Sets whether the format type is automatically determined by the filename extension or not.
+    @param autoFormat Whether the format type is automatically determined by the filename extension or not.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Taml, setAutoFormat, ConsoleVoid, 3, 3, (autoFormat))
 {
     object->setAutoFormat( dAtob(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Taml, getAutoFormat, bool, 2, 2,  "() Gets whether the format type is automatically determined by the filename extension or not.\n"
-                                                "@return Whether the format type is automatically determined by the filename extension or not." )
+/*! Gets whether the format type is automatically determined by the filename extension or not.
+    @return Whether the format type is automatically determined by the filename extension or not.
+*/
+ConsoleMethodWithDocs(Taml, getAutoFormat, ConsoleBool, 2, 2, ())
 {
     return object->getAutoFormat();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Taml, setWriteDefaults, void, 3, 3,   "(writeDefaults) Sets whether to write static fields that are at their default or not.\n"
-                                                    "@param writeDefaults Whether to write static fields that are at their default or not.\n"
-                                                    "@return No return value." )
+/*! Sets whether to write static fields that are at their default or not.
+    @param writeDefaults Whether to write static fields that are at their default or not.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Taml, setWriteDefaults, ConsoleVoid, 3, 3, (writeDefaults))
 {
     object->setWriteDefaults( dAtob(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Taml, getWriteDefaults, bool, 2, 2,   "() Gets whether to write static fields that are at their default or not.\n"
-                                                    "@return Whether to write static fields that are at their default or not." )
+/*! Gets whether to write static fields that are at their default or not.
+    @return Whether to write static fields that are at their default or not.
+*/
+ConsoleMethodWithDocs(Taml, getWriteDefaults, ConsoleBool, 2, 2, ())
 {
     return object->getWriteDefaults();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Taml, setProgenitorUpdate, void, 3, 3,    "(progenitorUpdate) Sets whether to update each type instances file-progenitor or not.\n"
-                                                        "If not updating then the progenitor stay as the script that executed the call to Taml.\n"
-                                                        "@param progenitorUpdate Whether to update each type instances file-progenitor or not.\n"
-                                                        "@return No return value." )
+/*! Sets whether to update each type instances file-progenitor or not.
+    If not updating then the progenitor stay as the script that executed the call to Taml.
+    @param progenitorUpdate Whether to update each type instances file-progenitor or not.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Taml, setProgenitorUpdate, ConsoleVoid, 3, 3, (progenitorUpdate))
 {
     object->setProgenitorUpdate( dAtob(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Taml, getProgenitorUpdate, bool, 2, 2,    "() Gets whether to update each type instances file-progenitor or not.\n"
-                                                        "@return Whether to update each type instances file-progenitor or not." )
+/*! Gets whether to update each type instances file-progenitor or not.
+    @return Whether to update each type instances file-progenitor or not.
+*/
+ConsoleMethodWithDocs(Taml, getProgenitorUpdate, ConsoleBool, 2, 2, ())
 {
     return object->getProgenitorUpdate();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Taml, setAutoFormatXmlExtension, void, 3, 3,  "(extension) Sets the extension (end of filename) used to detect the XML format.\n"
-                                                            "@param extension The extension (end of filename) used to detect the XML format.\n"
-                                                            "@return No return value." )
+/*! Sets the extension (end of filename) used to detect the XML format.
+    @param extension The extension (end of filename) used to detect the XML format.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Taml, setAutoFormatXmlExtension, ConsoleVoid, 3, 3, (extension))
 {
     object->setAutoFormatXmlExtension( argv[2] );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Taml, getAutoFormatXmlExtension, const char*, 3, 3,   "() Gets the extension (end of filename) used to detect the XML format.\n"
-                                                                    "@return The extension (end of filename) used to detect the XML format." )
+/*! Gets the extension (end of filename) used to detect the XML format.
+    @return The extension (end of filename) used to detect the XML format.
+*/
+ConsoleMethodWithDocs(Taml, getAutoFormatXmlExtension, ConsoleString, 3, 3, ())
 {
     return object->getAutoFormatXmlExtension();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Taml, setAutoFormatBinaryExtension, void, 3, 3,   "(extension) Sets the extension (end of filename) used to detect the Binary format.\n"
-                                                                "@param extension The extension (end of filename) used to detect the Binary format.\n"
-                                                                "@return No return value." )
+/*! Sets the extension (end of filename) used to detect the Binary format.
+    @param extension The extension (end of filename) used to detect the Binary format.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Taml, setAutoFormatBinaryExtension, ConsoleVoid, 3, 3, (extension))
 {
     object->setAutoFormatBinaryExtension( argv[2] );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Taml, getAutoFormatBinaryExtension, const char*, 3, 3,    "() Gets the extension (end of filename) used to detect the Binary format.\n"
-                                                                        "@return The extension (end of filename) used to detect the Binary format." )
+/*! Gets the extension (end of filename) used to detect the Binary format.
+    @return The extension (end of filename) used to detect the Binary format.
+*/
+ConsoleMethodWithDocs(Taml, getAutoFormatBinaryExtension, ConsoleString, 3, 3, ())
 {
     return object->getAutoFormatBinaryExtension();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Taml, setBinaryCompression, void, 3, 3,   "(compressed) - Sets whether ZIP compression is used on binary formatting or not.\n"
-                                                        "@param compressed Whether compression is on or off.\n"
-                                                        "@return No return value.")
+/*! Sets whether ZIP compression is used on binary formatting or not.
+    @param compressed Whether compression is on or off.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Taml, setBinaryCompression, ConsoleVoid, 3, 3, (compressed))
 {
     // Set compression.
     object->setBinaryCompression( dAtob(argv[2]) );
@@ -146,8 +174,10 @@ ConsoleMethod(Taml, setBinaryCompression, void, 3, 3,   "(compressed) - Sets whe
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Taml, getBinaryCompression, bool, 2, 2,  "() - Gets whether ZIP compression is used on binary formatting or not.\n"
-                                                        "@return Whether ZIP compression is used on binary formatting or not.")
+/*! Gets whether ZIP compression is used on binary formatting or not.
+    @return Whether ZIP compression is used on binary formatting or not.
+*/
+ConsoleMethodWithDocs(Taml, getBinaryCompression, ConsoleBool, 2, 2, ())
 {
     // Fetch compression.
     return object->getBinaryCompression();
@@ -155,10 +185,34 @@ ConsoleMethod(Taml, getBinaryCompression, bool, 2, 2,  "() - Gets whether ZIP co
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Taml, write, bool, 4, 4,  "(object, filename) - Writes an object to a file using Taml.\n"
-                                        "@param object The object to write.\n"
-                                        "@param filename The filename to write to.\n"
-                                        "@return Whether the write was successful or not.")
+/*! Sets whether to write JSON that is strictly compatible with RFC4627 or not.
+    @param jsonStrict Whether to write JSON that is strictly compatible with RFC4627 or not.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Taml, setJSONStrict, ConsoleVoid, 3, 3, (jsonStrict))
+{
+    // Set JSON Strict.
+    object->setJSONStrict( dAtob(argv[2]) );
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets whether to write JSON that is strictly compatible with RFC4627 or not.
+    @return whether to write JSON that is strictly compatible with RFC4627 or not.
+*/
+ConsoleMethodWithDocs(Taml, getJSONStrict, ConsoleBool, 2, 2, ())
+{
+    // Get RFC strict.
+    return object->getJSONStrict();
+}
+//-----------------------------------------------------------------------------
+
+/*! Writes an object to a file using Taml.
+    @param object The object to write.
+    @param filename The filename to write to.
+    @return Whether the write was successful or not.
+*/
+ConsoleMethodWithDocs(Taml, write, ConsoleBool, 4, 4, (object, filename))
 {
     // Fetch filename.
     const char* pFilename = argv[3];
@@ -179,9 +233,11 @@ ConsoleMethod(Taml, write, bool, 4, 4,  "(object, filename) - Writes an object t
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Taml, read, const char*, 3, 3,    "(filename) - Read an object from a file using Taml.\n"
-                                                "@param filename The filename to read from.\n"
-                                                "@return (Object) The object read from the file or an empty string if read failed.")
+/*! Read an object from a file using Taml.
+    @param filename The filename to read from.
+    @return (Object) The object read from the file or an empty string if read failed.
+*/
+ConsoleMethodWithDocs(Taml, read, ConsoleString, 3, 3, (filename))
 {
     // Fetch filename.
     const char* pFilename = argv[2];
@@ -202,12 +258,17 @@ ConsoleMethod(Taml, read, const char*, 3, 3,    "(filename) - Read an object fro
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunction(TamlWrite, bool, 3, 5,  "(object, filename, [format], [compressed]) - Writes an object to a file using Taml.\n"
-                                        "@param object The object to write.\n"
-                                        "@param filename The filename to write to.\n"
-                                        "@param format The file format to use.  Optional: Defaults to 'xml'.  Can be set to 'binary'.\n"
-                                        "@param compressed Whether ZIP compression is used on binary formatting or not.  Optional: Defaults to 'true'.\n"
-                                        "@return Whether the write was successful or not.")
+ConsoleMethodGroupEndWithDocs(Taml)
+
+
+/*! Writes an object to a file using Taml.
+    @param object The object to write.
+    @param filename The filename to write to.
+    @param format The file format to use.  Optional: Defaults to 'xml'.  Can be set to 'binary'.
+    @param compressed Whether ZIP compression is used on binary formatting or not.  Optional: Defaults to 'true'.
+    @return Whether the write was successful or not.
+*/
+ConsoleFunctionWithDocs(TamlWrite, ConsoleBool, 3, 5, (object, filename, [format]?, [compressed]?))
 {
     // Fetch filename.
     const char* pFilename = argv[2];
@@ -257,10 +318,12 @@ ConsoleFunction(TamlWrite, bool, 3, 5,  "(object, filename, [format], [compresse
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunction(TamlRead, const char*, 2, 4,    "(filename, [format]) - Read an object from a file using Taml.\n"
-                                                "@param filename The filename to read from.\n"
-                                                "@param format The file format to use.  Optional: Defaults to 'xml'.  Can be set to 'binary'.\n"
-                                                "@return (Object) The object read from the file or an empty string if read failed.")
+/*! Read an object from a file using Taml.
+    @param filename The filename to read from.
+    @param format The file format to use.  Optional: Defaults to 'xml'.  Can be set to 'binary'.
+    @return (Object) The object read from the file or an empty string if read failed.
+*/
+ConsoleFunctionWithDocs(TamlRead, ConsoleString, 2, 4, (filename, [format]?))
 {
     // Fetch filename.
     const char* pFilename = argv[1];
@@ -294,9 +357,11 @@ ConsoleFunction(TamlRead, const char*, 2, 4,    "(filename, [format]) - Read an 
 
 //-----------------------------------------------------------------------------
 
-ConsoleFunction(GenerateTamlSchema, bool, 1, 1, "() - Generate a TAML schema file of all engine types.\n"
-                                                "The schema file is specified using the console variable '" TAML_SCHEMA_VARIABLE "'.\n"
-                                                "@return Whether the schema file was writtent or not." )
+/*! Generate a TAML schema file of all engine types.
+    The schema file is specified using the console variable ' TAML_SCHEMA_VARIABLE '.
+    @return Whether the schema file was writtent or not.
+*/
+ConsoleFunctionWithDocs(GenerateTamlSchema, ConsoleBool, 1, 1, ())
 {
     // Generate the schema.
     return Taml::generateTamlSchema();

@@ -146,11 +146,33 @@ static osxPlatState * tempSharedPlatState = nil;
         
         // Get the new position of the title bar
         barOffset -= frame.size.height;
+        
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < 1070
+        
+        // Update the frame of the torqueView to match the window
+        frame = NSMakeRect([_window frame].origin.x, [_window frame].origin.y, width, height);
+        NSRect viewFrame = NSMakeRect(0, 0, frame.size.width, frame.size.height);
+        [_torqueView setFrame:viewFrame];
+        [_torqueView updateContext];
+#endif
     }
     else
     {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < 1070
+        
+        NSRect mainDisplayRect = [[NSScreen mainScreen] frame];
+        // Update the frame of the torqueView to match the window
+        NSRect viewFrame = NSMakeRect(0, 0, mainDisplayRect.size.width, mainDisplayRect.size.height);
+        [_torqueView setFrame:viewFrame];
+        [_torqueView updateContext];
+        
+        // Otherwise, just go straight full screen
+        [_torqueView enterFullScreenMode:[NSScreen mainScreen] withOptions:nil];
+        
+#else
         // Otherwise, just go straight full screen
         [_window toggleFullScreen:self];
+#endif
     }
     
     // Update the frame of the torqueView to match the window
@@ -225,7 +247,7 @@ static osxPlatState * tempSharedPlatState = nil;
 
 //-----------------------------------------------------------------------------
 
-- (unsigned)retainCount
+- (NSUInteger)retainCount
 {
     // Denotes an object that cannot be released
     return UINT_MAX;

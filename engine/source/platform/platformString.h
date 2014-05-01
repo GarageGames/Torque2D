@@ -27,9 +27,11 @@
 #include "platform/types.h"
 #endif
 
+#include <stdarg.h>
+
 //------------------------------------------------------------------------------
 
-extern dsize_t dStrlen(const char *str);
+extern U32 dStrlen(const char *str);
 
 extern char* dStrcat(char *dst, const char *src);
 extern UTF8* dStrcat(UTF8 *dst, const UTF8 *src);
@@ -59,8 +61,8 @@ extern char* dStrchr(char *str, int c);
 extern const char* dStrchr(const char *str, int c);
 extern char* dStrrchr(char *str, int c);
 extern const char* dStrrchr(const char *str, int c);
-extern dsize_t dStrspn(const char *str, const char *set);
-extern dsize_t dStrcspn(const char *str, const char *set);
+extern U32 dStrspn(const char *str, const char *set);
+extern U32 dStrcspn(const char *str, const char *set);
 extern char* dStrstr(char *str1, char *str2);
 extern char* dStrstr(const char *str1, const char *str2);
 
@@ -83,9 +85,9 @@ extern int dFflushStdout();
 extern int dFflushStderr();
 
 extern void dPrintf(const char *format, ...);
-extern int dVprintf(const char *format, void *arglist);
+extern int dVprintf(const char *format, va_list arglist);
 extern int dSprintf(char *buffer, dsize_t bufferSize, const char *format, ...);
-extern int dVsprintf(char *buffer, dsize_t bufferSize, const char *format, void *arglist);
+extern int dVsprintf(char *buffer, dsize_t bufferSize, const char *format, va_list arglist);
 
 #define QSORT_CALLBACK FN_CDECL
 extern void dQsort(void *base, U32 nelem, U32 width, int (QSORT_CALLBACK *fcmp)(const void *, const void *));

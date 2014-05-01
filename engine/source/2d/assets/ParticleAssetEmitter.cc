@@ -20,10 +20,10 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#include "2d/assets/particleAssetEmitter.h"
+#include "2d/assets/ParticleAssetEmitter.h"
 
 #ifndef _PARTICLE_ASSET_H_
-#include "2d/assets/particleAsset.h"
+#include "2d/assets/ParticleAsset.h"
 #endif
 
 #ifndef _CONSOLETYPES_H_
@@ -203,6 +203,8 @@ ParticleAssetEmitter::ParticleAssetEmitter() :
     // Register for refresh notifications.
     mImageAsset.registerRefreshNotify( this );
     mAnimationAsset.registerRefreshNotify( this );
+    
+    mNamedImageFrame = "";
 }
 
 //------------------------------------------------------------------------------
@@ -246,6 +248,7 @@ void ParticleAssetEmitter::initPersistFields()
 
     addProtectedField("Image", TypeImageAssetPtr, Offset(mImageAsset, ParticleAssetEmitter), &setImage, &getImage, &writeImage, "");
     addProtectedField("Frame", TypeS32, Offset(mImageFrame, ParticleAssetEmitter), &setImageFrame, &defaultProtectedGetFn, &writeImageFrame, "");
+    addProtectedField("NamedFrame", TypeString, Offset(mNamedImageFrame, ParticleAssetEmitter), &setNamedImageFrame, &defaultProtectedGetFn, &writeNamedImageFrame, "");
     addProtectedField("RandomImageFrame", TypeBool, Offset(mRandomImageFrame, ParticleAssetEmitter), &setRandomImageFrame, &defaultProtectedGetFn, &writeRandomImageFrame, "");
     addProtectedField("Animation", TypeAnimationAssetPtr, Offset(mAnimationAsset, ParticleAssetEmitter), &setAnimation, &getAnimation, &writeAnimation, "");
 }
@@ -291,10 +294,15 @@ void ParticleAssetEmitter::copyTo(SimObject* object)
    pParticleAssetEmitter->setAlphaTest( getAlphaTest() );
 
    pParticleAssetEmitter->setRandomImageFrame( getRandomImageFrame() );
+
+   // Static provider?
    if ( pParticleAssetEmitter->isStaticFrameProvider() )
    {
-       pParticleAssetEmitter->setImage( getImage() );
-       pParticleAssetEmitter->setImageFrame( getImageFrame() );
+        // Named image frame?
+        if ( pParticleAssetEmitter->isUsingNamedImageFrame() )
+            pParticleAssetEmitter->setImage( getImage(), getNamedImageFrame() );
+        else
+            pParticleAssetEmitter->setImage( getImage(), getImageFrame() );
    }
    else
    {
@@ -400,9 +408,59 @@ bool ParticleAssetEmitter::setImage( const char* pAssetId, U32 frame )
         mImageFrame = 0;
     }
 
+    // Using a numerical frame index
+    mUsingNamedFrame = false;
+
     // Refresh the asset.
     refreshAsset();
 
+    // Return Okay.
+    return true;
+}
+
+//------------------------------------------------------------------------------
+
+bool ParticleAssetEmitter::setImage( const char* pAssetId, const char* frameName )
+{
+    // Sanity!
+    AssertFatal( pAssetId != NULL, "ParticleAssetEmitter::setImage() - Cannot use a NULL asset Id." );
+    
+    // Set static mode.
+    mStaticMode = true;
+    
+    // Clear animation asset.
+    mAnimationAsset.clear();
+    
+    // Set asset Id.
+    mImageAsset = pAssetId;
+    
+    // Is there an asset?
+    if ( mImageAsset.notNull() )
+    {
+        // Yes, so is the frame valid?
+        if ( !mImageAsset->containsFrame(frameName) )
+        {
+            // No, so warn.
+            Con::warnf( "ParticleAssetEmitter::setImage() - Invalid frame '%s' for ImageAsset '%s'.", frameName, mImageAsset.getAssetId() );
+        }
+        else
+        {
+        // Yes, so set the frame.
+        mNamedImageFrame = StringTable->insert(frameName);
+        }
+    }
+    else
+    {
+        // No, so reset the image frame.
+        mNamedImageFrame = StringTable->insert(StringTable->EmptyString);
+    }
+
+    // Using a named frame index
+    mUsingNamedFrame = true;
+    
+    // Refresh the asset.
+    refreshAsset();
+    
     // Return Okay.
     return true;
 }
@@ -433,9 +491,49 @@ bool ParticleAssetEmitter::setImageFrame( const U32 frame )
     // Set Frame.
     mImageFrame = frame;
 
+    // Using a numerical frame index.
+    mUsingNamedFrame = false;
+
     // Refresh the asset.
     refreshAsset();
 
+    // Return Okay.
+    return true;
+}
+
+//------------------------------------------------------------------------------
+
+bool ParticleAssetEmitter::setNamedImageFrame( const char* frameName )
+{
+    // Check Existing Image.
+    if ( mImageAsset.isNull() )
+    {
+        // Warn.
+        Con::warnf("ParticleAssetEmitter::setNamedImageFrame() - Cannot set Frame without existing asset Id.");
+        
+        // Return Here.
+        return false;
+    }
+    
+    // Check Frame Validity.
+    if ( !mImageAsset->containsFrame(frameName) )
+    {
+        // Warn.
+        Con::warnf( "ParticleAssetEmitter::setNamedImageFrame() - Invalid Frame %s for asset Id '%s'.", frameName, mImageAsset.getAssetId() );
+        
+        // Return Here.
+        return false;
+    }
+    
+    // Set frame.
+    mNamedImageFrame = StringTable->insert(frameName);
+
+    // Using a named frame index
+    mUsingNamedFrame = true;
+    
+    // Refresh the asset.
+    refreshAsset();
+    
     // Return Okay.
     return true;
 }
@@ -464,7 +562,7 @@ bool ParticleAssetEmitter::setAnimation( const char* pAnimationAssetId )
 
 //------------------------------------------------------------------------------
 
-inline void ParticleAssetEmitter::refreshAsset( void )
+void ParticleAssetEmitter::refreshAsset( void )
 {
     // Finish if no owner.
     if ( mOwner == NULL )

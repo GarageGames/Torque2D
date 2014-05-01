@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,41 +20,55 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( GuiImageButtonCtrl, setNormalImage, void, 3, 3,  "(imageAssetId) Sets the asset Id the button \"up\" state.\n"
-                                                                "@return No return value.")
+ConsoleMethodGroupBeginWithDocs(GuiImageButtonCtrl, GuiButtonCtrl)
+
+/*! Sets the asset Id the button \up\ state.
+    @return No return value.
+*/
+ConsoleMethodWithDocs( GuiImageButtonCtrl, setNormalImage, ConsoleVoid, 3, 3, (imageAssetId))
 {
    object->setNormalImage( argv[2] );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( GuiImageButtonCtrl, setHoverImage, void, 3, 3,       "(imageAssetId) Sets the asset Id the button \"hover\" state.\n"
-                                                                    "@return No return value.")
+/*! Sets the asset Id the button \hover\ state.
+    @return No return value.
+*/
+ConsoleMethodWithDocs( GuiImageButtonCtrl, setHoverImage, ConsoleVoid, 3, 3, (imageAssetId))
 {
    object->setHoverImage( argv[2]  );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( GuiImageButtonCtrl, setDownImage, void, 3, 3,   "(imageAssetId) Sets the asset Id the button \"down\" state.\n"
-                                                                    "@return No return value.")
+/*! Sets the asset Id the button \down\ state.
+    @return No return value.
+*/
+ConsoleMethodWithDocs( GuiImageButtonCtrl, setDownImage, ConsoleVoid, 3, 3, (imageAssetId))
 {
    object->setDownImage( argv[2]  );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( GuiImageButtonCtrl, setInactiveImage, void, 3, 3,    "(imageAssetId) Sets the asset Id the button \"inactive\" state.\n"
-                                                                    "@return No return value.")
+/*! Sets the asset Id the button \inactive\ state.
+    @return No return value.
+*/
+ConsoleMethodWithDocs( GuiImageButtonCtrl, setInactiveImage, ConsoleVoid, 3, 3, (imageAssetId))
 {
    object->setInactiveImage( argv[2]  );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( GuiImageButtonCtrl, setActive, void, 3, 3,    "(imageAssetId) Sets the asset Id the button \"inactive\" state.\n"
-                                                                    "@return No return value.")
+/*! Sets the asset Id the button \inactive\ state.
+    @return No return value.
+*/
+ConsoleMethodWithDocs( GuiImageButtonCtrl, setActive, ConsoleVoid, 3, 3, (imageAssetId))
 {
     bool flag = dAtob( argv[2] );
     object->setActive( flag  );
 }
+
+ConsoleMethodGroupEndWithDocs(GuiImageButtonCtrl)

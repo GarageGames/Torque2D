@@ -32,7 +32,7 @@
 #endif
 
 #ifndef B2_COLLISION_H
-#include "box2d/Collision/b2Collision.h"
+#include "Box2D/Collision/b2Collision.h"
 #endif
 
 #ifndef _PLATFORM_H_

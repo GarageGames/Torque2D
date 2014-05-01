@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,11 +20,13 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleFunction( OpenRemoteDebugger, bool, 4, 4,    "( int debuggerVersion, int port, string password ) - Open the remote debugger.\n"
-                                                    "@param debuggerVersion The debugger version required.\n"
-                                                    "@param port The port the remote debugger should be listening for a debugging session on.\n"
-                                                    "@param password The optional password the remote debugger should use for a debugging session authentication.\n"
-                                                    "@return Whether the remote debugger was opened or not." )
+/*! Open the remote debugger.
+    @param debuggerVersion The debugger version required.
+    @param port The port the remote debugger should be listening for a debugging session on.
+    @param password The optional password the remote debugger should use for a debugging session authentication.
+    @return Whether the remote debugger was opened or not.
+*/
+ConsoleFunctionWithDocs( OpenRemoteDebugger, ConsoleBool, 4, 4, ( int debuggerVersion, int port, string password ))
 {
     // Fetch debugger version.
     const S32 debuggerVersion = dAtoi(argv[1]);

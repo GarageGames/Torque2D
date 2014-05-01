@@ -56,7 +56,7 @@
 #endif
 
 #ifndef _SIM_OBJECT_LIST_H_
-#include "sim/simObjectList.h"
+#include "sim/SimObjectList.h"
 #endif
 
 #ifndef _SIM_OBJECT_H_

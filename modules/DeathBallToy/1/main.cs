@@ -450,7 +450,7 @@ function DeathBallToy::cancelPendingEvents()
 function DeathBallToy::onTouchDown(%this, %touchID, %worldPosition)
 {
     %origin = Deathball.getPosition();
-    %angle = -mRadToDeg( mAtan( getWord(%worldPosition,0)-getWord(%origin,0), getWord(%worldPosition,1)-getWord(%origin,1) ) );
+    %angle = mAtan( Vector2Sub( %worldPosition, %origin ) ) - 90;
 
     Deathball.RotateTo( %angle, DeathBallToy.rotateSpeed );
 
@@ -468,7 +468,7 @@ function DeathBallToy::onTouchDown(%this, %touchID, %worldPosition)
 function DeathBallToy::onTouchUp(%this, %touchID, %worldPosition)
 {
     %origin = Deathball.getPosition();
-    %angle = -mRadToDeg( mAtan( getWord(%worldPosition,0)-getWord(%origin,0), getWord(%worldPosition,1)-getWord(%origin,1) ) );
+    %angle = mAtan( Vector2Sub( %worldPosition, %origin ) );
     
     // Since the speed is used instead of time, we can use the current velocity to set it's speed.
     %adjustedSpeed = VectorLen(DeathBall.getLinearVelocity());// (DeathBallToy.ballSpeed / DeathBallToy.maxBallSpeed) * 3000;
@@ -481,7 +481,7 @@ function DeathBallToy::onTouchUp(%this, %touchID, %worldPosition)
 function DeathBallToy::onTouchDragged(%this, %touchID, %worldPosition)
 {    
     %origin = Deathball.getPosition();
-    %angle = -mRadToDeg( mAtan( getWord(%worldPosition,0)-getWord(%origin,0), getWord(%worldPosition,1)-getWord(%origin,1) ) );
+    %angle = mAtan( Vector2Sub( %worldPosition, %origin ) ) - 90;
 
     Deathball.RotateTo( %angle, DeathBallToy.rotateSpeed );
 

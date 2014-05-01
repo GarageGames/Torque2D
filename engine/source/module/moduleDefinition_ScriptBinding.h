@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,8 +20,12 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ModuleDefinition, save, bool, 2, 2,   "() - Saves the module definition to the file it was loaded from (if any).\n"
-                                                    "@return (bool success) Whether the module definition was saved or not.")
+ConsoleMethodGroupBeginWithDocs(ModuleDefinition, SimSet)
+
+/*! Saves the module definition to the file it was loaded from (if any).
+    @return (bool success) Whether the module definition was saved or not.
+*/
+ConsoleMethodWithDocs(ModuleDefinition, save, ConsoleBool, 2, 2, ())
 {
     // Save.
     return object->save();
@@ -29,8 +33,10 @@ ConsoleMethod(ModuleDefinition, save, bool, 2, 2,   "() - Saves the module defin
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ModuleDefinition, getModuleManager, S32, 2, 2,    "() - Gets the module manager which this module definition is registered with (if any).\n"
-                                                                "@return (moduleManager) The module manager which this module definition is registered with (zero if not registered).")
+/*! Gets the module manager which this module definition is registered with (if any).
+    @return (moduleManager) The module manager which this module definition is registered with (zero if not registered).
+*/
+ConsoleMethodWithDocs(ModuleDefinition, getModuleManager, ConsoleInt, 2, 2, ())
 {
     // Fetch module manager.
     ModuleManager* pModuleManager = object->getModuleManager();
@@ -40,8 +46,10 @@ ConsoleMethod(ModuleDefinition, getModuleManager, S32, 2, 2,    "() - Gets the m
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ModuleDefinition, getDependencyCount, S32, 2, 2,  "() - Gets the number of module dependencies this module definition has.\n"
-                                                                "@return (int count) The number of module dependencies this module definition has.")
+/*! Gets the number of module dependencies this module definition has.
+    @return (int count) The number of module dependencies this module definition has.
+*/
+ConsoleMethodWithDocs(ModuleDefinition, getDependencyCount, ConsoleInt, 2, 2, ())
 {
     // Get module dependency count.
     return object->getDependencyCount();
@@ -49,9 +57,11 @@ ConsoleMethod(ModuleDefinition, getDependencyCount, S32, 2, 2,  "() - Gets the n
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ModuleDefinition, getDependency, const char*, 3, 3,   "(int dependencyIndex) - Gets the module dependency at the specified index.\n"
-                                                                    "@param dependencyIndex The module dependency index.\n"
-                                                                    "@return (module-dependency) The module dependency at the specified index.")
+/*! Gets the module dependency at the specified index.
+    @param dependencyIndex The module dependency index.
+    @return (module-dependency) The module dependency at the specified index.
+*/
+ConsoleMethodWithDocs(ModuleDefinition, getDependency, ConsoleString, 3, 3, (int dependencyIndex))
 {
     // Fetch dependency index.
     const U32 dependencyIndex = (U32)dAtoi(argv[2]);
@@ -70,10 +80,12 @@ ConsoleMethod(ModuleDefinition, getDependency, const char*, 3, 3,   "(int depend
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ModuleDefinition, addDependency, bool, 4, 4,      "(moduleId, versionId) - Adds the specified moduleId and vesionId as a dependency.\n"
-                                                                "@param moduleId The module Id to add as a dependency.\n"
-                                                                "@param versionId The version Id to add as a dependency.  Using zero indicates any version.\n"
-                                                                "@return (bool success) Whether the module dependency was added or not.")
+/*! Adds the specified moduleId and vesionId as a dependency.
+    @param moduleId The module Id to add as a dependency.
+    @param versionId The version Id to add as a dependency.  Using zero indicates any version.
+    @return (bool success) Whether the module dependency was added or not.
+*/
+ConsoleMethodWithDocs(ModuleDefinition, addDependency, ConsoleBool, 4, 4, (moduleId, versionId))
 {
     // Fetch module Id.
     const char* pModuleId = argv[2];
@@ -87,9 +99,11 @@ ConsoleMethod(ModuleDefinition, addDependency, bool, 4, 4,      "(moduleId, vers
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ModuleDefinition, removeDependency, bool, 3, 3,   "(moduleId) - Removes the specified moduleId as a dependency.\n"
-                                                                "@param moduleId The module Id to remove as a dependency.\n"
-                                                                "@return (bool success) Whether the module dependency was removed or not.")
+/*! Removes the specified moduleId as a dependency.
+    @param moduleId The module Id to remove as a dependency.
+    @return (bool success) Whether the module dependency was removed or not.
+*/
+ConsoleMethodWithDocs(ModuleDefinition, removeDependency, ConsoleBool, 3, 3, (moduleId))
 {
     // Fetch module Id.
     const char* pModuleId = argv[2];
@@ -97,3 +111,5 @@ ConsoleMethod(ModuleDefinition, removeDependency, bool, 3, 3,   "(moduleId) - Re
     // Remove dependency.
     return object->removeDependency( pModuleId );
 }
+
+ConsoleMethodGroupEndWithDocs(ModuleDefinition)

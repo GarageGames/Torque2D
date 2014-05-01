@@ -26,16 +26,9 @@
 #include "game/gameInterface.h"
 #include "string/unicode.h"
 
-WinConsole *WindowsConsole = NULL;
+#include "winConsole_ScriptBinding.h"
 
-ConsoleFunction(enableWinConsole, void, 2, 2, "( enable ) Use the enableWinConsole function to tell TGB to create an external console window, either as a separate DOS window or as a new window under OSX/Linux/*NIX.\n"
-                                                                "Subsequent calls to this function do nothing. Only one external console is allowed\n"
-                                                                "@param enable A boolean. If this value is set to true, a new console window will be created.\n"
-                                                                "@return No return value.")
-{
-   argc;
-   WindowsConsole->enable(dAtob(argv[1]));
-}
+WinConsole *WindowsConsole = NULL;
 
 void WinConsole::create()
 {

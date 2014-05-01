@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,16 +20,24 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetBase, refreshAsset, void, 2, 2,        "() Refresh the asset.\n"
-                                                                "@return No return value.")
+ConsoleMethodGroupBeginWithDocs(AssetBase, SimObject)
+
+/*! Refresh the asset.
+    @return No return value.
+*/
+ConsoleMethodWithDocs( AssetBase, refreshAsset, ConsoleVoid, 2, 2, ())
 {
     object->refreshAsset();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( AssetBase, getAssetId, const char*, 2, 2,   "() - Gets the assets' Asset Id.  This is only available if the asset was acquired from the asset manager.\n"
-                                                                "@return The assets' Asset Id.")
+/*! Gets the assets' Asset Id.  This is only available if the asset was acquired from the asset manager.
+    @return The assets' Asset Id.
+*/
+ConsoleMethodWithDocs( AssetBase, getAssetId, ConsoleString, 2, 2, ())
 {
     return object->getAssetId();
 }
+
+ConsoleMethodGroupEndWithDocs(AssetBase)

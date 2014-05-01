@@ -130,7 +130,7 @@ ParticleAsset::ParticleAsset() :
     VECTOR_SET_ASSOCIATION( mEmitters );  
 
     // Initialize particle fields.
-    mParticleFields.addField( mParticleLifeScale.getBase(), "LifeScale", 1000.0f, 0.0f, 100.0f, 1.0f );
+    mParticleFields.addField( mParticleLifeScale.getBase(), "LifetimeScale", 1000.0f, 0.0f, 100.0f, 1.0f );
     mParticleFields.addField( mQuantityScale.getBase(), "QuantityScale", 1000.0f, 0.0f, 100.0f, 1.0f );
     mParticleFields.addField( mSizeXScale.getBase(), "SizeXScale", 1000.0f, 0.0f, 100.0f, 1.0f );
     mParticleFields.addField( mSizeYScale.getBase(), "SizeYScale", 1000.0f, 0.0f, 100.0f, 1.0f );

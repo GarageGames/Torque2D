@@ -59,7 +59,7 @@ bool FileDialog::Execute()
             setDataField(StringTable->insert("files"), Con::getIntArg(i), StringTable->insert(file));
         }
 
-        setDataField(StringTable->insert("fileCount"), NULL, Con::getIntArg([nsFileArray count]));
+        setDataField(StringTable->insert("fileCount"), NULL, Con::getIntArg((S32)[nsFileArray count]));
     }
     else
     {
@@ -209,7 +209,7 @@ S32 Platform::messageBox(const UTF8 *title, const UTF8 *message, MBButtons butto
     [alert setMessageText:nsTitle];
     [alert setInformativeText:nsMessage];
 
-    S32 result = [alert runModal];
+    S32 result = (S32)[alert runModal];
 
     return result;
 }

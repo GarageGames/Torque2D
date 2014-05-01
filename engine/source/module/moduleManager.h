@@ -50,6 +50,8 @@
 
 //-----------------------------------------------------------------------------
 
+/// @ingroup moduleGroup
+/// @see moduleGroup
 class ModuleManager : public SimObject
 {
 private:

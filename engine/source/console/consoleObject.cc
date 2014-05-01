@@ -26,7 +26,7 @@
 #include "algorithm/crc.h"
 #include "console/console.h"
 #include "console/consoleInternal.h"
-#include "console/consoleTypeValidators.h"
+#include "console/ConsoleTypeValidators.h"
 #include "math/mMath.h"
 
 AbstractClassRep *                 AbstractClassRep::classLinkList = NULL;
@@ -158,7 +158,7 @@ ConsoleObject* AbstractClassRep::create(const U32 groupId, const U32 typeId, con
 
 //--------------------------------------
 
-static S32 QSORT_CALLBACK ACRCompare(const void *aptr, const void *bptr)
+S32 QSORT_CALLBACK ACRCompare(const void *aptr, const void *bptr)
 {
    const AbstractClassRep *a = *((const AbstractClassRep **) aptr);
    const AbstractClassRep *b = *((const AbstractClassRep **) bptr);
@@ -580,41 +580,4 @@ ConsoleObject::~ConsoleObject()
 AbstractClassRep* ConsoleObject::getClassRep() const
 {
    return NULL;
-}
-
-ConsoleFunction( enumerateConsoleClasses, const char*, 1, 2, "enumerateConsoleClasses(<\"base class\">);")
-{
-   AbstractClassRep *base = NULL;    
-   if(argc > 1)
-   {
-      base = AbstractClassRep::findClassRep(argv[1]);
-      if(!base)
-         return "";
-   }
-   
-   Vector<AbstractClassRep*> classes;
-   U32 bufSize = 0;
-   for(AbstractClassRep *rep = AbstractClassRep::getClassList(); rep; rep = rep->getNextClass())
-   {
-      if( !base || rep->isClass(base))
-      {
-         classes.push_back(rep);
-         bufSize += dStrlen(rep->getClassName()) + 1;
-      }
-   }
-   
-   if(!classes.size())
-      return "";
-
-   dQsort(classes.address(), classes.size(), sizeof(AbstractClassRep*), ACRCompare);
-
-   char* ret = Con::getReturnBuffer(bufSize);
-   dStrcpy( ret, classes[0]->getClassName());
-   for( U32 i=0; i< (U32)classes.size(); i++)
-   {
-      dStrcat( ret, "\t" );
-      dStrcat( ret, classes[i]->getClassName() );
-   }
-   
-   return ret;
 }

@@ -1005,7 +1005,7 @@ bool TiXmlDocument::LoadFile( FileStream &stream, TiXmlEncoding encoding )
     char* buf = new char[ length+1 ];
     buf[0] = 0;
 
-    if ( !stream.read( length, buf ) ) {
+    if ( !stream.read( (U32)length, buf ) ) {
         delete [] buf;
         SetError( TIXML_ERROR_OPENING_FILE, 0, 0, TIXML_ENCODING_UNKNOWN );
         return false;

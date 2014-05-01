@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,11 +20,14 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
+ConsoleMethodGroupBeginWithDocs(Sprite, SpriteBase)
 
-ConsoleMethod(Sprite, setFlip, void, 4, 4,  "(bool flipX, bool flipY) Sets the sprite texture flipping for each axis.\n"
-                                                "@param flipX Whether or not to flip the texture along the x (horizontal) axis.\n"
-                                                "@param flipY Whether or not to flip the texture along the y (vertical) axis.\n"
-                                                "@return No return value.")
+/*! Sets the sprite texture flipping for each axis.
+    @param flipX Whether or not to flip the texture along the x (horizontal) axis.
+    @param flipY Whether or not to flip the texture along the y (vertical) axis.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Sprite, setFlip, ConsoleVoid, 4, 4, (bool flipX, bool flipY))
 {
     // Set Flip.
     object->setFlip( dAtob(argv[2]), dAtob(argv[3]) );
@@ -32,8 +35,10 @@ ConsoleMethod(Sprite, setFlip, void, 4, 4,  "(bool flipX, bool flipY) Sets the s
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Sprite, getFlip, const char*, 2, 2,   "() Gets the flip for each axis.\n"
-                                                        "@return (bool flipX/bool flipY) Whether or not the texture is flipped along the x and y axis.")
+/*! Gets the flip for each axis.
+    @return (bool flipX/bool flipY) Whether or not the texture is flipped along the x and y axis.
+*/
+ConsoleMethodWithDocs(Sprite, getFlip, ConsoleString, 2, 2, ())
 {
     // Create Returnable Buffer.
     char* pBuffer = Con::getReturnBuffer(32);
@@ -47,9 +52,11 @@ ConsoleMethod(Sprite, getFlip, const char*, 2, 2,   "() Gets the flip for each a
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Sprite, setFlipX, void, 3, 3,     "(bool flipX) Sets whether or not the texture is flipped horizontally.\n"
-                                                    "@param flipX Whether or not to flip the texture along the x (horizontal) axis."
-                                                    "@return No return value.")
+/*! Sets whether or not the texture is flipped horizontally.
+    @param flipX Whether or not to flip the texture along the x (horizontal) axis.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Sprite, setFlipX, ConsoleVoid, 3, 3, (bool flipX))
 {
     // Set Flip.
     object->setFlipX( dAtob(argv[2]) );
@@ -57,9 +64,11 @@ ConsoleMethod(Sprite, setFlipX, void, 3, 3,     "(bool flipX) Sets whether or no
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Sprite, setFlipY, void, 3, 3,     "(bool flipY) Sets whether or not the texture is flipped vertically.\n"
-                                                    "@param flipY Whether or not to flip the texture along the y (vertical) axis."
-                                                    "@return No return value.")
+/*! Sets whether or not the texture is flipped vertically.
+    @param flipY Whether or not to flip the texture along the y (vertical) axis.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(Sprite, setFlipY, ConsoleVoid, 3, 3, (bool flipY))
 {
     // Set Flip.
     object->setFlipY( dAtob(argv[2]) );
@@ -67,16 +76,22 @@ ConsoleMethod(Sprite, setFlipY, void, 3, 3,     "(bool flipY) Sets whether or no
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Sprite, getFlipX, bool, 2, 2,     "() Gets whether or not the texture is flipped horizontally.\n"
-                                                    "@return (bool flipX) Whether or not the texture is flipped along the x axis.")
+/*! Gets whether or not the texture is flipped horizontally.
+    @return (bool flipX) Whether or not the texture is flipped along the x axis.
+*/
+ConsoleMethodWithDocs(Sprite, getFlipX, ConsoleBool, 2, 2, ())
 {
    return object->getFlipX();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(Sprite, getFlipY, bool, 2, 2,     "() Gets whether or not the texture is flipped vertically."
-                                                    "@return (bool flipY) Whether or not the texture is flipped along the y axis.")
+/*! Gets whether or not the texture is flipped vertically.
+    @return (bool flipY) Whether or not the texture is flipped along the y axis.
+*/
+ConsoleMethodWithDocs(Sprite, getFlipY, ConsoleBool, 2, 2, ())
 {
    return object->getFlipY();
 }
+
+ConsoleMethodGroupEndWithDocs(Sprite)

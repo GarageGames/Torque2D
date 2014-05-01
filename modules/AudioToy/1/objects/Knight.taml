@@ -1,0 +1,22 @@
+<Sprite
+    SceneLayer="5"
+    Size="4 4"
+    Position="15 -6.9"
+    UseInputEvents="true"
+    Animation="ToyAssets:TD_Knight_MoveSouth" >
+    <Sprite.Behaviors>
+        <ButtonBehavior />
+        <AnimationBehavior 
+            DeathAnimation="ToyAssets:TD_Knight_Death" />
+        <SoundBehavior
+            DeathSound="ToyAssets:KnightDeathSound" />
+    </Sprite.Behaviors>
+    <Sprite.CollisionShapes>
+        <Polygon>
+            <Point>-2 -2</Point>
+            <Point>2 -2</Point>
+            <Point>2 2</Point>
+            <Point>-2 2</Point>
+        </Polygon>
+    </Sprite.CollisionShapes>
+</Sprite>

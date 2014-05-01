@@ -23,11 +23,11 @@
 #include "2d/core/SpriteBatchQuery.h"
 
 #ifndef _SPRITE_BATCH_H_
-#include "2d/core/spriteBatch.h"
+#include "2d/core/SpriteBatch.h"
 #endif
 
 #ifndef _SPRITE_BATCH_ITEM_H_
-#include "2d/core/spriteBatchItem.h"
+#include "2d/core/SpriteBatchItem.h"
 #endif
 
 // Debug Profiling.
@@ -80,6 +80,30 @@ bool SpriteBatchQuery::update( SpriteBatchItem* pSpriteBatchItem, const b2AABB& 
 }
 
 //-----------------------------------------------------------------------------
+
+U32 SpriteBatchQuery::queryOOBB( const b2AABB& aabb, b2PolygonShape& oobb, const bool targetOOBB )
+{
+  // This function is used exclusively when picking rectangular areas using CompositeSprite's pickArea ConsoleMethod
+  // For rendering, SpriteBatchQuery::queryArea is used instead
+
+  // Debug Profiling.
+    PROFILE_SCOPE(SpriteBatchQuery_QueryArea);
+
+    mMasterQueryKey++;
+
+    // Flag as not a ray-cast query result.
+    mIsRaycastQueryResult = false;
+
+  mComparePolygonShape.Set(oobb.m_vertices,4);
+  mComparePolygonShape.m_centroid = oobb.m_centroid;
+
+    mCompareTransform.SetIdentity();
+    mCheckOOBB = targetOOBB;
+    Query( this, aabb );
+    mCheckOOBB = false;
+
+    return getQueryResultsCount();
+}
 
 U32 SpriteBatchQuery::queryArea( const b2AABB& aabb, const bool targetOOBB )
 {
@@ -195,7 +219,7 @@ bool SpriteBatchQuery::QueryCallback( S32 proxyId )
     {
             // Fetch the shapes render OOBB.
         b2PolygonShape oobb;
-        oobb.Set( pSpriteBatchItem->getRenderOOBB(), 4);
+        oobb.Set( pSpriteBatchItem->getLocalOOBB(), 4);
 
         if ( mCheckPoint )
         {
@@ -237,7 +261,7 @@ F32 SpriteBatchQuery::RayCastCallback( const b2RayCastInput& input, S32 proxyId 
     {
         // Fetch the shapes render OOBB.
         b2PolygonShape oobb;
-        oobb.Set( pSpriteBatchItem->getRenderOOBB(), 4);
+        oobb.Set( pSpriteBatchItem->getLocalOOBB(), 4);
         b2RayCastOutput rayOutput;
         if ( !oobb.RayCast( &rayOutput, mCompareRay, mCompareTransform, 0 ) )
             return true;

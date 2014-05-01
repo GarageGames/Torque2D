@@ -20,7 +20,7 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#include "2d/core/imageFrameProviderCore.h"
+#include "2d/core/ImageFrameProviderCore.h"
 
 #ifndef _SCENE_OBJECT_H_
 #include "2d/sceneobject/SceneObject.h"
@@ -39,7 +39,7 @@
 #endif
 
 #ifndef _RENDER_PROXY_H_
-#include "2d/core/renderProxy.h"
+#include "2d/core/RenderProxy.h"
 #endif
 
 // Debug Profiling.
@@ -114,7 +114,13 @@ void ImageFrameProviderCore::copyTo( ImageFrameProviderCore* pImageFrameProvider
     {
         // Yes, so use the image/frame if we have an asset.
         if ( mpImageAsset->notNull() )
-            pImageFrameProviderCore->setImage( getImage(), getImageFrame() );
+        {
+            // Named image frame?
+            if ( !isUsingNamedImageFrame() )
+                pImageFrameProviderCore->setImage( getImage(), getImageFrame() );
+            else
+                pImageFrameProviderCore->setImage( getImage(), getNamedImageFrame() );
+        }
     }
     else if ( mpAnimationAsset->notNull() )
     {
@@ -178,11 +184,35 @@ bool ImageFrameProviderCore::validRender( void ) const
     if ( isStaticFrameProvider() )
     {
         // Yes, so we must have an image asset and the frame must be in bounds.
-        return mpImageAsset->notNull() && ( getImageFrame() < (*mpImageAsset)->getFrameCount() );
+        if (!isUsingNamedImageFrame())
+            return mpImageAsset->notNull() && ( getImageFrame() < (*mpImageAsset)->getFrameCount() );
+        else
+            return mpImageAsset->notNull() && getNamedImageFrame() != StringTable->EmptyString && ( (*mpImageAsset)->containsFrame(getNamedImageFrame()) );
     }
 
     // No, so if the animation must be valid.
     return isAnimationValid();
+}
+
+//------------------------------------------------------------------------------
+
+const ImageAsset::FrameArea& ImageFrameProviderCore::getProviderImageFrameArea( void ) const
+{
+    // If this does not have a valid render state, return a bad frame
+    if (!validRender())
+        return BadFrameArea;
+    
+    // If it is a static frame and it's not using named frames, get the image area based mImageFrame
+    // If it is a static frame and it's using named frames, get the image area based on mImageNameFrame
+    // Otherwise, get the current animation frame
+    if (isStaticFrameProvider())
+        return !isUsingNamedImageFrame() ? (*mpImageAsset)->getImageFrameArea(mImageFrame) : (*mpImageAsset)->getImageFrameArea(mNamedImageFrame);
+    else
+        return !(*mpAnimationAsset)->getNamedCellsMode() ? (*mpAnimationAsset)->getImage()->getImageFrameArea(getCurrentAnimationFrame()) :
+                                                           (*mpAnimationAsset)->getImage()->getImageFrameArea(getCurrentNamedAnimationFrame());
+    
+    // If we got here for some reason, that's bad. So return a bad area frame
+    return BadFrameArea;
 }
 
 //------------------------------------------------------------------------------
@@ -254,7 +284,7 @@ void ImageFrameProviderCore::renderGui( GuiControl& owner, Point2I offset, const
         RectI destinationRegion(offset, owner.mBounds.extent);
 
         // Render image.
-		dglSetBitmapModulation( owner.mProfile->mFillColor );
+        dglSetBitmapModulation( owner.mProfile->mFillColor );
         dglDrawBitmapStretchSR( getProviderTexture(), destinationRegion, sourceRegion );
         dglClearBitmapModulation();
     }
@@ -278,15 +308,37 @@ bool ImageFrameProviderCore::setImage( const char* pImageAssetId, const U32 fram
     if ( mpImageAsset->notNull() )
         setImageFrame( frame );
 
-    // Set Frame.
-    mImageFrame = frame;
-
     // Set as static provider.
     mStaticProvider = true;
 
     // Turn-off tick processing.
     setProcessTicks( false );
 
+    // Return Okay.
+    return true;
+}
+
+//------------------------------------------------------------------------------
+
+bool ImageFrameProviderCore::setImage( const char* pImageAssetId, const char* pNamedFrame )
+{
+    // Finish if invalid image asset.
+    if ( pImageAssetId == NULL )
+        return false;
+    
+    // Set asset.
+    mpImageAsset->setAssetId( pImageAssetId );
+    
+    // Set the image frame if the image asset was set.
+    if ( mpImageAsset->notNull() )
+        setNamedImageFrame( pNamedFrame );
+    
+    // Set as static provider.
+    mStaticProvider = true;
+    
+    // Turn-off tick processing.
+    setProcessTicks( false );
+    
     // Return Okay.
     return true;
 }
@@ -309,7 +361,7 @@ bool ImageFrameProviderCore::setImageFrame( const U32 frame )
     if ( frame >= (*mpImageAsset)->getFrameCount() )
     {
         // Warn.
-        Con::warnf( "ImageFrameProviderCore::setImageFrame() - Invalid Frame #%d for asset Id '%s'.", frame, mpImageAsset->getAssetId() );
+        Con::warnf("ImageFrameProviderCore::setImageFrame() - Invalid Frame #%d for asset Id '%s'.", frame, mpImageAsset->getAssetId());
         // Return Here.
         return false;
     }
@@ -317,6 +369,40 @@ bool ImageFrameProviderCore::setImageFrame( const U32 frame )
     // Set Frame.
     mImageFrame = frame;
 
+    // Using a numerical frame index.
+    mUsingNamedFrame = false;
+
+    // Return Okay.
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool ImageFrameProviderCore::setNamedImageFrame(const char* pNamedFrame)
+{
+    // Check Existing Image.
+    if ( mpImageAsset->isNull() )
+    {
+        // Warn.
+        Con::warnf("ImageFrameProviderCore::setNamedImageFrame() - Cannot set Frame without existing asset Id.");
+        
+        // Return Here.
+        return false;
+    }
+    
+    // Check Frame Validity.
+    if ( pNamedFrame == StringTable->EmptyString )
+    {
+        // Warn.
+        Con::warnf( "ImageFrameProviderCore::setNamedImageFrame() - Invalid Frame %s for asset Id '%s'.", pNamedFrame, mpImageAsset->getAssetId() );
+        // Return Here.
+        return false;
+    }
+    
+    // Set Frame.
+    mNamedImageFrame = StringTable->insert(pNamedFrame);
+    mUsingNamedFrame = true;
+    
     // Return Okay.
     return true;
 }
@@ -339,17 +425,37 @@ const U32 ImageFrameProviderCore::getCurrentAnimationFrame( void ) const
 
 //-----------------------------------------------------------------------------
 
+const char* ImageFrameProviderCore::getCurrentNamedAnimationFrame( void ) const
+{
+    // Sanity!
+    AssertFatal( mpAnimationAsset->notNull(), "Animation controller requested current image frame but no animation asset assigned." );
+
+    // Fetch validated frames.
+    const Vector<StringTableEntry>& validatedFrames = (*mpAnimationAsset)->getValidatedNamedAnimationFrames();
+
+    // Sanity!
+    AssertFatal( mCurrentFrameIndex < validatedFrames.size(), "Animation controller requested the current frame but it is out of bounds of the validated frames." );
+
+    return validatedFrames[mCurrentFrameIndex];
+}
+
+//-----------------------------------------------------------------------------
+
 bool ImageFrameProviderCore::isAnimationValid( void ) const
 {
     // Not valid if no animation asset.
     if ( mpAnimationAsset->isNull() )
         return false;
 
-    // Fetch validated frames.
-    const Vector<S32>& validatedFrames = (*mpAnimationAsset)->getValidatedAnimationFrames();
+    S32 validatedFrameSize = 0;
+
+    if ((*mpAnimationAsset)->getNamedCellsMode())
+        validatedFrameSize = (*mpAnimationAsset)->getValidatedNamedAnimationFrames().size();
+    else
+        validatedFrameSize = (*mpAnimationAsset)->getValidatedAnimationFrames().size();
 
     // Not valid if current frame index is out of bounds of the validated frames.
-    if ( mCurrentFrameIndex >= validatedFrames.size() )
+    if ( mCurrentFrameIndex >= validatedFrameSize )
         return false;
 
     // Fetch image asset.
@@ -359,12 +465,23 @@ bool ImageFrameProviderCore::isAnimationValid( void ) const
     if ( imageAsset.isNull() )
         return false;
 
-    // Fetch current frame.
-    const U32 currentFrame = getCurrentAnimationFrame();
+    if (!(*mpAnimationAsset)->getNamedCellsMode())
+    {
+        // Fetch current frame.
+        const U32 currentFrame = getCurrentAnimationFrame();
 
-    // Not valid if current frame is out of bounds of the image asset.
-    if ( currentFrame >= imageAsset->getFrameCount() )
-        return false;
+        // Not valid if current frame is out of bounds of the image asset.
+        if ( currentFrame >= imageAsset->getFrameCount() )
+            return false;
+    }
+    else
+    {
+        // Fetch the current name frame.
+        const char* frameName = getCurrentNamedAnimationFrame();
+
+        if (!imageAsset->containsFrame(frameName))
+            return false;
+    }
 
     // Valid.
     return true;
@@ -419,10 +536,15 @@ bool ImageFrameProviderCore::playAnimation( const AssetPtr<AnimationAsset>& anim
     mStaticProvider = false;
 
     // Fetch validated frames.
-    const Vector<S32>& validatedFrames = animationAsset->getValidatedAnimationFrames();
+    U32 validatedFrameSize = 0;
+
+    if (animationAsset->getNamedCellsMode())
+        validatedFrameSize = animationAsset->getValidatedNamedAnimationFrames().size();
+    else
+        validatedFrameSize = animationAsset->getValidatedAnimationFrames().size();
 
     // Check we've got some frames.
-    if ( validatedFrames.size() == 0 )
+    if ( validatedFrameSize == 0 )
     {
         Con::warnf( "ImageFrameProviderCore::playAnimation() - Cannot play AnimationAsset '%s' - Animation has no validated frames!", mpAnimationAsset->getAssetId() );
         return false;
@@ -432,13 +554,13 @@ bool ImageFrameProviderCore::playAnimation( const AssetPtr<AnimationAsset>& anim
     mpAnimationAsset->setAssetId( animationAsset.getAssetId() );
 
     // Set Maximum Frame Index.
-    mMaxFrameIndex = validatedFrames.size()-1;
+    mMaxFrameIndex = validatedFrameSize-1;
 
     // Calculate Total Integration Time.
     mTotalIntegrationTime = (*mpAnimationAsset)->getAnimationTime();
 
     // Calculate Frame Integration Time.
-    mFrameIntegrationTime = mTotalIntegrationTime / validatedFrames.size();
+    mFrameIntegrationTime = mTotalIntegrationTime / validatedFrameSize;
 
     // No, so random Start?
     if ( (*mpAnimationAsset)->getRandomStart() )
@@ -477,12 +599,25 @@ bool ImageFrameProviderCore::updateAnimation( const F32 elapsedTime )
     if ( mAnimationFinished )
         return false;
 
-    // Fetch validated frames.
-    const Vector<S32>& validatedFrames = (*mpAnimationAsset)->getValidatedAnimationFrames();
+    // Check for validity in the different frame lists
+    if ((*mpAnimationAsset)->getNamedCellsMode())
+    {
+        // Fetch the validated name frames.
+        const Vector<StringTableEntry>& validatedFrames = (*mpAnimationAsset)->getValidatedNamedAnimationFrames();
 
-    // Finish if there are no validated frames.
-    if ( validatedFrames.size() == 0 )
-        return false;
+        // Finish if there are no validated frames.
+        if ( validatedFrames.size() == 0 )
+            return false;
+    }
+    else
+    {
+        // Fetch validated frames.
+        const Vector<S32>& validatedFrames = (*mpAnimationAsset)->getValidatedAnimationFrames();
+
+        // Finish if there are no validated frames.
+        if ( validatedFrames.size() == 0 )
+            return false;
+    }
 
     // Calculate scaled time.
     const F32 scaledTime = elapsedTime * mAnimationTimeScale;
@@ -505,18 +640,6 @@ bool ImageFrameProviderCore::updateAnimation( const F32 elapsedTime )
 
     // Calculate Current Frame.
     mCurrentFrameIndex = (S32)(mCurrentModTime / mFrameIntegrationTime);
-
-    // Fetch frame.
-    S32 frame = validatedFrames[mCurrentFrameIndex];
-
-    // Fetch image frame count.
-    const S32 imageFrameCount = (*mpAnimationAsset)->getImage()->getFrameCount();
-
-    // Clamp frames.
-    if ( frame < 0 )
-        frame = 0;
-    else if (frame >= imageFrameCount )
-        frame = imageFrameCount-1;
 
     // Calculate if frame has changed.
     bool frameChanged = (mCurrentFrameIndex != mLastFrameIndex);
@@ -569,6 +692,7 @@ void ImageFrameProviderCore::clearAssets( void )
 
     // Reset remaining state.
     mImageFrame = 0;
+    mNamedImageFrame = StringTable->EmptyString;
     mStaticProvider = true;
     setProcessTicks( false );
 }

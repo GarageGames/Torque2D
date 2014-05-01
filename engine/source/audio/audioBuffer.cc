@@ -110,14 +110,37 @@ AudioBuffer::AudioBuffer(StringTableEntry filename)
 
 AudioBuffer::~AudioBuffer()
 {
-   if( malBuffer != 0 ) 
-   {
-     alGetError();
-     alDeleteBuffers( 1, &malBuffer );
-     ALenum error;
-     error = alGetError();
-     AssertWarn( error == AL_NO_ERROR, "AudioBuffer::~AudioBuffer() - failed to release buffer" );
-   }
+   if( alIsBuffer(malBuffer) )
+  {
+    alGetError();
+    alDeleteBuffers( 1, &malBuffer );
+
+    ALenum error;
+    error = alGetError();
+    AssertWarn( error == AL_NO_ERROR, "AudioBuffer::~AudioBuffer() - failed to release buffer" );
+    switch (error)
+    {
+      case AL_NO_ERROR:
+        break;
+      case AL_INVALID_NAME:
+        Con::errorf("AudioBuffer::~AudioBuffer() - alDeleteBuffers OpenAL AL_INVALID_NAME error code returned");
+        break;
+      case AL_INVALID_ENUM:
+        Con::errorf("AudioBuffer::~AudioBuffer() - alDeleteBuffers OpenAL AL_INVALID_ENUM error code returned");
+        break;
+      case AL_INVALID_VALUE:
+        Con::errorf("AudioBuffer::~AudioBuffer() - alDeleteBuffers OpenAL AL_INVALID_VALUE error code returned");
+        break;
+      case AL_INVALID_OPERATION:
+        Con::errorf("AudioBuffer::~AudioBuffer() - alDeleteBuffers OpenAL AL_INVALID_OPERATION error code returned");
+        break;
+      case AL_OUT_OF_MEMORY:
+        Con::errorf("AudioBuffer::~AudioBuffer() - alDeleteBuffers OpenAL AL_OUT_OF_MEMORY error code returned");
+        break;
+      default:
+        Con::errorf("AudioBuffer::~AudioBuffer() - alDeleteBuffers OpenAL has encountered a problem and won't tell us what it is. %d", error);
+    };
+  }
 }
 
 //--------------------------------------

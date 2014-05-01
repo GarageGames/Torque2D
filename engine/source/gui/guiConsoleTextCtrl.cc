@@ -124,7 +124,7 @@ void GuiConsoleTextCtrl::onRender(Point2I offset, const RectI &updateRect)
    r.extent += r.point;
    glColor4ub(0, 0, 0, 0);
 
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_EMSCRIPTEN)
    Point2I topleft(r.point.x,  r.point.y);
    Point2I bottomRight(r.extent.x-1, r.extent.y-1);
 	//this was the same drawing as dglDrawRect

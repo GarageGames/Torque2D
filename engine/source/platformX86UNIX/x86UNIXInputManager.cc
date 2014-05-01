@@ -20,20 +20,13 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-
-
 #include "platformX86UNIX/platformX86UNIX.h"
 #include "console/consoleTypes.h"
 #include "platform/event.h"
-#include "platform/gameInterface.h"
+#include "game/gameInterface.h"
 #include "platformX86UNIX/x86UNIXState.h"
 #include "platformX86UNIX/x86UNIXInputManager.h"
 #include "math/mMathFn.h"
-
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xatom.h>
-#include <X11/keysym.h>
 
 #include <SDL/SDL.h>
 
@@ -46,7 +39,7 @@ static U8 SDLtoTKeyMap[SDLtoTKeyMapSize];
 static bool keyMapsInitialized = false;
 
 // helper functions
-static void MapKey(Uint16 SDLkey, U8 tkey, KeySym xkeysym);
+static void MapKey(Uint16 SDLkey, U8 tkey);
 static void InitKeyMaps();
 static inline U8 TranslateSDLKeytoTKey(SDLKey keysym);
 
@@ -67,11 +60,8 @@ extern "C" Uint16 X11_KeyToUnicode( SDLKey keysym, SDLMod modifiers );
 //==============================================================================
 // Static helper functions
 //==============================================================================
-static void MapKey(Uint16 SDLkey, U8 tkey, KeySym xkeysym)
-{ 
-   DisplayPtrManager xdisplay;
-   Display* display = xdisplay.getDisplayPointer();
-
+static void MapKey(Uint16 SDLkey, U8 tkey)
+{
    SDLtoTKeyMap[SDLkey] = tkey; 
 
    Uint16 key = 0;
@@ -88,56 +78,6 @@ static void MapKey(Uint16 SDLkey, U8 tkey, KeySym xkeysym)
    mod = KMOD_MODE;
    key = X11_KeyToUnicode( skey, mod );
    AsciiTable[tkey].goofy.ascii = key;
-
-#if 0
-   if (xkeysym == 0)
-      return;
-
-   XKeyPressedEvent fooKey;
-   const int keybufSize = 256;
-   char keybuf[keybufSize];
-
-   // find the x keycode for the keysym
-   KeyCode xkeycode = XKeysymToKeycode(
-      display, xkeysym);
-
-//   Display *dpy = XOpenDisplay(NULL);
-//    KeyCode xkeycode = XKeysymToKeycode(
-//       dpy, xkeysym);
-
-   if (!xkeycode)
-      return;     
-
-   // create an event with the keycode
-   dMemset(&fooKey, 0, sizeof(fooKey));
-   fooKey.type = KeyPress;
-   fooKey.display = display;
-   fooKey.window = DefaultRootWindow(display);
-   fooKey.time = CurrentTime;
-   fooKey.keycode = xkeycode;
-
-   // translate the event with no modifiers (yields lowercase)
-   KeySym dummyKeySym;
-   int numChars = XLookupString(
-      &fooKey, keybuf, keybufSize, &dummyKeySym, NULL);
-   if (numChars)
-   {
-      //Con::printf("assigning lowercase string %c", *keybuf);
-      // ignore everything but first char
-      AsciiTable[tkey].lower.ascii = *keybuf;
-      AsciiTable[tkey].goofy.ascii = *keybuf;
-   }
-         
-   // translate the event with shift modifier (yields uppercase)
-   fooKey.state |= ShiftMask;
-   numChars = XLookupString(&fooKey, keybuf, keybufSize, &dummyKeySym, NULL);
-   if (numChars)
-   {
-      //Con::printf("assigning uppercase string %c", *keybuf);
-      // ignore everything but first char
-      AsciiTable[tkey].upper.ascii = *keybuf;
-   }
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -148,93 +88,84 @@ void InitKeyMaps()
    
    // set up the X to Torque key map
    // stuff
-   MapKey(SDLK_BACKSPACE, KEY_BACKSPACE, XK_BackSpace);
-   MapKey(SDLK_TAB, KEY_TAB, XK_Tab);
-   MapKey(SDLK_RETURN, KEY_RETURN, XK_Return);
-   MapKey(SDLK_PAUSE, KEY_PAUSE, XK_Pause);
-   MapKey(SDLK_CAPSLOCK, KEY_CAPSLOCK, XK_Caps_Lock);
-   MapKey(SDLK_ESCAPE, KEY_ESCAPE, XK_Escape);
+   MapKey(SDLK_BACKSPACE, KEY_BACKSPACE);
+   MapKey(SDLK_TAB, KEY_TAB);
+   MapKey(SDLK_RETURN, KEY_RETURN);
+   MapKey(SDLK_PAUSE, KEY_PAUSE);
+   MapKey(SDLK_CAPSLOCK, KEY_CAPSLOCK);
+   MapKey(SDLK_ESCAPE, KEY_ESCAPE);
 
    // more stuff
-   MapKey(SDLK_SPACE, KEY_SPACE, XK_space);
-   MapKey(SDLK_PAGEDOWN, KEY_PAGE_DOWN, XK_Page_Down);
-   MapKey(SDLK_PAGEUP, KEY_PAGE_UP, XK_Page_Up);
-   MapKey(SDLK_END, KEY_END, XK_End);
-   MapKey(SDLK_HOME, KEY_HOME, XK_Home);
-   MapKey(SDLK_LEFT, KEY_LEFT, XK_Left);
-   MapKey(SDLK_UP, KEY_UP, XK_Up);
-   MapKey(SDLK_RIGHT, KEY_RIGHT, XK_Right);
-   MapKey(SDLK_DOWN, KEY_DOWN, XK_Down);
-   MapKey(SDLK_PRINT, KEY_PRINT, XK_Print);
-   MapKey(SDLK_INSERT, KEY_INSERT, XK_Insert);
-   MapKey(SDLK_DELETE, KEY_DELETE, XK_Delete);
+   MapKey(SDLK_SPACE, KEY_SPACE);
+   MapKey(SDLK_PAGEDOWN, KEY_PAGE_DOWN);
+   MapKey(SDLK_PAGEUP, KEY_PAGE_UP);
+   MapKey(SDLK_END, KEY_END);
+   MapKey(SDLK_HOME, KEY_HOME);
+   MapKey(SDLK_LEFT, KEY_LEFT);
+   MapKey(SDLK_UP, KEY_UP);
+   MapKey(SDLK_RIGHT, KEY_RIGHT);
+   MapKey(SDLK_DOWN, KEY_DOWN);
+   MapKey(SDLK_PRINT, KEY_PRINT);
+   MapKey(SDLK_INSERT, KEY_INSERT);
+   MapKey(SDLK_DELETE, KEY_DELETE);
    
    S32 keysym;
    S32 tkeycode;
-   KeySym xkey;
    // main numeric keys
-   for (keysym = SDLK_0, tkeycode = KEY_0, xkey = XK_0;
-        keysym <= SDLK_9; 
-        ++keysym, ++tkeycode, ++xkey)
-      MapKey(static_cast<SDLKey>(keysym), tkeycode, xkey);
+   for (keysym = SDLK_0, tkeycode = KEY_0; keysym <= SDLK_9; ++keysym, ++tkeycode)
+      MapKey(static_cast<SDLKey>(keysym), tkeycode);
    
    // lowercase letters
-   for (keysym = SDLK_a, tkeycode = KEY_A, xkey = XK_a; 
-        keysym <= SDLK_z; 
-        ++keysym, ++tkeycode, ++xkey)
-      MapKey(static_cast<SDLKey>(keysym), tkeycode, xkey);
+   for (keysym = SDLK_a, tkeycode = KEY_A; keysym <= SDLK_z; ++keysym, ++tkeycode)
+      MapKey(static_cast<SDLKey>(keysym), tkeycode);
 
    // various punctuation
-   MapKey('|', KEY_TILDE, XK_grave);
-   MapKey(SDLK_BACKQUOTE, KEY_TILDE, XK_grave);
-   MapKey(SDLK_MINUS, KEY_MINUS, XK_minus);
-   MapKey(SDLK_EQUALS, KEY_EQUALS, XK_equal);
-   MapKey(SDLK_LEFTBRACKET, KEY_LBRACKET, XK_bracketleft);
-   MapKey('{', KEY_LBRACKET, XK_bracketleft);
-   MapKey(SDLK_RIGHTBRACKET, KEY_RBRACKET, XK_bracketright);
-   MapKey('}', KEY_RBRACKET, XK_bracketright);
-   MapKey(SDLK_BACKSLASH, KEY_BACKSLASH, XK_backslash);
-   MapKey(SDLK_SEMICOLON, KEY_SEMICOLON, XK_semicolon);
-   MapKey(SDLK_QUOTE, KEY_APOSTROPHE, XK_apostrophe);
-   MapKey(SDLK_COMMA, KEY_COMMA, XK_comma);
-   MapKey(SDLK_PERIOD, KEY_PERIOD, XK_period);
-   MapKey(SDLK_SLASH, KEY_SLASH, XK_slash); 
+   MapKey('|', KEY_TILDE);
+   MapKey(SDLK_BACKQUOTE, KEY_TILDE);
+   MapKey(SDLK_MINUS, KEY_MINUS);
+   MapKey(SDLK_EQUALS, KEY_EQUALS);
+   MapKey(SDLK_LEFTBRACKET, KEY_LBRACKET);
+   MapKey('{', KEY_LBRACKET);
+   MapKey(SDLK_RIGHTBRACKET, KEY_RBRACKET);
+   MapKey('}', KEY_RBRACKET);
+   MapKey(SDLK_BACKSLASH, KEY_BACKSLASH);
+   MapKey(SDLK_SEMICOLON, KEY_SEMICOLON);
+   MapKey(SDLK_QUOTE, KEY_APOSTROPHE);
+   MapKey(SDLK_COMMA, KEY_COMMA);
+   MapKey(SDLK_PERIOD, KEY_PERIOD);
+   MapKey(SDLK_SLASH, KEY_SLASH); 
 
    // numpad numbers
-   for (keysym = SDLK_KP0, tkeycode = KEY_NUMPAD0, xkey = XK_KP_0; 
-        keysym <= SDLK_KP9; 
-        ++keysym, ++tkeycode, ++xkey)
-      MapKey(static_cast<SDLKey>(keysym), tkeycode, xkey);
+   for (keysym = SDLK_KP0, tkeycode = KEY_NUMPAD0; keysym <= SDLK_KP9; ++keysym, ++tkeycode)
+      MapKey(static_cast<SDLKey>(keysym), tkeycode);
 
    // other numpad stuff
-   MapKey(SDLK_KP_MULTIPLY, KEY_MULTIPLY, XK_KP_Multiply);
-   MapKey(SDLK_KP_PLUS, KEY_ADD, XK_KP_Add);
-   MapKey(SDLK_KP_EQUALS, KEY_SEPARATOR, XK_KP_Separator);
-   MapKey(SDLK_KP_MINUS, KEY_SUBTRACT, XK_KP_Subtract);
-   MapKey(SDLK_KP_PERIOD, KEY_DECIMAL, XK_KP_Decimal);
-   MapKey(SDLK_KP_DIVIDE, KEY_DIVIDE, XK_KP_Divide);
-   MapKey(SDLK_KP_ENTER, KEY_NUMPADENTER, XK_KP_Enter);
+   MapKey(SDLK_KP_MULTIPLY, KEY_MULTIPLY);
+   MapKey(SDLK_KP_PLUS, KEY_ADD);
+   MapKey(SDLK_KP_EQUALS, KEY_SEPARATOR);
+   MapKey(SDLK_KP_MINUS, KEY_SUBTRACT);
+   MapKey(SDLK_KP_PERIOD, KEY_DECIMAL);
+   MapKey(SDLK_KP_DIVIDE, KEY_DIVIDE);
+   MapKey(SDLK_KP_ENTER, KEY_NUMPADENTER);
 
    // F keys
-   for (keysym = SDLK_F1, tkeycode = KEY_F1, xkey = XK_F1; 
-        keysym <= SDLK_F15; 
-        ++keysym, ++tkeycode, ++xkey)
-      MapKey(static_cast<SDLKey>(keysym), tkeycode, xkey);
+   for (keysym = SDLK_F1, tkeycode = KEY_F1; keysym <= SDLK_F15; ++keysym, ++tkeycode)
+      MapKey(static_cast<SDLKey>(keysym), tkeycode);
 
    // various modifiers
-   MapKey(SDLK_NUMLOCK, KEY_NUMLOCK, XK_Num_Lock);
-   MapKey(SDLK_SCROLLOCK, KEY_SCROLLLOCK, XK_Scroll_Lock);
-   MapKey(SDLK_LCTRL, KEY_LCONTROL, XK_Control_L);
-   MapKey(SDLK_RCTRL, KEY_RCONTROL, XK_Control_R);
-   MapKey(SDLK_LALT, KEY_LALT, XK_Alt_L);
-   MapKey(SDLK_RALT, KEY_RALT, XK_Alt_R);
-   MapKey(313, KEY_RALT, XK_Alt_R);   
-   MapKey(SDLK_LSHIFT, KEY_LSHIFT, XK_Shift_L);
-   MapKey(SDLK_RSHIFT, KEY_RSHIFT, XK_Shift_R);
-   MapKey(SDLK_LSUPER, KEY_WIN_LWINDOW, 0);
-   MapKey(SDLK_RSUPER, KEY_WIN_RWINDOW, 0);
-   MapKey(SDLK_MENU, KEY_WIN_APPS, 0);
-   MapKey(SDLK_MODE, KEY_OEM_102, 0);
+   MapKey(SDLK_NUMLOCK, KEY_NUMLOCK);
+   MapKey(SDLK_SCROLLOCK, KEY_SCROLLLOCK);
+   MapKey(SDLK_LCTRL, KEY_LCONTROL);
+   MapKey(SDLK_RCTRL, KEY_RCONTROL);
+   MapKey(SDLK_LALT, KEY_LALT);
+   MapKey(SDLK_RALT, KEY_RALT);
+   MapKey(313, KEY_RALT);   
+   MapKey(SDLK_LSHIFT, KEY_LSHIFT);
+   MapKey(SDLK_RSHIFT, KEY_RSHIFT);
+   MapKey(SDLK_LSUPER, KEY_WIN_LWINDOW);
+   MapKey(SDLK_RSUPER, KEY_WIN_RWINDOW);
+   MapKey(SDLK_MENU, KEY_WIN_APPS);
+   MapKey(SDLK_MODE, KEY_OEM_102);
 
    keyMapsInitialized = true;
 };
@@ -410,7 +341,7 @@ void UInputManager::resetKeyboardState()
          event.objType = SI_KEY;
          event.objInst = i;
          event.action = SI_BREAK;
-         event.fValue = 0.0;
+         event.fValues[0] = 0.0;
          Game->postEvent(event);
       }
    }
@@ -439,7 +370,7 @@ void UInputManager::resetMouseState()
          event.objType = SI_BUTTON;
          event.objInst = buttonID;
          event.action = SI_BREAK;
-         event.fValue = 0.0;
+         event.fValues[0] = 0.0;
          Game->postEvent(event);
       }
    }
@@ -538,13 +469,13 @@ void UInputManager::mouseMotionEvent(const SDL_Event& event)
       if (event.motion.xrel != 0)
       {
          ievent.objType = SI_XAXIS;
-         ievent.fValue = event.motion.xrel;
+         ievent.fValues[0] = event.motion.xrel;
          Game->postEvent(ievent);
       }
       if (event.motion.yrel != 0)
       {
          ievent.objType = SI_YAXIS;
-         ievent.fValue = event.motion.yrel; 
+         ievent.fValues[0] = event.motion.yrel; 
          Game->postEvent(ievent);
       }
 #ifdef LOG_INPUT
@@ -595,7 +526,7 @@ void UInputManager::joyButtonEvent(U8 deviceID, U8 buttonNum, bool pressed)
    ievent.objType = SI_BUTTON;
    ievent.objInst = objInst;
    ievent.action = action;
-   ievent.fValue = (action == SI_MAKE) ? 1.0 : 0.0;
+   ievent.fValues[0] = (action == SI_MAKE) ? 1.0 : 0.0;
 
    Game->postEvent(ievent);
 #ifdef LOG_INPUT
@@ -626,7 +557,7 @@ void UInputManager::joyHatEvent(U8 deviceID, U8 hatNum,
 
    // first break any positions that are no longer valid
    ievent.action = SI_BREAK;
-   ievent.fValue = 0.0;
+   ievent.fValues[0] = 0.0;
 
    if (prevHatState & SDL_HAT_UP && !(currHatState & SDL_HAT_UP))
    {
@@ -663,7 +594,7 @@ void UInputManager::joyHatEvent(U8 deviceID, U8 hatNum,
 
    // now do the make events
    ievent.action = SI_MAKE;
-   ievent.fValue = 1.0;
+   ievent.fValues[0] = 1.0;
 
    if (!(prevHatState & SDL_HAT_UP) && currHatState & SDL_HAT_UP)
    {
@@ -743,13 +674,13 @@ void UInputManager::joyAxisEvent(U8 deviceID, U8 axisNum, S16 axisValue)
    ievent.objType = axisInfo.type;
    ievent.objInst = 0;
    ievent.action = SI_MOVE;
-   ievent.fValue = scaledValue;
+   ievent.fValues[0] = scaledValue;
 
    Game->postEvent(ievent);
 
 #ifdef LOG_INPUT
       Input::log( "EVENT (Input): joystick axis %d moved: %.1f.\n",
-         axisNum, ievent.fValue);
+         axisNum, ievent.fValues[0]);
 #endif
 
 }
@@ -804,11 +735,11 @@ void UInputManager::mouseButtonEvent(const SDL_Event& event)
       ievent.objType = SI_ZAXIS;
       ievent.objInst = 0;
       ievent.action = SI_MOVE;
-      ievent.fValue = wheelDelta;
+      ievent.fValues[0] = wheelDelta;
 #ifdef LOG_INPUT
       Input::log( "EVENT (Input): mouse wheel moved %s: %.1f. MODS:%c%c%c\n",
          wheelDelta > 0 ? "up" : "down",
-         ievent.fValue,
+         ievent.fValues[0],
          ( mModifierKeys & SI_SHIFT ? 'S' : '.' ), 
          ( mModifierKeys & SI_CTRL ? 'C' : '.' ), 
          ( mModifierKeys & SI_ALT ? 'A' : '.' ));
@@ -823,7 +754,7 @@ void UInputManager::mouseButtonEvent(const SDL_Event& event)
       ievent.objType = SI_BUTTON;
       ievent.objInst = objInst;
       ievent.action = action;
-      ievent.fValue = (action == SI_MAKE) ? 1.0 : 0.0;
+      ievent.fValues[0] = (action == SI_MAKE) ? 1.0 : 0.0;
 #ifdef LOG_INPUT
       Input::log( "EVENT (Input): mouse button%d %s. MODS:%c%c%c\n",
          buttonID,
@@ -941,7 +872,7 @@ void UInputManager::keyEvent(const SDL_Event& event)
    if (action == SI_MAKE && mKeyboardState[ievent.objInst])
       action = SI_REPEAT;
    ievent.action = action;
-   ievent.fValue = (action == SI_MAKE || action == SI_REPEAT) ? 1.0 : 0.0;
+   ievent.fValues[0] = (action == SI_MAKE || action == SI_REPEAT) ? 1.0 : 0.0;
 
    processKeyEvent(ievent);
    Game->postEvent(ievent);

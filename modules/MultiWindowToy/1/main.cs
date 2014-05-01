@@ -172,7 +172,7 @@ function MultiWindowToy::createGems( %this )
             %object.BlendColor = LimeGreen;
             
             // Mount to the object.
-            SandboxWindow2.mount( %object, "0 0", 0, true, true );
+            SandboxWindow2.mount( %object, "0 0", 0, true, false );
         }
         else
         {

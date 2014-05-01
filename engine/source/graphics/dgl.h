@@ -40,6 +40,9 @@ class Point2I;
 class Point2F;
 class Point3F;
 
+/// @defgroup dgl Cross-Platform OpenGL Support
+/// functions used to map Torque2D calls to OpenGL (or OpenGL ES) calls per platform
+
 //------------------------------------------------------------------------------
 //-------------------------------------- Bitmap Drawing
 //
@@ -57,6 +60,7 @@ enum GFlipConstants
 };
 
 /// @defgroup dgl_bitmap_mod Bitmap Modulation
+/// @ingroup dgl
 /// These functions control a modulation color that is used to modulate all drawn objects
 /// @{
 
@@ -86,6 +90,7 @@ void dglClearBitmapModulation();
 void dglSetTextAnchorColor(const ColorF&);
 
 /// @defgroup dgl_bitmap_draw Bitmap Drawing Functions
+/// @ingroup dgl
 /// These functions allow you to draw a bitmap.
 /// Each function will draw the bitmap in a specific way regarding stretching
 /// @{
@@ -137,6 +142,7 @@ void dglDrawBitmapStretchSR(TextureObject* texObject,
                             bool           bSilhouette = false);
 /// @}
 /// @defgroup dgl_text Text Functions
+/// @ingroup dgl
 /// These functions draw a string on the string with a given font
 /// @{
 
@@ -163,6 +169,7 @@ U32 dglDrawTextN(GFont *font, const Point2I &ptDraw, const UTF8  *in_string, U32
 // Drawing primitives
 
 /// @defgroup dgl_primitive Primitive Drawing
+/// @ingroup dgl
 /// Easy functions for drawing lines and (un)textured rectangles in 2d or 3d space
 /// @{
 
@@ -191,6 +198,7 @@ void dglSolidCube(const Point3F &extent, const Point3F & enter);
 // Matrix functions
 
 /// @defgroup dgl_matrix Matrix Functions
+/// @ingroup dgl
 /// These functions manipulate the current matrix.  The current matrix could be modelivew, projection, or texture
 /// @note Make sure you specify which matrix you want to manipulate with a call to glMatrixMode(enum matrix); before calling dglLoadMatrix() or dglMultMatrix()
 /// @{
@@ -208,6 +216,7 @@ void dglGetProjection(MatrixF *m);
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 // Camera functions
 /// @defgroup dgl_camera_func Camera functions
+/// @ingroup dgl
 /// @{
 
 /// Returns the pixel scale, namely:
@@ -223,6 +232,7 @@ F32 dglProjectRadius(F32 dist, F32 radius);
 /// @}
 
 /// @defgroup dgl_view Viewing Volume Functions
+/// @ingroup dgl
 /// These functions set up the view cube of the window.
 /// @{
 
@@ -312,7 +322,7 @@ bool dglCheckState(const S32 mvDepth, const S32 pDepth,
 extern signed int gFSAASamples;
 
 
-#ifdef TORQUE_OS_IOS
+#if defined TORQUE_OS_IOS || defined TORQUE_OS_ANDROID
 
 //Luma: Add some additional commands here so that it works in all cases
 extern GLfloat gVertexFloats[8];
