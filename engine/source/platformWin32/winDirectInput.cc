@@ -785,20 +785,18 @@ void DInputManager::processXInput( void )
          // trim the controller's thumbsticks to zero if they are within the deadzone
          if( mXInputDeadZoneOn )
          {
-            // Zero value if thumbsticks are within the dead zone 
-            if( (mXInputStateNew[i].state.Gamepad.sThumbLX < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbLX > -XINPUT_DEADZONE) && 
-                (mXInputStateNew[i].state.Gamepad.sThumbLY < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbLY > -XINPUT_DEADZONE) ) 
-            {
+			 //Verify each axis of each thumbstick and reset only if appropriate
+             if(mXInputStateNew[i].state.Gamepad.sThumbLX < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbLX > -XINPUT_DEADZONE) 
                mXInputStateNew[i].state.Gamepad.sThumbLX = 0;
-               mXInputStateNew[i].state.Gamepad.sThumbLY = 0;
-            }
 
-            if( (mXInputStateNew[i].state.Gamepad.sThumbRX < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbRX > -XINPUT_DEADZONE) && 
-                (mXInputStateNew[i].state.Gamepad.sThumbRY < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbRY > -XINPUT_DEADZONE) ) 
-            {
-               mXInputStateNew[i].state.Gamepad.sThumbRX = 0;
-               mXInputStateNew[i].state.Gamepad.sThumbRY = 0;
-            }
+             if(mXInputStateNew[i].state.Gamepad.sThumbLY < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbLY > -XINPUT_DEADZONE)
+               mXInputStateNew[i].state.Gamepad.sThumbLY = 0;
+
+             if(mXInputStateNew[i].state.Gamepad.sThumbRX < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbRX > -XINPUT_DEADZONE)
+				   mXInputStateNew[i].state.Gamepad.sThumbRX = 0;
+
+             if(mXInputStateNew[i].state.Gamepad.sThumbRY < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbRY > -XINPUT_DEADZONE)
+				  mXInputStateNew[i].state.Gamepad.sThumbRY = 0;
          }
 
          // this controller was connected or disconnected
