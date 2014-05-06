@@ -786,18 +786,17 @@ void DInputManager::processXInput( void )
          if( mXInputDeadZoneOn )
          {
             // Zero value if thumbsticks are within the dead zone 
-            if( (mXInputStateNew[i].state.Gamepad.sThumbLX < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbLX > -XINPUT_DEADZONE) && 
-                (mXInputStateNew[i].state.Gamepad.sThumbLY < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbLY > -XINPUT_DEADZONE) ) 
-            {
-               mXInputStateNew[i].state.Gamepad.sThumbLX = 0;
-               mXInputStateNew[i].state.Gamepad.sThumbLY = 0;
-            }
+            if(mXInputStateNew[i].state.Gamepad.sThumbLX < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbLX > -XINPUT_DEADZONE)
+            mXInputStateNew[i].state.Gamepad.sThumbLX = 0;
 
-            if( (mXInputStateNew[i].state.Gamepad.sThumbRX < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbRX > -XINPUT_DEADZONE) && 
-                (mXInputStateNew[i].state.Gamepad.sThumbRY < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbRY > -XINPUT_DEADZONE) ) 
-            {
-               mXInputStateNew[i].state.Gamepad.sThumbRX = 0;
-               mXInputStateNew[i].state.Gamepad.sThumbRY = 0;
+            if(mXInputStateNew[i].state.Gamepad.sThumbLY < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbLY > -XINPUT_DEADZONE)  
+            mXInputStateNew[i].state.Gamepad.sThumbLY = 0;
+            
+            if(mXInputStateNew[i].state.Gamepad.sThumbRX < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbRX > -XINPUT_DEADZONE)
+            mXInputStateNew[i].state.Gamepad.sThumbRX = 0;
+
+            if(mXInputStateNew[i].state.Gamepad.sThumbRY < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbRY > -XINPUT_DEADZONE)
+            mXInputStateNew[i].state.Gamepad.sThumbRY = 0;
             }
          }
 
