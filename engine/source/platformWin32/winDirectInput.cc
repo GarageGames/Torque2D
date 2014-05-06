@@ -786,8 +786,8 @@ void DInputManager::processXInput( void )
          if( mXInputDeadZoneOn )
          {
 			 //Verify each axis of each thumbstick and reset only if appropriate
-			 if(mXInputStateNew[i].state.Gamepad.sThumbLX < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbLX > -XINPUT_DEADZONE) 
-				 mXInputStateNew[i].state.Gamepad.sThumbLX = 0;
+             if(mXInputStateNew[i].state.Gamepad.sThumbLX < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbLX > -XINPUT_DEADZONE) 
+               mXInputStateNew[i].state.Gamepad.sThumbLX = 0;
 
              if(mXInputStateNew[i].state.Gamepad.sThumbLY < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbLY > -XINPUT_DEADZONE)
                mXInputStateNew[i].state.Gamepad.sThumbLY = 0;
