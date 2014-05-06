@@ -797,7 +797,6 @@ void DInputManager::processXInput( void )
 
             if(mXInputStateNew[i].state.Gamepad.sThumbRY < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbRY > -XINPUT_DEADZONE)
             mXInputStateNew[i].state.Gamepad.sThumbRY = 0;
-            }
          }
 
          // this controller was connected or disconnected
