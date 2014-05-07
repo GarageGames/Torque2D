@@ -1041,11 +1041,11 @@ ConsoleMethodWithDocs(CompositeSprite, getSpriteName, ConsoleString, 2, 2, ())
 //-----------------------------------------------------------------------------
 
 /*! Gets the SpriteBatchID of the currently selected Sprite
-	@returns The SpriteBatchID
+    @returns The SpriteBatchID
 */
 ConsoleMethodWithDocs(CompositeSprite, getSpriteID, ConsoleInt, 2, 2, ())
 {
-	return object->getSelectedSprite()->getBatchId();
+    return object->getSelectedSprite()->getBatchId();
 }
 //-----------------------------------------------------------------------------
 
@@ -1410,6 +1410,5 @@ ConsoleMethodWithDocs(CompositeSprite, getSpriteIDfromIndex, ConsoleInt, 3, 3, (
 {
     return (object->getSpriteBatchIDfromIndex(dAtoi(argv[2])));
 }
-
 
 ConsoleMethodGroupEndWithDocs(CompositeSprite)
