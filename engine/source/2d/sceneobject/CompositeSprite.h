@@ -75,8 +75,8 @@ public:
 
     void setBatchLayout( const BatchLayoutType& batchLayoutType );
     BatchLayoutType getBatchLayout( void ) const { return mBatchLayoutType; }
-    
-	inline SpriteBatchItem* getSelectedSprite( void ){ return mSelectedSprite; };
+
+    inline SpriteBatchItem* getSelectedSprite( void ){ return mSelectedSprite; };
 
     static BatchLayoutType getBatchLayoutTypeEnum( const char* label );
     static const char* getBatchLayoutTypeDescription( const BatchLayoutType batchLayoutType );
