@@ -144,7 +144,7 @@ ConsoleMethodWithDocs(ImageFont, getFontSize, ConsoleString, 2, 2, ())
 ConsoleMethodWithDocs(ImageFont, setFontPadding, ConsoleVoid, 3, 3, (padding))
 {
    // Set character padding.
-   object->setFontPadding( (const F32) dAtoi(argv[2]) );
+   object->setFontPadding( dAtoi(argv[2]) );
 
 }
 
@@ -155,7 +155,7 @@ ConsoleMethodWithDocs(ImageFont, setFontPadding, ConsoleVoid, 3, 3, (padding))
 */
 ConsoleMethodWithDocs(ImageFont, getFontPadding, ConsoleInt, 2, 2, ())
 {
-    return (S32) object->getFontPadding();
+    return object->getFontPadding();
 }
 
 ConsoleMethodGroupEndWithDocs(ImageFont)

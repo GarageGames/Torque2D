@@ -732,7 +732,7 @@ inline void DInputManager::fireXInputButtonEvent( int controllerID, bool forceFi
 	  Con::printf("%s", objName);
 	  */
 
-      buildXInputEvent( controllerID, XI_BUTTON, objInst, action, (float) ( action == XI_MAKE ? 1 : 0 ) );
+      buildXInputEvent( controllerID, XI_BUTTON, objInst, action, ( action == XI_MAKE ? 1 : 0 ) );
    }
 }
 
