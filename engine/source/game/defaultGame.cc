@@ -247,6 +247,7 @@ bool initializeGame(int argc, const char **argv)
         argc -= 2;
     }
 
+    Platform::setCurrentDirectory(Platform::getExecutablePath());
     // Scan executable location and all sub-directories.
     ResourceManager->setWriteablePath(Platform::getCurrentDirectory());
     ResourceManager->addPath( Platform::getCurrentDirectory() );
