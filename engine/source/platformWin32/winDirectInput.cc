@@ -49,6 +49,7 @@ DInputManager::DInputManager()
    mDInputInterface  = NULL;
    mKeyboardActive   = mMouseActive = mJoystickActive = false;
    mXInputActive = true;
+   mXInputLib = NULL;
 
    for(S32 i=0; i<4; i++)
 	   mLastDisconnectTime[i] = -1;
