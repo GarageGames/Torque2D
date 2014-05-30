@@ -41,7 +41,7 @@ ConsoleGetType( Typeb2AABB )
 
     // Format AABB.
     char* pBuffer = Con::getReturnBuffer(64);
-    dSprintf(pBuffer, 64, "%.5g %.5g", pAABB->lowerBound.x, pAABB->lowerBound.y, pAABB->upperBound.x, pAABB->upperBound.y );
+    dSprintf(pBuffer, 64, "%.5g %.5g %.5g %.5g", pAABB->lowerBound.x, pAABB->lowerBound.y, pAABB->upperBound.x, pAABB->upperBound.y );
     return pBuffer;
 }
 
