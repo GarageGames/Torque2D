@@ -250,7 +250,7 @@ ConsoleMethodWithDocs(ParticlePlayer, setEmitterPaused, ConsoleVoid, 4, 4, (paus
 */
 ConsoleMethodWithDocs(ParticlePlayer, getEmitterPaused, ConsoleBool, 3, 3, (emitterIndex))
 {
-    return object->getEmitterPaused( dAtob(argv[2]) );
+    return object->getEmitterPaused( dAtoi(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
@@ -273,7 +273,7 @@ ConsoleMethodWithDocs(ParticlePlayer, setEmitterVisible, ConsoleVoid, 4, 4, (vis
 */
 ConsoleMethodWithDocs(ParticlePlayer, getEmitterVisible, ConsoleBool, 3, 3, (emitterIndex))
 {
-    return object->getEmitterVisible( dAtob(argv[2]) );
+    return object->getEmitterVisible( dAtoi(argv[2]) );
 }
 
 ConsoleMethodGroupEndWithDocs(ParticlePlayer)
