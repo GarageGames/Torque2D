@@ -144,7 +144,7 @@ ConsoleMethodWithDocs(ImageFont, getFontSize, ConsoleString, 2, 2, ())
 ConsoleMethodWithDocs(ImageFont, setFontPadding, ConsoleVoid, 3, 3, (padding))
 {
    // Set character padding.
-   object->setFontPadding( dAtoi(argv[2]) );
+   object->setFontPadding( dAtof(argv[2]) );
 
 }
 
@@ -153,7 +153,7 @@ ConsoleMethodWithDocs(ImageFont, setFontPadding, ConsoleVoid, 3, 3, (padding))
 /*! Gets the font padding.
     @return The font padding.
 */
-ConsoleMethodWithDocs(ImageFont, getFontPadding, ConsoleInt, 2, 2, ())
+ConsoleMethodWithDocs(ImageFont, getFontPadding, ConsoleFloat, 2, 2, ())
 {
     return object->getFontPadding();
 }
