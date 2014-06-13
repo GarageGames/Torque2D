@@ -40,7 +40,7 @@
 #endif
 
 #ifndef BOX2D_H
-#include "box2d/Box2D.h"
+#include "Box2D/Box2D.h"
 #endif
 
 ///-----------------------------------------------------------------------------
@@ -86,8 +86,8 @@ struct Vector2 : b2Vec2
     inline Vector2 operator = (const b2Vec2 &p)                         { x = p.x; y = p.y; return *this; }
 
     /// Utility.
-    inline void setAngle(const F32 radians)                             { x = mSin(radians); y = mCos(radians); }
-    inline void setPolar(const F32 radians,F32 length)                  { x = mSin(radians)*length; y = mCos(radians)*length; }
+    inline void setAngle(const F32 radians)                             { x = mCos(radians); y = mSin(radians); }
+    inline void setPolar(const F32 radians,F32 length)                  { x = mCos(radians)*length; y = mSin(radians)*length; }
     inline void setString(const char* pString )
     {
         const U32 elementCount = Utility::mGetStringElementCount(pString);

@@ -30,12 +30,14 @@
 #include "io/fileStream.h"
 #include "platform/threads/thread.h"
 
+#include "profiler_ScriptBinding.h"
+
 #ifdef TORQUE_ENABLE_PROFILER
 ProfilerRootData *ProfilerRootData::sRootList = NULL;
 Profiler *gProfiler = NULL;
 
 #ifdef TORQUE_MULTITHREAD
-U32 gMainThread = 0;
+ThreadIdent gMainThread = 0;
 #endif
 
 #if defined(TORQUE_SUPPORTS_VC_INLINE_X86_ASM)
@@ -608,45 +610,5 @@ void Profiler::enableMarker(const char *marker, bool enable)
       }
    }
 }
-
-ConsoleFunctionGroupBegin( Profiler, "Profiler functionality.");
-
-ConsoleFunction(profilerMarkerEnable, void, 3, 3, "(string markerName, bool enable) Enables (or disables) a marker for the profiler\n"
-                "@param markerName The name of the marker to (un)set\n"
-                "@param enable Boolean value. Set if true, unset if false\n"
-                "@return No Return Value")
-{
-   if(gProfiler)
-      gProfiler->enableMarker(argv[1], dAtob(argv[2]));
-}
-
-ConsoleFunction(profilerEnable, void, 2, 2, "( enable ) Use the profileEnable function to enable (or disable) engine profiling.\n"
-                                                                "@param enable A boolean value. If set to true and the engine was compiled with DEBUG specified, engine profiling is enabled, otherwise it is disabled.\n"
-                                                                "@return No return value.")
-{
-   if(gProfiler)
-      gProfiler->enable(dAtob(argv[1]));
-}
-
-ConsoleFunction(profilerDump, void, 1, 1, "() Use the profilerDump function to dump engine profile statistics to the console.\n"
-                                                                "@return No return value")
-{
-   if(gProfiler)
-      gProfiler->dumpToConsole();
-}
-
-ConsoleFunction(profilerDumpToFile, void, 2, 2, "(string filename) Dump profiling stats to a file.")
-{
-   if(gProfiler)
-      gProfiler->dumpToFile(argv[1]);
-}
-
-ConsoleFunction(profilerReset, void, 1, 1, "Resets the profiler, clearing all of its data.")
-{
-   if(gProfiler)
-      gProfiler->reset();
-}
-
-ConsoleFunctionGroupEnd( Profiler );
 
 #endif

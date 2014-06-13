@@ -23,8 +23,12 @@
 #ifndef _TAML_ASSET_DECLARED_VISITOR_H_
 #define _TAML_ASSET_DECLARED_VISITOR_H_
 
-#ifndef _TAML_XMLPARSER_H_
-#include "persistence//taml/tamlXmlParser.h"
+#ifndef _TAML_VISITOR_H_
+#include "persistence/taml/tamlVisitor.h"
+#endif
+
+#ifndef _TAML_PARSER_H_
+#include "persistence\/taml/tamlParser.h"
 #endif
 
 #ifndef _ASSET_FIELD_TYPES_H_
@@ -44,113 +48,104 @@
 
 //-----------------------------------------------------------------------------
 
-class TamlAssetDeclaredVisitor : public TamlXmlVisitor
+class TamlAssetDeclaredVisitor : public TamlVisitor
 {
-protected:
-    virtual bool visit( TiXmlElement* pXmlElement, TamlXmlParser& xmlParser )
-    {
+public:
+    typedef StringTableEntry typeAssetId;
+    typedef Vector<typeAssetId> typeAssetIdVector;
+    typedef Vector<StringTableEntry> typeLooseFileVector;
+
+private:
+    AssetDefinition         mAssetDefinition;
+    typeAssetIdVector       mAssetDependencies;
+    typeLooseFileVector     mAssetLooseFiles;
+
+public:
+    TamlAssetDeclaredVisitor() { mAssetDefinition.reset(); }
+    virtual ~TamlAssetDeclaredVisitor() {}
+
+
+    inline AssetDefinition& getAssetDefinition( void ) { return mAssetDefinition; }
+    inline typeAssetIdVector& getAssetDependencies( void ) { return mAssetDependencies; }
+    inline typeLooseFileVector& getAssetLooseFiles( void ) { return mAssetLooseFiles; }
+
+    void clear( void ) { mAssetDefinition.reset(); mAssetDependencies.clear(); mAssetLooseFiles.clear(); }
+
+    virtual bool wantsPropertyChanges( void ) { return false; }
+    virtual bool wantsRootOnly( void ) { return false; }
+
+    virtual bool visit( const TamlParser& parser, TamlVisitor::PropertyState& propertyState )
+    {    
         // Debug Profiling.
-        PROFILE_SCOPE(TamlAssetDeclaredVisitor_VisitElement);
+        PROFILE_SCOPE(TamlAssetDeclaredVisitor_Visit);
 
-        // Finish if this is not the root element.
-        if ( pXmlElement != pXmlElement->GetDocument()->RootElement() )
-            return true;
+        // Fetch property name and value.
+        StringTableEntry propertyName = propertyState.getPropertyName();
+        const char* pPropertyValue = propertyState.getPropertyValue();
 
-        // Fetch asset field names.
-        StringTableEntry assetNameField = StringTable->insert( ASSET_BASE_ASSETNAME_FIELD );
-        StringTableEntry assetDescriptionField = StringTable->insert( ASSET_BASE_ASSETDESCRIPTION_FIELD );
-        StringTableEntry assetCategoryField = StringTable->insert( ASSET_BASE_CATEGORY_FIELD );
-        StringTableEntry assetAutoUnloadField = StringTable->insert( ASSET_BASE_AUTOUNLOAD_FIELD );
-        StringTableEntry assetInternalField = StringTable->insert( ASSET_BASE_ASSETINTERNAL_FIELD );
-
-        // Iterate attributes.
-        for ( TiXmlAttribute* pAttribute = pXmlElement->FirstAttribute(); pAttribute; pAttribute = pAttribute->Next() )
+        // Is this the root object?
+        if ( propertyState.isRootObject() )
         {
-            // Insert attribute name.
-            StringTableEntry attributeName = StringTable->insert( pAttribute->Name() );
+            // Yes, so is the asset type set yet?
+            if ( mAssetDefinition.mAssetType == StringTable->EmptyString )
+            {
+                // No, set set asset type and base file-path.
+                mAssetDefinition.mAssetType = propertyState.getObjectName();
+                mAssetDefinition.mAssetBaseFilePath = parser.getParsingFilename();
+            }
 
             // Asset name?
-            if ( attributeName == assetNameField )
+            if ( propertyName == assetNameField )
             {
                 // Yes, so assign it.
-                mAssetDefinition.mAssetName = StringTable->insert( pAttribute->Value() );
-                continue;
+                mAssetDefinition.mAssetName = StringTable->insert( pPropertyValue );
+                return true;
             }
             // Asset description?
-            else if ( attributeName == assetDescriptionField )
+            else if ( propertyName == assetDescriptionField )
             {
                 // Yes, so assign it.
-                mAssetDefinition.mAssetDescription = StringTable->insert( pAttribute->Value() );
-                continue;
+                mAssetDefinition.mAssetDescription = StringTable->insert( pPropertyValue );
+                return true;
             }
             // Asset description?
-            else if ( attributeName == assetCategoryField )
+            else if ( propertyName == assetCategoryField )
             {
                 // Yes, so assign it.
-                mAssetDefinition.mAssetCategory = StringTable->insert( pAttribute->Value() );
-                continue;
+                mAssetDefinition.mAssetCategory = StringTable->insert( pPropertyValue );
+                return true;
             }
             // Asset auto-unload?
-            else if ( attributeName == assetAutoUnloadField )
+            else if ( propertyName == assetAutoUnloadField )
             {
                 // Yes, so assign it.
-                mAssetDefinition.mAssetAutoUnload = dAtob( pAttribute->Value() );
-                continue;
+                mAssetDefinition.mAssetAutoUnload = dAtob( pPropertyValue );
+                return true;
             }
             // Asset internal?
-            else if ( attributeName == assetInternalField )
+            else if ( propertyName == assetInternalField )
             {
                 // Yes, so assign it.
-                mAssetDefinition.mAssetInternal = dAtob( pAttribute->Value() );
-                continue;
+                mAssetDefinition.mAssetInternal = dAtob( pPropertyValue );
+                return true;
             }
         }
 
-        // Did we get an asset name?
-        if ( mAssetDefinition.mAssetName == StringTable->EmptyString )
-        {
-            // No, so reset everything.
-            clear();
+        // Fetch property word count.
+        const U32 propertyWordCount = StringUnit::getUnitCount( pPropertyValue, ASSET_ASSIGNMENT_TOKEN );
 
-            // Stop processing!
-            return false;
-        }
-
-        // Set asset file-path.
-        mAssetDefinition.mAssetBaseFilePath = StringTable->insert( xmlParser.getParsingFilename() );
-
-        // Set asset type.
-        mAssetDefinition.mAssetType = StringTable->insert( pXmlElement->Value() );
-
-        return true;
-    }
-
-    virtual bool visit( TiXmlAttribute* pAttribute, TamlXmlParser& xmlParser )
-    {
-        // Debug Profiling.
-        PROFILE_SCOPE(TamlAssetDeclaredVisitor_VisitAttribute);
-
-        // Sanity!
-        AssertFatal( mAssetDefinition.mAssetName != StringTable->EmptyString, "Cannot generate asset dependencies without asset name." );
-
-        // Fetch asset reference.
-        const char* pAssetReference = pAttribute->Value();
-
-        // Fetch field word count.
-        const U32 fieldWordCount = StringUnit::getUnitCount( pAssetReference, ASSET_ASSIGNMENT_TOKEN );
-
-        // Finish if there are not two words.
-        if ( fieldWordCount != 2 )
+        // Finish if there's not two words.
+        if ( propertyWordCount != 2 )
             return true;
 
         // Fetch the asset signature.
-        StringTableEntry assetSignature = StringTable->insert( StringUnit::getUnit( pAssetReference, 0, ASSET_ASSIGNMENT_TOKEN ) );
+        StringTableEntry assetSignature = StringTable->insert( StringUnit::getUnit( pPropertyValue, 0, ASSET_ASSIGNMENT_TOKEN ) );
 
         // Is this an asset Id signature?
-        if ( assetSignature == StringTable->insert(ASSET_ID_SIGNATURE) )
+        if ( assetSignature == assetLooseIdSignature )
         {
             // Yes, so get asset Id.
-            typeAssetId assetId = StringTable->insert( StringUnit::getUnit( pAssetReference, 1, ASSET_ASSIGNMENT_TOKEN ) );
+            typeAssetId assetId = StringTable->insert( StringUnit::getUnit( pPropertyValue, 1, ASSET_ASSIGNMENT_TOKEN ) );
 
             // Finish if the dependency is itself!
             if ( mAssetDefinition.mAssetId == assetId )
@@ -168,42 +163,20 @@ protected:
             mAssetDependencies.push_back( assetId );
         }
         // Is this a loose-file signature?
-        else if ( assetSignature == StringTable->insert(ASSET_LOOSEFILE_SIGNATURE) )
+        else if ( assetSignature == assetLooseFileSignature )
         {
             // Yes, so get loose-file reference.
-            const char* pAssetLooseFile = StringUnit::getUnit( pAssetReference, 1, ASSET_ASSIGNMENT_TOKEN );
+            const char* pAssetLooseFile = StringUnit::getUnit( pPropertyValue, 1, ASSET_ASSIGNMENT_TOKEN );
 
+            // Fetch asset path only.
+            char assetBasePathBuffer[1024];
+            dSprintf( assetBasePathBuffer, sizeof(assetBasePathBuffer), "%s", mAssetDefinition.mAssetBaseFilePath );
+            char* pFinalSlash = dStrrchr( assetBasePathBuffer, '/' );
+            if ( pFinalSlash != NULL ) *pFinalSlash = 0;
+
+            // Expand the path in the usual way.
             char assetFilePathBuffer[1024];
-
-            // Is the asset loose-file expando specified?
-            if ( *pAssetLooseFile == '#' )
-            {
-                // Yes, so fetch relative path.
-                char parsingFileBuffer[1024];
-                dStrcpy( parsingFileBuffer, xmlParser.getParsingFilename() );
-                
-                // Find the final slash.
-                char* pLastSlash = dStrrchr( parsingFileBuffer, '/' );
-
-                // Is this the last slash?
-                if ( pLastSlash == NULL )
-                {
-                    // No, so warn.
-                    Con::warnf( "Failed to parse the loose-file path '%s' in asset file '%s'.", pAssetLooseFile, parsingFileBuffer );
-                    return true;
-                }
-
-                // Remove parsing file.
-                *pLastSlash = 0;
-
-                // Format expanded path taking into account any missing slash.
-                dSprintf( assetFilePathBuffer, sizeof(assetFilePathBuffer), "%s/%s", parsingFileBuffer, pAssetLooseFile + (pAssetLooseFile[1] == '/' ? 2 : 1 ) );               
-            }
-            else
-            {
-                // No, so expand the path in the usual way.
-                Con::expandPath( assetFilePathBuffer, sizeof(assetFilePathBuffer), pAssetLooseFile );
-            }
+            Con::expandPath( assetFilePathBuffer, sizeof(assetFilePathBuffer), pAssetLooseFile, assetBasePathBuffer );
 
             // Insert asset loose-file.
             mAssetLooseFiles.push_back( StringTable->insert( assetFilePathBuffer ) );
@@ -211,31 +184,6 @@ protected:
 
         return true;
     }
-
-public:
-    TamlAssetDeclaredVisitor() { mAssetDefinition.reset(); }
-    virtual ~TamlAssetDeclaredVisitor() {}
-
-    bool parse( const char* pFilename )
-    {
-        TamlXmlParser parser;
-        return parser.parse( pFilename, *this, false );
-    }
-
-    typedef StringTableEntry typeAssetId;
-    typedef Vector<typeAssetId> typeAssetIdVector;
-    typedef Vector<StringTableEntry> typeLooseFileVector;
-
-    inline AssetDefinition& getAssetDefinition( void ) { return mAssetDefinition; }
-    inline typeAssetIdVector& getAssetDependencies( void ) { return mAssetDependencies; }
-    inline typeLooseFileVector& getAssetLooseFiles( void ) { return mAssetLooseFiles; }
-
-    void clear( void ) { mAssetDefinition.reset(); mAssetDependencies.clear(); mAssetLooseFiles.clear(); }
-
-private:
-    AssetDefinition         mAssetDefinition;
-    typeAssetIdVector       mAssetDependencies;
-    typeLooseFileVector     mAssetLooseFiles;
 };
 
 #endif // _TAML_ASSET_DECLARED_VISITOR_H_

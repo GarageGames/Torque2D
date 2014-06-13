@@ -66,6 +66,12 @@ struct OSCardProfile
 static Vector<CardProfile> sCardProfiles(__FILE__, __LINE__);
 static Vector<OSCardProfile> sOSCardProfiles(__FILE__, __LINE__);
 
+//------------------------------------------------------------------------------
+
+#include "winOGLVideo_ScriptBinding.h"
+
+//------------------------------------------------------------------------------
+
 struct ProcessorProfile
 {
     U16 clock;  // clock range max
@@ -96,60 +102,6 @@ static SettingProfile sSettingProfiles[] =
 };
 
 //------------------------------------------------------------------------------
-ConsoleFunction( addCardProfile, void, 16, 16, "(string vendor, string renderer,"
-                "bool safeMode, bool lockArray, bool subImage, bool fogTexture,"
-                "bool noEnvColor, bool clipHigh, bool deleteContext, bool texCompress"
-                "bool interiorLock, bool skipFirstFog, bool only16,"
-                "bool noArraysAlpha, string proFile)"
-                ""
-                "Register a card profile with the card profile manager.\n\n"
-                "Most of the parameters are fairly self-explanatory and very internal"
-                " to the rendering code; however there are a few of note:\n"
-                "@param vendor   The vendor string the card claims.\n"
-                "@param renderer The renderer string the card claims.\n"
-                "@param proFile  Name of the file where further configuration information is kept."
-                )
-{
-   CardProfile profile;
-
-   profile.vendor = dStrdup(argv[1]);
-   profile.renderer = dStrdup(argv[2]);
-
-   profile.safeMode = dAtob(argv[3]);
-   profile.lockArray = dAtob(argv[4]);
-   profile.subImage = dAtob(argv[5]);
-   profile.fogTexture = dAtob(argv[6]);
-   profile.noEnvColor = dAtob(argv[7]);
-   profile.clipHigh = dAtob(argv[8]);
-    profile.deleteContext = dAtob(argv[9]);
-    profile.texCompress = dAtob(argv[10]);
-    profile.interiorLock = dAtob(argv[11]);
-    profile.skipFirstFog = dAtob(argv[12]);
-    profile.only16 = dAtob(argv[13]);
-    profile.noArraysAlpha = dAtob(argv[14]);
-
-    if (strcmp(argv[15],""))
-        profile.proFile = dStrdup(argv[15]);
-    else
-        profile.proFile = NULL;
-
-   sCardProfiles.push_back(profile);
-}
-
-ConsoleFunction( addOSCardProfile, void, 6,6, "(string vendor, string renderer, bool allowOpenGL,"
-                "Register with the profile manager what rendering mode is preferred with the "
-                "specified card.")
-{
-   OSCardProfile profile;
-
-   profile.vendor = dStrdup(argv[1]);
-   profile.renderer = dStrdup(argv[2]);
-
-   profile.allowOpenGL = dAtob(argv[3]);
-    profile.preferOpenGL = dAtob(argv[5]);
-
-   sOSCardProfiles.push_back(profile);
-}
 
 static void clearCardProfiles()
 {

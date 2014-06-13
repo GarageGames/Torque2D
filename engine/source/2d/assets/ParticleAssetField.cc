@@ -23,7 +23,7 @@
 #include "2d/assets/ParticleAssetField.h"
 
 #ifndef _CORE_MATH_H_
-#include "2d/core/coreMath.h"
+#include "2d/core/CoreMath.h"
 #endif
 
 #ifndef _MMATH_H_
@@ -543,7 +543,7 @@ void ParticleAssetField::onTamlCustomWrite( TamlCustomNode* pCustomNode )
         const DataKey& dataKey = mDataKeys[index];
 
         // Add a key node.
-        TamlCustomNode* pKeyNode = pCustomNode->addNode( particleAssetFieldDataKeyName );
+        TamlCustomNode* pKeyNode = pAssetField->addNode( particleAssetFieldDataKeyName );
 
         // Add key fields.
         pKeyNode->addField( particleAssetFieldDataKeyTimeName, dataKey.mTime );

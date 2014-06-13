@@ -31,10 +31,11 @@ IMPLEMENT_CONOBJECT(OpenFolderDialog);
 //-----------------------------------------------------------------------------
 FileDialogData::FileDialogData()
 {
-    mDefaultPath = StringTable->insert("");
-    mFilters = StringTable->insert("");
-    mFile = StringTable->insert("");
-    mTitle = StringTable->insert("");
+    mDefaultPath = StringTable->EmptyString;
+    mDefaultFile = StringTable->EmptyString;
+    mFilters = StringTable->EmptyString;
+    mFile = StringTable->EmptyString;
+    mTitle = StringTable->EmptyString;
     mStyle = 0;
 
 	mDefaultPath = StringTable->insert(Con::getVariable("Tools::FileDialogs::LastFilePath"));

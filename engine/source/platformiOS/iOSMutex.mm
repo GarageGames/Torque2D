@@ -34,7 +34,7 @@ struct PlatformMutexData
 {
    pthread_mutex_t   mMutex;
    bool              locked;
-   U32         lockedByThread;
+   ThreadIdent       lockedByThread;
 };
 
 Mutex::Mutex(void)
@@ -62,7 +62,7 @@ Mutex::~Mutex()
  
 bool Mutex::lock( bool block)
 {
-   bool ok;
+   int ok;
 
    if(block)
    {

@@ -125,17 +125,23 @@ function RotateToToy::setTrackMouse( %this, %value )
 
 function RotateToToy::onTouchDown(%this, %touchID, %worldPosition)
 {
-    // Calculate the angle to the mouse.
-    %origin = RotateToToy.TargetObject.getPosition();
-    %angle = -mRadToDeg( mAtan( %worldPosition.x-%origin.x, %worldPosition.y-%origin.y ) );
-    
-    //Rotate to the touched angle.
-    RotateToToy.TargetObject.RotateTo( %angle, RotateToToy.rotateSpeed );
+    %this.rotateTargetObject( %worldPosition );
 }
 
 //-----------------------------------------------------------------------------
 
-function RotateToToy::onTouchMoved(%this, %touchID, %worldPosition)
+function RotateToToy::onTouchDragged(%this, %touchID, %worldPosition)
+{
+    // Finish if not tracking the mouse.
+    if ( !RotateToToy.trackMouse )
+        return;
+        
+    %this.rotateTargetObject( %worldPosition );
+}
+
+//-----------------------------------------------------------------------------
+
+function RotateToToy::rotateTargetObject(%this, %worldPosition)
 {
     // Finish if not tracking the mouse.
     if ( !RotateToToy.trackMouse )
@@ -143,7 +149,12 @@ function RotateToToy::onTouchMoved(%this, %touchID, %worldPosition)
         
     // Calculate the angle to the mouse.
     %origin = RotateToToy.TargetObject.getPosition();
-    %angle = -mRadToDeg( mAtan( %worldPosition.x-%origin.x, %worldPosition.y-%origin.y ) );
+    %angle = mAtan( Vector2Sub( %worldPosition, %origin ) );
+    
+    // The target object points up (the 90-degree point in polar coordinates).
+    // We can simply subtract 90 from the calculate angle to make the
+    // object point to the mouse.
+    %angle -= 90;
     
     //Rotate to the touched angle.
     RotateToToy.TargetObject.RotateTo( %angle, RotateToToy.rotateSpeed );        

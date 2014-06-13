@@ -33,6 +33,8 @@
 #include "platformiOS/iOSUtil.h"
 #endif //TORQUE_OS_IOS
 
+#include "tcpObject_ScriptBinding.h"
+
 TCPObject *TCPObject::table[TCPObject::TableSize] = {0, };
 
 IMPLEMENT_CONOBJECT(TCPObject);
@@ -324,66 +326,6 @@ void TCPObject::send(const U8 *buffer, U32 len)
 {
    Net::sendtoSocket(mTag, buffer, S32(len));
 }
-
-ConsoleMethod( TCPObject, send, void, 3, 0, "( ... ) Use the send method to send any number of parameters, as strings, one at a time to the agent at the other end of the connection.\n"
-                                                                "@param ... Any number of arguments, as strings. Each string is sent separately. i.e. The arguments are not concatenated.\n"
-                                                                "@return No return value")
-{
-   for(S32 i = 2; i < argc; i++)
-      object->send((const U8 *) argv[i], dStrlen(argv[i]));
-}
-
-ConsoleMethod( TCPObject, listen, void, 3, 3, "( port ) Use the listen method to allow this TCPObject to accept connections on the specified port.\n"
-                                                                "@param port A value between 1000 and 65536.\n"
-                                                                "@return No return value")
-{
-   object->listen(U32(dAtoi(argv[2])));
-}
-
-ConsoleMethod( TCPObject, connect, void, 3, 3, "( addr ) Use the connect method to request a connection to a remote agent at the address addr.\n"
-                                                                "@param addr A string containing an address of the form: ìA.B.C.D:Portî, where A .. B are standard IP numbers between 0 and 255 and Port can be between 1000 and 65536.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa disconnect")
-{
-   object->connect(argv[2]);
-}
-
-
-//Luma:	Used to force networking to be opened before connecting... written specifically to handle GPRS/EDGE/3G situation on iPhone, but can be expanded to other platforms too
-ConsoleMethod( TCPObject, openAndConnect, void, 3, 3, "(string addr)"
-              "Connect to the given address, making sure that the connection is open first.")
-{
-   object->openAndConnect(argv[2]);
-}
-
-ConsoleMethod( TCPObject, disconnect, void, 2, 2, "() Use the disconnect method to close a previously opened connection without destroying the requesting TCPOpbject.\n"
-                                                                "This will close any open connection, but not destroy this object. Thus, the object can be used to open a new connection.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa connect")
-{
-   object->disconnect();
-}
-
-
-//Luma:	Encode data before sending via TCP so that only valid URL characters are sent
-ConsoleMethod(TCPObject, URLEncodeString, const char*, 3, 3, "(string data) Performs URLEncoding on a single string.\n\n")
-{
-    U8	*pEncodedString;
-    U32	iNewBufferLen;
-
-
-    pEncodedString = object->URLEncodeData((U8 *)argv[2], dStrlen(argv[2]) + 1, &iNewBufferLen);
-
-    //copy string to return buffer
-    char	*pcReturnBuffer = Con::getReturnBuffer(iNewBufferLen);
-    dMemcpy(pcReturnBuffer, pEncodedString, iNewBufferLen);
-
-    //free encoded data pointer
-    dFree((void *)pEncodedString);
-   
-    return pcReturnBuffer;
-}
-
 
 void DefaultGame::processConnectedReceiveEvent(ConnectedReceiveEvent* event )
 {

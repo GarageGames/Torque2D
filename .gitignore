@@ -60,3 +60,12 @@ linkmap.txt
 Icon?
 ehthumbs.db
 Thumbs.db
+
+# Android project files #
+#########################
+.metadata/
+engine/compilers/android/.settings/org.eclipse.cdt.core.prefs
+engine/compilers/android/bin/
+engine/compilers/android/gen/
+engine/compilers/android/obj/
+

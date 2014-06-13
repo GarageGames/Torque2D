@@ -194,6 +194,9 @@ StringTableEntry _StringTable::lookupn(const char* val, S32 len, const bool  cas
 {
    if ( val == NULL )
        return StringTable->EmptyString;
+       
+   MutexHandle mutex;
+   mutex.lock(&mMutex, true);
 
    Node **walk, *temp;
    U32 key = hashStringn(val, len);

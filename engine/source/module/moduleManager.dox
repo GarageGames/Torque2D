@@ -1,0 +1,543 @@
+/*! @defgroup moduleGroup Module Manager Reference
+
+## Overview
+
+The module system is designed to provide users with a unit of reuse for both code and assets.  The module system includes vital ingredients that make this possible including:
+
+- Module Identity
+- Module Versioning
+- Module Deprecation
+- Module Grouping
+- Module Types
+- Module Dependencies
+- Module Meta-data
+- Module Load/Unload Notifications
+- Module Synchronization/Publishing
+
+Essentially a module can contain code and/or data (typically assets) and its code can be tasked for almost any purpose.  For instance, a module might represent a sub-system in your game or perhaps a plug-in tool for your editor, even an asset-pack.
+
+## Prerequisite Knowledge
+
+The module system use [TAML](Taml-Guide) to load-up module definition files that declare a module so basic knowledge of that is essential.  At the very least, knowing how to modify the TAML XML format is required.
+
+Although not essential, a basic working knowledge of the [Asset System](Asset-Manager-Guide) would be useful.
+
+## TorqueScript Bindings
+
+- [Module Manager](https://github.com/GarageGames/Torque2D/blob/master/engine/source/module/moduleManager_ScriptBinding.h)
+- [Module Definition](https://github.com/GarageGames/Torque2D/blob/master/engine/source/module/moduleDefinition_ScriptBinding.h)
+
+## Module System
+
+This document refers to the "Module System" but in actual fact, this is an engine type named "ModuleManager".  At engine start-up an instance of this is automatically generated inside the engine itself.  This instance is exposed to the scripts by the named object "ModuleDatabase".  It is named this because in Torque you cannot name an object the same as its type name.  The terms "Module System", "ModuleManager" & "ModuleDatabase" can be used interchangeably to mean the same thing however in scripts you need to use "ModuleDatabase" to access the primary module database.
+
+## Declaring Modules
+
+Before going into the details of modules, it's important to understand how simple the definition of a module is.  A module is nothing more than a folder with a single TAML file describing the module itself.  This is analogous to an asset which is a file or files represented by an asset definition TAML file.  The TAML file that describes a module is known as a module definition.
+
+All modules have a unique Id known as a "module Id".  A module Id is nothing more than an arbitrary string.  Its only requirement is that it is unique to all modules in the system.  It can be as short or as long as you required however keeping it short and simple is recommended.
+
+The contents of a module are completely irrelevant to the module system, all it cares about is knowing that the module exists.  A module is a "unit of reuse" meaning that if you have something you'd like to be kept together such as a set of code or collection of assets then a module is what you need to use.
+
+## Module Scanning
+
+The module system initially has no modules.  There are no fixed or special modules to understand.  The only modules that the module system knows about are the ones it finds when you ask it to scan a location on disk.  You can ask it to scan several locations if you so wish gathering modules from anywhere.  When you ask the module system to scan a location on disk, it simply searches for module definitions.
+
+You can ask it to scan like this:
+@code{cpp}
+// Scan for modules.
+ModuleDatabase.scanModules( "MyModules" );
+@endcode
+
+The function "scanModules" will scan for modules defined in the path you specify.  You can specify any path you so choose, in this case it's a sub-folder named "MyModules".  By default, this function will automatically recurse all sub-folders of the location you specify searching for module definitions.  If you don't want it to do that then you can pass a second argument that specifies whether you want to search the root of the location you specify only i.e. if you specify "false" as the second argument then it'll scan the root only.
+
+The module system will scan for files ending in "module.taml" (this can be changed) and will check to see if the file contains a type "ModuleDefinition".
+
+A bare minimum module definition file would look like this:
+@code{xml}
+<ModuleDefinition
+	ModuleId="AICode"
+	VersionId="1"/>
+@endcode
+As you can see, this would create a type "ModuleDefintion".  This type is what the module system uses to define a module.  The bare minimum information that is required for a module is its "ModuleId" and its "VersionId".  The module Id as already stated is the modules unique identification.  The version Id is a serial Id that represents the modules version.  As you'll see, you are free to create multiple modules with the same Module Id that are at different versions i.e. different Version Id.  This is how the module system allows the same module to exist concurrently at different versions.
+
+When the module system finds a module definition, it first validates it.  As part of this validation, the module system ensures that the same module Id at the same version Id doesn't already exist.  If it does then a warning is issued and the module definition is ignored.
+
+## The Module Definition
+
+As you can see, the module definition is a simple type that contains fields that describe the module itself.  So far we've only seen the bare minimum configuration so here's a complete list:
+
+- ModuleId - A unique string Id for the module.  It can contain any characters except a comma or semi-colon (the asset scope character).
+- VersionId - The version Id.  Breaking changes to a module should use a higher version Id.
+- BuildId - The build Id.  Non-breaking changes to a module should use a higher build Id.  Optional: If not specified then the build Id will be zero.
+- Enabled - Whether the module is enabled or not.  When disabled, it is effectively ignored.  Optional: If not specified then the module is enabled.
+- Deprecated - Whether the module is deprecated or not.  Optional: If not specified then the module is not deprecated.
+- Description - The description typically used for debugging purposes but can be used for anything.
+- Author - The author of the module.
+- Group - The module group used typically when loading modules as a group.
+- Type - The module type typically used to distinguish modules during module enumeration.  Optional: If not specified then the type is empty although this can still be used as a pseudo 'global' type for instance.
+- Dependencies - A comma-separated list of module Ids/VersionIds (<ModuleId>=<VersionId>,<ModuleId>=<VersionId>,etc) which this module depends upon. Optional: If not specified then no dependencies are assumed.
+- ScriptFile - The name of the script file to compile when loading the module.  Optional.
+- CreateFunction - The name of the function used to create the module.  Optional: If not specified then no create function is called.
+- DestroyFunction - The name of the function used to destroy the module.  Optional: If not specified then no destroy function is called.
+- ScopeSet - The scope set used to control the lifetime scope of objects that the module uses.  Objects added to this set are destroyed automatically when the module is unloaded.
+- AssetTagsManifest - The name of tags asset manifest file if this module contains asset tags.  Optional: If not specified then no asset tags will be found for this module.  Currently, only a single asset tag manifest should exist.
+- Synchronized - Whether the module should be synchronized or not.  Optional: If not specified then the module is not synchronized.
+- CriticalMerge - Whether the merging of a module prior to a restart is critical or not.  Optional: If not specified then the module is not merge critical.
+
+## Module Layout
+
+As you've seen, a module is identified by its Module Id however, part of that identity is its Version Id and together they form a unique module i.e. a module at a specific version.  This means that you can have the same Module Id but at different versions known to the module system.  This raise the question of how they are organized on disk.  The module system does not mandate any specific way to organize modules, you can store a module anywhere, all that really matters is that the module definition file is scanned for so that module is known to the module system.
+
+So for hand-crafted games, situate them however you like.  For an editor system to generate and manipulate modules, it's far better to create some nomenclature to ensure that modules don't clash.  This has led to a standard for layout that whilst not mandatory (the module system doesn't care about it) it creates an environment that is well known and consistent for future editors.
+
+The standard layout is to have modules inside a folder with the same name as the module Id itself.  Within that folder a sub-folder with the same name as the version Id of the module.  Finally, within that is the module itself containing at least the module definition.
+
+This leads to a layout like this:
+
+| Module Id | Version Id | Folder |
+|--- | --- | --- |
+| RedModule | 1 | RedModule\1\... |
+| RedModule | 2 | RedModule\2\... |
+| GreenModule | 1 | GreenModule\1\... |
+| BlueModule | 1 | BlueModule\1\... |
+
+These modules however could've equally been organized like this:
+
+| Module Id | Version Id | Folder |
+|--- | --- | --- |
+| RedModule | 1 | RedModule1\... |
+| RedModule | 2 | RedModule2\... |
+| GreenModule | 1 | GreenModule\1\... |
+| BlueModule | 1 | BlueModule\1\... |
+
+... but as you can see, the "RedModule" are in folders named "RedModule1" and "RedModule2" to stop them clashing.  Also, they are not in a common root folder i.e. "RedModule".
+
+The choice is totally yours however but having the module exist inside a sub-folder named as the Version Id is a standard which will be used moving forward and affords many advantages for editors in the future.
+
+## Module Identity
+
+In addition to the Module Id and Version Id, there exists a third setting of Build Id.  Whilst this may not seem important when you are hand crafting modules (even version Id may not), it becomes very important when using the module systems synchronization features.  Synchronization is a feature that supports editor infrastructure for synchronizing application projects based upon modules and will be covered later in the document.
+
+For now, know that the version Id signifies a breaking change to a module i.e. version 2 has braking changes from version 1.  That may actually not be the case but this is the meaning of the version Id to the module system i.e. version 2 is incompatible and cannot be used in substitution for version 1.  Build Id is a non-breaking change where a module has been modified.  The build Id does not generate a new module, it is simply a replacement for an existing module.  Again, this relates to synchronization and indicates that an incoming module is a different build of an existing module Id and version Id module and it needs to be replaced.
+
+The build Id does not change the location of a module, it exists only as a field defined within the module definition like this:
+@code{xml}
+<ModuleDefinition
+	ModuleId="AICode"
+	VersionId="1"
+	BuildId="234"/>
+@endcode
+
+## Module Loading and Unloading
+
+When it comes time to load or unload a module, the process is extremely simple.  There are actually two ways to load and unload modules:
+
+- Explicit
+- Group
+
+An explicit load or unload is when you ask for a specific module at a specific version Id to be loaded or unloaded like so:
+@code{cpp}
+ModuleDatabase.LoadExplicit( "RedModule", 2 );
+@endcode
+Whilst this is a simple operation, it is fraught with problems when the complexity and number of the modules increases.  The initial downside to this approach is that the code itself has to know both the name and the version of the module it needs to load.  This couples the loading code with knowledge of the module Ids and Version Ids.  This isn't necessarily bad for a simple setup but it doesn't scale well.
+
+As an example, let's say that we have the RedModule (at versions 1 and 2), GreenModule and BlueModule.  They are all related functionality, let's say they're our "color handling" modules.  If we want to load them all we end up doing the following:
+
+@code{cpp}
+ModuleDatabase.LoadExplicit( "RedModule", 2 );
+ModuleDatabase.LoadExplicit( "GreenModule", 1 );
+ModuleDatabase.LoadExplicit( "BlueModule", 1 );
+@endcode
+Okay, so that's not too bad but consider that you might not want to load all the modules initially.  This will mean you end up with these kinds of explicit loads all over the place.  Again, this doesn't scale well.
+
+Also, to unload it you've got to do this:
+
+@code{cpp}
+ModuleDatabase.UnloadExplicit( "RedModule", 2 );
+ModuleDatabase.UnloadExplicit( "GreenModule", 1 );
+ModuleDatabase.UnloadExplicit( "BlueModule", 1 );
+@endcode
+
+A far better approach is to group these modules together and load them up as one.  To do this, you simply assign each module into a group by setting their group field like so:
+@code{xml}
+<ModuleDefinition
+	ModuleId="RedModule"
+	VersionId="1"
+	Group="Colors"/>
+@endcode
+
+@code{xml}
+<ModuleDefinition
+	ModuleId="RedModule"
+	VersionId="2"
+	Group="Colors"/>
+@endcode
+
+@code{xml}
+<ModuleDefinition
+	ModuleId="GreenModule"
+	VersionId="1"
+	Group="Colors"/>
+@endcode
+
+@code{xml}
+<ModuleDefinition
+	ModuleId="BlueModule"
+	VersionId="1"
+	Group="Colors"/>
+@endcode
+
+As you can see, the "Group" field has been set to "Colors".  This can be any string containing any characters you wish.  It could've equally been "All my color modules" but this is a group name and using sentences would be kind of odd looking and the potential for typos is high.
+
+To load that group you then simply do:
+@code{cpp}
+ModuleManager.LoadGroup( "Colors" );
+@endcode
+
+If you wanted to unload the group you simply do:
+@code{cpp}
+ModuleManager.UnloadGroup( "Colors" );
+@endcode
+
+The code above, doesn't know what modules its loading, it's just stating that at this point in time it needs to load the "color" modules.  Imagine this were editor tooling and you wanted to load all the "plug-in" modules, this could be used for that.  Equally, you might load the "AI" modules etc.  The main point to consider is that you can add a module, assign it to a group and not have to find the code that both loads and unloads it and make modifications.  This then becomes purely data-driven.
+
+You may be wondering what "RedModule" versions it loaded?  Well the answer is that in the absence of any module dependencies it will simply load the latest version of any module Id so in the examples above, the RedModule at version 2 is loaded and unloaded.
+
+## Module Dependencies
+
+When a module is loaded, it may require services or data provided by another module.  This means that you must ensure that the module it depends upon is loaded before the module itself is loaded.  Also, it means you must ensure that the module is depends upon is not only unloaded after the module that depends on it but also that the module it depends on is never unloaded whilst the module itself is loaded.  In simpler terms, if one module depends on another then it must be ready and "running" before a module is loaded and always be like that whilst the module itself is operating.
+
+It's possible to perform this organization yourself however, as was seen in the previous section, this doesn't scale well as more and more modules depend on each other.
+
+The module system however can easily handle this module dependency situation for you and all it asks from you is to define in a module definition, which modules at specific versions the module depends on.
+
+For example, let's say we have a module Id of "Game" which depends on services in another module Id of "GameCore".  To keep things simple, both modules are at version 1 for now:
+@code{xml}
+<ModuleDefinition
+	ModuleId="GameCore"
+	VersionId="1"/>
+@endcode
+
+@code{xml}
+<ModuleDefinition
+	ModuleId="Game"
+	VersionId="1"
+	Dependencies="GameCore=1"/>
+@endcode
+
+We then want to load explicitly our "Game" module like this:
+
+@code{cpp}
+ModuleManager.LoadExplicit( "Game", 1 );
+@endcode
+
+When we do this, the module system validates the "Game" module and checks for any dependencies.  As you can see, the "Game" module has specified that it depends on module "GameCore" at version "1".  This tells the module system that it needs to ensure that the "GameCore" at version "1" is loaded first so that's what it does prior to loading the "Game" module itself.
+
+It should be noted that if the "GameCore" is already loaded (perhaps it was loaded explicitly or another module was loaded that depended on it) then it simply increases a reference count i.e. you don't have to worry about modules being loaded twice.
+
+If you were then to unload the "Game" module like this:
+
+@code{cpp}
+ModuleManager.UnloadExplicit( "Game", 1 );
+@endcode
+
+... the module system would first look for the "Game" module dependencies and see the "GameCore" dependency.  It then reduces the reference count for "GameCore" and if it is zero i.e. nothing is currently referencing the "GameCore" module then it unloads it.  It then proceeds to unload the "Game" module itself.
+
+You specify as many module dependencies as you like by using comma separation like so:
+
+@code{xml}
+<ModuleDefinition
+	ModuleId="Game"
+	VersionId="1"
+	Dependencies="GameCore=1,AICore=2,AudioCore=1,PlugInCore=6"/>
+@endcode
+
+The golden rule for module dependencies is that if you have a module that depends on another module being loaded whether that be because you directly uses its functions directly or indirectly use its data, you must always declare a dependency on it.
+
+Module dependencies are very powerful and they allow for very complex loading and unload situations and dependencies.  For instance, if you load a module explicitly, not only will any dependencies be loaded but also their dependencies will be loaded as well.  This is completely recursive i.e. module dependencies form a dependency directed-graph.  The module system can also detect cycles in the loading dependencies which obviously cannot be satisfied and refuse to load as well as raising a warning to the log.
+
+Furthermore, module dependencies applies any time a module is loaded or unloaded so this means if you load a module group, any of the groups modules get their dependencies loaded as well.
+
+A final and critical rule to consider is that the module system uses the module Id to mean a unique piece of functionality.  This means that it will NOT allow the same module Id at different versions to be loaded under any circumstances.  If you attempt to do this you'll simply get a warning output to the log and the module won't load.  Having multiple versions of the same module on the disk doesn't mean they can be loaded at the same time.  This is expected because otherwise, those modules would potentially conflict in their operation.
+
+## Module Disabling
+
+By default every module is enabled but there may be times when you don't want it to be loaded by the module system.  Instead of having to move the module outside of the folders being scanned by your application you can simply disable the module like so:
+
+@code{xml}
+<ModuleDefinition
+	ModuleId="BlueModule"
+	VersionId="1"
+	Enabled="0"/>
+@endcode
+
+The module system will acknowledge the module by outputing to the log that the module was found but not loaded because it was disabled.  Also, you should be careful when disabling modules that are depended on by other modules as doing so will also stop those modules from loading.
+
+## Module Deprecation
+
+You can mark a module as being deprecated.  This won't stop the module from being loaded however it will output a warning to the log saying that a deprecated module is being loaded.  This can serve as a hint to use a newer version of a module or perhaps a different module Id altogether.  It is also useful for an editor in indicating to the end-user that a module is deprecated.
+
+You flag a module as deprecated like so:
+
+@code{xml}
+<ModuleDefinition
+	ModuleId="RedModule"
+	VersionId="1"
+	Deprecated="1"/>
+@endcode
+
+## Module Description and Author
+
+Whilst the module system doesn't actually use either the module description or author, they are both useful fields for identification and can be used to display to the end-user for various purposes.
+
+You can configure these like so:
+
+@code{xml}
+<ModuleDefinition
+	ModuleId="GreenModule"
+	VersionId="1"
+	Description="The really useful green module."
+	Author="Mr Green, GreenSoft Inc."/>
+@endcode
+
+## Module Type
+
+You can assign a module to a type and whilst the module system doesn't use this, it can prove extremely useful when finding modules using the "find" functions that the module system provides (covered later in the document).  Typicaly the type is used to filter modules from each other.  For instance, let's say you had a bunch of modules that provided "art" packs, you could assign the type as "ArtPack" like so:
+@code{xml}
+<ModuleDefinition
+	ModuleId="PlatformArtPack"
+	VersionId="1"
+	Description="Lots of cool platform assets."
+	Type="ArtPack"/>
+@endcode
+
+You can then use the "find" functions (detailed later) to find modules of the type "ArtPack".  You are free to use anything here as it is simply a string.  You can think of the "Type" as analogous to a category.
+
+## Module Scripts
+
+So far we've seen how to load and unload modules as well as how to configure various aspects but we've not yet seen how to actually utilize them in a real situation.
+
+The most common use for a module is to host code.  When a module is loaded, it's common to want to define code to run and even automatically run a specific function.  Also, when unloading the module it's common to want to also run a specific function.  If you are not hosting code then none of this section is relevant and you can omit the fields it refers to.
+
+A module allows by using three fields:
+
+- ScriptFile
+- CreateFunction
+- DestroyFunction
+
+You typically set them up like so:
+
+@code{xml}
+<ModuleDefinition
+	ModuleId="BlueModule"
+	VersionId="1"
+	ScriptFile="main.cs"
+	CreateFunction="create"
+	DestroyFunction="destroy"/>
+@endcode
+
+The script file field allows you to specify a [TorqueScript](TorqueScript-Overview) file to compile when the module is loaded for the first time.  In the example above, it will execute the file "main.cs" that resides alongside the module definition TAML file itself.  This file can be named anything you like and does not have to be "main.cs".
+
+Compiling a TorqueScript file is useful in that any functions defined by the compilation suddenly become available to be called by other code.  It is however useful to execute a "create" function when the module loads that enables you to perform an action when the module is loaded.  The same goes for executing a "destroy" function when the module is unloaded.  You define these with the "CreateFunction" and "DestroyFunction" fields.
+
+These functions however are not global functions i.e. they are NOT defined like this:
+@code{cpp}
+function create()
+{
+}
+
+function destroy()
+{
+}
+@endcode
+
+The reason they are not like this is because there is a high likelyhood of those functions already being defined in which case Torque replaces the previous functions which can cause extremely hard to track bugs.  Instead, the module system requires that you do this:
+@code{cpp}
+function BlueModule::create(%this)
+{
+}
+
+function BlueModule::destroy(%this)
+{
+}
+@endcode
+This works because when a module is loaded, the module system generates an object named the same as the module Id that is being loaded.  This is known as the modules "ScopeSet" and will be covered in the next section.
+
+You should try to stick to using the namespace of the module Id i.e. "BlueModule" shown above if possible to avoid function naming conflicts however if you are careful about your naming then you can avoid this situation.  The potential for conflict can be high however if you are not in a position to supervise all the module functions that will be working together in the application i.e. if you were to accept third-party modules.
+
+Obviously, caution is indicated here.
+
+It's important to remember that whilst the "ScriptFile" will be compiled only once when the module is initially loaded, both the "CreateFunction" and the "DestroyFunction" will be call whenever the module is loaded or unloaded.
+
+## ScopeSet
+
+As shown in the previous section, the module system will generate a named object and call both the specified "CreateFunction" and "DestroyFunction" on it.  This "ScopeSet" is extremely useful for other reasons however.  The actual object created as the "ScopeSet" is a "[SimSet](https://github.com/GarageGames/Torque2D/blob/master/engine/source/sim/simSet.cc)" and because of this you are free to add any objects you wish to it.  The reason you might do this is because of the fact that the "ScopeSet" is not only deleted when the module is unloaded but it also deletes any objects that have been added to it.
+
+In other words, the "ScopeSet" is useful as an aid to deleting objects you want removed when the module unloads.  These are typically objects such as GUI controls but can be anything.
+
+## Module Manager
+
+So far we've only seen a handful of module system functions but there are many more.  For typically day-to-day use, most of the others won't be useful as a majority are designed for administering modules by an editor system.  There are however several that are extremely useful depending on how you use modules.
+
+Here's a tour of all the functions that are exposed by the module system organized by features:
+
+### Module Scanning
+
+When you scan for modules, the module system will use by default the extension "module.taml".  You are free to change this using:
+@code{cpp}
+ModuleDatabase.SetModuleExtension( "FunkyModules.taml" );
+@endcode
+
+You are free to specify whatever you like for an extension.
+
+### Module Loading and Unload
+
+You've already seen some of the module load and unload functions but a complete list being used is:
+@code{cpp}
+// Load the module group "CoreStuff".
+ModuleDatabase.LoadGroup( "CoreStuff" );
+
+// Unload the module group "CoreStuff".
+ModuleDatabase.UnloadGroup( "CoreStuff" );
+
+// Explicitly load the module "Game" at version "3".
+ModuleDatabase.LoadExplicit( "Game", 3 );
+
+// Explicitly unload the module "Game" at version "3".
+ModuleDatabase.UnloadExplicit( "Game", 3 );
+@endcode
+
+### Module Searching
+
+It's important to not only be able to load and unload modules but be able to find them in the first place!  This is important when you are dynamically loading modules.  This might be because you're using certain modules as dynamic asset content or maybe code plug-ins.  No matter the use, being able to find modules is important.
+
+In all cases, when you "find" a module you get a Torque object.  This object is actually the "ModuleDefinition" instance that was loaded when scanning for module definitions.  Each module has one and it has all the fields previously described.
+
+A brief example of these functions are presented however you should refer to the reference documentation for more details.
+
+Let's start with the most basic find function:
+@code{cpp}
+// Find the "Game" module at version 3.
+%module = ModuleDatabase.findModule( "Game", 3 );
+
+// Output its description.
+echo( %module.Description );
+@endcode
+
+As you can see, you can find any Module Id at a specific Version Id and the object returned is the module definition itself.  This allows you to access all the module definitons state including things like its description, author, dependencies etc.
+
+Another find mechanism allows you to find all modules or only modules that are currently loaded.  Whilst this may seem very specific, it's extremely useful for a module editor:
+
+@code{cpp}
+// Find all modules 
+%allModules = ModuleDatabase.findModules( false );
+
+// Find only loaded modules 
+%loadedModules = ModuleDatabase.findModules( true );
+@endcode
+In this case you get a space-separated list of module-definition objects.
+
+
+A more useful find mechanism is to be able to find modules by their "Type" field.  Recall that you can assign a "Type" to any module to indicate its usage such as "ArtPack" or "PlugIn" etc.
+
+Here's how you search for modules of a specific "Type":
+
+@code{cpp}
+// Find all "ArtPack" modules.
+%artPacks = ModuleDatabase.findModuleTypes( "ArtPack" );
+@endcode
+
+### Module Copying and Synchronization
+
+	This is a complex topic and will be detailed later!
+
+The following methods will be detailed:
+- copyModules()
+- synchronizeDependencies()
+
+### Module Merging and Updates
+
+	This is a complex topic and will be detailed later!
+
+The following methods will be detailed:
+- isModuleMergeAvailable()
+- canMergeModules()
+- mergeModules
+
+### Module Events and Listeners
+
+When a module system performs an important action it raises a corresponding event.  The following events are raised:
+
+- onModuleRegister - Called when a module is scanned, validated and finally registered.
+- onModulePreLoad - Called prior to a module loading
+- onModulePostLoad - Called after a module has been loaded
+- onModulePreUnload - Called prior to a module unloading
+- onModulePostUnload - Called after a module has been unloaded
+
+The module system allows you to register your own objects to receive these notifications by using the following methods:
+
+- addListener()
+- removeListener()
+
+When you perform these actions from TorqueScript, you can designate an object as a listener.  When this happens, the module system will then perform the above callbacks on the object(s) you specify like so:
+@code{cpp}
+// Create a listener object.
+new ScriptObject(MyModuleListener);
+
+// Add my object as a listener.
+ModuleDatabase.addListener(MyModuleListener);
+@endcode
+
+If you were to do the above then you could receive notifications like so:
+@code{cpp}
+function MyModuleListener::onModuleRegister( %module )
+{
+}
+
+function MyModuleListener::onModulePreLoad( %module )
+{
+}
+
+function MyModuleListener::onModulePostLoad( %module )
+{
+}
+
+function MyModuleListener::onModulePreUnload( %module )
+{
+}
+
+function MyModuleListener::onModulePostUnload( %module )
+{
+}
+@endcode
+
+If knowing when modules are registered, loading or unloaded is required then this functionality will provide that information.
+
+If the object designated as a listener implements the interface class "[ModuleCallbacks](https://github.com/GarageGames/Torque2D/blob/master/engine/source/module/moduleCallbacks.h)" then it will additionally receive direct callbacks in C++.
+
+## Modules with Assets
+
+As has been shown, when a module is loaded or unloaded, events are raised which allows third parties to be notified of those events.  This is utilized to great effect by the [Asset System](https://github.com/GarageGames/Torque2D/wiki/Asset-Manager-Guide).  When a module is loaded, the asset system needs to scan for assets in the module and likewise, when a module is unloaded, it needs to remove those assets.  It does this by listening for the module load and unload events and performing the appropriate actions.
+
+The asset system registers itself as a listener to module events [here](https://github.com/GarageGames/Torque2D/blob/master/engine/source/game/defaultGame.cc) in "initializeGame()".  More information on the actions it takes can be found in the asset system documentation.
+
+## Multiple Module Systems
+
+As already stated, the module system is simply an engine type of "ModuleManager" which the engine initially creates as a named object of "ModuleDatabase".  This is known as the primary module system however, you are free to generate more than one module system if you so desire.  This can be useful in more advanced module management scenarios.
+
+For instance, you may want to keep track, loading/unloading a specific set of modules in a different location than your primary modules and whilst you are free to scan modules in multiple locations using the primary module system, it may be convenient to use a separate module manager instance.  A good reason for this is because currently, there is no way to "unregister" a module.  If you were to use a separate module manager then simply deleting the module manager instance would result in the modules being removed from memory.
+
+There are other advanced scenarios such as when manipulating modules on the disk including copying and merging modules for product updates.  All these features were used by separate module managers in previous projects.
+
+As an example, you are free to do this:
+@code{cpp}
+// Create my module manager.
+%myModuleManager = new ModuleManager();
+
+// Scan for modules using my module manager.
+%myModuleManager.ScanModules( "MyModuleStuff" );
+@endcode
+You should be extremely careful to not load the same modules loaded by other module managers as that will cause undefined results.  When using this method you should preferably be scanning/working with modules in completely different locations.
+
+*/

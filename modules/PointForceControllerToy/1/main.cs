@@ -165,7 +165,7 @@ function Planetoid::onCollision( %this, %object, %collisionDetails )
     {
         // Yes, so calculate position angle.
         %positionDelta = Vector2Sub( %object.Position, %this.Position );
-        %angle = -mRadToDeg( mAtan( %positionDelta._0, %positionDelta._1 ) );
+        %angle = mAtan( %positionDelta ) - 90;
         
         // Fetch contact position.
         %contactPosition = %collisionDetails._4 SPC %collisionDetails._5;

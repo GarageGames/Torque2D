@@ -61,7 +61,15 @@ typedef unsigned long long  U64;
 #  define TORQUE_SUPPORTS_NASM
 #  define TORQUE_SUPPORTS_GCC_INLINE_X86_ASM
 #  include "platform/types.win32.h"
-
+#elif defined(__ANDROID__)
+#ifndef TORQUE_OS_ANDROID
+		#define TORQUE_OS_ANDROID
+#endif
+#  include "platform/types.arm.h"
+#elif defined(EMSCRIPTEN)
+#  define TORQUE_OS_STRING "Emscripten"
+#  define TORQUE_OS_EMSCRIPTEN
+#  include "platform/types.posix.h"
 #elif defined(linux)
 #  define TORQUE_OS_STRING "Linux"
 #  define TORQUE_OS_LINUX
@@ -100,6 +108,7 @@ typedef unsigned long long  U64;
 #  define TORQUE_SUPPORTS_NASM
 #endif
 #  include "platform/types.ppc.h"
+
 #else 
 #  error "GCC: Unsupported Operating System"
 #endif
@@ -112,6 +121,12 @@ typedef unsigned long long  U64;
 #  define TORQUE_CPU_X86
 #  define TORQUE_LITTLE_ENDIAN
 
+#elif defined(__amd64__)
+#  define TORQUE_CPU_STRING "Intel x86-64"
+#  define TORQUE_CPU_X86_64
+#  define TORQUE_LITTLE_ENDIAN
+#  define TORQUE_64
+
 #elif defined(__ppc__)
 #  define TORQUE_CPU_STRING "PowerPC"
 #  define TORQUE_CPU_PPC
@@ -120,6 +135,17 @@ typedef unsigned long long  U64;
 #elif defined(__arm__)
 #  define TORQUE_CPU_STRING "ARM"
 #  define TORQUE_CPU_ARM
+#  define TORQUE_LITTLE_ENDIAN
+
+#elif defined(__arm64__)
+#  define TORQUE_CPU_STRING "ARM"
+#  define TORQUE_CPU_ARM
+#  define TORQUE_LITTLE_ENDIAN
+#  define TORQUE_64
+
+#elif defined(EMSCRIPTEN)
+
+#  define TORQUE_OS_STRING "Emscripten"
 #  define TORQUE_LITTLE_ENDIAN
 
 #else

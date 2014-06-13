@@ -68,8 +68,3 @@ bool Platform::hasExtension(const char* pFilename, const char* pExtension)
     // Check if extension exists.
     return dStricmp( pFilename + filenameLength - extensionLength, pExtension ) == 0;
 }
-
-ConsoleFunction( createUUID, const char*, 1, 1, "() - Creates a UUID string." )
-{
-    return Platform::createUUID();
-}

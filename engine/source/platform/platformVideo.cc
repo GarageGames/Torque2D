@@ -25,9 +25,14 @@
 #include "console/console.h"
 #include "game/gameInterface.h"
 
+#include "platformVideo_ScriptBinding.h"
+
 extern void GameDeactivate( bool noRender );
 extern void GameReactivate();
-
+#ifdef TORQUE_OS_ANDROID
+extern int _AndroidGetScreenWidth();
+extern int _AndroidGetScreenHeight();
+#endif
 // Static class data:
 Vector<DisplayDevice*>  Video::smDeviceList;
 DisplayDevice*          Video::smCurrentDevice;
@@ -36,206 +41,6 @@ bool					Video::smNeedResurrect = false;
 
 Resolution  DisplayDevice::smCurrentRes;
 bool        DisplayDevice::smIsFullScreen;
-
-
-ConsoleFunctionGroupBegin(Video, "Video control functions.");
-
-//--------------------------------------------------------------------------
-ConsoleFunction( setDisplayDevice, bool, 2, 6, "( deviceName [, width [ , height [, bpp [, fullScreen ]]]] ) Use the setDisplayDevice function to select a display device and to set the initial width, height and bits-per-pixel (bpp) setting, as well as whether the application is windowed or in fullScreen.\n"
-                                                                "If no resolution information is specified, the first legal resolution on this device's resolution list will be used. Furthermore, for each optional argument if the subsequent arguments are not specified, the first matching case will be used. Lastly, if the application is not told to display in full screen, but the device only supports windowed, the application will be forced into windowed mode.\n"
-                                                                "@param deviceName A supported display device name.\n"
-                                                                "@param width Resolution width in pixels.\n"
-                                                                "@param height Resolution height in pixels.\n"
-                                                                "@param bpp Pixel resolution in bits-per-pixel (16 or 32).\n"
-                                                                "@param fullScreen A boolean value. If set to true, the application displays in full- screen mode, otherwise it will attempt to display in windowed mode.\n"
-                                                                "@return Returns true on success, false otherwise.\n"
-                                                                "@sa getDesktopResolution, getDisplayDeviceList, getResolutionList, nextResolution, prevResolution, setRes, setScreenMode, switchBitDepth")
-{
-    Resolution currentRes = Video::getResolution();
-
-    U32 width = ( argc > 2 ) ? dAtoi( argv[2] ) : currentRes.w;
-    U32 height =  ( argc > 3 ) ? dAtoi( argv[3] ) : currentRes.h;
-    U32 bpp = ( argc > 4 ) ? dAtoi( argv[4] ) : currentRes.bpp;
-    bool fullScreen = ( argc > 5 ) ? dAtob( argv[5] ) : Video::isFullScreen();
-
-   return( Video::setDevice( argv[1], width, height, bpp, fullScreen ) );
-}
-
-
-//--------------------------------------------------------------------------
-ConsoleFunction( setScreenMode, bool, 5, 5, "( width , height , bpp , fullScreen ) Use the setScreenMode function to set the screen to the specified width, height, and bits-per-pixel (bpp). Additionally, if fullScreen is set to true the engine will attempt to display the application in full-screen mode, otherwise it will attempt to used windowed mode.\n"
-                                                                "@param width Resolution width in pixels.\n"
-                                                                "@param height Resolution height in pixels.\n"
-                                                                "@param bpp Pixel resolution in bits-per-pixel (16 or 32).\n"
-                                                                "@param fullScreen A boolean value. If set to true, the application displays in full- screen mode, otherwise it will attempt to display in windowed mode.\n"
-                                                                "@return Returns true if successful, otherwise false.\n"
-                                                                "@sa getDesktopResolution, getDisplayDeviceList, getResolutionList, nextResolution, prevResolution, setDisplayDevice, setRes, switchBitDepth")
-{
-   return( Video::setScreenMode( dAtoi( argv[1] ), dAtoi( argv[2] ), dAtoi( argv[3] ), dAtob( argv[4] ) ) );
-}
-
-
-//------------------------------------------------------------------------------
-ConsoleFunction( toggleFullScreen, bool, 1, 1, "() Use the toggleFullScreen function to switch from full-screen mode to windowed, or vice versa.\n"
-                                                                "@return Returns true on success, false otherwise")
-{
-   return( Video::toggleFullScreen() );
-}
-
-
-//------------------------------------------------------------------------------
-ConsoleFunction( isFullScreen, bool, 1, 1, "() Use the isFullScreen function to determine if the current application is displayed in full-screen mode.\n"
-                                                                "@return Returns true if the engine is currently displaying full-screen, otherwise returns false")
-{
-   return( Video::isFullScreen() );
-}
-
-
-//--------------------------------------------------------------------------
-ConsoleFunction( switchBitDepth, bool, 1, 1, "() Use the switchBitDepth function to toggle the bits-per-pixel (bpp) pixel resolution between 16 and 32.\n"
-                                                                "@return Returns true on success, false otherwise.\n"
-                                                                "@sa getDesktopResolution, getDisplayDeviceList, getResolutionList, nextResolution, prevResolution, setDisplayDevice, setRes")
-{
-   if ( !Video::isFullScreen() )
-   {
-      Con::warnf( ConsoleLogEntry::General, "Can only switch bit depth in full-screen mode!" );
-      return( false );
-   }
-
-   Resolution res = Video::getResolution();
-   return( Video::setResolution( res.w, res.h, ( res.bpp == 16 ? 32 : 16 ) ) );
-}
-
-
-//--------------------------------------------------------------------------
-ConsoleFunction( prevResolution, bool, 1, 1, "() Use the prevResolution function to switch to the previous valid (lower) resolution for the current display device.\n"
-                                                                "@return Returns true if switch was successful, false otherwise.\n"
-                                                                "@sa getDesktopResolution, nextResolution, getResolutionList, setRes, setScreenMode, switchBitDepth")
-{
-   return( Video::prevRes() );
-}
-
-
-//--------------------------------------------------------------------------
-ConsoleFunction( nextResolution, bool, 1, 1, "() Use the nextResolution function to switch to the next valid (higher) resolution for the current display device.\n"
-                                                                "@return Returns true if switch was successful, false otherwise.\n"
-                                                                "@sa getDesktopResolution, prevResolution, getResolutionList, setRes, setScreenMode, switchBitDepth")
-{
-   return( Video::nextRes() );
-}
-
-
-//--------------------------------------------------------------------------
-ConsoleFunction( getRes, const char*, 1, 1, "Get the width, height, and bitdepth of the screen."
-                "@return A string formatted as \"<width> <height> <bitdepth>\"")
-{
-   static char resBuf[16];
-   Resolution res = Video::getResolution();
-   dSprintf( resBuf, sizeof(resBuf), "%d %d %d", res.w, res.h, res.bpp );
-   return( resBuf );
-}
-
-//--------------------------------------------------------------------------
-ConsoleFunction( setRes, bool, 3, 4, "( width , height , bpp ) Use the setRes function to set the screen to the specified width, height, and bits-per-pixel (bpp).\n"
-                                                                "@param width Resolution width in pixels.\n"
-                                                                "@param height Resolution height in pixels.\n"
-                                                                "@param bpp Pixel resolution in bits-per-pixel (16 or 32).\n"
-                                                                "@return Returns true if successful, otherwise false.\n"
-                                                                "@sa getDesktopResolution, getDisplayDeviceList, getResolutionList, nextResolution, prevResolution, setDisplayDevice, setScreenMode, switchBitDepth")
-{
-   U32 width = dAtoi( argv[1] );
-   U32 height = dAtoi( argv[2] );
-   U32 bpp = 0;
-   if ( argc == 4 )
-   {
-      bpp = dAtoi( argv[3] );
-      if ( bpp != 16 && bpp != 32 )
-         bpp = 0;
-   }
-
-   return( Video::setResolution( width, height, bpp ) );
-}
-
-//------------------------------------------------------------------------------
-ConsoleFunction( getDesktopResolution, const char*, 1, 1, "() Use the getDesktopResolution function to determine the current resolution of the desktop (not the application).\n"
-                                                                "To get the current resolution of a windowed display of the torque game engine, simply examine the global variable '$pref::Video::resolution'.\n"
-                                                                "@return Returns a string containing the current desktop resolution, including the width height and the current bits per pixel.\n"
-                                                                "@sa getDisplayDeviceList, getResolutionList, nextResolution, prevResolution, setDisplayDevice, setRes, setScreenMode, switchBitDepth")
-{
-   static char resBuf[16];
-   Resolution res = Video::getDesktopResolution();
-   dSprintf( resBuf, sizeof(resBuf), "%d %d %d", res.w, res.h, res.bpp );
-   return( resBuf );
-}
-
-
-//------------------------------------------------------------------------------
-ConsoleFunction( getDisplayDeviceList, const char*, 1, 1, "() Use the getDisplayDeviceList function to get a list of valid display devices.\n"
-                                                                "@return Returns a tab separated list of valid display devices.\n"
-                                                                "@sa getDesktopResolution, getResolutionList, setRes, setScreenMode, switchBitDepth")
-{
-    return( Video::getDeviceList() );	
-}
-
-
-//------------------------------------------------------------------------------
-ConsoleFunction( getResolutionList, const char*, 2, 2, "( devicename ) Use the getResolutionList function to get a semicolon separated list of legal resolutions for a specified device.\n"
-                                                                "Resolutions are always in the form: width height bpp, where width and height are in pixels and bpp is bits-per-pixel.\n"
-                                                                "@param deviceName A string containing a supported display device.\n"
-                                                                "@return Returns a tab separated list of valid display resolutions for devicename.\n"
-                                                                "@sa getDesktopResolution, getDisplayDeviceList, setRes, setScreenMode, switchBitDepth")
-{
-    DisplayDevice* device = Video::getDevice( argv[1] );
-    if ( !device )
-    {
-        Con::warnf( ConsoleLogEntry::General, "\"%s\" display device not found!", argv[1] );
-        return( NULL );
-    }
-    
-    return( device->getResolutionList() );		
-}
-
-//------------------------------------------------------------------------------
-ConsoleFunction( getVideoDriverInfo, const char*, 1, 1, "() Use the getVideoDriverInfo function to dump information on the video driver to the console.\n"
-                                                                "@return No return value")
-{
-    return( Video::getDriverInfo() );
-}
-
-//------------------------------------------------------------------------------
-ConsoleFunction( isDeviceFullScreenOnly, bool, 2, 2, "( devicename ) Use the isDeviceFullScreenOnly function to determine if the device specified in devicename is for full screen display only, or whether it supports windowed mode too.\n"
-                                                                "@param deviceName A string containing a supported display device.\n"
-                                                                "@return Returns true if the device can only display full scree, false otherwise.\n"
-                                                                "@sa getResolutionList")
-{
-    DisplayDevice* device = Video::getDevice( argv[1] );
-    if ( !device )
-    {
-        Con::warnf( ConsoleLogEntry::General, "\"%s\" display device not found!", argv[1] );
-        return( false );
-    }
-    
-    return( device->isFullScreenOnly() );		
-}
-
-
-//------------------------------------------------------------------------------
-static F32 sgOriginalGamma = -1.0;
-static F32 sgGammaCorrection = 0.0;
-
-ConsoleFunction(videoSetGammaCorrection, void, 2, 2, "( gamma ) Use the videoSetGammaCorrection function to adjust the gamma for the video card.\n"
-                                                                "The card will revert to it's default gamma setting as long as the application closes normally\n"
-                                                                "@param gamma A floating-point value between 0.0 and 1.0.\n"
-                                                                "@return No return value.")
-{
-   F32 g = mClampF(dAtof(argv[1]),0.0,1.0);
-   F32 d = -(g - 0.5f);
-
-   if (d != sgGammaCorrection &&
-     (sgOriginalGamma != -1.0f || Video::getGammaCorrection(sgOriginalGamma)))
-      Video::setGammaCorrection(sgOriginalGamma+d);
-    sgGammaCorrection = d;
-}
 
 //------------------------------------------------------------------------------
 void Video::init()
@@ -428,6 +233,13 @@ bool Video::setScreenMode( U32 width, U32 height, U32 bpp, bool fullScreen )
       //    height *=2;
       //}
        
+#elif TORQUE_OS_ANDROID
+      if(width == 0)
+	     width = _AndroidGetScreenWidth();
+	  if(height == 0)
+	     height = _AndroidGetScreenHeight();
+	  if(bpp == 0)
+	     bpp = ANDROID_DEFAULT_RESOLUTION_BIT_DEPTH;
 #else
       if(width == 0)
          width = MIN_RESOLUTION_X;
@@ -661,26 +473,6 @@ bool Video::setVerticalSync( bool on )
 
    return( false );
 }
-
-ConsoleFunction( setVerticalSync, bool, 2, 2, "( enable ) Use the setVerticalSync function to force the framerate to sync up with the vertical refresh rate.\n"
-                                                                "This is used to reduce excessive swapping/rendering. There is generally no purpose in rendering any faster than the monitor will support. Those extra 'ergs' can be used for something else\n"
-                                                                "@param enable A boolean value. If set to true, the engine will only swap front and back buffers on or before a vertical refresh pass.\n"
-                                                                "@return Returns true on success, false otherwise.")
-{
-   return( Video::setVerticalSync( dAtob( argv[1] ) ) );
-}
-
-ConsoleFunction( minimizeWindow, void, 1, 1, "minimizeWindow() - Minimize the game window" )
-{
-    Platform::minimizeWindow();
-}
-
-ConsoleFunction( restoreWindow, void, 1, 1, "restoreWindow() - Restore the game window" )
-{
-   Platform::restoreWindow();
-}
-
-ConsoleFunctionGroupEnd(Video);
 
 //------------------------------------------------------------------------------
 DisplayDevice::DisplayDevice()

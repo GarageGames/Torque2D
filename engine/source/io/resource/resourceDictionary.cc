@@ -47,7 +47,7 @@ ResDictionary::~ResDictionary()
 
 S32 ResDictionary::hash(StringTableEntry path, StringTableEntry file)
 {
-   return ((S32)((((dsize_t)path) >> 2) + (((dsize_t)file) >> 2) )) % hashTableSize;
+   return ((U32)((((dsize_t)path) >> 2) + (((dsize_t)file) >> 2) )) % hashTableSize;
 }
 
 void ResDictionary::insert(ResourceObject *obj, StringTableEntry path, StringTableEntry file)

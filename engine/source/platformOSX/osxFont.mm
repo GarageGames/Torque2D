@@ -19,7 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
-
+ 
 #import "platform/platform.h"
 #import "platformOSX/platformOSX.h"
 #import "platformOSX/osxFont.h"
@@ -217,12 +217,22 @@ PlatformFont::CharInfo& OSXFont::getCharInfo(const UTF16 character) const
     CGContextSetGrayFillColor( bitmapContext, 1.0, 1.0);
     CGContextSetTextDrawingMode( bitmapContext,  kCGTextFill);
 
-    // Draw glyph.
+    // Draw glyph. 
     CGPoint renderOrigin;
     renderOrigin.x = -characterInfo.xOrigin;
     renderOrigin.y = -characterInfo.yOrigin;
+    
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
     CTFontDrawGlyphs( mFontRef, &characterGlyph, &renderOrigin, 1, bitmapContext );
-
+#else
+    CGFontRef cgFont = CTFontCopyGraphicsFont(mFontRef, NULL);
+    CGContextSetFont(bitmapContext, cgFont);
+    CGContextSetFontSize(bitmapContext, CTFontGetSize(mFontRef));
+    CGContextShowGlyphsAtPositions(bitmapContext, &characterGlyph, &renderOrigin, 1);
+    CFRelease(cgFont);
+#endif
+    
+     
  #if 0
     Con::printf("Width:%f, Height:%f, OriginX:%f, OriginY:%f",
             characterBounds.size.width,

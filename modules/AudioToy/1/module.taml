@@ -1,0 +1,15 @@
+<ModuleDefinition
+    ModuleId="AudioToy"
+    VersionId="1"
+    Description="Plays background music and sound effects"
+    Dependencies="ToyAssets=1"
+    Type="toy"
+    ToyCategoryIndex="3"
+    ScriptFile="module.cs"
+    CreateFunction="create"
+    DestroyFunction="destroy">
+    <DeclaredAssets
+            Path="assets"
+            Extension="asset.taml"
+            Recurse="true"/>
+</ModuleDefinition>

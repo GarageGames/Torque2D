@@ -41,6 +41,8 @@ class TamlCallbacks;
 
 //-----------------------------------------------------------------------------
 
+/// @ingroup tamlGroup
+/// @see tamlGroup
 class TamlWriteNode
 {
 public:

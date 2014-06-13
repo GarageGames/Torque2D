@@ -19,6 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
+
 #include "platform/platform.h"
 #include "platform/platformTLS.h"
 #include "platform/threads/thread.h"
@@ -37,6 +38,9 @@
 #include "component/dynamicConsoleMethodComponent.h"
 #include "memory/safeDelete.h"
 #include <stdarg.h>
+
+#include "output_ScriptBinding.h"
+#include "expando_ScriptBinding.h"
 
 #ifndef _HASHTABLE_H
 #include "collection/hashTable.h"
@@ -185,10 +189,6 @@ ConsoleConstructor::ConsoleConstructor(const char* className, const char* usage)
    ns = true;
 }
 
-// We comment out the implementation of the Con namespace when doxygenizing because
-// otherwise Doxygen decides to ignore our docs in console.h
-#ifndef DOXYGENIZING
-
 namespace Con
 {
 
@@ -213,7 +213,7 @@ static U32 completionBaseStart;
 static U32 completionBaseLen;
 
 #ifdef TORQUE_MULTITHREAD
-static S32 gMainThreadID = -1;
+static ThreadIdent gMainThreadID = -1;
 #endif
 
 /// Current script file name and root, these are registered as
@@ -224,34 +224,6 @@ static S32 gMainThreadID = -1;
 StringTableEntry gCurrentFile;
 StringTableEntry gCurrentRoot;
 /// @}
-
-ConsoleFunctionGroupBegin( Clipboard, "Miscellaneous functions to control the clipboard and clear the console.");
-
-ConsoleFunction( cls, void, 1, 1, "() Use the cls function to clear the console output.\n"
-                                                                "@return No return value")
-{
-   if(consoleLogLocked)
-      return;
-   consoleLogChunker.freeBlocks();
-   consoleLog.setSize(0);
-};
-
-ConsoleFunction( getClipboard, const char*, 1, 1, "() Use the getClipboard function to get the contents of the GUI clipboard.\n"
-                                                                "@return Returns a string equal to the current contents of the copy the clipboard, or a NULL strain if the copy clipboard is empty.\n"
-                                                                "@sa setClipboard")
-{
-    return Platform::getClipboard();
-};
-
-ConsoleFunction( setClipboard, bool, 2, 2, "( string ) Use the setClipboard function to Set value on clipboard to string.\n"
-                                                                "@param string The new value to place in the GUI clipboard.\n"
-                                                                "@return Returns true if successful, false otherwise.\n"
-                                                                "@sa getClipoard")
-{
-    return Platform::setClipboard(argv[1]);
-};
-
-ConsoleFunctionGroupEnd( Clipboard );
 
 void init()
 {
@@ -512,6 +484,16 @@ static void log(const char *string)
       consoleLogFile.close();
    }
 }
+
+//------------------------------------------------------------------------------
+
+void cls( void )
+{
+   if(consoleLogLocked)
+      return;
+   consoleLogChunker.freeBlocks();
+   consoleLog.setSize(0);
+};
 
 //------------------------------------------------------------------------------
 
@@ -1516,7 +1498,7 @@ bool expandPath( char* pDstPath, U32 size, const char* pSrcPath, const char* pWo
         }
 
         // Yes, so use it as the prefix.
-        dStrcpy(pathBuffer, codeblockFullPath );
+        dStrncpy(pathBuffer, codeblockFullPath, sizeof(pathBuffer) - 1);
 
         // Find the final slash in the code-block.
         pSlash = dStrrchr(pathBuffer, '/');
@@ -1537,7 +1519,8 @@ bool expandPath( char* pDstPath, U32 size, const char* pSrcPath, const char* pWo
         }
            
         // Format the output path.
-        dSprintf( pathBuffer, sizeof(pathBuffer), "%s/%s", pathBuffer, pSrc );
+        dStrncat(pathBuffer, "/", sizeof(pathBuffer) - 1 - strlen(pathBuffer));
+        dStrncat(pathBuffer, pSrc, sizeof(pathBuffer) - 1 - strlen(pathBuffer));
 
         // Are we ensuring the trailing slash?
         if ( ensureTrailingSlash )
@@ -1553,7 +1536,16 @@ bool expandPath( char* pDstPath, U32 size, const char* pSrcPath, const char* pWo
     }
 
     // All else.
-    Platform::makeFullPathName( pSrcPath, pathBuffer, sizeof(pathBuffer), pWorkingDirectoryHint );
+
+    //Using a special case here because the code below barfs on trying to build a full path for apk reading
+ #ifdef TORQUE_OS_ANDROID
+    	if (leadingToken == '/' || strstr(pSrcPath, "/") == NULL)
+    		Platform::makeFullPathName( pSrcPath, pathBuffer, sizeof(pathBuffer), pWorkingDirectoryHint );
+    	else
+    		dSprintf(pathBuffer, sizeof(pathBuffer), "/%s", pSrcPath);
+#else
+ 	  Platform::makeFullPathName( pSrcPath, pathBuffer, sizeof(pathBuffer), pWorkingDirectoryHint );
+#endif
 
     // Are we ensuring the trailing slash?
     if ( ensureTrailingSlash )
@@ -1717,95 +1709,5 @@ bool stripRepeatSlashes( char* pDstPath, const char* pSrcPath, S32 dstSize )
     return false;
 }
 
-//-----------------------------------------------------------------------------
-
-ConsoleFunction(expandPath, const char*, 2, 2, "(string path) - Expands an expando or relative path into a full path.")
-{
-    char* ret = Con::getReturnBuffer( 1024 );
-    expandPath(ret, 1024, argv[1]);
-    return ret;
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleFunction(collapsePath, const char*, 2, 2, "(string path) - Collapses a path into either an expando path or a relative path.")
-{
-    char* ret = Con::getReturnBuffer( 1024 );
-    Con::collapsePath(ret, 1024, argv[1]);
-    return ret;
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleFunction(addPathExpando, void, 3, 3, "(string expando, string path) - Adds the expando to the path.  If it already exists then it is replaced.")
-{
-    addPathExpando(argv[1], argv[2]);
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleFunction(removePathExpando, void, 2, 2, "(string expando) - Removes the specified path expando.")
-{
-    removePathExpando(argv[1]);
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleFunction(isPathExpando, bool, 2, 2, "(string expando) - Checks whether the specified path expando is current set or not.")
-{
-    return isPathExpando(argv[1]);
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleFunction(getPathExpandoCount, S32, 1, 1, "() - Gets the expando path count.")
-{
-    return getPathExpandoCount();
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleFunction(getPathExpandoKey, const char*, 2, 2, "(int expandoIndex) - Gets the path expando key (the expando name) at the specified index.")
-{
-    // Fetch expando index.
-    const S32 expandoIndex = dAtoi(argv[1]);
-
-    // Is the expando index in range?
-    if ( expandoIndex < 0 || expandoIndex >= (S32)getPathExpandoCount() )
-    {
-        // No, so warn.
-        Con::warnf("getPathExpandoKey() - Expando index of '%d' is out of bounds.  Current expando count is '%d'.",
-            expandoIndex,
-            getPathExpandoCount() );
-        return StringTable->EmptyString;
-    }
-
-    // Fetch path expando key.
-    return getPathExpandoKey( expandoIndex );
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleFunction(getPathExpandoValue, const char*, 2, 2, "(int expandoIndex) - Gets the path expando value (the expando path) at the specified index.")
-{
-    // Fetch expando index.
-    const S32 expandoIndex = dAtoi(argv[1]);
-
-    // Is the expando index in range?
-    if ( expandoIndex < 0 || expandoIndex >= (S32)getPathExpandoCount() )
-    {
-        // No, so warn.
-        Con::warnf("getPathExpandoValue() - Expando index of '%d' is out of bounds.  Current expando count is '%d'.",
-            expandoIndex,
-            getPathExpandoCount() );
-        return StringTable->EmptyString;
-    }
-
-    // Fetch path expando value.
-    return getPathExpandoValue( expandoIndex );
-}
-
-
 } // end of Console namespace
 
-#endif

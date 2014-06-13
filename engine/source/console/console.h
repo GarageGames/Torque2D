@@ -129,7 +129,11 @@ struct EnumTable
 
 typedef const char *StringTableEntry;
 
+/// @defgroup tsScripting TorqueScript Bindings
+/// TorqueScrit bindings
+
 /// @defgroup console_callbacks Scripting Engine Callbacks
+/// @ingroup tsScripting
 ///
 /// The scripting engine makes heavy use of callbacks to represent
 /// function exposed to the scripting language. StringCallback,
@@ -157,6 +161,7 @@ typedef void (*ConsumerCallback)(ConsoleLogEntry::Level level, const char *conso
 /// @}
 
 /// @defgroup console_types Scripting Engine Type Functions
+/// @ingroup tsScripting
 ///
 /// @see Con::registerType
 /// @{
@@ -196,7 +201,8 @@ namespace Con
       //  02/16/07 - THB - 40->41 newmsg operator
       //  02/16/07 - PAUP - 41->42 DSOs are read with a pointer before every string(ASTnodes changed). Namespace and HashTable revamped
       //  05/17/10 - Luma - 42-43 Adding proper sceneObject physics flags, fixes in general
-      DSOVersion = 43,
+      //  02/07/13 - JU   - 43->44 Expanded the width of stringtable entries to  64bits 
+      DSOVersion = 44,
       MaxLineLength = 512,  ///< Maximum length of a line of console input.
       MaxDataTypes = 256    ///< Maximum number of registered data types.
    };
@@ -508,6 +514,9 @@ namespace Con
    /// @see Con::errorf()
    void errorf(ConsoleLogEntry::Type type, const char *_format, ...);
 
+   /// clear the console log
+   void cls( void );
+
    /// Prints a separator to the console.
    inline void printSeparator( void ) { printf("--------------------------------------------------------------------------------"); }
 
@@ -632,7 +641,7 @@ namespace Con
 
 extern void expandEscape(char *dest, const char *src);
 extern bool collapseEscape(char *buf);
-extern S32 HashPointer(StringTableEntry ptr);
+extern U32 HashPointer(StringTableEntry ptr);
 
 /// This is the backend for the ConsoleMethod()/ConsoleFunction() macros.
 ///
@@ -778,8 +787,20 @@ public:
 #define conmethod_nullify(val)
 #define conmethod_return_void               conmethod_nullify(void
 #define conmethod_return_bool               return (bool
+#define conmethod_return_ConsoleInt         conmethod_return_S32
+#define conmethod_return_ConsoleFloat       conmethod_return_F32
+#define conmethod_return_ConsoleVoid        conmethod_return_void
+#define conmethod_return_ConsoleBool        conmethod_return_bool
+#define conmethod_return_ConsoleString		conmethod_return_const char*
 
 #if !defined(TORQUE_SHIPPING)
+
+// Console function return types
+#define ConsoleString	const char*
+#define ConsoleInt		S32
+#define ConsoleFloat	F32
+#define ConsoleVoid		void
+#define ConsoleBool		bool
 
 // Console function macros
 #  define ConsoleFunctionGroupBegin(groupName, usage) \
@@ -788,6 +809,11 @@ public:
 #  define ConsoleFunction(name,returnType,minArgs,maxArgs,usage1)                         \
       static returnType c##name(SimObject *, S32, const char **argv);                     \
       static ConsoleConstructor g##name##obj(NULL,#name,c##name,usage1,minArgs,maxArgs);  \
+      static returnType c##name(SimObject *, S32 argc, const char **argv)
+
+#  define ConsoleFunctionWithDocs(name,returnType,minArgs,maxArgs,argString)              \
+      static returnType c##name(SimObject *, S32, const char **argv);                     \
+	  static ConsoleConstructor g##name##obj(NULL,#name,c##name,#argString,minArgs,maxArgs);      \
       static returnType c##name(SimObject *, S32 argc, const char **argv)
 
 #  define ConsoleFunctionGroupEnd(groupName) \
@@ -800,26 +826,52 @@ public:
 #  define ConsoleMethodGroupBegin(className, groupName, usage) \
       static ConsoleConstructor className##groupName##__GroupBegin(#className,#groupName,usage);
 
-#  define ConsoleMethod(className,name,returnType,minArgs,maxArgs,usage1)                             \
-      static inline returnType c##className##name(className *, S32, const char **argv);               \
-      static returnType c##className##name##caster(SimObject *object, S32 argc, const char **argv) {  \
-         AssertFatal( dynamic_cast<className*>( object ), "Object passed to " #name " is not a " #className "!" ); \
-         conmethod_return_##returnType ) c##className##name(static_cast<className*>(object),argc,argv);              \
-      };                                                                                              \
+// note: we would want to expand the following macro into (Doxygen) comments!
+// we can not do that with a macro.  these are here just as a reminder until completion
+#  define ConsoleMethodRootGroupBeginWithDocs(className)
+#  define ConsoleMethodGroupBeginWithDocs(className, superclassName)
+
+#  define ConsoleMethod(className,name,returnType,minArgs,maxArgs,usage1)                                                 \
+      static inline returnType c##className##name(className *, S32, const char **argv);                                   \
+      static returnType c##className##name##caster(SimObject *object, S32 argc, const char **argv) {                      \
+         AssertFatal( dynamic_cast<className*>( object ), "Object passed to " #name " is not a " #className "!" );        \
+         conmethod_return_##returnType ) c##className##name(static_cast<className*>(object),argc,argv);                   \
+      };                                                                                                                  \
       static ConsoleConstructor className##name##obj(#className,#name,c##className##name##caster,usage1,minArgs,maxArgs); \
+      static inline returnType c##className##name(className *object, S32 argc, const char **argv)
+
+#  define ConsoleMethodWithDocs(className,name,returnType,minArgs,maxArgs,argString)                                  \
+      static inline returnType c##className##name(className *, S32, const char **argv);                               \
+      static returnType c##className##name##caster(SimObject *object, S32 argc, const char **argv) {                  \
+         AssertFatal( dynamic_cast<className*>( object ), "Object passed to " #name " is not a " #className "!" );    \
+         conmethod_return_##returnType ) c##className##name(static_cast<className*>(object),argc,argv);               \
+      };                                                                                                              \
+	  static ConsoleConstructor className##name##obj(#className,#name,c##className##name##caster,#argString,minArgs,maxArgs); \
       static inline returnType c##className##name(className *object, S32 argc, const char **argv)
 
 #  define ConsoleStaticMethod(className,name,returnType,minArgs,maxArgs,usage1)                       \
       static inline returnType c##className##name(S32, const char **);                                \
       static returnType c##className##name##caster(SimObject *object, S32 argc, const char **argv) {  \
-         conmethod_return_##returnType ) c##className##name(argc,argv);                                \
+         conmethod_return_##returnType ) c##className##name(argc,argv);                               \
       };                                                                                              \
       static ConsoleConstructor                                                                       \
          className##name##obj(#className,#name,c##className##name##caster,usage1,minArgs,maxArgs);    \
       static inline returnType c##className##name(S32 argc, const char **argv)
 
+#  define ConsoleStaticMethodWithDocs(className,name,returnType,minArgs,maxArgs,argString)            \
+      static inline returnType c##className##name(S32, const char **);                                \
+      static returnType c##className##name##caster(SimObject *object, S32 argc, const char **argv) {  \
+         conmethod_return_##returnType ) c##className##name(argc,argv);                               \
+      };                                                                                              \
+      static ConsoleConstructor                                                                       \
+	  className##name##obj(#className,#name,c##className##name##caster,#argString,minArgs,maxArgs);        \
+      static inline returnType c##className##name(S32 argc, const char **argv)
+
 #  define ConsoleMethodGroupEnd(className, groupName) \
       static ConsoleConstructor className##groupName##__GroupEnd(#className,#groupName,NULL);
+
+#  define ConsoleMethodRootGroupEndWithDocs(className)
+#  define ConsoleMethodGroupEndWithDocs(className)
 
 #else
 

@@ -213,7 +213,7 @@ void ShapeVector::renderCircleShape(Vector2 position, F32 radius)
 
 void ShapeVector::renderPolygonShape(U32 vertexCount)
 {
-#ifdef TORQUE_OS_IOS
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_EMSCRIPTEN)
     // Fill Mode?
     if ( mFillMode )
     {

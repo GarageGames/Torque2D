@@ -39,6 +39,8 @@
 
 #include "memory/safeDelete.h"
 
+#include "resourceManager_ScriptBinding.h"
+
 ResManager *ResourceManager = NULL;
 
 const char *ResManager::smExcludedDirectories = ".svn;CVS";
@@ -198,15 +200,6 @@ void ResManager::dumpResources (const bool onlyLoaded)
    }
 }
 
-ConsoleFunction(dumpResources, void, 2, 2, "(onlyLoaded?) Use the dumpLoadedResources function to dump a listing of the currently in-use resources to the console. This will include such things as sound files, font files, etc.\n"
-                                                                "For this to work, the engine must have been compiled with TORQUE_DEBUG defined.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa purgeResources")
-{
-    const bool onlyLoaded = argc == 2 ? dAtob(argv[1]) : true;
-    ResourceManager->dumpResources(onlyLoaded);
-}
-
 #endif
 
 //------------------------------------------------------------------------------
@@ -321,7 +314,7 @@ static void getPaths (const char *fullPath, StringTableEntry & path,
    }
    else
    {
-      S32 len = ptr - fullPath;
+      S32 len = (S32)(ptr - fullPath);
       dStrncpy (buf, fullPath, len);
       buf[len] = 0;
       fileName = StringTable->insert (ptr + 1);
@@ -541,14 +534,6 @@ void ResManager::addPath(const char *path, bool ignoreZips )
    searchPath(path, true, ignoreZips );
 }
 
-ConsoleFunction(addResPath, void, 2, 3, "(path, [ignoreZips=false]) Add a path to the resource manager")
-{
-   if( argc > 2 )
-      ResourceManager->addPath(argv[1], dAtob(argv[2]));
-   else
-      ResourceManager->addPath(argv[1]);
-}
-
 void ResManager::removePath(const char *path)
 {
    ResourceObject *rwalk = resourceList.nextResource, *rtemp;
@@ -566,11 +551,6 @@ void ResManager::removePath(const char *path)
       else
          rwalk = rwalk->nextResource;
    }
-}
-
-ConsoleFunction(removeResPath, void, 2, 2, "(pathExpression) Remove a path from the resource manager. Path is an expression as in findFirstFile()")
-{
-   ResourceManager->removePath(argv[1]);
 }
 
 void ResManager::setModPaths (U32 numPaths, const char **paths)
@@ -640,39 +620,6 @@ void ResManager::setModPaths (U32 numPaths, const char **paths)
 const char * ResManager::getModPaths ()
 {
    return ((const char *) pathList);
-}
-
-//------------------------------------------------------------------------------
-
-// Mod paths aren't used in tools applications.  
-// See : addResPath/removeResPath console functions
-ConsoleFunction( setModPaths, void, 2, 2, "( path ) Use the setModPaths function to set the current mod path to the value specified in path.\n"
-                                                                "@param path A string containing a semi-colon (;) separated list of game and mod paths.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa getModPaths")
-{
-   char buf[512];
-   dStrncpy(buf, argv[1], sizeof(buf) - 1);
-   buf[511] = '\0';
-
-   Vector<char *> paths;
-   char* temp = dStrtok( buf, ";" );
-   while ( temp )
-   {
-      if ( temp[0] )
-         paths.push_back(temp);
-      
-      temp = dStrtok( NULL, ";" );
-   }
-
-   ResourceManager->setModPaths( paths.size(), (const char**) paths.address() );
-}
-
-ConsoleFunction( getModPaths, const char*, 1, 1, "() Use the getModPaths function to get the current mod path information.\n"
-                                                                "@return Returns a string equivalent to the complete current mod path, that is all pads that are visible to the file manager.\n"
-                                                                "@sa setModPaths")
-{
-   return( ResourceManager->getModPaths() );
 }
 
 //------------------------------------------------------------------------------
@@ -1123,13 +1070,6 @@ void ResManager::purge ()
    while (found);
 }
 
-ConsoleFunction( purgeResources, void, 1, 1, "() Use the purgeResources function to purge all game resources.\n"
-                                                                "@return No return value.\n"
-                                                                "@sa clearTextureHolds, dumpResourceStats, dumpTextureStats, flushTextureCache")
-{
-   ResourceManager->purge();
-}
-
 //------------------------------------------------------------------------------
 
 void ResManager::purge (ResourceObject * obj)
@@ -1157,9 +1097,9 @@ struct ResourceObjectIndex
       const ResourceObjectIndex *r2 = (ResourceObjectIndex *) s2;
 
       if (r1->ro->path != r2->ro->path)
-         return r1->ro->path - r2->ro->path;
+         return (S32)(r1->ro->path - r2->ro->path);
       if (r1->ro->name != r2->ro->name)
-         return r1->ro->name - r2->ro->name;
+         return (S32)(r1->ro->name - r2->ro->name);
       return r1->ro->fileOffset - r2->ro->fileOffset;
    }
 };
@@ -1363,10 +1303,4 @@ bool ResManager::openFileForWrite (FileStream & stream, const char *fileName, U3
    ro->fileSize = 0;
    ro->compressedFileSize = 0;
    return true;
-}
-
-ConsoleFunction(isUsingVFS, bool, 1, 1, "()\n"
-                "@return Returns true if using Virtual File System")
-{
-   return ResourceManager->isUsingVFS();
 }

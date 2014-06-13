@@ -148,7 +148,7 @@ private:
     void sendWindowInputEvent( StringTableEntry name, const GuiEvent& event );
     void sendObjectInputEvent( StringTableEntry, const GuiEvent& event );
 
-    inline void calculateCameraView( CameraView* pCameraView );
+    void calculateCameraView( CameraView* pCameraView );
 
 public:
 
@@ -270,8 +270,6 @@ public:
     void completeCameraMove( void );
     void undoCameraMove( const F32 interpolationTime );
     F32 interpolate( F32 from, F32 to, F32 delta );
-    F32 linearInterpolate( F32 from, F32 to, F32 delta );
-    F32 sigmoidInterpolate( F32 from, F32 to, F32 delta );
     void updateCamera( void );
 
     inline Vector2 getCameraRenderPosition( void )                      { calculateCameraView( &mCameraCurrent ); return mCameraCurrent.mDestinationArea.centre(); }

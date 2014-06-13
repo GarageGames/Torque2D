@@ -20,9 +20,13 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ImageFont, setImage, bool, 3, 3,  "(imageAssetId) - Sets the image asset to use..\n"
-                                                "@param imageName The image asset to use.\n"
-                                                "@return Returns true on success.")
+ConsoleMethodGroupBeginWithDocs(ImageFont, SceneObject)
+
+/*! Sets the image asset to use..
+    @param imageName The image asset to use.
+    @return Returns true on success.
+*/
+ConsoleMethodWithDocs(ImageFont, setImage, ConsoleBool, 3, 3, (imageAssetId))
 {
     // Set Image.
     return object->setImage( argv[2] );
@@ -30,8 +34,10 @@ ConsoleMethod(ImageFont, setImage, bool, 3, 3,  "(imageAssetId) - Sets the image
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ImageFont, getImage, const char*, 2, 2,   "() - Gets current image asset..\n"
-                                                        "@return The current image asset.")
+/*! Gets current image asset..
+    @return The current image asset.
+*/
+ConsoleMethodWithDocs(ImageFont, getImage, ConsoleString, 2, 2, ())
 {
     // Get Image.
     return object->getImage();
@@ -39,23 +45,29 @@ ConsoleMethod(ImageFont, getImage, const char*, 2, 2,   "() - Gets current image
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ImageFont, setText, void, 3, 3,   "(text) - Set the text to render.\n")
+/*! Set the text to render.
+*/
+ConsoleMethodWithDocs(ImageFont, setText, ConsoleVoid, 3, 3, (text))
 {
     object->setText(argv[2]);
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ImageFont, getText, const char*, 2, 2,    "() - Gets the text being rendered.\n")
+/*! Gets the text being rendered.
+*/
+ConsoleMethodWithDocs(ImageFont, getText, ConsoleString, 2, 2, ())
 {
     return object->getText().getPtr8();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ImageFont, setTextAlignment, void, 3, 3,  "(alignment) - Set the text alignment to 'left', 'center' or 'right'.\n"
-                                                        "@param alignment The text alignment of 'left', 'center' or 'right'.\n"
-                                                        "@return No return value.")
+/*! Set the text alignment to 'left', 'center' or 'right'.
+    @param alignment The text alignment of 'left', 'center' or 'right'.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(ImageFont, setTextAlignment, ConsoleVoid, 3, 3, (alignment))
 {
 
     object->setTextAlignment( ImageFont::getTextAlignmentEnum(argv[2]) );
@@ -63,18 +75,22 @@ ConsoleMethod(ImageFont, setTextAlignment, void, 3, 3,  "(alignment) - Set the t
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ImageFont, getTextAlignment, const char*, 2, 2,   "() - Gets the text alignment.\n"
-                                                                "@return The text alignment of 'left', 'center' or 'right'.")
+/*! Gets the text alignment.
+    @return The text alignment of 'left', 'center' or 'right'.
+*/
+ConsoleMethodWithDocs(ImageFont, getTextAlignment, ConsoleString, 2, 2, ())
 {
     return ImageFont::getTextAlignmentDescription(object->getTextAlignment());
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ImageFont, setFontSize, void, 3, 4,   "(width, height) - Set the size of the font characters.\n"
-                                                    "@param width The width of a font character.\n"
-                                                    "@param height The height of a font character.\n"
-                                                    "@return No return value.")
+/*! Set the size of the font characters.
+    @param width The width of a font character.
+    @param height The height of a font character.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(ImageFont, setFontSize, ConsoleVoid, 3, 4, (width, height))
 {
     F32 width, height;
 
@@ -111,17 +127,21 @@ ConsoleMethod(ImageFont, setFontSize, void, 3, 4,   "(width, height) - Set the s
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ImageFont, getFontSize, const char*, 2, 2,    "() - Gets the size of the font characters.\n"
-                                                            "@return The size of the font characters.")
+/*! Gets the size of the font characters.
+    @return The size of the font characters.
+*/
+ConsoleMethodWithDocs(ImageFont, getFontSize, ConsoleString, 2, 2, ())
 {
     return object->getFontSize().scriptThis();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ImageFont, setFontPadding, void, 3, 3,    "(padding) - Set the font padding.\n"
-                                                        "@param padding The space added in-between font characters.\n"
-                                                        "@return No return value.")
+/*! Set the font padding.
+    @param padding The space added in-between font characters.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(ImageFont, setFontPadding, ConsoleVoid, 3, 3, (padding))
 {
    // Set character padding.
    object->setFontPadding( dAtoi(argv[2]) );
@@ -130,8 +150,12 @@ ConsoleMethod(ImageFont, setFontPadding, void, 3, 3,    "(padding) - Set the fon
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(ImageFont, getFontPadding, S32, 2, 2,     "() - Gets the font padding.\n"
-                                                        "@return The font padding.")
+/*! Gets the font padding.
+    @return The font padding.
+*/
+ConsoleMethodWithDocs(ImageFont, getFontPadding, ConsoleInt, 2, 2, ())
 {
     return object->getFontPadding();
 }
+
+ConsoleMethodGroupEndWithDocs(ImageFont)

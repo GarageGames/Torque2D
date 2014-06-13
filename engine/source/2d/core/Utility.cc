@@ -28,6 +28,8 @@
 #include "2d/sceneobject/SceneObject.h"
 #include "2d/core/Utility.h"
 
+#include "Utility_ScriptBinding.h"
+
 //-----------------------------------------------------------------------------
 
 ConsoleType( b2AABB, Typeb2AABB, sizeof(b2AABB), "" )
@@ -75,64 +77,6 @@ ConsoleSetType( Typeb2AABB )
 
 namespace Utility
 {
-
-//-----------------------------------------------------------------------------
-// Return a string containing the common elements of two space-separated strings of elements.
-//-----------------------------------------------------------------------------
-ConsoleFunction( t2dGetCommonElements, const char*, 3, 3, "(set1, set2) - Returns the common elements in two sets.")
-{
-    if (argc != 3)
-    {
-        Con::warnf("t2dGetCommonElements - Invalid number of parameters!");
-        return NULL;
-    }
-
-    // Grab the element count of the first set.
-    const U32 elementCount1 = Utility::mGetStringElementCount(argv[1]);
-
-    // Make sure we get at least one number.
-    if (elementCount1 < 1)
-    {
-        return NULL;
-    }
-
-    // Grab the element count of the second set.
-    const U32 elementCount2 = Utility::mGetStringElementCount(argv[2]);
-
-    // Make sure we get at least one number.
-    if (elementCount2 < 1)
-    {
-        return NULL;
-    }
-
-    char* buffer = Con::getReturnBuffer(dStrlen(argv[1]) + 1);
-    buffer[0] = '\0';
-    bool first = true;
-    
-    // Individual elements assumed to be 1024 or less in length
-    char element[1024];
-
-    // Check for common elements
-    for (U32 i = 0; i < elementCount1; i++)
-    {
-        dStrcpy(element,  Utility::mGetStringElement(argv[1], i, true));
-        
-        for (U32 j = 0; j < elementCount2; j++)
-        {
-            if (!dStrcmp(element, Utility::mGetStringElement(argv[2], j, true)))
-            {
-                if (!first)
-                    dStrcat(buffer, " ");
-                else
-                    first = false;
-
-                dStrcat(buffer, element);
-            }
-        }
-    }
-
-    return buffer;
-}
 
 //-----------------------------------------------------------------------------
 
@@ -269,7 +213,7 @@ const char* mGetStringElement( const char* inString, const U32 index, const bool
                 static char buffer[4096];
 
                 // Calculate word length.
-                const U32 length = inString - pWordStart - ((*inString)?1:0);
+                const U32 length = (const U32)(inString - pWordStart - ((*inString)?1:0));
 
                 // Copy Word.
                 dStrncpy( buffer, pWordStart, length);

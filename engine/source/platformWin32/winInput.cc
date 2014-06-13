@@ -28,6 +28,7 @@
 #include "console/console.h"
 
 #include "platform/platformInput_ScriptBinding.h"
+#include "winInput_ScriptBinding.h"
 
 // Static class variables:
 InputManager*  Input::smManager;
@@ -123,30 +124,6 @@ void Input::init()
    Con::printf( "" );
 
 
-}
-
-//------------------------------------------------------------------------------
-ConsoleFunction( isJoystickDetected, bool, 1, 1, "() Use the isJoystickDetected function to determine if one or more joysticks are connected to the system.\n"
-																"This doesn't tell us how many joysticks there are, just that there are joysticks. It is our job to find out how many and to attach them.\n"
-																"@return Returns true if one or more joysticks are attached and detected, false otherwise.\n"
-																"@sa disableJoystick, enableJoystick, getJoystickAxes")
-{
-   argc; argv;
-   return( DInputDevice::joystickDetected() );
-}
-
-//------------------------------------------------------------------------------
-ConsoleFunction( getJoystickAxes, const char*, 2, 2, "( instance ) Use the getJoystickAxes function to get the current axes position (x and y ) of any intance of a joystick.\n"
-																"@param instance A non-negative number value selecting a specific joystick instance attached to this computer.\n"
-																"@return Returns a string containing the \"x y\" position of the joystick.\n"
-																"@sa disableJoystick, enableJoystick, isJoystickDetected")
-{
-   argc;
-   DInputManager* mgr = dynamic_cast<DInputManager*>( Input::getManager() );
-   if ( mgr )
-      return( mgr->getJoystickAxesString( dAtoi( argv[1] ) ) );
-
-   return( "" );
 }
 
 //------------------------------------------------------------------------------
@@ -518,6 +495,10 @@ void Input::echoInputState()
 		Con::printf( "- Joystick is %sabled and %sactive.",
             mgr->isJoystickEnabled() ? "en" : "dis",
             mgr->isJoystickActive() ? "" : "in" );
+
+		Con::printf( "- Xinput is %sabled and %sactive.",
+			mgr->isXInputEnabled() ? "en" : "dis",
+			mgr->isXInputActive() ? "" : "in" );
    }
    else
     {

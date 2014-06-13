@@ -36,7 +36,6 @@
 #define PLATFORM_UNITTEST_STRING_DESTINATION_BUFFERSIZE     1024
 
 //-----------------------------------------------------------------------------
-
 TEST( PlatformStringTests, dStrlenTest )
 {
     // Check length of string.
@@ -610,5 +609,4 @@ TEST( PlatformStringTests, dIsspaceTest )
         ASSERT_EQ( false, dIsspace(source3[index]) );
     }
 }
-
 #endif // TORQUE_SHIPPING

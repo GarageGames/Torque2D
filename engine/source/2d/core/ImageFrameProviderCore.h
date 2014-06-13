@@ -62,8 +62,11 @@ protected:
     bool                                    mSelfTick;
 
     bool                                    mStaticProvider;
+    
+    bool                                    mUsingNamedFrame;
 
     U32                                     mImageFrame;
+    StringTableEntry                        mNamedImageFrame;
     AssetPtr<ImageAsset>*                   mpImageAsset;
     AssetPtr<AnimationAsset>*               mpAnimationAsset;
 
@@ -112,14 +115,18 @@ public:
     /// Static-Image Frame.
     inline bool setImage( const char* pImageAssetId ) { return setImage( pImageAssetId, mImageFrame ); }
     virtual bool setImage( const char* pImageAssetId, const U32 frame );
+    virtual bool setImage( const char* pImageAssetId, const char* pNamedFrame );
     inline StringTableEntry getImage( void ) const{ return mpImageAsset->getAssetId(); }
     virtual bool setImageFrame( const U32 frame );
     inline U32 getImageFrame( void ) const { return mImageFrame; }
+    virtual bool setNamedImageFrame( const char* frame );
+    inline StringTableEntry getNamedImageFrame( void ) const { return mNamedImageFrame; }
 
     /// Animated-Image Frame.
     virtual bool setAnimation( const char* pAnimationAssetId );
     inline StringTableEntry getAnimation( void ) const { return mpAnimationAsset->getAssetId(); }
     void setAnimationFrame( const U32 frameIndex );
+    inline S32 getAnimationFrame( void ) const { return mCurrentFrameIndex; }
     void setAnimationTimeScale( const F32 scale ) { mAnimationTimeScale = scale; }
     inline F32 getAnimationTimeScale( void ) const { return mAnimationTimeScale; }
     bool playAnimation( const AssetPtr<AnimationAsset>& animationAsset);
@@ -132,12 +139,13 @@ public:
 
     /// Frame provision.
     inline bool isStaticFrameProvider( void ) const { return mStaticProvider; }
+    inline bool isUsingNamedImageFrame( void ) const { return mUsingNamedFrame; }
     inline TextureHandle& getProviderTexture( void ) const { return !validRender() ? BadTextureHandle : isStaticFrameProvider() ? (*mpImageAsset)->getImageTexture() : (*mpAnimationAsset)->getImage()->getImageTexture(); };
-    inline const ImageAsset::FrameArea& getProviderImageFrameArea( void ) const  { return !validRender() ? BadFrameArea : isStaticFrameProvider() ? (*mpImageAsset)->getImageFrameArea(mImageFrame) : (*mpAnimationAsset)->getImage()->getImageFrameArea(getCurrentAnimationFrame()); };
-
+    const ImageAsset::FrameArea& getProviderImageFrameArea( void ) const;
     inline const AnimationAsset* getCurrentAnimation( void ) const { return mpAnimationAsset->notNull() ? *mpAnimationAsset : NULL; };
     inline const StringTableEntry getCurrentAnimationAssetId( void ) const { return mpAnimationAsset->getAssetId(); };
     const U32 getCurrentAnimationFrame( void ) const;
+    const char* getCurrentNamedAnimationFrame( void ) const;
     inline const F32 getCurrentAnimationTime( void ) const { return mCurrentTime; };
 
     void clearAssets( void );

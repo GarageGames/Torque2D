@@ -24,6 +24,8 @@
 #include "console/console.h"
 #include <stdarg.h>
 
+#include "platformAssert_ScriptBinding.h"
+
 //-------------------------------------- STATIC Declaration
 PlatformAssert *PlatformAssert::platformAssert = NULL;
 
@@ -167,13 +169,4 @@ const char* avar(const char *message, ...)
    va_start(args, message);
    dVsprintf(buffer, sizeof(buffer), message, args);
    return( buffer );
-}
-
-
-//-----------------------------------------------------------------------------
-
-ConsoleFunction( Assert, void, 3, 3, "(condition, message) - Fatal Script Assertion" )
-{
-    // Process Assertion.
-    AssertISV( dAtob(argv[1]), argv[2] );
 }

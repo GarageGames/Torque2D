@@ -20,10 +20,14 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(PointForceController, setPosition, void, 3, 4,    "(float x, float y) - Sets the position of the force center.\n"
-                                                                "@param x The position along the horizontal axis.\n"
-                                                                "@param y The position along the vertical axis.\n"
-                                                                "@return No return value.")
+ConsoleMethodGroupBeginWithDocs(PointForceController, PickingSceneController)
+
+/*! Sets the position of the force center.
+    @param x The position along the horizontal axis.
+    @param y The position along the vertical axis.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(PointForceController, setPosition, ConsoleVoid, 3, 4, (float x, float y))
 {
     // The new position.
     b2Vec2 position;
@@ -52,8 +56,10 @@ ConsoleMethod(PointForceController, setPosition, void, 3, 4,    "(float x, float
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(PointForceController, PointForceController, const char*, 2, 2,    "() Gets the position of the force center.\n"
-                                                                                "@return (float x/float y) The x and y (horizontal and vertical) position of the force center.")
+/*! Gets the position of the force center.
+    @return (float x/float y) The x and y (horizontal and vertical) position of the force center.
+*/
+ConsoleMethodWithDocs(PointForceController, getPosition, ConsoleString, 2, 2, ())
 {
     // Get position.
     return object->getPosition().scriptThis();
@@ -61,94 +67,116 @@ ConsoleMethod(PointForceController, PointForceController, const char*, 2, 2,    
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(PointForceController, setRadius, void, 3, 3,       "(radius) - Sets the radius of the point force to use.\n"
-                                                                "@param radius The radius of the point force to use.\n"
-                                                                "@return No return value.")
+/*! Sets the radius of the point force to use.
+    @param radius The radius of the point force to use.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(PointForceController, setRadius, ConsoleVoid, 3, 3, (radius))
 {
     object->setRadius( dAtof(argv[2]) );
 } 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(PointForceController, getRadius, F32, 2, 2,        "() Gets the radius of the point force being used.\n"
-                                                                "@return The radius of the point force being used.")
+/*! Gets the radius of the point force being used.
+    @return The radius of the point force being used.
+*/
+ConsoleMethodWithDocs(PointForceController, getRadius, ConsoleFloat, 2, 2, ())
 {
     return object->getRadius();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(PointForceController, setForce, void, 3, 3,       "(force) - Sets the point force to use.\n"
-                                                                "@param force The point force to use.\n"
-                                                                "@return No return value.")
+/*! Sets the point force to use.
+    @param force The point force to use.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(PointForceController, setForce, ConsoleVoid, 3, 3, (force))
 {
     object->setForce( dAtof(argv[2]) );
 } 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(PointForceController, getForce, F32, 2, 2,        "() Gets the point force being used.\n"
-                                                                "@return The point force being used.")
+/*! Gets the point force being used.
+    @return The point force being used.
+*/
+ConsoleMethodWithDocs(PointForceController, getForce, ConsoleFloat, 2, 2, ())
 {
     return object->getForce();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(PointForceController, setLinearDrag, void, 3, 3,  "(linearDrag) - Sets the linear drag coefficient (0.0 to 1.0).\n"
-                                                                "@param linearDrag The linear drag coefficient\n"
-                                                                "@return No return value.")
+/*! Sets the linear drag coefficient (0.0 to 1.0).
+    @param linearDrag The linear drag coefficient
+    @return No return value.
+*/
+ConsoleMethodWithDocs(PointForceController, setLinearDrag, ConsoleVoid, 3, 3, (linearDrag))
 {
     object->setLinearDrag( dAtof(argv[2]) );
 } 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(PointForceController, getLinearDrag, F32, 2, 2,   "() Gets the linear drag coefficient.\n"
-                                                                "@return The linear drag coefficient.")
+/*! Gets the linear drag coefficient.
+    @return The linear drag coefficient.
+*/
+ConsoleMethodWithDocs(PointForceController, getLinearDrag, ConsoleFloat, 2, 2, ())
 {
     return object->getLinearDrag();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(PointForceController, setAngularDrag, void, 3, 3, "(angularDrag) - Sets the angular drag coefficient (0.0 to 1.0).\n"
-                                                                "@param angularDrag The angular drag coefficient\n"
-                                                                "@return No return value.")
+/*! Sets the angular drag coefficient (0.0 to 1.0).
+    @param angularDrag The angular drag coefficient
+    @return No return value.
+*/
+ConsoleMethodWithDocs(PointForceController, setAngularDrag, ConsoleVoid, 3, 3, (angularDrag))
 {
     object->setAngularDrag( dAtof(argv[2]) );
 } 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(PointForceController, getAngularDrag, F32, 2, 2,  "() Gets the angular drag coefficient.\n"
-                                                                "@return The angular drag coefficient.")
+/*! Gets the angular drag coefficient.
+    @return The angular drag coefficient.
+*/
+ConsoleMethodWithDocs(PointForceController, getAngularDrag, ConsoleFloat, 2, 2, ())
 {
     return object->getAngularDrag();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(PointForceController, setNonLinear, void, 3, 3,   "(nonLinear) - Sets whether to apply the force non-linearly (using the inverse square law) or linearly.\n"
-                                                                "@param nonLinear whether to apply the force non-linearly (using the inverse square law) or linearly.\n"
-                                                                "@return No return value.")
+/*! Sets whether to apply the force non-linearly (using the inverse square law) or linearly.
+    @param nonLinear whether to apply the force non-linearly (using the inverse square law) or linearly.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(PointForceController, setNonLinear, ConsoleVoid, 3, 3, (nonLinear))
 {
     object->setNonLinear( dAtob(argv[2]) );
 } 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(PointForceController, getNonLinear, bool, 2, 2,  "() Gets whether to apply the force non-linearly (using the inverse square law) or linearly.\n"
-                                                                "@return Whether to apply the force non-linearly (using the inverse square law) or linearly.")
+/*! Gets whether to apply the force non-linearly (using the inverse square law) or linearly.
+    @return Whether to apply the force non-linearly (using the inverse square law) or linearly.
+*/
+ConsoleMethodWithDocs(PointForceController, getNonLinear, ConsoleBool, 2, 2, ())
 {
     return object->getNonLinear();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(PointForceController, setTrackedObject, void, 3, 3,   "(sceneObject) - Sets a scene object from which the position will be tracked.\n"
-                                                                    "@param sceneObject The scene object from which the position will be tracked.  An empty string will stop tracking.\n"
-                                                                    "@return No return value.")
+/*! Sets a scene object from which the position will be tracked.
+    @param sceneObject The scene object from which the position will be tracked.  An empty string will stop tracking.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(PointForceController, setTrackedObject, ConsoleVoid, 3, 3, (sceneObject))
 {
     // Find the scene object.
     SceneObject* pSceneObject = Sim::findObject<SceneObject>( argv[2] );
@@ -158,8 +186,10 @@ ConsoleMethod(PointForceController, setTrackedObject, void, 3, 3,   "(sceneObjec
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(PointForceController, getTrackedObject, const char*, 2, 2,    "() - Gets the scene object from which the position will be tracked.\n"
-                                                                            "@return The scene object from which the position will be tracked or an empty string if nothing is being tracked.")
+/*! Gets the scene object from which the position will be tracked.
+    @return The scene object from which the position will be tracked or an empty string if nothing is being tracked.
+*/
+ConsoleMethodWithDocs(PointForceController, getTrackedObject, ConsoleString, 2, 2, ())
 {
     // Fetch the scene object.
     SceneObject* pSceneObject = object->getTrackedObject();
@@ -167,3 +197,4 @@ ConsoleMethod(PointForceController, getTrackedObject, const char*, 2, 2,    "() 
     return pSceneObject == NULL ? NULL : pSceneObject->getIdString();
 } 
 
+ConsoleMethodGroupEndWithDocs(PointForceController)

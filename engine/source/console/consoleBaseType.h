@@ -75,7 +75,7 @@ public:
    ConsoleBaseType(const S32 size, S32 *idPtr, const char *aTypeName);
 
    const S32 getTypeID() const { return mTypeID; }
-   const S32 getTypeSize() const { return mTypeSize; }
+   const dsize_t getTypeSize() const { return mTypeSize; }
    const char *getTypeName() const { return mTypeName; }
 
    void setInspectorFieldType(const char *type) { mInspectorFieldType = type; }

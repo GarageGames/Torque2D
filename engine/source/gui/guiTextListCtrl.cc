@@ -350,9 +350,9 @@ void GuiTextListCtrl::onRenderCell(Point2I offset, Point2I cell, bool selected, 
       const char *nextCol = dStrchr(text, '\t');
       if(mColumnOffsets[index] >= 0)
       {
-         dsize_t slen;
+         U32 slen;
          if(nextCol)
-            slen = nextCol - text;
+            slen = (U32)(nextCol - text);
          else
             slen = dStrlen(text);
 
@@ -393,7 +393,7 @@ U32 GuiTextListCtrl::getRowWidth(Entry *row)
       const char *nextCol = dStrchr(text, '\t');
       U32 textWidth;
       if(nextCol)
-         textWidth = mFont->getStrNWidth((const UTF8*)text, nextCol - text);
+         textWidth = mFont->getStrNWidth((const UTF8*)text, (U32)(nextCol - text));
       else
          textWidth = mFont->getStrWidth((const UTF8*)text);
       if(mColumnOffsets[index] >= 0)

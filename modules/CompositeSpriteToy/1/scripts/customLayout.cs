@@ -82,7 +82,7 @@ function CompositeSprite::onCustomLayout( %this, %args )
     %inputX = %args._0;
     
     // Calculate an angle from the first argument.
-    %angle = mDegToRad( %inputX * 10 );
+    %angle = %inputX * 10;
     
     // Calculate an interesting output position.
     %outputX = %inputX - (CompositeSpriteToy.SpriteCount * 0.5);

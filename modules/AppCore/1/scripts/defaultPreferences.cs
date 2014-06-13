@@ -55,6 +55,7 @@ $pref::T2D::warnFileDeprecated = 1;
 $pref::T2D::warnSceneOccupancy = 1;
 $pref::T2D::imageAssetGlobalFilterMode = Bilinear;
 $pref::T2D::TAMLSchema="";
+$pref::T2D::JSONStrict = 1;
 
 /// Video
 $pref::Video::appliedPref = 0;

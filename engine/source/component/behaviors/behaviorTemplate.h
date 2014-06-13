@@ -33,10 +33,6 @@
 
 //-----------------------------------------------------------------------------
 
-#define BEHAVIORTEMPLATE_ASSET_FIELDTYPE    "Asset"
-
-//-----------------------------------------------------------------------------
-
 class BehaviorTemplate : public SimObject
 {
    typedef SimObject Parent;

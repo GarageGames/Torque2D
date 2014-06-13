@@ -41,12 +41,17 @@
 #endif
 
 #ifndef _AUDIO_ASSET_H_
-#include "audio/audioAsset.h"
+#include "audio/AudioAsset.h"
 #endif
 
 #ifndef _STRINGUNIT_H_
 #include "string/stringUnit.h"
 #endif
+
+//-----------------------------------------------------------------------------
+
+StringTableEntry assetLooseIdSignature = StringTable->insert( ASSET_ID_SIGNATURE );
+StringTableEntry assetLooseFileSignature = StringTable->insert( ASSET_LOOSEFILE_SIGNATURE );
 
 //-----------------------------------------------------------------------------
 

@@ -25,7 +25,7 @@
 #endif
 
 #ifndef _SPRITE_BATCH_QUERY_H_
-#include "2d/core/spriteBatchQuery.h"
+#include "2d/core/SpriteBatchQuery.h"
 #endif
 
 #ifndef _SCENE_RENDER_OBJECT_H_
@@ -475,6 +475,24 @@ void SpriteBatch::setSpriteImage( const char* pAssetId, const U32 imageFrame )
 
 //------------------------------------------------------------------------------
 
+void SpriteBatch::setSpriteImage( const char* pAssetId, const char* namedFrame )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(SpriteBatch_SetSpriteImage);
+
+    // Sanity!
+    AssertFatal( pAssetId, "Cannot set sprite image using a NULL asset Id." );
+
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return;
+
+    // Set image and frame.
+    mSelectedSprite->setImage( pAssetId, namedFrame );
+}
+
+//------------------------------------------------------------------------------
+
 StringTableEntry SpriteBatch::getSpriteImage( void ) const
 {
     // Finish if a sprite is not selected.
@@ -503,10 +521,34 @@ U32 SpriteBatch::getSpriteImageFrame( void ) const
 {
     // Finish if a sprite is not selected.
     if ( !checkSpriteSelected() )
-        return 0;
+        return NULL;
 
     // Get image frame.
     return mSelectedSprite->getImageFrame();
+}
+
+//------------------------------------------------------------------------------
+
+void SpriteBatch::setSpriteNamedImageFrame( const char* namedFrame )
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return;
+
+    // Set image frame.
+    mSelectedSprite->setNamedImageFrame( namedFrame );
+}
+
+//------------------------------------------------------------------------------
+
+StringTableEntry SpriteBatch::getSpriteNamedImageFrame( void ) const
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return NULL;
+
+    // Get image frame.
+    return mSelectedSprite->getNamedImageFrame();
 }
 
 //------------------------------------------------------------------------------
@@ -600,6 +642,18 @@ Vector2 SpriteBatch::getSpriteLocalPosition( void )
 
     // Get local position.
     return mSelectedSprite->getLocalPosition();
+}
+
+//------------------------------------------------------------------------------
+
+const SpriteBatchItem::LogicalPosition SpriteBatch::getSpriteLogicalPosition( void ) const
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return NULL;
+    
+    // Get logical position.
+    return mSelectedSprite->getLogicalPosition();
 }
 
 //------------------------------------------------------------------------------
@@ -1014,6 +1068,34 @@ SpriteBatchItem* SpriteBatch::createSprite( void )
 
     // Set batch parent.
     pSpriteBatchItem->setBatchParent( this, batchId );
+
+    // Create sprite batch item,
+    mSprites.insert( batchId, pSpriteBatchItem );
+
+    return pSpriteBatchItem;
+}
+
+//------------------------------------------------------------------------------
+
+SpriteBatchItem* SpriteBatch::createSprite( const Vector2* explicitVertices  )
+{
+    // Debug Profiling.
+    PROFILE_SCOPE(SpriteBatch_CreateSprite);
+
+    // Allocate batch Id.
+    const U32 batchId = ++mMasterBatchId;
+
+    // Create sprite batch item,
+    SpriteBatchItem* pSpriteBatchItem = SpriteBatchItemFactory.createObject();
+
+    // Set batch parent.
+    pSpriteBatchItem->setBatchParent( this, batchId );
+
+    // Set explicit mode.
+    pSpriteBatchItem->setExplicitMode( true );
+
+    // Set explicit vertices.
+
 
     // Create sprite batch item,
     mSprites.insert( batchId, pSpriteBatchItem );

@@ -316,19 +316,37 @@ void Scroller::sceneRender( const SceneRenderState* pSceneRenderState, const Sce
     // Flush any existing batches.
     pBatchRenderer->flush();
 
+    // jamesu - no clip planes in webgl
+#ifndef TORQUE_OS_EMSCRIPTEN
+
     // Set-up a set of clip-planes against the OOBB.
     GLdouble left[4] = {1, 0, 0, -renderOOBB0.x};
     GLdouble right[4] = {-1, 0, 0, renderOOBB1.x};
     GLdouble top[4] = {0, -1, 0, renderOOBB3.y};
     GLdouble bottom[4] = {0, 1, 0, -renderOOBB0.y};
+
+    //This is to prevent some android devices from throwing opengl errors. For instance the tegra 3 only supports 1
+    int maxClip = 4;
+    glGetIntegerv(GL_MAX_CLIP_PLANES, &maxClip);
+
     glClipPlane(GL_CLIP_PLANE0, left);
-    glClipPlane(GL_CLIP_PLANE1, right);
-    glClipPlane(GL_CLIP_PLANE2, top);
+
+    if (maxClip > 1)
+    	glClipPlane(GL_CLIP_PLANE1, right);
+    if (maxClip > 2)
+    	glClipPlane(GL_CLIP_PLANE2, top);
+    if (maxClip > 3)
     glClipPlane(GL_CLIP_PLANE3, bottom);
+
     glEnable(GL_CLIP_PLANE0);
-    glEnable(GL_CLIP_PLANE1);
-    glEnable(GL_CLIP_PLANE2);
-    glEnable(GL_CLIP_PLANE3);
+    if (maxClip > 1)
+    	glEnable(GL_CLIP_PLANE1);
+    if (maxClip > 2)
+    	glEnable(GL_CLIP_PLANE2);
+    if (maxClip > 3)
+    	glEnable(GL_CLIP_PLANE3);
+
+#endif
 
     // Render repeat Y.
     for ( S32 repeatIndexY = 0; repeatIndexY < wholeRegionY; ++repeatIndexY )
@@ -372,11 +390,17 @@ void Scroller::sceneRender( const SceneRenderState* pSceneRenderState, const Sce
     // Flush the scroller batches.
     pBatchRenderer->flush();
 
+#ifndef TORQUE_OS_EMSCRIPTEN
     // Disable the OOBB clip-planes.
     glDisable(GL_CLIP_PLANE0);
-    glDisable(GL_CLIP_PLANE1);
-    glDisable(GL_CLIP_PLANE2);
-    glDisable(GL_CLIP_PLANE3);
+    if (maxClip > 1)
+    	glDisable(GL_CLIP_PLANE1);
+    if (maxClip > 2)
+    	glDisable(GL_CLIP_PLANE2);
+    if (maxClip > 3)
+    	glDisable(GL_CLIP_PLANE3);
+
+#endif
 }
 
 //------------------------------------------------------------------------------

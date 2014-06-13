@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,17 +20,23 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-ConsoleFunction( getGlobalSceneObjectCount, S32, 1, 1,  "() - Gets the system-wide scene-object count.\n"
-                                                        "@return The system-wide scene-object count." )
+/*! Gets the system-wide scene-object count.
+    @return The system-wide scene-object count.
+*/
+ConsoleFunctionWithDocs( getGlobalSceneObjectCount, ConsoleInt, 1, 1, ())
 {
     return SceneObject::getGlobalSceneObjectCount();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, addToScene, void, 3, 3, "(Scene scene) Add the object to a scene.\n"
-                                                      "@param scene the scene you wish to add this object to."
-                                                      "@return No return value.")
+ConsoleMethodGroupBeginWithDocs(SceneObject, BehaviorComponent)
+
+/*! Add the object to a scene.
+    @param scene the scene you wish to add this object to.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, addToScene, ConsoleVoid, 3, 3, (Scene scene))
 {
     // Find Scene Object.
     Scene* pScene = dynamic_cast<Scene*>(Sim::findObject(argv[2]));
@@ -48,8 +54,10 @@ ConsoleMethod(SceneObject, addToScene, void, 3, 3, "(Scene scene) Add the object
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, removeFromScene, void, 2, 2, "() Remove the object from the scene."
-              "@return No return value.")
+/*! Remove the object from the scene.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, removeFromScene, ConsoleVoid, 2, 2, ())
 {
     // Check we're in a scene.
     if ( !object->getScene() )
@@ -64,17 +72,21 @@ ConsoleMethod(SceneObject, removeFromScene, void, 2, 2, "() Remove the object fr
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getScene, S32, 2, 2, "() Get the scene the object is in.\n"
-                                                         "@return (Scene scene) The scene this object is currently in.")
+/*! Get the scene the object is in.
+    @return (Scene scene) The scene this object is currently in.
+*/
+ConsoleMethodWithDocs( SceneObject, getScene, ConsoleInt, 2, 2, ())
 {
    return object->getScene() ? object->getScene()->getId() : 0;
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setEnabled, void, 3, 3, "(bool status) Enables or disables the object.\n"
-                                                      "@param status Whether to enable or disable the object."
-                                                      "@return No return value.")
+/*! Enables or disables the object.
+    @param status Whether to enable or disable the object.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setEnabled, ConsoleVoid, 3, 3, (bool status))
 {
     // Set Enabled.
     object->setEnabled( dAtob(argv[2]) );
@@ -82,9 +94,11 @@ ConsoleMethod(SceneObject, setEnabled, void, 3, 3, "(bool status) Enables or dis
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setLifetime, void, 3, 3, "(float lifetime) - Set Objects' Lifetime.\n"
-                                                       "@param lifetime The amount of time, in seconds, before the object is automatically deleted.\n"
-                                                                 "@return No return Value.")
+/*! Set Objects' Lifetime.
+    @param lifetime The amount of time, in seconds, before the object is automatically deleted.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setLifetime, ConsoleVoid, 3, 3, (float lifetime))
 {
     // Set Lifetime.
     object->setLifetime( dAtof(argv[2]) );
@@ -92,8 +106,10 @@ ConsoleMethod(SceneObject, setLifetime, void, 3, 3, "(float lifetime) - Set Obje
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getLifetime, F32, 2, 2, "() Gets the Objects Lifetime.\n"
-                                                      "@return (float lifetime) The objects lifetime left before it is automatically deleted.")
+/*! Gets the Objects Lifetime.
+    @return (float lifetime) The objects lifetime left before it is automatically deleted.
+*/
+ConsoleMethodWithDocs(SceneObject, getLifetime, ConsoleFloat, 2, 2, ())
 {
     // Return Lifetime.
     return object->getLifetime();
@@ -101,10 +117,12 @@ ConsoleMethod(SceneObject, getLifetime, F32, 2, 2, "() Gets the Objects Lifetime
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setSceneLayer, void, 3, 3, "(integer layer) Sets the objects scene layer (0-31).\n"
-                                                    "The layer on which to place the object.\n"
-                                                    "@param layer Integer in the range [0-31].\n"
-                                                    "@return No return Value.")
+/*! Sets the objects scene layer (0-31).
+    The layer on which to place the object.
+    @param layer Integer in the range [0-31].
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setSceneLayer, ConsoleVoid, 3, 3, (integer layer))
 {
     // Set Layer.
     object->setSceneLayer( dAtoi(argv[2]) );
@@ -112,8 +130,10 @@ ConsoleMethod(SceneObject, setSceneLayer, void, 3, 3, "(integer layer) Sets the 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getSceneLayer, S32, 2, 2, "() Gets the Objects Layer.\n"
-                                                        "@return (integer layer) The scene layer the object is on.")
+/*! Gets the Objects Layer.
+    @return (integer layer) The scene layer the object is on.
+*/
+ConsoleMethodWithDocs(SceneObject, getSceneLayer, ConsoleInt, 2, 2, ())
 {
     // Return Layer.
     return object->getSceneLayer();
@@ -121,9 +141,11 @@ ConsoleMethod(SceneObject, getSceneLayer, S32, 2, 2, "() Gets the Objects Layer.
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setSceneLayerDepth, void, 3, 3,  "(float layerDepth) Sets the objects scene layer depth.\n"
-                                                            "@param layerDepth The layer depth can be any value.\n"
-                                                            "@return No return Value.")
+/*! Sets the objects scene layer depth.
+    @param layerDepth The layer depth can be any value.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setSceneLayerDepth, ConsoleVoid, 3, 3, (float layerDepth))
 {
     // Set scene layer depth.
     object->setSceneLayerDepth( dAtof(argv[2]) );
@@ -131,8 +153,10 @@ ConsoleMethod(SceneObject, setSceneLayerDepth, void, 3, 3,  "(float layerDepth) 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getSceneLayerDepth, F32, 2, 2,   "() Gets the scene layer depth.\n"
-                                                            "@return (float layerDepth) The scene layer depth.")
+/*! Gets the scene layer depth.
+    @return (float layerDepth) The scene layer depth.
+*/
+ConsoleMethodWithDocs(SceneObject, getSceneLayerDepth, ConsoleFloat, 2, 2, ())
 {
     // Return Layer.
     return object->getSceneLayerDepth();
@@ -141,42 +165,52 @@ ConsoleMethod(SceneObject, getSceneLayerDepth, F32, 2, 2,   "() Gets the scene l
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setSceneLayerDepthFront, bool, 2, 2, "() Sets the layer depth to be the front-most within the current layer..\n"
-                                                                "@return Whether the scene layer depth was adjusted or not.")
+/*! Sets the layer depth to be the front-most within the current layer..
+    @return Whether the scene layer depth was adjusted or not.
+*/
+ConsoleMethodWithDocs(SceneObject, setSceneLayerDepthFront, ConsoleBool, 2, 2, ())
 {
     return object->setSceneLayerDepthFront();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setSceneLayerDepthBack, bool, 2, 2, "() Sets the layer depth to be the back-most within the current layer..\n"
-                                                                "@return Whether the scene layer depth was adjusted or not.")
+/*! Sets the layer depth to be the back-most within the current layer..
+    @return Whether the scene layer depth was adjusted or not.
+*/
+ConsoleMethodWithDocs(SceneObject, setSceneLayerDepthBack, ConsoleBool, 2, 2, ())
 {
     return object->setSceneLayerDepthBack();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setSceneLayerDepthForward, bool, 2, 2,   "() Sets the layer depth to be in-front of the object currently in-front within the current layer.\n"
-                                                                    "@return Whether the scene layer depth was adjusted or not.")
+/*! Sets the layer depth to be in-front of the object currently in-front within the current layer.
+    @return Whether the scene layer depth was adjusted or not.
+*/
+ConsoleMethodWithDocs(SceneObject, setSceneLayerDepthForward, ConsoleBool, 2, 2, ())
 {
     return object->setSceneLayerDepthForward();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setSceneLayerDepthBackward, bool, 2, 2,  "() Sets the layer depth to be behind of the object currently behind within the current layer.\n"
-                                                                    "@return Whether the scene layer depth was adjusted or not.")
+/*! Sets the layer depth to be behind of the object currently behind within the current layer.
+    @return Whether the scene layer depth was adjusted or not.
+*/
+ConsoleMethodWithDocs(SceneObject, setSceneLayerDepthBackward, ConsoleBool, 2, 2, ())
 {
     return object->setSceneLayerDepthBackward();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setSceneGroup, void, 3, 3, "(integer group) - Sets the objects group (0-31).\n"
-                                                         "The scene group to place the object in.\n"
-                                                         "@param group Integer in the range [0-31].\n"
-                                                         "@return No return Value.")
+/*! Sets the objects group (0-31).
+    The scene group to place the object in.
+    @param group Integer in the range [0-31].
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setSceneGroup, ConsoleVoid, 3, 3, (integer group))
 {
     // Set Group.
     object->setSceneGroup( dAtoi(argv[2]) );
@@ -184,8 +218,10 @@ ConsoleMethod(SceneObject, setSceneGroup, void, 3, 3, "(integer group) - Sets th
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getSceneGroup, S32, 2, 2, "() Gets the Objects Group.\n"
-                                                        "@return (integer group) The scene group the object is on.")
+/*! Gets the Objects Group.
+    @return (integer group) The scene group the object is on.
+*/
+ConsoleMethodWithDocs(SceneObject, getSceneGroup, ConsoleInt, 2, 2, ())
 {
     // Return Group.
     return object->getSceneGroup();
@@ -193,12 +229,14 @@ ConsoleMethod(SceneObject, getSceneGroup, S32, 2, 2, "() Gets the Objects Group.
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setArea, void, 3, 6, "(float x1, float y1, float x2, float y2) Sets the objects area.\n"
-                                                   "@param x1 The lower left corner x position.\n"
-                                                   "@param y1 The lower left corner y position.\n"
-                                                   "@param x2 The upper right corner x position.\n"
-                                                   "@param y2 The upper right corner y position.\n"
-                                                   "@return No return value.")
+/*! Sets the objects area.
+    @param x1 The lower left corner x position.
+    @param y1 The lower left corner y position.
+    @param x2 The upper right corner x position.
+    @param y2 The upper right corner y position.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setArea, ConsoleVoid, 3, 6, (float x1, float y1, float x2, float y2))
 {
    // Upper left and lower right bound.
    Vector2 v1, v2;
@@ -243,8 +281,10 @@ ConsoleMethod(SceneObject, setArea, void, 3, 6, "(float x1, float y1, float x2, 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getArea, const char*, 2, 2, "() Gets the object's area.\n"
-                                                          "@return (float x1/float y1/float x2/float y2) A space separated list of the lower left corner x and y position and the upper right corner x and y positions.")
+/*! Gets the object's area.
+    @return (float x1/float y1/float x2/float y2) A space separated list of the lower left corner x and y position and the upper right corner x and y positions.
+*/
+ConsoleMethodWithDocs(SceneObject, getArea, ConsoleString, 2, 2, ())
 {
     // Fetch position and half-size.
     const Vector2 position = object->getPosition();
@@ -260,8 +300,10 @@ ConsoleMethod(SceneObject, getArea, const char*, 2, 2, "() Gets the object's are
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getAreaMin, const char*, 2, 2, "() Gets the upper left point of the object.\n"
-                                                             "@return (float x1/float y1) The lower left corner x and y position of the object.")
+/*! Gets the upper left point of the object.
+    @return (float x1/float y1) The lower left corner x and y position of the object.
+*/
+ConsoleMethodWithDocs(SceneObject, getAreaMin, ConsoleString, 2, 2, ())
 {
     // Fetch position and half-size.
     const Vector2 position = object->getPosition();
@@ -277,8 +319,10 @@ ConsoleMethod(SceneObject, getAreaMin, const char*, 2, 2, "() Gets the upper lef
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getAreaMax, const char*, 2, 2, "Gets the lower right point of the object.\n"
-                                                             "@return (float x2/float y2) The upper right corner x and y position of the object.")
+/*! Gets the lower right point of the object.
+    @return (float x2/float y2) The upper right corner x and y position of the object.
+*/
+ConsoleMethodWithDocs(SceneObject, getAreaMax, ConsoleString, 2, 2, (...))
 {
     // Fetch position and half-size.
     const Vector2 position = object->getPosition();
@@ -294,19 +338,23 @@ ConsoleMethod(SceneObject, getAreaMax, const char*, 2, 2, "Gets the lower right 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getAutoSizing, bool, 2, 2,   "() - Gets whether the object automatically sizes itself or not.\n"
-                                                        "You cannot set the size of an object that automatically sizes itself.\n"
-                                                        "@return Whether the object automatically sizes itself or not." )
+/*! Gets whether the object automatically sizes itself or not.
+    You cannot set the size of an object that automatically sizes itself.
+    @return Whether the object automatically sizes itself or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getAutoSizing, ConsoleBool, 2, 2, ())
 {
     return object->getAutoSizing();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setSize, void, 3, 4, "(float width, float height) Sets the objects size.\n"
-                                                   "@param width The width of the object.\n"
-                                                   "@param height The height of the object.\n"
-                                                     "@return No return value.")
+/*! Sets the objects size.
+    @param width The width of the object.
+    @param height The height of the object.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setSize, ConsoleVoid, 3, 4, (float width, float height))
 {
     F32 width, height;
 
@@ -351,17 +399,21 @@ ConsoleMethod(SceneObject, setSize, void, 3, 4, "(float width, float height) Set
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getSize, const char*, 2, 2, "() Gets the objects size.\n"
-                                                          "@return (float width/float height) The width and height of the object.")
+/*! Gets the objects size.
+    @return (float width/float height) The width and height of the object.
+*/
+ConsoleMethodWithDocs(SceneObject, getSize, ConsoleString, 2, 2, ())
 {
     return object->getSize().scriptThis();
 } 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setSizeX, void, 3, 3, "(float width) Sets the width of the object.\n"
-                                                    "@param width The width of the object."
-                                                     "@return No return value.")
+/*! Sets the width of the object.
+    @param width The width of the object.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setSizeX, ConsoleVoid, 3, 3, (float width))
 {
     // Set Size X-Component.
     object->setSize( Vector2( dAtof(argv[2]), object->getSize().y ) );
@@ -369,9 +421,11 @@ ConsoleMethod(SceneObject, setSizeX, void, 3, 3, "(float width) Sets the width o
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setSizeY, void, 3, 3, "(float height) Sets the height of the object.\n"
-                                                    "@param height The height of the object."
-                                                      "@return No return value.")
+/*! Sets the height of the object.
+    @param height The height of the object.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setSizeY, ConsoleVoid, 3, 3, (float height))
 {
     // Set Size Y-Component.
     object->setSize( Vector2( object->getSize().x, dAtof(argv[2]) ) );
@@ -379,8 +433,10 @@ ConsoleMethod(SceneObject, setSizeY, void, 3, 3, "(float height) Sets the height
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getSizeX, F32, 2, 2, "() Gets the width of the object.\n"
-                                                   "@return (float width) The width of the object.")
+/*! Gets the width of the object.
+    @return (float width) The width of the object.
+*/
+ConsoleMethodWithDocs(SceneObject, getSizeX, ConsoleFloat, 2, 2, ())
 {
     // Get Size X-Component.
     return object->getSize().x;
@@ -388,8 +444,10 @@ ConsoleMethod(SceneObject, getSizeX, F32, 2, 2, "() Gets the width of the object
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getSizeY, F32, 2, 2, "() Gets the height of the object.\n"
-                                                   "@return (float height) The height of the object.")
+/*! Gets the height of the object.
+    @return (float height) The height of the object.
+*/
+ConsoleMethodWithDocs(SceneObject, getSizeY, ConsoleFloat, 2, 2, ())
 {
     // Get Size Y-Component.
     return object->getSize().y;
@@ -397,9 +455,11 @@ ConsoleMethod(SceneObject, getSizeY, F32, 2, 2, "() Gets the height of the objec
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setWidth, void, 3, 3, "(float width) Sets the width of the object.\n"
-                                                    "@param width The width of the object."
-                                                      "@return No return value.")
+/*! Sets the width of the object.
+    @param width The width of the object.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setWidth, ConsoleVoid, 3, 3, (float width))
 {
     // Set Size Width Component.
     object->setSize( Vector2( dAtof(argv[2]), object->getSize().y ) );
@@ -407,9 +467,11 @@ ConsoleMethod(SceneObject, setWidth, void, 3, 3, "(float width) Sets the width o
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setHeight, void, 3, 3, "(float height) Sets the height of the object."
-                                                     "@param height The height of the object."
-                                                      "@return No return value.")
+/*! Sets the height of the object.
+    @param height The height of the object.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setHeight, ConsoleVoid, 3, 3, (float height))
 {
     // Set Size Height Component.
     object->setSize( Vector2( object->getSize().x, dAtof(argv[2]) ) );
@@ -417,8 +479,10 @@ ConsoleMethod(SceneObject, setHeight, void, 3, 3, "(float height) Sets the heigh
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getWidth, F32, 2, 2, "() Gets the width of the object.\n"
-                                                   "@return (float width) The width of the object.")
+/*! Gets the width of the object.
+    @return (float width) The width of the object.
+*/
+ConsoleMethodWithDocs(SceneObject, getWidth, ConsoleFloat, 2, 2, ())
 {
     // Get Size Width Component.
     return object->getSize().x;
@@ -426,8 +490,10 @@ ConsoleMethod(SceneObject, getWidth, F32, 2, 2, "() Gets the width of the object
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getHeight, F32, 2, 2, "() Gets the height of the object.\n"
-                                                    "@return (float height) The height of the object.")
+/*! Gets the height of the object.
+    @return (float height) The height of the object.
+*/
+ConsoleMethodWithDocs(SceneObject, getHeight, ConsoleFloat, 2, 2, ())
 {
     // Get Size Height Component.
     return object->getSize().y;
@@ -435,8 +501,10 @@ ConsoleMethod(SceneObject, getHeight, F32, 2, 2, "() Gets the height of the obje
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getAABB, const char*, 2, 2,   "() Gets the axis-aligned bounding-box of the object.\n"
-                                                            "@return (lowerXY upperXY) A space separated list of the lower left and upper right bounds.")
+/*! Gets the axis-aligned bounding-box of the object.
+    @return (lowerXY upperXY) A space separated list of the lower left and upper right bounds.
+*/
+ConsoleMethodWithDocs(SceneObject, getAABB, ConsoleString, 2, 2, ())
 {
     // Fetch the AABB
     const b2AABB aabb = object->getAABB();
@@ -453,10 +521,12 @@ ConsoleMethod(SceneObject, getAABB, const char*, 2, 2,   "() Gets the axis-align
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setPosition, void, 3, 4, "(float x, float y) - Sets the objects position.\n"
-                                                       "@param x The position of the object along the horizontal axis.\n"
-                                                       "@param y The position of the object along the vertical axis.\n"
-                                                      "@return No return value.")
+/*! Sets the objects position.
+    @param x The position of the object along the horizontal axis.
+    @param y The position of the object along the vertical axis.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setPosition, ConsoleVoid, 3, 4, (float x, float y))
 {
     // The new position.
     b2Vec2 position;
@@ -485,9 +555,11 @@ ConsoleMethod(SceneObject, setPosition, void, 3, 4, "(float x, float y) - Sets t
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setPositionX, void, 3, 3, "(float x) Sets the objects x position.\n"
-                                                        "@param x The horizontal position of the object."
-                                                      "@return No return value.")
+/*! Sets the objects x position.
+    @param x The horizontal position of the object.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setPositionX, ConsoleVoid, 3, 3, (float x))
 {
     // Set Position X-Component.
     object->setPosition( b2Vec2( dAtof(argv[2]), object->getPosition().y ) );
@@ -495,9 +567,11 @@ ConsoleMethod(SceneObject, setPositionX, void, 3, 3, "(float x) Sets the objects
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setPositionY, void, 3, 3, "(float y) Sets the objects y position.\n"
-                                                        "@param y The vertical position of the object."
-                                                      "@return No return value.")
+/*! Sets the objects y position.
+    @param y The vertical position of the object.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setPositionY, ConsoleVoid, 3, 3, (float y))
 {
     // Set Position Y-Component.
     object->setPosition( b2Vec2( object->getPosition().x, dAtof(argv[2]) ) );
@@ -505,8 +579,10 @@ ConsoleMethod(SceneObject, setPositionY, void, 3, 3, "(float y) Sets the objects
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getPosition, const char*, 2, 2, "() Gets the object's position.\n"
-                                                              "@return (float x/float y) The x and y (horizontal and vertical) position of the object.")
+/*! Gets the object's position.
+    @return (float x/float y) The x and y (horizontal and vertical) position of the object.
+*/
+ConsoleMethodWithDocs(SceneObject, getPosition, ConsoleString, 2, 2, ())
 {
     // Get position.
     return object->getPosition().scriptThis();
@@ -514,8 +590,10 @@ ConsoleMethod(SceneObject, getPosition, const char*, 2, 2, "() Gets the object's
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getRenderPosition, const char*, 2, 2, "() Gets the current render position.\n"
-                                                                    "@return (float x/float y) The x and y (horizontal and vertical) render position of the object.")
+/*! Gets the current render position.
+    @return (float x/float y) The x and y (horizontal and vertical) render position of the object.
+*/
+ConsoleMethodWithDocs(SceneObject, getRenderPosition, ConsoleString, 2, 2, ())
 {
    // Get render position.
     return object->getRenderPosition().scriptThis();
@@ -523,9 +601,11 @@ ConsoleMethod(SceneObject, getRenderPosition, const char*, 2, 2, "() Gets the cu
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setAngle, void, 3, 3,     "(float angle) - Sets the objects angle.\n"
-                                                        "@param angle The angle of the object."
-                                                        "@return No return value.")
+/*! Sets the objects angle.
+    @param angle The angle of the object.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setAngle, ConsoleVoid, 3, 3, (float angle))
 {
     // Set Rotation.
     object->setAngle( mDegToRad( dAtof(argv[2]) ) );
@@ -533,8 +613,10 @@ ConsoleMethod(SceneObject, setAngle, void, 3, 3,     "(float angle) - Sets the o
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getAngle, F32, 2, 2, "() Gets the object's angle.\n"
-                                                      "@return (float angle) The object's current angle.")
+/*! Gets the object's angle.
+    @return (float angle) The object's current angle.
+*/
+ConsoleMethodWithDocs(SceneObject, getAngle, ConsoleFloat, 2, 2, ())
 {
     // Return angle.
     return mRadToDeg( object->getAngle());
@@ -542,8 +624,10 @@ ConsoleMethod(SceneObject, getAngle, F32, 2, 2, "() Gets the object's angle.\n"
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getRenderAngle, F32, 2, 2, "() Gets the object's render angle.\n"
-                                                            "@return (float rotation) The object's current render angle.")
+/*! Gets the object's render angle.
+    @return (float rotation) The object's current render angle.
+*/
+ConsoleMethodWithDocs(SceneObject, getRenderAngle, ConsoleFloat, 2, 2, ())
 {
     // Return Rotation.
     return mRadToDeg( object->getRenderAngle() );
@@ -551,8 +635,10 @@ ConsoleMethod(SceneObject, getRenderAngle, F32, 2, 2, "() Gets the object's rend
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setFixedAngle, void, 3, 3,    "(bool status?) - Whether the object angle is fixed or not.\n"
-                                                            "@return No return Value.")
+/*! Whether the object angle is fixed or not.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setFixedAngle, ConsoleVoid, 3, 3, (bool status?))
 {
     // Set fixed angle.
     object->setFixedAngle( dAtob(argv[2]) );
@@ -560,8 +646,10 @@ ConsoleMethod(SceneObject, setFixedAngle, void, 3, 3,    "(bool status?) - Wheth
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getFixedAngle, bool, 2, 2, "() - Gets whether the angle is fixed or not.\n"
-                                                             "@return (bool status?) Whether the angle is fixed or not.")
+/*! Gets whether the angle is fixed or not.
+    @return (bool status?) Whether the angle is fixed or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getFixedAngle, ConsoleBool, 2, 2, ())
 {
     // Get fixed angle.
     return object->getFixedAngle();
@@ -569,8 +657,10 @@ ConsoleMethod(SceneObject, getFixedAngle, bool, 2, 2, "() - Gets whether the ang
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getLocalCenter, const char*, 2, 2,    "() - Gets the local center of mass.\n"
-                                                                    "@return (float localCenter) Gets the local center of mass.")
+/*! Gets the local center of mass.
+    @return (float localCenter) Gets the local center of mass.
+*/
+ConsoleMethodWithDocs(SceneObject, getLocalCenter, ConsoleString, 2, 2, ())
 {
     // Get local center.
     return object->getLocalCenter().scriptThis();
@@ -578,8 +668,10 @@ ConsoleMethod(SceneObject, getLocalCenter, const char*, 2, 2,    "() - Gets the 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getWorldCenter, const char*, 2, 2,    "() - Gets the world center of mass.\n"
-                                                                    "@return (float worldCenter) Gets the world center of mass.")
+/*! Gets the world center of mass.
+    @return (float worldCenter) Gets the world center of mass.
+*/
+ConsoleMethodWithDocs(SceneObject, getWorldCenter, ConsoleString, 2, 2, ())
 {
     // Get world center.
     return object->getWorldCenter().scriptThis();
@@ -587,10 +679,12 @@ ConsoleMethod(SceneObject, getWorldCenter, const char*, 2, 2,    "() - Gets the 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getLocalPoint, const char*, 3, 4, "(float worldPointX/Y) - Returns a local point from the world point.\n"
-                                                                "Converts a point in world space to local space.\n"
-                                                                "@param worldPointX/Y The world point to convert into a local point."
-                                                                "@return (float localPointX/Y) The local point that was converted from the world point passed.")
+/*! Returns a local point from the world point.
+    Converts a point in world space to local space.
+    @param worldPointX/Y The world point to convert into a local point.
+    @return (float localPointX/Y) The local point that was converted from the world point passed.
+*/
+ConsoleMethodWithDocs(SceneObject, getLocalPoint, ConsoleString, 3, 4, (float worldPointX/Y))
 {
    // The new position.
    Vector2 worldPoint;
@@ -621,10 +715,12 @@ ConsoleMethod(SceneObject, getLocalPoint, const char*, 3, 4, "(float worldPointX
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getWorldPoint, const char*, 3, 4, "(float localPointX/Y) - Returns a world point from the local point.\n"
-                                                                "Converts a point in local space to world space.\n"
-                                                                "@param localPointX/Y The local point to convert into a world point."
-                                                                "@return (float worldPointX/Y) The world point that was converted from the local point passed.")
+/*! Returns a world point from the local point.
+    Converts a point in local space to world space.
+    @param localPointX/Y The local point to convert into a world point.
+    @return (float worldPointX/Y) The world point that was converted from the local point passed.
+*/
+ConsoleMethodWithDocs(SceneObject, getWorldPoint, ConsoleString, 3, 4, (float localPointX/Y))
 {
    // The new position.
    Vector2 localPoint;
@@ -643,8 +739,8 @@ ConsoleMethod(SceneObject, getWorldPoint, const char*, 3, 4, "(float localPointX
    // Invalid
    else
    {
-      Con::warnf("SceneObject::getWorldPoint() - Invalid number of parameters!");
-      return false;
+        Con::warnf("SceneObject::getWorldPoint() - Invalid number of parameters!");
+        return NULL;
    }
 
     // Calculate world coordinate.
@@ -655,10 +751,12 @@ ConsoleMethod(SceneObject, getWorldPoint, const char*, 3, 4, "(float localPointX
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getLocalVector, const char*, 3, 4,    "(float worldVectorX/Y) - Returns a local vector from the world vector.\n"
-                                                                    "Converts a vector in world space to local space.\n"
-                                                                    "@param worldVectorX/Y The world vector to convert into a vector point."
-                                                                    "@return (float localVectorX/Y) The local vector that was converted from the world vector passed.")
+/*! Returns a local vector from the world vector.
+    Converts a vector in world space to local space.
+    @param worldVectorX/Y The world vector to convert into a vector point.
+    @return (float localVectorX/Y) The local vector that was converted from the world vector passed.
+*/
+ConsoleMethodWithDocs(SceneObject, getLocalVector, ConsoleString, 3, 4, (float worldVectorX/Y))
 {
    // The new vector.
    Vector2 worldVector;
@@ -689,10 +787,12 @@ ConsoleMethod(SceneObject, getLocalVector, const char*, 3, 4,    "(float worldVe
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getWorldVector, const char*, 3, 4,    "(float localVectorX/Y) - Returns a world vector from the local vector.\n"
-                                                                    "Converts a vector in local space to world space.\n"
-                                                                    "@param localVectorX/Y The local vector to convert into a world vector."
-                                                                    "@return (float worldVectorX/Y) The world vector that was converted from the local vector passed.")
+/*! Returns a world vector from the local vector.
+    Converts a vector in local space to world space.
+    @param localVectorX/Y The local vector to convert into a world vector.
+    @return (float worldVectorX/Y) The world vector that was converted from the local vector passed.
+*/
+ConsoleMethodWithDocs(SceneObject, getWorldVector, ConsoleString, 3, 4, (float localVectorX/Y))
 {
    // The new vector.
    Vector2 localVector;
@@ -712,7 +812,7 @@ ConsoleMethod(SceneObject, getWorldVector, const char*, 3, 4,    "(float localVe
    else
    {
       Con::warnf("SceneObject::getWorldVector() - Invalid number of parameters!");
-      return false;
+      return NULL;
    }
 
     // Calculate world vector.
@@ -723,9 +823,11 @@ ConsoleMethod(SceneObject, getWorldVector, const char*, 3, 4,    "(float localVe
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getIsPointInOOBB, bool, 3, 4,     "(worldPointX/Y) - Returns whether the world point intersects with the objects OOBB or not.\n"
-                                                                "@param worldPointX/Y The world point to check.\n"
-                                                                "@return (bool isInside) Whether the world point intersects with the objects OOBB or not.")
+/*! Returns whether the world point intersects with the objects OOBB or not.
+    @param worldPointX/Y The world point to check.
+    @return (bool isInside) Whether the world point intersects with the objects OOBB or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getIsPointInOOBB, ConsoleBool, 3, 4, (worldPointX/Y))
 {
    Vector2 worldPoint;
 
@@ -752,10 +854,12 @@ ConsoleMethod(SceneObject, getIsPointInOOBB, bool, 3, 4,     "(worldPointX/Y) - 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getIsPointInCollisionShape, bool, 4, 5,   "(int shapeIndex, worldPointX/Y) - Returns whether the world point intersects with the specified collision shape or not.\n"
-                                                                        "@param worldPointX/Y The world point to check.\n"
-                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                        "@return (bool isInside) Whether the world point intersects with the specified collision shape or not.")
+/*! Returns whether the world point intersects with the specified collision shape or not.
+    @param worldPointX/Y The world point to check.
+    @param shapeIndex - The index of the collision shape.
+    @return (bool isInside) Whether the world point intersects with the specified collision shape or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getIsPointInCollisionShape, ConsoleBool, 4, 5, (int shapeIndex, worldPointX/Y))
 {
     // Fetch shape count.
     const U32 shapeCount = object->getCollisionShapeCount();
@@ -796,8 +900,10 @@ ConsoleMethod(SceneObject, getIsPointInCollisionShape, bool, 4, 5,   "(int shape
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setBodyType, void, 3, 3, "(bodyType type) Sets the body type.\n"
-                                                      "@return No return value.")
+/*! Sets the body type.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setBodyType, ConsoleVoid, 3, 3, (bodyType type))
 {
     // Fetch body type.
     const b2BodyType type = SceneObject::getBodyTypeEnum(argv[2]);
@@ -812,101 +918,125 @@ ConsoleMethod(SceneObject, setBodyType, void, 3, 3, "(bodyType type) Sets the bo
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getBodyType, const char*, 2, 2,   "() Gets the body type.\n"
-                                                                "@return The body type." )
+/*! Gets the body type.
+    @return The body type.
+*/
+ConsoleMethodWithDocs(SceneObject, getBodyType, ConsoleString, 2, 2, ())
 {
     return SceneObject::getBodyTypeDescription( object->getBodyType() );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setActive, void, 2, 3,            "([bool status?]) - Sets the body active status.\n"
-                                                                "@param status - Whether the body should be active or not (defaults to true)."
-                                                                 "@return No return Value.")
+/*! Sets the body active status.
+    @param status - Whether the body should be active or not (defaults to true).
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setActive, ConsoleVoid, 2, 3, ([bool status?]))
 {
     object->setActive( argc > 2 ? dAtob(argv[2]) : true );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getActive, bool, 2, 2,            "() Gets the body active status.\n"
-                                                                "@return (bool status) Whether the body is active or not.")
+/*! Gets the body active status.
+    @return (bool status) Whether the body is active or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getActive, ConsoleBool, 2, 2, ())
 {
     return object->getActive();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setAwake, void, 2, 3,            "([bool status?]) - Sets whether the body is awake or not.\n"
-                                                                "@param status - Whether the body should be awake or not (defaults to true)."
-                                                                 "@return No return Value.")
+/*! Sets whether the body is awake or not.
+    @param status - Whether the body should be awake or not (defaults to true).
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setAwake, ConsoleVoid, 2, 3, ([bool status?]))
 {
     object->setAwake( argc > 2 ? dAtob(argv[2]) : true );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getAwake, bool, 2, 2,            "() Gets whether the body is awake or not.\n"
-                                                                "@return (bool status) Whether the body is awake or not.")
+/*! Gets whether the body is awake or not.
+    @return (bool status) Whether the body is awake or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getAwake, ConsoleBool, 2, 2, ())
 {
     return object->getAwake();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setBullet, void, 2, 3,            "([bool status?]) - Sets whether the body is a bullet or not.\n"
-                                                                "@param status - Whether the body should be a bullet (fast moving body) or not (defaults to true)."
-                                                                 "@return No return Value.")
+/*! Sets whether the body is a bullet or not.
+    @param status - Whether the body should be a bullet (fast moving body) or not (defaults to true).
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setBullet, ConsoleVoid, 2, 3, ([bool status?]))
 {
     object->setBullet( argc > 2 ? dAtob(argv[2]) : true );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getBullet, bool, 2, 2,            "() Gets whether the body is a bullet or not.\n"
-                                                                "@return (bool status) Whether the body is a bullet or not.")
+/*! Gets whether the body is a bullet or not.
+    @return (bool status) Whether the body is a bullet or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getBullet, ConsoleBool, 2, 2, ())
 {
     return object->getBullet();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setSleepingAllowed, void, 2, 3,   "([bool status?]) - Sets whether the body is allowed to sleep or not.\n"
-                                                                "@param status - Whether sleeping is allowed on the body or not (defaults to true)."
-                                                                "@return No return Value.")
+/*! Sets whether the body is allowed to sleep or not.
+    @param status - Whether sleeping is allowed on the body or not (defaults to true).
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setSleepingAllowed, ConsoleVoid, 2, 3, ([bool status?]))
 {
     object->setSleepingAllowed( argc > 2 ? dAtob(argv[2]) : true );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getSleepingAllowed, bool, 2, 2,   "() Gets whether the body is allowed to sleep or not.\n"
-                                                                "@return (bool status) Whether the body is allowed to sleep or not.")
+/*! Gets whether the body is allowed to sleep or not.
+    @return (bool status) Whether the body is allowed to sleep or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getSleepingAllowed, ConsoleBool, 2, 2, ())
 {
     return object->getSleepingAllowed();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getMass, F32, 2, 2,               "() Gets the total mass of the body.\n"
-                                                                "@return (float mass) The total mass of the body.  If object is not in a scene then mass is always zero.")
+/*! Gets the total mass of the body.
+    @return (float mass) The total mass of the body.  If object is not in a scene then mass is always zero.
+*/
+ConsoleMethodWithDocs(SceneObject, getMass, ConsoleFloat, 2, 2, ())
 {
     return object->getMass();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getInertia, F32, 2, 2,            "() Gets the rotation inertia of the body around the local origin.\n"
-                                                                "@return (float inertia) rotation inertia of the body around the local origin (Kg-m^2).  If object is not in a scene then mass is always zero.")
+/*! Gets the rotation inertia of the body around the local origin.
+    @return (float inertia) rotation inertia of the body around the local origin (Kg-m^2).  If object is not in a scene then mass is always zero.
+*/
+ConsoleMethodWithDocs(SceneObject, getInertia, ConsoleFloat, 2, 2, ())
 {
     return object->getInertia();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setCollisionSuppress, void, 2, 3, "([bool status?]) - Sets the collision suppress status.\n"
-                                                                "@param status Whether to suppress the collision or not (defaults to true).\n"
-                                                                "@return No return Value.")
+/*! Sets the collision suppress status.
+    @param status Whether to suppress the collision or not (defaults to true).
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setCollisionSuppress, ConsoleVoid, 2, 3, ([bool status?]))
 {
     // Set Collision Suppress.
     object->setCollisionSuppress( argc > 2 ? dAtob(argv[2]) : true );
@@ -914,8 +1044,10 @@ ConsoleMethod(SceneObject, setCollisionSuppress, void, 2, 3, "([bool status?]) -
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getCollisionSuppress, bool, 2, 2, "() Gets the collision suppress status.\n"
-                                                                "@return (bool status) Whether to supress the collision or not.")
+/*! Gets the collision suppress status.
+    @return (bool status) Whether to supress the collision or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getCollisionSuppress, ConsoleBool, 2, 2, ())
 {
     // Get Collision Callback.
     return object->getCollisionSuppress();
@@ -923,34 +1055,42 @@ ConsoleMethod(SceneObject, getCollisionSuppress, bool, 2, 2, "() Gets the collis
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setGatherContacts, void, 3, 3,    "(bool gatherContacts) - Sets whether to gather contacts or not.\n"
-                                                                "@param gatherContacts Whether to gather contacts or not.  By default contact gather is off as it can become expensive if a lot of contacts are being processed.\n"
-                                                                "@return No return value.")
+/*! Sets whether to gather contacts or not.
+    @param gatherContacts Whether to gather contacts or not.  By default contact gather is off as it can become expensive if a lot of contacts are being processed.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setGatherContacts, ConsoleVoid, 3, 3, (bool gatherContacts))
 {
     object->setGatherContacts( dAtob(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getGatherContacts, bool, 2, 2,    "() - Gets whether the gathering of contacts is active or not.\n"
-                                                                "@return Whether the gathering of contacts is active or not.")
+/*! Gets whether the gathering of contacts is active or not.
+    @return Whether the gathering of contacts is active or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getGatherContacts, ConsoleBool, 2, 2, ())
 {
     return object->getGatherContacts();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getContactCount, S32, 2, 2,   "() Gets the current contact count.  This will always be zero if contact gathering is off.\n"
-                                                            "@return (int count) - Gets the current contact count.")
+/*! Gets the current contact count.  This will always be zero if contact gathering is off.
+    @return (int count) - Gets the current contact count.
+*/
+ConsoleMethodWithDocs(SceneObject, getContactCount, ConsoleInt, 2, 2, ())
 {
     return object->getCurrentContactCount();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Gets the contact at the specified contact index.\n"
-                                                                "@param contactIndex The contact at the specified index.\n"
-                                                                "@return The contact at the specified index.\n" )
+/*! Gets the contact at the specified contact index.
+    @param contactIndex The contact at the specified index.
+    @return The contact at the specified index.
+*/
+ConsoleMethodWithDocs(SceneObject, getContact, ConsoleString, 3, 3, (contactIndex))
 {
     // Fetch contact index.
     const S32 contactIndex = dAtoi(argv[2]);
@@ -1016,7 +1156,7 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
     {
         dSprintf(pReturnBuffer, 128,
             "%d %d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
-            pSceneObjectCollider,
+            pSceneObjectCollider->getId(),
             shapeIndexThis, shapeIndexCollider,
             normal.x, normal.y,
             point1.x, point1.y,
@@ -1030,31 +1170,33 @@ ConsoleMethod(SceneObject, getContact, const char*, 3, 3,    "(contactIndex) Get
     {
         dSprintf(pReturnBuffer, 128,
             "%d %d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
-            pSceneObjectCollider,
+            pSceneObjectCollider->getId(),
             shapeIndexThis, shapeIndexCollider,
             normal.x, normal.y,
             point1.x, point1.y,
             normalImpulse1,
             tangentImpulse1 );
     }
-	else
-	{
+    else
+    {
         dSprintf(pReturnBuffer, 64,
             "%d %d %d",
-            pSceneObjectCollider,
+            pSceneObjectCollider->getId(),
             shapeIndexThis, shapeIndexCollider );
-	}
+    }
 
     return pReturnBuffer;
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setCollisionMasks, void, 3, 4,    "(groupMask, [layerMask]) - Sets the collision masks.\n"
-                                                                "Collision masks limit the objects that are collided with based on their scene group and scene Layer. In order for two objects to collide, the sending object must have the receiving object's Graph Group and Rendering Layer in its masks. The receiving object's masks, however, do not have to contain the sending object's Graph Group and Rendering Layer.\n"
-                                                                "@param sceneGroupMask The scene group(s) to enable collision with.\n"
-                                                                "@param sceneLayerMask The scene layer(s) to enable collision with. If sceneLayerMask is not specified then all scene layers will be included."
-                                                                "@return No return value.")
+/*! Sets the collision masks.
+    Collision masks limit the objects that are collided with based on their scene group and scene Layer. In order for two objects to collide, the sending object must have the receiving object's Graph Group and Rendering Layer in its masks. The receiving object's masks, however, do not have to contain the sending object's Graph Group and Rendering Layer.
+    @param sceneGroupMask The scene group(s) to enable collision with.
+    @param sceneLayerMask The scene layer(s) to enable collision with. If sceneLayerMask is not specified then all scene layers will be included.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setCollisionMasks, ConsoleVoid, 3, 4, (groupMask, [layerMask]))
 {
     // Calculate Group-Mask.
     const U32 groupMask = dAtoi(argv[2]);
@@ -1068,8 +1210,10 @@ ConsoleMethod(SceneObject, setCollisionMasks, void, 3, 4,    "(groupMask, [layer
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getCollisionMasks, const char*, 2, 2, "Gets the collision group/layer masks.\n"
-                                                                    "@return (groupMask/layerMask) The scene group(s) and scene layer(s) the object is enabled to collide with.")
+/*! Gets the collision group/layer masks.
+    @return (groupMask/layerMask) The scene group(s) and scene layer(s) the object is enabled to collide with.
+*/
+ConsoleMethodWithDocs(SceneObject, getCollisionMasks, ConsoleString, 2, 2, (...))
 {
     // Create Returnable Buffer.
     char* pBuffer = Con::getReturnBuffer(32);
@@ -1083,10 +1227,12 @@ ConsoleMethod(SceneObject, getCollisionMasks, const char*, 2, 2, "Gets the colli
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setCollisionAgainst, void, 3, 4, "(SceneObject object, [clearMasks? = false]) - Sets the collision masks against a specific object.\n"
-                                                               "@param object The SceneObject to set collision masks against\n"
-                                                               "@param clearMasks Whether or not to clear the collision masks before setting them against the object."
-                                                                "@return No return value.")
+/*! Sets the collision masks against a specific object.
+    @param object The SceneObject to set collision masks against
+    @param clearMasks Whether or not to clear the collision masks before setting them against the object.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setCollisionAgainst, ConsoleVoid, 3, 4, (SceneObject object, [clearMasks? = false]))
 {
     // Find SceneObject Object.
     const SceneObject* pSceneObject = dynamic_cast<SceneObject*>(Sim::findObject(argv[2]));
@@ -1107,9 +1253,11 @@ ConsoleMethod(SceneObject, setCollisionAgainst, void, 3, 4, "(SceneObject object
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setCollisionLayers, void, 2, 2 + MASK_BITCOUNT,  "(layers) - Sets the collision layers(s).\n"
-                                                                            "@param layers A list of layers to collide with.\n"
-                                                                            "@return No return value.")
+/*! Sets the collision layers(s).
+    @param layers A list of layers to collide with.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setCollisionLayers, ConsoleVoid, 2, 2 + MASK_BITCOUNT, (layers))
 {
     // Set to all if no arguments.
     if ( argc == 2 )
@@ -1189,9 +1337,11 @@ ConsoleMethod(SceneObject, setCollisionLayers, void, 2, 2 + MASK_BITCOUNT,  "(la
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setCollisionGroups, void, 2, 2 + MASK_BITCOUNT,  "(groups) - Sets the collision group(s).\n"
-                                                                            "@param groups A list of collision groups to collide with.\n"
-                                                                            "@return No return value.")
+/*! Sets the collision group(s).
+    @param groups A list of collision groups to collide with.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setCollisionGroups, ConsoleVoid, 2, 2 + MASK_BITCOUNT, (groups))
 {
     // Set to all if no arguments.
     if ( argc == 2 )
@@ -1269,8 +1419,10 @@ ConsoleMethod(SceneObject, setCollisionGroups, void, 2, 2 + MASK_BITCOUNT,  "(gr
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getCollisionLayers, const char*, 2, 2, "() - Gets the collision layers.\n"
-                                                                     "@return (collisionLayers) A list of collision layers.")
+/*! Gets the collision layers.
+    @return (collisionLayers) A list of collision layers.
+*/
+ConsoleMethodWithDocs(SceneObject, getCollisionLayers, ConsoleString, 2, 2, ())
 {
     U32 mask = object->getCollisionLayerMask();
 
@@ -1293,8 +1445,10 @@ ConsoleMethod(SceneObject, getCollisionLayers, const char*, 2, 2, "() - Gets the
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getCollisionGroups, const char*, 2, 2, "() - Gets the collision groups.\n"
-                                                                     "@return (collisionGroups) A list of collision groups.")
+/*! Gets the collision groups.
+    @return (collisionGroups) A list of collision groups.
+*/
+ConsoleMethodWithDocs(SceneObject, getCollisionGroups, ConsoleString, 2, 2, ())
 {
     U32 mask = object->getCollisionGroupMask();
 
@@ -1317,10 +1471,12 @@ ConsoleMethod(SceneObject, getCollisionGroups, const char*, 2, 2, "() - Gets the
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setDefaultDensity, void, 3, 4,    "(float density, [bool updateShapes]) - Sets the default density to use when creating collision shapes.\n"
-                                                                "@param density The default density to use when creating collision shapes."
-                                                                "@param updateShapes Whether to update the density on any existing shapes or not (default is true)."
-                                                                "@return No return Value.")
+/*! Sets the default density to use when creating collision shapes.
+    @param density The default density to use when creating collision shapes.
+    @param updateShapes Whether to update the density on any existing shapes or not (default is true).
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setDefaultDensity, ConsoleVoid, 3, 4, (float density, [bool updateShapes]))
 {
     // Fetch density.
     const F32 density = dAtof(argv[2]);
@@ -1335,8 +1491,10 @@ ConsoleMethod(SceneObject, setDefaultDensity, void, 3, 4,    "(float density, [b
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getDefaultDensity, F32, 2, 2,  "() - Gets the default density.\n"
-                                                            "@return (float density) The default density.")
+/*! Gets the default density.
+    @return (float density) The default density.
+*/
+ConsoleMethodWithDocs(SceneObject, getDefaultDensity, ConsoleFloat, 2, 2, ())
 {
     // Get default density.
     return object->getDefaultDensity();
@@ -1344,10 +1502,12 @@ ConsoleMethod(SceneObject, getDefaultDensity, F32, 2, 2,  "() - Gets the default
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setDefaultFriction, void, 3, 4,   "(float friction, [bool updateShapes]) - Sets the default friction to use when creating collision shapes.\n"
-                                                                "@param friction The default friction to use when creating collision shapes."
-                                                                "@param updateShapes Whether to update the friction on any existing shapes or not (default is true)."
-                                                                "@return No return Value.")
+/*! Sets the default friction to use when creating collision shapes.
+    @param friction The default friction to use when creating collision shapes.
+    @param updateShapes Whether to update the friction on any existing shapes or not (default is true).
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setDefaultFriction, ConsoleVoid, 3, 4, (float friction, [bool updateShapes]))
 {
     // Fetch friction.
     const F32 friction = dAtof(argv[2]);
@@ -1362,8 +1522,10 @@ ConsoleMethod(SceneObject, setDefaultFriction, void, 3, 4,   "(float friction, [
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getDefaultFriction, F32, 2, 2,     "() - Gets the default friction.\n"
-                                                                "@return (float friction) The default friction.")
+/*! Gets the default friction.
+    @return (float friction) The default friction.
+*/
+ConsoleMethodWithDocs(SceneObject, getDefaultFriction, ConsoleFloat, 2, 2, ())
 {
     // Get default friction.
     return object->getDefaultFriction();
@@ -1371,10 +1533,12 @@ ConsoleMethod(SceneObject, getDefaultFriction, F32, 2, 2,     "() - Gets the def
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setDefaultRestitution, void, 3, 4,    "(float restitution, [bool updateShapes]) - Sets the default restitution to use when creating collision shapes..\n"
-                                                                    "@param restitution The default restitution to use when creating collision shapes."
-                                                                    "@param updateShapes Whether to update the restitution on any existing shapes or not (default is true)."
-                                                                    "@return No return Value.")
+/*! Sets the default restitution to use when creating collision shapes..
+    @param restitution The default restitution to use when creating collision shapes.
+    @param updateShapes Whether to update the restitution on any existing shapes or not (default is true).
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setDefaultRestitution, ConsoleVoid, 3, 4, (float restitution, [bool updateShapes]))
 {
     // Fetch restitution.
     const F32 restitution = dAtof(argv[2]);
@@ -1389,8 +1553,10 @@ ConsoleMethod(SceneObject, setDefaultRestitution, void, 3, 4,    "(float restitu
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getDefaultRestitution, F32, 2, 2,  "() - Gets the default restitution.\n"
-                                                            "@return (float density) The default restitution.")
+/*! Gets the default restitution.
+    @return (float density) The default restitution.
+*/
+ConsoleMethodWithDocs(SceneObject, getDefaultRestitution, ConsoleFloat, 2, 2, ())
 {
     // Get default restitution.
     return object->getDefaultRestitution();
@@ -1398,11 +1564,13 @@ ConsoleMethod(SceneObject, getDefaultRestitution, F32, 2, 2,  "() - Gets the def
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setLinearVelocity, void, 3, 4, "(float velocityX, float velocityY) - Sets Objects Linear Velocity.\n"
-                                                             "Sets the velocity at which the object will move.\n"
-                                                             "@param velocityX The x component of the velocity.\n"
-                                                             "@param velocityY The y component of the velocity.\n\n"
-                                                            "@return No return Value.")
+/*! Sets Objects Linear Velocity.
+    Sets the velocity at which the object will move.
+    @param velocityX The x component of the velocity.
+    @param velocityY The y component of the velocity.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setLinearVelocity, ConsoleVoid, 3, 4, (float velocityX, float velocityY))
 {
    // The velocity.
    Vector2 velocity;
@@ -1431,9 +1599,11 @@ ConsoleMethod(SceneObject, setLinearVelocity, void, 3, 4, "(float velocityX, flo
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setLinearVelocityX, void, 3, 3,   "(float velocityX) - Sets Objects Linear Velocity X-Component.\n"
-                                                                "@param velocityX The x component of the velocity.\n"
-                                                                "@return No return Value.")
+/*! Sets Objects Linear Velocity X-Component.
+    @param velocityX The x component of the velocity.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setLinearVelocityX, ConsoleVoid, 3, 3, (float velocityX))
 {
     // Set Linear Velocity X-Component.
     object->setLinearVelocity( Vector2( dAtof(argv[2]), object->getLinearVelocity().y ) );
@@ -1441,9 +1611,11 @@ ConsoleMethod(SceneObject, setLinearVelocityX, void, 3, 3,   "(float velocityX) 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setLinearVelocityY, void, 3, 3,   "(float velocityY) - Sets Objects Linear Velocity Y-Component.\n"
-                                                                "@param velocityY The y component of the velocity.\n"
-                                                                "@return No return Value.")
+/*! Sets Objects Linear Velocity Y-Component.
+    @param velocityY The y component of the velocity.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setLinearVelocityY, ConsoleVoid, 3, 3, (float velocityY))
 {
     // Set Linear Velocity Y-Component.
     object->setLinearVelocity( Vector2( object->getLinearVelocity().x, dAtof(argv[2]) ) );
@@ -1451,12 +1623,14 @@ ConsoleMethod(SceneObject, setLinearVelocityY, void, 3, 3,   "(float velocityY) 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setLinearVelocityPolar, void, 4, 4,   "(float angle, float speed) - Sets Objects Linear Velocity using Polar-speed.\n"
-                                                                    "Sets the speed and direction at which the object will move.\n"
-                                                                    "This has the same effect as setLinearVelocity(), it just sets the velocity in a different way.\n"
-                                                                    "@param angle The angle of the direction at which the object to move.\n"
-                                                                    "@param speed The speed at which the object will move.\n"
-                                                                    "@return No return Value.")
+/*! Sets Objects Linear Velocity using Polar-speed.
+    Sets the speed and direction at which the object will move.
+    This has the same effect as setLinearVelocity(), it just sets the velocity in a different way.
+    @param angle The angle of the direction at which the object to move.
+    @param speed The speed at which the object will move.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setLinearVelocityPolar, ConsoleVoid, 4, 4, (float angle, float speed))
 {
     // Renormalize Angle.
     F32 angle = mDegToRad(mFmod(dAtof(argv[2]), 360.0f));
@@ -1469,13 +1643,15 @@ ConsoleMethod(SceneObject, setLinearVelocityPolar, void, 4, 4,   "(float angle, 
     mSinCos( angle, sin, cos );
 
     // Set Gross Linear Velocity.
-    object->setLinearVelocity( Vector2( sin*speed, -cos*speed ) );
+    object->setLinearVelocity( Vector2( cos*speed, sin*speed ) );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getLinearVelocityPolar, const char*, 2, 2, "() - Gets Objects Linear Velocity using Polar angle/speed.\n"
-                                                                         "@return (float angle, float speed) The angle and speed the object is moving at.")
+/*! Gets Objects Linear Velocity using Polar angle/speed.
+    @return (float angle, float speed) The angle and speed the object is moving at.
+*/
+ConsoleMethodWithDocs(SceneObject, getLinearVelocityPolar, ConsoleString, 2, 2, ())
 {
     // Get Linear Velocity.
     Vector2 linearVelocity = object->getLinearVelocity();
@@ -1484,7 +1660,7 @@ ConsoleMethod(SceneObject, getLinearVelocityPolar, const char*, 2, 2, "() - Gets
     char* pBuffer = Con::getReturnBuffer(32);
 
     // Format Buffer.
-    dSprintf(pBuffer, 32, "%g %g", mRadToDeg(mAtan(linearVelocity.x, -linearVelocity.y)), linearVelocity.Length() );
+    dSprintf(pBuffer, 32, "%g %g", mRadToDeg(mAtan(linearVelocity.x, linearVelocity.y)), linearVelocity.Length() );
 
     // Return Velocity.
     return pBuffer;
@@ -1492,8 +1668,10 @@ ConsoleMethod(SceneObject, getLinearVelocityPolar, const char*, 2, 2, "() - Gets
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getLinearVelocity, const char*, 2, 2, "() - Gets Object Linear Velocity.\n"
-                                                                    "@return (float velocityX, float velocityY) The x and y velocities of the object.")
+/*! Gets Object Linear Velocity.
+    @return (float velocityX, float velocityY) The x and y velocities of the object.
+*/
+ConsoleMethodWithDocs(SceneObject, getLinearVelocity, ConsoleString, 2, 2, ())
 {
     // Get Linear Velocity.
     Vector2 linearVelocity = object->getLinearVelocity();
@@ -1503,8 +1681,10 @@ ConsoleMethod(SceneObject, getLinearVelocity, const char*, 2, 2, "() - Gets Obje
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getLinearVelocityX, F32, 2, 2, "() - Gets Object Linear Velocity X.\n"
-                                                             "@return (float velocityX) The object's velocity along the x axis.")
+/*! Gets Object Linear Velocity X.
+    @return (float velocityX) The object's velocity along the x axis.
+*/
+ConsoleMethodWithDocs(SceneObject, getLinearVelocityX, ConsoleFloat, 2, 2, ())
 {
     // Get Linear Velocity X.
     return object->getLinearVelocity().x;
@@ -1512,8 +1692,10 @@ ConsoleMethod(SceneObject, getLinearVelocityX, F32, 2, 2, "() - Gets Object Line
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getLinearVelocityY, F32, 2, 2, "() - Gets Object Linear Velocity Y.\n"
-                                                             "@return (float velocityY) The object's velocity along the y axis.")
+/*! Gets Object Linear Velocity Y.
+    @return (float velocityY) The object's velocity along the y axis.
+*/
+ConsoleMethodWithDocs(SceneObject, getLinearVelocityY, ConsoleFloat, 2, 2, ())
 {
     // Get Linear Velocity Y.
     return object->getLinearVelocity().y;
@@ -1521,8 +1703,10 @@ ConsoleMethod(SceneObject, getLinearVelocityY, F32, 2, 2, "() - Gets Object Line
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getLinearVelocityFromWorldPoint, const char*, 3, 4,   "(worldPointX/Y) - Gets the linear velocity from a world point.\n"
-                                                                                    "@return (float linearVelocityX/Y) The linear velocity at the world point.")
+/*! Gets the linear velocity from a world point.
+    @return (float linearVelocityX/Y) The linear velocity at the world point.
+*/
+ConsoleMethodWithDocs(SceneObject, getLinearVelocityFromWorldPoint, ConsoleString, 3, 4, (worldPointX/Y))
 {
     // World point.
     const U32 worldPointElementCount = Utility::mGetStringElementCount(argv[2]);
@@ -1553,8 +1737,10 @@ ConsoleMethod(SceneObject, getLinearVelocityFromWorldPoint, const char*, 3, 4,  
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getLinearVelocityFromLocalPoint, const char*, 3, 4,   "(localPointX/Y) - Gets the linear velocity from a local point.\n"
-                                                                                    "@return (float linearVelocityX/Y) The linear velocity at the local point.")
+/*! Gets the linear velocity from a local point.
+    @return (float linearVelocityX/Y) The linear velocity at the local point.
+*/
+ConsoleMethodWithDocs(SceneObject, getLinearVelocityFromLocalPoint, ConsoleString, 3, 4, (localPointX/Y))
 {
     // Local point.
     const U32 localPointElementCount = Utility::mGetStringElementCount(argv[2]);
@@ -1585,9 +1771,11 @@ ConsoleMethod(SceneObject, getLinearVelocityFromLocalPoint, const char*, 3, 4,  
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setAngularVelocity, void, 3, 3,   "(float velocity) - Sets Objects Angular Velocity.\n"
-                                                                "@param velocity The speed at which the object will rotate.\n"
-                                                                "@return No return Value.")
+/*! Sets Objects Angular Velocity.
+    @param velocity The speed at which the object will rotate.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setAngularVelocity, ConsoleVoid, 3, 3, (float velocity))
 {
     // Set Angular Velocity.
     object->setAngularVelocity( mDegToRad( dAtof(argv[2]) ) );
@@ -1595,8 +1783,10 @@ ConsoleMethod(SceneObject, setAngularVelocity, void, 3, 3,   "(float velocity) -
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getAngularVelocity, F32, 2, 2, "() - Gets Object Angular Velocity.\n"
-                                                             "@return (float velocity) The speed at which the object is rotating.")
+/*! Gets Object Angular Velocity.
+    @return (float velocity) The speed at which the object is rotating.
+*/
+ConsoleMethodWithDocs(SceneObject, getAngularVelocity, ConsoleFloat, 2, 2, ())
 {
     // Get Angular Velocity.
     return mRadToDeg( object->getAngularVelocity() );
@@ -1604,9 +1794,11 @@ ConsoleMethod(SceneObject, getAngularVelocity, F32, 2, 2, "() - Gets Object Angu
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setLinearDamping, void, 3, 3,     "(float damping) - Sets the linear damping.\n"
-                                                                "@param damping - The linear damping scale."
-                                                                "@return No return Value.")
+/*! Sets the linear damping.
+    @param damping - The linear damping scale.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setLinearDamping, ConsoleVoid, 3, 3, (float damping))
 {
     // Set linear damping.
     object->setLinearDamping( dAtof(argv[2]) );
@@ -1614,8 +1806,10 @@ ConsoleMethod(SceneObject, setLinearDamping, void, 3, 3,     "(float damping) - 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getLinearDamping, F32, 2, 2,  "() - Gets the linear damping.\n"
-                                                            "@return (float damping) The linear damping.")
+/*! Gets the linear damping.
+    @return (float damping) The linear damping.
+*/
+ConsoleMethodWithDocs(SceneObject, getLinearDamping, ConsoleFloat, 2, 2, ())
 {
     // Get linear damping.
     return object->getLinearDamping();
@@ -1623,9 +1817,11 @@ ConsoleMethod(SceneObject, getLinearDamping, F32, 2, 2,  "() - Gets the linear d
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setAngularDamping, void, 3, 3,    "(float damping) - Sets the angular damping.\n"
-                                                                "@param damping - The angular damping scale."
-                                                                "@return No return Value.")
+/*! Sets the angular damping.
+    @param damping - The angular damping scale.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setAngularDamping, ConsoleVoid, 3, 3, (float damping))
 {
     // Set angular damping.
     object->setAngularDamping( dAtof(argv[2]) );
@@ -1633,8 +1829,10 @@ ConsoleMethod(SceneObject, setAngularDamping, void, 3, 3,    "(float damping) - 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getAngularDamping, F32, 2, 2, "() - Gets the angular damping.\n"
-                                                            "@return (float damping) The angular damping.")
+/*! Gets the angular damping.
+    @return (float damping) The angular damping.
+*/
+ConsoleMethodWithDocs(SceneObject, getAngularDamping, ConsoleFloat, 2, 2, ())
 {
     // Get angular damping.
     return object->getAngularDamping();
@@ -1642,14 +1840,16 @@ ConsoleMethod(SceneObject, getAngularDamping, F32, 2, 2, "() - Gets the angular 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, moveTo, bool, 4, 7,  "(worldPoint X/Y, speed, [autoStop = true], [warpToTarget = true]) - Moves the object to the specified world point.\n"
-                                                "The point is moved by calculating the initial linear velocity required and applies it.\n"
-                                                "The object may never reach the point if it has linear damping applied or collides with another object.\n"
-                                                "@param worldPoint/Y The world point to move the object to.\n"
-                                                "@param speed The speed (in m/s) to use to move to the specified point."
-                                                "@param autoStop? Whether to automatically set the linear velocity to zero when time has elapsed or not\n"
-                                                "@param warpToTarget? Whether to move instantly to the target point after the specified time or not in-case the target was not quite reached.\n"
-                                                "@return Whether the move could be started or not.")
+/*! Moves the object to the specified world point.
+    The point is moved by calculating the initial linear velocity required and applies it.
+    The object may never reach the point if it has linear damping applied or collides with another object.
+    @param worldPoint/Y The world point to move the object to.
+    @param speed The speed (in m/s) to use to move to the specified point.
+    @param autoStop? Whether to automatically set the linear velocity to zero when time has elapsed or not
+    @param warpToTarget? Whether to move instantly to the target point after the specified time or not in-case the target was not quite reached.
+    @return Whether the move could be started or not.
+*/
+ConsoleMethodWithDocs(SceneObject, moveTo, ConsoleBool, 4, 7, (worldPoint X/Y, speed, [autoStop = true], [warpToTarget = true]))
 {
     // World point.
     const U32 worldPointElementCount = Utility::mGetStringElementCount(argv[2]);
@@ -1697,14 +1897,16 @@ ConsoleMethod(SceneObject, moveTo, bool, 4, 7,  "(worldPoint X/Y, speed, [autoSt
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, rotateTo, bool, 4, 6,    "(angle, speed, [autoStop = true], [warpToTarget = true]) - Rotates the object to the specified angle.\n"
-                                                    "The angle is rotated to by calculating the initial angular velocity required and applies it.\n"
-                                                    "The object may never reach the point if it has angular damping applied or collides with another object.\n"
-                                                    "@param angle The angle to rotate the object to.\n"
-                                                    "@param speed The speed (in degree/s) to use to rotate to the specified angle."
-                                                    "@param autoStop? Whether to automatically set the angular velocity to zero when time has elapsed or not\n"
-                                                    "@param warpToTarget? Whether to rotate instantly to the target angle after the specified time or not in-case the target was not quite reached.\n"
-                                                    "@return Whether the rotation could be started or not.")
+/*! Rotates the object to the specified angle.
+    The angle is rotated to by calculating the initial angular velocity required and applies it.
+    The object may never reach the point if it has angular damping applied or collides with another object.
+    @param angle The angle to rotate the object to.
+    @param speed The speed (in degree/s) to use to rotate to the specified angle.
+    @param autoStop? Whether to automatically set the angular velocity to zero when time has elapsed or not
+    @param warpToTarget? Whether to rotate instantly to the target angle after the specified time or not in-case the target was not quite reached.
+    @return Whether the rotation could be started or not.
+*/
+ConsoleMethodWithDocs(SceneObject, rotateTo, ConsoleBool, 4, 6, (angle, speed, [autoStop = true], [warpToTarget = true]))
 {
     // Fetch angle.
     const F32 angle = mDegToRad(dAtof(argv[2]));
@@ -1734,9 +1936,11 @@ ConsoleMethod(SceneObject, rotateTo, bool, 4, 6,    "(angle, speed, [autoStop = 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, cancelMoveTo, void, 2, 3,     "([autoStop = true]) - Stop a previous 'moveTo' command.\n"
-                                                            "@param autoStop? - Whether to automatically set the linear velocity to zero or not\n"
-                                                            "@return No return value.")
+/*! Stop a previous 'moveTo' command.
+    @param autoStop? - Whether to automatically set the linear velocity to zero or not
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, cancelMoveTo, ConsoleVoid, 2, 3, ([autoStop = true]))
 {
     if ( argc == 2 )
     {
@@ -1751,9 +1955,11 @@ ConsoleMethod(SceneObject, cancelMoveTo, void, 2, 3,     "([autoStop = true]) - 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, cancelRotateTo, void, 2, 3,   "([autoStop = true]) - Stop a previous 'rotateTo' command.\n"
-                                                            "@param autoStop? - Whether to automatically set the angular velocity to zero or not\n"
-                                                            "@return No return value.")
+/*! Stop a previous 'rotateTo' command.
+    @param autoStop? - Whether to automatically set the angular velocity to zero or not
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, cancelRotateTo, ConsoleVoid, 2, 3, ([autoStop = true]))
 {
     if ( argc == 2 )
     {
@@ -1768,27 +1974,33 @@ ConsoleMethod(SceneObject, cancelRotateTo, void, 2, 3,   "([autoStop = true]) - 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, isMoveToComplete, bool, 2, 2,     "() - Gets whether a previous 'moveTo' command has completed or not.\n"
-                                                                "@return No return value.")
+/*! Gets whether a previous 'moveTo' command has completed or not.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, isMoveToComplete, ConsoleBool, 2, 2, ())
 {
     return object->isMoveToComplete();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, isRotateToComplete, bool, 2, 2,   "() - Gets whether a previous 'rotateTo' command has completed or not.\n"
-                                                                "@return No return value.")
+/*! Gets whether a previous 'rotateTo' command has completed or not.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, isRotateToComplete, ConsoleBool, 2, 2, ())
 {
     return object->isRotateToComplete();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, applyForce, void, 4, 6,       "(worldForce X/Y, [worldPoint X/Y]) - Applies a force at a world point.\n"
-                                                            "If the force is not applied at the center of mass, it will generate a torque and affect the angular velocity.\n"
-                                                            "@param worldForceX/Y - The world force vector in Newtons (N)."
-                                                            "@param worldPointX/Y - The world point where the force is applied.  If world point is not specified, the center of mass is used."
-                                                            "@return No return Value.")
+/*! Applies a force at a world point.
+    If the force is not applied at the center of mass, it will generate a torque and affect the angular velocity.
+    @param worldForceX/Y - The world force vector in Newtons (N).
+    @param worldPointX/Y - The world point where the force is applied.  If world point is not specified, the center of mass is used.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, applyForce, ConsoleVoid, 4, 6, (worldForce X/Y, [worldPoint X/Y]))
 {
     // World force.
     const U32 worldForceElementCount = Utility::mGetStringElementCount(argv[2]);
@@ -1816,6 +2028,7 @@ ConsoleMethod(SceneObject, applyForce, void, 4, 6,       "(worldForce X/Y, [worl
     {
         // Apply force.
         object->applyForce( worldForce );
+        return;
     }
 
     // World point.
@@ -1845,10 +2058,12 @@ ConsoleMethod(SceneObject, applyForce, void, 4, 6,       "(worldForce X/Y, [worl
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, applyTorque, void, 3, 3,      "(torque) - Applies a torque.\n"
-                                                            "This affects the angular velocity without affecting the linear velocity of the center of mass.\n"
-                                                            "@param torque - The torque in Newton-metres (N-m)."
-                                                            "@return No return Value.")
+/*! Applies a torque.
+    This affects the angular velocity without affecting the linear velocity of the center of mass.
+    @param torque - The torque in Newton-metres (N-m).
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, applyTorque, ConsoleVoid, 3, 3, (torque))
 {
     // Fetch torque.
     const F32 torque = dAtof(argv[2]);
@@ -1859,11 +2074,13 @@ ConsoleMethod(SceneObject, applyTorque, void, 3, 3,      "(torque) - Applies a t
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, applyLinearImpulse, void, 4, 6,   "(worldImpulse X/Y, [worldPoint X/Y]) - Applies an impulse at a world point.\n"
-                                                                "This immediately modifies the linear velocity.  It also modifies the angular velocity if the point of application is not the center of mass.\n"
-                                                                "@param worldImpulse/Y - The world impulse vector in Newtons (N-seconds) or Kg-m/s."
-                                                                "@param worldPointX/Y - The world point where the force is applied.  If world point is not specified, the center of mass is used."
-                                                                "@return No return Value.")
+/*! Applies an impulse at a world point.
+    This immediately modifies the linear velocity.  It also modifies the angular velocity if the point of application is not the center of mass.
+    @param worldImpulse/Y - The world impulse vector in Newtons (N-seconds) or Kg-m/s.
+    @param worldPointX/Y - The world point where the force is applied.  If world point is not specified, the center of mass is used.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, applyLinearImpulse, ConsoleVoid, 4, 6, (worldImpulse X/Y, [worldPoint X/Y]))
 {
     // World impulse.
     const U32 worldImpulseElementCount = Utility::mGetStringElementCount(argv[2]);
@@ -1891,6 +2108,7 @@ ConsoleMethod(SceneObject, applyLinearImpulse, void, 4, 6,   "(worldImpulse X/Y,
     {
         // Apply force.
         object->applyForce( worldImpulse );
+        return;
     }
 
     // World point.
@@ -1920,9 +2138,11 @@ ConsoleMethod(SceneObject, applyLinearImpulse, void, 4, 6,   "(worldImpulse X/Y,
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, applyAngularImpulse, void, 3, 3,  "(impulse) - Applies an angular impulse.\n"
-                                                                "@param impulse - The impulse in Kg*m*m/s."
-                                                                "@return No return Value.")
+/*! Applies an angular impulse.
+    @param impulse - The impulse in Kg*m*m/s.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, applyAngularImpulse, ConsoleVoid, 3, 3, (impulse))
 {
     // Fetch impulse.
     const F32 impulse = dAtof(argv[2]);
@@ -1933,9 +2153,11 @@ ConsoleMethod(SceneObject, applyAngularImpulse, void, 3, 3,  "(impulse) - Applie
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setGravityScale, void, 3, 3,  "(float scale) - Sets the scaled world gravity.\n"
-                                                            "@param scale - The scaled world gravity."
-                                                            "@return No return Value.")
+/*! Sets the scaled world gravity.
+    @param scale - The scaled world gravity.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setGravityScale, ConsoleVoid, 3, 3, (float scale))
 {
     // Set gravity scale.
     object->setGravityScale( dAtof(argv[2]) );
@@ -1943,8 +2165,10 @@ ConsoleMethod(SceneObject, setGravityScale, void, 3, 3,  "(float scale) - Sets t
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getGravityScale, F32,2, 2,    "() - Gets the gravity scale.\n"
-                                                            "@return (float scale) The gravity scale.")
+/*! Gets the gravity scale.
+    @return (float scale) The gravity scale.
+*/
+ConsoleMethodWithDocs(SceneObject, getGravityScale, ConsoleFloat,2, 2, ())
 {
     // Get gravity scale.
     return object->getGravityScale();
@@ -1952,9 +2176,11 @@ ConsoleMethod(SceneObject, getGravityScale, F32,2, 2,    "() - Gets the gravity 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, deleteCollisionShape, bool, 3, 3,        "(int shapeIndex) - Deletes the specified collision shape.\n"
-                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                        "@return Whether the collision shape was successfully deleted or not." )
+/*! Deletes the specified collision shape.
+    @param shapeIndex - The index of the collision shape.
+    @return Whether the collision shape was successfully deleted or not.
+*/
+ConsoleMethodWithDocs( SceneObject, deleteCollisionShape, ConsoleBool, 3, 3, (int shapeIndex))
 {
     // Fetch shape count.
     const U32 shapeCount = object->getCollisionShapeCount();
@@ -1977,16 +2203,20 @@ ConsoleMethod( SceneObject, deleteCollisionShape, bool, 3, 3,        "(int shape
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, clearCollisionShapes, void, 2, 2,        "() - Deletes all collision shapes.\n"
-                                                                        "@return No return value." )
+/*! Deletes all collision shapes.
+    @return No return value.
+*/
+ConsoleMethodWithDocs( SceneObject, clearCollisionShapes, ConsoleVoid, 2, 2, ())
 {
     object->clearCollisionShapes();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getCollisionShapeCount, S32, 2, 2,    "() - Gets the number of collision shapes.\n"
-                                                                    "@return (int count) The number of collision shapes.")
+/*! Gets the number of collision shapes.
+    @return (int count) The number of collision shapes.
+*/
+ConsoleMethodWithDocs(SceneObject, getCollisionShapeCount, ConsoleInt, 2, 2, ())
 {
     // Get collision shape count.
     return object->getCollisionShapeCount();
@@ -1994,9 +2224,11 @@ ConsoleMethod(SceneObject, getCollisionShapeCount, S32, 2, 2,    "() - Gets the 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getCollisionShapeType, const char*, 3, 3, "(int shapeIndex) - Gets the type of collision shape at the specified index.\n"
-                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                        "@return (type) The type of collision shape at the specified index.")
+/*! Gets the type of collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @return (type) The type of collision shape at the specified index.
+*/
+ConsoleMethodWithDocs(SceneObject, getCollisionShapeType, ConsoleString, 3, 3, (int shapeIndex))
 {
     // Fetch shape count.
     const U32 shapeCount = object->getCollisionShapeCount();
@@ -2016,9 +2248,11 @@ ConsoleMethod(SceneObject, getCollisionShapeType, const char*, 3, 3, "(int shape
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getCollisionShapeArea, F32, 3, 3,    "(int shapeIndex) - Gets the area of collision shape at the specified index.\n"
-                                                                "@param shapeIndex - The index of the collision shape."
-                                                                "@return (area) The area of collision shape at the specified index.")
+/*! Gets the area of collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @return (area) The area of collision shape at the specified index.
+*/
+ConsoleMethodWithDocs(SceneObject, getCollisionShapeArea, ConsoleFloat, 3, 3, (int shapeIndex))
 {
     // Fetch shape count.
     const U32 shapeCount = object->getCollisionShapeCount();
@@ -2079,10 +2313,12 @@ ConsoleMethod(SceneObject, getCollisionShapeArea, F32, 3, 3,    "(int shapeIndex
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, setCollisionShapeDensity, void, 4, 4,    "(int shapeIndex, float density) - Sets the density of the collision shape at the specified index.\n"
-                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                        "@param density - The collision shape density."
-                                                                        "@return No return value." )
+/*! Sets the density of the collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @param density - The collision shape density.
+    @return No return value.
+*/
+ConsoleMethodWithDocs( SceneObject, setCollisionShapeDensity, ConsoleVoid, 4, 4, (int shapeIndex, float density))
 {
     // Fetch shape count.
     const U32 shapeCount = object->getCollisionShapeCount();
@@ -2110,9 +2346,11 @@ ConsoleMethod( SceneObject, setCollisionShapeDensity, void, 4, 4,    "(int shape
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getCollisionShapeDensity, F32, 3, 3, "(int shapeIndex) - Gets the density of the collision shape at the specified index.\n"
-                                                                    "@param shapeIndex - The index of the collision shape."
-                                                                    "@return The density of the collision shape at the specified index (-1 if error)." )
+/*! Gets the density of the collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @return The density of the collision shape at the specified index (-1 if error).
+*/
+ConsoleMethodWithDocs( SceneObject, getCollisionShapeDensity, ConsoleFloat, 3, 3, (int shapeIndex))
 {
     // Fetch shape count.
     const U32 shapeCount = object->getCollisionShapeCount();
@@ -2133,10 +2371,12 @@ ConsoleMethod( SceneObject, getCollisionShapeDensity, F32, 3, 3, "(int shapeInde
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, setCollisionShapeFriction, void, 4, 4,   "(int shapeIndex, float friction) - Sets the friction of the collision shape at the specified index.\n"
-                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                        "@param friction - The collision shape friction."
-                                                                        "@return No return value." )
+/*! Sets the friction of the collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @param friction - The collision shape friction.
+    @return No return value.
+*/
+ConsoleMethodWithDocs( SceneObject, setCollisionShapeFriction, ConsoleVoid, 4, 4, (int shapeIndex, float friction))
 {
     // Fetch shape count.
     const U32 shapeCount = object->getCollisionShapeCount();
@@ -2164,9 +2404,11 @@ ConsoleMethod( SceneObject, setCollisionShapeFriction, void, 4, 4,   "(int shape
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getCollisionShapeFriction, F32, 3, 3, "(int shapeIndex) - Gets the friction of the collision shape at the specified index.\n"
-                                                                    "@param shapeIndex - The index of the collision shape."
-                                                                    "@return The friction of the collision shape at the specified index (-1 if error)." )
+/*! Gets the friction of the collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @return The friction of the collision shape at the specified index (-1 if error).
+*/
+ConsoleMethodWithDocs( SceneObject, getCollisionShapeFriction, ConsoleFloat, 3, 3, (int shapeIndex))
 {
     // Fetch shape count.
     const U32 shapeCount = object->getCollisionShapeCount();
@@ -2187,10 +2429,12 @@ ConsoleMethod( SceneObject, getCollisionShapeFriction, F32, 3, 3, "(int shapeInd
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, setCollisionShapeRestitution, void, 4, 4,    "(int shapeIndex, float restitution) - Sets the restitution of the collision shape at the specified index.\n"
-                                                                            "@param shapeIndex - The index of the collision shape."
-                                                                            "@param density - The collision shape restitution."
-                                                                            "@return No return value." )
+/*! Sets the restitution of the collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @param density - The collision shape restitution.
+    @return No return value.
+*/
+ConsoleMethodWithDocs( SceneObject, setCollisionShapeRestitution, ConsoleVoid, 4, 4, (int shapeIndex, float restitution))
 {
     // Fetch shape count.
     const U32 shapeCount = object->getCollisionShapeCount();
@@ -2218,9 +2462,11 @@ ConsoleMethod( SceneObject, setCollisionShapeRestitution, void, 4, 4,    "(int s
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getCollisionShapeRestitution, F32, 3, 3, "(int shapeIndex) - Gets the restitution of the collision shape at the specified index.\n"
-                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                        "@return The restitution of the collision shape at the specified index (-1 if error)." )
+/*! Gets the restitution of the collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @return The restitution of the collision shape at the specified index (-1 if error).
+*/
+ConsoleMethodWithDocs( SceneObject, getCollisionShapeRestitution, ConsoleFloat, 3, 3, (int shapeIndex))
 {
     // Fetch shape count.
     const U32 shapeCount = object->getCollisionShapeCount();
@@ -2241,10 +2487,12 @@ ConsoleMethod( SceneObject, getCollisionShapeRestitution, F32, 3, 3, "(int shape
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, setCollisionShapeIsSensor, void, 4, 4,   "(int shapeIndex, bool status ) - Sets whether the collision shape at the specified index is a sensor or not.\n"
-                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                        "@param status - Whether the collision shape at the specified index is a sensor or not."
-                                                                        "@return No return value." )
+/*! Sets whether the collision shape at the specified index is a sensor or not.
+    @param shapeIndex - The index of the collision shape.
+    @param status - Whether the collision shape at the specified index is a sensor or not.
+    @return No return value.
+*/
+ConsoleMethodWithDocs( SceneObject, setCollisionShapeIsSensor, ConsoleVoid, 4, 4, (int shapeIndex, bool status ))
 {
     // Fetch shape count.
     const U32 shapeCount = object->getCollisionShapeCount();
@@ -2265,9 +2513,11 @@ ConsoleMethod( SceneObject, setCollisionShapeIsSensor, void, 4, 4,   "(int shape
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getCollisionShapeIsSensor, bool, 3, 3,   "(int shapeIndex) - Gets whether the collision shape at the specified index is a sensor or not.\n"
-                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                        "@return Whether the collision shape at the specified index is a sensor or not." )
+/*! Gets whether the collision shape at the specified index is a sensor or not.
+    @param shapeIndex - The index of the collision shape.
+    @return Whether the collision shape at the specified index is a sensor or not.
+*/
+ConsoleMethodWithDocs( SceneObject, getCollisionShapeIsSensor, ConsoleBool, 3, 3, (int shapeIndex))
 {
     // Fetch shape count.
     const U32 shapeCount = object->getCollisionShapeCount();
@@ -2287,9 +2537,11 @@ ConsoleMethod( SceneObject, getCollisionShapeIsSensor, bool, 3, 3,   "(int shape
 }
 
 //-----------------------------------------------------------------------------
-ConsoleMethod( SceneObject, createCircleCollisionShape, S32, 3, 5,   "(radius, [localPositionX, localPositionY]) Creates a circle collision shape.\n"
-                                                                        "@param radius The radius of the circle."
-                                                                        "@return (int shapeIndex) The index of the collision shape or (-1) if not created.")
+/*! Creates a circle collision shape.
+    @param radius The radius of the circle.
+    @return (int shapeIndex) The index of the collision shape or (-1) if not created.
+*/
+ConsoleMethodWithDocs( SceneObject, createCircleCollisionShape, ConsoleInt, 3, 5, (radius, [localPositionX, localPositionY]))
 {
     const F32 radius = dAtof(argv[2]);
 
@@ -2322,9 +2574,11 @@ ConsoleMethod( SceneObject, createCircleCollisionShape, S32, 3, 5,   "(radius, [
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getCircleCollisionShapeRadius, F32, 3, 3,    "(int shapeIndex) - Gets the radius of a circle collision shape at the specified index.\n"
-                                                                            "@param shapeIndex - The index of the collision shape."
-                                                                            "@return (F32 radius) The radius of a circle collision shape at the specified index or (0) if an invalid shape." )
+/*! Gets the radius of a circle collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @return (F32 radius) The radius of a circle collision shape at the specified index or (0) if an invalid shape.
+*/
+ConsoleMethodWithDocs( SceneObject, getCircleCollisionShapeRadius, ConsoleFloat, 3, 3, (int shapeIndex))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -2351,9 +2605,11 @@ ConsoleMethod( SceneObject, getCircleCollisionShapeRadius, F32, 3, 3,    "(int s
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getCircleCollisionShapeLocalPosition, const char*, 3, 3,     "(int shapeIndex) - Gets the local position of a circle collision shape at the specified index.\n"
-                                                                                            "@param shapeIndex - The index of the collision shape."
-                                                                                            "@return (localPositionXY) The local position of a circle collision shape at the specified index." )
+/*! Gets the local position of a circle collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @return (localPositionXY) The local position of a circle collision shape at the specified index.
+*/
+ConsoleMethodWithDocs( SceneObject, getCircleCollisionShapeLocalPosition, ConsoleString, 3, 3, (int shapeIndex))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -2380,9 +2636,11 @@ ConsoleMethod( SceneObject, getCircleCollisionShapeLocalPosition, const char*, 3
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, createPolygonCollisionShape, S32, 3, 3,  "(localPointsX/Y) Creates a convex polygon collision shape.\n"
-                                                                        "@param localPointsX/Y A space separated list of local points for the convex polygon collision shape (must be at least three points)."
-                                                                        "@return (int shapeIndex) The index of the collision shape or (-1) if not created.")
+/*! Creates a convex polygon collision shape.
+    @param localPointsX/Y A space separated list of local points for the convex polygon collision shape (must be at least three points).
+    @return (int shapeIndex) The index of the collision shape or (-1) if not created.
+*/
+ConsoleMethodWithDocs( SceneObject, createPolygonCollisionShape, ConsoleInt, 3, 3, (localPointsX/Y))
 {
     const U32 pointElements = Utility::mGetStringElementCount(argv[2]);
 
@@ -2405,12 +2663,14 @@ ConsoleMethod( SceneObject, createPolygonCollisionShape, S32, 3, 3,  "(localPoin
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, createPolygonBoxCollisionShape, S32, 2, 7,  "(width, height, [localCentroidX, localCentroidY], [angle]) Creates a polygon box collision shape.\n"
-                                                                            "@param width The width of the box."
-                                                                            "@param height The height of the box."
-                                                                            "@param localCentroidX/Y The local position of the box centroid."
-                                                                            "@param angle The angle of the box."
-                                                                            "@return (int shapeIndex) The index of the collision shape or (-1) if not created.")
+/*! Creates a polygon box collision shape.
+    @param width The width of the box.
+    @param height The height of the box.
+    @param localCentroidX/Y The local position of the box centroid.
+    @param angle The angle of the box.
+    @return (int shapeIndex) The index of the collision shape or (-1) if not created.
+*/
+ConsoleMethodWithDocs( SceneObject, createPolygonBoxCollisionShape, ConsoleInt, 2, 7, (width, height, [localCentroidX, localCentroidY], [angle]))
 {
     // Were any dimensions specified?
     if( argc == 2 )
@@ -2486,9 +2746,11 @@ ConsoleMethod( SceneObject, createPolygonBoxCollisionShape, S32, 2, 7,  "(width,
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getPolygonCollisionShapePointCount, S32, 3, 3,   "(int shapeIndex) - Gets the point count of a polygon collision shape at the specified index.\n"
-                                                                                "@param shapeIndex - The index of the collision shape."
-                                                                                "@return (int pointCount) The point count of a polygon collision shape at the specified index or (0) if an invalid shape." )
+/*! Gets the point count of a polygon collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @return (int pointCount) The point count of a polygon collision shape at the specified index or (0) if an invalid shape.
+*/
+ConsoleMethodWithDocs( SceneObject, getPolygonCollisionShapePointCount, ConsoleInt, 3, 3, (int shapeIndex))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -2515,10 +2777,12 @@ ConsoleMethod( SceneObject, getPolygonCollisionShapePointCount, S32, 3, 3,   "(i
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getPolygonCollisionShapeLocalPoint, const char*, 4, 4,   "(int shapeIndex, int pointIndex) - Gets the local point of a polygon collision shape at the specified index.\n"
-                                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                                        "@param pointIndex - The index of the local point."
-                                                                                        "@return (localPointXY) The local point of a polygon collision shape at the specified index." )
+/*! Gets the local point of a polygon collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @param pointIndex - The index of the local point.
+    @return (localPointXY) The local point of a polygon collision shape at the specified index.
+*/
+ConsoleMethodWithDocs( SceneObject, getPolygonCollisionShapeLocalPoint, ConsoleString, 4, 4, (int shapeIndex, int pointIndex))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -2558,11 +2822,13 @@ ConsoleMethod( SceneObject, getPolygonCollisionShapeLocalPoint, const char*, 4, 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, createChainCollisionShape, S32, 3, 7,    "(localPointsX/Y, [adjacentLocalPositionStartX, adjacentLocalPositionStartY], [adjacentLocalPositionEndX, adjacentLocalPositionEndY]) Creates a chain collision shape.\n"
-                                                                        "@param localPointsX/Y A space separated list of local points for the chain collision shape (must be at least two points)."
-                                                                        "@param adjacentLocalPositionStartXY The adjacent local position of the start of the edge."
-                                                                        "@param adjacentLocalPositionEndXY The adjacent local position of the end of the edge."
-                                                                        "@return (int shapeIndex) The index of the collision shape or (-1) if not created.")
+/*! Creates a chain collision shape.
+    @param localPointsX/Y A space separated list of local points for the chain collision shape (must be at least two points).
+    @param adjacentLocalPositionStartXY The adjacent local position of the start of the edge.
+    @param adjacentLocalPositionEndXY The adjacent local position of the end of the edge.
+    @return (int shapeIndex) The index of the collision shape or (-1) if not created.
+*/
+ConsoleMethodWithDocs( SceneObject, createChainCollisionShape, ConsoleInt, 3, 7, (localPointsX/Y, [adjacentLocalPositionStartX, adjacentLocalPositionStartY], [adjacentLocalPositionEndX, adjacentLocalPositionEndY]))
 {
     const U32 pointElements = Utility::mGetStringElementCount(argv[2]);
 
@@ -2639,9 +2905,11 @@ ConsoleMethod( SceneObject, createChainCollisionShape, S32, 3, 7,    "(localPoin
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getChainCollisionShapePointCount, S32, 3, 3,     "(int shapeIndex) - Gets the point count of a chain collision shape at the specified index.\n"
-                                                                                "@param shapeIndex - The index of the collision shape."
-                                                                                "@return (int pointCount) The point count of a chain collision shape at the specified index or (0) if an invalid shape." )
+/*! Gets the point count of a chain collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @return (int pointCount) The point count of a chain collision shape at the specified index or (0) if an invalid shape.
+*/
+ConsoleMethodWithDocs( SceneObject, getChainCollisionShapePointCount, ConsoleInt, 3, 3, (int shapeIndex))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -2668,10 +2936,12 @@ ConsoleMethod( SceneObject, getChainCollisionShapePointCount, S32, 3, 3,     "(i
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getChainCollisionShapeLocalPoint, const char*, 4, 4,   "(int shapeIndex, int pointIndex) - Gets the local point of a polygon collision shape at the specified index.\n"
-                                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                                        "@param pointIndex - The index of the local point."
-                                                                                        "@return (localPointXY) The local point of a polygon collision shape at the specified index." )
+/*! Gets the local point of a polygon collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @param pointIndex - The index of the local point.
+    @return (localPointXY) The local point of a polygon collision shape at the specified index.
+*/
+ConsoleMethodWithDocs( SceneObject, getChainCollisionShapeLocalPoint, ConsoleString, 4, 4, (int shapeIndex, int pointIndex))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -2711,9 +2981,11 @@ ConsoleMethod( SceneObject, getChainCollisionShapeLocalPoint, const char*, 4, 4,
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getChainCollisionShapeHasAdjacentStart, bool, 3, 3,  "(int shapeIndex) - Gets whether the chain collision shape at the specified index has an adjacent start point or not.\n"
-                                                                                    "@param shapeIndex - The index of the collision shape."
-                                                                                    "@return (bool adjacentStart) Whether the chain collision shape at the specified index has an adjacent start point or not." )
+/*! Gets whether the chain collision shape at the specified index has an adjacent start point or not.
+    @param shapeIndex - The index of the collision shape.
+    @return (bool adjacentStart) Whether the chain collision shape at the specified index has an adjacent start point or not.
+*/
+ConsoleMethodWithDocs( SceneObject, getChainCollisionShapeHasAdjacentStart, ConsoleBool, 3, 3, (int shapeIndex))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -2740,9 +3012,11 @@ ConsoleMethod( SceneObject, getChainCollisionShapeHasAdjacentStart, bool, 3, 3, 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getChainCollisionShapeHasAdjacentEnd, bool, 3, 3,    "(int shapeIndex) - Gets whether the chain collision shape at the specified index has an adjacent end point or not.\n"
-                                                                                    "@param shapeIndex - The index of the collision shape."
-                                                                                    "@return (bool adjacentEnd) Whether the chain collision shape at the specified index has an adjacent end point or not." )
+/*! Gets whether the chain collision shape at the specified index has an adjacent end point or not.
+    @param shapeIndex - The index of the collision shape.
+    @return (bool adjacentEnd) Whether the chain collision shape at the specified index has an adjacent end point or not.
+*/
+ConsoleMethodWithDocs( SceneObject, getChainCollisionShapeHasAdjacentEnd, ConsoleBool, 3, 3, (int shapeIndex))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -2769,9 +3043,11 @@ ConsoleMethod( SceneObject, getChainCollisionShapeHasAdjacentEnd, bool, 3, 3,   
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getChainCollisionShapeAdjacentStart, const char*, 3, 3,  "(int shapeIndex) - Gets the adjacent start point of the chain collision shape at the specified index.\n"
-                                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                                        "@return (adjacentStartPointXY) The adjacent start point of the chain collision shape at the specified index." )
+/*! Gets the adjacent start point of the chain collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @return (adjacentStartPointXY) The adjacent start point of the chain collision shape at the specified index.
+*/
+ConsoleMethodWithDocs( SceneObject, getChainCollisionShapeAdjacentStart, ConsoleString, 3, 3, (int shapeIndex))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -2783,14 +3059,14 @@ ConsoleMethod( SceneObject, getChainCollisionShapeAdjacentStart, const char*, 3,
     if ( shapeIndex >= shapeCount )
     {
         Con::warnf("SceneObject::getChainCollisionShapeAdjacentStart() - Invalid shape index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     // Sanity!
     if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_chain )
     {
         Con::warnf("SceneObject::getChainCollisionShapeAdjacentStart() - Not a chain shape at index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     return object->getChainCollisionShapeAdjacentStart( shapeIndex ).scriptThis();
@@ -2798,9 +3074,11 @@ ConsoleMethod( SceneObject, getChainCollisionShapeAdjacentStart, const char*, 3,
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getChainCollisionShapeAdjacentEnd, const char*, 3, 3,    "(int shapeIndex) - Gets whether the chain collision shape at the specified index has an adjacent end point or not.\n"
-                                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                                        "@return (bool adjacentEnd) Whether the chain collision shape at the specified index has an adjacent end point or not." )
+/*! Gets whether the chain collision shape at the specified index has an adjacent end point or not.
+    @param shapeIndex - The index of the collision shape.
+    @return (bool adjacentEnd) Whether the chain collision shape at the specified index has an adjacent end point or not.
+*/
+ConsoleMethodWithDocs( SceneObject, getChainCollisionShapeAdjacentEnd, ConsoleString, 3, 3, (int shapeIndex))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -2812,14 +3090,14 @@ ConsoleMethod( SceneObject, getChainCollisionShapeAdjacentEnd, const char*, 3, 3
     if ( shapeIndex >= shapeCount )
     {
         Con::warnf("SceneObject::getChainCollisionShapeAdjacentEnd() - Invalid shape index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     // Sanity!
     if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_chain )
     {
         Con::warnf("SceneObject::getChainCollisionShapeAdjacentEnd() - Not a chain shape at index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     return object->getChainCollisionShapeAdjacentEnd( shapeIndex ).scriptThis();
@@ -2827,12 +3105,14 @@ ConsoleMethod( SceneObject, getChainCollisionShapeAdjacentEnd, const char*, 3, 3
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, createEdgeCollisionShape, S32, 4, 10, "(localPositionStartX, localPositionStartY, localPositionEndX, localPositionEndY, [adjacentLocalPositionStartX, adjacentLocalPositionStartY], [adjacentLocalPositionEndX, adjacentLocalPositionEndY]) - Creates an edge collision shape.\n"
-                                                                    "@param localPositionStartXY The local position of the start of the edge."
-                                                                    "@param localPositionEndXY The local position of the end of the edge."
-                                                                    "@param adjacentLocalPositionStartXY The adjacent local position of the start of the edge."
-                                                                    "@param adjacentLocalPositionEndXY The adjacent local position of the end of the edge."
-                                                                    "@return (int shapeIndex) The index of the collision shape or (-1) if not created.")
+/*! Creates an edge collision shape.
+    @param localPositionStartXY The local position of the start of the edge.
+    @param localPositionEndXY The local position of the end of the edge.
+    @param adjacentLocalPositionStartXY The adjacent local position of the start of the edge.
+    @param adjacentLocalPositionEndXY The adjacent local position of the end of the edge.
+    @return (int shapeIndex) The index of the collision shape or (-1) if not created.
+*/
+ConsoleMethodWithDocs(SceneObject, createEdgeCollisionShape, ConsoleInt, 4, 10, (localPositionStartX, localPositionStartY, localPositionEndX, localPositionEndY, [adjacentLocalPositionStartX, adjacentLocalPositionStartY], [adjacentLocalPositionEndX, adjacentLocalPositionEndY]))
 {
     // Local position start.
     const U32 localPositionStartElementCount = Utility::mGetStringElementCount(argv[2]);
@@ -2931,9 +3211,11 @@ ConsoleMethod(SceneObject, createEdgeCollisionShape, S32, 4, 10, "(localPosition
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getEdgeCollisionShapeLocalPositionStart, const char*, 3, 3,  "(int shapeIndex) - Gets the local position start of the edge collision shape at the specified index.\n"
-                                                                                            "@param shapeIndex - The index of the collision shape."
-                                                                                            "@return (localPositionStartXY) The local position start of the edge collision shape at the specified index." )
+/*! Gets the local position start of the edge collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @return (localPositionStartXY) The local position start of the edge collision shape at the specified index.
+*/
+ConsoleMethodWithDocs( SceneObject, getEdgeCollisionShapeLocalPositionStart, ConsoleString, 3, 3, (int shapeIndex))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -2945,14 +3227,14 @@ ConsoleMethod( SceneObject, getEdgeCollisionShapeLocalPositionStart, const char*
     if ( shapeIndex >= shapeCount )
     {
         Con::warnf("SceneObject::getEdgeCollisionShapeLocalPositionStart() - Invalid shape index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     // Sanity!
     if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_edge )
     {
         Con::warnf("SceneObject::getEdgeCollisionShapeLocalPositionStart() - Not an edge shape at index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     return object->getEdgeCollisionShapeLocalPositionStart( shapeIndex ).scriptThis();
@@ -2960,9 +3242,11 @@ ConsoleMethod( SceneObject, getEdgeCollisionShapeLocalPositionStart, const char*
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getEdgeCollisionShapeLocalPositionEnd, const char*, 3, 3,    "(int shapeIndex) - Gets the local position end of the edge collision shape at the specified index.\n"
-                                                                                            "@param shapeIndex - The index of the collision shape."
-                                                                                            "@return (localPositionEndXY) The local position end of the edge collision shape at the specified index." )
+/*! Gets the local position end of the edge collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @return (localPositionEndXY) The local position end of the edge collision shape at the specified index.
+*/
+ConsoleMethodWithDocs( SceneObject, getEdgeCollisionShapeLocalPositionEnd, ConsoleString, 3, 3, (int shapeIndex))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -2974,14 +3258,14 @@ ConsoleMethod( SceneObject, getEdgeCollisionShapeLocalPositionEnd, const char*, 
     if ( shapeIndex >= shapeCount )
     {
         Con::warnf("SceneObject::getEdgeCollisionShapeLocalPositionEnd() - Invalid shape index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     // Sanity!
     if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_edge )
     {
         Con::warnf("SceneObject::getEdgeCollisionShapeLocalPositionEnd() - Not an edge shape at index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     return object->getEdgeCollisionShapeLocalPositionEnd( shapeIndex ).scriptThis();
@@ -2989,9 +3273,11 @@ ConsoleMethod( SceneObject, getEdgeCollisionShapeLocalPositionEnd, const char*, 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getEdgeCollisionShapeHasAdjacentStart, bool, 3, 3,  "(int shapeIndex) - Gets whether the chain collision shape at the specified index has an adjacent start point or not.\n"
-                                                                                    "@param shapeIndex - The index of the collision shape."
-                                                                                    "@return (bool adjacentStart) Whether the chain collision shape at the specified index has an adjacent start point or not." )
+/*! Gets whether the chain collision shape at the specified index has an adjacent start point or not.
+    @param shapeIndex - The index of the collision shape.
+    @return (bool adjacentStart) Whether the chain collision shape at the specified index has an adjacent start point or not.
+*/
+ConsoleMethodWithDocs( SceneObject, getEdgeCollisionShapeHasAdjacentStart, ConsoleBool, 3, 3, (int shapeIndex))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -3018,9 +3304,11 @@ ConsoleMethod( SceneObject, getEdgeCollisionShapeHasAdjacentStart, bool, 3, 3,  
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getEdgeCollisionShapeHasAdjacentEnd, bool, 3, 3,    "(int shapeIndex) - Gets whether the edge collision shape at the specified index has an adjacent end point or not.\n"
-                                                                                    "@param shapeIndex - The index of the collision shape."
-                                                                                    "@return (bool adjacentEnd) Whether the edge collision shape at the specified index has an adjacent end point or not." )
+/*! Gets whether the edge collision shape at the specified index has an adjacent end point or not.
+    @param shapeIndex - The index of the collision shape.
+    @return (bool adjacentEnd) Whether the edge collision shape at the specified index has an adjacent end point or not.
+*/
+ConsoleMethodWithDocs( SceneObject, getEdgeCollisionShapeHasAdjacentEnd, ConsoleBool, 3, 3, (int shapeIndex))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -3047,9 +3335,11 @@ ConsoleMethod( SceneObject, getEdgeCollisionShapeHasAdjacentEnd, bool, 3, 3,    
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getEdgeCollisionShapeAdjacentStart, const char*, 3, 3,  "(int shapeIndex) - Gets the adjacent start point of the edge collision shape at the specified index.\n"
-                                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                                        "@return (adjacentStartPointXY) The adjacent start point of the edge collision shape at the specified index." )
+/*! Gets the adjacent start point of the edge collision shape at the specified index.
+    @param shapeIndex - The index of the collision shape.
+    @return (adjacentStartPointXY) The adjacent start point of the edge collision shape at the specified index.
+*/
+ConsoleMethodWithDocs( SceneObject, getEdgeCollisionShapeAdjacentStart, ConsoleString, 3, 3, (int shapeIndex))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -3061,14 +3351,14 @@ ConsoleMethod( SceneObject, getEdgeCollisionShapeAdjacentStart, const char*, 3, 
     if ( shapeIndex >= shapeCount )
     {
         Con::warnf("SceneObject::getEdgeCollisionShapeAdjacentStart() - Invalid shape index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     // Sanity!
     if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_edge )
     {
         Con::warnf("SceneObject::getEdgeCollisionShapeAdjacentStart() - Not an edge shape at index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     return object->getEdgeCollisionShapeAdjacentStart( shapeIndex ).scriptThis();
@@ -3076,9 +3366,11 @@ ConsoleMethod( SceneObject, getEdgeCollisionShapeAdjacentStart, const char*, 3, 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod( SceneObject, getEdgeCollisionShapeAdjacentEnd, const char*, 3, 3,    "(int shapeIndex) - Gets whether the edge collision shape at the specified index has an adjacent end point or not.\n"
-                                                                                        "@param shapeIndex - The index of the collision shape."
-                                                                                        "@return (bool adjacentEnd) Whether the edge collision shape at the specified index has an adjacent end point or not." )
+/*! Gets whether the edge collision shape at the specified index has an adjacent end point or not.
+    @param shapeIndex - The index of the collision shape.
+    @return (bool adjacentEnd) Whether the edge collision shape at the specified index has an adjacent end point or not.
+*/
+ConsoleMethodWithDocs( SceneObject, getEdgeCollisionShapeAdjacentEnd, ConsoleString, 3, 3, (int shapeIndex))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -3090,14 +3382,14 @@ ConsoleMethod( SceneObject, getEdgeCollisionShapeAdjacentEnd, const char*, 3, 3,
     if ( shapeIndex >= shapeCount )
     {
         Con::warnf("SceneObject::getEdgeCollisionShapeAdjacentEnd() - Invalid shape index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     // Sanity!
     if ( object->getCollisionShapeType( shapeIndex ) != b2Shape::e_edge )
     {
         Con::warnf("SceneObject::getEdgeCollisionShapeAdjacentEnd() - Not an edge shape at index of %d.", shapeIndex);
-        return false;
+        return NULL;
     }
 
     return object->getEdgeCollisionShapeAdjacentEnd( shapeIndex ).scriptThis();
@@ -3105,10 +3397,12 @@ ConsoleMethod( SceneObject, getEdgeCollisionShapeAdjacentEnd, const char*, 3, 3,
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, copyAllCollisionShapes, void, 3, 4,  "(targetObject [, clearTargetShapes?] ) - Copies all collision shapes to the target object.\n"
-                                                                "@param targetObject - The target object to receive the collision shapes.\n"
-                                                                "@param clearTargetShapes - Whether to clear the current collision shapes on the target or not.  Optional: Defaults to true.\n"
-                                                                "@return No return value.")
+/*! Copies all collision shapes to the target object.
+    @param targetObject - The target object to receive the collision shapes.
+    @param clearTargetShapes - Whether to clear the current collision shapes on the target or not.  Optional: Defaults to true.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, copyAllCollisionShapes, ConsoleVoid, 3, 4, (targetObject [, clearTargetShapes?] ))
 {
     // Fetch target object.
     SceneObject* pSceneObject = Sim::findObject<SceneObject>( argv[2] );
@@ -3129,10 +3423,12 @@ ConsoleMethod(SceneObject, copyAllCollisionShapes, void, 3, 4,  "(targetObject [
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, copyCollisionShape, S32, 4, 4,   "(int shapeIndex, targetObject) - Copies a collision shape at the specified index to the target object.\n"
-                                                            "@param shapeIndex - The index of the collision shape.\n"
-                                                            "@param targetObject - The target object to receive the collision shape copy.\n"
-                                                            "@return The shape index of the copied collision shape on the target object or (-1) if not copied.")
+/*! Copies a collision shape at the specified index to the target object.
+    @param shapeIndex - The index of the collision shape.
+    @param targetObject - The target object to receive the collision shape copy.
+    @return The shape index of the copied collision shape on the target object or (-1) if not copied.
+*/
+ConsoleMethodWithDocs(SceneObject, copyCollisionShape, ConsoleInt, 4, 4, (int shapeIndex, targetObject))
 {
     // Fetch shape index.
     const U32 shapeIndex = dAtoi(argv[2]);
@@ -3163,9 +3459,11 @@ ConsoleMethod(SceneObject, copyCollisionShape, S32, 4, 4,   "(int shapeIndex, ta
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setVisible, void, 3, 3, "(bool status) - Show or hide the object.\n"
-                                                      "@param status Whether to enable or disable visibility on the object."
-                                                      "@return No return value.")
+/*! Show or hide the object.
+    @param status Whether to enable or disable visibility on the object.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setVisible, ConsoleVoid, 3, 3, (bool status))
 {
     // Set Visible.
     object->setVisible( dAtob(argv[2]) );
@@ -3173,8 +3471,10 @@ ConsoleMethod(SceneObject, setVisible, void, 3, 3, "(bool status) - Show or hide
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getVisible, bool, 2, 2, "() - Gets the object's visible status.\n"
-                                                      "@return (bool status) Whether or not the object is visible.")
+/*! Gets the object's visible status.
+    @return (bool status) Whether or not the object is visible.
+*/
+ConsoleMethodWithDocs(SceneObject, getVisible, ConsoleBool, 2, 2, ())
 {
     // Get Visible Status.
     return object->getVisible();
@@ -3182,9 +3482,11 @@ ConsoleMethod(SceneObject, getVisible, bool, 2, 2, "() - Gets the object's visib
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setBlendMode, void, 3, 3,    "(bool blendMode) - Sets whether blending is on or not.\n"
-                                                        "@blendMode Whether blending is on or not.\n"
-                                                        "@return No return Value.")
+/*! Sets whether blending is on or not.
+    @blendMode Whether blending is on or not.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setBlendMode, ConsoleVoid, 3, 3, (bool blendMode))
 {
     // Fetch blend mode.
     const bool blendMode = dAtob(argv[2]);
@@ -3194,17 +3496,21 @@ ConsoleMethod(SceneObject, setBlendMode, void, 3, 3,    "(bool blendMode) - Sets
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getBlendMode, bool, 2, 2,    "() - Gets whether blending is on or not.\n"
-                                                        "@return (bool blendMode) Whether blending is on or not.")
+/*! Gets whether blending is on or not.
+    @return (bool blendMode) Whether blending is on or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getBlendMode, ConsoleBool, 2, 2, ())
 {
    return object->getBlendMode();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setSrcBlendFactor, void, 3, 3,   "(srcBlend) - Sets the source blend factor.\n"
-                                                            "@param srcBlend The source blend factor.\n"
-                                                            "@return No return Value.")
+/*! Sets the source blend factor.
+    @param srcBlend The source blend factor.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setSrcBlendFactor, ConsoleVoid, 3, 3, (srcBlend))
 {
     // Fetch source blend factor.
     GLenum blendFactor = SceneObject::getSrcBlendFactorEnum(argv[2]);
@@ -3214,17 +3520,21 @@ ConsoleMethod(SceneObject, setSrcBlendFactor, void, 3, 3,   "(srcBlend) - Sets t
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getSrcBlendFactor, const char*, 2, 2, "() - Gets the source blend factor.\n"
-                                                                    "@return (srcBlend) The source blend factor.")
+/*! Gets the source blend factor.
+    @return (srcBlend) The source blend factor.
+*/
+ConsoleMethodWithDocs(SceneObject, getSrcBlendFactor, ConsoleString, 2, 2, ())
 {
    return SceneObject::getSrcBlendFactorDescription(object->getSrcBlendFactor());
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setDstBlendFactor, void, 3, 3,   "(dstBlend) - Sets the destination blend factor.\n"
-                                                            "@param dstBlend The destination blend factor.\n"
-                                                            "@return No return Value.")
+/*! Sets the destination blend factor.
+    @param dstBlend The destination blend factor.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setDstBlendFactor, ConsoleVoid, 3, 3, (dstBlend))
 {
     // Fetch destination blend factor.
     GLenum blendFactor = SceneObject::getDstBlendFactorEnum(argv[2]);
@@ -3234,20 +3544,24 @@ ConsoleMethod(SceneObject, setDstBlendFactor, void, 3, 3,   "(dstBlend) - Sets t
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getDstBlendFactor, const char*, 2, 2, "() - Gets the destination blend factor.\n"
-                                                                    "@return (dstBlend) The destination blend factor.")
+/*! Gets the destination blend factor.
+    @return (dstBlend) The destination blend factor.
+*/
+ConsoleMethodWithDocs(SceneObject, getDstBlendFactor, ConsoleString, 2, 2, ())
 {
    return SceneObject::getDstBlendFactorDescription(object->getDstBlendFactor());
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setBlendColor, void, 3, 6,   "(float red, float green, float blue, [float alpha = 1.0]) or ( stockColorName ) - Sets the blend color."
-                                                        "@param red The red value.\n"
-                                                        "@param green The green value.\n"
-                                                        "@param blue The blue value.\n"
-                                                        "@param alpha The alpha value.\n"
-                                                        "@return No return Value.")
+/*! or ( stockColorName ) - Sets the blend color.
+    @param red The red value.
+    @param green The green value.
+    @param blue The blue value.
+    @param alpha The alpha value.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setBlendColor, ConsoleVoid, 3, 6, (float red, float green, float blue, [float alpha = 1.0]))
 {
     // The colors.
     F32 red;
@@ -3315,9 +3629,11 @@ ConsoleMethod(SceneObject, setBlendColor, void, 3, 6,   "(float red, float green
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getBlendColor, const char*, 2, 3,    "(allowColorNames) Gets the Rendering Blend color.\n"
-                                                                "@param allowColorNames Whether to allow stock color names to be returned or not.  Optional: Defaults to false.\n"
-                                                                "@return (float red / float green / float blue / float alpha) The sprite blend color.")
+/*! Gets the Rendering Blend color.
+    @param allowColorNames Whether to allow stock color names to be returned or not.  Optional: Defaults to false.
+    @return (float red / float green / float blue / float alpha) The sprite blend color.
+*/
+ConsoleMethodWithDocs(SceneObject, getBlendColor, ConsoleString, 2, 3, (allowColorNames))
 {
     // Get Blend color.
     ColorF blendColor = object->getBlendColor();
@@ -3338,10 +3654,12 @@ ConsoleMethod(SceneObject, getBlendColor, const char*, 2, 3,    "(allowColorName
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setBlendAlpha, void, 3, 3,    "(float alpha) - Sets the Rendering Alpha (transparency).\n"
-                                                            "The alpha value specifies directly the transparency of the image. A value of 1.0 will not affect the object and a value of 0.0 will make the object completely transparent.\n"
-                                                            "@param alpha The alpha value.\n"
-                                                            "@return No return Value.")
+/*! Sets the Rendering Alpha (transparency).
+    The alpha value specifies directly the transparency of the image. A value of 1.0 will not affect the object and a value of 0.0 will make the object completely transparent.
+    @param alpha The alpha value.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setBlendAlpha, ConsoleVoid, 3, 3, (float alpha))
 {
     // Set Blend Alpha.
     object->setBlendAlpha( dAtof(argv[2]) );
@@ -3349,8 +3667,10 @@ ConsoleMethod(SceneObject, setBlendAlpha, void, 3, 3,    "(float alpha) - Sets t
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getBlendAlpha, F32, 2, 2,     "() - Gets the Rendering Alpha (transparency).\n"
-                                                            "@return (float alpha) The alpha value, a range from 0.0 to 1.0.  Less than zero if alpha testing is disabled.")
+/*! Gets the Rendering Alpha (transparency).
+    @return (float alpha) The alpha value, a range from 0.0 to 1.0.  Less than zero if alpha testing is disabled.
+*/
+ConsoleMethodWithDocs(SceneObject, getBlendAlpha, ConsoleFloat, 2, 2, ())
 {
     // Get Blend Alpha.
     return object->getBlendAlpha();
@@ -3358,28 +3678,34 @@ ConsoleMethod(SceneObject, getBlendAlpha, F32, 2, 2,     "() - Gets the Renderin
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setAlphaTest, void, 3, 3,    "(float alpha) - Set the render alpha test threshold.\n"
-                                                        "@param alpha The alpha test threshold in the range of 0.0 to 1.0.  Less than zero to disable alpha testing.\n"
-                                                        "@return No return value." )
+/*! Set the render alpha test threshold.
+    @param alpha The alpha test threshold in the range of 0.0 to 1.0.  Less than zero to disable alpha testing.
+    @return No return value.
 
+*/
+ConsoleMethodWithDocs(SceneObject, setAlphaTest, ConsoleVoid, 3, 3, (float alpha))
 {
     object->setAlphaTest(dAtof(argv[2]));
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getAlphaTest, F32, 2, 2,  "() - Gets the render alpha test threshold.\n"
-                                                        "@return The render alpha test threshold in the range of 0.0f to 1.0.  Less than zero represents disabled alpha testing.")
+/*! Gets the render alpha test threshold.
+    @return The render alpha test threshold in the range of 0.0f to 1.0.  Less than zero represents disabled alpha testing.
+*/
+ConsoleMethodWithDocs(SceneObject, getAlphaTest, ConsoleFloat, 2, 2, ())
 {
     return object->getAlphaTest();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setSortPoint, void, 3, 4, "(float x, float y) Sets the layer draw order sorting point.\n"
-                                                        "@param x The x position local to the object of the sort point.\n"
-                                                        "@param y The y position local to the object of the sort point.\n"
-                                                        "@return No return value.")
+/*! Sets the layer draw order sorting point.
+    @param x The x position local to the object of the sort point.
+    @param y The y position local to the object of the sort point.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setSortPoint, ConsoleVoid, 3, 4, (float x, float y))
 {
    // The new sort point.
    Vector2 sortPt;
@@ -3408,8 +3734,10 @@ ConsoleMethod(SceneObject, setSortPoint, void, 3, 4, "(float x, float y) Sets th
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getSortPoint, const char*, 2, 2, "() Gets the layer draw order sorting point.\n"
-                                                               "@return (float x/float y) The local x and y position of the sort point.")
+/*! Gets the layer draw order sorting point.
+    @return (float x/float y) The local x and y position of the sort point.
+*/
+ConsoleMethodWithDocs(SceneObject, getSortPoint, ConsoleString, 2, 2, ())
 {
     // Get sort point.
     return object->getSortPoint().scriptThis();
@@ -3417,9 +3745,11 @@ ConsoleMethod(SceneObject, getSortPoint, const char*, 2, 2, "() Gets the layer d
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setSortPointX, void, 3, 3, "(float x) Sets the x-component of the layer draw order sorting point.\n"
-                                                         "@param x The x position local to the object of the sort point.\n"
-                                                        "@return No return value.")
+/*! Sets the x-component of the layer draw order sorting point.
+    @param x The x position local to the object of the sort point.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setSortPointX, ConsoleVoid, 3, 3, (float x))
 {
     // Set sort point X-component.
     object->setSortPoint( Vector2( dAtof(argv[2]), object->getSortPoint().y ) );
@@ -3427,8 +3757,10 @@ ConsoleMethod(SceneObject, setSortPointX, void, 3, 3, "(float x) Sets the x-comp
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getSortPointX, F32, 2, 2, "() Gets the x component of the layer draw order sorting point.\n"
-                                                        "@return (float x) The local x position of the sort point.")
+/*! Gets the x component of the layer draw order sorting point.
+    @return (float x) The local x position of the sort point.
+*/
+ConsoleMethodWithDocs(SceneObject, getSortPointX, ConsoleFloat, 2, 2, ())
 {
     // Get sort point X-component.
     return object->getSortPoint().x;
@@ -3436,9 +3768,11 @@ ConsoleMethod(SceneObject, getSortPointX, F32, 2, 2, "() Gets the x component of
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setSortPointY, void, 3, 3, "(float y) Sets the y-component of the layer draw order sorting point.\n"
-                                                         "@param y The y position local to the object of the sort point.\n"
-                                                         "@return No return value.")
+/*! Sets the y-component of the layer draw order sorting point.
+    @param y The y position local to the object of the sort point.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setSortPointY, ConsoleVoid, 3, 3, (float y))
 {
     // Set sort point Y-component.
     object->setSortPoint( Vector2( object->getSortPoint().x, dAtof(argv[2]) ) );
@@ -3446,8 +3780,10 @@ ConsoleMethod(SceneObject, setSortPointY, void, 3, 3, "(float y) Sets the y-comp
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getSortPointY, F32, 2, 2, "() Gets the y component of the layer draw order sorting point.\n"
-                                                        "@return (float y) The local y position of the sort point.")
+/*! Gets the y component of the layer draw order sorting point.
+    @return (float y) The local y position of the sort point.
+*/
+ConsoleMethodWithDocs(SceneObject, getSortPointY, ConsoleFloat, 2, 2, ())
 {
     // Get sort point Y-component.
     return object->getSortPoint().y;
@@ -3455,79 +3791,97 @@ ConsoleMethod(SceneObject, getSortPointY, F32, 2, 2, "() Gets the y component of
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setRenderGroup, void, 3, 3,  "(renderGroup) Sets the name of the render group used to sort the object during rendering.\n"
-                                                        "@param renderGroup The name of the render group to use.  Defaults to nothing.\n"
-                                                        "@return No return value.")
+/*! Sets the name of the render group used to sort the object during rendering.
+    @param renderGroup The name of the render group to use.  Defaults to nothing.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setRenderGroup, ConsoleVoid, 3, 3, (renderGroup))
 {
     object->setRenderGroup( argv[2] );
 } 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getRenderGroup, const char*, 2, 2,   "() Gets the name of the render group used to sort the object during rendering.\n"
-                                                                "@return The render group used to sort the object during rendering.")
+/*! Gets the name of the render group used to sort the object during rendering.
+    @return The render group used to sort the object during rendering.
+*/
+ConsoleMethodWithDocs(SceneObject, getRenderGroup, ConsoleString, 2, 2, ())
 {
     return object->getRenderGroup();
 } 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setUseInputEvents, void, 3, 3, "(bool inputStatus) - Sets whether input events are passed from the scene window are monitored by this object or not.\n"
-                                                             "@param inputStatus Whether input events are passed from the scene window are monitored by this object or not.\n"
-                                                                 "@return No return Value.")
+/*! Sets whether input events are passed from the scene window are monitored by this object or not.
+    @param inputStatus Whether input events are passed from the scene window are monitored by this object or not.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setUseInputEvents, ConsoleVoid, 3, 3, (bool inputStatus))
 {
     object->setUseInputEvents( dAtob(argv[2]) );
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getUseInputEvents, bool, 2, 2, "() - Gets whether input events are passed from the scene window are monitored by this object or not.\n"
-                                                             "@return (bool inputStatus) Whether input events are passed from the scene window are monitored by this object or not.")
+/*! Gets whether input events are passed from the scene window are monitored by this object or not.
+    @return (bool inputStatus) Whether input events are passed from the scene window are monitored by this object or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getUseInputEvents, ConsoleBool, 2, 2, ())
 {
     return object->getUseInputEvents();
 } 
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setUpdateCallback, void, 2, 3,    "([bool status?]) - Sets whether the 'onUpdate' callback is called or not.\n"
-                                                                "@param status Whether the 'onUpdate' callback is called or not (default is false).\n"
-                                                                "@return No return Value.")
+/*! Sets whether the 'onUpdate' callback is called or not.
+    @param status Whether the 'onUpdate' callback is called or not (default is false).
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setUpdateCallback, ConsoleVoid, 2, 3, ([bool status?]))
 {
    object->setUpdateCallback( argc > 2 ? dAtob(argv[2]) : true);
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getUpdateCallback, bool, 2, 2,    "() - Gets whether the 'onUpdate' callback is called or not.\n"
-                                                                "@return (bool status ) Whether the 'onUpdate' callback is called or not.")
+/*! Gets whether the 'onUpdate' callback is called or not.
+    @return (bool status ) Whether the 'onUpdate' callback is called or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getUpdateCallback, ConsoleBool, 2, 2, ())
 {
    return object->getUpdateCallback();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setSleepingCallback, void, 2, 3,  "([bool status?]) - Sets whether the 'onWake' and 'onSleep' callbacks are called or not when the object changes sleep state.\n"
-                                                                "The object must be able to sleep (setSleepingAllowed) and have a 'dynamic' body mode for this callback to occur.\n"
-                                                                "@param status Whether the 'onWake' and 'onSleep' callbacks are called or not (default is false).\n"
-                                                                "@return No return Value.")
+/*! Sets whether the 'onWake' and 'onSleep' callbacks are called or not when the object changes sleep state.
+    The object must be able to sleep (setSleepingAllowed) and have a 'dynamic' body mode for this callback to occur.
+    @param status Whether the 'onWake' and 'onSleep' callbacks are called or not (default is false).
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setSleepingCallback, ConsoleVoid, 2, 3, ([bool status?]))
 {
    object->setSleepingCallback( argc > 2 ? dAtob(argv[2]) : true);
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getSleepingCallback, bool, 2, 2,    "() - Gets whether the 'onWake' and 'onSleep' callbacks are called or not when the object changes sleep state.\n"
-                                                                "@return (bool status ) Whether the 'onWake' and 'onSleep' callbacks are called or not.")
+/*! Gets whether the 'onWake' and 'onSleep' callbacks are called or not when the object changes sleep state.
+    @return (bool status ) Whether the 'onWake' and 'onSleep' callbacks are called or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getSleepingCallback, ConsoleBool, 2, 2, ())
 {
    return object->getSleepingCallback();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setCollisionCallback, void, 2, 3,     "([bool status?]) - Sets whether the 'Scene::onCollision' callback is called or not.\n"
-                                                                    "Sets whether whether the 'Scene::onCollision' callback is called or not.\n"
-                                                                    "@param status Whether the 'Scene::onCollision' callback is called or not (default is false).\n"
-                                                                    "@return No return Value.")
+/*! Sets whether the 'Scene::onCollision' callback is called or not.
+    Sets whether whether the 'Scene::onCollision' callback is called or not.
+    @param status Whether the 'Scene::onCollision' callback is called or not (default is false).
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setCollisionCallback, ConsoleVoid, 2, 3, ([bool status?]))
 {
     // Set collision callback.
     object->setCollisionCallback( argc > 2 ? dAtob(argv[2]) : true );
@@ -3535,8 +3889,10 @@ ConsoleMethod(SceneObject, setCollisionCallback, void, 2, 3,     "([bool status?
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getCollisionCallback, bool, 2, 2,  "() Gets whether the 'Scene::onCollision' callback is called or not.\n"
-                                                                    "@return (bool status) the 'Scene::onCollision' callback is called or not.")
+/*! Gets whether the 'Scene::onCollision' callback is called or not.
+    @return (bool status) the 'Scene::onCollision' callback is called or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getCollisionCallback, ConsoleBool, 2, 2, ())
 {
     // Get collision callback.
     return object->getCollisionCallback();
@@ -3544,9 +3900,11 @@ ConsoleMethod(SceneObject, getCollisionCallback, bool, 2, 2,  "() Gets whether t
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setDebugOn, void, 3, 2 + DEBUG_MODE_COUNT,   "(debugOptions) Sets Debug option(s) on.\n"
-                                                                        "@param debugOptions Either a list of debug modes (comma-separated), or a string with the modes (space-separated)\n"
-                                                                        "@return No return value.")
+/*! Sets Debug option(s) on.
+    @param debugOptions Either a list of debug modes (comma-separated), or a string with the modes (space-separated)
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setDebugOn, ConsoleVoid, 3, 2 + DEBUG_MODE_COUNT, (debugOptions))
 {
     // Reset the mask.
     U32 mask = 0;
@@ -3612,9 +3970,11 @@ ConsoleMethod(SceneObject, setDebugOn, void, 3, 2 + DEBUG_MODE_COUNT,   "(debugO
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setDebugOff, void, 3, 2 + DEBUG_MODE_COUNT,  "(debugOptions) Sets Debug options(s) off.\n"
-                                                                        "@param debugOptions Either a list of debug modes to turn off (comma-separated) or a string (space-separated)\n"
-                                                                        "@return No return value.")
+/*! Sets Debug options(s) off.
+    @param debugOptions Either a list of debug modes to turn off (comma-separated) or a string (space-separated)
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setDebugOff, ConsoleVoid, 3, 2 + DEBUG_MODE_COUNT, (debugOptions))
 {
     // Reset the mask.
     U32 mask = 0;
@@ -3680,11 +4040,13 @@ ConsoleMethod(SceneObject, setDebugOff, void, 3, 2 + DEBUG_MODE_COUNT,  "(debugO
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, attachGui, void, 4, 5, "(guiControl guiObject, SceneWindow window, [sizeControl? = false]) - Attach a GUI Control to the object.\n"
-                                                     "@param guiObject The GuiControl to attach.\n"
-                                                     "@param window The SceneWindow to bind the GuiControl to.\n"
-                                                     "@param sizeControl Whether or not to size the GuiControl to the size of this object.\n"
-                                                                 "@return No return Value.")
+/*! Attach a GUI Control to the object.
+    @param guiObject The GuiControl to attach.
+    @param window The SceneWindow to bind the GuiControl to.
+    @param sizeControl Whether or not to size the GuiControl to the size of this object.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, attachGui, ConsoleVoid, 4, 5, (guiControl guiObject, SceneWindow window, [sizeControl? = false]))
 {
     // Find GuiControl Object.
     GuiControl* pGuiControl = dynamic_cast<GuiControl*>(Sim::findObject(argv[2]));
@@ -3715,8 +4077,10 @@ ConsoleMethod(SceneObject, attachGui, void, 4, 5, "(guiControl guiObject, SceneW
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, detachGui, void, 2, 2, "() - Detach any GUI Control.\n"
-                                                                 "@return No return Value.")
+/*! Detach any GUI Control.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, detachGui, ConsoleVoid, 2, 2, ())
 {
     // Detach GUI Control.
     object->detachGui();
@@ -3724,11 +4088,13 @@ ConsoleMethod(SceneObject, detachGui, void, 2, 2, "() - Detach any GUI Control.\
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, copyFrom, bool, 3, 4, "(SceneObject object, [copyDynamicFields? = false]) - Copies one scene object from another scene object.\n"
-                                                    "The object being copied to needs to be of the same class as the object being copied from.\n"
-                                                    "@param object The SceneObject to copy this object to.\n"
-                                                    "@param copyDynamicFields Whether the dynamic fields should be copied or not.  Optional: Defaults to false.\n"
-                                                    "@return (bool) Whether or not the copy was successful.")
+/*! Copies one scene object from another scene object.
+    The object being copied to needs to be of the same class as the object being copied from.
+    @param object The SceneObject to copy this object to.
+    @param copyDynamicFields Whether the dynamic fields should be copied or not.  Optional: Defaults to false.
+    @return (bool) Whether or not the copy was successful.
+*/
+ConsoleMethodWithDocs(SceneObject, copyFrom, ConsoleBool, 3, 4, (SceneObject object, [copyDynamicFields? = false]))
 {
     // Find scene object.
     SceneObject* pSceneObject = dynamic_cast<SceneObject*>( Sim::findObject(argv[2]) );
@@ -3752,9 +4118,11 @@ ConsoleMethod(SceneObject, copyFrom, bool, 3, 4, "(SceneObject object, [copyDyna
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, setPickingAllowed, void, 3, 3,   "(bool pickingAllowed) - Sets whether picking is allowed or not.\n"
-                                                            "@param pickingAllowed Whether picking is allowed or not.\n"
-                                                            "@return No return Value.")
+/*! Sets whether picking is allowed or not.
+    @param pickingAllowed Whether picking is allowed or not.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, setPickingAllowed, ConsoleVoid, 3, 3, (bool pickingAllowed))
 {
     // Fetch flag.
     const bool pickingAllowed = dAtob(argv[2]);
@@ -3764,18 +4132,23 @@ ConsoleMethod(SceneObject, setPickingAllowed, void, 3, 3,   "(bool pickingAllowe
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getPickingAllowed, bool, 2, 2,   "() - Gets whether picking is allowed or not.\n"
-                                                            "@return Whether picking is allowed or not.")
+/*! Gets whether picking is allowed or not.
+    @return Whether picking is allowed or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getPickingAllowed, ConsoleBool, 2, 2, ())
 {
     return object->getPickingAllowed();
 }
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, safeDelete, void, 2, 2, "() - Safely deletes object.\n"
-                                                                 "@return No return Value.")
+/*! Safely deletes object.
+    @return No return Value.
+*/
+ConsoleMethodWithDocs(SceneObject, safeDelete, ConsoleVoid, 2, 2, ())
 {
     // Script Delete.
     object->safeDelete();
 }
 
+ConsoleMethodGroupEndWithDocs(SceneObject)

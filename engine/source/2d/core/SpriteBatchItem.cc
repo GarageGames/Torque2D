@@ -54,6 +54,7 @@ static StringTableEntry spriteBlendColorName        = StringTable->insert("Blend
 static StringTableEntry spriteAlphaTestName         = StringTable->insert("AlphaTest");
 static StringTableEntry spriteImageName             = StringTable->insert("Image");
 static StringTableEntry spriteImageFrameName        = StringTable->insert("Frame");
+static StringTableEntry spriteNamedImageFrameName   = StringTable->insert("NamedFrame");
 static StringTableEntry spriteAnimationName         = StringTable->insert("Animation");
 static StringTableEntry spriteDataObjectName        = StringTable->insert("DataObject");
 
@@ -94,8 +95,12 @@ void SpriteBatchItem::resetState( void )
     mLogicalPosition.resetState();
 
     mVisible = true;
+    mExplicitMode = false;
 
     mLocalPosition.SetZero();
+    for (U32 i = 0; i < 4; i++)
+        mExplicitVerts[i].SetZero();
+
     mDepth = 0.0f;
     mLocalAngle = 0.0f;
     setSize( Vector2( 1.0f, 1.0f ) );
@@ -226,6 +231,18 @@ void SpriteBatchItem::render( BatchRender* pBatchRenderer, const SceneRenderRequ
 
 //------------------------------------------------------------------------------
 
+void SpriteBatchItem::setExplicitVertices( const Vector2* explicitVertices )
+{
+    mExplicitMode = true;
+
+    mExplicitVerts[0] = explicitVertices[0];
+    mExplicitVerts[1] = explicitVertices[1];
+    mExplicitVerts[2] = explicitVertices[2];
+    mExplicitVerts[3] = explicitVertices[3];
+}
+
+//------------------------------------------------------------------------------
+
 void SpriteBatchItem::updateLocalTransform( void )
 {
     // Debug Profiling.
@@ -248,10 +265,20 @@ void SpriteBatchItem::updateLocalTransform( void )
     const F32 halfHeight = mSize.y * 0.5f;
 
     // Set local size vertices.
-    mLocalOOBB[0].Set( -halfWidth, -halfHeight );
-    mLocalOOBB[1].Set( +halfWidth, -halfHeight );
-    mLocalOOBB[2].Set( +halfWidth, +halfHeight );
-    mLocalOOBB[3].Set( -halfWidth, +halfHeight );
+    if (!mExplicitMode)
+    {
+        mLocalOOBB[0].Set( -halfWidth, -halfHeight );
+        mLocalOOBB[1].Set( +halfWidth, -halfHeight );
+        mLocalOOBB[2].Set( +halfWidth, +halfHeight );
+        mLocalOOBB[3].Set( -halfWidth, +halfHeight );
+    }
+    else
+    {
+        mLocalOOBB[0] = mExplicitVerts[0];
+        mLocalOOBB[1] = mExplicitVerts[1];
+        mLocalOOBB[2] = mExplicitVerts[2];
+        mLocalOOBB[3] = mExplicitVerts[3];
+    }
 
     // Calculate local OOBB.
     CoreMath::mCalculateOOBB( mLocalOOBB, localTransform, mLocalOOBB );
@@ -324,8 +351,11 @@ void SpriteBatchItem::onTamlCustomWrite( TamlCustomNode* pParentNode )
             // Yes, so write image asset Id.
             pSpriteNode->addField( spriteImageName, assetId );
 
-            // Write image frame.
-            pSpriteNode->addField( spriteImageFrameName, getImageFrame() );
+            // Write the image frame.
+            if ( isUsingNamedImageFrame() )
+                pSpriteNode->addField( spriteNamedImageFrameName, getNamedImageFrame() );
+            else
+                pSpriteNode->addField( spriteImageFrameName, getImageFrame() );
         }
     }
     else
@@ -447,6 +477,11 @@ void SpriteBatchItem::onTamlCustomRead( const TamlCustomNode* pSpriteNode )
             // Set image frame if image is available.
             if ( getImage() != StringTable->EmptyString )
                 setImageFrame( imageFrame );
+        }
+        else if ( fieldName == spriteNamedImageFrameName )
+        {
+            if ( getImage() != StringTable->EmptyString )
+                setNamedImageFrame( pSpriteField->getFieldValue() );
         }
         else if ( fieldName == spriteAnimationName )
         {

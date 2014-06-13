@@ -1,0 +1,6 @@
+<Sprite
+    SceneLayer="31"
+    Size="40 30"
+    BodyType="Static"
+    Image="@asset=ToyAssets:jungleSky"
+    Frame="0" />

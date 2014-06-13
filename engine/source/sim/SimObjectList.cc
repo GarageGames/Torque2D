@@ -20,7 +20,7 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#include "simObjectList.h"
+#include "SimObjectList.h"
 #include "collection/findIterator.h"
 #include "simObject.h"
 
