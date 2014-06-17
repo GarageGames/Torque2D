@@ -121,6 +121,8 @@ public:
     inline void deselectSprite( void ) { mSelectedSprite = NULL; }
     bool isSpriteSelected( void ) const { return mSelectedSprite != NULL; }
 
+    U32 getSpriteBatchIDfromIndex( U32 index );
+
     void setSpriteImage( const char* pAssetId, const U32 imageFrame );
     void setSpriteImage( const char* pAssetId, const char* namedFrame );
     StringTableEntry getSpriteImage( void ) const;

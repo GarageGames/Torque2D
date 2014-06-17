@@ -457,6 +457,26 @@ bool SpriteBatch::selectSpriteName( const char* pName )
 
 //------------------------------------------------------------------------------
 
+U32 SpriteBatch::getSpriteBatchIDfromIndex( U32 index )
+{
+    U32 count = 0;
+
+    for( typeSpriteBatchHash::iterator spriteItr = mSprites.begin(); spriteItr != mSprites.end(); ++spriteItr )
+    {
+
+    if(count == index)
+    {
+    SpriteBatchItem* SB = spriteItr->value;
+    return(SB->getBatchId());
+    }
+
+    count++;
+    }
+
+    return(0);
+}
+
+//------------------------------------------------------------------------------
 void SpriteBatch::setSpriteImage( const char* pAssetId, const U32 imageFrame )
 {
     // Debug Profiling.

@@ -1040,6 +1040,15 @@ ConsoleMethodWithDocs(CompositeSprite, getSpriteName, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
+/*! Gets the SpriteBatchID of the currently selected Sprite
+    @returns The SpriteBatchID
+*/
+ConsoleMethodWithDocs(CompositeSprite, getSpriteID, ConsoleInt, 2, 2, ())
+{
+    return object->getSelectedSprite()->getBatchId();
+}
+//-----------------------------------------------------------------------------
+
 /*! Picks sprites intersecting the specified point with optional group/layer masks.
     @param x/y The coordinate of the point as either (\x y\ or (x,y)
     @return Returns list of sprite Ids.
@@ -1389,6 +1398,17 @@ ConsoleMethodWithDocs(CompositeSprite, pickRay, ConsoleString, 4, 6, (startx/y, 
 
     // Return buffer.
     return pBuffer;
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Returns the SpriteBatchItem ID (SpriteID) of the SpriteBatchItem located at index
+    @param index
+    @return Returns sprite Id
+*/
+ConsoleMethodWithDocs(CompositeSprite, getSpriteIDfromIndex, ConsoleInt, 3, 3, ())
+{
+    return (object->getSpriteBatchIDfromIndex(dAtoi(argv[2])));
 }
 
 ConsoleMethodGroupEndWithDocs(CompositeSprite)
