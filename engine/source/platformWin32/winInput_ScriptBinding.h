@@ -55,4 +55,14 @@ ConsoleFunctionWithDocs( getJoystickAxes, ConsoleString, 2, 2, ( instance ))
     return( "" );
 }
 
+/*! Returns the total number of joysticks connected, both XInput and other.
+    @return The number of joysticks connected.
+    @sa isJoystickDetected
+*/
+ConsoleFunctionWithDocs( getJoystickCount, ConsoleInt, 1, 1, ())
+{
+    argc; argv;
+    return( DInputDevice::getJoystickCount() );
+}
+
 /*! @} */ // end group WindowsPlatform

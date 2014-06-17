@@ -135,7 +135,7 @@ class DInputDevice : public InputDevice
       // Console interface functions:
       const char* getJoystickAxesString();
       static bool joystickDetected();
-      //
+      static U8 getJoystickCount();
 
       bool process();
 };
