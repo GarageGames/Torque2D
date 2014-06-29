@@ -205,6 +205,7 @@ ParticleAssetEmitter::ParticleAssetEmitter() :
     mAnimationAsset.registerRefreshNotify( this );
     
     mNamedImageFrame = "";
+    mUsingNamedFrame = false;
 }
 
 //------------------------------------------------------------------------------
