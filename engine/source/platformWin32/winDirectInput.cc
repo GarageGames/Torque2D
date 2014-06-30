@@ -522,6 +522,11 @@ bool DInputManager::isXInputEnabled()
 //------------------------------------------------------------------------------
 bool DInputManager::isXInputConnected(int controllerID)
 {
+	if (controllerID >= XINPUT_MAX_CONTROLLERS || controllerID < 0)
+	{
+		Con::errorf("Invalid device index: %d. Index should be between 0 and %d.", controllerID, XINPUT_MAX_CONTROLLERS - 1);
+		return false;
+	}
 	return( mXInputStateNew[controllerID].bConnected );
 }
 
