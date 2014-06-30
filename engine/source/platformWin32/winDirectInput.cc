@@ -524,7 +524,12 @@ bool DInputManager::isXInputConnected(int controllerID)
 {
 	if (controllerID >= XINPUT_MAX_CONTROLLERS || controllerID < 0)
 	{
-		Con::errorf("Invalid device index: %d. Index should be between 0 and %d.", controllerID, XINPUT_MAX_CONTROLLERS - 1);
+		Con::warnf("Invalid device index: %d. Index should be between 0 and %d.", controllerID, XINPUT_MAX_CONTROLLERS - 1);
+		return false;
+	}
+	if (!mXInputActive)
+	{
+		Con::warnf("Tried calling isXInputConnected while XInput is not active.");
 		return false;
 	}
 	return( mXInputStateNew[controllerID].bConnected );
@@ -532,44 +537,55 @@ bool DInputManager::isXInputConnected(int controllerID)
 
 int DInputManager::getXInputState(int controllerID, int property, bool current)
 {
-   int retVal;
+	if (controllerID >= XINPUT_MAX_CONTROLLERS || controllerID < 0)
+	{
+		Con::warnf("Invalid device index: %d. Index should be between 0 and %d.", controllerID, XINPUT_MAX_CONTROLLERS - 1);
+		return -1;
+	}
+	if (!mXInputActive)
+	{
+		Con::warnf("Tried calling getXInputState while XInput is not active.");
+		return -1;
+	}
 
-   switch(property)
-   {
+	int retVal;
+
+	switch (property)
+	{
 #define CHECK_PROP_ANALOG(prop, stateTest) \
-   case prop:        (current) ? retVal = mXInputStateNew[controllerID].state.Gamepad.##stateTest : retVal = mXInputStateOld[controllerID].state.Gamepad.##stateTest; return retVal;
+	case prop:        (current) ? retVal = mXInputStateNew[controllerID].state.Gamepad.##stateTest : retVal = mXInputStateOld[controllerID].state.Gamepad.##stateTest; return retVal;
 
-      CHECK_PROP_ANALOG(XI_THUMBLX, sThumbLX)
-      CHECK_PROP_ANALOG(XI_THUMBLY, sThumbLY)
-      CHECK_PROP_ANALOG(XI_THUMBRX, sThumbRX)
-      CHECK_PROP_ANALOG(XI_THUMBRY, sThumbRY)
-      CHECK_PROP_ANALOG(XI_LEFT_TRIGGER, bLeftTrigger)
-      CHECK_PROP_ANALOG(XI_RIGHT_TRIGGER, bRightTrigger)
+		CHECK_PROP_ANALOG(XI_THUMBLX, sThumbLX)
+			CHECK_PROP_ANALOG(XI_THUMBLY, sThumbLY)
+			CHECK_PROP_ANALOG(XI_THUMBRX, sThumbRX)
+			CHECK_PROP_ANALOG(XI_THUMBRY, sThumbRY)
+			CHECK_PROP_ANALOG(XI_LEFT_TRIGGER, bLeftTrigger)
+			CHECK_PROP_ANALOG(XI_RIGHT_TRIGGER, bRightTrigger)
 
 #undef CHECK_PROP_ANALOG
 
 #define CHECK_PROP_DIGITAL(prop, stateTest) \
-   case prop:           (current) ? retVal = (( mXInputStateNew[controllerID].state.Gamepad.wButtons & stateTest ) != 0 ) : retVal = (( mXInputStateOld[controllerID].state.Gamepad.wButtons & stateTest ) != 0 ); return retVal;
+	case prop:           (current) ? retVal = ((mXInputStateNew[controllerID].state.Gamepad.wButtons & stateTest) != 0) : retVal = ((mXInputStateOld[controllerID].state.Gamepad.wButtons & stateTest) != 0); return retVal;
 
-      CHECK_PROP_DIGITAL(SI_UPOV, XINPUT_GAMEPAD_DPAD_UP)
-      CHECK_PROP_DIGITAL(SI_DPOV, XINPUT_GAMEPAD_DPAD_DOWN)
-      CHECK_PROP_DIGITAL(SI_LPOV, XINPUT_GAMEPAD_DPAD_LEFT)
-      CHECK_PROP_DIGITAL(SI_RPOV, XINPUT_GAMEPAD_DPAD_RIGHT)
-      CHECK_PROP_DIGITAL(XI_START, XINPUT_GAMEPAD_START)
-      CHECK_PROP_DIGITAL(XI_BACK, XINPUT_GAMEPAD_BACK)
-      CHECK_PROP_DIGITAL(XI_LEFT_THUMB, XINPUT_GAMEPAD_LEFT_THUMB)
-      CHECK_PROP_DIGITAL(XI_RIGHT_THUMB, XINPUT_GAMEPAD_RIGHT_THUMB)
-      CHECK_PROP_DIGITAL(XI_LEFT_SHOULDER, XINPUT_GAMEPAD_LEFT_SHOULDER)
-      CHECK_PROP_DIGITAL(XI_RIGHT_SHOULDER, XINPUT_GAMEPAD_RIGHT_SHOULDER)
-      CHECK_PROP_DIGITAL(XI_A, XINPUT_GAMEPAD_A)
-      CHECK_PROP_DIGITAL(XI_B, XINPUT_GAMEPAD_B)
-      CHECK_PROP_DIGITAL(XI_X, XINPUT_GAMEPAD_X)
-      CHECK_PROP_DIGITAL(XI_Y, XINPUT_GAMEPAD_Y)
+			CHECK_PROP_DIGITAL(SI_UPOV, XINPUT_GAMEPAD_DPAD_UP)
+			CHECK_PROP_DIGITAL(SI_DPOV, XINPUT_GAMEPAD_DPAD_DOWN)
+			CHECK_PROP_DIGITAL(SI_LPOV, XINPUT_GAMEPAD_DPAD_LEFT)
+			CHECK_PROP_DIGITAL(SI_RPOV, XINPUT_GAMEPAD_DPAD_RIGHT)
+			CHECK_PROP_DIGITAL(XI_START, XINPUT_GAMEPAD_START)
+			CHECK_PROP_DIGITAL(XI_BACK, XINPUT_GAMEPAD_BACK)
+			CHECK_PROP_DIGITAL(XI_LEFT_THUMB, XINPUT_GAMEPAD_LEFT_THUMB)
+			CHECK_PROP_DIGITAL(XI_RIGHT_THUMB, XINPUT_GAMEPAD_RIGHT_THUMB)
+			CHECK_PROP_DIGITAL(XI_LEFT_SHOULDER, XINPUT_GAMEPAD_LEFT_SHOULDER)
+			CHECK_PROP_DIGITAL(XI_RIGHT_SHOULDER, XINPUT_GAMEPAD_RIGHT_SHOULDER)
+			CHECK_PROP_DIGITAL(XI_A, XINPUT_GAMEPAD_A)
+			CHECK_PROP_DIGITAL(XI_B, XINPUT_GAMEPAD_B)
+			CHECK_PROP_DIGITAL(XI_X, XINPUT_GAMEPAD_X)
+			CHECK_PROP_DIGITAL(XI_Y, XINPUT_GAMEPAD_Y)
 
 #undef CHECK_PROP_DIGITAL
-   }
+	}
 
-   return -1;
+	return -1;
 }
 
 //------------------------------------------------------------------------------
