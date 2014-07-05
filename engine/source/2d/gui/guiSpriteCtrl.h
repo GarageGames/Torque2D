@@ -36,6 +36,8 @@ private:
 
 protected:
     StringTableEntry                mImageAssetId;
+    U32                             mImageFrameId;
+    StringTableEntry                mNamedImageFrameId;
     StringTableEntry                mAnimationAssetId;
 
 public:
@@ -46,10 +48,19 @@ public:
     void onRender(Point2I offset, const RectI &updateRect);
     static void initPersistFields();
 
-	/// Static and Animated Assets.
-    virtual bool setImage( const char* pImageAssetId );
+    virtual void copyTo(SimObject* object);
+
+    // Static and Animated Assets.
+    inline bool setImage( const char* pImageAssetId ) { return setImage( pImageAssetId, mImageFrame ); }
+    virtual bool setImage( const char* pImageAssetId, const U32 frame );
+    virtual bool setImage( const char* pImageAssetId, const char* pNamedFrame );
+    inline StringTableEntry getImage( void ) const{ return mImageAssetId; }
     virtual bool setImageFrame( const U32 frame );
+    inline U32 getImageFrame( void ) const { return mImageFrameId; }
+    virtual bool setNamedImageFrame ( const char* namedFrame );
+    inline StringTableEntry getNamedImageFrame( void ) const { return mNamedImageFrameId; }
     virtual bool setAnimation( const char* pAnimationAssetId );
+    inline StringTableEntry getAnimation( void ) const { return mAnimationAssetId; }
 
     // Declare type.
     DECLARE_CONOBJECT(GuiSpriteCtrl);
@@ -59,13 +70,13 @@ protected:
 
 protected:
     static bool setImage(void* obj, const char* data) { static_cast<GuiSpriteCtrl*>(obj)->setImage( data ); return false; }
-    static const char* getImage(void* obj, const char* data) { return DYNAMIC_VOID_CAST_TO(GuiSpriteCtrl, ImageFrameProvider, obj)->getImage(); }
-    static bool writeImage( void* obj, StringTableEntry pFieldName ) { GuiSpriteCtrl* pCastObject = static_cast<GuiSpriteCtrl*>(obj); if ( !pCastObject->isStaticFrameProvider() ) return false; return pCastObject->mImageAssetId != StringTable->EmptyString; }
+    static bool writeImage(void* obj, StringTableEntry pFieldName) { GuiSpriteCtrl* pCastObject = static_cast<GuiSpriteCtrl*>(obj); if ( !pCastObject->isStaticFrameProvider() ) return false; return pCastObject->mImageAssetId != StringTable->EmptyString; }
     static bool setImageFrame(void* obj, const char* data) { static_cast<GuiSpriteCtrl*>(obj)->setImageFrame( dAtoi(data) ); return false; }
-    static bool writeImageFrame( void* obj, StringTableEntry pFieldName ) { GuiSpriteCtrl* pCastObject = static_cast<GuiSpriteCtrl*>(obj); return pCastObject->isStaticFrameProvider() && pCastObject->getImageFrame() > 0; }
+    static bool writeImageFrame(void* obj, StringTableEntry pFieldName) { GuiSpriteCtrl* pCastObject = static_cast<GuiSpriteCtrl*>(obj); if ( !pCastObject->isStaticFrameProvider() || pCastObject->isUsingNamedImageFrame() ) return false; return pCastObject->getImageFrame() > 0; }
+    static bool setNamedImageFrame(void* obj, const char* data) { static_cast<GuiSpriteCtrl*>(obj)->setNamedImageFrame(data); return false; }
+    static bool writeNamedImageFrame(void* obj, StringTableEntry pFieldName) { GuiSpriteCtrl* pCastObject = static_cast<GuiSpriteCtrl*>(obj); if ( !pCastObject->isStaticFrameProvider() || !pCastObject->isUsingNamedImageFrame() ) return false; return pCastObject->mNamedImageFrameId != StringTable->EmptyString; }
     static bool setAnimation(void* obj, const char* data) { static_cast<GuiSpriteCtrl*>(obj)->setAnimation(data); return false; };
-    static const char* getAnimation(void* obj, const char* data) { return DYNAMIC_VOID_CAST_TO(GuiSpriteCtrl, ImageFrameProvider, obj)->getAnimation(); }
-    static bool writeAnimation( void* obj, StringTableEntry pFieldName ) { GuiSpriteCtrl* pCastObject = static_cast<GuiSpriteCtrl*>(obj); if ( pCastObject->isStaticFrameProvider() ) return false; return pCastObject->mAnimationAssetId != StringTable->EmptyString; }
+    static bool writeAnimation(void* obj, StringTableEntry pFieldName) { GuiSpriteCtrl* pCastObject = static_cast<GuiSpriteCtrl*>(obj); if ( pCastObject->isStaticFrameProvider() ) return false; return pCastObject->mAnimationAssetId != StringTable->EmptyString; }
 };
 
 #endif //_GUISPRITECTRL_H_
