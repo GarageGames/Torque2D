@@ -1050,6 +1050,20 @@ ConsoleMethodWithDocs(CompositeSprite, getSpriteId, ConsoleInt, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
+ConsoleMethodWithDocs(CompositeSprite, getSpriteUserData, ConsoleString, 2, 2, ())
+{
+    const char* UserDatastr = (const char*) object->getUserData();
+    return UserDatastr;
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethodWithDocs(CompositeSprite, setSpriteUserData, ConsoleVoid, 3, 3, (string))
+{
+    StringTableEntry UserDatastr = StringTable->insert(argv[2]);
+    object->setUserData((void *)UserDatastr);
+}
+
 /*! Picks sprites intersecting the specified point with optional group/layer masks.
     @param x/y The coordinate of the point as either (\x y\ or (x,y)
     @return Returns list of sprite Ids.
