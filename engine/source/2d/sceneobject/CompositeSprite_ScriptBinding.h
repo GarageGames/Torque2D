@@ -1018,6 +1018,22 @@ ConsoleMethodWithDocs(CompositeSprite, getSpriteDataObject, ConsoleString, 2, 2,
 }
 
 //-----------------------------------------------------------------------------
+ConsoleMethodWithDocs(CompositeSprite, getSpriteUserData, ConsoleString, 2, 2, ())
+{
+    const char* UserDatastr = (const char*) object->getUserData();
+    return UserDatastr;
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethodWithDocs(CompositeSprite, setSpriteUserData, ConsoleVoid, 3, 3, (string))
+{
+    StringTableEntry UserDatastr = StringTable->insert(argv[2]);
+    object->setUserData((void *)UserDatastr);
+}
+
+
+//-----------------------------------------------------------------------------
 
 /*! Set the sprite name.
     This must be unique within this composite sprite instance.  To clear the name you can pass an empty string.
@@ -1040,14 +1056,13 @@ ConsoleMethodWithDocs(CompositeSprite, getSpriteName, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the SpriteBatchId of the currently selected sprite.
-    @returns The SpriteBatchId
+/*! Gets the SpriteBatchID of the currently selected Sprite
+	@returns The SpriteBatchID
 */
-ConsoleMethodWithDocs(CompositeSprite, getSpriteId, ConsoleInt, 2, 2, ())
+ConsoleMethodWithDocs(CompositeSprite, getSpriteID, ConsoleInt, 2, 2, ())
 {
-    return object->getSpriteId();
+	return object->getSelectedSprite()->getBatchId();
 }
-
 //-----------------------------------------------------------------------------
 
 /*! Picks sprites intersecting the specified point with optional group/layer masks.
