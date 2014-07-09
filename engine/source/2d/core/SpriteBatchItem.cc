@@ -57,7 +57,7 @@ static StringTableEntry spriteImageFrameName        = StringTable->insert("Frame
 static StringTableEntry spriteNamedImageFrameName   = StringTable->insert("NamedFrame");
 static StringTableEntry spriteAnimationName         = StringTable->insert("Animation");
 static StringTableEntry spriteDataObjectName        = StringTable->insert("DataObject");
-static StringTableEntry spriteUserDataName          = StringTable->insert("DataObject");
+static StringTableEntry spriteUserDataName          = StringTable->insert("UserData");
 
 //------------------------------------------------------------------------------
 
@@ -589,7 +589,7 @@ void SpriteBatchItem::onTamlCustomRead( const TamlCustomNode* pSpriteNode )
             // Set logical position.
             setLogicalPosition( LogicalPosition( pLogicalPositionArgs ) );
         }
-		else if ( fieldName == spriteUserDataName )
+        else if ( fieldName == spriteUserDataName )
         {
             StringTableEntry UserDatastr = StringTable->insert(pSpriteField->getFieldValue());
             setUserData((void *)UserDatastr);
