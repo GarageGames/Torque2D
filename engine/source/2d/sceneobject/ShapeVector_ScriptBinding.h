@@ -105,7 +105,7 @@ ConsoleMethodWithDocs(ShapeVector, getWorldPoly, ConsoleString, 2, 2, ())
 
 //----------------------------------------------------------------------------
 
-/*! or ( stockColorName ) - Sets the line color.
+/*! RGBA value or ( stockColorName ) - Sets the line color.
     @param red The red value.
     @param green The green value.
     @param blue The blue value.
@@ -130,7 +130,7 @@ ConsoleMethodWithDocs(ShapeVector, setLineColor, ConsoleVoid, 3, 6, (float red, 
         if ( elementCount == 1 )
         {
             // Set color.
-            Con::setData( TypeColorF, &const_cast<ColorF&>(object->getBlendColor()), 0, 1, &(argv[2]) );
+            Con::setData( TypeColorF, &const_cast<ColorF&>(object->getLineColor()), 0, 1, &(argv[2]) );
             return;
         }
 
@@ -216,7 +216,7 @@ ConsoleMethodWithDocs(ShapeVector, setLineAlpha, ConsoleVoid, 3, 3, (alpha))
 
 //----------------------------------------------------------------------------
 
-/*! or ( stockColorName ) - Sets the fill color.
+/*! RGBA value or ( stockColorName ) - Sets the fill color.
     @param red The red value.
     @param green The green value.
     @param blue The blue value.
@@ -241,7 +241,7 @@ ConsoleMethodWithDocs(ShapeVector, setFillColor, ConsoleVoid, 3, 3, (float red, 
         if ( elementCount == 1 )
         {
             // Set color.
-            Con::setData( TypeColorF, &const_cast<ColorF&>(object->getBlendColor()), 0, 1, &(argv[2]) );
+            Con::setData( TypeColorF, &const_cast<ColorF&>(object->getFillColor()), 0, 1, &(argv[2]) );
             return;
         }
 
