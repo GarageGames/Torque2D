@@ -670,8 +670,21 @@ void ParticleAssetField::onTamlCustomRead( const TamlCustomNode* pCustomNode )
         keys.push_back( key );
     }
 
-    // Set the value bounds.
-    setValueBounds( maxTime, minValue, maxValue, defaultValue );
+    // If value bounds are present but no keys, assign the field its default values.
+    if ( !keys.size() )
+    {
+        DataKey key;
+        key.mTime = getMinTime();
+        key.mValue = getDefaultValue();
+        keys.push_back( key );
+    }
+
+    // Did we read in any value bounds?
+    if ( mValueBoundsDirty )
+    {
+        // Set the value bounds.
+        setValueBounds( maxTime, minValue, maxValue, defaultValue );
+    }
 
     // Set the value scale.
     setValueScale( valueScale );

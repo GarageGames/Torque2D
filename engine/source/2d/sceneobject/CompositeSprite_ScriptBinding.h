@@ -1040,6 +1040,16 @@ ConsoleMethodWithDocs(CompositeSprite, getSpriteName, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
+/*! Gets the SpriteBatchId of the currently selected sprite.
+    @returns The SpriteBatchId
+*/
+ConsoleMethodWithDocs(CompositeSprite, getSpriteId, ConsoleInt, 2, 2, ())
+{
+    return object->getSpriteId();
+}
+
+//-----------------------------------------------------------------------------
+
 /*! Picks sprites intersecting the specified point with optional group/layer masks.
     @param x/y The coordinate of the point as either (\x y\ or (x,y)
     @return Returns list of sprite Ids.

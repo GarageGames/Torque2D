@@ -1482,5 +1482,7 @@ bool DInputDevice::joystickDetected()
    return( smJoystickCount > 0  );
 }
 
-
-
+U8 DInputDevice::getJoystickCount()
+{  
+   return(smJoystickCount);
+}

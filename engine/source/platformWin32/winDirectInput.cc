@@ -49,6 +49,7 @@ DInputManager::DInputManager()
    mDInputInterface  = NULL;
    mKeyboardActive   = mMouseActive = mJoystickActive = false;
    mXInputActive = true;
+   mXInputLib = NULL;
 
    for(S32 i=0; i<4; i++)
 	   mLastDisconnectTime[i] = -1;
@@ -732,7 +733,7 @@ inline void DInputManager::fireXInputButtonEvent( int controllerID, bool forceFi
 	  Con::printf("%s", objName);
 	  */
 
-      buildXInputEvent( controllerID, XI_BUTTON, objInst, action, ( action == XI_MAKE ? 1 : 0 ) );
+      buildXInputEvent( controllerID, XI_BUTTON, objInst, action, ( action == XI_MAKE ? 1.0f : 0.0f ) );
    }
 }
 
@@ -786,19 +787,17 @@ void DInputManager::processXInput( void )
          if( mXInputDeadZoneOn )
          {
             // Zero value if thumbsticks are within the dead zone 
-            if( (mXInputStateNew[i].state.Gamepad.sThumbLX < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbLX > -XINPUT_DEADZONE) && 
-                (mXInputStateNew[i].state.Gamepad.sThumbLY < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbLY > -XINPUT_DEADZONE) ) 
-            {
-               mXInputStateNew[i].state.Gamepad.sThumbLX = 0;
-               mXInputStateNew[i].state.Gamepad.sThumbLY = 0;
-            }
+            if(mXInputStateNew[i].state.Gamepad.sThumbLX < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbLX > -XINPUT_DEADZONE)
+            mXInputStateNew[i].state.Gamepad.sThumbLX = 0;
 
-            if( (mXInputStateNew[i].state.Gamepad.sThumbRX < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbRX > -XINPUT_DEADZONE) && 
-                (mXInputStateNew[i].state.Gamepad.sThumbRY < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbRY > -XINPUT_DEADZONE) ) 
-            {
-               mXInputStateNew[i].state.Gamepad.sThumbRX = 0;
-               mXInputStateNew[i].state.Gamepad.sThumbRY = 0;
-            }
+            if(mXInputStateNew[i].state.Gamepad.sThumbLY < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbLY > -XINPUT_DEADZONE)  
+            mXInputStateNew[i].state.Gamepad.sThumbLY = 0;
+            
+            if(mXInputStateNew[i].state.Gamepad.sThumbRX < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbRX > -XINPUT_DEADZONE)
+            mXInputStateNew[i].state.Gamepad.sThumbRX = 0;
+
+            if(mXInputStateNew[i].state.Gamepad.sThumbRY < XINPUT_DEADZONE && mXInputStateNew[i].state.Gamepad.sThumbRY > -XINPUT_DEADZONE)
+            mXInputStateNew[i].state.Gamepad.sThumbRY = 0;
          }
 
          // this controller was connected or disconnected
