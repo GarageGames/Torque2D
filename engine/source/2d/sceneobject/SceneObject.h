@@ -658,9 +658,11 @@ protected:
     static bool             writeDefaultFriction( void* obj, StringTableEntry pFieldName ) {return mNotEqual(static_cast<SceneObject*>(obj)->getDefaultFriction(), 0.2f); }
     static bool             setDefaultRestitution(void* obj, const char* data) { static_cast<SceneObject*>(obj)->setDefaultRestitution(dAtof(data)); return false; }
     static bool             writeDefaultRestitution( void* obj, StringTableEntry pFieldName ) { return mNotEqual(static_cast<SceneObject*>(obj)->getDefaultRestitution(), 0.0f); }
-    static bool             setCollisionGroups(void* obj, const char* data) { static_cast<SceneObject*>(obj)->setCollisionGroupMask(dAtoi(data)); return false; }
+    static bool             setCollisionGroups(void* obj, const char* data) { static_cast<SceneObject*>(obj)->setCollisionGroupMask(Utility::mConvertStringToMask(data)); return false; }
+    static const char*      getCollisionGroups(void* obj, const char* data) { return Utility::mConvertMaskToString( static_cast<SceneObject*>(obj)->getCollisionGroupMask() ); }
     static bool             writeCollisionGroups( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getCollisionGroupMask() != MASK_ALL; }
-    static bool             setCollisionLayers(void* obj, const char* data) { static_cast<SceneObject*>(obj)->setCollisionLayerMask(dAtoi(data)); return false; }
+    static bool             setCollisionLayers(void* obj, const char* data) { static_cast<SceneObject*>(obj)->setCollisionLayerMask(Utility::mConvertStringToMask(data)); return false; }
+    static const char*      getCollisionLayers(void* obj, const char* data) { return Utility::mConvertMaskToString( static_cast<SceneObject*>(obj)->getCollisionLayerMask() ); }
     static bool             writeCollisionLayers( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getCollisionLayerMask() != MASK_ALL; }
     static bool             writeCollisionSuppress( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getCollisionSuppress() == true; }
     static bool             setGatherContacts(void* obj, const char* data)  { static_cast<SceneObject*>(obj)->setGatherContacts(dAtoi(data)); return false; }

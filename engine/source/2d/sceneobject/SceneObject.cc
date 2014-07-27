@@ -282,8 +282,8 @@ void SceneObject::initPersistFields()
     addProtectedField("SleepingAllowed", TypeBool, NULL, &setSleepingAllowed, &getSleepingAllowed, &writeSleepingAllowed, "" );
 
     /// Collision control.
-    addProtectedField("CollisionGroups", TypeS32, Offset(mCollisionGroupMask, SceneObject), &setCollisionGroups, &defaultProtectedGetFn, &writeCollisionGroups, "");
-    addProtectedField("CollisionLayers", TypeS32, Offset(mCollisionLayerMask, SceneObject), &setCollisionLayers, &defaultProtectedGetFn, &writeCollisionLayers, "");
+    addProtectedField("CollisionGroups", TypeS32, Offset(mCollisionGroupMask, SceneObject), &setCollisionGroups, &getCollisionGroups, &writeCollisionGroups, "");
+    addProtectedField("CollisionLayers", TypeS32, Offset(mCollisionLayerMask, SceneObject), &setCollisionLayers, &getCollisionLayers, &writeCollisionLayers, "");
     addField("CollisionSuppress", TypeBool, Offset(mCollisionSuppress, SceneObject), &writeCollisionSuppress, "");
     addProtectedField("GatherContacts", TypeBool, NULL, &setGatherContacts, &defaultProtectedGetFn, &writeGatherContacts, "");
     addProtectedField("DefaultDensity", TypeF32, Offset( mDefaultFixture.density, SceneObject), &setDefaultDensity, &defaultProtectedGetFn, &writeDefaultDensity, "");
