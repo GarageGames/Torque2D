@@ -327,4 +327,71 @@ U32 mGetStringElementCount( const char* inString )
     return wordCount;
 }
 
+//-----------------------------------------------------------------------------
+
+U32 mConvertStringToMask( const char* string )
+{
+    // Grab the element count of the first parameter.
+    const U32 elementCount = Utility::mGetStringElementCount(string);
+
+    // Make sure we get at least one number.
+    if (elementCount < 1)
+        return MASK_ALL;
+    else if ( elementCount == 1 )
+    {
+        if ( dStricmp( string, "all" ) == 0 )
+            return MASK_ALL;
+        else if ( dStricmp( string, "none" ) == 0 || dStricmp( string, "off" ) == 0 )
+            return 0;
+    }
+
+    // The mask.
+    U32 mask = 0;
+
+    // Convert the string to a mask.
+    for (U32 i = 0; i < elementCount; i++)
+    {
+        S32 bit = dAtoi(Utility::mGetStringElement(string, i));
+         
+        // Make sure the group is valid.
+        if ((bit < 0) || (bit >= MASK_BITCOUNT))
+        {
+            Con::warnf("Utility::mConvertStringToMask() - Invalid group specified (%d); skipped!", bit);
+            continue;
+        }
+         
+        mask |= (1 << bit);
+    }
+
+    return mask;
+}
+
+//-----------------------------------------------------------------------------
+
+const char* mConvertMaskToString( const U32 mask )
+{
+    bool first = true;
+    static char bits[128];
+    bits[0] = '\0';
+
+    if (!mask)
+    {
+        dSprintf(bits, 8, "none");
+        return bits;
+    }
+    
+    for (S32 i = 0; i < MASK_BITCOUNT; i++)
+    {
+        if (mask & BIT(i))
+        {
+            char bit[4];
+            dSprintf(bit, 4, "%s%d", first ? "" : " ", i);
+            first = false;
+            dStrcat(bits, bit);
+        }
+    }
+
+    return bits;
+}
+
 } // Namespace Utility
