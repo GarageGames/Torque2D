@@ -80,6 +80,8 @@ Vector2 mGetStringElementVector( const char* inString, const U32 index = 0 );
 VectorF mGetStringElementVector3D( const char* inString, const U32 index = 0 );
 const char* mGetStringElement( const char* inString, const U32 index, const bool copyBuffer = true );
 U32 mGetStringElementCount( const char *string );
+U32 mConvertStringToMask( const char* string );
+const char* mConvertMaskToString( const U32 mask );
 
 } // Namespace Utility.
 

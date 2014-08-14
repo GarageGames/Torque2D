@@ -1,5 +1,5 @@
 ![Torque Logo](http://static.garagegames.com/static/pg/logokits/Torque-Logo_H.png)
-## Torque 2D 3.0
+## Torque 2D 3.1
 
 MIT Licensed Open Source version of Torque 2D from GarageGames. Maintained by the T2D Steering Committee and contributions from the community.
 

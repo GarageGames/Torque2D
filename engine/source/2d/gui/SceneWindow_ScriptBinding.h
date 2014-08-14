@@ -374,9 +374,11 @@ ConsoleMethodWithDocs(SceneWindow, getTargetCameraSize, ConsoleString, 2, 2, ())
 //-----------------------------------------------------------------------------
 
 /*! Set the target camera area.
+    @param x1 / y1 Coordinates of the upper left corner of the target area.
+    @param x2 / y2 Coordinates of the lower right corner of the target area.
     @return No return value.
 */
-ConsoleMethodWithDocs(SceneWindow, setTargetCameraArea, ConsoleVoid, 3, 6, (x / y / width / height))
+ConsoleMethodWithDocs(SceneWindow, setTargetCameraArea, ConsoleVoid, 3, 6, (x1 / y1 / x2 / y2))
 {
    // Upper left bound.
    Vector2 v1;

@@ -1287,8 +1287,6 @@ ConsoleMethodWithDocs(SceneObject, setCollisionLayers, ConsoleVoid, 2, 2 + MASK_
             object->setCollisionLayerMask(0);
             return;
         }
-
-        return;
     }
 
     // The mask.

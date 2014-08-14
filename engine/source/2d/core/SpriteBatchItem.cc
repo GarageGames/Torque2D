@@ -57,6 +57,7 @@ static StringTableEntry spriteImageFrameName        = StringTable->insert("Frame
 static StringTableEntry spriteNamedImageFrameName   = StringTable->insert("NamedFrame");
 static StringTableEntry spriteAnimationName         = StringTable->insert("Animation");
 static StringTableEntry spriteDataObjectName        = StringTable->insert("DataObject");
+static StringTableEntry spriteUserDataName          = StringTable->insert("UserData");
 
 //------------------------------------------------------------------------------
 
@@ -433,6 +434,12 @@ void SpriteBatchItem::onTamlCustomWrite( TamlCustomNode* pParentNode )
     // Write data object.
     if ( getDataObject() != NULL )
         pSpriteNode->addNode( getDataObject() );
+
+    if ( getUserData() != NULL)
+    {   
+        const char* UserDatastr = (const char*) getUserData();
+        pSpriteNode->addField( "UserData", UserDatastr );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -581,6 +588,11 @@ void SpriteBatchItem::onTamlCustomRead( const TamlCustomNode* pSpriteNode )
 
             // Set logical position.
             setLogicalPosition( LogicalPosition( pLogicalPositionArgs ) );
+        }
+        else if ( fieldName == spriteUserDataName )
+        {
+            StringTableEntry UserDatastr = StringTable->insert(pSpriteField->getFieldValue());
+            setUserData((void *)UserDatastr);
         }
     }
 

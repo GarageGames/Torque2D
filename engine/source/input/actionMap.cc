@@ -1607,7 +1607,59 @@ bool ActionMap::processMove(const InputEvent* pEvent)
 
         return true;
     }
-    else if ( pEvent->deviceType == JoystickDeviceType || pEvent->deviceType == GamepadDeviceType )
+    else if ( pEvent->deviceType == JoystickDeviceType )
+    {
+        // Joystick events...
+        const Node* pNode = findNode( pEvent->deviceType, pEvent->deviceInst, pEvent->modifier,   pEvent->objType );
+
+        if( pNode == NULL )
+            return false;
+
+        // "Do nothing" bind:
+        if ( !pNode->consoleFunction[0] )
+            return( true );
+
+        // Whadda ya know, we have this bound.  Set up, and call the console
+        //  function associated with it.  Joystick move events are the same as mouse
+        //  move events except that they don't ignore dead zone.
+        //
+        F32 value = pEvent->fValues[0];
+        if ( pNode->flags & Node::Inverted )
+            value *= -1.0f;
+
+        if ( pNode->flags & Node::HasScale )
+            value *= pNode->scaleFactor;
+
+        if ( pNode->flags & Node::HasDeadZone )
+        {
+            if ( value >= pNode->deadZoneBegin && value <= pNode->deadZoneEnd )
+            {
+                value = 0.0f;
+            }
+            else
+            {
+                if( value > 0 )
+                    value = ( value - pNode->deadZoneBegin ) * ( 1.f / ( 1.f - pNode->deadZoneBegin ) );
+                else
+                    value = ( value + pNode->deadZoneBegin ) * ( 1.f / ( 1.f - pNode->deadZoneBegin ) );
+            }
+        }
+
+        if( pNode->flags & Node::NonLinear )
+            value = ( value < 0.f ? -1.f : 1.f ) * mPow( mFabs( value ), CONST_E );
+
+        // Ok, we're all set up, call the function.
+        argv[0] = pNode->consoleFunction;
+        argv[1] = Con::getFloatArg( value );
+            
+        if (pNode->object)
+            Con::executef(pNode->object, 2, argv[0], argv[1]);
+        else
+            Con::execute(2, argv);
+
+        return true;
+    }
+    else if ( pEvent->deviceType == GamepadDeviceType )
     {
         // Joystick events...
         const Node* pNode = findNode( pEvent->deviceType, pEvent->deviceInst, pEvent->modifier,   pEvent->objInst );
