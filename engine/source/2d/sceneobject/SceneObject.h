@@ -164,6 +164,7 @@ protected:
     b2FixtureDef            mDefaultFixture;
     bool                    mGatherContacts;
     Scene::typeContactVector* mpCurrentContacts;
+	bool					mOneWayCol;
 
     /// General collision shape access.
     typeCollisionFixtureDefVector mCollisionFixtureDefs;
@@ -368,7 +369,9 @@ public:
     inline F32              getDefaultRestitution( void ) const         { return mDefaultFixture.restitution; }
     inline void             setCollisionSuppress( const bool status )   { mCollisionSuppress = status; }
     inline bool             getCollisionSuppress(void) const            { return mCollisionSuppress; }
-    inline const Scene::typeContactVector* getCurrentContacts( void ) const    { return mpCurrentContacts; }
+	inline void             setOneWayCol(const bool status)				{ mOneWayCol = status; }
+	inline bool             getOneWayCol(void) const					{ return mOneWayCol; }
+	inline const Scene::typeContactVector* getCurrentContacts(void) const    { return mpCurrentContacts; }
     inline U32              getCurrentContactCount( void ) const        { if ( mpCurrentContacts != NULL ) return mpCurrentContacts->size(); else return 0; }
     virtual void            setGatherContacts( const bool gatherContacts ) { mGatherContacts = gatherContacts; initializeContactGathering(); }
     inline bool             getGatherContacts( void ) const             { return mGatherContacts; }
@@ -667,6 +670,7 @@ protected:
     static bool             writeCollisionSuppress( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getCollisionSuppress() == true; }
     static bool             setGatherContacts(void* obj, const char* data)  { static_cast<SceneObject*>(obj)->setGatherContacts(dAtoi(data)); return false; }
     static bool             writeGatherContacts( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getGatherContacts() == true; }
+	static bool             writeOneWayCol(void* obj, StringTableEntry pFieldName) { return static_cast<SceneObject*>(obj)->getOneWayCol() == true; }
 
     /// Velocities.
     static bool             setLinearVelocity(void* obj, const char* data)  { static_cast<SceneObject*>(obj)->setLinearVelocity(Vector2(data)); return false; }

@@ -183,7 +183,7 @@ protected:
 	static void Destroy(b2Contact* contact, b2Shape::Type typeA, b2Shape::Type typeB, b2BlockAllocator* allocator);
 	static void Destroy(b2Contact* contact, b2BlockAllocator* allocator);
 
-	b2Contact() : m_fixtureA(NULL), m_fixtureB(NULL) {}
+	b2Contact() : m_fixtureA(NULL), m_fixtureB(NULL), m_reEnable(true) {}
 	b2Contact(b2Fixture* fixtureA, int32 indexA, b2Fixture* fixtureB, int32 indexB);
 	virtual ~b2Contact() {}
 
@@ -193,6 +193,7 @@ protected:
 	static bool s_initialized;
 
 	uint32 m_flags;
+	bool m_reEnable;
 
 	// World pool and list pointers.
 	b2Contact* m_prev;
@@ -249,6 +250,7 @@ inline void b2Contact::SetEnabled(bool flag)
 	{
 		m_flags &= ~e_enabledFlag;
 	}
+	m_reEnable = flag;
 }
 
 inline bool b2Contact::IsEnabled() const

@@ -125,6 +125,7 @@ void b2Contact::Destroy(b2Contact* contact, b2BlockAllocator* allocator)
 
 b2Contact::b2Contact(b2Fixture* fA, int32 indexA, b2Fixture* fB, int32 indexB)
 {
+	m_reEnable = true;
 	m_flags = e_enabledFlag;
 
 	m_fixtureA = fA;
@@ -163,7 +164,8 @@ void b2Contact::Update(b2ContactListener* listener)
 	b2Manifold oldManifold = m_manifold;
 
 	// Re-enable this contact.
-	m_flags |= e_enabledFlag;
+	if (m_reEnable == true)
+		m_flags |= e_enabledFlag;
 
 	bool touching = false;
 	bool wasTouching = (m_flags & e_touchingFlag) == e_touchingFlag;

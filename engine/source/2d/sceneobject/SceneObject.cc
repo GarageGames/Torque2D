@@ -139,6 +139,7 @@ SceneObject::SceneObject() :
     mCollisionSuppress(false),
     mGatherContacts(false),
     mpCurrentContacts(NULL),
+	mOneWayCol(false),
 
     /// Render visibility.                                        
     mVisible(true),
@@ -289,6 +290,7 @@ void SceneObject::initPersistFields()
     addProtectedField("DefaultDensity", TypeF32, Offset( mDefaultFixture.density, SceneObject), &setDefaultDensity, &defaultProtectedGetFn, &writeDefaultDensity, "");
     addProtectedField("DefaultFriction", TypeF32, Offset( mDefaultFixture.friction, SceneObject), &setDefaultFriction, &defaultProtectedGetFn, &writeDefaultFriction, "");
     addProtectedField("DefaultRestitution", TypeF32, Offset( mDefaultFixture.restitution, SceneObject), &setDefaultRestitution, &defaultProtectedGetFn, &writeDefaultRestitution, "");
+	addField("OneWayCollision", TypeBool, Offset(mOneWayCol, SceneObject), &writeOneWayCol, "");
 
     /// Velocities.
     addProtectedField("LinearVelocity", TypeVector2, NULL, &setLinearVelocity, &getLinearVelocity, &writeLinearVelocity, "");

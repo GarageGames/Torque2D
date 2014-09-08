@@ -351,7 +351,71 @@ void Scene::BeginContact( b2Contact* pContact )
     SceneObject* pSceneObjectA = static_cast<SceneObject*>(pPhysicsProxyA);
     SceneObject* pSceneObjectB = static_cast<SceneObject*>(pPhysicsProxyB);
 
-    // Initialize the contact.
+	// If we've been told to check for one way collision....
+	if (pSceneObjectA->getOneWayCol() || pSceneObjectB->getOneWayCol())
+	{
+		// one way collision only applies to edge or chain shapes
+		if ((pFixtureA->GetType() == b2Shape::Type::e_chain || pFixtureA->GetType() == b2Shape::Type::e_edge) ||
+			(pFixtureB->GetType() == b2Shape::Type::e_chain || pFixtureB->GetType() == b2Shape::Type::e_edge))
+		{
+			// convenience renames....
+			SceneObject* pPlatformObject = NULL;
+			SceneObject* pMovingObject = NULL;
+			b2Fixture* pFixturePlatform = NULL;
+			b2Fixture* pFixtureObject = NULL;
+
+			if (pSceneObjectA->getOneWayCol())
+			{
+				pPlatformObject = pSceneObjectA;
+				pMovingObject = pSceneObjectB;
+				pFixturePlatform = pFixtureA;
+				pFixtureObject = pFixtureB;
+			}
+			else if (pSceneObjectB->getOneWayCol())
+			{
+				pPlatformObject = pSceneObjectB;
+				pMovingObject = pSceneObjectA;
+				pFixturePlatform = pFixtureB;
+				pFixtureObject = pFixtureA;
+			}
+
+			b2Manifold* manifold = pContact->GetManifold();
+
+			// attempting to "cheat" by just getting a bounding box for the shape and using that center
+			b2Vec2 collisionCentroid;
+			b2AABB* bbox = new b2AABB();
+			if (pFixturePlatform->GetType() == b2Shape::Type::e_chain)
+			{
+				const b2ChainShape* shape = pPlatformObject->getCollisionChainShape(0);
+				shape->ComputeAABB(bbox, pPlatformObject->getTransform(), 0);
+				collisionCentroid = bbox->GetCenter();
+			}
+			else
+			{
+				const b2EdgeShape* shape = pPlatformObject->getCollisionEdgeShape(0);
+				shape->ComputeAABB(bbox, pPlatformObject->getTransform(), 0);
+				collisionCentroid = bbox->GetCenter();
+			}
+			delete(bbox);
+
+			Vector2 nLPos = Vector2(collisionCentroid.x, collisionCentroid.y);
+			nLPos = pPlatformObject->getPosition() - nLPos;
+			nLPos.Normalize();
+			b2Vec2 vLPos = b2Vec2(nLPos.x, nLPos.y);
+
+			Vector2 nVel = Vector2(pMovingObject->getLinearVelocity().x, pMovingObject->getLinearVelocity().y);
+			nVel.Normalize();
+			b2Vec2 velB = b2Vec2(nVel.x, nVel.y);
+
+			F32 prod = b2Dot(vLPos, velB);// atan2(vLPos.x, vLPos.y) - atan2(velB.x, velB.y);
+			if (prod < 0.0f)
+			{
+				pContact->SetEnabled(false);
+			}
+		}
+	}
+
+	// Initialize the contact.
     TickContact tickContact;
     tickContact.initialize( pContact, pSceneObjectA, pSceneObjectB, pFixtureA, pFixtureB );
 
@@ -388,6 +452,11 @@ void Scene::EndContact( b2Contact* pContact )
     TickContact tickContact;
     tickContact.initialize( pContact, pSceneObjectA, pSceneObjectB, pFixtureA, pFixtureB );
 
+	if (pSceneObjectA->getOneWayCol() || pSceneObjectB->getOneWayCol())
+	{
+		pContact->SetEnabled(true);
+	}
+	
     // Add contact.
     mEndContacts.push_back( tickContact );
 }
