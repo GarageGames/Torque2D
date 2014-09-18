@@ -137,6 +137,7 @@ SceneObject::SceneObject() :
     mCollisionLayerMask(MASK_ALL),
     mCollisionGroupMask(MASK_ALL),
     mCollisionSuppress(false),
+    mCollisionOneWay(false),
     mGatherContacts(false),
     mpCurrentContacts(NULL),
 
@@ -285,6 +286,7 @@ void SceneObject::initPersistFields()
     addProtectedField("CollisionGroups", TypeS32, Offset(mCollisionGroupMask, SceneObject), &setCollisionGroups, &getCollisionGroups, &writeCollisionGroups, "");
     addProtectedField("CollisionLayers", TypeS32, Offset(mCollisionLayerMask, SceneObject), &setCollisionLayers, &getCollisionLayers, &writeCollisionLayers, "");
     addField("CollisionSuppress", TypeBool, Offset(mCollisionSuppress, SceneObject), &writeCollisionSuppress, "");
+    addField("CollisionOneWay", TypeBool, Offset(mCollisionOneWay, SceneObject), &writeCollisionOneWay, "");
     addProtectedField("GatherContacts", TypeBool, NULL, &setGatherContacts, &defaultProtectedGetFn, &writeGatherContacts, "");
     addProtectedField("DefaultDensity", TypeF32, Offset( mDefaultFixture.density, SceneObject), &setDefaultDensity, &defaultProtectedGetFn, &writeDefaultDensity, "");
     addProtectedField("DefaultFriction", TypeF32, Offset( mDefaultFixture.friction, SceneObject), &setDefaultFriction, &defaultProtectedGetFn, &writeDefaultFriction, "");
@@ -2837,6 +2839,7 @@ void SceneObject::copyTo( SimObject* obj )
     pSceneObject->setCollisionGroupMask( getCollisionGroupMask() );
     pSceneObject->setCollisionLayerMask( getCollisionLayerMask() );
     pSceneObject->setCollisionSuppress( getCollisionSuppress() );
+    pSceneObject->setCollisionOneWay( getCollisionOneWay() );
     pSceneObject->setGatherContacts( getGatherContacts() );
     pSceneObject->setDefaultDensity( getDefaultDensity() );
     pSceneObject->setDefaultFriction( getDefaultFriction() );

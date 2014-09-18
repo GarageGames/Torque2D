@@ -27,11 +27,16 @@
 #include "Box2D/Box2D.h"
 #endif
 
+#ifndef _SCENE_OBJECT_H_
+#include "2d/sceneobject/SceneObject.h"
+#endif
+
 //-----------------------------------------------------------------------------
 
 class ContactFilter : public b2ContactFilter
 {
-    virtual bool ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB);
+    virtual bool ShouldCollide(b2Fixture* pFixtureA, b2Fixture* pFixtureB);
+    virtual bool FilterOneWay(SceneObject* pSceneObjectA, SceneObject* pSceneObjectB, b2Fixture* pFixtureA, b2Fixture* pFixtureB);
 };
 
 #endif //_CONTACT_FILTER_H_

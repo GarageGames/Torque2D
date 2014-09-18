@@ -161,6 +161,7 @@ protected:
     U32                     mCollisionLayerMask;
     U32                     mCollisionGroupMask;
     bool                    mCollisionSuppress;
+    bool                    mCollisionOneWay;
     b2FixtureDef            mDefaultFixture;
     bool                    mGatherContacts;
     Scene::typeContactVector* mpCurrentContacts;
@@ -368,6 +369,8 @@ public:
     inline F32              getDefaultRestitution( void ) const         { return mDefaultFixture.restitution; }
     inline void             setCollisionSuppress( const bool status )   { mCollisionSuppress = status; }
     inline bool             getCollisionSuppress(void) const            { return mCollisionSuppress; }
+    inline void             setCollisionOneWay( const bool status )     { mCollisionOneWay = status; }
+    inline bool             getCollisionOneWay(void) const              { return mCollisionOneWay; }
     inline const Scene::typeContactVector* getCurrentContacts( void ) const    { return mpCurrentContacts; }
     inline U32              getCurrentContactCount( void ) const        { if ( mpCurrentContacts != NULL ) return mpCurrentContacts->size(); else return 0; }
     virtual void            setGatherContacts( const bool gatherContacts ) { mGatherContacts = gatherContacts; initializeContactGathering(); }
@@ -665,6 +668,7 @@ protected:
     static const char*      getCollisionLayers(void* obj, const char* data) { return Utility::mConvertMaskToString( static_cast<SceneObject*>(obj)->getCollisionLayerMask() ); }
     static bool             writeCollisionLayers( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getCollisionLayerMask() != MASK_ALL; }
     static bool             writeCollisionSuppress( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getCollisionSuppress() == true; }
+    static bool             writeCollisionOneWay( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getCollisionOneWay() == true; }
     static bool             setGatherContacts(void* obj, const char* data)  { static_cast<SceneObject*>(obj)->setGatherContacts(dAtoi(data)); return false; }
     static bool             writeGatherContacts( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getGatherContacts() == true; }
 
