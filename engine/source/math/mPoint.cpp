@@ -26,8 +26,8 @@
 
 const Point2I Point2I::One(1, 1);
 const Point2I Point2I::Zero(0, 0);
-const Point2I Point2I::Min(S32_MIN, S32_MIN);
-const Point2I Point2I::Max(S32_MAX, S32_MAX);
+const Point2I Point2I::Min(INT32_MIN, INT32_MIN);
+const Point2I Point2I::Max(INT32_MAX, INT32_MAX);
 
 const Point2F Point2F::One(1.0f, 1.0f);
 const Point2F Point2F::Zero(0.0f, 0.0f);

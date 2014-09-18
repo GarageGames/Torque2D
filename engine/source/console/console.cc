@@ -1582,7 +1582,7 @@ void collapsePath( char* pDstPath, U32 size, const char* pSrcPath, const char* p
     const U32 expandoCount = getPathExpandoCount();
 
     // Iterate expandos.
-    U32 expandoRelativePathLength = U32_MAX;
+    U32 expandoRelativePathLength = UINT32_MAX;
     for( U32 expandoIndex = 0; expandoIndex < expandoCount; ++expandoIndex )
     {
         // Fetch expando value (path).
@@ -1617,7 +1617,7 @@ void collapsePath( char* pDstPath, U32 size, const char* pSrcPath, const char* p
     }
 
     // Check if we've found a suitable expando
-    if ( expandoRelativePathLength != U32_MAX )
+    if ( expandoRelativePathLength != UINT32_MAX )
     {
         // Strip repeat slashes.
         Con::stripRepeatSlashes( pDstPath, pathBuffer, size );

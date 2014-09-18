@@ -43,7 +43,7 @@
 // Miscellaneous Defines.
 //-----------------------------------------------------------------------------
 
-#define MASK_ALL                        (U32_MAX)
+#define MASK_ALL                        (UINT32_MAX)
 #define MASK_BITCOUNT                   (32)
 #define DEBUG_MODE_COUNT                (8)
 #define MAX_LAYERS_SUPPORTED            (32)

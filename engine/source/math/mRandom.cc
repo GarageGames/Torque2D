@@ -31,8 +31,8 @@ RandomLCG gRandGen;
 static U32 msSeed = 1376312589;
 U32 gRandGenSeed = msSeed;
 
-const S32 RandomLCG::msQuotient  = S32_MAX / 16807L;
-const S32 RandomLCG::msRemainder = S32_MAX % 16807L;
+const S32 RandomLCG::msQuotient  = INT32_MAX / 16807L;
+const S32 RandomLCG::msRemainder = INT32_MAX % 16807L;
 
 //-----------------------------------------------------------------------------
 
@@ -99,7 +99,7 @@ U32 RandomLCG::randI()
 {
     if ( mSeed <= msQuotient )
     {
-        mSeed = (mSeed * 16807L) % S32_MAX;
+        mSeed = (mSeed * 16807L) % INT32_MAX;
     }
     else
     {
@@ -111,7 +111,7 @@ U32 RandomLCG::randI()
         if ( test > 0 )
             mSeed = test;
         else
-            mSeed = test + S32_MAX;
+            mSeed = test + INT32_MAX;
     }
 
     return mSeed;
