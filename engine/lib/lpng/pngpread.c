@@ -1,8 +1,8 @@
 
 /* pngpread.c - read a png file in push mode
  *
- * Last changed in libpng 1.5.11 [June 14, 2012]
- * Copyright (c) 1998-2012 Glenn Randers-Pehrson
+ * Last changed in libpng 1.5.19 [August 21, 2014]
+ * Copyright (c) 1998-2014 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  *
@@ -49,7 +49,7 @@ png_process_data_pause(png_structp png_ptr, int save)
       /* It's easiest for the caller if we do the save, then the caller doesn't
        * have to supply the same data again:
        */
-      if (save)
+      if (save != 0)
          png_push_save_buffer(png_ptr);
       else
       {
@@ -151,7 +151,7 @@ png_process_some_data(png_structp png_ptr, png_infop info_ptr)
 void /* PRIVATE */
 png_push_read_sig(png_structp png_ptr, png_infop info_ptr)
 {
-   png_size_t num_checked = png_ptr->sig_bytes,
+   png_size_t num_checked = png_ptr->sig_bytes, /* SAFE, does not exceed 8 */ 
        num_to_check = 8 - num_checked;
 
    if (png_ptr->buffer_size < num_to_check)
@@ -897,6 +897,12 @@ png_process_IDAT_data(png_structp png_ptr, png_bytep buffer,
        */
       ret = inflate(&png_ptr->zstream, Z_SYNC_FLUSH);
 
+      /* Hack, added in 1.5.18: the progressive reader does not reset
+       * png_ptr->zstream, so any attempt to use it after the last IDAT fails
+       * (silently).  This allows the read code to do the reset when required.
+       */
+      png_ptr->flags |= PNG_FLAG_ZSTREAM_PROGRESSIVE;
+
       /* Check for any failure before proceeding. */
       if (ret != Z_OK && ret != Z_STREAM_END)
       {
@@ -1285,7 +1291,7 @@ png_progressive_combine_row (png_structp png_ptr, png_bytep old_row,
     * it must be png_ptr->row_buf+1
     */
    if (new_row != NULL)
-      png_combine_row(png_ptr, old_row, 1/*display*/);
+      png_combine_row(png_ptr, old_row, 1/*blocky display*/);
 }
 #endif /* PNG_READ_INTERLACING_SUPPORTED */
 
