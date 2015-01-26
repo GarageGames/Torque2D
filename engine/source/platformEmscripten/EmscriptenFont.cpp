@@ -24,7 +24,7 @@
 #include "platform/platform.h"
 #include "platformEmscripten/platformEmscripten.h"
 #include "platformEmscripten/EmscriptenFont.h"
-#include "string/Unicode.h"
+#include "string/unicode.h"
 
 //------------------------------------------------------------------------------
 // New Unicode capable font class.

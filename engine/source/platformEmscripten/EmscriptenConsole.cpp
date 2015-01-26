@@ -22,7 +22,7 @@
 //-----------------------------------------------------------------------------
 
 #include "platformEmscripten/platformEmscripten.h"
-#include "platformEmscripten/EmscriptenCOnsole.h"
+#include "platformEmscripten/EmscriptenConsole.h"
 #include "platform/event.h"
 #include "game/gameInterface.h"
 
