@@ -29,7 +29,7 @@
 
 #include "platformEmscripten/EmscriptenOGLVideo.h"
 
-#include <SDL/sdl.h>
+#include <SDL/SDL.h>
 
 #define PREF_DIR_ROOT "/.torque"
 #define PREF_DIR_GAME_NAME "T2D"
