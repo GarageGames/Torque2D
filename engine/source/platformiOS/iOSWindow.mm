@@ -439,18 +439,18 @@ bool setScreenOrientation(bool portrait, bool upsidedown)
 }
 
 ConsoleFunction(setScreenOrientation, bool, 3, 3, "Sets the orientation of the screen ( portrait/landscape, upside down or right-side up )\n"
-            "@(bool portrait, bool upside_down)"){
+        "@(bool portrait, bool upside_down)"){
     return setScreenOrientation(dAtob(argv[1]), dAtob(argv[2]));
 }
 
 
 ConsoleFunction(getStatusBarHidden, bool, 1, 1, " Checks whether the status bar is hidden\n"
-            "@return Returns true if hidden and false if not"){
+        "@return Returns true if hidden and false if not"){
     return isStatusBarHidden();
 }
 
 ConsoleFunction(setStatusBarHidden, bool, 2, 2, " Hides/unhides the iOS status bar \n"
-            "@return true == status bar is hidden, false == status bar is visible"){
+        "@return true == status bar is hidden, false == status bar is visible"){
     return setStatusBarHidden(dAtob(argv[1]));
 }
 
