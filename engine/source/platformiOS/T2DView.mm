@@ -105,7 +105,7 @@ void ConvertToRetina(CGPoint *p)
         }
         
         S32 orientation = _iOSGameGetOrientation();
-        if (UIDeviceOrientationIsPortrait(orientation))
+        if (UIDeviceOrientationIsPortrait((UIDeviceOrientation)orientation))
         {
             point.y -= _iOSGetPortraitTouchoffset();
         }
@@ -137,7 +137,7 @@ extern Vector<Event *> TouchMoveEvents;
         }
         
         S32 orientation = _iOSGameGetOrientation();
-        if (UIDeviceOrientationIsPortrait(orientation))
+        if (UIDeviceOrientationIsPortrait((UIDeviceOrientation)orientation))
         {
             point.y -= _iOSGetPortraitTouchoffset();
             prevPoint.y -= _iOSGetPortraitTouchoffset();
@@ -166,7 +166,7 @@ extern Vector<Event *> TouchMoveEvents;
         }
         
         S32 orientation = _iOSGameGetOrientation();
-        if (UIDeviceOrientationIsPortrait(orientation))
+        if (UIDeviceOrientationIsPortrait((UIDeviceOrientation)orientation))
         {
             point.y -= _iOSGetPortraitTouchoffset();
             prevPoint.y -= _iOSGetPortraitTouchoffset();
