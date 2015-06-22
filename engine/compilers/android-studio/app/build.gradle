@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 
 
 android {
-    compileSdkVersion 18
+    compileSdkVersion 19
     buildToolsVersion "22.0.1"
 
     defaultConfig {
         applicationId "com.garagegames.torque2d"
-        minSdkVersion 9
-        targetSdkVersion 18
+        minSdkVersion 14
+        targetSdkVersion 19
 
         sourceSets.main {
             assets.srcDirs=[
