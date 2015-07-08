@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.garagegames.torque2d"
-        minSdkVersion 14
+        minSdkVersion 19
         targetSdkVersion 19
 
         sourceSets.main {
@@ -22,7 +22,7 @@ android {
         task buildNative(type: Exec, description: 'Compile JNI source via NDK') {
             def ndkDir = plugins.getPlugin('com.android.application').sdkHandler.getNdkFolder()
             commandLine "$ndkDir/ndk-build",
-                    '-C', file('src/main/jni').absolutePath, // Change src/main/jni the relative path to your jni source
+                    '-C', file('src/main/jni').absolutePath,
                     '-j', Runtime.runtime.availableProcessors(),
                     'all',
                     'NDK_DEBUG=1'
@@ -31,7 +31,7 @@ android {
         task cleanNative(type: Exec, description: 'Clean JNI object files') {
             def ndkDir = plugins.getPlugin('com.android.application').sdkHandler.getNdkFolder()
             commandLine "$ndkDir/ndk-build",
-                    '-C', file('src/main/jni').absolutePath, // Change src/main/jni the relative path to your jni source
+                    '-C', file('src/main/jni').absolutePath,
                     'clean'
         }
 
@@ -61,7 +61,10 @@ android {
 
         clean.dependsOn 'cleanNative'
         clean.dependsOn 'wipeGame'
-        preBuild.dependsOn 'copyGame'
+
+        tasks.withType(JavaCompile) {
+            compileTask -> compileTask.dependsOn copyGame
+        }
         tasks.withType(JavaCompile) {
             compileTask -> compileTask.dependsOn buildNative
         }
