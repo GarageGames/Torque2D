@@ -143,7 +143,7 @@ ConsoleMethodWithDocs(ParticleAsset, deselectField, ConsoleVoid, 2, 2, ())
 /*! Gets the selected field name or nothing if no field is selected.
     @return The selected field name or nothing if no fields is selected.
 */
-ConsoleMethodWithDocs(ParticleAsset, getSelectedField, ConsoleBool, 2, 2, ())
+ConsoleMethodWithDocs(ParticleAsset, getSelectedField, ConsoleString, 2, 2, ())
 {
     // Get the selected field.
     const ParticleAssetField* pParticleAssetField = object->getParticleFields().getSelectedField();

@@ -457,6 +457,18 @@ bool SpriteBatch::selectSpriteName( const char* pName )
 
 //------------------------------------------------------------------------------
 
+U32 SpriteBatch::getSpriteId( void ) const
+{
+    // Finish if a sprite is not selected.
+    if ( !checkSpriteSelected() )
+        return 0;
+
+    // Get sprite id.
+    return mSelectedSprite->getBatchId();
+}
+
+//------------------------------------------------------------------------------
+
 void SpriteBatch::setSpriteImage( const char* pAssetId, const U32 imageFrame )
 {
     // Debug Profiling.

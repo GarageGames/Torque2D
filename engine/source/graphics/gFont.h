@@ -52,12 +52,14 @@
 
 
 extern ResourceInstance* constructNewFont(Stream& stream);
+extern ResourceInstance* constructBMFont(Stream& stream);
 
 class TextureHandle;
 
 class GFont : public ResourceInstance
 {
    friend ResourceInstance* constructNewFont(Stream& stream);
+   friend ResourceInstance* constructBMFont(Stream& stream);
 
    static const U32 csm_fileVersion;
    static S32 smSheetIdCount;
@@ -173,6 +175,8 @@ public:
 
    /// Get the face name of the font.
    StringTableEntry getFontFaceName() const { return mFaceName; };
+
+   bool readBMFont(Stream& io_rStream);
 
    bool read(Stream& io_rStream);
    bool write(Stream& io_rStream);
