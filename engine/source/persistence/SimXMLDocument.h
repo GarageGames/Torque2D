@@ -64,7 +64,8 @@ class SimXMLDocument: public SimObject
       void reset(void);
       
       // Read / write / parse XML.
-      S32 loadFile(const char* rFileName);
+	  S32 loadFile(const char* rFileName);
+	  S32 loadPrefFile(const char* rFileName);
       S32 saveFile(const char* rFileName);
       S32 parse(const char* rText);
       
