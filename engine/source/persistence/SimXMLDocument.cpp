@@ -811,11 +811,15 @@ const char* SimXMLDocument::getText()
    if(!pNode)
       return "";
 
-   TiXmlText* text = pNode->FirstChild()->ToText();
-   if( !text )
-      return "";
+   if (pNode->FirstChild() != NULL)
+   {
+	   TiXmlText* text = pNode->FirstChild()->ToText();
+	   if (!text)
+		   return "";
 
-   return text->Value();
+	   return text->Value();
+   }
+   else return "";
 }
 
 void SimXMLDocument::removeText()
