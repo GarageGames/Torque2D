@@ -122,6 +122,17 @@ S32 SimXMLDocument::loadFile(const char* rFileName)
 }
 
 // -----------------------------------------------------------------------------
+// Get true if file loads successfully.
+// -----------------------------------------------------------------------------
+S32 SimXMLDocument::loadPrefFile(const char* rFileName)
+{
+	reset();
+
+	const char* prefsPath = Platform::getPrefsPath(rFileName);
+	return m_qDocument->LoadFile(prefsPath);
+}
+
+// -----------------------------------------------------------------------------
 // Get true if file saves successfully.
 // -----------------------------------------------------------------------------
 S32 SimXMLDocument::saveFile(const char* rFileName)
@@ -811,11 +822,15 @@ const char* SimXMLDocument::getText()
    if(!pNode)
       return "";
 
-   TiXmlText* text = pNode->FirstChild()->ToText();
-   if( !text )
-      return "";
+   if (pNode->FirstChild() != NULL)
+   {
+	   TiXmlText* text = pNode->FirstChild()->ToText();
+	   if (!text)
+		   return "";
 
-   return text->Value();
+	   return text->Value();
+   }
+   else return "";
 }
 
 void SimXMLDocument::removeText()

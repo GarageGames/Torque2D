@@ -39,6 +39,15 @@ ConsoleMethodWithDocs(SimXMLDocument, loadFile, ConsoleInt, 3, 3, (string fileNa
    return object->loadFile( argv[2] );
 }
 
+/*! Load file from given filename in the user pref folder (AppData on Windows systems). Do not begin the path with a qualifier such as ./ or /
+	@param fileName The name of the desired file
+	@return Returns 1 on success and 0 otherwise
+*/
+ConsoleMethodWithDocs(SimXMLDocument, loadPrefFile, ConsoleInt, 3, 3, (string fileName))
+{
+	return object->loadPrefFile(argv[2]);
+}
+
 /*! Save file to given filename.
     @param fileName A string presenting the filename to save the XML document as
     @return Returns 1 on success, and 0 otherwise
