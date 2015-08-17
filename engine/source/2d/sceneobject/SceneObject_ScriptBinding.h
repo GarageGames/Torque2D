@@ -590,6 +590,28 @@ ConsoleMethodWithDocs(SceneObject, getPosition, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
+/*! Gets the object's position.
+	@return The x (horizontal) position of the object.
+*/
+ConsoleMethodWithDocs(SceneObject, getPositionX, ConsoleFloat, 2, 2, ())
+{
+	// Get position.
+	return object->getPosition().x;
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets the object's position.
+	@return The y (vertical) position of the object.
+*/
+ConsoleMethodWithDocs(SceneObject, getPositionY, ConsoleFloat, 2, 2, ())
+{
+	// Get position.
+	return object->getPosition().y;
+}
+
+//-----------------------------------------------------------------------------
+
 /*! Gets the current render position.
     @return (float x/float y) The x and y (horizontal and vertical) render position of the object.
 */
