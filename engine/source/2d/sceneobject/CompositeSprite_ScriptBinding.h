@@ -471,8 +471,8 @@ ConsoleMethodWithDocs(CompositeSprite, getSpriteAnimation, ConsoleString, 2, 2, 
 
 //-----------------------------------------------------------------------------
 
-/*! Sets the sprite image frame.
-@param imageFrame The image frame to set the sprite to.
+/*! Sets the current animation frame for the selected sprite. IMPORTANT: this is not the image frame number used in the animation!
+@param frame Which frame of the animation to display
 @return No return value.
 */
 ConsoleMethodWithDocs(CompositeSprite, setSpriteAnimationFrame, ConsoleVoid, 3, 3, (int animationFrame))
@@ -485,8 +485,8 @@ ConsoleMethodWithDocs(CompositeSprite, setSpriteAnimationFrame, ConsoleVoid, 3, 
 
 //-----------------------------------------------------------------------------
 
-/*! Gets the sprite image frame.
-@return The sprite image frame.
+/*! Gets current frame index used in the animation for the selected sprite. IMPORTANT: this is not the image frame number!
+@return The current numerical animation frame for the selected sprite
 */
 ConsoleMethodWithDocs(CompositeSprite, getSpriteAnimationFrame, ConsoleInt, 2, 2, ())
 {
