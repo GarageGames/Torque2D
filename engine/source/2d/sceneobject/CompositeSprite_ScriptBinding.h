@@ -471,6 +471,30 @@ ConsoleMethodWithDocs(CompositeSprite, getSpriteAnimation, ConsoleString, 2, 2, 
 
 //-----------------------------------------------------------------------------
 
+/*! Sets the sprite image frame.
+@param imageFrame The image frame to set the sprite to.
+@return No return value.
+*/
+ConsoleMethodWithDocs(CompositeSprite, setSpriteAnimationFrame, ConsoleVoid, 3, 3, (int animationFrame))
+{
+	// Fetch frame.
+	const U32 frame = dAtoi(argv[2]);
+
+	object->setSpriteAnimationFrame(frame);
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets the sprite image frame.
+@return The sprite image frame.
+*/
+ConsoleMethodWithDocs(CompositeSprite, getSpriteAnimationFrame, ConsoleInt, 2, 2, ())
+{
+	return object->getSpriteAnimationFrame();
+}
+
+//-----------------------------------------------------------------------------
+
 /*! Clears any image or animation asset from the sprite.
     @return No return value.
 */
