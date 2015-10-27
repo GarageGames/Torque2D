@@ -1956,6 +1956,92 @@ ConsoleMethodWithDocs(SceneObject, rotateTo, ConsoleBool, 4, 6, (angle, speed, [
 
 //-----------------------------------------------------------------------------
 
+/*! Fades the object to the target color.
+	The current color of the object will continue to change until it arrives at the target color or the fade is cancelled.
+	The change will continue even if the blendColor is set directly.
+	@param (red / green / blue / alpha) The target color to fade the object to.
+	@param rate The rate per second to change each color value. Must be a number greater than zero.
+	@return Whether the fade started or not.
+*/
+ConsoleMethodWithDocs(SceneObject, fadeTo, ConsoleBool, 4, 4, (targetColor red / green / blue / alpha, rate))
+{
+	if (argc < 3)
+	{
+		Con::warnf("Scene::fadeTo() - Invalid number of parameters!");
+		return false;
+	}
+
+	const U32 colorCount = Utility::mGetStringElementCount(argv[2]);
+	if (colorCount != 4)
+	{
+		Con::warnf("Scene::fadeTo() - Invalid color! Colors require four values (red / green / blue / alpha)!");
+		return false;
+	}
+
+	F32 rate = dAtof(argv[3]);
+	if (rate <= 0.0f)
+	{
+		Con::warnf("Scene::fadeTo() - Rate must be greater than zero!");
+		return false;
+	}
+
+	return object->fadeTo(ColorF(dAtof(Utility::mGetStringElement(argv[2], 0)),
+								 dAtof(Utility::mGetStringElement(argv[2], 1)),
+								 dAtof(Utility::mGetStringElement(argv[2], 2)),
+								 dAtof(Utility::mGetStringElement(argv[2], 3))), 
+								 rate, rate, rate, rate);
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Fades the object to the target color over a period of time.
+	The current color of the object will continue to change until it arrives at the target color or the fade is cancelled.
+	The change will continue even if the blendColor is set directly which will change the amount of time it takes.
+	Unhindered, each of the color values will arrive at the target in approximately the target time.
+	@param (red / green / blue / alpha) The target color to fade the object to.
+	@param time The amount of time in milliseconds that each color value will take to reach the target. Must be a number greater than zero.
+	@return Whether the fade started or not.
+*/
+ConsoleMethodWithDocs(SceneObject, fadeToTime, ConsoleBool, 4, 4, (targetColor red / green / blue / alpha, time))
+{
+	if (argc < 3)
+	{
+		Con::warnf("Scene::fadeToTime() - Invalid number of parameters!");
+		return false;
+	}
+
+	const U32 colorCount = Utility::mGetStringElementCount(argv[2]);
+	if (colorCount != 4)
+	{
+		Con::warnf("Scene::fadeToTime() - Invalid color! Colors require four values (red / green / blue / alpha)!");
+		return false;
+	}
+
+	F32 time = dAtof(argv[3]);
+	if (time <= 0.0f)
+	{
+		Con::warnf("Scene::fadeToTime() - Time must be greater than zero!");
+		return false;
+	}
+
+	// Get the target color values.
+	const F32 tRed = dAtof(Utility::mGetStringElement(argv[2], 0));
+	const F32 tGreen = dAtof(Utility::mGetStringElement(argv[2], 1));
+	const F32 tBlue = dAtof(Utility::mGetStringElement(argv[2], 2));
+	const F32 tAlpha = dAtof(Utility::mGetStringElement(argv[2], 3));
+
+	// Get the rate to change each value. The rate will be change per second.
+	const ColorF currentColor = object->getBlendColor();
+	F32 rRed = (1000.0f * fabs(tRed - currentColor.red)) / time;
+	F32 rGreen = (1000.0f * fabs(tGreen - currentColor.green)) / time;
+	F32 rBlue = (1000.0f * fabs(tBlue - currentColor.blue)) / time;
+	F32 rAlpha = (1000.0f * fabs(tAlpha - currentColor.alpha)) / time;
+
+	return object->fadeTo(ColorF(tRed, tGreen, tBlue, tAlpha), rRed, rGreen, rBlue, rAlpha);
+}
+
+//-----------------------------------------------------------------------------
+
 /*! Stop a previous 'moveTo' command.
     @param autoStop? - Whether to automatically set the linear velocity to zero or not
     @return No return value.
@@ -1994,6 +2080,16 @@ ConsoleMethodWithDocs(SceneObject, cancelRotateTo, ConsoleVoid, 2, 3, ([autoStop
 
 //-----------------------------------------------------------------------------
 
+/*! Stop a previous 'fadeTo' command.
+	@return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, cancelFadeTo, ConsoleVoid, 2, 2, ())
+{
+	object->cancelFadeTo();
+}
+
+//-----------------------------------------------------------------------------
+
 /*! Gets whether a previous 'moveTo' command has completed or not.
     @return No return value.
 */
@@ -2010,6 +2106,16 @@ ConsoleMethodWithDocs(SceneObject, isMoveToComplete, ConsoleBool, 2, 2, ())
 ConsoleMethodWithDocs(SceneObject, isRotateToComplete, ConsoleBool, 2, 2, ())
 {
     return object->isRotateToComplete();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets whether a previous 'fadeTo' command has completed or not.
+	@return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, isFadeToComplete, ConsoleBool, 2, 2, ())
+{
+	return object->isFadeToComplete();
 }
 
 //-----------------------------------------------------------------------------

@@ -150,6 +150,14 @@ SceneObject::SceneObject() :
     mBlendColor(ColorF(1.0f,1.0f,1.0f,1.0f)),
     mAlphaTest(-1.0f),
 
+	// Fading.
+	mFadeActive(false),
+	mTargetColor(ColorF(1.0f, 1.0f, 1.0f, 1.0f)),
+	mDeltaRed(1.0f),
+	mDeltaGreen(1.0f),
+	mDeltaBlue(1.0f),
+	mDeltaAlpha(1.0f),
+
     /// Render sorting.
     mSortPoint(0.0f,0.0f),
 
@@ -610,6 +618,12 @@ void SceneObject::integrateObject( const F32 totalTime, const F32 elapsedTime, D
         // Yes, so calculate camera mount.
         mpAttachedCamera->calculateCameraMount( elapsedTime );
     }
+
+	// Update the BlendColor.
+	if ( mFadeActive )
+	{
+		updateBlendColor( elapsedTime );
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -632,6 +646,15 @@ void SceneObject::postIntegrate(const F32 totalTime, const F32 elapsedTime, Debu
         PROFILE_SCOPE(SceneObject_onUpdateCallback);
         Con::executef(this, 1, "onUpdate");
     }
+
+	// Check to see if we're done fading.
+	if ( mFadeActive && mBlendColor == mTargetColor )
+	{
+		mFadeActive = false;
+
+		PROFILE_SCOPE(SceneObject_onFadeComplete);
+		Con::executef(this, 1, "onFadeToComplete");
+	}
 
     // Are we using the sleeping callback?
     if ( mSleepingCallback )
@@ -1669,6 +1692,38 @@ bool SceneObject::rotateTo( const F32 targetAngle, const F32 speed, const bool a
     mRotateToEventId = Sim::postEvent(this, pEvent, Sim::getCurrentTime() + time );
 
     return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool SceneObject::fadeTo(const ColorF& targetColor, const F32 deltaRed, const F32 deltaGreen, const F32 deltaBlue, const F32 deltaAlpha)
+{
+	// Check in a scene.
+	if (!getScene())
+	{
+		Con::warnf("SceneObject::fadeTo() - Cannot fade object (%d) to a color as it is not in a scene.", getId());
+		return false;
+	}
+
+	// Check targetColor.
+	if (!targetColor.isValidColor())
+	{
+		Con::warnf("SceneObject::fadeTo() - Cannot fade object (%d) because the color is invalid.", getId());
+		return false;
+	}
+
+	// Only set fading active if the target color is not the blending color.
+	if (targetColor != mBlendColor)
+	{
+		mFadeActive = true;
+		mTargetColor = targetColor;
+		mDeltaRed = deltaRed;
+		mDeltaGreen = deltaGreen;
+		mDeltaBlue = deltaBlue;
+		mDeltaAlpha = deltaAlpha;
+	}
+
+	return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -4095,6 +4150,39 @@ const char* SceneObject::getDstBlendFactorDescription(const GLenum factor)
     Con::warnf( "SceneObject::getDstBlendFactorDescription() - Invalid destination blend factor." );
 
     return StringTable->EmptyString;
+}
+
+//-----------------------------------------------------------------------------
+
+void SceneObject::updateBlendColor(const F32 elapsedTime)
+{
+	// Apply the color deltas to the blendColor to move it toward the targetColor.
+	mBlendColor.red = processEffect(mBlendColor.red, mTargetColor.red, mDeltaRed * elapsedTime);
+	mBlendColor.green = processEffect(mBlendColor.green, mTargetColor.green, mDeltaGreen * elapsedTime);
+	mBlendColor.blue = processEffect(mBlendColor.blue, mTargetColor.blue, mDeltaBlue * elapsedTime);
+	mBlendColor.alpha = processEffect(mBlendColor.alpha, mTargetColor.alpha, mDeltaAlpha * elapsedTime);
+}
+
+//-----------------------------------------------------------------------------
+
+F32 SceneObject::processEffect(const F32 current, const F32 target, const F32 rate)
+{
+	if (mFabs(current - target) < rate)
+	{
+		return target;
+	}
+	else if (current < target)
+	{
+		return current + rate;
+	}
+	else if (current > target)
+	{
+		return current - rate;
+	}
+	else
+	{
+		return target;
+	}
 }
 
 //-----------------------------------------------------------------------------
