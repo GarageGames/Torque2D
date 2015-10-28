@@ -1,8 +1,8 @@
 
 /* pngrutil.c - utilities to read a PNG file
  *
- * Last changed in libpng 1.5.10 [March 8, 2012]
- * Copyright (c) 1998-2012 Glenn Randers-Pehrson
+ * Last changed in libpng 1.5.22 [March 26, 2015]
+ * Copyright (c) 1998-2015 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  *
@@ -17,8 +17,6 @@
 #include "pngpriv.h"
 
 #ifdef PNG_READ_SUPPORTED
-
-#define png_strtod(p,a,b) strtod(a,b)
 
 png_uint_32 PNGAPI
 png_get_uint_31(png_structp png_ptr, png_const_bytep buf)
@@ -211,7 +209,7 @@ png_crc_finish(png_structp png_ptr, png_uint_32 skip)
       png_crc_read(png_ptr, png_ptr->zbuf, png_ptr->zbuf_size);
    }
 
-   if (i)
+   if (i != 0)
    {
       png_crc_read(png_ptr, png_ptr->zbuf, i);
    }
@@ -267,7 +265,7 @@ png_crc_error(png_structp png_ptr)
    /* The chunk CRC must be serialized in a single I/O call. */
    png_read_data(png_ptr, crc_bytes, 4);
 
-   if (need_crc)
+   if (need_crc != 0)
    {
       crc = png_get_uint_32(crc_bytes);
       return ((int)(crc != png_ptr->crc));
@@ -283,6 +281,17 @@ png_inflate(png_structp png_ptr, png_bytep data, png_size_t size,
     png_bytep output, png_size_t output_size)
 {
    png_size_t count = 0;
+
+   /* HACK: added in libpng 1.5.18: the progressive reader always leaves
+    * png_ptr->zstream in a non-reset state.  This causes a reset if it needs to
+    * be used again.  This only copes with that one specific error; see libpng
+    * 1.6 for a better solution.
+    */
+   if ((png_ptr->flags & PNG_FLAG_ZSTREAM_PROGRESSIVE) != 0)
+   {
+      (void)inflateReset(&png_ptr->zstream);
+      png_ptr->flags &= ~PNG_FLAG_ZSTREAM_PROGRESSIVE;
+   }
 
    /* zlib can't necessarily handle more than 65535 bytes at once (i.e. it can't
     * even necessarily handle 65536 bytes) because the type uInt is "16 bits or
@@ -1309,7 +1318,7 @@ png_handle_iCCP(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
    /* Compression_type should always be zero */
    compression_type = *profile++;
 
-   if (compression_type)
+   if (compression_type != 0)
    {
       png_warning(png_ptr, "Ignoring nonzero compression type in iCCP chunk");
       compression_type = 0x00;  /* Reset it to zero (libpng-1.0.6 through 1.0.8
@@ -2309,7 +2318,7 @@ png_handle_tEXt(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
    png_ptr->chunkdata = NULL;
    png_free(png_ptr, text_ptr);
 
-   if (ret)
+   if (ret != 0)
       png_warning(png_ptr, "Insufficient memory to process text chunk");
 }
 #endif
@@ -2439,7 +2448,7 @@ png_handle_zTXt(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
    png_free(png_ptr, png_ptr->chunkdata);
    png_ptr->chunkdata = NULL;
 
-   if (ret)
+   if (ret != 0)
       png_error(png_ptr, "Insufficient memory to store zTXt chunk");
 }
 #endif
@@ -2452,7 +2461,7 @@ png_handle_iTXt(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
    png_textp text_ptr;
    png_charp key, lang, text, lang_key;
    int comp_flag;
-   int comp_type = 0;
+   int comp_type;
    int ret;
    png_size_t slength, prefix_len, data_len;
 
@@ -2533,18 +2542,30 @@ png_handle_iTXt(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
       return;
    }
 
-   else
-   {
-      comp_flag = *lang++;
-      comp_type = *lang++;
-   }
+   comp_flag = *lang++;
+   comp_type = *lang++;
 
-   if (comp_type || (comp_flag && comp_flag != PNG_TEXT_COMPRESSION_zTXt))
+   /* 1.5.14: The spec says "for uncompressed text decoders shall ignore [the
+    * compression type]".  The compression flag shall be 0 (no compression) or
+    * 1 (compressed with method 0 - deflate.)
+    */
+   if (comp_flag/*compressed*/ != 0)
    {
-      png_warning(png_ptr, "Unknown iTXt compression type or method");
-      png_free(png_ptr, png_ptr->chunkdata);
-      png_ptr->chunkdata = NULL;
-      return;
+     if (comp_flag != 1)
+     {
+        png_warning(png_ptr, "invalid iTXt compression flag");
+        png_free(png_ptr, png_ptr->chunkdata);
+        png_ptr->chunkdata = NULL;
+        return;
+     }
+
+     if (comp_type != 0)
+     {
+        png_warning(png_ptr, "unknown iTXt compression type");
+        png_free(png_ptr, png_ptr->chunkdata);
+        png_ptr->chunkdata = NULL;
+        return;
+     }
    }
 
    for (lang_key = lang; *lang_key; lang_key++)
@@ -2577,7 +2598,7 @@ png_handle_iTXt(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
 
    key=png_ptr->chunkdata;
 
-   if (comp_flag)
+   if (comp_flag/*compressed*/)
       png_decompress_chunk(png_ptr, comp_type,
           (size_t)length, prefix_len, &data_len);
 
@@ -2595,7 +2616,8 @@ png_handle_iTXt(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
       return;
    }
 
-   text_ptr->compression = (int)comp_flag + 1;
+   text_ptr->compression =
+      (comp_flag ? PNG_ITXT_COMPRESSION_zTXt : PNG_ITXT_COMPRESSION_NONE);
    text_ptr->lang_key = png_ptr->chunkdata + (lang_key - key);
    text_ptr->lang = png_ptr->chunkdata + (lang - key);
    text_ptr->itxt_length = data_len;
@@ -2609,7 +2631,7 @@ png_handle_iTXt(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
    png_free(png_ptr, png_ptr->chunkdata);
    png_ptr->chunkdata = NULL;
 
-   if (ret)
+   if (ret != 0)
       png_error(png_ptr, "Insufficient memory to store iTXt chunk");
 }
 #endif
@@ -2786,7 +2808,7 @@ png_combine_row(png_structp png_ptr, png_bytep dp, int display)
 {
    unsigned int pixel_depth = png_ptr->transformed_pixel_depth;
    png_const_bytep sp = png_ptr->row_buf + 1;
-   png_uint_32 row_width = png_ptr->width;
+   png_alloc_size_t row_width = png_ptr->width;
    unsigned int pass = png_ptr->pass;
    png_bytep end_ptr = 0;
    png_byte end_byte = 0;
@@ -2938,7 +2960,7 @@ png_combine_row(png_structp png_ptr, png_bytep dp, int display)
 #        define S_MASKS(d,s) { S_MASK(0,d,s), S_MASK(1,d,s), S_MASK(2,d,s),\
             S_MASK(3,d,s), S_MASK(4,d,s), S_MASK(5,d,s) }
 
-#        define B_MASKS(d,s) { B_MASK(1,d,s), S_MASK(3,d,s), S_MASK(5,d,s) }
+#        define B_MASKS(d,s) { B_MASK(1,d,s), B_MASK(3,d,s), B_MASK(5,d,s) }
 
 #        define DEPTH_INDEX(d) ((d)==1?0:((d)==2?1:2))
 
@@ -3049,7 +3071,7 @@ png_combine_row(png_structp png_ptr, png_bytep dp, int display)
          }
 
          /* Work out the bytes to copy. */
-         if (display)
+         if (display != 0)
          {
             /* When doing the 'block' algorithm the pixel in the pass gets
              * replicated to adjacent pixels.  This is why the even (0,2,4,6)
@@ -3059,7 +3081,7 @@ png_combine_row(png_structp png_ptr, png_bytep dp, int display)
 
             /* But don't allow this number to exceed the actual row width. */
             if (bytes_to_copy > row_width)
-               bytes_to_copy = row_width;
+               bytes_to_copy = (unsigned int)/*SAFE*/row_width;
          }
 
          else /* normal row; Adam7 only ever gives us one pixel to copy. */
@@ -3151,7 +3173,7 @@ png_combine_row(png_structp png_ptr, png_bytep dp, int display)
                   {
                      png_uint_32p dp32 = (png_uint_32p)dp;
                      png_const_uint_32p sp32 = (png_const_uint_32p)sp;
-                     unsigned int skip = (bytes_to_jump-bytes_to_copy) /
+                     size_t skip = (bytes_to_jump-bytes_to_copy) /
                         sizeof (png_uint_32);
 
                      do
@@ -3192,7 +3214,7 @@ png_combine_row(png_structp png_ptr, png_bytep dp, int display)
                   {
                      png_uint_16p dp16 = (png_uint_16p)dp;
                      png_const_uint_16p sp16 = (png_const_uint_16p)sp;
-                     unsigned int skip = (bytes_to_jump-bytes_to_copy) /
+                     size_t skip = (bytes_to_jump-bytes_to_copy) /
                         sizeof (png_uint_16);
 
                      do
@@ -3237,7 +3259,7 @@ png_combine_row(png_structp png_ptr, png_bytep dp, int display)
                   dp += bytes_to_jump;
                   row_width -= bytes_to_jump;
                   if (bytes_to_copy > row_width)
-                     bytes_to_copy = row_width;
+                     bytes_to_copy = (unsigned int)/*SAFE*/row_width;
                }
          }
 
@@ -3476,7 +3498,7 @@ png_do_read_interlace(png_row_infop row_info, png_bytep row, int pass,
 
             for (i = 0; i < row_info->width; i++)
             {
-               png_byte v[8];
+               png_byte v[8]; /* SAFE; pixel_depth does not exceed 64 */
                int j;
 
                png_memcpy(v, sp, pixel_bytes);
@@ -3660,66 +3682,6 @@ png_read_filter_row_paeth_multibyte_pixel(png_row_infop row_info, png_bytep row,
    }
 }
 
-#ifdef PNG_ARM_NEON
-
-#ifdef __linux__
-#include <stdio.h>
-#include <elf.h>
-#include <asm/hwcap.h>
-
-static int png_have_hwcap(unsigned cap)
-{
-   FILE *f = fopen("/proc/self/auxv", "r");
-   Elf32_auxv_t aux;
-   int have_cap = 0;
-
-   if (!f)
-      return 0;
-
-   while (fread(&aux, sizeof(aux), 1, f) > 0)
-   {
-      if (aux.a_type == AT_HWCAP &&
-          aux.a_un.a_val & cap)
-      {
-         have_cap = 1;
-         break;
-      }
-   }
-
-   fclose(f);
-
-   return have_cap;
-}
-#endif /* __linux__ */
-
-static void
-png_init_filter_functions_neon(png_structp pp, unsigned int bpp)
-{
-#ifdef __linux__
-   if (!png_have_hwcap(HWCAP_NEON))
-      return;
-#endif
-
-   pp->read_filter[PNG_FILTER_VALUE_UP-1] = png_read_filter_row_up_neon;
-
-   if (bpp == 3)
-   {
-      pp->read_filter[PNG_FILTER_VALUE_SUB-1] = png_read_filter_row_sub3_neon;
-      pp->read_filter[PNG_FILTER_VALUE_AVG-1] = png_read_filter_row_avg3_neon;
-      pp->read_filter[PNG_FILTER_VALUE_PAETH-1] = 
-         png_read_filter_row_paeth3_neon;
-   }
-
-   else if (bpp == 4)
-   {
-      pp->read_filter[PNG_FILTER_VALUE_SUB-1] = png_read_filter_row_sub4_neon;
-      pp->read_filter[PNG_FILTER_VALUE_AVG-1] = png_read_filter_row_avg4_neon;
-      pp->read_filter[PNG_FILTER_VALUE_PAETH-1] =
-          png_read_filter_row_paeth4_neon;
-   }
-}
-#endif /* PNG_ARM_NEON */
-
 static void
 png_init_filter_functions(png_structp pp)
 {
@@ -3735,8 +3697,16 @@ png_init_filter_functions(png_structp pp)
       pp->read_filter[PNG_FILTER_VALUE_PAETH-1] =
          png_read_filter_row_paeth_multibyte_pixel;
 
-#ifdef PNG_ARM_NEON
-   png_init_filter_functions_neon(pp, bpp);
+#ifdef PNG_FILTER_OPTIMIZATIONS
+   /* To use this define PNG_FILTER_OPTIMIZATIONS as the name of a function to
+    * call to install hardware optimizations for the above functions; simply
+    * replace whatever elements of the pp->read_filter[] array with a hardware
+    * specific (or, for that matter, generic) optimization.
+    *
+    * To see an example of this examine what configure.ac does when
+    * --enable-arm-neon is specified on the command line.
+    */
+   PNG_FILTER_OPTIMIZATIONS(pp, bpp);
 #endif
 }
 
@@ -3744,10 +3714,13 @@ void /* PRIVATE */
 png_read_filter_row(png_structp pp, png_row_infop row_info, png_bytep row,
    png_const_bytep prev_row, int filter)
 {
-   if (pp->read_filter[0] == NULL)
-      png_init_filter_functions(pp);
    if (filter > PNG_FILTER_VALUE_NONE && filter < PNG_FILTER_VALUE_LAST)
+   {
+      if (pp->read_filter[0] == NULL)
+         png_init_filter_functions(pp);
+
       pp->read_filter[filter-1](row_info, row, prev_row);
+   }
 }
 
 #ifdef PNG_SEQUENTIAL_READ_SUPPORTED
