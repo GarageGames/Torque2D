@@ -120,7 +120,10 @@ SceneObject::SceneObject() :
     mSceneGroupMask(BIT(mSceneGroup)),
 
     /// Area.
-    mWorldProxyId(-1),
+	mWorldProxyId(-1),
+
+	// Growing.
+	mGrowActive(false),
 
     /// Position / Angle.
     mPreTickPosition( 0.0f, 0.0f ),
@@ -553,6 +556,12 @@ void SceneObject::preIntegrate( const F32 totalTime, const F32 elapsedTime, Debu
     // Debug Profiling.
     PROFILE_SCOPE(SceneObject_PreIntegrate);
 
+	// Update the Size.
+	if (mGrowActive)
+	{
+		updateSize(elapsedTime);
+	}
+
    // Finish if nothing is dirty.
     if ( !mSpatialDirty )
         return;
@@ -652,8 +661,17 @@ void SceneObject::postIntegrate(const F32 totalTime, const F32 elapsedTime, Debu
 	{
 		mFadeActive = false;
 
-		PROFILE_SCOPE(SceneObject_onFadeComplete);
+		PROFILE_SCOPE(SceneObject_onFadeToComplete);
 		Con::executef(this, 1, "onFadeToComplete");
+	}
+
+	//Check to see if we're done growing.
+	if (mGrowActive && mSize == mTargetSize)
+	{
+		mGrowActive = false;
+
+		PROFILE_SCOPE(SceneObject_onGrowToComplete);
+		Con::executef(this, 1, "onGrowToComplete");
 	}
 
     // Are we using the sleeping callback?
@@ -1721,6 +1739,28 @@ bool SceneObject::fadeTo(const ColorF& targetColor, const F32 deltaRed, const F3
 		mDeltaGreen = deltaGreen;
 		mDeltaBlue = deltaBlue;
 		mDeltaAlpha = deltaAlpha;
+	}
+
+	return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool SceneObject::growTo(const Vector2& targetSize, const Vector2& deltaSize)
+{
+	// Check in a scene.
+	if (!getScene())
+	{
+		Con::warnf("SceneObject::fadeTo() - Cannot fade object (%d) to a color as it is not in a scene.", getId());
+		return false;
+	}
+
+	//only set growing active if the target size is not the current size
+	if (targetSize != mSize)
+	{
+		mGrowActive = true;
+		mTargetSize = targetSize;
+		mDeltaSize = deltaSize;
 	}
 
 	return true;
@@ -4161,6 +4201,17 @@ void SceneObject::updateBlendColor(const F32 elapsedTime)
 	mBlendColor.green = processEffect(mBlendColor.green, mTargetColor.green, mDeltaGreen * elapsedTime);
 	mBlendColor.blue = processEffect(mBlendColor.blue, mTargetColor.blue, mDeltaBlue * elapsedTime);
 	mBlendColor.alpha = processEffect(mBlendColor.alpha, mTargetColor.alpha, mDeltaAlpha * elapsedTime);
+}
+
+//-----------------------------------------------------------------------------
+
+void SceneObject::updateSize(const F32 elapsedTime)
+{
+	// Apply the size deltas to the area to move it toward the targetSize.
+	mSize.x = processEffect(mSize.x, mTargetSize.x, mDeltaSize.x * elapsedTime);
+	mSize.y = processEffect(mSize.y, mTargetSize.y, mDeltaSize.y * elapsedTime);
+
+	setSize(mSize);
 }
 
 //-----------------------------------------------------------------------------
