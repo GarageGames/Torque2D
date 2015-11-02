@@ -2042,6 +2042,103 @@ ConsoleMethodWithDocs(SceneObject, fadeToTime, ConsoleBool, 4, 4, (targetColor r
 
 //-----------------------------------------------------------------------------
 
+/*! Grows or shrinks the object to the target size.
+	The current size of the object will continue to change until it arrives at the target size or the grow is cancelled.
+	The change will continue even if the size is set directly.
+	@param (width / height) The target size to grow or shrink the object to.
+	@param (rateX / rateY) The rate per second to change the size. Must be a number greater than zero even if shrinking. Can be one or two values.
+	@return Whether the grow started or not.
+*/
+ConsoleMethodWithDocs(SceneObject, growTo, ConsoleBool, 4, 4, (targetSize width / height, rate rateX / rateY))
+{
+	if (argc < 3)
+	{
+		Con::warnf("Scene::growTo() - Invalid number of parameters!");
+		return false;
+	}
+
+	const U32 targetCount = Utility::mGetStringElementCount(argv[2]);
+	if (targetCount != 2)
+	{
+		Con::warnf("Scene::growTo() - Invalid size! Target size requires two values (width / height)!");
+		return false;
+	}
+
+	Vector2 rate;
+	const U32 rateCount = Utility::mGetStringElementCount(argv[2]);
+	if (rateCount == 1)
+	{
+		rate.x = dAtof(Utility::mGetStringElement(argv[3], 0));
+		rate.y = rate.x;
+	}
+	else if (rateCount == 2)
+	{
+		rate.x = dAtof(Utility::mGetStringElement(argv[3], 0));
+		rate.y = dAtof(Utility::mGetStringElement(argv[3], 1));
+	}
+	else
+	{
+		Con::warnf("Scene::growTo() - Invalid size! Target size requires two values (width / height)!");
+		return false;
+	}
+
+	if (rate.x <= 0.0f || rate.y <= 0.0f)
+	{
+		Con::warnf("Scene::growTo() - Rate must be greater than zero!");
+		return false;
+	}
+
+	return object->growTo(Vector2(dAtof(Utility::mGetStringElement(argv[2], 0)),
+		dAtof(Utility::mGetStringElement(argv[2], 1))),
+		rate);
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Grows or shrinks the object to the target size over a period of time.
+	The current size of the object will continue to change until it arrives at the target size or the grow is cancelled.
+	The change will continue even if the size is set directly which will change the amount of time it takes.
+	Unhindered, both size values will arrive at the target in approximately the target time.
+	@param (width / height) The target size to grow or shrink the object to.
+	@param time The amount of time in milliseconds that both size values will take to reach the target. Must be a number greater than zero.
+	@return Whether the fade started or not.
+*/
+ConsoleMethodWithDocs(SceneObject, growToTime, ConsoleBool, 4, 4, (targetSize width / height, time))
+{
+	if (argc < 3)
+	{
+		Con::warnf("Scene::growToTime() - Invalid number of parameters!");
+		return false;
+	}
+
+	const U32 targetCount = Utility::mGetStringElementCount(argv[2]);
+	if (targetCount != 2)
+	{
+		Con::warnf("Scene::growToTime() - Invalid size! Target size requires two values (width / height)!");
+		return false;
+	}
+
+	F32 time = dAtof(argv[3]);
+	if (time <= 0.0f)
+	{
+		Con::warnf("Scene::growToTime() - Time must be greater than zero!");
+		return false;
+	}
+
+	// Get the target size values.
+	const F32 tWidth = dAtof(Utility::mGetStringElement(argv[2], 0));
+	const F32 tHeight = dAtof(Utility::mGetStringElement(argv[2], 1));
+
+	// Get the rate to change each value. The rate will be change per second.
+	const Vector2 currentSize = object->getSize();
+	F32 rWidth = (1000.0f * fabs(tWidth - currentSize.x)) / time;
+	F32 rHeight = (1000.0f * fabs(tHeight - currentSize.y)) / time;
+
+	return object->growTo(Vector2(tWidth, tHeight), Vector2(rWidth, rHeight));
+}
+
+//-----------------------------------------------------------------------------
+
 /*! Stop a previous 'moveTo' command.
     @param autoStop? - Whether to automatically set the linear velocity to zero or not
     @return No return value.
@@ -2090,6 +2187,16 @@ ConsoleMethodWithDocs(SceneObject, cancelFadeTo, ConsoleVoid, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
+/*! Stop a previous 'growTo' command.
+	@return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, cancelGrowTo, ConsoleVoid, 2, 2, ())
+{
+	object->cancelGrowTo();
+}
+
+//-----------------------------------------------------------------------------
+
 /*! Gets whether a previous 'moveTo' command has completed or not.
     @return No return value.
 */
@@ -2116,6 +2223,16 @@ ConsoleMethodWithDocs(SceneObject, isRotateToComplete, ConsoleBool, 2, 2, ())
 ConsoleMethodWithDocs(SceneObject, isFadeToComplete, ConsoleBool, 2, 2, ())
 {
 	return object->isFadeToComplete();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets whether a previous 'growTo' command has completed or not.
+	@return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, isGrowToComplete, ConsoleBool, 2, 2, ())
+{
+	return object->isGrowToComplete();
 }
 
 //-----------------------------------------------------------------------------
