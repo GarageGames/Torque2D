@@ -2188,7 +2188,7 @@ bool alxCheckError(const char* sourceFuncName, const char* alFuncName)
       Con::errorf("%s - %s OpenAL AL_OUT_OF_MEMORY error code returned", sourceFuncName, alFuncName);
       break;
     default:
-      Con::errorf("%s - %s OpenAL has encountered a problem and won't tell us what it is. %d", errorVal, sourceFuncName, alFuncName);
+      Con::errorf("%s - %s OpenAL has encountered a problem and won't tell us what it is. %d", sourceFuncName, alFuncName, errorVal);
   };
   if (errorVal == AL_NO_ERROR)
     return true;
