@@ -2065,7 +2065,7 @@ ConsoleMethodWithDocs(SceneObject, growTo, ConsoleBool, 4, 4, (targetSize width 
 	}
 
 	Vector2 rate;
-	const U32 rateCount = Utility::mGetStringElementCount(argv[2]);
+	const U32 rateCount = Utility::mGetStringElementCount(argv[3]);
 	if (rateCount == 1)
 	{
 		rate.x = dAtof(Utility::mGetStringElement(argv[3], 0));
