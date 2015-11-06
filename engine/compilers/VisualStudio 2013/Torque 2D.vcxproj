@@ -124,7 +124,7 @@
     <ClCompile>
       <Optimization>MinSpace</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>../../Lib/LeapSDK/include;../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../source;../../source/persistence/rapidjson/include;../../source/persistence/libjson;../../source/testing/googleTest;../../source/testing/googleTest/include;../../source/spine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Lib/libogg/include;../../Lib/libvorbis/include;../../Lib/LeapSDK/include;../../Lib/zlib;../../Lib/lpng;../../Lib/ljpeg;../../Lib/openal/win32;../../source;../../source/persistence/rapidjson/include;../../source/persistence/libjson;../../source/testing/googleTest;../../source/testing/googleTest/include;../../source/spine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>UNICODE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
