@@ -57,7 +57,7 @@ AssetDatabase.IgnoreAutoUnload = true;
 ModuleDatabase.scanModules( "modules" );
 
 // Load AppCore module.
-ModuleDatabase.LoadExplicit( "Can_Sepsis" );
+ModuleDatabase.LoadExplicit( "AppCore" );
 
 //-----------------------------------------------------------------------------
 
