@@ -1076,6 +1076,7 @@
     <ClInclude Include="..\..\source\platformWin32\winInput_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platformWin32\winMath_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platformWin32\winOGLVideo_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\platformWin32\winVersion.h" />
     <ClInclude Include="..\..\source\platformWin32\winWindow.h" />
     <ClInclude Include="..\..\source\platform\CursorManager_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platform\event.h" />
