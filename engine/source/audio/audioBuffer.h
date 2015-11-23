@@ -47,6 +47,9 @@ private:
    bool readRIFFchunk(Stream &s, const char *seekLabel, U32 *size);
    bool readWAV(ResourceObject *obj);
 
+   bool readOgg(ResourceObject *obj);
+   long oggRead(struct OggVorbis_File* vf, char *buffer, int length, int bigendianp, int *bitstream);
+
 public:
    AudioBuffer(StringTableEntry filename);
    ~AudioBuffer();
