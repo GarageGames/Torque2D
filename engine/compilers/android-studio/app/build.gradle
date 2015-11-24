@@ -1,0 +1,84 @@
+apply plugin: 'com.android.application'
+
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "com.garagegames.torque2d"
+        minSdkVersion 19
+        targetSdkVersion 19
+
+        sourceSets.main {
+            assets.srcDirs=[
+                    'src/main/assets',
+                    'src/main/game'
+            ]
+            jni.srcDirs = ['../../../source/']
+            jniLibs.srcDir 'src/main/libs'
+
+        }
+        task buildNative(type: Exec, description: 'Compile JNI source via NDK') {
+            def ndkDir = plugins.getPlugin('com.android.application').sdkHandler.getNdkFolder()
+            commandLine "$ndkDir/ndk-build",
+                    '-C', file('src/main/jni').absolutePath,
+                    '-j', Runtime.runtime.availableProcessors(),
+                    'all',
+                    'NDK_DEBUG=1'
+        }
+
+        task cleanNative(type: Exec, description: 'Clean JNI object files') {
+            def ndkDir = plugins.getPlugin('com.android.application').sdkHandler.getNdkFolder()
+            commandLine "$ndkDir/ndk-build",
+                    '-C', file('src/main/jni').absolutePath,
+                    'clean'
+        }
+
+        task copyGame(type: Copy, description: 'Copy torque scripts and modules'){
+            from('../../../../'){
+                include '**'
+                exclude 'engine/**'
+                exclude 'tools/**'
+                exclude 'tutorials/**'
+                exclude '.**'
+                exclude '*.dll'
+                exclude 'preferences.cs'
+                exclude '*.md'
+                exclude '*.app'
+                exclude '*.bat'
+                exclude '*.log'
+                exclude '*.torsion'
+            }
+            into 'src/main/game'
+            includeEmptyDirs = false
+
+        }
+
+        task wipeGame(type: Delete, description: 'Wipe android-specific copy of torque scripts and modules'){
+            delete 'src/main/game/'
+        }
+
+        clean.dependsOn 'cleanNative'
+        clean.dependsOn 'wipeGame'
+
+        tasks.withType(JavaCompile) {
+            compileTask -> compileTask.dependsOn copyGame
+        }
+        tasks.withType(JavaCompile) {
+            compileTask -> compileTask.dependsOn buildNative
+        }
+        tasks.withType(com.android.build.gradle.tasks.NdkCompile){task->
+            task.enabled = false
+        }
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+}
