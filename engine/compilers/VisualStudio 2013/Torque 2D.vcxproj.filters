@@ -3164,6 +3164,7 @@
     </ClInclude>
     <ClInclude Include="..\..\source\audio\vorbisStreamSource.h">
       <Filter>audio</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\source\platformWin32\winVersion.h">
       <Filter>platformWin32</Filter>
     </ClInclude>
