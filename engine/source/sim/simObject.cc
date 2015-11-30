@@ -46,7 +46,7 @@ namespace Sim
 
 //-----------------------------------------------------------------------------
 
-SimObject::SimObject( const U8 namespaceLinkMask ) : mNSLinkMask( namespaceLinkMask )
+SimObject::SimObject()
 {
     mFlags.set( ModStaticFields | ModDynamicFields );
     objectName               = NULL;
@@ -62,7 +62,7 @@ SimObject::SimObject( const U8 namespaceLinkMask ) : mNSLinkMask( namespaceLinkM
     mTypeMask                = 0;
     mScriptCallbackGuard     = 0;
     mFieldDictionary         = NULL;
-    mCanSaveFieldDictionary	 = true;
+    mCanSaveFieldDictionary  = true;
     mClassName               = NULL;
     mSuperClassName          = NULL;
     mProgenitorFile          = CodeBlock::getCurrentCodeBlockFullPath();
@@ -103,7 +103,7 @@ bool SimObject::registerObject()
    AssertFatal(Sim::gIdDictionary && Sim::gNameDictionary, 
       "SimObject::registerObject - tried to register an object before Sim::init()!");
 
-   Sim::gIdDictionary->insert(this);	
+   Sim::gIdDictionary->insert(this);  
 
    Sim::gNameDictionary->insert(this);
 
@@ -200,40 +200,46 @@ void SimObject::setId(SimObjectId newId)
 
 void SimObject::assignName(const char *name)
 {
-   // Added this assert 3/30/2007 because it is dumb to try to name
-   // a SimObject the same thing as it's class name -patw
-   //AssertFatal( dStricmp( getClassName(), name ), "Attempted to assign a name to a SimObject which matches it's type name." );
-   if( dStricmp( getClassName(), name ) == 0 )
-      Con::errorf( "SimObject::assignName - Assigning name '%s' to instance of object with type '%s'."
-      " This can cause namespace linking issues.", getClassName(), name  );
+    if( dStricmp( getClassName(), name ) == 0 )
+        Con::errorf( "SimObject::assignName - Assigning name '%s' to instance of object with type '%s'."
+        " This can cause namespace linking issues.", getClassName(), name  );
 
-#if 0
-    Con::printf( "SimObject::assignName(%s)", name );
-#endif
+    // Is this name already registered?
+    if ( Sim::gNameDictionary->find(name) != NULL )
+    {
+        // Yes, so error,
+        Con::errorf( "SimObject::assignName() - Attempted to set object to name '%s' but it is already assigned to another object.", name );
+        return;
+    }
 
-   // Is this name already registered?
-   if ( Sim::gNameDictionary->find(name) != NULL )
-   {
-       // Yes, so error,
-       Con::errorf( "SimObject::assignName() - Attempted to set object to name '%s' but it is already assigned to another object.", name );
-       return;
-   }
+    StringTableEntry newName = NULL;
 
-   StringTableEntry newName = NULL;
-   if(name[0])
-      newName = StringTable->insert(name);
+    if (name[0])
+        newName = StringTable->insert(name);
 
-   if(mGroup)
-      mGroup->nameDictionary.remove(this);
-   if(mFlags.test(Added))
-      Sim::gNameDictionary->remove(this);
+    if (mGroup)
+        mGroup->nameDictionary.remove(this);
 
-   objectName = newName;
+    if (isProperlyAdded())
+    {
+        // Unlink the old namespaces.
+        unlinkNamespaces();
 
-   if(mGroup)
-      mGroup->nameDictionary.insert(this);
-   if(mFlags.test(Added))
-      Sim::gNameDictionary->insert(this);
+        Sim::gNameDictionary->remove(this);
+    }
+
+    objectName = newName;
+
+    if (mGroup)
+        mGroup->nameDictionary.insert(this);
+
+    if (isProperlyAdded())
+    {
+        // Link the new namespaces.
+        linkNamespaces();
+
+        Sim::gNameDictionary->insert(this);
+    }  
 }
 
 //---------------------------------------------------------------------------
@@ -487,7 +493,7 @@ void  SimObject::dumpClassHierarchy()
    while(pRep)
    {
       Con::warnf("%s ->", pRep->getClassName());
-      pRep	=	pRep->getParentClass();
+      pRep  = pRep->getParentClass();
    }
 }
 
@@ -928,7 +934,7 @@ bool SimObject::isChildOfGroup(SimGroup* pGroup)
    if(pGroup == dynamic_cast<SimGroup*>(this))
       return true;
 
-   SimGroup* temp	=	mGroup;
+   SimGroup* temp = mGroup;
    while(temp)
    {
       if(temp == pGroup)
@@ -1079,7 +1085,7 @@ void SimObject::initPersistFields()
 {
    Parent::initPersistFields();
    addGroup("SimBase");
-   addField("canSaveDynamicFields",		TypeBool,		Offset(mCanSaveFieldDictionary, SimObject), &writeCanSaveDynamicFields, "");
+   addField("canSaveDynamicFields",   TypeBool,   Offset(mCanSaveFieldDictionary, SimObject), &writeCanSaveDynamicFields, "");
    addField("internalName",            TypeString,       Offset(mInternalName, SimObject), &writeInternalName, "");   
    addProtectedField("parentGroup",        TypeSimObjectPtr, Offset(mGroup, SimObject), &setParentGroup, &defaultProtectedGetFn, &writeParentGroup, "Group hierarchy parent of the object." );
    endGroup("SimBase");
@@ -1225,106 +1231,159 @@ void SimObject::inspectPostApply()
 {
 }
 
+//-----------------------------------------------------------------------------
+
 void SimObject::linkNamespaces()
 {
-   if( mNameSpace )
-      unlinkNamespaces();
-   
-   StringTableEntry parent = StringTable->insert( getClassName() );
-   if( ( mNSLinkMask & LinkSuperClassName ) && mSuperClassName && mSuperClassName[0] )
-   {
-      if( Con::linkNamespaces( parent, mSuperClassName ) )
-         parent = mSuperClassName;
-      else
-         mSuperClassName = StringTable->EmptyString; // CodeReview Is this behavior that we want?
-                                                      // CodeReview This will result in the mSuperClassName variable getting hosed
-                                                      // CodeReview if Con::linkNamespaces returns false. Looking at the code for
-                                                      // CodeReview Con::linkNamespaces, and the call it makes to classLinkTo, it seems
-                                                      // CodeReview like this would only fail if it had bogus data to begin with, but
-                                                      // CodeReview I wanted to note this behavior which occurs in some implementations
-                                                      // CodeReview but not all. -patw
-   }
+    // Don't link if we already have a namespace linkage in place.
+    AssertWarn(mNameSpace == NULL, "SimObject::linkNamespaces -- Namespace linkage already in place");
 
-   // ClassName -> SuperClassName
-   if ( ( mNSLinkMask & LinkClassName ) && mClassName && mClassName[0] )
-   {
-      if( Con::linkNamespaces( parent, mClassName ) )
-         parent = mClassName;
-      else
-         mClassName = StringTable->EmptyString; // CodeReview (See previous note on this code)
-   }
+    if (mNameSpace)
+        return;
 
-   // ObjectName -> ClassName
-   StringTableEntry objectName = getName();
-   if( objectName && objectName[0] )
-   {
-      if( Con::linkNamespaces( parent, objectName ) )
-         parent = objectName;
-   }
+    // Start with the C++ Class namespace.
+    StringTableEntry parent = StringTable->insert( getClassName() );
 
-   // Store our namespace.
-   mNameSpace = Con::lookupNamespace( parent );
+    // Link SuperClass to C++ Class.
+    if ( mSuperClassName && mSuperClassName[0] )
+    {
+        if ( Con::linkNamespaces(parent, mSuperClassName) )
+            parent = mSuperClassName;
+        else
+            mSuperClassName = NULL;
+    }
+
+    // Link Class to SuperClass or Class to C++ Class.
+    if ( mClassName && mClassName[0] )
+    {
+        if ( Con::linkNamespaces(parent, mClassName) )
+            parent = mClassName;
+        else
+            mClassName = NULL;
+    }
+
+    // Get the object's name.
+    StringTableEntry objectName = getName();
+
+    // Link Object Name to Class/SuperClass/C++ Class.
+    if ( objectName && objectName[0] )
+    {
+        if ( Con::linkNamespaces(parent, objectName) )
+            parent = objectName;
+    }
+
+    // Store our namespace.
+    mNameSpace = Con::lookupNamespace(parent);
 }
+
+//-----------------------------------------------------------------------------
 
 void SimObject::unlinkNamespaces()
 {
-   if (!mNameSpace)
-      return;
+    // Stop if there is no assigned namespace.
+    if (!mNameSpace)
+        return;
 
-   // Restore NameSpace's
-   StringTableEntry child = getName();
-   if( child && child[0] )
-   {
-      if( ( mNSLinkMask & LinkClassName ) && mClassName && mClassName[0])
-      {
-         if( Con::unlinkNamespaces( mClassName, child ) )
-            child = mClassName;
-      }
+    // Get the object's name.
+    StringTableEntry child = getName();
 
-      if( ( mNSLinkMask & LinkSuperClassName ) && mSuperClassName && mSuperClassName[0] )
-      {
-         if( Con::unlinkNamespaces( mSuperClassName, child ) )
-            child = mSuperClassName;
-      }
+    // Unlink any possible namespace combination.
+    if ( child && child[0] )
+    {
+        // Object Name/Class
+        if ( mClassName && mClassName[0] )
+        {
+            if( Con::unlinkNamespaces(mClassName, child) )
+                child = mClassName;
+        }
 
-      Con::unlinkNamespaces( getClassName(), child );
-   }
-   else
-   {
-      child = mClassName;
-      if( child && child[0] )
-      {
-         if( ( mNSLinkMask & LinkSuperClassName ) && mSuperClassName && mSuperClassName[0] )
-         {
-            if( Con::unlinkNamespaces( mSuperClassName, child ) )
-               child = mSuperClassName;
-         }
+        // Object Name/SuperClass or Class/SuperClass
+        if ( mSuperClassName && mSuperClassName[0] )
+        {
+            if ( Con::unlinkNamespaces(mSuperClassName, child) )
+                child = mSuperClassName;
+        }
 
-         Con::unlinkNamespaces( getClassName(), child );
-      }
-      else
-      {
-         if( ( mNSLinkMask & LinkSuperClassName ) && mSuperClassName && mSuperClassName[0] )
-            Con::unlinkNamespaces( getClassName(), mSuperClassName );
-      }
-   }
+        // Object Name/C++ Class or SuperClass/C++ Class
+        Con::unlinkNamespaces(getClassName(), child);
+    }
+    else
+    {
+        // No Object Name, so get the Class namespace.
+        child = mClassName;
 
-   mNameSpace = NULL;
+        // Unlink any possible namespace combination.
+        if ( child && child[0] )
+        {
+            // Class/SuperClass
+            if ( mSuperClassName && mSuperClassName[0] )
+            {
+                if ( Con::unlinkNamespaces(mSuperClassName, child) )
+                    child = mSuperClassName;
+            }
+
+            // Class/C++ Class or SuperClass/C++ Class
+            Con::unlinkNamespaces(getClassName(), child);
+        }
+        else
+        {
+            // SuperClass/C++ Class
+            if ( mSuperClassName && mSuperClassName[0] )
+                Con::unlinkNamespaces(getClassName(), mSuperClassName);
+        }
+    }
+
+    // Reset the namespace.
+    mNameSpace = NULL;
 }
 
-void SimObject::setClassNamespace( const char *classNamespace )
+//-----------------------------------------------------------------------------
+
+void SimObject::setClassNamespace( const char* classNamespace )
 {
-    mClassName = StringTable->insert( classNamespace );
-    if (mFlags.test(Added))
+    StringTableEntry oldClass = mClassName;
+    StringTableEntry newClass = StringTable->insert(classNamespace);
+
+    // Skip if no change.
+    if (oldClass == newClass)
+        return;
+
+    // Unlink the old namespaces.
+    if ( isProperlyAdded() )
+        unlinkNamespaces();
+
+    // Assign the new class namespace.
+    mClassName = newClass;
+
+    // Link the new namespaces.
+    if ( isProperlyAdded() )
         linkNamespaces();
 }
 
-void SimObject::setSuperClassNamespace( const char *superClassNamespace )
+//-----------------------------------------------------------------------------
+
+void SimObject::setSuperClassNamespace( const char* superClassNamespace )
 {
-    mSuperClassName = StringTable->insert( superClassNamespace );
-    if (mFlags.test(Added))
+    StringTableEntry oldSuperClass = mSuperClassName;
+    StringTableEntry newSuperClass = StringTable->insert(superClassNamespace);
+
+    // Skip if no change.
+    if (oldSuperClass == newSuperClass)
+        return;
+
+    // Unlink the old namespaces.
+    if ( isProperlyAdded() )
+        unlinkNamespaces();
+
+    // Assign the new SuperClass namespace.
+    mSuperClassName = newSuperClass;
+
+    // Link the new namespaces.
+    if ( isProperlyAdded() )
         linkNamespaces();
 }
+
+//-----------------------------------------------------------------------------
 
 static S32 QSORT_CALLBACK compareFields(const void* a,const void* b)
 {

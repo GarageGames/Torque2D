@@ -78,29 +78,18 @@ void Input::init()
    smLastMouseActivated = true;
    smLastJoystickActivated = true;
 
-   OSVERSIONINFO OSVersionInfo;
-   dMemset( &OSVersionInfo, 0, sizeof( OSVERSIONINFO ) );
-   OSVersionInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
-   if ( GetVersionEx( &OSVersionInfo ) )
+   smManager = new DInputManager;
+   if (!smManager->enable())
    {
+	   Con::printf("   DirectInput not enabled.");
 
-      if ( !( OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT && OSVersionInfo.dwMajorVersion < 5 ) )
-      {
-         smManager = new DInputManager;
-         if ( !smManager->enable() )
-         {
-            Con::printf( "   DirectInput not enabled." );
-            delete smManager;
-            smManager = NULL;
-         }
-         else
-         {
-            DInputManager::init();
-            Con::printf( "   DirectInput enabled." );
-         }
-      }
-      else
-         Con::printf( "  WinNT detected -- DirectInput not enabled." );
+	   delete smManager;
+	   smManager = NULL;
+   }
+   else
+   {
+	   DInputManager::init();
+	   Con::printf("   DirectInput enabled.");
    }
 
    // Startup the Cursor Manager

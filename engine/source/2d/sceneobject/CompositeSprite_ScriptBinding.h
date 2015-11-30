@@ -471,6 +471,30 @@ ConsoleMethodWithDocs(CompositeSprite, getSpriteAnimation, ConsoleString, 2, 2, 
 
 //-----------------------------------------------------------------------------
 
+/*! Sets the current animation frame for the selected sprite. IMPORTANT: this is not the image frame number used in the animation!
+@param frame Which frame of the animation to display
+@return No return value.
+*/
+ConsoleMethodWithDocs(CompositeSprite, setSpriteAnimationFrame, ConsoleVoid, 3, 3, (int animationFrame))
+{
+	// Fetch frame.
+	const U32 frame = dAtoi(argv[2]);
+
+	object->setSpriteAnimationFrame(frame);
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets current frame index used in the animation for the selected sprite. IMPORTANT: this is not the image frame number!
+@return The current numerical animation frame for the selected sprite
+*/
+ConsoleMethodWithDocs(CompositeSprite, getSpriteAnimationFrame, ConsoleInt, 2, 2, ())
+{
+	return object->getSpriteAnimationFrame();
+}
+
+//-----------------------------------------------------------------------------
+
 /*! Clears any image or animation asset from the sprite.
     @return No return value.
 */

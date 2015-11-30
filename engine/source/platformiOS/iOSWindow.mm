@@ -381,48 +381,60 @@ bool setScreenOrientation(bool portrait, bool upsidedown)
     bool success = false;
 
     CGPoint point;
-    if (platState.portrait)
+    
+    // Is the iOS version less than 8?
+    if( [[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedAscending )
+    {
+        
+        if (platState.portrait)
+        {
+            point.x = platState.windowSize.x / 2;
+            point.y = platState.windowSize.y / 2;
+        }
+        else
+        {
+            point.x = platState.windowSize.y / 2;
+            point.y = platState.windowSize.x / 2;
+        }
+        
+        
+        [platState.ctx centerOnPoint:point];
+        
+        if (portrait)
+        {//normal upright
+            if (upsidedown)
+            {//button on top
+                [platState.ctx rotateToAngle:M_PI + (M_PI / 2.0)];//rotate to 90 degrees
+                platState.application.statusBarOrientation = UIInterfaceOrientationPortraitUpsideDown;
+                success = true;
+            } else
+            {//button on bottom
+                [platState.ctx rotateToAngle:(M_PI / 2.0)];//rotate to 270 degrees
+                platState.application.statusBarOrientation = UIInterfaceOrientationPortrait;
+                success = true;
+            }
+        } else
+        {//landscape/ sideways
+            if (upsidedown)
+            {//button on left
+                [platState.ctx rotateToAngle:0];//rotate to -180 (0) degrees
+                platState.application.statusBarOrientation = UIInterfaceOrientationLandscapeLeft;
+                success = true;
+            } else
+            {//button on right
+                [platState.ctx rotateToAngle:(M_PI)];//rotate to 180 degrees
+                platState.application.statusBarOrientation = UIInterfaceOrientationLandscapeRight;
+                success = true;
+            }
+        }
+    }
+    //Set the screen for iOS 8 and latter
+    else
     {
         point.x = platState.windowSize.x / 2;
         point.y = platState.windowSize.y / 2;
     }
-    else
-    {
-        point.x = platState.windowSize.y / 2;
-        point.y = platState.windowSize.x / 2;
-    }
-
-
-    [platState.ctx centerOnPoint:point];
-
-    if (portrait)
-    {//normal upright
-        if (upsidedown)
-        {//button on top
-            [platState.ctx rotateToAngle:M_PI + (M_PI / 2.0)];//rotate to 90 degrees
-            platState.application.statusBarOrientation = UIInterfaceOrientationPortraitUpsideDown;
-            success = true;
-        } else
-        {//button on bottom
-            [platState.ctx rotateToAngle:(M_PI / 2.0)];//rotate to 270 degrees
-            platState.application.statusBarOrientation = UIInterfaceOrientationPortrait;
-            success = true;
-        }
-    } else
-    {//landscape/ sideways
-        if (upsidedown)
-        {//button on left
-            [platState.ctx rotateToAngle:0];//rotate to -180 (0) degrees
-            platState.application.statusBarOrientation = UIInterfaceOrientationLandscapeLeft;
-            success = true;
-        } else
-        {//button on right
-            [platState.ctx rotateToAngle:(M_PI)];//rotate to 180 degrees
-            platState.application.statusBarOrientation = UIInterfaceOrientationLandscapeRight;
-            success = true;
-        }
-    }
-
+    
     return success;
 }
 

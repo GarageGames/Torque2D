@@ -595,6 +595,30 @@ StringTableEntry SpriteBatch::getSpriteAnimation( void ) const
 
 //------------------------------------------------------------------------------
 
+void SpriteBatch::setSpriteAnimationFrame(const U32 animationFrame)
+{
+	// Finish if a sprite is not selected.
+	if (!checkSpriteSelected())
+		return;
+
+	// Set image frame.
+	mSelectedSprite->setAnimationFrame(animationFrame);
+}
+
+//------------------------------------------------------------------------------
+
+U32 SpriteBatch::getSpriteAnimationFrame(void) const
+{
+	// Finish if a sprite is not selected.
+	if (!checkSpriteSelected())
+		return NULL;
+
+	// Get image frame.
+	return mSelectedSprite->getAnimationFrame();
+}
+
+//------------------------------------------------------------------------------
+
 void SpriteBatch::clearSpriteAsset( void )
 {
     // Finish if a sprite is not selected.
