@@ -25,6 +25,7 @@
 #include "io/stream.h"
 #include "console/console.h"
 #include "memory/frameAllocator.h"
+#include "vorbis/vorbisfile.h"
 
 #ifndef _MMATH_H_
 #include "math/mMath.h"
@@ -96,6 +97,44 @@ struct WAVChunkHdr
 
 #define CHUNKSIZE 4096
 
+// Ogg Vorbis
+static size_t _ov_read_func(void *ptr, size_t size, size_t nmemb, void *datasource)
+{
+	Stream *stream = reinterpret_cast<Stream*>(datasource);
+
+	// Stream::read() returns true if any data was
+	// read, so we must track the read bytes ourselves.
+	U32 startByte = stream->getPosition();
+	stream->read(size * nmemb, ptr);
+	U32 endByte = stream->getPosition();
+
+	// How many did we actually read?
+	U32 readBytes = (endByte - startByte);
+	U32 readItems = readBytes / size;
+
+	return readItems;
+}
+
+static int _ov_seek_func(void *datasource, ogg_int64_t offset, int whence)
+{
+	Stream *stream = reinterpret_cast<Stream*>(datasource);
+
+	U32 newPos = 0;
+	if (whence == SEEK_CUR)
+		newPos = stream->getPosition() + (U32)offset;
+	else if (whence == SEEK_END)
+		newPos = stream->getStreamSize() - (U32)offset;
+	else
+		newPos = (U32)offset;
+
+	return stream->setPosition(newPos) ? 0 : -1;
+}
+
+static long _ov_tell_func(void *datasource)
+{
+	Stream *stream = reinterpret_cast<Stream*>(datasource);
+	return stream->getPosition();
+}
 
 
 //--------------------------------------
@@ -236,6 +275,14 @@ ALuint AudioBuffer::getALBuffer()
            malBuffer = bufferID;
        }
 #endif
+		else if (len > 3 && !dStricmp(mFilename + len - 4, ".ogg"))
+		{
+#  ifdef LOG_SOUND_LOADS
+		   Con::printf("Reading Ogg: %s\n", mFilename);
+#  endif
+		   readSuccess = readOgg(obj);
+	   }
+
       if(readSuccess)
          return(malBuffer);
    }
@@ -383,4 +430,107 @@ bool AudioBuffer::readWAV(ResourceObject *obj)
    }
 
    return false;
+}
+
+// Read an Ogg Vorbis file from the given ResourceObject and initialize an alBuffer with it.
+// Pulled from: https://www.garagegames.com/community/forums/viewthread/136675
+bool AudioBuffer::readOgg(ResourceObject *obj)
+{
+	ALenum  format = AL_FORMAT_MONO16;
+	char   *data = NULL;
+	ALsizei size = 0;
+	ALsizei freq = 22050;
+	ALboolean loop = AL_FALSE;
+	int current_section = 0;
+
+#if defined(TORQUE_BIG_ENDIAN)
+	int endian = 1;
+#else
+	int endian = 0;
+#endif
+
+	int eof = 0;
+
+	Stream *stream = ResourceManager->openStream(obj);
+	if (!stream)
+		return false;
+
+	OggVorbis_File vf;
+	dMemset(&vf, 0, sizeof(OggVorbis_File));
+
+	const bool canSeek = stream->hasCapability(Stream::StreamPosition);
+
+	ov_callbacks cb;
+	cb.read_func = _ov_read_func;
+	cb.seek_func = canSeek ? _ov_seek_func : NULL;
+	cb.close_func = NULL;
+	cb.tell_func = canSeek ? _ov_tell_func : NULL;
+
+	// Open it.
+	int ovResult = ov_open_callbacks(stream, &vf, NULL, 0, cb);
+	if (ovResult != 0)
+	{
+		ResourceManager->closeStream(stream);
+		return false;
+	}
+
+	const vorbis_info *vi = ov_info(&vf, -1);
+	freq = vi->rate;
+
+	long samples = (long)ov_pcm_total(&vf, -1);
+
+	if (vi->channels == 1) {
+		format = AL_FORMAT_MONO16;
+		size = 2 * samples;
+	}
+	else {
+		format = AL_FORMAT_STEREO16;
+		size = 4 * samples;
+	}
+
+	data = new char[size];
+	if (data)
+	{
+		long ret = oggRead(&vf, data, size, endian, &current_section);
+	}
+
+	/* cleanup */
+	ov_clear(&vf);
+
+	ResourceManager->closeStream(stream);
+	if (data)
+	{
+		alBufferData(malBuffer, format, data, size, freq);
+		delete[] data;
+		return (alGetError() == AL_NO_ERROR);
+	}
+
+	return false;
+}
+
+// ov_read() only returns a maximum of one page worth of data
+// this helper function will repeat the read until buffer is full
+// Pulled from: https://www.garagegames.com/community/forums/viewthread/136675
+long AudioBuffer::oggRead(OggVorbis_File* vf, char *buffer, int length, int bigendianp, int *bitstream)
+{
+	long bytesRead = 0;
+	long totalBytes = 0;
+	long offset = 0;
+	long bytesToRead = 0;
+
+	while ((offset) < length)
+	{
+		if ((length - offset) < CHUNKSIZE)
+			bytesToRead = length - offset;
+		else
+			bytesToRead = CHUNKSIZE;
+
+		bytesRead = ov_read(vf, buffer, bytesToRead, bigendianp, 2, 1, bitstream);
+		if (bytesRead <= 0)
+			break;
+		offset += bytesRead;
+		buffer += bytesRead;
+	}
+
+	return offset;
 }

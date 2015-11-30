@@ -1,0 +1,2 @@
+$ cat .gitattributes
+engine/lib/* linguist-vendored
