@@ -178,6 +178,7 @@ ConsoleFunctionWithDocs(OpenALInitDriver, ConsoleBool, 1, 1, ())
       static bool registered = false;
       if (!registered) {
          ResourceManager->registerExtension(".wav", AudioBuffer::construct);
+		 ResourceManager->registerExtension(".ogg", AudioBuffer::construct);
       }
       registered = true;
       return true;

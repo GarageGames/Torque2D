@@ -30,6 +30,7 @@
 #include "audio/audioStreamSourceFactory.h"
 
 #include "audio/wavStreamSource.h"
+#include "audio/vorbisStreamSource.h"
 
 AudioStreamSource* AudioStreamSourceFactory::getNewInstance(const char *filename)
 {
@@ -37,5 +38,8 @@ AudioStreamSource* AudioStreamSourceFactory::getNewInstance(const char *filename
 	if(len > 3 && !dStricmp(filename + len - 4, ".wav"))
 		return new WavStreamSource(filename);
 	
+	if (len > 3 && !dStricmp(filename + len - 4, ".ogg"))
+		return new VorbisStreamSource(filename);
+
 	return NULL;
 }
