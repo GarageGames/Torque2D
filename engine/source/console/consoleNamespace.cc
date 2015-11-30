@@ -148,12 +148,14 @@ bool Namespace::canTabComplete(const char *prevText, const char *bestMatch, cons
    }
 }
 
-bool Namespace::unlinkClass(Namespace *parent)
+bool Namespace::unlinkClass(Namespace* parent)
 {
-   Namespace *walk = this;
+   Namespace* walk = this;
+
    while(walk->mParent && walk->mParent->mName == mName)
       walk = walk->mParent;
 
+   // Make sure "parent" is the direct parent namespace.
    if(walk->mParent && walk->mParent != parent)
    {
       Con::errorf(ConsoleLogEntry::General, "Namespace::unlinkClass - cannot unlink namespace parent linkage for %s for %s.",
@@ -161,30 +163,37 @@ bool Namespace::unlinkClass(Namespace *parent)
       return false;
    }
 
-   AssertFatal(mRefCountToParent > 0, "Namespace::unlinkClass - reference count to parent is less than 0");
+   // Decrease the reference count. Note that we do this on the bottom-most namespace.
+   AssertWarn(mRefCountToParent > 0, "Namespace::unlinkClass - reference count to parent is already at 0");
    mRefCountToParent--;
 
+   // Unlink if the count dropped to zero.
    if(mRefCountToParent == 0)
+   {
       walk->mParent = NULL;
-
-   trashCache();
+      trashCache();
+   }
 
    return true;
 }
 
 
-bool Namespace::classLinkTo(Namespace *parent)
+bool Namespace::classLinkTo(Namespace* parent)
 {
-   Namespace *walk = this;
+   Namespace* walk = this;
+
    while(walk->mParent && walk->mParent->mName == mName)
       walk = walk->mParent;
 
+   // Make sure there is no existing parent namespace.
    if(walk->mParent && walk->mParent != parent)
    {
-      Con::errorf(ConsoleLogEntry::General, "Error: cannot change namespace parent linkage of %s from %s to %s.",
+      Con::errorf(ConsoleLogEntry::General, "Namespace::classLinkTo - cannot change namespace parent linkage of %s from %s to %s.",
          walk->mName, walk->mParent->mName, parent->mName);
       return false;
    }
+
+   // Increase the reference count and add the parent namespace.
    mRefCountToParent++;
    walk->mParent = parent;
 

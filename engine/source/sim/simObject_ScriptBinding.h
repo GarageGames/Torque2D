@@ -900,11 +900,11 @@ ConsoleMethodWithDocs(SimObject, clone, ConsoleInt, 2, 3, ([copyDynamicFields = 
 */
 
 /*! Starts a periodic timer for this object.
-    Sets a timer on the object that, when it expires, will cause the object to execute the onTimer() callback.
-    The timer event will continue to occur at regular intervals until setTimerOff() is called.
+    Sets a timer on the object that, when it expires, will cause the object to execute the given callback function.
+    The timer event will continue to occur at regular intervals until stopTimer() is called or the timer expires.
     @param callbackFunction The name of the callback function to call for each timer repetition.
     @param timePeriod The period of time (in milliseconds) between each callback.
-    @param repeat The number of times the timer should repeat.  If not specified or zero then it will run infinitely
+    @param repeat The number of times the timer should repeat.  If not specified or zero then it will run infinitely.
     @return No return Value.
 */
 ConsoleMethodWithDocs(SimObject, startTimer, ConsoleBool, 4, 5, (callbackFunction, float timePeriod, [repeat]?))
