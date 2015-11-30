@@ -48,6 +48,11 @@ LOCAL_MODULE    := torque2d
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
 					$(LOCAL_PATH)/../../../../../../lib/ljpeg \
 					$(LOCAL_PATH)/../../../../../../lib/lpng \
+					$(LOCAL_PATH)/../../../../../../lib/libogg \
+					$(LOCAL_PATH)/../../../../../../lib/libogg/include \
+					$(LOCAL_PATH)/../../../../../../lib/libvorbis \
+					$(LOCAL_PATH)/../../../../../../lib/libvorbis/include \
+					$(LOCAL_PATH)/../../../../../../lib/libvorbis/lib \
     				$(LOCAL_PATH)/../../../../../../source \
     				$(LOCAL_PATH)/../../../../../../source/2d \
     				$(LOCAL_PATH)/../../../../../../source/2d/assets \
@@ -153,6 +158,8 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../lib/ljpeg/jquant1.c \
 					../../../../../../lib/ljpeg/jquant2.c \
 					../../../../../../lib/ljpeg/jutils.c \
+					../../../../../../lib/libogg/src/bitwise.c \
+					../../../../../../lib/libogg/src/framing.c \
 					../../../../../../lib/lpng/png.c \
 					../../../../../../lib/lpng/pngerror.c \
 					../../../../../../lib/lpng/pngget.c \
@@ -168,6 +175,28 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../lib/lpng/pngwrite.c \
 					../../../../../../lib/lpng/pngwtran.c \
 					../../../../../../lib/lpng/pngwutil.c \
+					../../../../../../lib/libvorbis/analysis.c \
+                    ../../../../../../lib/libvorbis/barkmel.c \
+                    ../../../../../../lib/libvorbis/bitrate.c \
+                    ../../../../../../lib/libvorbis/block.c \
+                    ../../../../../../lib/libvorbis/codebook.c \
+                    ../../../../../../lib/libvorbis/envelope.c \
+                    ../../../../../../lib/libvorbis/floor0.c \
+                    ../../../../../../lib/libvorbis/floor1.c \
+                    ../../../../../../lib/libvorbis/info.c \
+                    ../../../../../../lib/libvorbis/lookup.c \
+                    ../../../../../../lib/libvorbis/lpc.c \
+                    ../../../../../../lib/libvorbis/lsp.c \
+                    ../../../../../../lib/libvorbis/mapping0.c \
+                    ../../../../../../lib/libvorbis/mdct.c \
+                    ../../../../../../lib/libvorbis/psy.c \
+                    ../../../../../../lib/libvorbis/registry.c \
+                    ../../../../../../lib/libvorbis/res0.c \
+                    ../../../../../../lib/libvorbis/sharedbook.c \
+                    ../../../../../../lib/libvorbis/smallft.c \
+                    ../../../../../../lib/libvorbis/synthesis.c \
+                    ../../../../../../lib/libvorbis/vorbisfile.c \
+                    ../../../../../../lib/libvorbis/window.c \
 					../../../../../../source/2d/assets/AnimationAsset.cc \
 					../../../../../../source/2d/assets/ImageAsset.cc \
 					../../../../../../source/2d/assets/ParticleAsset.cc \
@@ -223,7 +252,14 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../source/assets/assetTagsManifest.cc \
 					../../../../../../source/assets/declaredAssets.cc \
 					../../../../../../source/assets/referencedAssets.cc \
+                    ../../../../../../source/audio/audio.cc \
+                    ../../../../../../source/audio/audioDataBlock.cc \
+                    ../../../../../../source/audio/audio_ScriptBinding.cc \
+                    ../../../../../../source/audio/audioStreamSourceFactory.cc \
+                    ../../../../../../source/audio/wavStreamSource.cc \
 					../../../../../../source/audio/AudioAsset.cc \
+					../../../../../../source/audio/audioBuffer.cc \
+					../../../../../../source/audio/vorbisStreamSource.cc \
 					../../../../../../source/Box2D/Collision/b2BroadPhase.cpp \
 					../../../../../../source/Box2D/Collision/b2CollideCircle.cpp \
 					../../../../../../source/Box2D/Collision/b2CollideEdge.cpp \
@@ -406,12 +442,6 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../source/persistence/tinyXML/tinyxml.cpp \
 					../../../../../../source/persistence/tinyXML/tinyxmlerror.cpp \
 					../../../../../../source/persistence/tinyXML/tinyxmlparser.cpp \
-					../../../../../../source/audio/audio.cc \
-					../../../../../../source/audio/audioBuffer.cc \
-					../../../../../../source/audio/audioDataBlock.cc \
-					../../../../../../source/audio/audio_ScriptBinding.cc \
-					../../../../../../source/audio/audioStreamSourceFactory.cc \
-					../../../../../../source/audio/wavStreamSource.cc \
 					../../../../../../source/component/dynamicConsoleMethodComponent.cpp \
 					../../../../../../source/component/simComponent.cpp \
 					../../../../../../source/component/behaviors/behaviorComponent.cpp \
