@@ -38,7 +38,6 @@ ShapeVector::ShapeVector() :
     mLineColor(ColorF(1.0f,1.0f,1.0f,1.0f)),
     mFillColor(ColorF(0.5f,0.5f,0.5f,1.0f)),
     mFillMode(false),
-    mPolygonScale( 1.0f, 1.0f ),
     mIsCircle(false),
     mCircleRadius(1.0f),
     mFlipX(false),
@@ -141,14 +140,20 @@ void ShapeVector::sceneRender( const SceneRenderState* pSceneRenderState, const 
     if (mIsCircle)
     {
         glRotatef( mRadToDeg(getRenderAngle()), 0.0f, 0.0f, 1.0f );
-        renderCircleShape(position, mCircleRadius);
+
+        // Render the shape.
+        bool wireFrame = (pBatchRenderer->getWireframeMode() || this->getDebugMask() & Scene::DebugOption::SCENE_DEBUG_WIREFRAME_RENDER) ? true : false;
+        renderCircleShape(position, mCircleRadius, wireFrame);
     }
     else
     {
         // Move into Vector-Space.
         glTranslatef( position.x, position.y, 0.0f );
         glRotatef( mRadToDeg(getRenderAngle()), 0.0f, 0.0f, 1.0f );
-        renderPolygonShape(vertexCount);
+
+        // Render the shape.
+        bool wireFrame = (pBatchRenderer->getWireframeMode() || this->getDebugMask() & Scene::DebugOption::SCENE_DEBUG_WIREFRAME_RENDER) ? true : false;
+        renderPolygonShape(vertexCount, wireFrame);
     }
 
     // Restore color.
@@ -158,149 +163,122 @@ void ShapeVector::sceneRender( const SceneRenderState* pSceneRenderState, const 
     glPopMatrix();
 }
 
-void ShapeVector::renderCircleShape(Vector2 position, F32 radius)
+void ShapeVector::renderCircleShape(Vector2 position, F32 radius, const bool wireFrame)
 {
     if (mFillMode)
     {
-        const float32 k_segments = 32.0f;
-        const float32 k_increment = 2.0f * b2_pi / k_segments;
-        float32 theta = 0.0f;
+        // Set the fill color.
+        glColor4f((GLfloat)mFillColor.red, (GLfloat)mFillColor.green, (GLfloat)mFillColor.blue, (GLfloat)mFillColor.alpha);
 
-        glEnable(GL_BLEND);
-        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glColor4f(mFillColor.red, mFillColor.green, mFillColor.blue, mFillColor.alpha);
+        // Draw the shape.
+        const U32 k_segments = 32;
+        const F32 k_increment = 2.0f * M_PI_F / k_segments;
+        F32 theta = 0.0f;
 
-        glBegin(GL_TRIANGLE_FAN);
-        for (int32 i = 0; i < k_segments; ++i)
+        Vector<GLfloat> verts;
+        for (U32 n = 0; n < k_segments; n++)
         {
-            Vector2 v = position + radius * Vector2(cosf(theta), sinf(theta));
-            glVertex2f(v.x, v.y);
+            Vector2 v = position + radius * Vector2(mCos(theta), mSin(theta));
+
+            verts.push_back((GLfloat)v.x);
+            verts.push_back((GLfloat)v.y);
+
             theta += k_increment;
         }
-        glEnd();
 
-        glDisable(GL_BLEND);
+        glVertexPointer(2, GL_FLOAT, 0, verts.address());
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, k_segments);
 
-        theta = 0.0f;
-        glColor4f(mLineColor.red, mLineColor.green, mLineColor.blue, 1.0f);
-        glBegin(GL_LINE_LOOP);
-        for (int32 i = 0; i < k_segments; ++i)
+        // If mFillMode is enabled wireframe is also enabled, we'll draw a filled shape with a wire overlay.
+        // Set the line color.
+        if (wireFrame)
         {
-            Vector2 v = position + radius * Vector2(cosf(theta), sinf(theta));
-            glVertex2f(v.x, v.y);
-            theta += k_increment;
+            glColor4f((GLfloat)mLineColor.red, (GLfloat)mLineColor.green, (GLfloat)mLineColor.blue, (GLfloat)mLineColor.alpha);
+            glDrawArrays(GL_LINE_LOOP, 0, k_segments);
         }
-        glEnd();
+
+        glDisableClientState(GL_VERTEX_ARRAY);
     }
     else
     {
-        const float32 k_segments = 36.0f;
-        const float32 k_increment = 2.0f * b2_pi / k_segments;
-        float32 theta = 0.0f;
+        // We emulate wireframe mode here by drawing lines between the verts.
+        // Set the line color.
+        glColor4f((GLfloat)mLineColor.red, (GLfloat)mLineColor.green, (GLfloat)mLineColor.blue, (GLfloat)mLineColor.alpha);
 
-        glColor4f(mLineColor.red, mLineColor.green, mLineColor.blue, mLineColor.alpha);
-        
-        glBegin(GL_LINE_LOOP);
-        for (int32 i = 0; i < k_segments; ++i)
+        // Draw the shape.
+        const U32 k_segments = 32;
+        const F32 k_increment = 2.0f * M_PI_F / k_segments;
+        F32 theta = 0.0f;
+
+        Vector<GLfloat> verts;
+        for (U32 n = 0; n < k_segments; n++)
         {
-            Vector2 v = position + radius * Vector2(cosf(theta), sinf(theta));
-            glVertex2f(v.x, v.y);
+            Vector2 v = position + radius * Vector2(mCos(theta), mSin(theta));
+
+            verts.push_back((GLfloat)v.x);
+            verts.push_back((GLfloat)v.y);
+
             theta += k_increment;
         }
-        glEnd();
+
+        glVertexPointer(2, GL_FLOAT, 0, verts.address());
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glDrawArrays(GL_LINE_LOOP, 0, k_segments);
+        glDisableClientState(GL_VERTEX_ARRAY);
     }
 }
 
-void ShapeVector::renderPolygonShape(U32 vertexCount)
+void ShapeVector::renderPolygonShape(U32 vertexCount, const bool wireFrame)
 {
-#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_EMSCRIPTEN)
-    // Fill Mode?
-    if ( mFillMode )
+    // If fill mode is enabled, draw the polygon using GL_TRIANGLE_FAN, otherwise we draw with GL_LINE_LOOP.
+    // We also draw with GL_LINE_LOOP if the scene/object is being rendered with wireframe enabled.
+    if (mFillMode)
     {
-        // Yes, so set polygon mode to FILL.
-        //glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+        // Set the fill color.
+        glColor4f((GLfloat)mFillColor.red, (GLfloat)mFillColor.green, (GLfloat)mFillColor.blue, (GLfloat)mFillColor.alpha);
 
-        // Set Fill color.
-        glColor4f( (GLfloat)mFillColor.red, (GLfloat)mFillColor.green, (GLfloat)mFillColor.blue, (GLfloat)mFillColor.alpha );
-
-        GLfloat vert1[] = {//get first vert and make triangles based off of this one
-            (GLfloat)(mPolygonLocalList[0].x),
-            (GLfloat)(mPolygonLocalList[0].y),
-        };
-        GLfloat prevVert[] = {
-            (GLfloat)(mPolygonLocalList[1].x),
-            (GLfloat)(mPolygonLocalList[1].y),
-        };
-        
-        
-        // Draw Object.
-            for ( U32 n = 2; n < vertexCount; n++ )
-            {
-                //glVertex2fv ( (GLfloat*)&(mPolygonLocalList[n]) );
-                GLfloat vertex[] = {
-                                    vert1[0], vert1[1],
-                                    (GLfloat)(mPolygonLocalList[n].x), (GLfloat)(mPolygonLocalList[n].y),
-                                    prevVert[0], prevVert[1],
-                };
-                
-                glVertexPointer(2, GL_FLOAT, 0, vertex );
-                glDrawArrays(GL_TRIANGLES, 0, 3 );
-                prevVert[0] = (GLfloat)(mPolygonLocalList[n].x);//save the current one's for nxt time
-                prevVert[1] = (GLfloat)(mPolygonLocalList[n].y);
-            }
-        //glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-        //glEnd();
- 
-    }
-
-    // Set Line color.
-    glColor4f(mLineColor.red, mLineColor.green, mLineColor.blue, mLineColor.alpha );
-    
-        for ( U32 n = 1; n <= vertexCount; n++ )
+        // Draw the shape.
+        Vector<GLfloat> verts;
+        for (U32 n = 0; n < vertexCount; n++)
         {
-            GLfloat verts[] = {
-                (GLfloat)(mPolygonLocalList[n - 1].x),
-                (GLfloat)(mPolygonLocalList[n - 1].y),
-                (GLfloat)(mPolygonLocalList[n == vertexCount ? 0 : n].x),
-                (GLfloat)(mPolygonLocalList[n == vertexCount ? 0 : n].y),
-            };
-
-            glVertexPointer(2, GL_FLOAT, 0, verts );			
-            glDrawArrays(GL_LINE_LOOP, 0, 2);//draw last two
+            verts.push_back((GLfloat)mPolygonLocalList[n].x);
+            verts.push_back((GLfloat)mPolygonLocalList[n].y);
         }
 
-#else
-    // Fill Mode?
-    if ( mFillMode )
-    {
-        // Yes, so set polygon mode to FILL.
-        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+        glVertexPointer(2, GL_FLOAT, 0, verts.address());
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
 
-        // Set Fill color.
-        glColor4fv( (GLfloat*)&mFillColor );
-
-        // Draw Object.
-        glBegin( GL_POLYGON );
-            for ( U32 n = 0; n < vertexCount; n++ )
-            {
-                glVertex2fv ( (GLfloat*)&(mPolygonLocalList[n]) );
-            }
-        glEnd();
-    }
-
-    // Set Line color.
-    glColor4fv( (GLfloat*)&mLineColor );
-
-    // Draw Object.
-    glBegin(GL_LINES);
-        for ( U32 n = 1; n <= vertexCount; n++ )
+        // If mFillMode is enabled wireframe is also enabled, we'll draw a filled shape with a wire overlay.
+        // Set the line color.
+        if (wireFrame)
         {
-            glVertex2fv ( (GLfloat*)&(mPolygonLocalList[n - 1]) );
-            glVertex2fv ( (GLfloat*)&(mPolygonLocalList[n == vertexCount ? 0 : n]) );
+            glColor4f((GLfloat)mLineColor.red, (GLfloat)mLineColor.green, (GLfloat)mLineColor.blue, (GLfloat)mLineColor.alpha);
+            glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
         }
-    glEnd();
 
-#endif
+        glDisableClientState(GL_VERTEX_ARRAY);
+    }
+    else
+    {
+        // We emulate wireframe mode here by drawing lines between the verts.
+        // Set the line color.
+        glColor4f((GLfloat)mLineColor.red, (GLfloat)mLineColor.green, (GLfloat)mLineColor.blue, (GLfloat)mLineColor.alpha);
+
+        // Draw the shape.
+        Vector<GLfloat> verts;
+        for (U32 n = 0; n < vertexCount; n++)
+        {
+            verts.push_back((GLfloat)mPolygonLocalList[n].x);
+            verts.push_back((GLfloat)mPolygonLocalList[n].y);
+        }
+
+        glVertexPointer(2, GL_FLOAT, 0, verts.address());
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
+        glDisableClientState(GL_VERTEX_ARRAY);
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -321,30 +299,6 @@ void ShapeVector::setSize( const Vector2& size )
         // Generate Local Polygon.
         generateLocalPoly();
     }
-}
-
-//----------------------------------------------------------------------------
-
-void ShapeVector::setPolyScale( const Vector2& scale )
-{
-    // Check Scales.
-    if ( scale.x <= 0.0f || scale.y <= 0.0f )
-    {
-        Con::warnf("ShapeVector::setPolyScale() - Polygon Scales must be greater than zero! '%g,%g'.", scale.x, scale.y);
-        return;
-    }
-    // Check Scales.
-    if ( scale.x > 1.0f || scale.y > 1.0f )
-    {
-        Con::warnf("ShapeVector::setPolyScale() - Polygon Scales cannot be greater than one! '%g,%g'.", scale.x, scale.y);
-        return;
-    }
-
-    // Set Polygon Scale.
-    mPolygonScale = scale;
-
-    // Generation Local Poly.
-    generateLocalPoly();
 }
 
 //----------------------------------------------------------------------------
@@ -563,12 +517,6 @@ void ShapeVector::generateLocalPoly( void )
         // Clear Polygon List.
         mPolygonLocalList.clear();
         mPolygonLocalList.setSize( polyVertexCount );
-
-        // Fetch Half Size.
-        const Vector2 halfSize = getHalfSize();
-
-        // Calculate Polygon Half-Size.
-        const Vector2 polyHalfSize( halfSize.x * mPolygonScale.x, halfSize.y * mPolygonScale.y );
 
         // Scale/Orientate Polygon.
         for ( U32 n = 0; n < polyVertexCount; n++ )
