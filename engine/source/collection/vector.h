@@ -456,6 +456,11 @@ template<class T> inline bool Vector<T>::empty() const
    return (mElementCount == 0);
 }
 
+template<class T> inline bool Vector<T>::contains(const T& t) const
+{
+    return find_next(t) != -1;
+}
+
 template<class T> inline void Vector<T>::insert(iterator p,const T& x)
 {
    U32 index = (U32) (p - mArray);
