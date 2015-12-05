@@ -2471,9 +2471,6 @@
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObject_ScriptBinding.h">
       <Filter>2d\sceneobject</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectMoveToEvent.h">
-      <Filter>2d\sceneobject</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectRotateToEvent.h">
       <Filter>2d\sceneobject</Filter>
     </ClInclude>

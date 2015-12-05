@@ -52,10 +52,6 @@
 #include "component/behaviors/behaviorTemplate.h"
 #endif
 
-#ifndef _SCENE_OBJECT_MOVE_TO_EVENT_H_
-#include "2d/sceneobject/SceneObjectMoveToEvent.h"
-#endif
-
 #ifndef _SCENE_OBJECT_ROTATE_TO_EVENT_H_
 #include "2d/sceneobject/SceneObjectRotateToEvent.h"
 #endif
@@ -131,6 +127,14 @@ SceneObject::SceneObject() :
     mRenderPosition( 0.0f, 0.0f ),
     mRenderAngle( 0.0f ),
     mSpatialDirty( true ),
+    mTargetPosition( 0.0f, 0.0f ),
+    mLastCheckedPosition( 0.0f, 0.0f ),
+    mTargetPositionActive( false ),
+    mDistanceToTarget( 0.0f ),
+    mTargetPositionMargin( 0.1f ),
+    mTargetPositionFound( false ),
+    mSnapToTargetPosition( true ),
+    mStopAtTargetPosition( true ),
 
     /// Body.
     mpBody(NULL),
@@ -193,7 +197,6 @@ SceneObject::SceneObject() :
     mEditorTickAllowed(true),
     mPickingAllowed(true),
     mAlwaysInScope(false),
-    mMoveToEventId(0),
     mRotateToEventId(0),
     mSerialId(0),
     mRenderGroup( StringTable->EmptyString )
@@ -607,6 +610,12 @@ void SceneObject::integrateObject( const F32 totalTime, const F32 elapsedTime, D
             
         // Update world proxy.
         mpScene->getWorldQuery()->update( this, tickAABB, tickDisplacement );
+
+        //have we arrived at the target position?
+        if (mTargetPositionActive)
+        {
+           updateTargetPosition();
+        }
     }
 
     // Update Lifetime.
@@ -654,6 +663,15 @@ void SceneObject::postIntegrate(const F32 totalTime, const F32 elapsedTime, Debu
     {
         PROFILE_SCOPE(SceneObject_onUpdateCallback);
         Con::executef(this, 1, "onUpdate");
+    }
+
+    // Check to see if we're done moving.
+    if (mTargetPositionActive && mTargetPositionFound)
+    {
+       mTargetPositionActive = false;
+
+       PROFILE_SCOPE(SceneObject_onMoveToComplete);
+       Con::executef(this, 1, "onMoveToComplete");
     }
 
 	// Check to see if we're done fading.
@@ -1614,7 +1632,7 @@ void SceneObject::onEndCollision( const TickContact& tickContact )
 
 //-----------------------------------------------------------------------------
 
-bool SceneObject::moveTo( const Vector2& targetWorldPoint, const F32 speed, const bool autoStop, const bool warpToTarget )
+bool SceneObject::moveTo( const Vector2& targetWorldPoint, const F32 speed, const bool autoStop, const bool snapToTarget, const F32 margin )
 {
     // Check in a scene.
     if ( !getScene() )
@@ -1637,26 +1655,22 @@ bool SceneObject::moveTo( const Vector2& targetWorldPoint, const F32 speed, cons
         return false;
     }
 
-    // Cancel any previous event.
-    if ( mMoveToEventId != 0 )
-    {
-        Sim::cancelEvent( mMoveToEventId );
-        mMoveToEventId = 0;
-    }
+    // Set the target position
+    mLastCheckedPosition = getPosition();
+    mTargetPosition = targetWorldPoint;
+    mTargetPositionMargin = margin;
+    mTargetPositionActive = true;
+    mTargetPositionFound = false;
+    mSnapToTargetPosition = snapToTarget;
+    mStopAtTargetPosition = autoStop;
+    mDistanceToTarget = (mLastCheckedPosition - mTargetPosition).Length();
 
     // Calculate the linear velocity for the specified speed.
     Vector2 linearVelocity = targetWorldPoint - getPosition();
-    const F32 distance = linearVelocity.Normalize( speed );
-
-    // Calculate the time it will take to reach the target.
-    const U32 time = (U32)((distance / speed) * 1000.0f);
+    linearVelocity.Normalize(speed);
 
     // Set the linear velocity.
     setLinearVelocity( linearVelocity );
-
-    // Create and post event.
-    SceneObjectMoveToEvent* pEvent = new SceneObjectMoveToEvent( targetWorldPoint, autoStop, warpToTarget );
-    mMoveToEventId = Sim::postEvent(this, pEvent, Sim::getCurrentTime() + time );
 
     return true;
 }
@@ -1771,10 +1785,9 @@ bool SceneObject::growTo(const Vector2& targetSize, const Vector2& deltaSize)
 void SceneObject::cancelMoveTo( const bool autoStop )
 {
     // Only cancel an active moveTo event
-    if ( mMoveToEventId != 0 )
+    if ( mTargetPositionActive )
     {
-        Sim::cancelEvent( mMoveToEventId );
-        mMoveToEventId = 0;
+       mTargetPositionActive = false;
 
         // Should we auto stop?
         if ( autoStop )
@@ -4207,11 +4220,90 @@ void SceneObject::updateBlendColor(const F32 elapsedTime)
 
 void SceneObject::updateSize(const F32 elapsedTime)
 {
-	// Apply the size deltas to the area to move it toward the targetSize.
-	mSize.x = processEffect(mSize.x, mTargetSize.x, mDeltaSize.x * elapsedTime);
-	mSize.y = processEffect(mSize.y, mTargetSize.y, mDeltaSize.y * elapsedTime);
+   // Apply the size deltas to the area to move it toward the targetSize.
+   mSize.x = processEffect(mSize.x, mTargetSize.x, mDeltaSize.x * elapsedTime);
+   mSize.y = processEffect(mSize.y, mTargetSize.y, mDeltaSize.y * elapsedTime);
 
-	setSize(mSize);
+   setSize(mSize);
+}
+
+//-----------------------------------------------------------------------------
+
+void SceneObject::updateTargetPosition()
+{
+   F32 distance = (getPosition() - mTargetPosition).Length();
+   bool hasArrived = false;
+
+   // Is the current position within the target?
+   if ( distance <= mTargetPositionMargin )
+   {
+      hasArrived = true;
+   }
+   else // Did we pass through the target?
+   {
+      // Moving vertically
+      if (mLastCheckedPosition.x == getPosition().x)
+      {
+         if (((mLastCheckedPosition.y < mTargetPosition.y && mTargetPosition.y < getPosition().y) || (mLastCheckedPosition.y > mTargetPosition.y && mTargetPosition.y > getPosition().y)) &&
+         mFabs(getPosition().x - mTargetPosition.x) <= mTargetPositionMargin)
+         {
+            hasArrived = true;
+         }
+      }// Or moving horizontally
+      else if (mLastCheckedPosition.y == getPosition().y)
+      {
+         if (((mLastCheckedPosition.x < mTargetPosition.x && mTargetPosition.x < getPosition().x) || (mLastCheckedPosition.x > mTargetPosition.x && mTargetPosition.x > getPosition().x)) &&
+            mFabs(getPosition().y - mTargetPosition.y) <= mTargetPositionMargin)
+         {
+            hasArrived = true;
+         }
+      }// Or moving diagonally
+      else
+      {
+         //slopes of the two lines
+         Vector2 slope = (mLastCheckedPosition - getPosition());
+         Vector2 perpSlope = slope.getPerp();
+         F32 m1 = slope.y / slope.x;
+         F32 m2 = perpSlope.y / perpSlope.x;
+
+         //y-intercepts
+         F32 b1 = mLastCheckedPosition.y - (m1 * mLastCheckedPosition.x);
+         F32 b2 = mTargetPosition.y - (m2 * mTargetPosition.x);
+
+         //point of interception
+         F32 x = (b1 - b2) / (m2 - m1);
+         F32 y = (m1 * x) + b1;
+         Vector2 intercept = Vector2(x, y);
+
+         //Is the intercept point between the other two points and is the distance less than the margin?
+         if (((mLastCheckedPosition.x < intercept.x && intercept.x < getPosition().x) || (mLastCheckedPosition.x > intercept.x && intercept.x > getPosition().x)) &&
+            (intercept - mTargetPosition).Length() <= mTargetPositionMargin)
+         {
+            hasArrived = true;
+         }
+      }
+   }
+
+   if (hasArrived)
+   {
+      if (mSnapToTargetPosition)
+      {
+         setPosition(mTargetPosition);
+      }
+      if (mStopAtTargetPosition)
+      {
+         setLinearVelocity(Vector2::getZero());
+      }
+      mTargetPositionFound = true;
+   }
+   // Are we moving away from the target?
+   else if (distance > mDistanceToTarget)
+   {
+      // Then turn off the target. No need to keep checking.
+      mTargetPositionActive = false;
+   }
+   mLastCheckedPosition = getPosition();
+   mDistanceToTarget = distance;
 }
 
 //-----------------------------------------------------------------------------

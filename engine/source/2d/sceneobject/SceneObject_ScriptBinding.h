@@ -1861,15 +1861,17 @@ ConsoleMethodWithDocs(SceneObject, getAngularDamping, ConsoleFloat, 2, 2, ())
 //-----------------------------------------------------------------------------
 
 /*! Moves the object to the specified world point.
-    The point is moved by calculating the initial linear velocity required and applies it.
-    The object may never reach the point if it has linear damping applied or collides with another object.
-    @param worldPoint/Y The world point to move the object to.
+    Linear velocity is applied to the object at the given speed in the direction of the target world point.
+    The object may never reach the point if other forces act on the target such as collisions.
+    If the object moves away from the target the object will stop checking to see if it has arrived at the target.
+    @param worldPointX/Y The world point to move the object to.
     @param speed The speed (in m/s) to use to move to the specified point.
-    @param autoStop? Whether to automatically set the linear velocity to zero when time has elapsed or not
-    @param warpToTarget? Whether to move instantly to the target point after the specified time or not in-case the target was not quite reached.
+    @param autoStop? Whether to automatically set the linear velocity to zero when the object arrives at the target.
+    @param snapToTarget? Whether to snap the object to the target point when it is within the margin.
+    @param margin? The distance from the target that qualifies as reaching the target.
     @return Whether the move could be started or not.
 */
-ConsoleMethodWithDocs(SceneObject, moveTo, ConsoleBool, 4, 7, (worldPoint X/Y, speed, [autoStop = true], [warpToTarget = true]))
+ConsoleMethodWithDocs(SceneObject, moveTo, ConsoleBool, 4, 7, (worldPoint X/Y, speed, [autoStop = true], [snapToTarget = true], [margin = 0.1]))
 {
     // World point.
     const U32 worldPointElementCount = Utility::mGetStringElementCount(argv[2]);
@@ -1909,10 +1911,18 @@ ConsoleMethodWithDocs(SceneObject, moveTo, ConsoleBool, 4, 7, (worldPoint X/Y, s
         return object->moveTo( worldPoint, speed, autoStop );
     }
 
-    // Warp to target?
-    const bool warpToTarget = dAtob(argv[nextArg++]);
+    // Snap to target?
+    const bool snapToTarget = dAtob(argv[nextArg++]);
 
-    return object->moveTo( worldPoint, speed, autoStop, warpToTarget );
+    if ( argc <= nextArg )
+    {
+       return object->moveTo(worldPoint, speed, autoStop, snapToTarget);
+    }
+
+    // Margin.
+    const F32 margin = dAtof(argv[nextArg++]);
+
+    return object->moveTo( worldPoint, speed, autoStop, snapToTarget, margin );
 }
 
 //-----------------------------------------------------------------------------

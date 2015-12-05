@@ -109,7 +109,6 @@ public:
     friend class ContactFilter;
     friend class WorldQuery;
     friend class DebugDraw;
-    friend class SceneObjectMoveToEvent;
     friend class SceneObjectRotateToEvent;
 
 protected:
@@ -156,6 +155,14 @@ protected:
     Vector2                 mRenderPosition;
     F32                     mRenderAngle;
     bool                    mSpatialDirty;
+    Vector2                 mLastCheckedPosition;
+    Vector2                 mTargetPosition;
+    bool                    mTargetPositionActive;
+    F32                     mDistanceToTarget;
+    F32                     mTargetPositionMargin;
+    bool                    mTargetPositionFound;
+    bool                    mSnapToTargetPosition;
+    bool                    mStopAtTargetPosition;
 
     /// Body.
     b2Body*                 mpBody;
@@ -228,7 +235,6 @@ protected:
     bool                    mEditorTickAllowed;
     bool                    mPickingAllowed;
     bool                    mAlwaysInScope;
-    U32                     mMoveToEventId;
     U32                     mRotateToEventId;
     U32                     mSerialId;
     StringTableEntry        mRenderGroup;
@@ -404,12 +410,13 @@ public:
     inline F32              getAngularDamping(void) const               { if ( mpScene ) return mpBody->GetAngularDamping(); else return mBodyDefinition.angularDamping; }
 
     /// Move/Rotate to.
-    bool                    moveTo( const Vector2& targetWorldPoint, const F32 speed, const bool autoStop = true, const bool warpToTarget = true );
+    bool                    moveTo(const Vector2& targetWorldPoint, const F32 speed, const bool autoStop = true, const bool snapToTarget = true, const F32 margin = 0.1f);
     bool                    rotateTo( const F32 targetAngle, const F32 speed, const bool autoStop = true, const bool warpToTarget = true );
     void                    cancelMoveTo( const bool autoStop = true );
     void                    cancelRotateTo( const bool autoStop = true );
-    inline bool             isMoveToComplete( void ) const              { return mMoveToEventId == 0; }
+    inline bool             isMoveToComplete( void ) const              { return !mTargetPositionActive; }
     inline bool             isRotateToComplete( void ) const            { return mRotateToEventId == 0; }
+    void                    updateTargetPosition( void );
 
 	// Fade to
 	bool					fadeTo( const ColorF& targetColor, const F32 deltaRed, const F32 deltaGreen, const F32 deltaBlue, const F32 deltaAlpha );
