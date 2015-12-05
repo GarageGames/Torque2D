@@ -22,43 +22,6 @@
 
 ConsoleMethodGroupBeginWithDocs(ShapeVector, SceneObject)
 
-/*! Sets the polygon scale.
-    @param width/heightScale The scale values of the given polygon. If no height is specified, the widthScale value is repeated.
-    @return No return value.
-*/
-ConsoleMethodWithDocs(ShapeVector, setPolyScale, ConsoleVoid, 3, 3, (widthScale / [heightScale]))
-{
-    // Calculate Element Count.
-    const U32 elementCount = Utility::mGetStringElementCount( argv[2] );
-
-    // Check Parameters.
-    if ( elementCount < 1 )
-    {
-        Con::warnf("ShapeVector::setPolyScale() - Invalid number of parameters!");
-        return;
-    }
-
-    // Fetch Width Scale.
-    Vector2 scale;
-    scale.x = dAtof(Utility::mGetStringElement(argv[2],0));
-    // Use Fixed-Aspect for Scale if Height-Scale not specified.
-    if ( elementCount == 2 )
-    {
-        // Specified Height Scale.
-        scale.y = dAtof(Utility::mGetStringElement(argv[2],1));
-    }
-    else
-    {
-        // Fixed-Aspect Scale.
-        scale.y = scale.x;
-    }
-
-    // Set Polygon Scale.
-    object->setPolyScale( scale );
-}
-
-//----------------------------------------------------------------------------
-
 /*! Sets a regular polygon primitive.
     @return No return value.
 */
