@@ -724,7 +724,7 @@ bool GFont::write(Stream& stream)
 
 
    // Get the min/max we have values for, and only write that range out.
-   S32 minGlyph = S32_MAX, maxGlyph = 0;
+   S32 minGlyph = INT32_MAX, maxGlyph = 0;
    S32 i;
 
    for(i = 0; i < 65536; i++)

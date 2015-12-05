@@ -995,7 +995,7 @@ void GuiEditCtrl::onMouseDragged(const GuiEvent &event)
    {
       Vector<GuiControl *>::iterator i = mSelectedControls.begin();
       //Point2I minPos = (*i)->mBounds.point;
-      Point2I minPos (S32_MAX, S32_MAX);
+      Point2I minPos (INT32_MAX, INT32_MAX);
 
       for(; i != mSelectedControls.end(); i++)
       {

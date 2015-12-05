@@ -1282,7 +1282,6 @@
 		867BAFA716AEC9050033868F /* Tickable.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tickable.cc; sourceTree = "<group>"; };
 		867BAFA816AEC9050033868F /* Tickable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tickable.h; sourceTree = "<group>"; };
 		867BAFA916AEC9050033868F /* types.arm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.arm.h; sourceTree = "<group>"; };
-		867BAFAA16AEC9050033868F /* types.codewarrior.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.codewarrior.h; sourceTree = "<group>"; };
 		867BAFAB16AEC9050033868F /* types.gcc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.gcc.h; sourceTree = "<group>"; };
 		867BAFAC16AEC9050033868F /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 		867BAFAD16AEC9050033868F /* types.posix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.posix.h; sourceTree = "<group>"; };
@@ -1290,7 +1289,6 @@
 		867BAFAF16AEC9050033868F /* types.visualc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.visualc.h; sourceTree = "<group>"; };
 		867BAFB016AEC9050033868F /* types.win32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.win32.h; sourceTree = "<group>"; };
 		867BAFB116AEC9050033868F /* typesLinux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typesLinux.h; sourceTree = "<group>"; };
-		867BAFB216AEC9050033868F /* typesPPC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typesPPC.h; sourceTree = "<group>"; };
 		867BAFB316AEC9050033868F /* typesWin32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typesWin32.h; sourceTree = "<group>"; };
 		867BAFB416AEC9050033868F /* typesX86UNIX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typesX86UNIX.h; sourceTree = "<group>"; };
 		867BAFB616AEC9050033868F /* scriptGroup.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scriptGroup.cc; sourceTree = "<group>"; };
@@ -2812,7 +2810,6 @@
 				867BAFA716AEC9050033868F /* Tickable.cc */,
 				867BAFA816AEC9050033868F /* Tickable.h */,
 				867BAFA916AEC9050033868F /* types.arm.h */,
-				867BAFAA16AEC9050033868F /* types.codewarrior.h */,
 				867BAFAB16AEC9050033868F /* types.gcc.h */,
 				867BAFAC16AEC9050033868F /* types.h */,
 				867BAFAD16AEC9050033868F /* types.posix.h */,
@@ -2820,7 +2817,6 @@
 				867BAFAF16AEC9050033868F /* types.visualc.h */,
 				867BAFB016AEC9050033868F /* types.win32.h */,
 				867BAFB116AEC9050033868F /* typesLinux.h */,
-				867BAFB216AEC9050033868F /* typesPPC.h */,
 				867BAFB316AEC9050033868F /* typesWin32.h */,
 				867BAFB416AEC9050033868F /* typesX86UNIX.h */,
 			);
