@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -1073,6 +1073,27 @@ ConsoleMethodWithDocs(SceneObject, getCollisionSuppress, ConsoleBool, 2, 2, ())
 {
     // Get Collision Callback.
     return object->getCollisionSuppress();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Sets the one way collision status for chain and edge shapes that belong to this object.
+    @param status Whether collisions happen only in one direction or not (defaults to false).
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setCollisionOneWay, ConsoleVoid, 2, 3, ([bool status?]))
+{
+    object->setCollisionOneWay( argc > 2 ? dAtob(argv[2]) : true );
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets the one way collision status for chain and edge shapes that belong to this object.
+    @return (bool status) Whether collisions happen only in one direction or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getCollisionOneWay, ConsoleBool, 2, 2, ())
+{
+    return object->getCollisionOneWay();
 }
 
 //-----------------------------------------------------------------------------
