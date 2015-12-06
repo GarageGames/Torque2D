@@ -707,7 +707,6 @@
     <ClInclude Include="..\..\source\2d\sceneobject\ParticlePlayer_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObject.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectList.h" />
-    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectMoveToEvent.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectRotateToEvent.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectSet_ScriptBinding.h" />
