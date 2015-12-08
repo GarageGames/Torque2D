@@ -145,7 +145,7 @@ void ProcessControlInit()
 
    // we're not interested in the exit status of child processes, so this 
    // prevents zombies from accumulating.
-#if defined(__FreeBSD__)
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
    signal(SIGCHLD, SIG_IGN);
 #else
    signal(SIGCLD, SIG_IGN);
