@@ -26,7 +26,7 @@
 #include "platform/platform.h"
 #endif
 
-#ifdef TORQUE_OS_LINUX
+#if defined(TORQUE_OS_LINUX) || defined(TORQUE_OS_OPENBSD)
 // Need to remove this once Xlib stops leaking
 #undef Status
 #endif

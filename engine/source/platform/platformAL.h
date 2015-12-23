@@ -35,7 +35,7 @@
 //Android uses openal soft from https://github.com/AerialX/openal-soft-android
 #include <AL/al.h>
 #include <AL/alc.h>
-#elif defined(TORQUE_OS_LINUX)
+#elif defined(TORQUE_OS_LINUX) || defined(TORQUE_OS_OPENBSD)
 #include <AL/al.h>
 #include <AL/alc.h>
 #include "platform/eaxtypes.h"
