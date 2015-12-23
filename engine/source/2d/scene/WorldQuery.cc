@@ -719,8 +719,8 @@ bool WorldQuery::QueryCallback( S32 proxyId )
     if ( mQueryFilter.mEnabledFilter && !pSceneObject->isEnabled() )
         return true;
 
-    // Visible filter.
-    if ( mQueryFilter.mVisibleFilter && !pSceneObject->getVisible() )
+    // Visible filter.  If an object has a size x or y value of zero then they are treated here as invisible.
+    if (mQueryFilter.mVisibleFilter && (!pSceneObject->getVisible() || pSceneObject->getSize().isXZero() || pSceneObject->getSize().isYZero()))
         return true;
 
     // Picking allowed filter.
