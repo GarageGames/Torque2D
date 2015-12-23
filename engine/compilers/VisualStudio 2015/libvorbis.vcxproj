@@ -194,9 +194,6 @@
     <ClCompile Include="..\..\Lib\libvorbis\window.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\vorbis.def" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\..\Lib\libvorbis\backends.h" />
     <ClInclude Include="..\..\Lib\libvorbis\bitrate.h" />
     <ClInclude Include="..\..\Lib\libvorbis\codebook.h" />
@@ -204,7 +201,7 @@
     <ClInclude Include="..\..\Lib\libvorbis\codec_internal.h" />
     <ClInclude Include="..\..\Lib\libvorbis\envelope.h" />
     <ClInclude Include="..\..\Lib\libvorbis\lib\modes\floor_all.h" />
-    <ClInclude Include="..\..\Lib\libvorbis\books\floor\floor_books.h" />
+    <ClInclude Include="..\..\Lib\libvorbis\lib\books\floor\floor_books.h" />
     <ClInclude Include="..\..\Lib\libvorbis\highlevel.h" />
     <ClInclude Include="..\..\Lib\libvorbis\lookup.h" />
     <ClInclude Include="..\..\Lib\libvorbis\lookup_data.h" />
@@ -220,8 +217,8 @@
     <ClInclude Include="..\..\Lib\libvorbis\lib\modes\psych_44.h" />
     <ClInclude Include="..\..\Lib\libvorbis\lib\modes\psych_8.h" />
     <ClInclude Include="..\..\Lib\libvorbis\registry.h" />
-    <ClInclude Include="..\..\Lib\libvorbis\books\coupled\res_books_stereo.h" />
-    <ClInclude Include="..\..\Lib\libvorbis\books\uncoupled\res_books_uncoupled.h" />
+    <ClInclude Include="..\..\Lib\libvorbis\lib\books\coupled\res_books_stereo.h" />
+    <ClInclude Include="..\..\Lib\libvorbis\lib\books\uncoupled\res_books_uncoupled.h" />
     <ClInclude Include="..\..\Lib\libvorbis\lib\modes\residue_16.h" />
     <ClInclude Include="..\..\Lib\libvorbis\lib\modes\residue_44.h" />
     <ClInclude Include="..\..\Lib\libvorbis\lib\modes\residue_44u.h" />
@@ -236,8 +233,8 @@
     <ClInclude Include="..\..\Lib\libvorbis\lib\modes\setup_8.h" />
     <ClInclude Include="..\..\Lib\libvorbis\lib\modes\setup_X.h" />
     <ClInclude Include="..\..\Lib\libvorbis\smallft.h" />
-    <ClInclude Include="..\..\..\include\vorbis\vorbisenc.h" />
-    <ClInclude Include="..\..\..\include\vorbis\vorbisfile.h" />
+    <ClInclude Include="..\..\Lib\libvorbis\include\vorbis\vorbisenc.h" />
+    <ClInclude Include="..\..\Lib\libvorbis\include\vorbis\vorbisfile.h" />
     <ClInclude Include="..\..\Lib\libvorbis\window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
