@@ -5,6 +5,7 @@
 .LSOverride
 /tmp/*
 /preferences.cs
+/engine/**/preferences.cs
 *.dso
 *.edso
 *.user
