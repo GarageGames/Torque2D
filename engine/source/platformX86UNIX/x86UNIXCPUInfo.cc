@@ -39,7 +39,7 @@ void detectX86CPUInfo(char *vendor, U32 *processor, U32 *properties);
 }
 
 /* used in the asm */
-static U32 time[2];
+static U32 Ttime[2];
 static U32 clockticks = 0;
 static char vendor[13] = {0,};
 static U32 properties = 0;
@@ -59,7 +59,7 @@ void Processor::init()
    PlatformSystemInfo.processor.mhz  = 0;
    PlatformSystemInfo.processor.properties = CPU_PROP_C;
 
-   clockticks = properties = processor = time[0] = 0;
+   clockticks = properties = processor = Ttime[0] = 0;
    dStrcpy(vendor, "");
 
    detectX86CPUInfo(vendor, &processor, &properties);
@@ -82,8 +82,8 @@ void Processor::init()
          "pushl  %eax\n"
          "pushl  %edx\n"
          "rdtsc\n"
-         "movl   %eax, (time)\n"
-         "movl   %edx, (time+4)\n"
+         "movl   %eax, (Ttime)\n"
+         "movl   %edx, (Ttime+4)\n"
          "popl   %edx\n"
          "popl   %eax\n"
          );
@@ -102,8 +102,8 @@ void Processor::init()
          "pushl  %eax\n"
          "pushl  %edx\n"
          "rdtsc\n"
-         "sub    (time+4), %edx\n"
-         "sbb    (time), %eax\n"
+         "sub    (Ttime+4), %edx\n"
+         "sbb    (Ttime), %eax\n"
          "mov    %eax, (clockticks)\n"
          "popl   %edx\n"
          "popl   %eax\n"
