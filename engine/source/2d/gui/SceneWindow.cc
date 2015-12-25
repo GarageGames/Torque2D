@@ -1431,13 +1431,6 @@ void SceneWindow::calculateCameraView( CameraView* pCameraView )
         // Recalculate destination area.
         pCameraView->mDestinationArea.point  = pCameraView->mSceneMin;
         pCameraView->mDestinationArea.extent = pCameraView->mSceneMax - pCameraView->mSceneMin;
-
-        // Inset Window by Zoom Factor (if it's big enough to do so).
-        if (    pCameraView->mDestinationArea.extent.x > (zoomFactorX*2.0f) &&
-                pCameraView->mDestinationArea.extent.y > (zoomFactorY*2.0f) )
-        {
-            pCameraView->mDestinationArea.inset( zoomFactorX, zoomFactorY );
-        }
     }
 
     // Calculate Scene Window Scale.

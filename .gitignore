@@ -5,6 +5,7 @@
 .LSOverride
 /tmp/*
 /preferences.cs
+/engine/**/preferences.cs
 *.dso
 *.edso
 *.user
@@ -26,7 +27,7 @@ Torque2D_DEBUG.exe
 Torque2DGame.app
 Torque2DGame_Debug.app
 linkmap.txt
-    
+
 # Compiled source #
 ###################
 *.com
@@ -68,4 +69,10 @@ engine/compilers/android/.settings/org.eclipse.cdt.core.prefs
 engine/compilers/android/bin/
 engine/compilers/android/gen/
 engine/compilers/android/obj/
-
+engine/compilers/android-studio/.gradle/
+engine/compilers/android-studio/build/
+engine/compilers/android-studio/app/build/
+engine/compilers/android-studio/local.properties
+engine/compilers/android-studio/app/src/main/obj/
+engine/compilers/android-studio/app/src/main/libs/
+engine/compilers/android-studio/app/src/main/game/

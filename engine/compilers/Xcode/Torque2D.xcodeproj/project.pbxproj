@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06D168651C1F90F1009A1AD1 /* libogg.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 06D1685F1C1F90AB009A1AD1 /* libogg.0.dylib */; };
+		06D168661C1F90F1009A1AD1 /* libvorbis.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 06D168601C1F90AB009A1AD1 /* libvorbis.0.dylib */; };
+		06D168671C1F90F1009A1AD1 /* libvorbisfile.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 06D168611C1F90AB009A1AD1 /* libvorbisfile.3.dylib */; };
+		06D1686A1C1F949D009A1AD1 /* vorbisStreamSource.cc in Sources */ = {isa = PBXBuildFile; fileRef = 06D168681C1F949D009A1AD1 /* vorbisStreamSource.cc */; };
+		06D1686B1C1F949D009A1AD1 /* vorbisStreamSource.h in Sources */ = {isa = PBXBuildFile; fileRef = 06D168691C1F949D009A1AD1 /* vorbisStreamSource.h */; };
 		27908DFA18A3F8CB002D41BD /* Animation.c in Sources */ = {isa = PBXBuildFile; fileRef = 27908DCD18A3F8CB002D41BD /* Animation.c */; };
 		27908DFB18A3F8CB002D41BD /* AnimationState.c in Sources */ = {isa = PBXBuildFile; fileRef = 27908DCF18A3F8CB002D41BD /* AnimationState.c */; };
 		27908DFC18A3F8CB002D41BD /* AnimationStateData.c in Sources */ = {isa = PBXBuildFile; fileRef = 27908DD118A3F8CB002D41BD /* AnimationStateData.c */; };
@@ -496,6 +501,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		06D1685F1C1F90AB009A1AD1 /* libogg.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libogg.0.dylib; path = /usr/local/lib/libogg.0.dylib; sourceTree = "<group>"; };
+		06D168601C1F90AB009A1AD1 /* libvorbis.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbis.0.dylib; path = /usr/local/lib/libvorbis.0.dylib; sourceTree = "<group>"; };
+		06D168611C1F90AB009A1AD1 /* libvorbisfile.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbisfile.3.dylib; path = /usr/local/lib/libvorbisfile.3.dylib; sourceTree = "<group>"; };
+		06D168681C1F949D009A1AD1 /* vorbisStreamSource.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vorbisStreamSource.cc; sourceTree = "<group>"; };
+		06D168691C1F949D009A1AD1 /* vorbisStreamSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vorbisStreamSource.h; sourceTree = "<group>"; };
 		27908DCD18A3F8CB002D41BD /* Animation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Animation.c; path = ../../../source/spine/Animation.c; sourceTree = "<group>"; };
 		27908DCE18A3F8CB002D41BD /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Animation.h; path = ../../../source/spine/Animation.h; sourceTree = "<group>"; };
 		27908DCF18A3F8CB002D41BD /* AnimationState.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = AnimationState.c; path = ../../../source/spine/AnimationState.c; sourceTree = "<group>"; };
@@ -1537,6 +1547,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06D168651C1F90F1009A1AD1 /* libogg.0.dylib in Frameworks */,
+				06D168661C1F90F1009A1AD1 /* libvorbis.0.dylib in Frameworks */,
+				06D168671C1F90F1009A1AD1 /* libvorbisfile.3.dylib in Frameworks */,
 				867492F5188727FF00CF0136 /* libLeap.dylib in Frameworks */,
 				865A20CA16515B1E00527C44 /* AppKit.framework in Frameworks */,
 				865A20CC16515B1E00527C44 /* Cocoa.framework in Frameworks */,
@@ -2089,6 +2102,9 @@
 		869FF8BB1651518C002FE082 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				06D1685F1C1F90AB009A1AD1 /* libogg.0.dylib */,
+				06D168601C1F90AB009A1AD1 /* libvorbis.0.dylib */,
+				06D168611C1F90AB009A1AD1 /* libvorbisfile.3.dylib */,
 				867492F4188727FF00CF0136 /* libLeap.dylib */,
 				865A20C916515AEF00527C44 /* System */,
 				869FF8BE1651518C002FE082 /* Other Frameworks */,
@@ -2372,6 +2388,8 @@
 				86BC7F0A16518D4600D96ADF /* audioStreamSource.h */,
 				86BC7F0B16518D4600D96ADF /* audioStreamSourceFactory.cc */,
 				86BC7F0C16518D4600D96ADF /* audioStreamSourceFactory.h */,
+				06D168681C1F949D009A1AD1 /* vorbisStreamSource.cc */,
+				06D168691C1F949D009A1AD1 /* vorbisStreamSource.h */,
 				86BC7F0D16518D4600D96ADF /* wavStreamSource.cc */,
 				86BC7F0E16518D4600D96ADF /* wavStreamSource.h */,
 			);
@@ -3265,6 +3283,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06D1686A1C1F949D009A1AD1 /* vorbisStreamSource.cc in Sources */,
+				06D1686B1C1F949D009A1AD1 /* vorbisStreamSource.h in Sources */,
 				86D770C3165687450046D71F /* osxFileDialogs.mm in Sources */,
 				86D770571656873C0046D71F /* mathTypes.cc in Sources */,
 				86D770581656873C0046D71F /* mathUtils.cc in Sources */,
@@ -3789,7 +3809,7 @@
 				HEADER_SEARCH_PATHS = (
 					../../source,
 					../../lib,
-					../../lib/vorbis/include,
+					../../lib/libvorbis/include,
 					../../lib/lpng,
 					../../lib/ljpeg,
 					../../lib/lungif,
@@ -3797,11 +3817,13 @@
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Versions/Current/Frameworks/QD.framework/Headers",
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/OpenGL.framework/Headers",
 					../../lib/LeapSDK/include,
+					../../lib/libogg/include,
 				);
 				INFOPLIST_FILE = "Torque2D/Torque2D-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"../../lib/LeapSDK/lib/libc++",
+					/usr/local/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = /usr/lib/libz.dylib;
@@ -3895,7 +3917,7 @@
 				HEADER_SEARCH_PATHS = (
 					../../source,
 					../../lib,
-					../../lib/vorbis/include,
+					../../lib/libvorbis/include,
 					../../lib/lpng,
 					../../lib/ljpeg,
 					../../lib/lungif,
@@ -3905,11 +3927,13 @@
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Versions/Current/Frameworks/QD.framework/Headers",
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/OpenGL.framework/Headers",
 					../../lib/LeapSDK/include,
+					../../lib/libogg/include,
 				);
 				INFOPLIST_FILE = "Torque2D/Torque2D-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"../../lib/LeapSDK/lib/libc++",
+					/usr/local/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = /usr/lib/libz.dylib;
@@ -3937,7 +3961,7 @@
 				HEADER_SEARCH_PATHS = (
 					../../source,
 					../../lib,
-					../../lib/vorbis/include,
+					../../lib/libvorbis/include,
 					../../lib/lpng,
 					../../lib/ljpeg,
 					../../lib/lungif,
@@ -3947,11 +3971,12 @@
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Versions/Current/Frameworks/QD.framework/Headers",
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/OpenGL.framework/Headers",
 					../../lib/LeapSDK/include,
+					../../lib/libogg/include,
 				);
 				"HEADER_SEARCH_PATHS[arch=*]" = (
 					../../source,
 					../../lib,
-					../../lib/vorbis/include,
+					../../lib/libvorbis/include,
 					../../lib/lpng,
 					../../lib/ljpeg,
 					../../lib/lungif,
@@ -3961,11 +3986,13 @@
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Versions/Current/Frameworks/QD.framework/Headers",
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/OpenGL.framework/Headers",
 					../../lib/LeapSDK/include,
+					../../lib/libogg/include,
 				);
 				INFOPLIST_FILE = "Torque2D/Torque2D-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"../../lib/LeapSDK/lib/libc++",
+					/usr/local/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = /usr/lib/libz.dylib;

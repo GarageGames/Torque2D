@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // Copyright (c) 2013 GarageGames, LLC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -590,6 +590,28 @@ ConsoleMethodWithDocs(SceneObject, getPosition, ConsoleString, 2, 2, ())
 
 //-----------------------------------------------------------------------------
 
+/*! Gets the object's position.
+	@return The x (horizontal) position of the object.
+*/
+ConsoleMethodWithDocs(SceneObject, getPositionX, ConsoleFloat, 2, 2, ())
+{
+	// Get position.
+	return object->getPosition().x;
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets the object's position.
+	@return The y (vertical) position of the object.
+*/
+ConsoleMethodWithDocs(SceneObject, getPositionY, ConsoleFloat, 2, 2, ())
+{
+	// Get position.
+	return object->getPosition().y;
+}
+
+//-----------------------------------------------------------------------------
+
 /*! Gets the current render position.
     @return (float x/float y) The x and y (horizontal and vertical) render position of the object.
 */
@@ -1051,6 +1073,27 @@ ConsoleMethodWithDocs(SceneObject, getCollisionSuppress, ConsoleBool, 2, 2, ())
 {
     // Get Collision Callback.
     return object->getCollisionSuppress();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Sets the one way collision status for chain and edge shapes that belong to this object.
+    @param status Whether collisions happen only in one direction or not (defaults to false).
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, setCollisionOneWay, ConsoleVoid, 2, 3, ([bool status?]))
+{
+    object->setCollisionOneWay( argc > 2 ? dAtob(argv[2]) : true );
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets the one way collision status for chain and edge shapes that belong to this object.
+    @return (bool status) Whether collisions happen only in one direction or not.
+*/
+ConsoleMethodWithDocs(SceneObject, getCollisionOneWay, ConsoleBool, 2, 2, ())
+{
+    return object->getCollisionOneWay();
 }
 
 //-----------------------------------------------------------------------------
@@ -1839,15 +1882,17 @@ ConsoleMethodWithDocs(SceneObject, getAngularDamping, ConsoleFloat, 2, 2, ())
 //-----------------------------------------------------------------------------
 
 /*! Moves the object to the specified world point.
-    The point is moved by calculating the initial linear velocity required and applies it.
-    The object may never reach the point if it has linear damping applied or collides with another object.
-    @param worldPoint/Y The world point to move the object to.
+    Linear velocity is applied to the object at the given speed in the direction of the target world point.
+    The object may never reach the point if other forces act on the target such as collisions.
+    If the object moves away from the target the object will stop checking to see if it has arrived at the target.
+    @param worldPointX/Y The world point to move the object to.
     @param speed The speed (in m/s) to use to move to the specified point.
-    @param autoStop? Whether to automatically set the linear velocity to zero when time has elapsed or not
-    @param warpToTarget? Whether to move instantly to the target point after the specified time or not in-case the target was not quite reached.
+    @param autoStop? Whether to automatically set the linear velocity to zero when the object arrives at the target.
+    @param snapToTarget? Whether to snap the object to the target point when it is within the margin.
+    @param margin? The distance from the target that qualifies as reaching the target.
     @return Whether the move could be started or not.
 */
-ConsoleMethodWithDocs(SceneObject, moveTo, ConsoleBool, 4, 7, (worldPoint X/Y, speed, [autoStop = true], [warpToTarget = true]))
+ConsoleMethodWithDocs(SceneObject, moveTo, ConsoleBool, 4, 7, (worldPoint X/Y, speed, [autoStop = true], [snapToTarget = true], [margin = 0.1]))
 {
     // World point.
     const U32 worldPointElementCount = Utility::mGetStringElementCount(argv[2]);
@@ -1887,10 +1932,18 @@ ConsoleMethodWithDocs(SceneObject, moveTo, ConsoleBool, 4, 7, (worldPoint X/Y, s
         return object->moveTo( worldPoint, speed, autoStop );
     }
 
-    // Warp to target?
-    const bool warpToTarget = dAtob(argv[nextArg++]);
+    // Snap to target?
+    const bool snapToTarget = dAtob(argv[nextArg++]);
 
-    return object->moveTo( worldPoint, speed, autoStop, warpToTarget );
+    if ( argc <= nextArg )
+    {
+       return object->moveTo(worldPoint, speed, autoStop, snapToTarget);
+    }
+
+    // Margin.
+    const F32 margin = dAtof(argv[nextArg++]);
+
+    return object->moveTo( worldPoint, speed, autoStop, snapToTarget, margin );
 }
 
 //-----------------------------------------------------------------------------
@@ -1934,6 +1987,189 @@ ConsoleMethodWithDocs(SceneObject, rotateTo, ConsoleBool, 4, 6, (angle, speed, [
 
 //-----------------------------------------------------------------------------
 
+/*! Fades the object to the target color.
+	The current color of the object will continue to change until it arrives at the target color or the fade is cancelled.
+	The change will continue even if the blendColor is set directly.
+	@param (red / green / blue / alpha) The target color to fade the object to.
+	@param rate The rate per second to change each color value. Must be a number greater than zero.
+	@return Whether the fade started or not.
+*/
+ConsoleMethodWithDocs(SceneObject, fadeTo, ConsoleBool, 4, 4, (targetColor red / green / blue / alpha, rate))
+{
+	if (argc < 3)
+	{
+		Con::warnf("Scene::fadeTo() - Invalid number of parameters!");
+		return false;
+	}
+
+	const U32 colorCount = Utility::mGetStringElementCount(argv[2]);
+	if (colorCount != 4)
+	{
+		Con::warnf("Scene::fadeTo() - Invalid color! Colors require four values (red / green / blue / alpha)!");
+		return false;
+	}
+
+	F32 rate = dAtof(argv[3]);
+	if (rate <= 0.0f)
+	{
+		Con::warnf("Scene::fadeTo() - Rate must be greater than zero!");
+		return false;
+	}
+
+	return object->fadeTo(ColorF(dAtof(Utility::mGetStringElement(argv[2], 0)),
+								 dAtof(Utility::mGetStringElement(argv[2], 1)),
+								 dAtof(Utility::mGetStringElement(argv[2], 2)),
+								 dAtof(Utility::mGetStringElement(argv[2], 3))), 
+								 rate, rate, rate, rate);
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Fades the object to the target color over a period of time.
+	The current color of the object will continue to change until it arrives at the target color or the fade is cancelled.
+	The change will continue even if the blendColor is set directly which will change the amount of time it takes.
+	Unhindered, each of the color values will arrive at the target in approximately the target time.
+	@param (red / green / blue / alpha) The target color to fade the object to.
+	@param time The amount of time in milliseconds that each color value will take to reach the target. Must be a number greater than zero.
+	@return Whether the fade started or not.
+*/
+ConsoleMethodWithDocs(SceneObject, fadeToTime, ConsoleBool, 4, 4, (targetColor red / green / blue / alpha, time))
+{
+	if (argc < 3)
+	{
+		Con::warnf("Scene::fadeToTime() - Invalid number of parameters!");
+		return false;
+	}
+
+	const U32 colorCount = Utility::mGetStringElementCount(argv[2]);
+	if (colorCount != 4)
+	{
+		Con::warnf("Scene::fadeToTime() - Invalid color! Colors require four values (red / green / blue / alpha)!");
+		return false;
+	}
+
+	F32 time = dAtof(argv[3]);
+	if (time <= 0.0f)
+	{
+		Con::warnf("Scene::fadeToTime() - Time must be greater than zero!");
+		return false;
+	}
+
+	// Get the target color values.
+	const F32 tRed = dAtof(Utility::mGetStringElement(argv[2], 0));
+	const F32 tGreen = dAtof(Utility::mGetStringElement(argv[2], 1));
+	const F32 tBlue = dAtof(Utility::mGetStringElement(argv[2], 2));
+	const F32 tAlpha = dAtof(Utility::mGetStringElement(argv[2], 3));
+
+	// Get the rate to change each value. The rate will be change per second.
+	const ColorF currentColor = object->getBlendColor();
+	F32 rRed = (1000.0f * fabs(tRed - currentColor.red)) / time;
+	F32 rGreen = (1000.0f * fabs(tGreen - currentColor.green)) / time;
+	F32 rBlue = (1000.0f * fabs(tBlue - currentColor.blue)) / time;
+	F32 rAlpha = (1000.0f * fabs(tAlpha - currentColor.alpha)) / time;
+
+	return object->fadeTo(ColorF(tRed, tGreen, tBlue, tAlpha), rRed, rGreen, rBlue, rAlpha);
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Grows or shrinks the object to the target size.
+	The current size of the object will continue to change until it arrives at the target size or the grow is cancelled.
+	The change will continue even if the size is set directly.
+	@param (width / height) The target size to grow or shrink the object to.
+	@param (rateX / rateY) The rate per second to change the size. Must be a number greater than zero even if shrinking. Can be one or two values.
+	@return Whether the grow started or not.
+*/
+ConsoleMethodWithDocs(SceneObject, growTo, ConsoleBool, 4, 4, (targetSize width / height, rate rateX / rateY))
+{
+	if (argc < 3)
+	{
+		Con::warnf("Scene::growTo() - Invalid number of parameters!");
+		return false;
+	}
+
+	const U32 targetCount = Utility::mGetStringElementCount(argv[2]);
+	if (targetCount != 2)
+	{
+		Con::warnf("Scene::growTo() - Invalid size! Target size requires two values (width / height)!");
+		return false;
+	}
+
+	Vector2 rate;
+	const U32 rateCount = Utility::mGetStringElementCount(argv[3]);
+	if (rateCount == 1)
+	{
+		rate.x = dAtof(Utility::mGetStringElement(argv[3], 0));
+		rate.y = rate.x;
+	}
+	else if (rateCount == 2)
+	{
+		rate.x = dAtof(Utility::mGetStringElement(argv[3], 0));
+		rate.y = dAtof(Utility::mGetStringElement(argv[3], 1));
+	}
+	else
+	{
+		Con::warnf("Scene::growTo() - Invalid size! Target size requires two values (width / height)!");
+		return false;
+	}
+
+	if (rate.x <= 0.0f || rate.y <= 0.0f)
+	{
+		Con::warnf("Scene::growTo() - Rate must be greater than zero!");
+		return false;
+	}
+
+	return object->growTo(Vector2(dAtof(Utility::mGetStringElement(argv[2], 0)),
+		dAtof(Utility::mGetStringElement(argv[2], 1))),
+		rate);
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Grows or shrinks the object to the target size over a period of time.
+	The current size of the object will continue to change until it arrives at the target size or the grow is cancelled.
+	The change will continue even if the size is set directly which will change the amount of time it takes.
+	Unhindered, both size values will arrive at the target in approximately the target time.
+	@param (width / height) The target size to grow or shrink the object to.
+	@param time The amount of time in milliseconds that both size values will take to reach the target. Must be a number greater than zero.
+	@return Whether the fade started or not.
+*/
+ConsoleMethodWithDocs(SceneObject, growToTime, ConsoleBool, 4, 4, (targetSize width / height, time))
+{
+	if (argc < 3)
+	{
+		Con::warnf("Scene::growToTime() - Invalid number of parameters!");
+		return false;
+	}
+
+	const U32 targetCount = Utility::mGetStringElementCount(argv[2]);
+	if (targetCount != 2)
+	{
+		Con::warnf("Scene::growToTime() - Invalid size! Target size requires two values (width / height)!");
+		return false;
+	}
+
+	F32 time = dAtof(argv[3]);
+	if (time <= 0.0f)
+	{
+		Con::warnf("Scene::growToTime() - Time must be greater than zero!");
+		return false;
+	}
+
+	// Get the target size values.
+	const F32 tWidth = dAtof(Utility::mGetStringElement(argv[2], 0));
+	const F32 tHeight = dAtof(Utility::mGetStringElement(argv[2], 1));
+
+	// Get the rate to change each value. The rate will be change per second.
+	const Vector2 currentSize = object->getSize();
+	F32 rWidth = (1000.0f * fabs(tWidth - currentSize.x)) / time;
+	F32 rHeight = (1000.0f * fabs(tHeight - currentSize.y)) / time;
+
+	return object->growTo(Vector2(tWidth, tHeight), Vector2(rWidth, rHeight));
+}
+
+//-----------------------------------------------------------------------------
+
 /*! Stop a previous 'moveTo' command.
     @param autoStop? - Whether to automatically set the linear velocity to zero or not
     @return No return value.
@@ -1972,6 +2208,26 @@ ConsoleMethodWithDocs(SceneObject, cancelRotateTo, ConsoleVoid, 2, 3, ([autoStop
 
 //-----------------------------------------------------------------------------
 
+/*! Stop a previous 'fadeTo' command.
+	@return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, cancelFadeTo, ConsoleVoid, 2, 2, ())
+{
+	object->cancelFadeTo();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Stop a previous 'growTo' command.
+	@return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, cancelGrowTo, ConsoleVoid, 2, 2, ())
+{
+	object->cancelGrowTo();
+}
+
+//-----------------------------------------------------------------------------
+
 /*! Gets whether a previous 'moveTo' command has completed or not.
     @return No return value.
 */
@@ -1988,6 +2244,26 @@ ConsoleMethodWithDocs(SceneObject, isMoveToComplete, ConsoleBool, 2, 2, ())
 ConsoleMethodWithDocs(SceneObject, isRotateToComplete, ConsoleBool, 2, 2, ())
 {
     return object->isRotateToComplete();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets whether a previous 'fadeTo' command has completed or not.
+	@return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, isFadeToComplete, ConsoleBool, 2, 2, ())
+{
+	return object->isFadeToComplete();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets whether a previous 'growTo' command has completed or not.
+	@return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, isGrowToComplete, ConsoleBool, 2, 2, ())
+{
+	return object->isGrowToComplete();
 }
 
 //-----------------------------------------------------------------------------

@@ -1425,6 +1425,9 @@
     <ClCompile Include="..\..\source\2d\sceneobject\SkeletonObject.cc">
       <Filter>2d\sceneobject</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\audio\vorbisStreamSource.cc">
+      <Filter>audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\audio\audio.h">
@@ -2468,9 +2471,6 @@
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObject_ScriptBinding.h">
       <Filter>2d\sceneobject</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectMoveToEvent.h">
-      <Filter>2d\sceneobject</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObjectRotateToEvent.h">
       <Filter>2d\sceneobject</Filter>
     </ClInclude>
@@ -3158,6 +3158,12 @@
     </ClInclude>
     <ClInclude Include="..\..\source\2d\sceneobject\SkeletonObject.h">
       <Filter>2d\sceneobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\audio\vorbisStreamSource.h">
+      <Filter>audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\platformWin32\winVersion.h">
+      <Filter>platformWin32</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

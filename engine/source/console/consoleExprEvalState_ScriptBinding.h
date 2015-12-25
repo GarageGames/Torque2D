@@ -37,7 +37,8 @@ ConsoleFunctionWithDocs(backtrace, ConsoleVoid, 1, 1, ())
 
    for(U32 i = 0; i < (U32)gEvalState.stack.size(); i++)
    {
-      totalSize += dStrlen(gEvalState.stack[i]->scopeName) + 3;
+      if(gEvalState.stack[i]->scopeName)
+         totalSize += dStrlen(gEvalState.stack[i]->scopeName) + 3;
       if(gEvalState.stack[i]->scopeNamespace && gEvalState.stack[i]->scopeNamespace->mName)
          totalSize += dStrlen(gEvalState.stack[i]->scopeNamespace->mName) + 2;
    }
@@ -52,7 +53,11 @@ ConsoleFunctionWithDocs(backtrace, ConsoleVoid, 1, 1, ())
          dStrcat(buf, gEvalState.stack[i]->scopeNamespace->mName);
          dStrcat(buf, "::");
       }
-      dStrcat(buf, gEvalState.stack[i]->scopeName);
+
+      if(gEvalState.stack[i]->scopeName)
+      {
+         dStrcat(buf, gEvalState.stack[i]->scopeName);
+      }
    }
    Con::printf("BackTrace: %s", buf);
 

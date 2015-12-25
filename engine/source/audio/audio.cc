@@ -2188,7 +2188,7 @@ bool alxCheckError(const char* sourceFuncName, const char* alFuncName)
       Con::errorf("%s - %s OpenAL AL_OUT_OF_MEMORY error code returned", sourceFuncName, alFuncName);
       break;
     default:
-      Con::errorf("%s - %s OpenAL has encountered a problem and won't tell us what it is. %d", errorVal, sourceFuncName, alFuncName);
+      Con::errorf("%s - %s OpenAL has encountered a problem and won't tell us what it is. %d", sourceFuncName, alFuncName, errorVal);
   };
   if (errorVal == AL_NO_ERROR)
     return true;
@@ -2474,7 +2474,7 @@ bool OpenALInit()
       return false;
 
    // Create an openAL context
-#ifdef TORQUE_OS_LINUX
+#if defined(TORQUE_OS_LINUX) || defined(TORQUE_OS_OPENBSD)
    int freq = Con::getIntVariable("Pref::Unix::OpenALFrequency");
    if (freq == 0)
       freq = 22050;
@@ -2504,7 +2504,7 @@ bool OpenALInit()
       return false;
 
    // Make this context the active context
-#if defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_LINUX) || defined(TORQUE_OS_EMSCRIPTEN)
+#if defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_LINUX) || defined(TORQUE_OS_EMSCRIPTEN) || defined(TORQUE_OS_OPENBSD)
    alcMakeContextCurrent((ALCcontext*)mContext);
 #else
    alcMakeContextCurrent(mContext);
@@ -2590,7 +2590,7 @@ void OpenALShutdown()
 
    if (mContext)
    {
-#if defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_LINUX)
+#if defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_LINUX) || defined(TORQUE_OS_OPENBSD)
 	   alcDestroyContext((ALCcontext*)mContext);
 #elif defined(TORQUE_OS_EMSCRIPTEN)
       alcDestroyContext((ALCcontext*)mContext);
@@ -2602,7 +2602,7 @@ void OpenALShutdown()
    }
    if (mDevice)
    {
-#if defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_LINUX)
+#if defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_LINUX) || defined(TORQUE_OS_OPENBSD)
 	   alcCloseDevice((ALCdevice*)mDevice);
 #elif defined(TORQUE_OS_EMSCRIPTEN)
       alcCloseDevice((ALCdevice*)mDevice);

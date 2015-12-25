@@ -9,9 +9,9 @@ APP_TARGETS_DEBUG :=
 all: debug release
 
 clean:
-	rm -rfv Debug
-	rm -rfv Release
-	rm -rfv lib
+	rm -rf Debug
+	rm -rf Release
+	rm -rf lib
 
 .PHONY: all debug release clean
 

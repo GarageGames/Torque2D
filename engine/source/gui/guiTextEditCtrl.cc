@@ -66,14 +66,7 @@ GuiTextEditCtrl::GuiTextEditCtrl()
 
    mValidateCommand = StringTable->EmptyString;
    mEscapeCommand = StringTable->EmptyString;
-#ifdef TORQUE_OS_OSX
-   UTF8	bullet[4] = { static_cast<UTF8>(0xE2), static_cast<UTF8>(0x80), static_cast<UTF8>(0xA2), 0 };
-   
-   mPasswordMask = StringTable->insert( bullet );
-#else
    mPasswordMask = StringTable->insert( "*" );
-#endif
-
 
    mEditCursor = NULL;
 }

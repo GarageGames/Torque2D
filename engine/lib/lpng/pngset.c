@@ -1,8 +1,8 @@
 
 /* pngset.c - storage of image information into info struct
  *
- * Last changed in libpng 1.5.11 [June 14, 2012]
- * Copyright (c) 1998-2012 Glenn Randers-Pehrson
+ * Last changed in libpng 1.5.23 [July 23, 2015]
+ * Copyright (c) 1998-2015 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  *
@@ -252,16 +252,7 @@ png_set_IHDR(png_structp png_ptr, png_infop info_ptr,
 
    info_ptr->pixel_depth = (png_byte)(info_ptr->channels * info_ptr->bit_depth);
 
-   /* Check for potential overflow */
-   if (width >
-       (PNG_UINT_32_MAX >> 3)      /* 8-byte RRGGBBAA pixels */
-       - 48       /* bigrowbuf hack */
-       - 1        /* filter byte */
-       - 7*8      /* rounding of width to multiple of 8 pixels */
-       - 8)       /* extra max_pixel_depth pad */
-      info_ptr->rowbytes = 0;
-   else
-      info_ptr->rowbytes = PNG_ROWBYTES(info_ptr->pixel_depth, width);
+   info_ptr->rowbytes = PNG_ROWBYTES(info_ptr->pixel_depth, width);
 }
 
 #ifdef PNG_oFFs_SUPPORTED
@@ -671,7 +662,7 @@ png_set_text(png_structp png_ptr, png_infop info_ptr, png_const_textp text_ptr,
    int ret;
    ret = png_set_text_2(png_ptr, info_ptr, text_ptr, num_text);
 
-   if (ret)
+   if (ret != 0)
       png_error(png_ptr, "Insufficient memory to store text");
 }
 
@@ -680,8 +671,9 @@ png_set_text_2(png_structp png_ptr, png_infop info_ptr,
     png_const_textp text_ptr, int num_text)
 {
    int i;
+   size_t element_size;
 
-   png_debug1(1, "in %lx storage function", png_ptr == NULL ? "unexpected" :
+  png_debug1(1, "in %lx storage function", png_ptr == NULL ? 0xabadca11 :
       (unsigned long)png_ptr->chunk_name);
 
    if (png_ptr == NULL || info_ptr == NULL || num_text == 0)
@@ -690,6 +682,18 @@ png_set_text_2(png_structp png_ptr, png_infop info_ptr,
    /* Make sure we have enough space in the "text" array in info_struct
     * to hold all of the incoming text_ptr objects.
     */
+
+   element_size=png_sizeof(png_text);
+   if (num_text < 0 ||
+       num_text > INT_MAX - info_ptr->num_text - 8 ||
+       (unsigned int)/*SAFE*/(num_text +/*SAFE*/
+       info_ptr->num_text + 8) >=
+       PNG_SIZE_MAX/element_size)
+   {
+      png_warning(png_ptr, "too many text chunks");
+      return(0);
+   }
+
    if (info_ptr->num_text + num_text > info_ptr->max_text)
    {
       int old_max_text = info_ptr->max_text;
@@ -836,7 +840,7 @@ png_set_text_2(png_structp png_ptr, png_infop info_ptr,
          textp->text = textp->key + key_len + 1;
       }
 
-      if (text_length)
+      if (text_length != 0)
          png_memcpy(textp->text, text_ptr[i].text,
              (png_size_t)(text_length));
 
@@ -897,6 +901,12 @@ png_set_tRNS(png_structp png_ptr, png_infop info_ptr,
    if (png_ptr == NULL || info_ptr == NULL)
       return;
 
+   if (num_trans < 0 || num_trans > PNG_MAX_PALETTE_LENGTH)
+      {
+        png_warning(png_ptr, "Ignoring invalid num_trans value");
+        return;
+      }
+
    if (trans_alpha != NULL)
    {
        /* It may not actually be necessary to set png_ptr->trans_alpha here;
@@ -916,16 +926,19 @@ png_set_tRNS(png_structp png_ptr, png_infop info_ptr,
 
    if (trans_color != NULL)
    {
-      int sample_max = (1 << info_ptr->bit_depth);
+      if (info_ptr->bit_depth < 16)
+      {
+         unsigned int sample_max = (1U << info_ptr->bit_depth) - 1U;
 
-      if ((info_ptr->color_type == PNG_COLOR_TYPE_GRAY &&
-          (int)trans_color->gray > sample_max) ||
-          (info_ptr->color_type == PNG_COLOR_TYPE_RGB &&
-          ((int)trans_color->red > sample_max ||
-          (int)trans_color->green > sample_max ||
-          (int)trans_color->blue > sample_max)))
-         png_warning(png_ptr,
-            "tRNS chunk has out-of-range samples for bit_depth");
+         if ((info_ptr->color_type == PNG_COLOR_TYPE_GRAY &&
+             trans_color->gray > sample_max) ||
+             (info_ptr->color_type == PNG_COLOR_TYPE_RGB &&
+             (trans_color->red > sample_max ||
+             trans_color->green > sample_max ||
+             trans_color->blue > sample_max)))
+           png_warning(png_ptr,
+              "tRNS chunk has out-of-range samples for bit_depth");
+      }
 
       png_memcpy(&(info_ptr->trans_color), trans_color,
          png_sizeof(png_color_16));
@@ -959,13 +972,24 @@ png_set_sPLT(png_structp png_ptr,
 {
    png_sPLT_tp np;
    int i;
+   size_t element_size;
 
    if (png_ptr == NULL || info_ptr == NULL)
       return;
 
-   np = (png_sPLT_tp)png_malloc_warn(png_ptr,
-       (info_ptr->splt_palettes_num + nentries) *
-       (png_size_t)png_sizeof(png_sPLT_t));
+   element_size = png_sizeof(png_sPLT_t);
+   if (nentries < 0 ||
+       nentries > INT_MAX-info_ptr->splt_palettes_num ||
+       (unsigned int)/*SAFE*/(nentries +/*SAFE*/
+       info_ptr->splt_palettes_num) >=
+       PNG_SIZE_MAX/element_size)
+      np=NULL;
+
+   else
+
+      np = (png_sPLT_tp)png_malloc_warn(png_ptr,
+          (info_ptr->splt_palettes_num + nentries) *
+          (png_size_t)png_sizeof(png_sPLT_t));
 
    if (np == NULL)
    {
@@ -1029,13 +1053,23 @@ png_set_unknown_chunks(png_structp png_ptr,
 {
    png_unknown_chunkp np;
    int i;
+   size_t element_size;
 
    if (png_ptr == NULL || info_ptr == NULL || num_unknowns == 0)
       return;
 
-   np = (png_unknown_chunkp)png_malloc_warn(png_ptr,
-       (png_size_t)(info_ptr->unknown_chunks_num + num_unknowns) *
-       png_sizeof(png_unknown_chunk));
+   element_size = png_sizeof(png_unknown_chunk);
+   if (num_unknowns < 0 ||
+       num_unknowns > INT_MAX-info_ptr->unknown_chunks_num ||
+       (unsigned int)/*SAFE*/(num_unknowns +/*SAFE*/
+       info_ptr->unknown_chunks_num) >=
+       PNG_SIZE_MAX/element_size)
+      np=NULL;
+
+   else
+      np = (png_unknown_chunkp)png_malloc_warn(png_ptr,
+          (png_size_t)(info_ptr->unknown_chunks_num + num_unknowns) *
+          png_sizeof(png_unknown_chunk));
 
    if (np == NULL)
    {
@@ -1198,11 +1232,12 @@ png_set_rows(png_structp png_ptr, png_infop info_ptr, png_bytepp row_pointers)
 
    info_ptr->row_pointers = row_pointers;
 
-   if (row_pointers)
+   if (row_pointers != NULL)
       info_ptr->valid |= PNG_INFO_IDAT;
 }
 #endif
 
+#ifdef PNG_WRITE_CUSTOMIZE_COMPRESSION_SUPPORTED
 void PNGAPI
 png_set_compression_buffer_size(png_structp png_ptr, png_size_t size)
 {
@@ -1230,6 +1265,7 @@ png_set_compression_buffer_size(png_structp png_ptr, png_size_t size)
     png_ptr->zstream.avail_out = 0;
     png_ptr->zstream.avail_in = 0;
 }
+#endif /* WRITE_CUSTOMIZE_COMPRESSION */
 
 void PNGAPI
 png_set_invalid(png_structp png_ptr, png_infop info_ptr, int mask)
@@ -1262,7 +1298,7 @@ void PNGAPI
 png_set_chunk_cache_max (png_structp png_ptr,
    png_uint_32 user_chunk_cache_max)
 {
-    if (png_ptr)
+    if (png_ptr != NULL)
        png_ptr->user_chunk_cache_max = user_chunk_cache_max;
 }
 
@@ -1271,7 +1307,7 @@ void PNGAPI
 png_set_chunk_malloc_max (png_structp png_ptr,
     png_alloc_size_t user_chunk_malloc_max)
 {
-   if (png_ptr)
+   if (png_ptr != NULL)
       png_ptr->user_chunk_malloc_max = user_chunk_malloc_max;
 }
 #endif /* ?PNG_SET_USER_LIMITS_SUPPORTED */
@@ -1283,7 +1319,7 @@ png_set_benign_errors(png_structp png_ptr, int allowed)
 {
    png_debug(1, "in png_set_benign_errors");
 
-   if (allowed)
+   if (allowed != 0)
       png_ptr->flags |= PNG_FLAG_BENIGN_ERRORS_WARN;
 
    else
@@ -1300,7 +1336,7 @@ png_set_check_for_invalid_index(png_structp png_ptr, int allowed)
 {
    png_debug(1, "in png_set_check_for_invalid_index");
 
-   if (allowed)
+   if (allowed != 0)
       png_ptr->num_palette_max = 0;
 
    else

@@ -130,7 +130,9 @@ public:
     void setSpriteNamedImageFrame( const char* namedFrame );
     StringTableEntry getSpriteNamedImageFrame( void ) const;
     void setSpriteAnimation( const char* pAssetId );
-    StringTableEntry getSpriteAnimation( void ) const;
+	StringTableEntry getSpriteAnimation(void) const;
+	void setSpriteAnimationFrame(const U32 animationFrame);
+	U32 getSpriteAnimationFrame(void) const;
     void clearSpriteAsset( void );
 
     void setSpriteVisible( const bool visible );

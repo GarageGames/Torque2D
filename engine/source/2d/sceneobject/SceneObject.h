@@ -109,7 +109,6 @@ public:
     friend class ContactFilter;
     friend class WorldQuery;
     friend class DebugDraw;
-    friend class SceneObjectMoveToEvent;
     friend class SceneObjectRotateToEvent;
 
 protected:
@@ -143,7 +142,12 @@ protected:
     b2AABB                  mCurrentAABB;
     Vector2                 mLocalSizeOOBB[4];
     Vector2                 mRenderOOBB[4];
-    S32                     mWorldProxyId;
+	S32                     mWorldProxyId;
+
+	// Growing
+	bool					mGrowActive;
+	Vector2					mTargetSize;
+	Vector2					mDeltaSize;
 
     /// Position / Angle.
     Vector2                 mPreTickPosition;
@@ -151,6 +155,14 @@ protected:
     Vector2                 mRenderPosition;
     F32                     mRenderAngle;
     bool                    mSpatialDirty;
+    Vector2                 mLastCheckedPosition;
+    Vector2                 mTargetPosition;
+    bool                    mTargetPositionActive;
+    F32                     mDistanceToTarget;
+    F32                     mTargetPositionMargin;
+    bool                    mTargetPositionFound;
+    bool                    mSnapToTargetPosition;
+    bool                    mStopAtTargetPosition;
 
     /// Body.
     b2Body*                 mpBody;
@@ -161,6 +173,7 @@ protected:
     U32                     mCollisionLayerMask;
     U32                     mCollisionGroupMask;
     bool                    mCollisionSuppress;
+    bool                    mCollisionOneWay;
     b2FixtureDef            mDefaultFixture;
     bool                    mGatherContacts;
     Scene::typeContactVector* mpCurrentContacts;
@@ -178,6 +191,14 @@ protected:
     S32                     mDstBlendFactor;
     ColorF                  mBlendColor;
     F32                     mAlphaTest;
+
+	// Fading
+	bool					mFadeActive;
+	ColorF					mTargetColor;
+	F32						mDeltaRed;
+	F32						mDeltaGreen;
+	F32						mDeltaBlue;
+	F32						mDeltaAlpha;
 
     /// Render sorting.
     Vector2                 mSortPoint;
@@ -215,7 +236,6 @@ protected:
     bool                    mEditorTickAllowed;
     bool                    mPickingAllowed;
     bool                    mAlwaysInScope;
-    U32                     mMoveToEventId;
     U32                     mRotateToEventId;
     U32                     mSerialId;
     StringTableEntry        mRenderGroup;
@@ -238,6 +258,9 @@ protected:
     /// Taml callbacks.
     virtual void            onTamlCustomWrite( TamlCustomNodes& customNodes );
     virtual void            onTamlCustomRead( const TamlCustomNodes& customNodes );
+
+	// Effect Processing.
+	F32					processEffect( const F32 current, const F32 target, const F32 rate );
 
 public:
     SceneObject();
@@ -368,6 +391,8 @@ public:
     inline F32              getDefaultRestitution( void ) const         { return mDefaultFixture.restitution; }
     inline void             setCollisionSuppress( const bool status )   { mCollisionSuppress = status; }
     inline bool             getCollisionSuppress(void) const            { return mCollisionSuppress; }
+    inline void             setCollisionOneWay( const bool status )     { mCollisionOneWay = status; }
+    inline bool             getCollisionOneWay(void) const              { return mCollisionOneWay; }
     inline const Scene::typeContactVector* getCurrentContacts( void ) const    { return mpCurrentContacts; }
     inline U32              getCurrentContactCount( void ) const        { if ( mpCurrentContacts != NULL ) return mpCurrentContacts->size(); else return 0; }
     virtual void            setGatherContacts( const bool gatherContacts ) { mGatherContacts = gatherContacts; initializeContactGathering(); }
@@ -388,12 +413,25 @@ public:
     inline F32              getAngularDamping(void) const               { if ( mpScene ) return mpBody->GetAngularDamping(); else return mBodyDefinition.angularDamping; }
 
     /// Move/Rotate to.
-    bool                    moveTo( const Vector2& targetWorldPoint, const F32 speed, const bool autoStop = true, const bool warpToTarget = true );
+    bool                    moveTo(const Vector2& targetWorldPoint, const F32 speed, const bool autoStop = true, const bool snapToTarget = true, const F32 margin = 0.1f);
     bool                    rotateTo( const F32 targetAngle, const F32 speed, const bool autoStop = true, const bool warpToTarget = true );
     void                    cancelMoveTo( const bool autoStop = true );
     void                    cancelRotateTo( const bool autoStop = true );
-    inline bool             isMoveToComplete( void ) const              { return mMoveToEventId == 0; }
+    inline bool             isMoveToComplete( void ) const              { return !mTargetPositionActive; }
     inline bool             isRotateToComplete( void ) const            { return mRotateToEventId == 0; }
+    void                    updateTargetPosition( void );
+
+	// Fade to
+	bool					fadeTo( const ColorF& targetColor, const F32 deltaRed, const F32 deltaGreen, const F32 deltaBlue, const F32 deltaAlpha );
+	inline void				cancelFadeTo( void )						{ mFadeActive = false; }
+	inline bool				isFadeToComplete( void ) const				{ return !mFadeActive; }
+	void					updateBlendColor( const F32 elapsedTime );
+
+	// Grow to
+	bool					growTo( const Vector2& targetSize, const Vector2& deltaSize );
+	inline void				cancelGrowTo(void)							{ mGrowActive = false; }
+	inline bool				isGrowToComplete(void) const				{ return !mGrowActive; }
+	void					updateSize(const F32 elapsedTime);
 
     /// Force and impulse.
     void                    applyForce( const Vector2& worldForce, const bool wake = true );
@@ -665,6 +703,7 @@ protected:
     static const char*      getCollisionLayers(void* obj, const char* data) { return Utility::mConvertMaskToString( static_cast<SceneObject*>(obj)->getCollisionLayerMask() ); }
     static bool             writeCollisionLayers( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getCollisionLayerMask() != MASK_ALL; }
     static bool             writeCollisionSuppress( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getCollisionSuppress() == true; }
+    static bool             writeCollisionOneWay( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getCollisionOneWay() == true; }
     static bool             setGatherContacts(void* obj, const char* data)  { static_cast<SceneObject*>(obj)->setGatherContacts(dAtoi(data)); return false; }
     static bool             writeGatherContacts( void* obj, StringTableEntry pFieldName ) { return static_cast<SceneObject*>(obj)->getGatherContacts() == true; }
 

@@ -327,7 +327,7 @@ protected:
     virtual void onTamlCustomRead( const TamlCustomNodes& customNodes ) {}
     
 protected:
-    bool	mCanSaveFieldDictionary; ///< true if dynamic fields (added at runtime) should be saved, defaults to true
+    bool    mCanSaveFieldDictionary; ///< true if dynamic fields (added at runtime) should be saved, defaults to true
     StringTableEntry mInternalName; ///< Stores object Internal Name
 
     // Namespace linking
@@ -356,21 +356,6 @@ protected:
     inline S32 getScriptCallbackGuard( void )    { return mScriptCallbackGuard; }
 
 protected:
-    // By setting the value of mNSLinkMask in the constructor of a class that 
-    // inherits from SimObject, you can specify how the namespaces are linked
-    // for that class. An easy way to think about this change, if you have worked
-    // with this in the past is that ScriptObject uses:
-    //    mNSLinkMask = LinkSuperClassName | LinkClassName;
-    // which will attempt to do a full namespace link checking mClassName and mSuperClassName
-    // 
-    // and BehaviorTemplate does not set the value of NSLinkMask, which means that
-    // only the default link will be made, which is: ObjectName -> ClassName
-    enum SimObjectNSLinkType
-    {
-        LinkClassName = BIT(0),
-        LinkSuperClassName = BIT(1)
-    };
-    U8 mNSLinkMask;
     void linkNamespaces();
     void unlinkNamespaces();
 
@@ -427,9 +412,9 @@ public:
     inline void clearDynamicFields( void ) { if ( mFieldDictionary != NULL ) { delete mFieldDictionary; mFieldDictionary = new SimFieldDictionary; } }
 
     /// Set whether fields created at runtime should be saved. Default is true.
-    void		setCanSaveDynamicFields(bool bCanSave){ mCanSaveFieldDictionary	=	bCanSave;}
+    void        setCanSaveDynamicFields(bool bCanSave){ mCanSaveFieldDictionary =   bCanSave;}
     /// Get whether fields created at runtime should be saved. Default is true.
-    inline bool getCanSaveDynamicFields(void) const { return	mCanSaveFieldDictionary;}
+    inline bool getCanSaveDynamicFields(void) const { return    mCanSaveFieldDictionary;}
 
     /// These functions support internal naming that is not namespace
     /// bound for locating child controls in a generic way.
@@ -440,7 +425,7 @@ public:
     StringTableEntry getInternalName();
 
     /// Save object as a TorqueScript File.
-    virtual bool		save(const char* pcFilePath, bool bOnlySelected=false);
+    virtual bool        save(const char* pcFilePath, bool bOnlySelected=false);
 
     /// Check if a method exists in the objects current namespace.
     virtual bool isMethod( const char* methodName );
@@ -450,7 +435,7 @@ public:
     /// @{
 
     ///
-    SimObject( const U8 namespaceLinkMask = LinkSuperClassName | LinkClassName );
+    SimObject();
     virtual ~SimObject();
 
     virtual bool processArguments(S32 argc, const char **argv);  ///< Process constructor options. (ie, new SimObject(1,2,3))
@@ -720,8 +705,8 @@ public:
 
     /// @}
 
-	virtual void			dump();
-    virtual void			dumpClassHierarchy();
+    virtual void            dump();
+    virtual void            dumpClassHierarchy();
 
     static void initPersistFields();
     SimObject* clone( const bool copyDynamicFields );

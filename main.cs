@@ -54,7 +54,7 @@ AssetDatabase.EchoInfo = false;
 AssetDatabase.IgnoreAutoUnload = true;
 
 // Scan modules.
-ModuleDatabase.scanModules( "modules" );
+ModuleDatabase.scanModules( "./modules" );
 
 // Load AppCore module.
 ModuleDatabase.LoadExplicit( "AppCore" );

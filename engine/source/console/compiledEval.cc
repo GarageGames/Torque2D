@@ -1482,6 +1482,7 @@ breakContinue:
                   Con::warnf(ConsoleLogEntry::General,"%s: Unable to find object: '%s' attempting to call function '%s'", getFileLine(ip-6), callArgv[1], fnName);
                   
                   STR.popFrame(); // [neo, 5/7/2007 - #2974]
+				  STR.setStringValue("");
 
                   break;
                }
