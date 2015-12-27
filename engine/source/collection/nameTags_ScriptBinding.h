@@ -80,7 +80,7 @@ ConsoleMethodWithDocs(NameTags, deleteTag, ConsoleInt, 3, 3, (tagId))
     if ( tagId == 0 )
     {
         Con::warnf("Invalid tag Id.\n");
-        return NULL;
+        return 0;
     }
 
     return object->deleteTag( tagId );

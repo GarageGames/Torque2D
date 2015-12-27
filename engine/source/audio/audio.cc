@@ -733,7 +733,7 @@ AUDIOHANDLE alxCreateSource(const Audio::Description& desc,
          if (streamSource)
          {
             streamSource->mHandle = getNewHandle() | AUDIOHANDLE_STREAMING_BIT | AUDIOHANDLE_INACTIVE_BIT;
-            streamSource->mSource = NULL;
+            streamSource->mSource = 0;
             streamSource->mDescription = desc;
             streamSource->mScore = volume;
             streamSource->mEnvironment = sampleEnvironment;

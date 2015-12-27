@@ -1,14 +1,15 @@
 apply plugin: 'com.android.application'
 
+import org.apache.tools.ant.taskdefs.condition.Os
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 22
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "com.garagegames.torque2d"
-        minSdkVersion 19
-        targetSdkVersion 19
+        minSdkVersion 22
+        targetSdkVersion 22
 
         sourceSets.main {
             assets.srcDirs=[
@@ -21,7 +22,8 @@ android {
         }
         task buildNative(type: Exec, description: 'Compile JNI source via NDK') {
             def ndkDir = plugins.getPlugin('com.android.application').sdkHandler.getNdkFolder()
-            commandLine "$ndkDir/ndk-build",
+            def extension = (Os.isFamily(Os.FAMILY_WINDOWS))? '.cmd' : ''
+            commandLine "$ndkDir/ndk-build" + extension,
                     '-C', file('src/main/jni').absolutePath,
                     '-j', Runtime.runtime.availableProcessors(),
                     'all',
@@ -30,7 +32,8 @@ android {
 
         task cleanNative(type: Exec, description: 'Clean JNI object files') {
             def ndkDir = plugins.getPlugin('com.android.application').sdkHandler.getNdkFolder()
-            commandLine "$ndkDir/ndk-build",
+            def extension = (Os.isFamily(Os.FAMILY_WINDOWS))? '.cmd' : ''
+            commandLine "$ndkDir/ndk-build" + extension,
                     '-C', file('src/main/jni').absolutePath,
                     'clean'
         }
