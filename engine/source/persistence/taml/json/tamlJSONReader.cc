@@ -45,7 +45,7 @@ SimObject* TamlJSONReader::read( FileStream& stream )
         Con::warnf("TamlJSONReader::read() -  Could not load Taml JSON file from stream.");
         return NULL;
     }
-    jsonText[streamSize] = NULL;
+    jsonText[streamSize] = '\0';
 
     // Create JSON document.
     rapidjson::Document document;
