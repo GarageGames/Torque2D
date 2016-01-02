@@ -1121,10 +1121,8 @@
     <ClInclude Include="..\..\source\platform\types.ppc.h" />
     <ClInclude Include="..\..\source\platform\types.visualc.h" />
     <ClInclude Include="..\..\source\platform\types.win32.h" />
-    <ClInclude Include="..\..\source\platform\typesLinux.h" />
     <ClInclude Include="..\..\source\platform\typesPPC.h" />
     <ClInclude Include="..\..\source\platform\typesWin32.h" />
-    <ClInclude Include="..\..\source\platform\typesX86UNIX.h" />
     <ClInclude Include="..\..\source\platform\menus\popupMenu.h" />
     <ClInclude Include="..\..\source\platform\nativeDialogs\fileDialog.h" />
     <ClInclude Include="..\..\source\platform\nativeDialogs\msgBox.h" />
