@@ -1289,10 +1289,8 @@
 		867BAFAE16AEC9050033868F /* types.ppc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.ppc.h; sourceTree = "<group>"; };
 		867BAFAF16AEC9050033868F /* types.visualc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.visualc.h; sourceTree = "<group>"; };
 		867BAFB016AEC9050033868F /* types.win32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.win32.h; sourceTree = "<group>"; };
-		867BAFB116AEC9050033868F /* typesLinux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typesLinux.h; sourceTree = "<group>"; };
 		867BAFB216AEC9050033868F /* typesPPC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typesPPC.h; sourceTree = "<group>"; };
 		867BAFB316AEC9050033868F /* typesWin32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typesWin32.h; sourceTree = "<group>"; };
-		867BAFB416AEC9050033868F /* typesX86UNIX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typesX86UNIX.h; sourceTree = "<group>"; };
 		867BAFB616AEC9050033868F /* scriptGroup.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scriptGroup.cc; sourceTree = "<group>"; };
 		867BAFB716AEC9050033868F /* scriptGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scriptGroup.h; sourceTree = "<group>"; };
 		867BAFB816AEC9050033868F /* scriptObject.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scriptObject.cc; sourceTree = "<group>"; };
@@ -2819,10 +2817,8 @@
 				867BAFAE16AEC9050033868F /* types.ppc.h */,
 				867BAFAF16AEC9050033868F /* types.visualc.h */,
 				867BAFB016AEC9050033868F /* types.win32.h */,
-				867BAFB116AEC9050033868F /* typesLinux.h */,
 				867BAFB216AEC9050033868F /* typesPPC.h */,
 				867BAFB316AEC9050033868F /* typesWin32.h */,
-				867BAFB416AEC9050033868F /* typesX86UNIX.h */,
 			);
 			name = platform;
 			path = ../../../source/platform;

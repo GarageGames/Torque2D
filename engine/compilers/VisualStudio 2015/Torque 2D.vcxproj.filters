@@ -1625,16 +1625,10 @@
     <ClInclude Include="..\..\source\platform\types.win32.h">
       <Filter>platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\platform\typesLinux.h">
-      <Filter>platform</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\platform\typesPPC.h">
       <Filter>platform</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\platform\typesWin32.h">
-      <Filter>platform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\platform\typesX86UNIX.h">
       <Filter>platform</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\platform\menus\popupMenu.h">
