@@ -94,6 +94,14 @@ extern EnumTable dstBlendFactorTable;
 
 //-----------------------------------------------------------------------------
 
+struct SceneObjectAttachedGUI
+{
+    bool mAutoSize;
+    GuiControl* mpAttachedCtrl;
+    SceneWindow* mpAttachedSceneWindow;
+    Vector2 mAttachedOffset;
+};
+
 class SceneObject :
     public BehaviorComponent,
     public SceneRenderObject,
@@ -219,9 +227,7 @@ protected:
     SceneWindow*            mpAttachedCamera;
 
     /// GUI attachment.
-    bool                    mAttachedGuiSizeControl;
-    GuiControl*             mpAttachedGui;
-    SceneWindow*            mpAttachedGuiSceneWindow;
+    Vector<SceneObjectAttachedGUI> mAttachedCtrls;
 
     /// Safe deletion.
     bool                    mBeingSafeDeleted;
@@ -562,9 +568,11 @@ public:
     inline void             dismountCamera( void )                      { if ( mpAttachedCamera ) mpAttachedCamera->dismountMe( this ); }
 
     // GUI attachment.
-    void                    attachGui( GuiControl* pGuiControl, SceneWindow* pSceneWindow, const bool sizeControl );
-    void                    detachGui( void );
-    inline void             updateAttachedGui( void );
+    void attachGui(GuiControl* pGuiControl, SceneWindow* pSceneWindow, const bool sizeControl, const Vector2 offset);
+    void detachGui(void);
+    void detachGui(GuiControl* pGuiControl);
+    void detachAllGuiControls(void);
+    inline void updateAttachedGui(void);
 
     // Picking.
     inline void             setPickingAllowed( const bool pickingAllowed ) { mPickingAllowed = pickingAllowed; }
