@@ -4315,18 +4315,19 @@ ConsoleMethodWithDocs(SceneObject, setDebugOff, ConsoleVoid, 3, 2 + DEBUG_MODE_C
 //-----------------------------------------------------------------------------
 
 /*! Attach a GUI Control to the object.
-    @param guiObject The GuiControl to attach.
-    @param window The SceneWindow to bind the GuiControl to.
-    @param sizeControl Whether or not to size the GuiControl to the size of this object.
-    @return No return Value.
+@param guiObject The GuiControl to attach.
+@param window The SceneWindow to bind the GuiControl to.
+@param sizeControl Whether or not to size the GuiControl to the size of this object.
+@param offset The position offset to apply to the GuiControl.
+@return No return Value.
 */
-ConsoleMethodWithDocs(SceneObject, attachGui, ConsoleVoid, 4, 5, (guiControl guiObject, SceneWindow window, [sizeControl? = false]))
+ConsoleMethodWithDocs(SceneObject, attachGui, ConsoleVoid, 4, 7, (guiControl guiObject, SceneWindow window, [sizeControl ? = false], [offset ? = Vector2(0, 0)]))
 {
     // Find GuiControl Object.
     GuiControl* pGuiControl = dynamic_cast<GuiControl*>(Sim::findObject(argv[2]));
 
     // Check for invalid Gui Control.
-    if ( !pGuiControl )
+    if (!pGuiControl)
     {
         Con::warnf("SceneObject::attachGui() - Couldn't find GuiControl %s!", argv[2]);
         return;
@@ -4336,28 +4337,71 @@ ConsoleMethodWithDocs(SceneObject, attachGui, ConsoleVoid, 4, 5, (guiControl gui
     SceneWindow* pSceneWindow = dynamic_cast<SceneWindow*>(Sim::findObject(argv[3]));
 
     // Check for invalid SceneWindow Object.
-    if ( !pSceneWindow )
+    if (!pSceneWindow)
     {
         Con::warnf("SceneObject::attachGui() - Couldn't find SceneWindow %s!", argv[3]);
         return;
     }
 
-    // Calculate Send to Mount.
+    // Auto-size control?.
     const bool sizeControl = argc >= 5 ? dAtob(argv[4]) : false;
 
+    // GuiControl position offset.
+    Vector2 offset(0, 0);
+
+    // Elements in the first argument.
+    U32 elementCount = Utility::mGetStringElementCount(argv[5]);
+
+    // ("x y")
+    if ((elementCount == 2) && (argc == 6))
+        offset = Utility::mGetStringElementVector(argv[5]);
+
+    // (x, y)
+    else if ((elementCount == 1) && (argc == 7))
+        offset = Vector2(dAtof(argv[5]), dAtof(argv[6]));
+
     // Attach GUI Control.
-    object->attachGui( pGuiControl, pSceneWindow, sizeControl );
+    object->attachGui(pGuiControl, pSceneWindow, sizeControl, offset);
 }
 
 //-----------------------------------------------------------------------------
 
 /*! Detach any GUI Control.
+@param ctrl The SimObjectId of the GuiControl to detach.
     @return No return Value.
 */
-ConsoleMethodWithDocs(SceneObject, detachGui, ConsoleVoid, 2, 2, ())
+ConsoleMethodWithDocs(SceneObject, detachGui, ConsoleVoid, 2, 3, ())
 {
-    // Detach GUI Control.
-    object->detachGui();
+    if (argc >= 3)
+    {
+        GuiControl* pGuiControl = dynamic_cast<GuiControl*>(Sim::findObject(argv[3]));
+
+        if (!pGuiControl)
+        {
+            // Detach the last attached control.
+            object->detachGui();
+        }
+        else
+        {
+            // Detach the attached control.
+            object->detachGui(pGuiControl);
+        }
+    }
+    else
+    {
+        // Detach the last attached control.
+        object->detachGui();
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Detach all GUI Controls.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, detachAllGuiControls, ConsoleVoid, 2, 2, ())
+{
+    object->detachAllGuiControls();
 }
 
 //-----------------------------------------------------------------------------
