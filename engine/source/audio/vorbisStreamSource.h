@@ -12,8 +12,8 @@
 #include "audio/audioStreamSource.h"
 #endif
 
+#ifndef TORQUE_OS_IOS
 #include "vorbis/vorbisfile.h"
-
 
 class VorbisStreamSource: public AudioStreamSource
 {
@@ -55,5 +55,6 @@ class VorbisStreamSource: public AudioStreamSource
 		void resetStream();
       void setNewFile(const char * file);
 };
+#endif
 
 #endif // _VORBISSTREAMSOURCE_H_
