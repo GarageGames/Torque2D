@@ -470,6 +470,8 @@ bool Video::getVerticalSync()
 {
     if (smCurrentDevice)
         return smCurrentDevice->getVerticalSync();
+    
+    return( false );
 }
 
 //------------------------------------------------------------------------------
