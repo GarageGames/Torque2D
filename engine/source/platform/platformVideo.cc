@@ -466,6 +466,13 @@ bool Video::setGammaCorrection(F32 g)
 }
 
 //------------------------------------------------------------------------------
+bool Video::getVerticalSync()
+{
+    if (smCurrentDevice)
+        return smCurrentDevice->getVerticalSync();
+}
+
+//------------------------------------------------------------------------------
 bool Video::setVerticalSync( bool on )
 {
    if ( smCurrentDevice )
