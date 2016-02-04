@@ -258,9 +258,9 @@ ConsoleFunctionWithDocs(videoSetGammaCorrection, ConsoleVoid, 2, 2, ( gamma ))
 @return Returns true if Vertical sync is enabled, false otherwise
 */
 ConsoleFunctionWithDocs(getVerticalSync, ConsoleBool, 1, 1, "")
-    {
+{
     return(Video::getVerticalSync());
-    }
+}
 
 /*! Use the setVerticalSync function to force the framerate to sync up with the vertical refresh rate.
     This is used to reduce excessive swapping/rendering. There is generally no purpose in rendering any faster than the monitor will support. Those extra 'ergs' can be used for something else
