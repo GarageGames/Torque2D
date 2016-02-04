@@ -647,6 +647,17 @@ bool OpenGLDevice::setGammaCorrection(F32 g)
 }
 
 //------------------------------------------------------------------------------
+bool OpenGLDevice::getVerticalSync()
+{
+    if ( !gGLState.suppSwapInterval )
+        return( false );
+
+    //Note that dwglGetSwapIntervalEXT returns the number of frames between Swaps.
+    //The function returns 0 / false if SwapInterval has not been specified.
+    return (dwglGetSwapIntervalEXT());
+}
+
+//------------------------------------------------------------------------------
 bool OpenGLDevice::setVerticalSync( bool on )
 {
    if ( !gGLState.suppSwapInterval )

@@ -254,6 +254,14 @@ ConsoleFunctionWithDocs(videoSetGammaCorrection, ConsoleVoid, 2, 2, ( gamma ))
     sgGammaCorrection = d;
 }
 
+/*! Use the getVerticalSync function to determine if the application's framerate is currently synchronized to the vertical refresh rate.
+@return Returns true if Vertical sync is enabled, false otherwise
+*/
+ConsoleFunctionWithDocs(getVerticalSync, ConsoleBool, 1, 1, "")
+{
+    return(Video::getVerticalSync());
+}
+
 /*! Use the setVerticalSync function to force the framerate to sync up with the vertical refresh rate.
     This is used to reduce excessive swapping/rendering. There is generally no purpose in rendering any faster than the monitor will support. Those extra 'ergs' can be used for something else
     @param enable A boolean value. If set to true, the engine will only swap front and back buffers on or before a vertical refresh pass.
