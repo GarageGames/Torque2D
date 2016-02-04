@@ -646,6 +646,15 @@ bool OpenGLDevice::setGammaCorrection(F32 g)
    return SetDeviceGammaRamp(winState.appDC, ramp);
 }
 
+bool OpenGLDevice::getVerticalSync()
+{
+   if (!gGLState.suppSwapInterval)
+      return(false);
+
+   if (dwglGetSwapIntervalEXT())
+	   return true;
+   else return false;
+}
 //------------------------------------------------------------------------------
 bool OpenGLDevice::setVerticalSync( bool on )
 {

@@ -76,6 +76,7 @@ public:
    static void swapBuffers();                         // page flip
    static bool getGammaCorrection(F32 &g);            // get gamma correction
    static bool setGammaCorrection(F32 g);             // set gamma correction
+   static bool getVerticalSync();                     // get current state of vertical sync
    static bool setVerticalSync( bool on );            // enable/disable vertical sync
 };
 
@@ -132,6 +133,7 @@ class DisplayDevice
      virtual const char* getDriverInfo() = 0;
       virtual bool getGammaCorrection(F32 &g) = 0;
       virtual bool setGammaCorrection(F32 g) = 0;
+	  virtual bool getVerticalSync() = 0;
       virtual bool setVerticalSync( bool on ) = 0;
 
       bool prevRes();
