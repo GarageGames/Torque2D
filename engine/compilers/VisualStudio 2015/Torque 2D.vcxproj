@@ -100,7 +100,7 @@
       <AdditionalIncludeDirectories>../../Lib/MSPlatformSDK/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Leap.lib;COMCTL32.LIB;COMDLG32.LIB;USER32.LIB;ADVAPI32.LIB;GDI32.LIB;RPCRT4.LIB;WINMM.LIB;WSOCK32.LIB;vfw32.lib;Imm32.lib;unicows.lib;shell32.lib;shlwapi.lib;ole32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Leap.lib;COMCTL32.LIB;COMDLG32.LIB;USER32.LIB;ADVAPI32.LIB;GDI32.LIB;RPCRT4.LIB;WINMM.LIB;WSOCK32.LIB;vfw32.lib;Imm32.lib;shell32.lib;shlwapi.lib;ole32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../../../Torque2D_DEBUG.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>../../lib/LeapSDK/lib/x86;../../Lib/unicode;../../lib/MSPlatformSDK/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -149,7 +149,7 @@
       <AdditionalIncludeDirectories>../../Lib/MSPlatformSDK/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Leap.lib;COMCTL32.LIB;COMDLG32.LIB;USER32.LIB;ADVAPI32.LIB;GDI32.LIB;WINMM.LIB;WSOCK32.LIB;vfw32.lib;Imm32.lib;unicows.lib;shell32.lib;shlwapi.lib;ole32.lib;RPCRT4.LIB;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Leap.lib;COMCTL32.LIB;COMDLG32.LIB;USER32.LIB;ADVAPI32.LIB;GDI32.LIB;WINMM.LIB;WSOCK32.LIB;vfw32.lib;Imm32.lib;shell32.lib;shlwapi.lib;ole32.lib;RPCRT4.LIB;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../../../Torque2D.exe</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <AdditionalLibraryDirectories>../../lib/LeapSDK/lib/x86;../../Lib/unicode;../../Lib/MSPlatformSDK/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -209,7 +209,7 @@
       <AdditionalIncludeDirectories>../../Lib/MSPlatformSDK/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Leap.lib;COMCTL32.LIB;COMDLG32.LIB;USER32.LIB;ADVAPI32.LIB;GDI32.LIB;WINMM.LIB;WSOCK32.LIB;vfw32.lib;Imm32.lib;unicows.lib;shell32.lib;shlwapi.lib;ole32.lib;RPCRT4.LIB;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Leap.lib;COMCTL32.LIB;COMDLG32.LIB;USER32.LIB;ADVAPI32.LIB;GDI32.LIB;WINMM.LIB;WSOCK32.LIB;vfw32.lib;Imm32.lib;shell32.lib;shlwapi.lib;ole32.lib;RPCRT4.LIB;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../../../Torque2D.exe</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <AdditionalLibraryDirectories>../../lib/LeapSDK/lib/x86;../../Lib/unicode;../../Lib/MSPlatformSDK/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
