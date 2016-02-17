@@ -240,6 +240,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\2d\assets\AnimationAsset.cc" />
+    <ClCompile Include="..\..\source\2d\assets\FontAsset.cc" />
     <ClCompile Include="..\..\source\2d\assets\ImageAsset.cc" />
     <ClCompile Include="..\..\source\2d\assets\ParticleAsset.cc" />
     <ClCompile Include="..\..\source\2d\assets\ParticleAssetEmitter.cc" />
@@ -297,6 +298,7 @@
     <ClCompile Include="..\..\source\audio\AudioAsset.cc" />
     <ClCompile Include="..\..\source\audio\audio_ScriptBinding.cc" />
     <ClCompile Include="..\..\source\audio\vorbisStreamSource.cc" />
+    <ClCompile Include="..\..\source\bitmapFont\BitmapFont.cc" />
     <ClCompile Include="..\..\source\Box2D\Collision\b2BroadPhase.cpp" />
     <ClCompile Include="..\..\source\Box2D\Collision\b2CollideCircle.cpp" />
     <ClCompile Include="..\..\source\Box2D\Collision\b2CollideEdge.cpp" />
@@ -652,6 +654,8 @@
   <ItemGroup>
     <ClInclude Include="..\..\source\2d\assets\AnimationAsset.h" />
     <ClInclude Include="..\..\source\2d\assets\AnimationAsset_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\assets\FontAsset.h" />
+    <ClInclude Include="..\..\source\2d\assets\FontAsset_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\assets\ImageAsset.h" />
     <ClInclude Include="..\..\source\2d\assets\ImageAsset_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\assets\ParticleAsset.h" />
@@ -758,6 +762,8 @@
     <ClInclude Include="..\..\source\assets\tamlAssetReferencedVisitor.h" />
     <ClInclude Include="..\..\source\audio\AudioAsset.h" />
     <ClInclude Include="..\..\source\audio\vorbisStreamSource.h" />
+    <ClInclude Include="..\..\source\bitmapFont\BitmapFont.h" />
+    <ClInclude Include="..\..\source\bitmapFont\BitmapFontCharacter.h" />
     <ClInclude Include="..\..\source\Box2D\Box2D.h" />
     <ClInclude Include="..\..\source\Box2D\Collision\b2BroadPhase.h" />
     <ClInclude Include="..\..\source\Box2D\Collision\b2Collision.h" />

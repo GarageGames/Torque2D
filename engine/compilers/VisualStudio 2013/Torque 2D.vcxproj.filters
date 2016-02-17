@@ -199,6 +199,9 @@
     <Filter Include="spine">
       <UniqueIdentifier>{bb776838-ed6f-477c-b366-dd0c5c60ae5f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="bitmapFont">
+      <UniqueIdentifier>{f2c8da8c-5c32-48ef-b5ab-0b27a9fe28d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\audio\audio.cc">
@@ -1427,6 +1430,12 @@
     </ClCompile>
     <ClCompile Include="..\..\source\audio\vorbisStreamSource.cc">
       <Filter>audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\assets\FontAsset.cc">
+      <Filter>2d\assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\bitmapFont\BitmapFont.cc">
+      <Filter>bitmapFont</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3158,6 +3167,18 @@
     </ClInclude>
     <ClInclude Include="..\..\source\platformWin32\winVersion.h">
       <Filter>platformWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\assets\FontAsset.h">
+      <Filter>2d\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\assets\FontAsset_ScriptBinding.h">
+      <Filter>2d\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\bitmapFont\BitmapFont.h">
+      <Filter>bitmapFont</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\bitmapFont\BitmapFontCharacter.h">
+      <Filter>bitmapFont</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
