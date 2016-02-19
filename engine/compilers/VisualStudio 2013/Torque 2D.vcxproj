@@ -279,6 +279,7 @@
     <ClCompile Include="..\..\source\2d\sceneobject\ShapeVector.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\SkeletonObject.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Sprite.cc" />
+    <ClCompile Include="..\..\source\2d\sceneobject\TextSprite.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\Trigger.cc" />
     <ClCompile Include="..\..\source\2d\scene\ContactFilter.cc" />
     <ClCompile Include="..\..\source\2d\scene\DebugDraw.cc" />
@@ -299,6 +300,7 @@
     <ClCompile Include="..\..\source\audio\audio_ScriptBinding.cc" />
     <ClCompile Include="..\..\source\audio\vorbisStreamSource.cc" />
     <ClCompile Include="..\..\source\bitmapFont\BitmapFont.cc" />
+    <ClCompile Include="..\..\source\bitmapFont\BitmapFontCharacter.cc" />
     <ClCompile Include="..\..\source\Box2D\Collision\b2BroadPhase.cpp" />
     <ClCompile Include="..\..\source\Box2D\Collision\b2CollideCircle.cpp" />
     <ClCompile Include="..\..\source\Box2D\Collision\b2CollideEdge.cpp" />
@@ -723,6 +725,8 @@
     <ClInclude Include="..\..\source\2d\sceneobject\SkeletonObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Sprite.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Sprite_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\TextSprite.h" />
+    <ClInclude Include="..\..\source\2d\sceneobject\TextSprite_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Trigger.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\Trigger_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\scene\ContactFilter.h" />

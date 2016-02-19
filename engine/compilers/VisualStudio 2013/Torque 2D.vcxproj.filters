@@ -1437,6 +1437,12 @@
     <ClCompile Include="..\..\source\bitmapFont\BitmapFont.cc">
       <Filter>bitmapFont</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\2d\sceneobject\TextSprite.cc">
+      <Filter>2d\sceneobject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\bitmapFont\BitmapFontCharacter.cc">
+      <Filter>bitmapFont</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\audio\audio.h">
@@ -3179,6 +3185,12 @@
     </ClInclude>
     <ClInclude Include="..\..\source\bitmapFont\BitmapFontCharacter.h">
       <Filter>bitmapFont</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\TextSprite.h">
+      <Filter>2d\sceneobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\TextSprite_ScriptBinding.h">
+      <Filter>2d\sceneobject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

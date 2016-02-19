@@ -20,39 +20,25 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-function ImageFontToy::create( %this )
+#ifndef _BITMAP_FONT_CHARACTER_H_
+#include "bitmapFont/BitmapFontCharacter.h"
+#endif
+
+namespace font
 {
-    // Reset the toy.
-    ImageFontToy.reset();
-}
+   void BitmapFontCharacter::ProcessCharacter(U16 width, U16 height)
+   {
+      F32 top, right, bottom, left;
 
-//-----------------------------------------------------------------------------
+      bottom = (F32)mY / height;
+      top = (F32)(mY + mHeight) / height;
 
-function ImageFontToy::destroy( %this )
-{
-}
+      left = (F32)mX / width;
+      right = (F32)(mX + mWidth) / width;
 
-//-----------------------------------------------------------------------------
-
-function ImageFontToy::reset( %this )
-{
-    // Clear the scene.
-    SandboxScene.clear();
-
-    // Create the image font.
-    %object = new TextSprite()
-    {
-        font = "ToyAssets:OratorBoldFont";
-        fontSize = 6;
-        position = "0 0";
-        text = "Hello World!";
-        size = "30 30";
-        BlendColor = "1 1 1 1";
-        AngularVelocity = 30;
-    };
-
-    $f = %object;
-
-    // Add the sprite to the scene.
-    SandboxScene.add( %object );
+      mOOBB[0] = Vector2(left, top);
+      mOOBB[1] = Vector2(right, top);
+      mOOBB[2] = Vector2(right, bottom);
+      mOOBB[3] = Vector2(left, bottom);
+   }
 }

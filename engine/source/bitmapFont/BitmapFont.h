@@ -47,10 +47,6 @@ namespace font
    class BitmapFont
    {
    private:
-      U16 mLineHeight;
-      U16 mBaseline;
-      U16 mSize;
-      U16 mAscent, mDescent;
       U16 mWidth, mHeight;
       U16 mPages;
 
@@ -58,12 +54,17 @@ namespace font
       KerningMap mKerning;
 
    public:
+      U16 mLineHeight;
+      U16 mBaseline;
+      U16 mSize;
       std::vector<StringTableEntry> mPageName;
       std::vector<TextureHandle> mTexture;
 
       BitmapFont();
       bool parseFont(Stream& io_rStream);
       TextureHandle LoadTexture(StringTableEntry fileName);
+      const BitmapFontCharacter getCharacter(const U16 charID) { return mChar[charID]; }
+      inline const F32 getSizeRatio(const U16 size) { return (F32)size / mLineHeight; }
 
    private:
       inline void AddKerning(U16 first, U16 second, S16 amount) { mKerning[make_pair(first, second)] = amount; }

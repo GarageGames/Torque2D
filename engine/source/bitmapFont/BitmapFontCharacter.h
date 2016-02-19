@@ -27,20 +27,28 @@
 #include "2d/core/utility.h"
 #endif
 
+#ifndef _VECTOR2_H_
+#include "2d/Core/Vector2.h"
+#endif
+
 namespace font
 {
-   struct BitmapFontCharacter
+   class BitmapFontCharacter
    {
+   public:
       U16 mX, mY;
       U16 mWidth, mHeight;
       F32 mXOffset, mYOffset;
       F32 mXAdvance;
       U16 mPage;
+      Vector2 mOOBB[4];
 
       BitmapFontCharacter() : mX(0), mY(0), mWidth(0), mHeight(0), mXOffset(0), mYOffset(0), mXAdvance(0), mPage(0)
       {
 
       }
+
+      void ProcessCharacter(U16 width, U16 height);
    };
 }
 

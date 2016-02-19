@@ -114,8 +114,6 @@ namespace font
                   mPages = U16(dAtoi(Value));
                currentWordCount++;
             }
-            mAscent = mBaseline;
-            mDescent = mHeight - mBaseline;
          }
          else if (dStrcmp(Read, "page") == 0)
          {
@@ -188,6 +186,7 @@ namespace font
                   ci.mPage = S32(dAtoi(Value));
                currentWordCount++;
             }
+            ci.ProcessCharacter(mWidth, mHeight);
             mChar.emplace(CharID, ci);
          }
          else if (dStrcmp(Read, "kerning") == 0 && dStrcmp(Read, "kernings") != 0)
@@ -227,27 +226,6 @@ namespace font
          }
       }
 
-      /*for (U32 i = 0; i < mPages; i++)
-      {
-         char buf[1024];
-         dSprintf(buf, sizeof(buf), "%s/%s", Con::getVariable("$GUI::fontCacheDirectory"), fileName);
-         Con::printf("Platform::makeFullPathName %s", buf);
-
-         GBitmap *bmp = dynamic_cast<GBitmap*>(ResourceManager->loadInstance(buf));
-
-         if (bmp == NULL)
-         {
-            return false;
-         }
-
-         char buff[30];
-         dSprintf(buff, sizeof(buff), "font_%d", smSheetIdCount++);
-
-         mTextureSheets.increment();
-         constructInPlace(&mTextureSheets.last());
-         mTextureSheets.last() = TextureHandle(buf, bmp, TextureHandle::BitmapKeepTexture);
-         mTextureSheets.last().setFilter(GL_NEAREST);
-      }*/
       return (io_rStream.getStatus() == Stream::EOS);
    }
 

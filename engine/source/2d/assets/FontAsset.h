@@ -66,6 +66,8 @@ public:
     void                    setFontFile( const char* pFontFile );
     inline StringTableEntry getFontFile( void ) const                   { return mFontFile; }
 
+    inline TextureHandle&   getImageTexture(U16 pageID)                         { return mBitmapFont.mTexture[pageID]; }
+
     /// Declare Console Object.
     DECLARE_CONOBJECT(FontAsset);
 
