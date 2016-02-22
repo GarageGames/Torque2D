@@ -768,6 +768,8 @@
     <ClInclude Include="..\..\source\audio\vorbisStreamSource.h" />
     <ClInclude Include="..\..\source\bitmapFont\BitmapFont.h" />
     <ClInclude Include="..\..\source\bitmapFont\BitmapFontCharacter.h" />
+    <ClInclude Include="..\..\source\bitmapFont\BitmapFontCharacterInfo.h" />
+    <ClInclude Include="..\..\source\bitmapFont\BitmapFontLineInfo.h" />
     <ClInclude Include="..\..\source\Box2D\Box2D.h" />
     <ClInclude Include="..\..\source\Box2D\Collision\b2BroadPhase.h" />
     <ClInclude Include="..\..\source\Box2D\Collision\b2Collision.h" />

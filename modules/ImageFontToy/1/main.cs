@@ -42,16 +42,14 @@ function ImageFontToy::reset( %this )
     // Create the image font.
     %object = new TextSprite()
     {
-        font = "ToyAssets:OratorBoldFont";
-        fontSize = 6;
+        font = "ToyAssets:ArialFont";
+        fontSize = 5;
         position = "0 0";
-        text = "Hello World!";
-        size = "30 30";
+        text = "The rain in Spain falls mainly on the plain!";
+        size = "25 25";
         BlendColor = "1 1 1 1";
         AngularVelocity = 30;
     };
-
-    $f = %object;
 
     // Add the sprite to the scene.
     SandboxScene.add( %object );

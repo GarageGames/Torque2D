@@ -186,6 +186,7 @@ namespace font
                   ci.mPage = S32(dAtoi(Value));
                currentWordCount++;
             }
+            ci.mCharID = CharID;
             ci.ProcessCharacter(mWidth, mHeight);
             mChar.emplace(CharID, ci);
          }

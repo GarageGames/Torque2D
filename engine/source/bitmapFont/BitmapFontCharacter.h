@@ -36,11 +36,13 @@ namespace font
    class BitmapFontCharacter
    {
    public:
+      U16 mCharID;
       U16 mX, mY;
       U16 mWidth, mHeight;
       F32 mXOffset, mYOffset;
       F32 mXAdvance;
       U16 mPage;
+      U16 mPageWidth, mPageHeight;
       Vector2 mOOBB[4];
 
       BitmapFontCharacter() : mX(0), mY(0), mWidth(0), mHeight(0), mXOffset(0), mYOffset(0), mXAdvance(0), mPage(0)

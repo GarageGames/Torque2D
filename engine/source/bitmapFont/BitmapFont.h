@@ -63,8 +63,9 @@ namespace font
       BitmapFont();
       bool parseFont(Stream& io_rStream);
       TextureHandle LoadTexture(StringTableEntry fileName);
-      const BitmapFontCharacter getCharacter(const U16 charID) { return mChar[charID]; }
-      inline const F32 getSizeRatio(const U16 size) { return (F32)size / mLineHeight; }
+      const BitmapFontCharacter& getCharacter(const U16 charID) { return mChar[charID]; }
+      inline const F32 getSizeRatio(const F32 size) { return size / mLineHeight; }
+      inline const S16 getKerning(U16 first, U16 second) { return (S16)mKerning[make_pair(first, second)]; }
 
    private:
       inline void AddKerning(U16 first, U16 second, S16 amount) { mKerning[make_pair(first, second)] = amount; }

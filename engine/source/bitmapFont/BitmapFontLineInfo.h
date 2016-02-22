@@ -20,27 +20,32 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _BITMAP_FONT_CHARACTER_H_
-#include "bitmapFont/BitmapFontCharacter.h"
+#ifndef _BITMAP_FONT_LINE_INFO_H_
+#define _BITMAP_FONT_LINE_INFO_H_
+
+#ifndef _UTILITY_H_
+#include "2d/core/utility.h"
 #endif
 
 namespace font
 {
-   void BitmapFontCharacter::ProcessCharacter(U16 width, U16 height)
+   struct BitmapFontLineInfo
    {
-      F32 top, right, bottom, left;
+   public:
+      U32 mStart;
+      U32 mEnd;
+      F32 mLength;
 
-      bottom = (F32)mY / height;
-      top = (F32)(mY + mHeight) / height;
+      BitmapFontLineInfo() : mStart(0), mEnd(0), mLength(0.0f)
+      {
 
-      left = (F32)mX / width;
-      right = (F32)(mX + mWidth) / width;
+      }
 
-      mOOBB[0] = Vector2(left, top);
-      mOOBB[1] = Vector2(right, top);
-      mOOBB[2] = Vector2(right, bottom);
-      mOOBB[3] = Vector2(left, bottom);
-      mPageWidth = width;
-      mPageHeight = height;
-   }
+      BitmapFontLineInfo(U32 start)
+      {
+         mStart = start;
+      }
+   };
 }
+
+#endif // _BITMAP_FONT_LINE_INFO_H_
