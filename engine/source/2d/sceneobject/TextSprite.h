@@ -47,6 +47,12 @@
 #include "bitmapFont/BitmapFontLineInfo.h"
 #endif
 
+#ifndef _BITMAP_FONT_CHARACTER_INFO_H_
+#include "bitmapFont/BitmapFontCharacterInfo.h"
+#endif
+
+using CharInfoMap = std::map<U32, BitmapFontCharacterInfo>;
+
 //-----------------------------------------------------------------------------
 
 class TextSprite : public SceneObject
@@ -109,6 +115,7 @@ private:
     std::vector<BitmapFontLineInfo> mLine;
     bool                    mFontSpatialsDirty;
     Vector2                 mCalculatedSize;
+    CharInfoMap             mCharInfo;
 
 
 public:
@@ -129,7 +136,7 @@ public:
 
     bool setFont( const char* pFontAssetId );
     const char* getFont(void) const                                         { return mFontAsset.getAssetId(); }
-    inline void setText(const StringBuffer& text)                           { mText.set(&text); mFontSpatialsDirty = true; }
+    inline void setText(const StringBuffer& text)                           { mText.set(&text); mFontSpatialsDirty = true; mCharInfo.clear(); }
     inline StringBuffer& getText(void)                                      { return mText; }
     inline void setFontSize(const F32 size)                                 { mFontSize = size; mFontSpatialsDirty = true; }
     inline F32 getFontSize(void) const                                      { return mFontSize; }
@@ -165,6 +172,21 @@ public:
 
     inline void setKerning(const F32 kern)                                  { mKerning = kern; mFontSpatialsDirty = true; }
     inline F32 getKerning(void) const                                       { return mKerning; }
+
+    void resetCharacterSettings(void)                                       { mCharInfo.clear(); }
+
+    void setCharacterBlendColor(const U32 charNum, const ColorF color);
+    ColorF getCharacterBlendColor(const U32 charNum);
+    bool getCharacterHasBlendColor(const U32 charNum);
+    void resetCharacterBlendColor(const U32 charNum);
+
+    void setCharacterScale(const U32 charNum, const F32 scaleX, const F32 scaleY);
+    Vector2 getCharacterScale(const U32 charNum);
+    void resetCharacterScale(const U32 charNum);
+
+    void setCharacterOffset(const U32 charNum, const F32 offsetX, const F32 offsetY);
+    Vector2 getCharacterOffset(const U32 charNum);
+    void resetCharacterOffset(const U32 charNum);
 
     // Declare Console Object.
     DECLARE_CONOBJECT(TextSprite);
@@ -208,7 +230,7 @@ protected:
     static bool writeKerning(void* obj, StringTableEntry pFieldName)       { return static_cast<TextSprite*>(obj)->getKerning() != 0.0f; }
 
 private:
-   void RenderLetter(BatchRender* pBatchRenderer, Vector2& cursor, U32 charID, F32 ratio);
+   void RenderLetter(BatchRender* pBatchRenderer, Vector2& cursor, U32 charID, F32 ratio, U32 charNum);
    void TextSprite::ApplyAlignment(Vector2& cursor, U32 totalRows, U32 row, F32 length, U32 charCount, F32 ratio);
    F32 TextSprite::getCursorAdvance(U32 charID, S32 prevCharID, F32 ratio);
    F32 TextSprite::getCursorAdvance(const BitmapFontCharacter& bmChar, S32 prevCharID, F32 ratio);

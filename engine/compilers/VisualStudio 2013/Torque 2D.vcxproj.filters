@@ -1254,9 +1254,6 @@
     <ClCompile Include="..\..\source\2d\core\ParticleSystem.cc">
       <Filter>2d\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\2d\sceneobject\ImageFont.cc">
-      <Filter>2d\sceneobject</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\assets\declaredAssets.cc">
       <Filter>assets</Filter>
     </ClCompile>
@@ -2698,12 +2695,6 @@
     </ClInclude>
     <ClInclude Include="..\..\source\2d\core\ParticleSystem.h">
       <Filter>2d\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\2d\sceneobject\ImageFont.h">
-      <Filter>2d\sceneobject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\2d\sceneobject\ImageFont_ScriptBinding.h">
-      <Filter>2d\sceneobject</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\assets\declaredAssets.h">
       <Filter>assets</Filter>

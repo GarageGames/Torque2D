@@ -270,7 +270,6 @@
     <ClCompile Include="..\..\source\2d\gui\guiSpriteCtrl.cc" />
     <ClCompile Include="..\..\source\2d\gui\SceneWindow.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\CompositeSprite.cc" />
-    <ClCompile Include="..\..\source\2d\sceneobject\ImageFont.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\ParticlePlayer.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\SceneObject.cc" />
     <ClCompile Include="..\..\source\2d\sceneobject\SceneObjectList.cc" />
@@ -707,8 +706,6 @@
     <ClInclude Include="..\..\source\2d\gui\SceneWindow_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\CompositeSprite.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\CompositeSprite_ScriptBinding.h" />
-    <ClInclude Include="..\..\source\2d\sceneobject\ImageFont.h" />
-    <ClInclude Include="..\..\source\2d\sceneobject\ImageFont_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\ParticlePlayer.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\ParticlePlayer_ScriptBinding.h" />
     <ClInclude Include="..\..\source\2d\sceneobject\SceneObject.h" />

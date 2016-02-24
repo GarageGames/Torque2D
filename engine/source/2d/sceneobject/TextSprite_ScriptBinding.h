@@ -270,4 +270,168 @@ ConsoleMethodWithDocs(TextSprite, getKerning, ConsoleFloat, 2, 2, ())
    return object->getKerning();
 }
 
+//-----------------------------------------------------------------------------
+
+/*! Resets the blend color, scale, and offset for all characters'.
+@return No return value.
+*/
+ConsoleMethodWithDocs(TextSprite, resetCharacterSettings, ConsoleVoid, 2, 2, ())
+{
+   object->resetCharacterSettings();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Sets the blend color for an individual character.
+@param index The zero based index for the character.
+@param color The blend color to use for character.
+@return No return value.
+*/
+ConsoleMethodWithDocs(TextSprite, setCharacterBlendColor, ConsoleVoid, 4, 4, (index, color))
+{
+   if (argc < 3)
+   {
+      Con::warnf("TextSprite::setCharacterBlendColor() - Invalid number of parameters!");
+      return;
+   }
+
+   const U32 colorCount = Utility::mGetStringElementCount(argv[3]);
+   if (colorCount != 4)
+   {
+      Con::warnf("TextSprite::setCharacterBlendColor() - Invalid color! Colors require four values (red / green / blue / alpha)!");
+      return;
+   }
+   object->setCharacterBlendColor(dAtoi(argv[2]), ColorF(dAtof(Utility::mGetStringElement(argv[3], 0)),
+                                                         dAtof(Utility::mGetStringElement(argv[3], 1)),
+                                                         dAtof(Utility::mGetStringElement(argv[3], 2)),
+                                                         dAtof(Utility::mGetStringElement(argv[3], 3))));
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets the blend color for an individual character if set or the blend color for the sprite.
+@param index The zero based index for the character.
+@return The blend color for the character or the sprite.
+*/
+ConsoleMethodWithDocs(TextSprite, getCharacterBlendColor, ConsoleString, 3, 3, (index))
+{
+   U32 charNum = dAtoi(argv[2]);
+   if (object->getCharacterHasBlendColor(charNum))
+   {
+      return object->getCharacterBlendColor(charNum).scriptThis();
+   }
+   else
+   {
+      return object->getBlendColor().scriptThis();
+   }
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets if the character is using a custom blend color.
+@param index The zero based index for the character.
+@return True if the character is using a custom blend color or false if the character uses the sprite's blend color.
+*/
+ConsoleMethodWithDocs(TextSprite, getCharacterHasBlendColor, ConsoleBool, 3, 3, (index))
+{
+   return object->getCharacterHasBlendColor(dAtoi(argv[2]));
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Resets the blend color for a character so that it uses the sprite's blend color.
+@param index The zero based index for the character.
+@return No return value.
+*/
+ConsoleMethodWithDocs(TextSprite, resetCharacterBlendColor, ConsoleVoid, 3, 3, (index))
+{
+   object->resetCharacterBlendColor(dAtoi(argv[2]));
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Sets the scale of a given character. This is multiplied by the scale of the font to get the total scale.
+@param index The zero based index for the character.
+@param (scaleX / scaleY) The amount to multiply the size of the character by. Default value is 1.
+@return No return value.
+*/
+ConsoleMethodWithDocs(TextSprite, setCharacterScale, ConsoleVoid, 4, 4, (index, scale scaleX / scaleY))
+{
+   U32 charNum = dAtoi(argv[2]);
+
+   const U32 count = Utility::mGetStringElementCount(argv[3]);
+   if (count != 2)
+   {
+      Con::warnf("TextSprite::setCharacterScale() - Invalid number of values (scaleX / scaleY)!");
+      return;
+   }
+
+   object->setCharacterScale(charNum, dAtof(Utility::mGetStringElement(argv[3], 0)), dAtof(Utility::mGetStringElement(argv[3], 1)));
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets scale of a given character.
+@param index The zero based index for the character.
+@return (scaleX / scaleY) The scale of the character.
+*/
+ConsoleMethodWithDocs(TextSprite, getCharacterScale, ConsoleString, 3, 3, (index))
+{
+   return object->getCharacterScale(dAtoi(argv[2])).scriptThis();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Resets the scale of a given character.
+@param index The zero based index for the character.
+@return No return value.
+*/
+ConsoleMethodWithDocs(TextSprite, resetCharacterScale, ConsoleVoid, 3, 3, (index))
+{
+   object->resetCharacterScale(dAtoi(argv[2]));
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Sets the offset of a given character.
+@param index The zero based index for the character.
+@param (offsetX / offsetY) The amount to move a character from it's calculated position.
+@return No return value.
+*/
+ConsoleMethodWithDocs(TextSprite, setCharacterOffset, ConsoleVoid, 4, 4, (index, offset offsetX / offsetY))
+{
+   U32 charNum = dAtoi(argv[2]);
+
+   const U32 count = Utility::mGetStringElementCount(argv[3]);
+   if (count != 2)
+   {
+      Con::warnf("TextSprite::setCharacterOffset() - Invalid number of values (offsetX / offsetY)!");
+      return;
+   }
+
+   object->setCharacterOffset(charNum, dAtof(Utility::mGetStringElement(argv[3], 0)), dAtof(Utility::mGetStringElement(argv[3], 1)));
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Gets offset of a given character.
+@param index The zero based index for the character.
+@return (offsetX / offsetY) The offset of the character.
+*/
+ConsoleMethodWithDocs(TextSprite, getCharacterOffset, ConsoleString, 3, 3, (index))
+{
+   return object->getCharacterOffset(dAtoi(argv[2])).scriptThis();
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Resets the offset of a given character.
+@param index The zero based index for the character.
+@return No return value.
+*/
+ConsoleMethodWithDocs(TextSprite, resetCharacterOffset, ConsoleVoid, 3, 3, (index))
+{
+   object->resetCharacterOffset(dAtoi(argv[2]));
+}
+
 ConsoleMethodGroupEndWithDocs(TextSprite)

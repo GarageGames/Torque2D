@@ -293,8 +293,8 @@ void TextSprite::initPersistFields()
     addProtectedField("fontSize", TypeVector2, Offset(mFontSize, TextSprite), &setFontSize, &defaultProtectedGetFn, &writeFontSize, "");
     addProtectedField("fontScaleX", TypeF32, Offset(mFontScaleX, TextSprite), &setFontScaleX, &defaultProtectedGetFn, &writeFontScaleX, "");
     addProtectedField("fontScaleY", TypeF32, Offset(mFontScaleY, TextSprite), &setFontScaleY, &defaultProtectedGetFn, &writeFontScaleY, "");
-    addProtectedField("textAlign", TypeEnum, Offset(mTextAlign, TextSprite), &setTextAlignment, &defaultProtectedGetFn, &writeTextAlignment, 1, &gTextAlignmentTable, "");
-    addProtectedField("textVAlign", TypeEnum, Offset(mTextVAlign, TextSprite), &setTextVAlignment, &defaultProtectedGetFn, &writeTextVAlignment, 1, &gTextVAlignmentTable, "");
+    addProtectedField("textAlignment", TypeEnum, Offset(mTextAlign, TextSprite), &setTextAlignment, &defaultProtectedGetFn, &writeTextAlignment, 1, &gTextAlignmentTable, "");
+    addProtectedField("textVAlignment", TypeEnum, Offset(mTextVAlign, TextSprite), &setTextVAlignment, &defaultProtectedGetFn, &writeTextVAlignment, 1, &gTextVAlignmentTable, "");
     addProtectedField("overflowModeX", TypeEnum, Offset(mOverflowX, TextSprite), &setOverflowModeX, &defaultProtectedGetFn, &writeOverflowModeX, 1, &gOverflowModeXTable, "");
     addProtectedField("overflowModeY", TypeEnum, Offset(mOverflowY, TextSprite), &setOverflowModeY, &defaultProtectedGetFn, &writeOverflowModeY, 1, &gOverflowModeYTable, "");
     addField("autoLineHeight", TypeBool, Offset(mAutoLineHeight, TextSprite), &writeAutoLineHeight, "");
@@ -348,6 +348,7 @@ void TextSprite::copyTo(SimObject* object)
     pFontObject->setAutoLineHeight(getAutoLineHeight());
     pFontObject->setCustomLineHeight(getCustomLineHeight());
     pFontObject->setKerning(getKerning());
+    pFontObject->mCharInfo = mCharInfo;
 }
 
 //------------------------------------------------------------------------------
@@ -447,7 +448,7 @@ void TextSprite::sceneRender( const SceneRenderState* pSceneRenderState, const S
 
         if (characterIndex >= mLine[row].mStart)
         {
-           RenderLetter(pBatchRenderer, cursor, charID, ratio);
+           RenderLetter(pBatchRenderer, cursor, charID, ratio, characterIndex);
         }
         
         if ((row + 1) < mLine.size() && mLine[row + 1].mStart == (characterIndex + 1))
@@ -485,9 +486,19 @@ void TextSprite::sceneRender( const SceneRenderState* pSceneRenderState, const S
 //-----------------------------------------------------------------------------
 
 
-void TextSprite::RenderLetter(BatchRender* pBatchRenderer, Vector2& cursor, U32 charID, F32 ratio)
+void TextSprite::RenderLetter(BatchRender* pBatchRenderer, Vector2& cursor, U32 charID, F32 ratio, U32 charNum)
 {
    const BitmapFontCharacter& bmChar = mFontAsset->mBitmapFont.getCharacter(charID);
+
+   Vector2 charScale = getCharacterScale(charNum);
+   Vector2 charOffset = getCharacterOffset(charNum);
+   ColorF charColor = getCharacterBlendColor(charNum);
+
+   F32 fontScaleX = mFontScaleX * charScale.x;
+   F32 fontScaleY = mFontScaleY * charScale.y;
+
+   F32 cursorX = cursor.x + charOffset.x - (bmChar.mWidth * ratio * mFontScaleX * ((charScale.x - 1) / 2));
+   F32 cursorY = cursor.y - charOffset.y;
 
    //inset, for hiding part of a letter
    F32 insetLeft, insetRight, insetTop, insetBottom;
@@ -499,17 +510,17 @@ void TextSprite::RenderLetter(BatchRender* pBatchRenderer, Vector2& cursor, U32 
    // Cropping time!
    if (mOverflowX == OVERFLOW_X_HIDDEN) 
    {
-      if ((cursor.x + (bmChar.mWidth * ratio * mFontScaleX) <= 0) || (cursor.x >= mSize.x))
+      if ((cursorX + (bmChar.mWidth * ratio * fontScaleX) <= 0) || (cursorX >= mSize.x))
          return;
 
-      if (cursor.x < 0 && (cursor.x + (bmChar.mWidth * ratio * mFontScaleX) > 0))
+      if (cursorX < 0 && (cursorX + (bmChar.mWidth * ratio * fontScaleX) > 0))
       {
-         insetLeft = -(cursor.x / (bmChar.mWidth * ratio * mFontScaleX));
+         insetLeft = -(cursorX / (bmChar.mWidth * ratio * fontScaleX));
       }
 
-      if (cursor.x < mSize.x && (cursor.x + (bmChar.mWidth * ratio * mFontScaleX) > mSize.x))
+      if (cursorX < mSize.x && (cursorX + (bmChar.mWidth * ratio * fontScaleX) > mSize.x))
       {
-         insetRight = (((cursor.x + (bmChar.mWidth * ratio * mFontScaleX)) - mSize.x) / (bmChar.mWidth * ratio * mFontScaleX));
+         insetRight = (((cursorX + (bmChar.mWidth * ratio * fontScaleX)) - mSize.x) / (bmChar.mWidth * ratio * fontScaleX));
       }
 
       if (insetLeft + insetRight > 1)
@@ -518,20 +529,20 @@ void TextSprite::RenderLetter(BatchRender* pBatchRenderer, Vector2& cursor, U32 
    if (mOverflowY == OVERFLOW_Y_HIDDEN)
    {
       F32 tempTop, tempBottom;
-      tempTop = cursor.y - (mFontAsset->mBitmapFont.mBaseline * ratio * mFontScaleY);
-      tempBottom = tempTop + (bmChar.mHeight * ratio * mFontScaleY);
+      tempTop = cursorY - (mFontAsset->mBitmapFont.mBaseline * ratio * fontScaleY) + (bmChar.mYOffset * ratio * fontScaleY);
+      tempBottom = tempTop + (bmChar.mHeight * ratio * fontScaleY);
 
       if ((tempBottom <= 0) || (tempTop >= mSize.y))
          return;
 
       if (tempTop < 0 && tempBottom > 0)
       {
-         insetTop = -(tempTop / (bmChar.mHeight * ratio * mFontScaleY));
+         insetTop = -(tempTop / (bmChar.mHeight * ratio * fontScaleY));
       }
 
       if (tempTop < mSize.y && tempBottom > mSize.y)
       {
-         insetBottom = (tempBottom - mSize.y) / (bmChar.mHeight * ratio * mFontScaleY);
+         insetBottom = (tempBottom - mSize.y) / (bmChar.mHeight * ratio * fontScaleY);
       }
 
       if (insetTop + insetBottom > 1)
@@ -547,16 +558,16 @@ void TextSprite::RenderLetter(BatchRender* pBatchRenderer, Vector2& cursor, U32 
 
    //create the destination rect
    Vector2 destLeft = (mRenderOOBB[1] - mRenderOOBB[0]);
-   destLeft.Normalize((F32)cursor.x + (insetLeft * bmChar.mWidth * ratio * mFontScaleX));
+   destLeft.Normalize((F32)cursorX + (insetLeft * bmChar.mWidth * ratio * fontScaleX));
 
    Vector2 destWidth = (mRenderOOBB[1] - mRenderOOBB[0]);
-   destWidth.Normalize(((bmChar.mWidth * ratio) - (insetLeft * (bmChar.mWidth * ratio)) - (insetRight * (bmChar.mWidth * ratio))) * mFontScaleX);
+   destWidth.Normalize(((bmChar.mWidth * ratio) - (insetLeft * (bmChar.mWidth * ratio)) - (insetRight * (bmChar.mWidth * ratio))) * fontScaleX);
 
    Vector2 destTop = -(mRenderOOBB[3] - mRenderOOBB[0]);
-   destTop.Normalize((F32)cursor.y - (((mFontAsset->mBitmapFont.mBaseline * ratio) - (bmChar.mYOffset * ratio) - (insetTop * bmChar.mHeight * ratio)) * mFontScaleY));
+   destTop.Normalize((F32)cursorY - (((mFontAsset->mBitmapFont.mBaseline * ratio) - (bmChar.mYOffset * ratio) - (insetTop * bmChar.mHeight * ratio)) * fontScaleY));
 
    Vector2 destHeight = -(mRenderOOBB[3] - mRenderOOBB[0]);
-   destHeight.Normalize(((bmChar.mHeight * ratio) - (insetBottom * bmChar.mHeight * ratio) - (insetTop * bmChar.mHeight * ratio)) * mFontScaleY);
+   destHeight.Normalize(((bmChar.mHeight * ratio) - (insetBottom * bmChar.mHeight * ratio) - (insetTop * bmChar.mHeight * ratio)) * fontScaleY);
 
    Vector2 destOOBB[4];
    destOOBB[0] = (mRenderOOBB[3] + destLeft + destTop + destHeight);
@@ -564,17 +575,35 @@ void TextSprite::RenderLetter(BatchRender* pBatchRenderer, Vector2& cursor, U32 
    destOOBB[2] = (mRenderOOBB[3] + destLeft + destWidth + destTop);
    destOOBB[3] = (mRenderOOBB[3] + destLeft + destTop);
 
-   // Submit batched quad.
-   pBatchRenderer->SubmitQuad(
-      destOOBB[0],
-      destOOBB[1],
-      destOOBB[2],
-      destOOBB[3],
-      sourceOOBB[0],
-      sourceOOBB[1],
-      sourceOOBB[2],
-      sourceOOBB[3],
-      mFontAsset->getImageTexture(bmChar.mPage));
+   if (charColor != mBlendColor)
+   {
+      // Submit batched quad.
+      pBatchRenderer->SubmitQuad(
+         destOOBB[0],
+         destOOBB[1],
+         destOOBB[2],
+         destOOBB[3],
+         sourceOOBB[0],
+         sourceOOBB[1],
+         sourceOOBB[2],
+         sourceOOBB[3],
+         mFontAsset->getImageTexture(bmChar.mPage),
+         charColor);
+   }
+   else
+   {
+      // Submit batched quad.
+      pBatchRenderer->SubmitQuad(
+         destOOBB[0],
+         destOOBB[1],
+         destOOBB[2],
+         destOOBB[3],
+         sourceOOBB[0],
+         sourceOOBB[1],
+         sourceOOBB[2],
+         sourceOOBB[3],
+         mFontAsset->getImageTexture(bmChar.mPage));
+   }
 }
 
 //-----------------------------------------------------------------------------
@@ -738,4 +767,149 @@ bool TextSprite::setFont( const char* pFontAssetId )
     
     // Return Okay.
     return true;
+}
+
+//-----------------------------------------------------------------------------
+
+void TextSprite::setCharacterBlendColor(const U32 charNum, const ColorF color)
+{
+   if (mCharInfo.find(charNum) != mCharInfo.end())
+   {
+      mCharInfo[charNum].mColor = color;
+      mCharInfo[charNum].mUseColor = true;
+   }
+   else
+   {
+      mCharInfo.emplace(charNum, BitmapFontCharacterInfo(color));
+   }
+}
+
+//-----------------------------------------------------------------------------
+
+ColorF TextSprite::getCharacterBlendColor(const U32 charNum)
+{
+   if (mCharInfo.find(charNum) != mCharInfo.end())
+   {
+      return mCharInfo[charNum].mColor;
+   }
+   else
+   {
+      return mBlendColor;
+   }
+}
+
+//-----------------------------------------------------------------------------
+
+bool TextSprite::getCharacterHasBlendColor(const U32 charNum)
+{
+   return (mCharInfo.find(charNum) != mCharInfo.end() && mCharInfo[charNum].mUseColor);
+}
+
+//-----------------------------------------------------------------------------
+
+void TextSprite::resetCharacterBlendColor(const U32 charNum)
+{
+   if (mCharInfo.find(charNum) != mCharInfo.end())
+   {
+      mCharInfo[charNum].mUseColor = false;
+
+      if (mCharInfo[charNum].isDefault())
+      {
+         mCharInfo.erase(charNum);
+      }
+   }
+}
+
+//-----------------------------------------------------------------------------
+
+void TextSprite::setCharacterScale(const U32 charNum, const F32 scaleX, const F32 scaleY)
+{
+   if (mCharInfo.find(charNum) == mCharInfo.end())
+   {
+      mCharInfo.emplace(charNum, BitmapFontCharacterInfo());
+   }
+   mCharInfo[charNum].mScaleX = scaleX;
+   mCharInfo[charNum].mScaleY = scaleY;
+
+   if (mCharInfo[charNum].isDefault())
+   {
+      mCharInfo.erase(charNum);
+   }
+}
+
+//-----------------------------------------------------------------------------
+
+Vector2 TextSprite::getCharacterScale(const U32 charNum)
+{
+   if (mCharInfo.find(charNum) != mCharInfo.end())
+   {
+      return Vector2(mCharInfo[charNum].mScaleX, mCharInfo[charNum].mScaleY);
+   }
+   else
+   {
+      return Vector2(1.0f, 1.0f);
+   }
+}
+
+//-----------------------------------------------------------------------------
+
+void TextSprite::resetCharacterScale(const U32 charNum)
+{
+   if (mCharInfo.find(charNum) != mCharInfo.end())
+   {
+      mCharInfo[charNum].mScaleX = 1.0f;
+      mCharInfo[charNum].mScaleY = 1.0f;
+
+      if (mCharInfo[charNum].isDefault())
+      {
+         mCharInfo.erase(charNum);
+      }
+   }
+}
+
+//-----------------------------------------------------------------------------
+
+void TextSprite::setCharacterOffset(const U32 charNum, const F32 offsetX, const F32 offsetY)
+{
+   if (mCharInfo.find(charNum) == mCharInfo.end())
+   {
+      mCharInfo.emplace(charNum, BitmapFontCharacterInfo());
+   }
+   mCharInfo[charNum].mOffsetX = offsetX;
+   mCharInfo[charNum].mOffsetY = offsetY;
+
+   if (mCharInfo[charNum].isDefault())
+   {
+      mCharInfo.erase(charNum);
+   }
+}
+
+//-----------------------------------------------------------------------------
+
+Vector2 TextSprite::getCharacterOffset(const U32 charNum)
+{
+   if (mCharInfo.find(charNum) != mCharInfo.end())
+   {
+      return Vector2(mCharInfo[charNum].mOffsetX, mCharInfo[charNum].mOffsetY);
+   }
+   else
+   {
+      return Vector2(0.0f, 0.0f);
+   }
+}
+
+//-----------------------------------------------------------------------------
+
+void TextSprite::resetCharacterOffset(const U32 charNum)
+{
+   if (mCharInfo.find(charNum) != mCharInfo.end())
+   {
+      mCharInfo[charNum].mOffsetX = 0.0f;
+      mCharInfo[charNum].mOffsetY = 0.0f;
+
+      if (mCharInfo[charNum].isDefault())
+      {
+         mCharInfo.erase(charNum);
+      }
+   }
 }
