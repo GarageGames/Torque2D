@@ -199,6 +199,9 @@
     <Filter Include="spine">
       <UniqueIdentifier>{bb776838-ed6f-477c-b366-dd0c5c60ae5f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="bitmapFont">
+      <UniqueIdentifier>{f2c8da8c-5c32-48ef-b5ab-0b27a9fe28d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\audio\audio.cc">
@@ -1251,9 +1254,6 @@
     <ClCompile Include="..\..\source\2d\core\ParticleSystem.cc">
       <Filter>2d\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\2d\sceneobject\ImageFont.cc">
-      <Filter>2d\sceneobject</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\assets\declaredAssets.cc">
       <Filter>assets</Filter>
     </ClCompile>
@@ -1427,6 +1427,18 @@
     </ClCompile>
     <ClCompile Include="..\..\source\audio\vorbisStreamSource.cc">
       <Filter>audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\assets\FontAsset.cc">
+      <Filter>2d\assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\bitmapFont\BitmapFont.cc">
+      <Filter>bitmapFont</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\sceneobject\TextSprite.cc">
+      <Filter>2d\sceneobject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\bitmapFont\BitmapFontCharacter.cc">
+      <Filter>bitmapFont</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2684,12 +2696,6 @@
     <ClInclude Include="..\..\source\2d\core\ParticleSystem.h">
       <Filter>2d\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\2d\sceneobject\ImageFont.h">
-      <Filter>2d\sceneobject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\2d\sceneobject\ImageFont_ScriptBinding.h">
-      <Filter>2d\sceneobject</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\assets\declaredAssets.h">
       <Filter>assets</Filter>
     </ClInclude>
@@ -3158,6 +3164,30 @@
     </ClInclude>
     <ClInclude Include="..\..\source\platformWin32\winVersion.h">
       <Filter>platformWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\assets\FontAsset.h">
+      <Filter>2d\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\assets\FontAsset_ScriptBinding.h">
+      <Filter>2d\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\bitmapFont\BitmapFont.h">
+      <Filter>bitmapFont</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\bitmapFont\BitmapFontCharacter.h">
+      <Filter>bitmapFont</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\TextSprite.h">
+      <Filter>2d\sceneobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\sceneobject\TextSprite_ScriptBinding.h">
+      <Filter>2d\sceneobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\bitmapFont\BitmapFontCharacterInfo.h">
+      <Filter>bitmapFont</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\bitmapFont\BitmapFontLineInfo.h">
+      <Filter>bitmapFont</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
