@@ -30,7 +30,6 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/2d/gui/guiSpriteCtrl.cc \
 	../../source/2d/gui/SceneWindow.cc \
 	../../source/2d/sceneobject/CompositeSprite.cc \
-	../../source/2d/sceneobject/ImageFont.cc \
 	../../source/2d/sceneobject/ParticlePlayer.cc \
 	../../source/2d/sceneobject/SceneObject.cc \
 	../../source/2d/sceneobject/SceneObjectList.cc \
@@ -238,6 +237,7 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/persistence/tinyXML/tinyxml.cpp \
 	../../source/persistence/tinyXML/tinyxmlerror.cpp \
 	../../source/persistence/tinyXML/tinyxmlparser.cpp \
+	../../source/audio/vorbisStreamSource.cc \
 	../../source/audio/audio.cc \
 	../../source/audio/audioBuffer.cc \
 	../../source/audio/audioDataBlock.cc \
@@ -413,6 +413,8 @@ CFLAGS += -I../../lib/ljpeg
 CFLAGS += -I../../lib/zlib
 CFLAGS += -I../../lib/lpng
 CFLAGS += -I../../lib/freetype
+CFLAGS += -I../../lib/libvorbis/include
+CFLAGS += -I../../lib/libogg/include
 
 CFLAGS += -DLINUX
 
