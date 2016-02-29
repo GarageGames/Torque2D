@@ -42,7 +42,7 @@ class OpenGLDevice : public DisplayDevice
       OpenGLDevice();
       virtual ~OpenGLDevice();
 
-      void initDevice();
+      virtual void initDevice();
       bool activate( U32 width, U32 height, U32 bpp, bool fullScreen );
       void shutdown();
       void destroy();
@@ -51,6 +51,7 @@ class OpenGLDevice : public DisplayDevice
       const char* getDriverInfo();
       bool getGammaCorrection(F32 &g);
       bool setGammaCorrection(F32 g);
+      bool getVerticalSync();
       bool setVerticalSync( bool on );
       void loadResolutions();
 
