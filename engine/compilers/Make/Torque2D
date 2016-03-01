@@ -432,7 +432,6 @@ CFLAGS += -O0
 NASMFLAGS := -f elf -D LINUX
 
 CC := gcc
-CXX := g++
 LD := gcc
 
 APP_TARGETS += $(APPNAME)
