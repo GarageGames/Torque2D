@@ -24,11 +24,11 @@
 #define _BITMAP_FONT_CHARACTER_H_
 
 #ifndef _UTILITY_H_
-#include "2d/core/utility.h"
+#include "2d/core/Utility.h"
 #endif
 
 #ifndef _VECTOR2_H_
-#include "2d/Core/Vector2.h"
+#include "2d/core/Vector2.h"
 #endif
 
 namespace font

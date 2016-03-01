@@ -231,11 +231,11 @@ protected:
 
 private:
    void RenderLetter(BatchRender* pBatchRenderer, Vector2& cursor, U32 charID, F32 ratio, U32 charNum);
-   void TextSprite::ApplyAlignment(Vector2& cursor, U32 totalRows, U32 row, F32 length, U32 charCount, F32 ratio);
-   F32 TextSprite::getCursorAdvance(U32 charID, S32 prevCharID, F32 ratio);
-   F32 TextSprite::getCursorAdvance(const BitmapFontCharacter& bmChar, S32 prevCharID, F32 ratio);
+   void ApplyAlignment(Vector2& cursor, U32 totalRows, U32 row, F32 length, U32 charCount, F32 ratio);
+   F32 getCursorAdvance(U32 charID, S32 prevCharID, F32 ratio);
+   F32 getCursorAdvance(const BitmapFontCharacter& bmChar, S32 prevCharID, F32 ratio);
    F32 GetLineHeight() { return (mAutoLineHeight) ? mFontSize : mCustomLineHeight; }
-   void TextSprite::CalculateSpatials(F32 ratio);
+   void CalculateSpatials(F32 ratio);
 };
 
 #endif // _TEXT_SPRITE_H_
