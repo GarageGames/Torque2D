@@ -1,6 +1,7 @@
 APPNAME := ../../../Torque2D
 
 SOURCES := ../../source/2d/assets/AnimationAsset.cc \
+	../../source/2d/assets/FontAsset.cc \
 	../../source/2d/assets/ImageAsset.cc \
 	../../source/2d/assets/ParticleAsset.cc \
 	../../source/2d/assets/ParticleAssetEmitter.cc \
@@ -30,7 +31,6 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/2d/gui/guiSpriteCtrl.cc \
 	../../source/2d/gui/SceneWindow.cc \
 	../../source/2d/sceneobject/CompositeSprite.cc \
-	../../source/2d/sceneobject/ImageFont.cc \
 	../../source/2d/sceneobject/ParticlePlayer.cc \
 	../../source/2d/sceneobject/SceneObject.cc \
 	../../source/2d/sceneobject/SceneObjectList.cc \
@@ -39,6 +39,7 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/2d/sceneobject/ShapeVector.cc \
 	../../source/2d/sceneobject/SkeletonObject.cc \
 	../../source/2d/sceneobject/Sprite.cc \
+	../../source/2d/sceneobject/TextSprite.cc \
 	../../source/2d/sceneobject/Trigger.cc \
 	../../source/2d/scene/ContactFilter.cc \
 	../../source/2d/scene/DebugDraw.cc \
@@ -56,6 +57,8 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/assets/declaredAssets.cc \
 	../../source/assets/referencedAssets.cc \
 	../../source/audio/AudioAsset.cc \
+	../../source/bitmapFont/BitmapFont.cc \
+	../../source/bitmapFont/BitmapFontCharacter.cc \
 	../../source/Box2D/Collision/b2BroadPhase.cpp \
 	../../source/Box2D/Collision/b2CollideCircle.cpp \
 	../../source/Box2D/Collision/b2CollideEdge.cpp \
@@ -238,6 +241,7 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/persistence/tinyXML/tinyxml.cpp \
 	../../source/persistence/tinyXML/tinyxmlerror.cpp \
 	../../source/persistence/tinyXML/tinyxmlparser.cpp \
+	../../source/audio/vorbisStreamSource.cc \
 	../../source/audio/audio.cc \
 	../../source/audio/audioBuffer.cc \
 	../../source/audio/audioDataBlock.cc \
@@ -398,12 +402,12 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/gui/editor/guiInspector.cc \
 	../../source/gui/editor/guiInspectorTypes.cc \
 	../../source/gui/editor/guiMenuBar.cc \
-	../../source/gui/editor/guiSeparatorCtrl.cc 
+	../../source/gui/editor/guiSeparatorCtrl.cc
 
 LDFLAGS := -g -m32
 LDLIBS := -lstdc++ -lm -ldl -lpthread -lrt -lX11 -lXft -lSDL -lopenal
 
-CFLAGS := -MMD -I. -Wfatal-errors -Wunused -m32 -msse -march=i686 -pipe
+CFLAGS := -std=gnu++11 -MMD -I. -Wfatal-errors -Wunused -m32 -msse -march=i686 -pipe
 
 CFLAGS += -I/usr/include
 CFLAGS += -I/usr/include/freetype2
@@ -413,6 +417,8 @@ CFLAGS += -I../../lib/ljpeg
 CFLAGS += -I../../lib/zlib
 CFLAGS += -I../../lib/lpng
 CFLAGS += -I../../lib/freetype
+CFLAGS += -I../../lib/libvorbis/include
+CFLAGS += -I../../lib/libogg/include
 
 CFLAGS += -DLINUX
 

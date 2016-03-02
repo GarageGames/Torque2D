@@ -19,6 +19,8 @@ clean:
 -include x zlib
 -include x lpng
 -include x ljpeg
+-include x vorbis
+-include x ogg
 
 release: $(LIB_TARGETS) $(SHARED_LIB_TARGETS) $(APP_TARGETS)
 	@echo Built libraries: $(LIB_TARGETS)

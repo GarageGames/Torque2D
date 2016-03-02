@@ -24,11 +24,11 @@
 #define _BITMAP_FONT_H_
 
 #ifndef _BITMAP_FONT_CHARACTER_H_
-#include "bitmapFont\BitmapFontCharacter.h"
+#include "bitmapFont/BitmapFontCharacter.h"
 #endif
 
 #ifndef _UTILITY_H_
-#include "2d/core/utility.h"
+#include "2d/core/Utility.h"
 #endif
 
 #ifndef _TEXTURE_MANAGER_H_
