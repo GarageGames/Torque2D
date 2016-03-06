@@ -39,6 +39,8 @@
 #include "graphics/dgl.h"
 #include "debug/profiler.h"
 #include "platformAndroid/T2DActivity.h"
+#include "AndroidOGLVideo.h"
+#include "../platform/platformVideo_ScriptBinding.h"
 
 //Luma: Tap support
 extern void createMouseTapEvent(S32 nbrTaps, S32 x, S32 y);
@@ -255,6 +257,12 @@ bool OpenGLDevice::getGammaCorrection(F32 &g)
 
 //------------------------------------------------------------------------------
 bool OpenGLDevice::setGammaCorrection(F32 g)
+{
+    return true;
+}
+
+//------------------------------------------------------------------------------
+bool OpenGLDevice::getVerticalSync()
 {
     return true;
 }

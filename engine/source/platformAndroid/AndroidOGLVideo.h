@@ -51,6 +51,7 @@ public:
     const char* getDriverInfo();
     bool getGammaCorrection(F32 &g);
     bool setGammaCorrection(F32 g);
+    bool getVerticalSync();
     bool setVerticalSync( bool on );
 };
 
