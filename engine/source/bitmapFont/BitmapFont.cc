@@ -188,7 +188,7 @@ namespace font
             }
             ci.mCharID = CharID;
             ci.ProcessCharacter(mWidth, mHeight);
-            mChar.emplace(CharID, ci);
+            mChar[CharID] = ci;
          }
          else if (dStrcmp(Read, "kerning") == 0 && dStrcmp(Read, "kernings") != 0)
          {

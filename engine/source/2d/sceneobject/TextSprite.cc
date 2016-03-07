@@ -780,7 +780,7 @@ void TextSprite::setCharacterBlendColor(const U32 charNum, const ColorF color)
    }
    else
    {
-      mCharInfo.emplace(charNum, BitmapFontCharacterInfo(color));
+      mCharInfo[charNum] = BitmapFontCharacterInfo(color);
    }
 }
 
@@ -826,7 +826,7 @@ void TextSprite::setCharacterScale(const U32 charNum, const F32 scaleX, const F3
 {
    if (mCharInfo.find(charNum) == mCharInfo.end())
    {
-      mCharInfo.emplace(charNum, BitmapFontCharacterInfo());
+      mCharInfo[charNum] = BitmapFontCharacterInfo();
    }
    mCharInfo[charNum].mScaleX = scaleX;
    mCharInfo[charNum].mScaleY = scaleY;
@@ -873,7 +873,7 @@ void TextSprite::setCharacterOffset(const U32 charNum, const F32 offsetX, const 
 {
    if (mCharInfo.find(charNum) == mCharInfo.end())
    {
-      mCharInfo.emplace(charNum, BitmapFontCharacterInfo());
+      mCharInfo[charNum] = BitmapFontCharacterInfo();
    }
    mCharInfo[charNum].mOffsetX = offsetX;
    mCharInfo[charNum].mOffsetY = offsetY;
