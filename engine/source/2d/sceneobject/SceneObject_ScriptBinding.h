@@ -4536,10 +4536,10 @@ ConsoleMethodWithDocs(SceneObject, stopSound, ConsoleVoid, 3, 3, (S32 index))
     const S32 index = dAtoi(argv[2]);
     
     if (!object->getSoundsCount())
-        {
+    {
         Con::warnf("No sounds on this object. Can't stop. WON't stop.");
         return;
-        }    
+    }    
     
     U32 handle = object->getSound(index);
 
