@@ -1545,4 +1545,16 @@ ConsoleMethodWithDocs(SceneWindow, getIsWindowPoint, ConsoleBool, 3, 4, (X / Y))
     return object->mBounds.pointInRect( Point2I( S32(mFloor(dstPoint.x)+object->mBounds.point.x), S32(mFloor(dstPoint.y)+object->mBounds.point.y )) );
 }
 
+/*! Sets this Scenewindow to process the AudioListener's position and velocity
+    WARNING : The code does not verify if multiple SceneWindows have this function enabled.
+              User must make sure to manage this manually. Multiple listeners may lead to crashes/bugs/unexpected behaviors.
+    @param status - Whether to enable or disable AudioListener processing (optional, default to true)
+*/
+ConsoleMethodWithDocs(SceneWindow, setAudioListener, ConsoleVoid, 2, 3, ())
+{
+    bool onoff = true;
+    if ((argc > 2) && !dAtob(argv[2])) onoff = false;
+    object->setProcessAudioListener(onoff);
+}
+
 ConsoleMethodGroupEndWithDocs(SceneWindow)

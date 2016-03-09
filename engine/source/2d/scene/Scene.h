@@ -183,6 +183,7 @@ public:
         SCENE_DEBUG_CONTROLLERS        = BIT(2), 
         SCENE_DEBUG_JOINTS             = BIT(3),
         SCENE_DEBUG_WIREFRAME_RENDER   = BIT(4),
+        SCENE_DEBUG_AUDIO_SOURCES      = BIT(5),
         ///
         SCENE_DEBUG_AABB               = BIT(16),
         SCENE_DEBUG_OOBB               = BIT(17),

@@ -296,6 +296,7 @@
     <ClCompile Include="..\..\source\assets\declaredAssets.cc" />
     <ClCompile Include="..\..\source\assets\referencedAssets.cc" />
     <ClCompile Include="..\..\source\audio\AudioAsset.cc" />
+    <ClCompile Include="..\..\source\audio\audioDescriptions.cc" />
     <ClCompile Include="..\..\source\audio\audio_ScriptBinding.cc" />
     <ClCompile Include="..\..\source\audio\vorbisStreamSource.cc" />
     <ClCompile Include="..\..\source\bitmapFont\BitmapFont.cc" />
@@ -763,6 +764,7 @@
     <ClInclude Include="..\..\source\assets\tamlAssetReferencedUpdateVisitor.h" />
     <ClInclude Include="..\..\source\assets\tamlAssetReferencedVisitor.h" />
     <ClInclude Include="..\..\source\audio\AudioAsset.h" />
+    <ClInclude Include="..\..\source\audio\audioDescriptions.h" />
     <ClInclude Include="..\..\source\audio\vorbisStreamSource.h" />
     <ClInclude Include="..\..\source\bitmapFont\BitmapFont.h" />
     <ClInclude Include="..\..\source\bitmapFont\BitmapFontCharacter.h" />

@@ -80,6 +80,7 @@ struct tDestroyNotification
 typedef VectorPtr<b2FixtureDef*> typeCollisionFixtureDefVector;
 typedef VectorPtr<b2Fixture*> typeCollisionFixtureVector;
 typedef Vector<tDestroyNotification> typeDestroyNotificationVector;
+typedef Vector<U32> typeAudioHandleVector;
 
 //-----------------------------------------------------------------------------
 
@@ -189,6 +190,8 @@ protected:
     /// General collision shape access.
     typeCollisionFixtureDefVector mCollisionFixtureDefs;
     typeCollisionFixtureVector mCollisionFixtures;
+    typeAudioHandleVector mAudioHandles;
+    Vector<S32> mHandleDeletionList; //Used for Audio source maintenance & deletion
 
     /// Render visibility.
     bool                    mVisible;
@@ -606,6 +609,12 @@ public:
     inline U32              getWorldQueryKey( void ) const              { return mWorldQueryKey; }
     static U32              getGlobalSceneObjectCount( void );
     inline U32              getSerialId( void ) const                   { return mSerialId; }
+
+    // Audio
+    void addAudioHandle(AUDIOHANDLE handle);
+    U32                 getSound(S32 index);
+    S32                 getSoundsCount();
+    void                refreshsources();
 
     // Read / Write fields.
     virtual bool            writeField(StringTableEntry fieldname, const char* value);

@@ -113,7 +113,8 @@ SceneWindow::SceneWindow() :    mpScene(NULL),
                                 mUseObjectInputEvents(false),
                                 mInputEventGroupMaskFilter(MASK_ALL),
                                 mInputEventLayerMaskFilter(MASK_ALL),
-                                mInputEventInvisibleFilter( true )
+                                mInputEventInvisibleFilter( true ),
+                                mProcessAudioListener(false)
 {
     // Set Vector Associations.
     VECTOR_SET_ASSOCIATION( mCameraQueue );
@@ -415,6 +416,13 @@ void SceneWindow::setCameraInterpolationMode( const CameraInterpolationMode inte
 {
     // Set Interpolation Mode.
     mCameraInterpolationMode = interpolationMode;
+}
+
+//-----------------------------------------------------------------------------
+
+void SceneWindow::setProcessAudioListener(bool mval)
+{
+    mProcessAudioListener = mval;
 }
 
 //-----------------------------------------------------------------------------
@@ -1462,6 +1470,8 @@ void SceneWindow::processTick( void )
     // Debug Profiling.
     PROFILE_SCOPE(SceneWindow_ProcessTick);
 
+    Point2F PreMove_CameraPos = mCameraCurrent.mSourceArea.centre();
+    F32 PreMove_CameraZoom = mCameraCurrent.mCameraZoom;
     // Are we moving the camera.
     if ( mMovingCamera )
     {
@@ -1505,7 +1515,25 @@ void SceneWindow::processTick( void )
             // No, so stop shake.
             stopCameraShake();
         }
-    }    
+    }
+    if (mProcessAudioListener)
+    {
+        F32 listenervelocity[] = { 0.f, 0.f, 0.f };
+
+        Point2F campos = mCameraCurrent.mSourceArea.centre();
+
+        if (campos != PreMove_CameraPos)
+        {
+            listenervelocity[0] = (campos.x - PreMove_CameraPos.x) * Tickable::smTickSec;
+            listenervelocity[1] = (campos.y - PreMove_CameraPos.y) * Tickable::smTickSec;
+            listenervelocity[2] = (mCameraCurrent.mCameraZoom - PreMove_CameraZoom) * Tickable::smTickSec;
+        }
+
+        F32 listenerpos[] = { campos.x, campos.y, 5.f };
+
+        alListenerfv(AL_POSITION, listenerpos);
+        alListenerfv(AL_VELOCITY, listenervelocity);
+    }
 }
 
 //-----------------------------------------------------------------------------
