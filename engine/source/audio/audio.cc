@@ -875,12 +875,12 @@ AUDIOHANDLE alxCreateSource(const AudioAsset *profile, const MatrixF *transform)
 //--------------------------------------------------------------------------
 AUDIOHANDLE alxCreateSource_AD(const AudioAsset *profile, const AudioDescription* description, const MatrixF *transform)
 {
-        //Since we don't want to modify AudioAssets all the time
-            //here is a version which accepts a script-defined AudioDescription
-        if (profile == NULL)
+    //Since we don't want to modify AudioAssets all the time
+    //here is a version which accepts a script-defined AudioDescription
+    if (profile == NULL)
         return NULL_AUDIOHANDLE;
     
-        Audio::Description newAD;
+    Audio::Description newAD;
     newAD.mVolume = description->mVolume;
     newAD.mVolumeChannel = description->mVolumeChannel;
     newAD.mConeInsideAngle = description->mConeInsideAngle;
@@ -894,8 +894,8 @@ AUDIOHANDLE alxCreateSource_AD(const AudioAsset *profile, const AudioDescription
     newAD.mMaxDistance = description->mMaxDistance;
     newAD.mReferenceDistance = description->mReferenceDistance;
     
-        return alxCreateSource(newAD, profile->getAudioFile(), transform, NULL);
-    }
+    return alxCreateSource(newAD, profile->getAudioFile(), transform, NULL);
+}
 //--------------------------------------------------------------------------
 
 extern void threadPlay(AudioBuffer * buffer, AUDIOHANDLE handle);
