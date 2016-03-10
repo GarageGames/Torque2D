@@ -20,6 +20,9 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
+#ifndef _AUDIODESCRIPTION_H_
+#include "audio/audioDescriptions.h"
+#endif
 /*! Gets the system-wide scene-object count.
     @return The system-wide scene-object count.
 */
@@ -4469,4 +4472,116 @@ ConsoleMethodWithDocs(SceneObject, safeDelete, ConsoleVoid, 2, 2, ())
     object->safeDelete();
 }
 
+/*! Plays a sound at the object's location
+@param AudioAsset - The Audio Asset to play
+@param AudioDescription - Sets the audio Description. If omitted,  (optional)
+@return returns the audio handle
+*/
+ConsoleMethodWithDocs(SceneObject, playSound, ConsoleInt, 3, 4, ())
+{
+    // Fetch asset Id.    
+    const char* pAssetId = argv[2];
+
+    // Acquire audio asset.
+    AudioAsset* pAudioAsset = AssetDatabase.acquireAsset<AudioAsset>(pAssetId);
+
+    // Did we get the audio asset?
+    if (pAudioAsset == NULL)
+    {
+        // No, so warn.
+        Con::warnf("alxPlay() - Could not find audio asset '%s'.", pAssetId);
+        return NULL_AUDIOHANDLE;
+    }
+    AudioDescription* AD;
+
+    if (argc > 3)
+    {
+        AD = static_cast<AudioDescription*>(Sim::findObject(argv[3]));
+    }
+    else
+    {
+        AD = new AudioDescription();
+    }
+
+    Vector2 pos = object->getPosition();
+    Vector2 vel = object->getLinearVelocity();
+    Point3F realpos;
+    Point3F velocity;
+
+    realpos.x = pos.x;
+    realpos.y = pos.y;
+    realpos.z = 0.f;
+
+    MatrixF transform(false);
+    transform.setColumn(3, realpos);
+
+    //If the source is not looping and outside of listener range, it is not created, handle = 0
+    AUDIOHANDLE handle = alxCreateSource_AD(pAudioAsset, AD, &transform);
+    if (!handle) return (0);
+    //alxplay returns the same handle as alxCreateSource
+    alxPlay(handle);
+    alxSource3f(handle, AL_POSITION, realpos.x, realpos.y, 0.f);
+
+    // Release asset.
+    AssetDatabase.releaseAsset(pAssetId);
+    object->addAudioHandle(handle);
+    return handle;
+}
+
+/*! Stops a sound attached to a SceneObject
+@param Index - The Index of the sound (obtained via getSoundatIndex)
+*/
+ConsoleMethodWithDocs(SceneObject, stopSound, ConsoleVoid, 3, 3, (S32 index))
+{
+    const S32 index = dAtoi(argv[2]);
+    
+    if (!object->getSoundsCount())
+    {
+        Con::warnf("No sounds on this object. Can't stop. WON't stop.");
+        return;
+    }    
+    
+    U32 handle = object->getSound(index);
+
+
+    if (!handle)
+    {
+        Con::warnf("Unable to find Sound Handle at index %i", index);
+        return;
+    }
+
+    alxStop(handle);
+    object->refreshsources();
+}
+
+/*! gets the amount of sounds currently attached to a SceneObject
+@return returns the Amount of sounds currently attached to the SceneObject
+*/
+ConsoleMethodWithDocs(SceneObject, getSoundsCount, ConsoleInt, 2, 2, ())
+{
+    return object->getSoundsCount();
+}
+
+/*! Gets the handle of a sound at specified index
+@param Index - The Index of the sound (obtained via getSoundatIndex)
+@return returns the handle of a sound
+*/
+ConsoleMethodWithDocs(SceneObject, getSoundatIndex, ConsoleInt, 3, 3, ())
+{
+    U32 size = object->getSoundsCount();
+    if (!size)
+    {
+        Con::printf("No sounds on this object.");
+        return 0;
+    }
+
+    U32 handle = object->getSound(dAtoi(argv[2]));
+    if (!handle)
+    {
+        Con::printf("Not a valid handle at index %i", dAtoi(argv[2]));
+        return 0;
+    }
+
+    return handle;
+}
 ConsoleMethodGroupEndWithDocs(SceneObject)

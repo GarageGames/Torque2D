@@ -1440,6 +1440,9 @@
     <ClCompile Include="..\..\source\bitmapFont\BitmapFontCharacter.cc">
       <Filter>bitmapFont</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\audio\audioDescriptions.cc">
+      <Filter>audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\audio\audio.h">
@@ -3191,6 +3194,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\bitmapFont\BitmapFontLineInfo.h">
       <Filter>bitmapFont</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\audio\audioDescriptions.h">
+      <Filter>audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -22,6 +22,7 @@
 
 #include "audio/audio.h"
 #include "audio/audioDataBlock.h"
+#include "audio/audioDescriptions.h"
 #include "collection/vector.h"
 #include "console/console.h"
 #include "console/consoleTypes.h"
@@ -871,6 +872,30 @@ AUDIOHANDLE alxCreateSource(const AudioAsset *profile, const MatrixF *transform)
    return alxCreateSource(profile->getAudioDescription(), profile->getAudioFile(), transform, NULL );
 }
 
+//--------------------------------------------------------------------------
+AUDIOHANDLE alxCreateSource_AD(const AudioAsset *profile, const AudioDescription* description, const MatrixF *transform)
+{
+    //Since we don't want to modify AudioAssets all the time
+    //here is a version which accepts a script-defined AudioDescription
+    if (profile == NULL)
+        return NULL_AUDIOHANDLE;
+    
+    Audio::Description newAD;
+    newAD.mVolume = description->mVolume;
+    newAD.mVolumeChannel = description->mVolumeChannel;
+    newAD.mConeInsideAngle = description->mConeInsideAngle;
+    newAD.mConeOutsideAngle = description->mConeOutsideAngle;
+    newAD.mConeOutsideVolume = description->mConeOutsideVolume;
+    newAD.mConeVector = description->mConeVector;
+    newAD.mEnvironmentLevel = description->mEnvironmentLevel;
+    newAD.mIs3D = description->mIs3D;
+    newAD.mIsLooping = description->mIsLooping;
+    newAD.mIsStreaming = description->mIsStreaming;
+    newAD.mMaxDistance = description->mMaxDistance;
+    newAD.mReferenceDistance = description->mReferenceDistance;
+    
+    return alxCreateSource(newAD, profile->getAudioFile(), transform, NULL);
+}
 //--------------------------------------------------------------------------
 
 extern void threadPlay(AudioBuffer * buffer, AUDIOHANDLE handle);
@@ -2541,7 +2566,21 @@ bool OpenALInit()
    // Similiar to DSound Model w/o min distance clamping
    alEnable(AL_DISTANCE_MODEL);
    alDistanceModel(AL_INVERSE_DISTANCE);
+   alDopplerFactor(1.f);
    alListenerf(AL_GAIN_LINEAR, 1.f);
+
+   //The audio listener is initialized at position 0,0
+   //Listener orientation
+   //The first three values represent an "at" vector which points towards the screen.
+   //The second set of three values represent the "up" vector (Y+)
+
+   F32 listenerPos[] = { 0.f, 0.f, 0.f };
+   F32 listenerVel[] = { 0.f, 0.f, 0.f };
+   F32 listenerOrientation[] = { 0.f, 0.f, -1.0f, 0.f, 1.f, 0.f };
+
+   alListenerfv(AL_POSITION, listenerPos);
+   alListenerfv(AL_VELOCITY, listenerVel);
+   alListenerfv(AL_ORIENTATION, listenerOrientation);
 
    return true;
 }
