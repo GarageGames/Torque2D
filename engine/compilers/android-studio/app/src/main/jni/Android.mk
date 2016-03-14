@@ -255,6 +255,7 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../source/assets/referencedAssets.cc \
                     ../../../../../../source/audio/audio.cc \
                     ../../../../../../source/audio/audioDataBlock.cc \
+					../../../../../../source/audio/audioDescriptions.cc \
                     ../../../../../../source/audio/audio_ScriptBinding.cc \
                     ../../../../../../source/audio/audioStreamSourceFactory.cc \
                     ../../../../../../source/audio/wavStreamSource.cc \
