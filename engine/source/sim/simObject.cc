@@ -622,11 +622,8 @@ const char *SimObject::getPrefixedDataField(StringTableEntry fieldName, const ch
     // Fetch field value.
     const char* pFieldValue = getDataField( fieldName, array );
 
-    // Sanity.
-    AssertFatal( pFieldValue != NULL, "Field value cannot be NULL." );
-
     // Return without the prefix if there's no value.
-    if ( *pFieldValue == 0 )
+    if ( pFieldValue == NULL || *pFieldValue == 0 )
         return StringTable->EmptyString;
 
     // Fetch the field prefix.
