@@ -262,6 +262,12 @@ bool OpenGLDevice::setGammaCorrection(F32 g)
 }
 
 //------------------------------------------------------------------------------
+bool OpenGLDevice::getVerticalSync()
+{
+    return true;
+}
+
+//------------------------------------------------------------------------------
 bool OpenGLDevice::setVerticalSync(bool on)
 {
     return true;

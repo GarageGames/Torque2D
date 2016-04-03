@@ -166,6 +166,21 @@
 }
 
 //-----------------------------------------------------------------------------
+- (int)getVerticalSync
+{
+    if (_openGLContext != nil)
+    {
+        GLint swapInterval = 0;
+        [_openGLContext getValues:&swapInterval forParameter:NSOpenGLCPSwapInterval];
+        return swapInterval;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+//-----------------------------------------------------------------------------
 - (void)setVerticalSync:(bool)sync
 {
     if (_openGLContext != nil)
