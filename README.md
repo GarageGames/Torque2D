@@ -1,5 +1,5 @@
 ![Torque Logo](http://static.garagegames.com/static/pg/logokits/Torque-Logo_H.png)
-## Torque 2D 3.2
+## Torque 2D 3.3
 
 MIT Licensed Open Source version of Torque 2D from GarageGames. Maintained by the T2D Steering Committee and contributions from the community.
 
@@ -21,11 +21,11 @@ If you do not wish to compile the source code yourself, precompiled binary files
 
 After downloading a copy of the source code, the following project files for each platform are provided for you and can be found in the `engine/compilers` folder.
 
-* **Windows:** Visual Studio 2010, 2012, or 2013 (works with the free, "Express for Windows Desktop" version)
+* **Windows:** Visual Studio 2013 or 2015 (works with the free, "Express for Windows Desktop" version)
 * **OSX:** Xcode
 * **Linux:** Make
 * **iOS:** Xcode_iOS
-* **Android:** Eclipse
+* **Android:** Eclipse or Android Studio
 * **Web:** Emscripten/Cmake
 
 See the [wiki](https://github.com/GarageGames/Torque2D/wiki) for available guides on platform setup and development.
