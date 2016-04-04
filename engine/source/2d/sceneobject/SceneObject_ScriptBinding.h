@@ -20,6 +20,9 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
+#ifndef _AUDIODESCRIPTION_H_
+#include "audio/audioDescriptions.h"
+#endif
 /*! Gets the system-wide scene-object count.
     @return The system-wide scene-object count.
 */
@@ -4315,18 +4318,19 @@ ConsoleMethodWithDocs(SceneObject, setDebugOff, ConsoleVoid, 3, 2 + DEBUG_MODE_C
 //-----------------------------------------------------------------------------
 
 /*! Attach a GUI Control to the object.
-    @param guiObject The GuiControl to attach.
-    @param window The SceneWindow to bind the GuiControl to.
-    @param sizeControl Whether or not to size the GuiControl to the size of this object.
-    @return No return Value.
+@param guiObject The GuiControl to attach.
+@param window The SceneWindow to bind the GuiControl to.
+@param sizeControl Whether or not to size the GuiControl to the size of this object.
+@param offset The position offset to apply to the GuiControl.
+@return No return Value.
 */
-ConsoleMethodWithDocs(SceneObject, attachGui, ConsoleVoid, 4, 5, (guiControl guiObject, SceneWindow window, [sizeControl? = false]))
+ConsoleMethodWithDocs(SceneObject, attachGui, ConsoleVoid, 4, 7, (guiControl guiObject, SceneWindow window, [sizeControl ? = false], [offset ? = Vector2(0, 0)]))
 {
     // Find GuiControl Object.
     GuiControl* pGuiControl = dynamic_cast<GuiControl*>(Sim::findObject(argv[2]));
 
     // Check for invalid Gui Control.
-    if ( !pGuiControl )
+    if (!pGuiControl)
     {
         Con::warnf("SceneObject::attachGui() - Couldn't find GuiControl %s!", argv[2]);
         return;
@@ -4336,28 +4340,71 @@ ConsoleMethodWithDocs(SceneObject, attachGui, ConsoleVoid, 4, 5, (guiControl gui
     SceneWindow* pSceneWindow = dynamic_cast<SceneWindow*>(Sim::findObject(argv[3]));
 
     // Check for invalid SceneWindow Object.
-    if ( !pSceneWindow )
+    if (!pSceneWindow)
     {
         Con::warnf("SceneObject::attachGui() - Couldn't find SceneWindow %s!", argv[3]);
         return;
     }
 
-    // Calculate Send to Mount.
+    // Auto-size control?.
     const bool sizeControl = argc >= 5 ? dAtob(argv[4]) : false;
 
+    // GuiControl position offset.
+    Vector2 offset(0, 0);
+
+    // Elements in the first argument.
+    U32 elementCount = Utility::mGetStringElementCount(argv[5]);
+
+    // ("x y")
+    if ((elementCount == 2) && (argc == 6))
+        offset = Utility::mGetStringElementVector(argv[5]);
+
+    // (x, y)
+    else if ((elementCount == 1) && (argc == 7))
+        offset = Vector2(dAtof(argv[5]), dAtof(argv[6]));
+
     // Attach GUI Control.
-    object->attachGui( pGuiControl, pSceneWindow, sizeControl );
+    object->attachGui(pGuiControl, pSceneWindow, sizeControl, offset);
 }
 
 //-----------------------------------------------------------------------------
 
 /*! Detach any GUI Control.
+@param ctrl The SimObjectId of the GuiControl to detach.
     @return No return Value.
 */
-ConsoleMethodWithDocs(SceneObject, detachGui, ConsoleVoid, 2, 2, ())
+ConsoleMethodWithDocs(SceneObject, detachGui, ConsoleVoid, 2, 3, ())
 {
-    // Detach GUI Control.
-    object->detachGui();
+    if (argc >= 3)
+    {
+        GuiControl* pGuiControl = dynamic_cast<GuiControl*>(Sim::findObject(argv[3]));
+
+        if (!pGuiControl)
+        {
+            // Detach the last attached control.
+            object->detachGui();
+        }
+        else
+        {
+            // Detach the attached control.
+            object->detachGui(pGuiControl);
+        }
+    }
+    else
+    {
+        // Detach the last attached control.
+        object->detachGui();
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+/*! Detach all GUI Controls.
+    @return No return value.
+*/
+ConsoleMethodWithDocs(SceneObject, detachAllGuiControls, ConsoleVoid, 2, 2, ())
+{
+    object->detachAllGuiControls();
 }
 
 //-----------------------------------------------------------------------------
@@ -4425,4 +4472,116 @@ ConsoleMethodWithDocs(SceneObject, safeDelete, ConsoleVoid, 2, 2, ())
     object->safeDelete();
 }
 
+/*! Plays a sound at the object's location
+@param AudioAsset - The Audio Asset to play
+@param AudioDescription - Sets the audio Description. If omitted,  (optional)
+@return returns the audio handle
+*/
+ConsoleMethodWithDocs(SceneObject, playSound, ConsoleInt, 3, 4, ())
+{
+    // Fetch asset Id.    
+    const char* pAssetId = argv[2];
+
+    // Acquire audio asset.
+    AudioAsset* pAudioAsset = AssetDatabase.acquireAsset<AudioAsset>(pAssetId);
+
+    // Did we get the audio asset?
+    if (pAudioAsset == NULL)
+    {
+        // No, so warn.
+        Con::warnf("alxPlay() - Could not find audio asset '%s'.", pAssetId);
+        return NULL_AUDIOHANDLE;
+    }
+    AudioDescription* AD;
+
+    if (argc > 3)
+    {
+        AD = static_cast<AudioDescription*>(Sim::findObject(argv[3]));
+    }
+    else
+    {
+        AD = new AudioDescription();
+    }
+
+    Vector2 pos = object->getPosition();
+    Vector2 vel = object->getLinearVelocity();
+    Point3F realpos;
+    Point3F velocity;
+
+    realpos.x = pos.x;
+    realpos.y = pos.y;
+    realpos.z = 0.f;
+
+    MatrixF transform(false);
+    transform.setColumn(3, realpos);
+
+    //If the source is not looping and outside of listener range, it is not created, handle = 0
+    AUDIOHANDLE handle = alxCreateSource_AD(pAudioAsset, AD, &transform);
+    if (!handle) return (0);
+    //alxplay returns the same handle as alxCreateSource
+    alxPlay(handle);
+    alxSource3f(handle, AL_POSITION, realpos.x, realpos.y, 0.f);
+
+    // Release asset.
+    AssetDatabase.releaseAsset(pAssetId);
+    object->addAudioHandle(handle);
+    return handle;
+}
+
+/*! Stops a sound attached to a SceneObject
+@param Index - The Index of the sound (obtained via getSoundatIndex)
+*/
+ConsoleMethodWithDocs(SceneObject, stopSound, ConsoleVoid, 3, 3, (S32 index))
+{
+    const S32 index = dAtoi(argv[2]);
+    
+    if (!object->getSoundsCount())
+    {
+        Con::warnf("No sounds on this object. Can't stop. WON't stop.");
+        return;
+    }    
+    
+    U32 handle = object->getSound(index);
+
+
+    if (!handle)
+    {
+        Con::warnf("Unable to find Sound Handle at index %i", index);
+        return;
+    }
+
+    alxStop(handle);
+    object->refreshsources();
+}
+
+/*! gets the amount of sounds currently attached to a SceneObject
+@return returns the Amount of sounds currently attached to the SceneObject
+*/
+ConsoleMethodWithDocs(SceneObject, getSoundsCount, ConsoleInt, 2, 2, ())
+{
+    return object->getSoundsCount();
+}
+
+/*! Gets the handle of a sound at specified index
+@param Index - The Index of the sound (obtained via getSoundatIndex)
+@return returns the handle of a sound
+*/
+ConsoleMethodWithDocs(SceneObject, getSoundatIndex, ConsoleInt, 3, 3, ())
+{
+    U32 size = object->getSoundsCount();
+    if (!size)
+    {
+        Con::printf("No sounds on this object.");
+        return 0;
+    }
+
+    U32 handle = object->getSound(dAtoi(argv[2]));
+    if (!handle)
+    {
+        Con::printf("Not a valid handle at index %i", dAtoi(argv[2]));
+        return 0;
+    }
+
+    return handle;
+}
 ConsoleMethodGroupEndWithDocs(SceneObject)

@@ -54,7 +54,7 @@ public:
    {
       mList.next = mList.prev = &mList;
       mList.order = 0.5f;
-      mTriggerNext = NULL;
+      //mTriggerNext = NULL;
    }
 
    ~SignalBase();

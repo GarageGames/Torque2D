@@ -128,7 +128,7 @@ void WavStreamSource::clear()
         freeStream();
 
     mHandle           = NULL_AUDIOHANDLE;
-    mSource			  = NULL;
+    mSource			  = 0;
 
     if(mBufferList[0] != 0)
         alDeleteBuffers(NUMBUFFERS, mBufferList);

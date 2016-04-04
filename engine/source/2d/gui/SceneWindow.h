@@ -141,6 +141,9 @@ private:
     U32                 mRenderLayerMask;
     U32                 mRenderGroupMask;
 
+    //Audio Listener
+    bool                mProcessAudioListener;
+
     char                mDebugText[256];
 
     /// Handling Input Events.
@@ -264,6 +267,9 @@ public:
     void setCameraInterpolationTime( const F32 interpolationTime );
     void setCameraInterpolationMode( const CameraInterpolationMode interpolationMode );
 
+    /// Audio Listener
+    void setProcessAudioListener(bool mval);
+
     /// Camera Movement.
     void startCameraMove( const F32 interpolationTime );
     void stopCameraMove( void );
@@ -280,6 +286,9 @@ public:
     inline const Vector2& getCameraShake(void) const                    { return mCameraShakeOffset; }
     inline bool isCameraMounted( void ) const                           { return mCameraMounted; }
     inline bool isCameraMoving( void ) const                            { return mMovingCamera; }
+
+    /// Audio Listener
+    inline bool isProcessAudioListener(void) const { return mProcessAudioListener; }
 
     /// Camera Shake.
     void startCameraShake( const F32 magnitude, const F32 time );

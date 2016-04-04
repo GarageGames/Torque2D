@@ -50,7 +50,6 @@
 		2AB4C1A316DE9F1100B02479 /* AmbientForceController.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AB4C1A116DE9F1100B02479 /* AmbientForceController.cc */; };
 		2AB97A1D16B66BC70080F940 /* tamlCustom.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AB97A1B16B66BC70080F940 /* tamlCustom.cc */; };
 		2ABF5C8F16569A0C00BBBF1D /* osxMutex.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2ABF5C8E16569A0C00BBBF1D /* osxMutex.mm */; };
-		2AC4404516B0142B00FC4091 /* ImageFont.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AC4404316B0142B00FC4091 /* ImageFont.cc */; };
 		2AC5C7E81667C85700A0D046 /* platformStringTests.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AC5C7E71667C85700A0D046 /* platformStringTests.cc */; };
 		2ACAFD4A1705CF4A0022601C /* tamlJSONParser.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ACAFD481705CF4A0022601C /* tamlJSONParser.cc */; };
 		2ACF5A2816E52D4B00F838D9 /* SpriteBatchQuery.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ACF5A2516E52D4B00F838D9 /* SpriteBatchQuery.cc */; };
@@ -485,6 +484,11 @@
 		B350D158174EF62400033EBB /* fileSystem_ScriptBinding.cc in Sources */ = {isa = PBXBuildFile; fileRef = B350D156174EF62400033EBB /* fileSystem_ScriptBinding.cc */; };
 		B350D164174EF71B00033EBB /* metaScripting_ScriptBinding.cc in Sources */ = {isa = PBXBuildFile; fileRef = B350D161174EF71B00033EBB /* metaScripting_ScriptBinding.cc */; };
 		B350D172174EF91900033EBB /* audio_ScriptBinding.cc in Sources */ = {isa = PBXBuildFile; fileRef = B350D171174EF91900033EBB /* audio_ScriptBinding.cc */; };
+		D000F9731CB0CF4800C4D097 /* audioDescriptions.cc in Sources */ = {isa = PBXBuildFile; fileRef = D000F9711CB0CF4800C4D097 /* audioDescriptions.cc */; };
+		D000F97B1CB0D16A00C4D097 /* BitmapFont.cc in Sources */ = {isa = PBXBuildFile; fileRef = D000F9751CB0D16A00C4D097 /* BitmapFont.cc */; };
+		D000F97C1CB0D16A00C4D097 /* BitmapFontCharacter.cc in Sources */ = {isa = PBXBuildFile; fileRef = D000F9771CB0D16A00C4D097 /* BitmapFontCharacter.cc */; };
+		D000F9801CB0D1B300C4D097 /* FontAsset.cc in Sources */ = {isa = PBXBuildFile; fileRef = D000F97E1CB0D1B300C4D097 /* FontAsset.cc */; };
+		D000F9841CB0D25A00C4D097 /* TextSprite.cc in Sources */ = {isa = PBXBuildFile; fileRef = D000F9821CB0D25A00C4D097 /* TextSprite.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -594,9 +598,6 @@
 		2AB97A1B16B66BC70080F940 /* tamlCustom.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tamlCustom.cc; sourceTree = "<group>"; };
 		2AB97A1C16B66BC70080F940 /* tamlCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlCustom.h; sourceTree = "<group>"; };
 		2ABF5C8E16569A0C00BBBF1D /* osxMutex.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = osxMutex.mm; sourceTree = "<group>"; };
-		2AC4404216B0142B00FC4091 /* ImageFont_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFont_ScriptBinding.h; sourceTree = "<group>"; };
-		2AC4404316B0142B00FC4091 /* ImageFont.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageFont.cc; sourceTree = "<group>"; };
-		2AC4404416B0142B00FC4091 /* ImageFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFont.h; sourceTree = "<group>"; };
 		2AC5C7E71667C85700A0D046 /* platformStringTests.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = platformStringTests.cc; path = ../../../source/testing/tests/platformStringTests.cc; sourceTree = "<group>"; };
 		2ACAFD481705CF4A0022601C /* tamlJSONParser.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tamlJSONParser.cc; path = json/tamlJSONParser.cc; sourceTree = "<group>"; };
 		2ACAFD491705CF4A0022601C /* tamlJSONParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tamlJSONParser.h; path = json/tamlJSONParser.h; sourceTree = "<group>"; };
@@ -928,7 +929,6 @@
 		86BC7EC316518D4600D96ADF /* SceneObject.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneObject.cc; sourceTree = "<group>"; };
 		86BC7EC416518D4600D96ADF /* SceneObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObject.h; sourceTree = "<group>"; };
 		86BC7EC516518D4600D96ADF /* SceneObject_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObject_ScriptBinding.h; sourceTree = "<group>"; };
-		86BC7EC816518D4600D96ADF /* SceneObjectMoveToEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObjectMoveToEvent.h; sourceTree = "<group>"; };
 		86BC7EC916518D4600D96ADF /* SceneObjectRotateToEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObjectRotateToEvent.h; sourceTree = "<group>"; };
 		86BC7ECE16518D4600D96ADF /* Scroller.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scroller.cc; sourceTree = "<group>"; };
 		86BC7ECF16518D4600D96ADF /* Scroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scroller.h; sourceTree = "<group>"; };
@@ -1540,6 +1540,20 @@
 		B350D171174EF91900033EBB /* audio_ScriptBinding.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audio_ScriptBinding.cc; sourceTree = "<group>"; };
 		B350D173174EF93900033EBB /* undo_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = undo_ScriptBinding.h; sourceTree = "<group>"; };
 		B350D174174EFA6100033EBB /* Utility_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utility_ScriptBinding.h; sourceTree = "<group>"; };
+		D000F9711CB0CF4800C4D097 /* audioDescriptions.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audioDescriptions.cc; sourceTree = "<group>"; };
+		D000F9721CB0CF4800C4D097 /* audioDescriptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audioDescriptions.h; sourceTree = "<group>"; };
+		D000F9751CB0D16A00C4D097 /* BitmapFont.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapFont.cc; sourceTree = "<group>"; };
+		D000F9761CB0D16A00C4D097 /* BitmapFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitmapFont.h; sourceTree = "<group>"; };
+		D000F9771CB0D16A00C4D097 /* BitmapFontCharacter.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapFontCharacter.cc; sourceTree = "<group>"; };
+		D000F9781CB0D16A00C4D097 /* BitmapFontCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitmapFontCharacter.h; sourceTree = "<group>"; };
+		D000F9791CB0D16A00C4D097 /* BitmapFontCharacterInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitmapFontCharacterInfo.h; sourceTree = "<group>"; };
+		D000F97A1CB0D16A00C4D097 /* BitmapFontLineInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitmapFontLineInfo.h; sourceTree = "<group>"; };
+		D000F97D1CB0D1B300C4D097 /* FontAsset_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontAsset_ScriptBinding.h; sourceTree = "<group>"; };
+		D000F97E1CB0D1B300C4D097 /* FontAsset.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontAsset.cc; sourceTree = "<group>"; };
+		D000F97F1CB0D1B300C4D097 /* FontAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontAsset.h; sourceTree = "<group>"; };
+		D000F9811CB0D25A00C4D097 /* TextSprite_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextSprite_ScriptBinding.h; sourceTree = "<group>"; };
+		D000F9821CB0D25A00C4D097 /* TextSprite.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextSprite.cc; sourceTree = "<group>"; };
+		D000F9831CB0D25A00C4D097 /* TextSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextSprite.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2122,6 +2136,7 @@
 		869FF8C21651518C002FE082 /* Torque2D */ = {
 			isa = PBXGroup;
 			children = (
+				D000F9741CB0D16A00C4D097 /* bitmapFont */,
 				86BC7E7516518D4600D96ADF /* 2d */,
 				86BC7EE016518D4600D96ADF /* algorithm */,
 				86BC7EE716518D4600D96ADF /* assets */,
@@ -2182,6 +2197,9 @@
 		86BC7E7616518D4600D96ADF /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				D000F97E1CB0D1B300C4D097 /* FontAsset.cc */,
+				D000F97F1CB0D1B300C4D097 /* FontAsset.h */,
+				D000F97D1CB0D1B300C4D097 /* FontAsset_ScriptBinding.h */,
 				27908E1018A3F904002D41BD /* SkeletonAsset_ScriptBinding.h */,
 				27908E1118A3F904002D41BD /* SkeletonAsset.cc */,
 				27908E1218A3F904002D41BD /* SkeletonAsset.h */,
@@ -2289,12 +2307,12 @@
 		86BC7EB716518D4600D96ADF /* sceneobject */ = {
 			isa = PBXGroup;
 			children = (
+				D000F9811CB0D25A00C4D097 /* TextSprite_ScriptBinding.h */,
+				D000F9821CB0D25A00C4D097 /* TextSprite.cc */,
+				D000F9831CB0D25A00C4D097 /* TextSprite.h */,
 				86BC7EBB16518D4600D96ADF /* CompositeSprite.cc */,
 				86BC7EBC16518D4600D96ADF /* CompositeSprite.h */,
 				86BC7EBD16518D4600D96ADF /* CompositeSprite_ScriptBinding.h */,
-				2AC4404316B0142B00FC4091 /* ImageFont.cc */,
-				2AC4404416B0142B00FC4091 /* ImageFont.h */,
-				2AC4404216B0142B00FC4091 /* ImageFont_ScriptBinding.h */,
 				2A25738E16A48DAC00363C6F /* ParticlePlayer.cc */,
 				2A25738F16A48DAC00363C6F /* ParticlePlayer.h */,
 				2A25738D16A48DAC00363C6F /* ParticlePlayer_ScriptBinding.h */,
@@ -2303,7 +2321,6 @@
 				86BC7EC516518D4600D96ADF /* SceneObject_ScriptBinding.h */,
 				2AA6865A16D69943003CEF0A /* SceneObjectList.cc */,
 				2AA6865B16D69943003CEF0A /* SceneObjectList.h */,
-				86BC7EC816518D4600D96ADF /* SceneObjectMoveToEvent.h */,
 				86BC7EC916518D4600D96ADF /* SceneObjectRotateToEvent.h */,
 				2AA6865D16D69943003CEF0A /* SceneObjectSet.cc */,
 				2AA6865E16D69943003CEF0A /* SceneObjectSet.h */,
@@ -2376,6 +2393,8 @@
 		86BC7F0016518D4600D96ADF /* audio */ = {
 			isa = PBXGroup;
 			children = (
+				D000F9711CB0CF4800C4D097 /* audioDescriptions.cc */,
+				D000F9721CB0CF4800C4D097 /* audioDescriptions.h */,
 				B350D171174EF91900033EBB /* audio_ScriptBinding.cc */,
 				86BC7F0116518D4600D96ADF /* audio.cc */,
 				86BC7F0216518D4600D96ADF /* audio.h */,
@@ -3219,6 +3238,20 @@
 			path = threads;
 			sourceTree = "<group>";
 		};
+		D000F9741CB0D16A00C4D097 /* bitmapFont */ = {
+			isa = PBXGroup;
+			children = (
+				D000F9751CB0D16A00C4D097 /* BitmapFont.cc */,
+				D000F9761CB0D16A00C4D097 /* BitmapFont.h */,
+				D000F9771CB0D16A00C4D097 /* BitmapFontCharacter.cc */,
+				D000F9781CB0D16A00C4D097 /* BitmapFontCharacter.h */,
+				D000F9791CB0D16A00C4D097 /* BitmapFontCharacterInfo.h */,
+				D000F97A1CB0D16A00C4D097 /* BitmapFontLineInfo.h */,
+			);
+			name = bitmapFont;
+			path = ../../../source/bitmapFont;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3246,7 +3279,7 @@
 		869FF8AF1651518C002FE082 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Michael Perry";
 			};
 			buildConfigurationList = 869FF8B21651518C002FE082 /* Build configuration list for PBXProject "Torque2D" */;
@@ -3348,6 +3381,7 @@
 				27908DFB18A3F8CB002D41BD /* AnimationState.c in Sources */,
 				86D770991656873C0046D71F /* msgBox.cpp in Sources */,
 				86D770AA1656873C0046D71F /* scriptGroup.cc in Sources */,
+				D000F9731CB0CF4800C4D097 /* audioDescriptions.cc in Sources */,
 				86D770AB1656873C0046D71F /* scriptObject.cc in Sources */,
 				86D770AC1656873C0046D71F /* simBase.cc in Sources */,
 				86D770AD1656873C0046D71F /* simConsoleEvent.cc in Sources */,
@@ -3385,6 +3419,8 @@
 				86D7704C165687220046D71F /* centralDir.cc in Sources */,
 				86D7704D165687220046D71F /* compressor.cc in Sources */,
 				86D7704E165687220046D71F /* deflate.cc in Sources */,
+				D000F97C1CB0D16A00C4D097 /* BitmapFontCharacter.cc in Sources */,
+				D000F97B1CB0D16A00C4D097 /* BitmapFont.cc in Sources */,
 				86D7704F165687220046D71F /* extraField.cc in Sources */,
 				86D77050165687220046D71F /* fileHeader.cc in Sources */,
 				86D77051165687220046D71F /* stored.cc in Sources */,
@@ -3426,6 +3462,7 @@
 				27908E0A18A3F8CB002D41BD /* SkeletonBounds.c in Sources */,
 				86D76FD2165687060046D71F /* RemoteDebugger1.cc in Sources */,
 				86D76FD3165687060046D71F /* RemoteDebuggerBase.cc in Sources */,
+				D000F9801CB0D1B300C4D097 /* FontAsset.cc in Sources */,
 				86D76FD4165687060046D71F /* RemoteDebuggerBridge.cc in Sources */,
 				86D76FD5165687060046D71F /* telnetDebugger.cc in Sources */,
 				86D76FD6165687060046D71F /* delegateSignal.cpp in Sources */,
@@ -3660,6 +3697,7 @@
 				865A2331165187FF00527C44 /* jquant2.c in Sources */,
 				27908E0218A3F8CB002D41BD /* BoneData.c in Sources */,
 				865A2332165187FF00527C44 /* jutils.c in Sources */,
+				D000F9841CB0D25A00C4D097 /* TextSprite.cc in Sources */,
 				865A23421651881300527C44 /* png.c in Sources */,
 				865A23431651881300527C44 /* pngerror.c in Sources */,
 				27908E0718A3F8CB002D41BD /* Json.c in Sources */,
@@ -3717,7 +3755,6 @@
 				2A25739016A48DAC00363C6F /* ParticlePlayer.cc in Sources */,
 				2AE5B54216A6D860006908D5 /* ParticleAssetFieldCollection.cc in Sources */,
 				2AF3633916A9BBE0004ED7AA /* ParticleSystem.cc in Sources */,
-				2AC4404516B0142B00FC4091 /* ImageFont.cc in Sources */,
 				2AF1C54016B439BB00C1CF3A /* declaredAssets.cc in Sources */,
 				2AF1C54116B439BB00C1CF3A /* referencedAssets.cc in Sources */,
 				2AB97A1D16B66BC70080F940 /* tamlCustom.cc in Sources */,
@@ -3768,7 +3805,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -3795,7 +3831,6 @@
 		865A20AF165152EA00527C44 /* Shipping */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LIBRARY = "libc++";
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = ../../..;
@@ -3837,7 +3872,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -3862,7 +3896,7 @@
 				HEADER_SEARCH_PATHS = "";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				VALID_ARCHS = i386;
 			};
@@ -3872,7 +3906,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -3903,7 +3936,6 @@
 		869FF8D71651518C002FE082 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LIBRARY = "libc++";
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = ../../..;
@@ -3946,7 +3978,6 @@
 		869FF8D81651518C002FE082 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LIBRARY = "libc++";
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = ../../..;

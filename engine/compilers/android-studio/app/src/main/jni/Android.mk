@@ -198,6 +198,7 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
                     ../../../../../../lib/libvorbis/vorbisfile.c \
                     ../../../../../../lib/libvorbis/window.c \
 					../../../../../../source/2d/assets/AnimationAsset.cc \
+					../../../../../../source/2d/assets/FontAsset.cc \
 					../../../../../../source/2d/assets/ImageAsset.cc \
 					../../../../../../source/2d/assets/ParticleAsset.cc \
 					../../../../../../source/2d/assets/ParticleAssetEmitter.cc \
@@ -227,7 +228,6 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../source/2d/gui/guiSpriteCtrl.cc \
 					../../../../../../source/2d/gui/SceneWindow.cc \
 					../../../../../../source/2d/sceneobject/CompositeSprite.cc \
-					../../../../../../source/2d/sceneobject/ImageFont.cc \
 					../../../../../../source/2d/sceneobject/ParticlePlayer.cc \
 					../../../../../../source/2d/sceneobject/SceneObject.cc \
 					../../../../../../source/2d/sceneobject/SceneObjectList.cc \
@@ -236,6 +236,7 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../source/2d/sceneobject/ShapeVector.cc \
 					../../../../../../source/2d/sceneobject/SkeletonObject.cc \
 					../../../../../../source/2d/sceneobject/Sprite.cc \
+					../../../../../../source/2d/sceneobject/TextSprite.cc \
 					../../../../../../source/2d/sceneobject/Trigger.cc \
 					../../../../../../source/2d/scene/ContactFilter.cc \
 					../../../../../../source/2d/scene/DebugDraw.cc \
@@ -254,12 +255,15 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../source/assets/referencedAssets.cc \
                     ../../../../../../source/audio/audio.cc \
                     ../../../../../../source/audio/audioDataBlock.cc \
+					../../../../../../source/audio/audioDescriptions.cc \
                     ../../../../../../source/audio/audio_ScriptBinding.cc \
                     ../../../../../../source/audio/audioStreamSourceFactory.cc \
                     ../../../../../../source/audio/wavStreamSource.cc \
 					../../../../../../source/audio/AudioAsset.cc \
 					../../../../../../source/audio/audioBuffer.cc \
 					../../../../../../source/audio/vorbisStreamSource.cc \
+					../../../../../../source/bitmapFont/BitmapFont.cc \
+					../../../../../../source/bitmapFont/BitmapFontCharacter.cc \
 					../../../../../../source/Box2D/Collision/b2BroadPhase.cpp \
 					../../../../../../source/Box2D/Collision/b2CollideCircle.cpp \
 					../../../../../../source/Box2D/Collision/b2CollideEdge.cpp \
@@ -603,10 +607,12 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 #					../../../../../../source/testing/unitTesting.cc
  
 ifeq ($(APP_OPTIM),debug)
-	LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_DEBUG -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O0 -fsigned-char   
+	LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_DEBUG -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O0 -fsigned-char
+	LOCAL_CPPFLAGS := -std=gnu++11 $(LOCAL_CFLAGS)
 else
-	LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O3 -fsigned-char   
-endif				   
+	LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O3 -fsigned-char
+	LOCAL_CPPFLAGS := -std=gnu++11 $(LOCAL_CFLAGS)
+endif
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lz -lOpenSLES -L../../../../../../lib/openal/Android/$(TARGET_ARCH_ABI)
 LOCAL_STATIC_LIBRARIES := android_native_app_glue freetype-prebuilt
 LOCAL_SHARED_LIBRARIES := libopenal-prebuilt

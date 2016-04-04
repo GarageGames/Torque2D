@@ -142,7 +142,7 @@ void ShapeVector::sceneRender( const SceneRenderState* pSceneRenderState, const 
         glRotatef( mRadToDeg(getRenderAngle()), 0.0f, 0.0f, 1.0f );
 
         // Render the shape.
-        bool wireFrame = (pBatchRenderer->getWireframeMode() || this->getDebugMask() & Scene::DebugOption::SCENE_DEBUG_WIREFRAME_RENDER) ? true : false;
+        bool wireFrame = (pBatchRenderer->getWireframeMode() || this->getDebugMask() & Scene::SCENE_DEBUG_WIREFRAME_RENDER) ? true : false;
         renderCircleShape(position, mCircleRadius, wireFrame);
     }
     else
@@ -152,7 +152,7 @@ void ShapeVector::sceneRender( const SceneRenderState* pSceneRenderState, const 
         glRotatef( mRadToDeg(getRenderAngle()), 0.0f, 0.0f, 1.0f );
 
         // Render the shape.
-        bool wireFrame = (pBatchRenderer->getWireframeMode() || this->getDebugMask() & Scene::DebugOption::SCENE_DEBUG_WIREFRAME_RENDER) ? true : false;
+        bool wireFrame = (pBatchRenderer->getWireframeMode() || this->getDebugMask() & Scene::SCENE_DEBUG_WIREFRAME_RENDER) ? true : false;
         renderPolygonShape(vertexCount, wireFrame);
     }
 

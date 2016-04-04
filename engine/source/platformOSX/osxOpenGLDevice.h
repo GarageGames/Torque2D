@@ -73,6 +73,8 @@ public:
     
     bool setGammaCorrection(F32 g);
     
+    bool getVerticalSync();
+    
     bool setVerticalSync( bool sync );
     
 };

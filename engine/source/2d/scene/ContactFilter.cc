@@ -75,8 +75,8 @@ bool ContactFilter::ShouldCollide(b2Fixture* pFixtureA, b2Fixture* pFixtureB)
 bool ContactFilter::FilterOneWay(SceneObject* pSceneObjectA, SceneObject* pSceneObjectB, b2Fixture* pFixtureA, b2Fixture* pFixtureB)
 {
     // One way collisions only apply to edge or chain shapes.
-    if ((pFixtureA->GetType() == b2Shape::Type::e_chain || pFixtureA->GetType() == b2Shape::Type::e_edge) ||
-        (pFixtureB->GetType() == b2Shape::Type::e_chain || pFixtureB->GetType() == b2Shape::Type::e_edge))
+    if ((pFixtureA->GetType() == b2Shape::e_chain || pFixtureA->GetType() == b2Shape::e_edge) ||
+        (pFixtureB->GetType() == b2Shape::e_chain || pFixtureB->GetType() == b2Shape::e_edge))
     {
         // Convenience renaming.
         SceneObject* pPlatformObject = NULL;
@@ -103,7 +103,7 @@ bool ContactFilter::FilterOneWay(SceneObject* pSceneObjectA, SceneObject* pScene
         b2Vec2 shapeCentroid;
         b2AABB* box = new b2AABB();
 
-        if (pFixturePlatform->GetType() == b2Shape::Type::e_chain)
+        if (pFixturePlatform->GetType() == b2Shape::e_chain)
         {
             const b2ChainShape* shape = pPlatformObject->getCollisionChainShape(0);
             shape->ComputeAABB(box, pPlatformObject->getTransform(), 0);

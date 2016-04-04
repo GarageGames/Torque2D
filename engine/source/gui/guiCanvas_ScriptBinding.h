@@ -256,7 +256,7 @@ ConsoleMethodWithDocs( GuiCanvas, getMouseControl, ConsoleInt, 2, 2, ())
    if (control)
       return control->getId();
    
-   return NULL;
+   return 0;
 }
 
 //-----------------------------------------------------------------------------

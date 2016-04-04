@@ -5272,6 +5272,7 @@ static EnumTable::Enums DebugOptionsLookup[] =
                 { Scene::SCENE_DEBUG_CONTROLLERS,       "controllers" },
                 { Scene::SCENE_DEBUG_JOINTS,            "joints" },
                 { Scene::SCENE_DEBUG_WIREFRAME_RENDER,  "wireframe" },
+                { Scene::SCENE_DEBUG_AUDIO_SOURCES,     "audio"},
                 ///
                 { Scene::SCENE_DEBUG_AABB,              "aabb" },
                 { Scene::SCENE_DEBUG_OOBB,              "oobb" },

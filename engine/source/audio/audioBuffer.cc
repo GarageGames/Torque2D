@@ -25,7 +25,10 @@
 #include "io/stream.h"
 #include "console/console.h"
 #include "memory/frameAllocator.h"
+
+#ifndef TORQUE_OS_IOS
 #include "vorbis/vorbisfile.h"
+#endif
 
 #ifndef _MMATH_H_
 #include "math/mMath.h"
@@ -97,6 +100,7 @@ struct WAVChunkHdr
 
 #define CHUNKSIZE 4096
 
+#ifndef TORQUE_OS_IOS
 // Ogg Vorbis
 static size_t _ov_read_func(void *ptr, size_t size, size_t nmemb, void *datasource)
 {
@@ -135,6 +139,7 @@ static long _ov_tell_func(void *datasource)
 	Stream *stream = reinterpret_cast<Stream*>(datasource);
 	return stream->getPosition();
 }
+#endif
 
 
 //--------------------------------------
@@ -275,6 +280,7 @@ ALuint AudioBuffer::getALBuffer()
            malBuffer = bufferID;
        }
 #endif
+#ifndef TORQUE_OS_IOS
 		else if (len > 3 && !dStricmp(mFilename + len - 4, ".ogg"))
 		{
 #  ifdef LOG_SOUND_LOADS
@@ -282,6 +288,7 @@ ALuint AudioBuffer::getALBuffer()
 #  endif
 		   readSuccess = readOgg(obj);
 	   }
+#endif
 
       if(readSuccess)
          return(malBuffer);
@@ -432,6 +439,7 @@ bool AudioBuffer::readWAV(ResourceObject *obj)
    return false;
 }
 
+#ifndef TORQUE_OS_IOS
 // Read an Ogg Vorbis file from the given ResourceObject and initialize an alBuffer with it.
 // Pulled from: https://www.garagegames.com/community/forums/viewthread/136675
 bool AudioBuffer::readOgg(ResourceObject *obj)
@@ -534,3 +542,4 @@ long AudioBuffer::oggRead(OggVorbis_File* vf, char *buffer, int length, int bige
 
 	return offset;
 }
+#endif

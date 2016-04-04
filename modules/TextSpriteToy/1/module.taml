@@ -1,7 +1,7 @@
 <ModuleDefinition
-	ModuleId="ImageFontToy"
+	ModuleId="TextSpriteToy"
 	VersionId="1"
-	Description="Demonstrates creating an sprite that renders text."
+	Description="Demonstrates the amazing TextSprite!"
 	Dependencies="ToyAssets=1"
 	Type="toy"
 	ToyCategoryIndex="3"

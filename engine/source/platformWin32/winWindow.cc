@@ -74,32 +74,6 @@ extern U16  DIK_to_Key( U8 dikCode );
 
 Win32PlatState winState;
 
-
-//-----------------------------------------------------------------------------------------------------------------------------------------------------------
-//
-// Microsoft Layer for Unicode
-// http://msdn.microsoft.com/library/default.asp?url=/library/en-us/mslu/winprog/compiling_your_application_with_the_microsoft_layer_for_unicode.asp
-//
-//-----------------------------------------------------------------------------------------------------------------------------------------------------------
-#ifdef UNICODE
-
-HMODULE LoadUnicowsProc(void)
-{
-   return(LoadLibraryA("unicows.dll"));
-}
-
-#ifdef _cplusplus
-extern "C" {
-#endif
-   extern FARPROC _PfnLoadUnicows = (FARPROC) &LoadUnicowsProc;
-#ifdef _cplusplus
-}
-#endif
-
-#endif
-
-
-
 //--------------------------------------
 Win32PlatState::Win32PlatState()
 {

@@ -407,7 +407,7 @@ ConsoleFunctionWithDocs(alxGetSourcef, ConsoleFloat, 3, 3, ( handle , ALEnum ))
 */
 ConsoleFunctionWithDocs(alxGetSource3f, ConsoleString, 3, 3, ( handle , ALEnum ))
 {
-   ALenum e = getEnum(argv[2], (Source|Get|Float));
+   ALenum e = getEnum(argv[2], (Source|Get|Float3));
    if(e == AL_INVALID)
    {
       Con::errorf(ConsoleLogEntry::General, "cAudio_alxGetSource3f: invalid enum name '%s'", argv[2]);
@@ -630,7 +630,7 @@ ConsoleFunctionWithDocs(alxGetListenerf, ConsoleFloat, 2, 2, ( ALEnum ))
 */
 ConsoleFunctionWithDocs(alGetListener3f, ConsoleString, 2, 2, ( ALEnum ))
 {
-   ALenum e = getEnum(argv[2], (Source|Get|Float));
+   ALenum e = getEnum(argv[1], (Source|Get|Float3));
    if(e == AL_INVALID)
    {
       Con::errorf(ConsoleLogEntry::General, "alGetListener3f: invalid enum name '%s'", argv[1]);
@@ -641,7 +641,7 @@ ConsoleFunctionWithDocs(alGetListener3f, ConsoleString, 2, 2, ( ALEnum ))
    alxGetListenerPoint3F(e, &v);
 
    char * ret = Con::getReturnBuffer(64);
-   dSprintf(ret, 64, "%7.3f %7.3 %7.3", v.x, v.y, v.z);
+   dSprintf(ret, 64, "%7.3f %7.3f %7.3f", v.x, v.y, v.z);
    return(ret);
 }
 

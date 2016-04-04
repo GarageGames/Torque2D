@@ -1,0 +1,195 @@
+info face="Arial" size=128 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1 outline=0
+common lineHeight=128 base=103 scaleW=512 scaleH=512 pages=2 packed=0 alphaChnl=0 redChnl=4 greenChnl=4 blueChnl=4
+page id=0 file="Arial_0.png"
+page id=1 file="Arial_1.png"
+chars count=97
+char id=32   x=507   y=0     width=3     height=1     xoffset=-1    yoffset=127   xadvance=32    page=0  chnl=15
+char id=33   x=491   y=358   width=14    height=82    xoffset=8     yoffset=21    xadvance=29    page=0  chnl=15
+char id=34   x=275   y=227   width=32    height=29    xoffset=4     yoffset=21    xadvance=40    page=1  chnl=15
+char id=35   x=128   y=83    width=62    height=82    xoffset=0     yoffset=21    xadvance=63    page=1  chnl=15
+char id=36   x=321   y=0     width=55    height=97    xoffset=3     yoffset=17    xadvance=63    page=0  chnl=15
+char id=37   x=54    y=108   width=89    height=84    xoffset=6     yoffset=20    xadvance=101   page=0  chnl=15
+char id=38   x=74    y=193   width=70    height=84    xoffset=4     yoffset=20    xadvance=76    page=0  chnl=15
+char id=39   x=308   y=227   width=13    height=29    xoffset=4     yoffset=21    xadvance=22    page=1  chnl=15
+char id=40   x=243   y=0     width=28    height=105   xoffset=6     yoffset=21    xadvance=38    page=0  chnl=15
+char id=41   x=213   y=0     width=29    height=105   xoffset=6     yoffset=21    xadvance=38    page=0  chnl=15
+char id=42   x=471   y=166   width=38    height=35    xoffset=3     yoffset=21    xadvance=44    page=1  chnl=15
+char id=43   x=112   y=248   width=56    height=54    xoffset=6     yoffset=36    xadvance=67    page=1  chnl=15
+char id=44   x=322   y=227   width=13    height=27    xoffset=9     yoffset=93    xadvance=32    page=1  chnl=15
+char id=45   x=399   y=175   width=32    height=10    xoffset=3     yoffset=68    xadvance=38    page=0  chnl=15
+char id=46   x=442   y=259   width=13    height=10    xoffset=10    yoffset=93    xadvance=32    page=0  chnl=15
+char id=47   x=471   y=0     width=34    height=82    xoffset=-1    yoffset=21    xadvance=32    page=1  chnl=15
+char id=48   x=0     y=279   width=55    height=83    xoffset=4     yoffset=21    xadvance=63    page=0  chnl=15
+char id=49   x=50    y=166   width=31    height=82    xoffset=12    yoffset=21    xadvance=63    page=1  chnl=15
+char id=50   x=248   y=83    width=55    height=82    xoffset=3     yoffset=21    xadvance=63    page=1  chnl=15
+char id=51   x=56    y=279   width=55    height=83    xoffset=4     yoffset=21    xadvance=63    page=0  chnl=15
+char id=52   x=94    y=166   width=57    height=81    xoffset=1     yoffset=22    xadvance=63    page=1  chnl=15
+char id=53   x=304   y=83    width=55    height=82    xoffset=4     yoffset=22    xadvance=63    page=1  chnl=15
+char id=54   x=112   y=278   width=55    height=83    xoffset=4     yoffset=21    xadvance=63    page=0  chnl=15
+char id=55   x=152   y=166   width=54    height=81    xoffset=5     yoffset=22    xadvance=63    page=1  chnl=15
+char id=56   x=442   y=175   width=55    height=83    xoffset=4     yoffset=21    xadvance=63    page=0  chnl=15
+char id=57   x=168   y=278   width=55    height=83    xoffset=4     yoffset=21    xadvance=63    page=0  chnl=15
+char id=58   x=495   y=441   width=13    height=60    xoffset=10    yoffset=43    xadvance=32    page=0  chnl=15
+char id=59   x=207   y=166   width=13    height=77    xoffset=9     yoffset=43    xadvance=32    page=1  chnl=15
+char id=60   x=0     y=249   width=55    height=55    xoffset=6     yoffset=35    xadvance=67    page=1  chnl=15
+char id=61   x=219   y=244   width=55    height=35    xoffset=6     yoffset=45    xadvance=67    page=1  chnl=15
+char id=62   x=56    y=249   width=55    height=55    xoffset=6     yoffset=35    xadvance=67    page=1  chnl=15
+char id=63   x=224   y=278   width=54    height=83    xoffset=4     yoffset=20    xadvance=63    page=0  chnl=15
+char id=64   x=0     y=0     width=106   height=107   xoffset=6     yoffset=20    xadvance=116   page=0  chnl=15
+char id=65   x=109   y=363   width=78    height=82    xoffset=-1    yoffset=21    xadvance=76    page=0  chnl=15
+char id=66   x=64    y=83    width=63    height=82    xoffset=8     yoffset=21    xadvance=76    page=1  chnl=15
+char id=67   x=0     y=194   width=73    height=84    xoffset=5     yoffset=20    xadvance=82    page=0  chnl=15
+char id=68   x=0     y=0     width=69    height=82    xoffset=8     yoffset=21    xadvance=82    page=1  chnl=15
+char id=69   x=0     y=83    width=63    height=82    xoffset=8     yoffset=21    xadvance=76    page=1  chnl=15
+char id=70   x=191   y=83    width=56    height=82    xoffset=9     yoffset=21    xadvance=70    page=1  chnl=15
+char id=71   x=399   y=90    width=78    height=84    xoffset=5     yoffset=20    xadvance=89    page=0  chnl=15
+char id=72   x=139   y=0     width=66    height=82    xoffset=8     yoffset=21    xadvance=82    page=1  chnl=15
+char id=73   x=498   y=167   width=12    height=82    xoffset=10    yoffset=21    xadvance=32    page=0  chnl=15
+char id=74   x=460   y=0     width=46    height=83    xoffset=3     yoffset=21    xadvance=57    page=0  chnl=15
+char id=75   x=70    y=0     width=68    height=82    xoffset=8     yoffset=21    xadvance=76    page=1  chnl=15
+char id=76   x=360   y=83    width=52    height=82    xoffset=8     yoffset=21    xadvance=63    page=1  chnl=15
+char id=77   x=424   y=275   width=79    height=82    xoffset=8     yoffset=21    xadvance=95    page=0  chnl=15
+char id=78   x=340   y=0     width=65    height=82    xoffset=8     yoffset=21    xadvance=82    page=1  chnl=15
+char id=79   x=318   y=106   width=80    height=84    xoffset=5     yoffset=20    xadvance=89    page=0  chnl=15
+char id=80   x=406   y=0     width=64    height=82    xoffset=8     yoffset=21    xadvance=76    page=1  chnl=15
+char id=81   x=377   y=0     width=82    height=89    xoffset=4     yoffset=20    xadvance=89    page=0  chnl=15
+char id=82   x=417   y=359   width=73    height=82    xoffset=8     yoffset=21    xadvance=82    page=0  chnl=15
+char id=83   x=145   y=193   width=67    height=84    xoffset=4     yoffset=20    xadvance=76    page=0  chnl=15
+char id=84   x=206   y=0     width=66    height=82    xoffset=3     yoffset=21    xadvance=71    page=1  chnl=15
+char id=85   x=375   y=191   width=66    height=83    xoffset=8     yoffset=21    xadvance=82    page=0  chnl=15
+char id=86   x=265   y=362   width=76    height=82    xoffset=0     yoffset=21    xadvance=76    page=0  chnl=15
+char id=87   x=0     y=363   width=108   height=82    xoffset=1     yoffset=21    xadvance=110   page=0  chnl=15
+char id=88   x=188   y=362   width=76    height=82    xoffset=0     yoffset=21    xadvance=77    page=0  chnl=15
+char id=89   x=342   y=360   width=74    height=82    xoffset=0     yoffset=21    xadvance=75    page=0  chnl=15
+char id=90   x=273   y=0     width=66    height=82    xoffset=2     yoffset=21    xadvance=70    page=1  chnl=15
+char id=91   x=272   y=0     width=24    height=105   xoffset=7     yoffset=21    xadvance=32    page=0  chnl=15
+char id=92   x=464   y=83    width=34    height=82    xoffset=-1    yoffset=21    xadvance=32    page=1  chnl=15
+char id=93   x=297   y=0     width=23    height=105   xoffset=2     yoffset=21    xadvance=32    page=0  chnl=15
+char id=94   x=169   y=248   width=49    height=44    xoffset=2     yoffset=20    xadvance=53    page=1  chnl=15
+char id=95   x=418   y=227   width=68    height=7     xoffset=-3    yoffset=119   xadvance=63    page=1  chnl=15
+char id=96   x=396   y=227   width=21    height=16    xoffset=5     yoffset=21    xadvance=38    page=1  chnl=15
+char id=97   x=58    y=446   width=56    height=62    xoffset=3     yoffset=42    xadvance=63    page=0  chnl=15
+char id=98   x=333   y=276   width=52    height=83    xoffset=7     yoffset=21    xadvance=63    page=0  chnl=15
+char id=99   x=172   y=446   width=53    height=62    xoffset=4     yoffset=42    xadvance=57    page=0  chnl=15
+char id=100  x=279   y=276   width=53    height=83    xoffset=3     yoffset=21    xadvance=63    page=0  chnl=15
+char id=101  x=115   y=446   width=56    height=62    xoffset=3     yoffset=42    xadvance=63    page=0  chnl=15
+char id=102  x=386   y=275   width=37    height=83    xoffset=0     yoffset=20    xadvance=32    page=0  chnl=15
+char id=103  x=0     y=108   width=53    height=85    xoffset=3     yoffset=42    xadvance=63    page=0  chnl=15
+char id=104  x=0     y=166   width=49    height=82    xoffset=7     yoffset=21    xadvance=63    page=1  chnl=15
+char id=105  x=82    y=166   width=11    height=82    xoffset=7     yoffset=21    xadvance=25    page=1  chnl=15
+char id=106  x=188   y=0     width=24    height=106   xoffset=-6    yoffset=21    xadvance=25    page=0  chnl=15
+char id=107  x=413   y=83    width=50    height=82    xoffset=7     yoffset=21    xadvance=57    page=1  chnl=15
+char id=108  x=499   y=83    width=12    height=82    xoffset=6     yoffset=21    xadvance=25    page=1  chnl=15
+char id=109  x=277   y=445   width=82    height=61    xoffset=7     yoffset=42    xadvance=95    page=0  chnl=15
+char id=110  x=411   y=443   width=49    height=61    xoffset=7     yoffset=42    xadvance=63    page=0  chnl=15
+char id=111  x=0     y=446   width=57    height=62    xoffset=3     yoffset=42    xadvance=63    page=0  chnl=15
+char id=112  x=322   y=191   width=52    height=84    xoffset=7     yoffset=42    xadvance=63    page=0  chnl=15
+char id=113  x=268   y=191   width=53    height=84    xoffset=3     yoffset=42    xadvance=63    page=0  chnl=15
+char id=114  x=461   y=442   width=33    height=61    xoffset=7     yoffset=42    xadvance=38    page=0  chnl=15
+char id=115  x=226   y=445   width=50    height=62    xoffset=3     yoffset=42    xadvance=57    page=0  chnl=15
+char id=116  x=478   y=84    width=31    height=82    xoffset=1     yoffset=22    xadvance=32    page=0  chnl=15
+char id=117  x=360   y=443   width=50    height=61    xoffset=6     yoffset=43    xadvance=63    page=0  chnl=15
+char id=118  x=360   y=166   width=55    height=60    xoffset=1     yoffset=43    xadvance=57    page=1  chnl=15
+char id=119  x=221   y=166   width=81    height=60    xoffset=0     yoffset=43    xadvance=81    page=1  chnl=15
+char id=120  x=303   y=166   width=56    height=60    xoffset=0     yoffset=43    xadvance=56    page=1  chnl=15
+char id=121  x=213   y=193   width=54    height=84    xoffset=1     yoffset=43    xadvance=55    page=0  chnl=15
+char id=122  x=416   y=166   width=54    height=60    xoffset=1     yoffset=43    xadvance=57    page=1  chnl=15
+char id=123  x=107   y=0     width=34    height=107   xoffset=2     yoffset=20    xadvance=38    page=0  chnl=15
+char id=124  x=176   y=0     width=11    height=107   xoffset=9     yoffset=21    xadvance=29    page=0  chnl=15
+char id=125  x=142   y=0     width=33    height=107   xoffset=2     yoffset=20    xadvance=38    page=0  chnl=15
+char id=126  x=336   y=227   width=59    height=21    xoffset=4     yoffset=54    xadvance=67    page=1  chnl=15
+char id=169  x=231   y=106   width=86    height=84    xoffset=-1    yoffset=20    xadvance=84    page=0  chnl=15
+char id=174  x=144   y=108   width=86    height=84    xoffset=-1    yoffset=20    xadvance=84    page=0  chnl=15
+kernings count=92
+kerning first=32  second=65  amount=-6  
+kerning first=32  second=84  amount=-2  
+kerning first=32  second=89  amount=-2  
+kerning first=121 second=46  amount=-9  
+kerning first=121 second=44  amount=-9  
+kerning first=119 second=46  amount=-6  
+kerning first=119 second=44  amount=-6  
+kerning first=118 second=46  amount=-9  
+kerning first=118 second=44  amount=-9  
+kerning first=114 second=46  amount=-6  
+kerning first=49  second=49  amount=-9  
+kerning first=65  second=32  amount=-6  
+kerning first=65  second=84  amount=-9  
+kerning first=65  second=86  amount=-9  
+kerning first=65  second=87  amount=-4  
+kerning first=65  second=89  amount=-9  
+kerning first=65  second=118 amount=-2  
+kerning first=65  second=119 amount=-2  
+kerning first=65  second=121 amount=-2  
+kerning first=114 second=44  amount=-6  
+kerning first=70  second=44  amount=-13 
+kerning first=70  second=46  amount=-13 
+kerning first=70  second=65  amount=-6  
+kerning first=76  second=32  amount=-4  
+kerning first=76  second=84  amount=-9  
+kerning first=76  second=86  amount=-9  
+kerning first=76  second=87  amount=-9  
+kerning first=76  second=89  amount=-9  
+kerning first=76  second=121 amount=-4  
+kerning first=102 second=102 amount=-2  
+kerning first=80  second=32  amount=-2  
+kerning first=80  second=44  amount=-15 
+kerning first=80  second=46  amount=-15 
+kerning first=80  second=65  amount=-9  
+kerning first=82  second=84  amount=-2  
+kerning first=82  second=86  amount=-2  
+kerning first=82  second=87  amount=-2  
+kerning first=82  second=89  amount=-2  
+kerning first=84  second=32  amount=-2  
+kerning first=84  second=44  amount=-13 
+kerning first=84  second=45  amount=-6  
+kerning first=84  second=46  amount=-13 
+kerning first=84  second=58  amount=-13 
+kerning first=89  second=118 amount=-6  
+kerning first=84  second=65  amount=-9  
+kerning first=84  second=79  amount=-2  
+kerning first=84  second=97  amount=-13 
+kerning first=84  second=99  amount=-13 
+kerning first=84  second=101 amount=-13 
+kerning first=84  second=105 amount=-4  
+kerning first=84  second=111 amount=-13 
+kerning first=84  second=114 amount=-4  
+kerning first=84  second=115 amount=-13 
+kerning first=84  second=117 amount=-4  
+kerning first=84  second=119 amount=-6  
+kerning first=84  second=121 amount=-6  
+kerning first=86  second=44  amount=-11 
+kerning first=86  second=45  amount=-6  
+kerning first=86  second=46  amount=-11 
+kerning first=86  second=58  amount=-4  
+kerning first=89  second=117 amount=-6  
+kerning first=86  second=65  amount=-9  
+kerning first=86  second=97  amount=-9  
+kerning first=86  second=101 amount=-6  
+kerning first=86  second=105 amount=-2  
+kerning first=86  second=111 amount=-6  
+kerning first=86  second=114 amount=-4  
+kerning first=86  second=117 amount=-4  
+kerning first=86  second=121 amount=-4  
+kerning first=87  second=44  amount=-6  
+kerning first=87  second=45  amount=-2  
+kerning first=87  second=46  amount=-6  
+kerning first=87  second=58  amount=-2  
+kerning first=89  second=113 amount=-11 
+kerning first=87  second=65  amount=-4  
+kerning first=87  second=97  amount=-4  
+kerning first=87  second=101 amount=-2  
+kerning first=89  second=112 amount=-9  
+kerning first=87  second=111 amount=-2  
+kerning first=87  second=114 amount=-2  
+kerning first=87  second=117 amount=-2  
+kerning first=87  second=121 amount=-1  
+kerning first=89  second=32  amount=-2  
+kerning first=89  second=44  amount=-15 
+kerning first=89  second=45  amount=-11 
+kerning first=89  second=46  amount=-15 
+kerning first=89  second=58  amount=-6  
+kerning first=89  second=111 amount=-11 
+kerning first=89  second=65  amount=-9  
+kerning first=89  second=97  amount=-9  
+kerning first=89  second=101 amount=-11 
+kerning first=89  second=105 amount=-4  

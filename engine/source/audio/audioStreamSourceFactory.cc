@@ -30,7 +30,10 @@
 #include "audio/audioStreamSourceFactory.h"
 
 #include "audio/wavStreamSource.h"
+
+#ifndef TORQUE_OS_IOS
 #include "audio/vorbisStreamSource.h"
+#endif
 
 AudioStreamSource* AudioStreamSourceFactory::getNewInstance(const char *filename)
 {
@@ -38,8 +41,10 @@ AudioStreamSource* AudioStreamSourceFactory::getNewInstance(const char *filename
 	if(len > 3 && !dStricmp(filename + len - 4, ".wav"))
 		return new WavStreamSource(filename);
 	
+#ifndef TORQUE_OS_IOS
 	if (len > 3 && !dStricmp(filename + len - 4, ".ogg"))
 		return new VorbisStreamSource(filename);
+#endif
 
 	return NULL;
 }

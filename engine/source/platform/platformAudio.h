@@ -86,6 +86,7 @@ class AudioStreamSource;
 AUDIOHANDLE alxCreateSource(const Audio::Description *desc, const char *filename, const MatrixF *transform=NULL, AudioSampleEnvironment * sampleEnvironment = 0);
 AUDIOHANDLE alxCreateSource(AudioDescription *descObject, const char *filename, const MatrixF *transform=NULL, AudioSampleEnvironment * sampleEnvironment = 0);
 AUDIOHANDLE alxCreateSource(const AudioAsset *profile, const MatrixF *transform=NULL);
+AUDIOHANDLE alxCreateSource_AD(const AudioAsset *profile, const AudioDescription* description, const MatrixF *transform);
 AudioStreamSource* alxFindAudioStreamSource(AUDIOHANDLE handle);
 
 AUDIOHANDLE alxPlay(AUDIOHANDLE handle);

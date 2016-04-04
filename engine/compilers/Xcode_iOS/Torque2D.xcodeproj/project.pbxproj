@@ -40,7 +40,6 @@
 		2AB4C1B016DE9F6700B02479 /* GroupedSceneController.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AB4C1AA16DE9F6700B02479 /* GroupedSceneController.cc */; };
 		2AB4C1B116DE9F6700B02479 /* PickingSceneController.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AB4C1AD16DE9F6700B02479 /* PickingSceneController.cc */; };
 		2AB97A2116B66BE50080F940 /* tamlCustom.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AB97A1F16B66BE50080F940 /* tamlCustom.cc */; };
-		2AC4404E16B0144500FC4091 /* ImageFont.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AC4404C16B0144500FC4091 /* ImageFont.cc */; };
 		2ACAFD471705CF340022601C /* tamlJSONParser.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ACAFD451705CF340022601C /* tamlJSONParser.cc */; };
 		2ACF5A2C16E52D6A00F838D9 /* SpriteBatchQuery.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2ACF5A2916E52D6A00F838D9 /* SpriteBatchQuery.cc */; };
 		2AD42156170434C2005BB8AD /* tamlBinaryReader.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2AD42152170434C2005BB8AD /* tamlBinaryReader.cc */; };
@@ -508,6 +507,11 @@
 		B350D1A3174F063200033EBB /* math_ScriptBinding.cc in Sources */ = {isa = PBXBuildFile; fileRef = B350D19F174F063200033EBB /* math_ScriptBinding.cc */; };
 		B350D1A5174F064000033EBB /* frameAllocator_ScriptBinding.cc in Sources */ = {isa = PBXBuildFile; fileRef = B350D1A4174F064000033EBB /* frameAllocator_ScriptBinding.cc */; };
 		B350D1BB174F06B700033EBB /* platformNetwork_ScriptBinding.cc in Sources */ = {isa = PBXBuildFile; fileRef = B350D1B8174F06B700033EBB /* platformNetwork_ScriptBinding.cc */; };
+		D000F9881CB0D44600C4D097 /* TextSprite.cc in Sources */ = {isa = PBXBuildFile; fileRef = D000F9861CB0D44600C4D097 /* TextSprite.cc */; };
+		D000F98C1CB0D46D00C4D097 /* FontAsset.cc in Sources */ = {isa = PBXBuildFile; fileRef = D000F98A1CB0D46D00C4D097 /* FontAsset.cc */; };
+		D000F9941CB0D48600C4D097 /* BitmapFont.cc in Sources */ = {isa = PBXBuildFile; fileRef = D000F98E1CB0D48600C4D097 /* BitmapFont.cc */; };
+		D000F9951CB0D48600C4D097 /* BitmapFontCharacter.cc in Sources */ = {isa = PBXBuildFile; fileRef = D000F9901CB0D48600C4D097 /* BitmapFontCharacter.cc */; };
+		D000F9981CB0D5DD00C4D097 /* audioDescriptions.cc in Sources */ = {isa = PBXBuildFile; fileRef = D000F9961CB0D5DD00C4D097 /* audioDescriptions.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -588,9 +592,6 @@
 		2AB4C1AF16DE9F6700B02479 /* SceneController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneController.h; path = controllers/core/SceneController.h; sourceTree = "<group>"; };
 		2AB97A1F16B66BE50080F940 /* tamlCustom.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tamlCustom.cc; sourceTree = "<group>"; };
 		2AB97A2016B66BE50080F940 /* tamlCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tamlCustom.h; sourceTree = "<group>"; };
-		2AC4404B16B0144500FC4091 /* ImageFont_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFont_ScriptBinding.h; sourceTree = "<group>"; };
-		2AC4404C16B0144500FC4091 /* ImageFont.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageFont.cc; sourceTree = "<group>"; };
-		2AC4404D16B0144500FC4091 /* ImageFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFont.h; sourceTree = "<group>"; };
 		2ACAFD451705CF340022601C /* tamlJSONParser.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tamlJSONParser.cc; path = json/tamlJSONParser.cc; sourceTree = "<group>"; };
 		2ACAFD461705CF340022601C /* tamlJSONParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tamlJSONParser.h; path = json/tamlJSONParser.h; sourceTree = "<group>"; };
 		2ACF5A2916E52D6A00F838D9 /* SpriteBatchQuery.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpriteBatchQuery.cc; sourceTree = "<group>"; };
@@ -784,7 +785,6 @@
 		867BAD5216AEC9050033868F /* SceneObject.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneObject.cc; sourceTree = "<group>"; };
 		867BAD5316AEC9050033868F /* SceneObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObject.h; sourceTree = "<group>"; };
 		867BAD5416AEC9050033868F /* SceneObject_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObject_ScriptBinding.h; sourceTree = "<group>"; };
-		867BAD5716AEC9050033868F /* SceneObjectMoveToEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObjectMoveToEvent.h; sourceTree = "<group>"; };
 		867BAD5816AEC9050033868F /* SceneObjectRotateToEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneObjectRotateToEvent.h; sourceTree = "<group>"; };
 		867BAD5D16AEC9050033868F /* Scroller.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scroller.cc; sourceTree = "<group>"; };
 		867BAD5E16AEC9050033868F /* Scroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scroller.h; sourceTree = "<group>"; };
@@ -1289,10 +1289,8 @@
 		867BAFAE16AEC9050033868F /* types.ppc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.ppc.h; sourceTree = "<group>"; };
 		867BAFAF16AEC9050033868F /* types.visualc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.visualc.h; sourceTree = "<group>"; };
 		867BAFB016AEC9050033868F /* types.win32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.win32.h; sourceTree = "<group>"; };
-		867BAFB116AEC9050033868F /* typesLinux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typesLinux.h; sourceTree = "<group>"; };
 		867BAFB216AEC9050033868F /* typesPPC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typesPPC.h; sourceTree = "<group>"; };
 		867BAFB316AEC9050033868F /* typesWin32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typesWin32.h; sourceTree = "<group>"; };
-		867BAFB416AEC9050033868F /* typesX86UNIX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typesX86UNIX.h; sourceTree = "<group>"; };
 		867BAFB616AEC9050033868F /* scriptGroup.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scriptGroup.cc; sourceTree = "<group>"; };
 		867BAFB716AEC9050033868F /* scriptGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scriptGroup.h; sourceTree = "<group>"; };
 		867BAFB816AEC9050033868F /* scriptObject.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scriptObject.cc; sourceTree = "<group>"; };
@@ -1586,6 +1584,20 @@
 		B350D1C2174F06DE00033EBB /* simSet_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simSet_ScriptBinding.h; sourceTree = "<group>"; };
 		B350D1C3174F06ED00033EBB /* stringBuffer_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stringBuffer_ScriptBinding.h; sourceTree = "<group>"; };
 		B350D1C4174F06ED00033EBB /* stringUnit_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stringUnit_ScriptBinding.h; sourceTree = "<group>"; };
+		D000F9851CB0D44600C4D097 /* TextSprite_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextSprite_ScriptBinding.h; sourceTree = "<group>"; };
+		D000F9861CB0D44600C4D097 /* TextSprite.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextSprite.cc; sourceTree = "<group>"; };
+		D000F9871CB0D44600C4D097 /* TextSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextSprite.h; sourceTree = "<group>"; };
+		D000F9891CB0D46D00C4D097 /* FontAsset_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontAsset_ScriptBinding.h; sourceTree = "<group>"; };
+		D000F98A1CB0D46D00C4D097 /* FontAsset.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontAsset.cc; sourceTree = "<group>"; };
+		D000F98B1CB0D46D00C4D097 /* FontAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontAsset.h; sourceTree = "<group>"; };
+		D000F98E1CB0D48600C4D097 /* BitmapFont.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapFont.cc; sourceTree = "<group>"; };
+		D000F98F1CB0D48600C4D097 /* BitmapFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitmapFont.h; sourceTree = "<group>"; };
+		D000F9901CB0D48600C4D097 /* BitmapFontCharacter.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapFontCharacter.cc; sourceTree = "<group>"; };
+		D000F9911CB0D48600C4D097 /* BitmapFontCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitmapFontCharacter.h; sourceTree = "<group>"; };
+		D000F9921CB0D48600C4D097 /* BitmapFontCharacterInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitmapFontCharacterInfo.h; sourceTree = "<group>"; };
+		D000F9931CB0D48600C4D097 /* BitmapFontLineInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitmapFontLineInfo.h; sourceTree = "<group>"; };
+		D000F9961CB0D5DD00C4D097 /* audioDescriptions.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audioDescriptions.cc; sourceTree = "<group>"; };
+		D000F9971CB0D5DD00C4D097 /* audioDescriptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audioDescriptions.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1879,6 +1891,9 @@
 		867BACF916AEC9050033868F /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				D000F9891CB0D46D00C4D097 /* FontAsset_ScriptBinding.h */,
+				D000F98A1CB0D46D00C4D097 /* FontAsset.cc */,
+				D000F98B1CB0D46D00C4D097 /* FontAsset.h */,
 				27908E1818A3FA9C002D41BD /* SkeletonAsset_ScriptBinding.h */,
 				27908E1918A3FA9C002D41BD /* SkeletonAsset.cc */,
 				27908E1A18A3FA9C002D41BD /* SkeletonAsset.h */,
@@ -1986,6 +2001,9 @@
 		867BAD4516AEC9050033868F /* sceneobject */ = {
 			isa = PBXGroup;
 			children = (
+				D000F9851CB0D44600C4D097 /* TextSprite_ScriptBinding.h */,
+				D000F9861CB0D44600C4D097 /* TextSprite.cc */,
+				D000F9871CB0D44600C4D097 /* TextSprite.h */,
 				27908E1C18A3FAB1002D41BD /* SkeletonObject_ScriptBinding.h */,
 				27908E1D18A3FAB1002D41BD /* SkeletonObject.cc */,
 				27908E1E18A3FAB1002D41BD /* SkeletonObject.h */,
@@ -1994,9 +2012,6 @@
 				2AA6866716D69968003CEF0A /* SceneObjectSet_ScriptBinding.h */,
 				2AA6866816D69968003CEF0A /* SceneObjectSet.cc */,
 				2AA6866916D69968003CEF0A /* SceneObjectSet.h */,
-				2AC4404B16B0144500FC4091 /* ImageFont_ScriptBinding.h */,
-				2AC4404C16B0144500FC4091 /* ImageFont.cc */,
-				2AC4404D16B0144500FC4091 /* ImageFont.h */,
 				867BAD4916AEC9050033868F /* CompositeSprite.cc */,
 				867BAD4A16AEC9050033868F /* CompositeSprite.h */,
 				867BAD4B16AEC9050033868F /* CompositeSprite_ScriptBinding.h */,
@@ -2006,7 +2021,6 @@
 				867BAD5216AEC9050033868F /* SceneObject.cc */,
 				867BAD5316AEC9050033868F /* SceneObject.h */,
 				867BAD5416AEC9050033868F /* SceneObject_ScriptBinding.h */,
-				867BAD5716AEC9050033868F /* SceneObjectMoveToEvent.h */,
 				867BAD5816AEC9050033868F /* SceneObjectRotateToEvent.h */,
 				867BAD5D16AEC9050033868F /* Scroller.cc */,
 				867BAD5E16AEC9050033868F /* Scroller.h */,
@@ -2073,6 +2087,8 @@
 		867BAD8916AEC9050033868F /* audio */ = {
 			isa = PBXGroup;
 			children = (
+				D000F9961CB0D5DD00C4D097 /* audioDescriptions.cc */,
+				D000F9971CB0D5DD00C4D097 /* audioDescriptions.h */,
 				B350D17B174F053800033EBB /* audio_ScriptBinding.cc */,
 				867BAD8A16AEC9050033868F /* audio.cc */,
 				867BAD8B16AEC9050033868F /* audio.h */,
@@ -2819,10 +2835,8 @@
 				867BAFAE16AEC9050033868F /* types.ppc.h */,
 				867BAFAF16AEC9050033868F /* types.visualc.h */,
 				867BAFB016AEC9050033868F /* types.win32.h */,
-				867BAFB116AEC9050033868F /* typesLinux.h */,
 				867BAFB216AEC9050033868F /* typesPPC.h */,
 				867BAFB316AEC9050033868F /* typesWin32.h */,
-				867BAFB416AEC9050033868F /* typesX86UNIX.h */,
 			);
 			name = platform;
 			path = ../../../source/platform;
@@ -3224,6 +3238,7 @@
 		86A9A3BA16AEC786003F01E6 /* Torque2D */ = {
 			isa = PBXGroup;
 			children = (
+				D000F98D1CB0D48600C4D097 /* bitmapFont */,
 				867BACF816AEC9050033868F /* 2d */,
 				867BAD6916AEC9050033868F /* algorithm */,
 				867BAD7016AEC9050033868F /* assets */,
@@ -3274,6 +3289,20 @@
 			);
 			name = "Supporting Files";
 			path = Torque2D;
+			sourceTree = "<group>";
+		};
+		D000F98D1CB0D48600C4D097 /* bitmapFont */ = {
+			isa = PBXGroup;
+			children = (
+				D000F98E1CB0D48600C4D097 /* BitmapFont.cc */,
+				D000F98F1CB0D48600C4D097 /* BitmapFont.h */,
+				D000F9901CB0D48600C4D097 /* BitmapFontCharacter.cc */,
+				D000F9911CB0D48600C4D097 /* BitmapFontCharacter.h */,
+				D000F9921CB0D48600C4D097 /* BitmapFontCharacterInfo.h */,
+				D000F9931CB0D48600C4D097 /* BitmapFontLineInfo.h */,
+			);
+			name = bitmapFont;
+			path = ../../../source/bitmapFont;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3429,6 +3458,7 @@
 				867BB00B16AEC9050033868F /* assetQuery.cc in Sources */,
 				867BB00D16AEC9050033868F /* assetTagsManifest.cc in Sources */,
 				867BB00E16AEC9050033868F /* audio.cc in Sources */,
+				D000F9981CB0D5DD00C4D097 /* audioDescriptions.cc in Sources */,
 				27908E5418A3FAE1002D41BD /* AttachmentLoader.c in Sources */,
 				867BB00F16AEC9050033868F /* AudioAsset.cc in Sources */,
 				867BB01016AEC9050033868F /* audioBuffer.cc in Sources */,
@@ -3534,6 +3564,7 @@
 				867BB07D16AEC9050033868F /* guiCanvas.cc in Sources */,
 				867BB07F16AEC9050033868F /* guiConsole.cc in Sources */,
 				867BB08016AEC9050033868F /* guiConsoleEditCtrl.cc in Sources */,
+				D000F9951CB0D48600C4D097 /* BitmapFontCharacter.cc in Sources */,
 				867BB08116AEC9050033868F /* guiConsoleTextCtrl.cc in Sources */,
 				867BB08216AEC9050033868F /* guiControl.cc in Sources */,
 				867BB08316AEC9050033868F /* guiDefaultControlRender.cc in Sources */,
@@ -3576,6 +3607,7 @@
 				867BB0A816AEC9050033868F /* centralDir.cc in Sources */,
 				27908E5118A3FAE1002D41BD /* Atlas.c in Sources */,
 				867BB0A916AEC9050033868F /* compressor.cc in Sources */,
+				D000F98C1CB0D46D00C4D097 /* FontAsset.cc in Sources */,
 				867BB0AA16AEC9050033868F /* deflate.cc in Sources */,
 				867BB0AB16AEC9050033868F /* extraField.cc in Sources */,
 				867BB0AC16AEC9050033868F /* fileHeader.cc in Sources */,
@@ -3729,6 +3761,7 @@
 				867BB21D16AECA070033868F /* pngread.c in Sources */,
 				867BB21E16AECA070033868F /* pngrio.c in Sources */,
 				867BB21F16AECA070033868F /* pngrtran.c in Sources */,
+				D000F9881CB0D44600C4D097 /* TextSprite.cc in Sources */,
 				867BB22016AECA070033868F /* pngrutil.c in Sources */,
 				867BB22116AECA070033868F /* pngset.c in Sources */,
 				867BB22216AECA070033868F /* pngtrans.c in Sources */,
@@ -3762,6 +3795,7 @@
 				27908E4F18A3FAE1002D41BD /* AnimationState.c in Sources */,
 				867BB26B16AECA110033868F /* jddctmgr.c in Sources */,
 				867BB26C16AECA110033868F /* jdhuff.c in Sources */,
+				D000F9941CB0D48600C4D097 /* BitmapFont.cc in Sources */,
 				867BB26D16AECA110033868F /* jdinput.c in Sources */,
 				867BB26E16AECA110033868F /* jdmainct.c in Sources */,
 				867BB26F16AECA110033868F /* jdmarker.c in Sources */,
@@ -3785,7 +3819,6 @@
 				867BB28116AECA110033868F /* jquant2.c in Sources */,
 				867BB28216AECA110033868F /* jutils.c in Sources */,
 				867BB44416AED2850033868F /* iOSGL2ES.mm in Sources */,
-				2AC4404E16B0144500FC4091 /* ImageFont.cc in Sources */,
 				86555D3716B2C2B400881446 /* T2DAppDelegate.mm in Sources */,
 				86555D3816B2C2B400881446 /* T2DView.mm in Sources */,
 				86555D3916B2C2B400881446 /* T2DViewController.mm in Sources */,

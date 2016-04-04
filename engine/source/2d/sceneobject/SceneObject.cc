@@ -183,11 +183,6 @@ SceneObject::SceneObject() :
     /// Camera mounting.
     mpAttachedCamera(NULL),
 
-    /// GUI attachment.
-    mAttachedGuiSizeControl(false),
-    mpAttachedGui(NULL),
-    mpAttachedGuiSceneWindow(NULL),
-
     /// Safe deletion.
     mBeingSafeDeleted(false),
     mSafeDeleteReady(true),
@@ -206,6 +201,9 @@ SceneObject::SceneObject() :
     VECTOR_SET_ASSOCIATION( mDestroyNotifyList );
     VECTOR_SET_ASSOCIATION( mCollisionFixtureDefs );
     VECTOR_SET_ASSOCIATION( mCollisionFixtures );
+    VECTOR_SET_ASSOCIATION( mAttachedCtrls );
+    VECTOR_SET_ASSOCIATION( mAudioHandles );
+    VECTOR_SET_ASSOCIATION( mHandleDeletionList );
 
     // Assign scene-object index.
     mSerialId = ++sSceneObjectMasterSerialId;
@@ -258,6 +256,16 @@ SceneObject::~SceneObject()
     {
         // Yes, so remove from Scene.
         mpScene->removeFromScene( this );
+    }
+
+    if (mAudioHandles.size())
+    {
+       for (typeAudioHandleVector::iterator itr = mAudioHandles.begin(); itr != mAudioHandles.end(); ++itr)
+       {
+       U32 handle = *itr;
+       alxStop(handle);
+       }
+       mAudioHandles.clear();
     }
 
     // Decrease scene-object count.
@@ -368,8 +376,8 @@ bool SceneObject::onAdd()
 
 void SceneObject::onRemove()
 {
-    // Detach Any GUI Control.
-    detachGui();
+    // Detach all GUI Control.
+    detachAllGuiControls();
 
     // Remove from Scene.
     if ( getScene() )
@@ -567,6 +575,9 @@ void SceneObject::preIntegrate( const F32 totalTime, const F32 elapsedTime, Debu
 		updateSize(elapsedTime);
 	}
 
+    if (mAudioHandles.size())
+        refreshsources();
+
    // Finish if nothing is dirty.
     if ( !mSpatialDirty )
         return;
@@ -627,7 +638,7 @@ void SceneObject::integrateObject( const F32 totalTime, const F32 elapsedTime, D
     }
 
     // Update Any Attached GUI.
-    if ( mpAttachedGui && mpAttachedGuiSceneWindow )
+    if ( mAttachedCtrls.size() )
     {
         updateAttachedGui();
     }
@@ -644,6 +655,17 @@ void SceneObject::integrateObject( const F32 totalTime, const F32 elapsedTime, D
 	{
 		updateBlendColor( elapsedTime );
 	}
+
+    if (mAudioHandles.size())
+    {
+        for (typeAudioHandleVector::iterator itr = mAudioHandles.begin(); itr != mAudioHandles.end(); ++itr)
+        {
+            U32 handle = *itr;
+            Point2F vel = getLinearVelocity();
+            alxSource3f(handle, AL_POSITION, position.x, position.y, 0.f);
+            alxSource3f(handle, AL_VELOCITY, vel.x, vel.y, 0.f);
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -761,7 +783,7 @@ void SceneObject::interpolateObject( const F32 timeDelta )
     }
 
     // Update Any Attached GUI.
-    if ( mpAttachedGui && mpAttachedGuiSceneWindow )
+    if ( mAttachedCtrls.size() )
     {
         updateAttachedGui();
     }
@@ -864,6 +886,24 @@ void SceneObject::sceneRenderOverlay( const SceneRenderState* sceneRenderState )
     if ( debugMask & Scene::SCENE_DEBUG_SORT_POINTS )
     {
         pScene->mDebugDraw.DrawSortPoint( getRenderPosition(), getSize(), mSortPoint );
+    }
+
+    if (debugMask & Scene::SCENE_DEBUG_AUDIO_SOURCES)
+    {
+        if (mAudioHandles.size())
+        {
+            for (typeAudioHandleVector::iterator itr = mAudioHandles.begin(); itr != mAudioHandles.end(); ++itr)
+            {
+                U32 handle = *itr;
+                ALfloat MaxDistance = 0.f;
+                ALfloat RefDistance = 0.f;
+                alxGetSourcef(handle, AL_MAX_DISTANCE, &MaxDistance);
+                alxGetSourcef(handle, AL_REFERENCE_DISTANCE, &RefDistance);
+                pScene->mDebugDraw.DrawCircle(getRenderPosition(), MaxDistance, ColorF(1.f, 0.2f, 0.2f));
+                pScene->mDebugDraw.DrawCircle(getRenderPosition(), RefDistance, ColorF(1.f, 0.0f, 0.0f));
+            }
+        }
+        
     }
 }
 
@@ -2776,119 +2816,162 @@ void SceneObject::onInputEvent( StringTableEntry name, const GuiEvent& event, co
 
 //-----------------------------------------------------------------------------
 
-void SceneObject::attachGui( GuiControl* pGuiControl, SceneWindow* pSceneWindow, const bool sizeControl )
+void SceneObject::attachGui(GuiControl* pGuiControl, SceneWindow* pSceneWindow, const bool sizeControl, const Vector2 offset)
 {
-    // Attach Gui Control.
-    mpAttachedGui = pGuiControl;
+    // Attach GUI control.
+    SceneObjectAttachedGUI attachedGui;
+    attachedGui.mpAttachedCtrl = pGuiControl;
+    attachedGui.mpAttachedSceneWindow = pSceneWindow;
+    attachedGui.mAutoSize = sizeControl;
+    attachedGui.mAttachedOffset = offset;
 
-    // Attach SceneWindow.
-    mpAttachedGuiSceneWindow = pSceneWindow;
+    // Register GUI control & window references.
+    attachedGui.mpAttachedCtrl->registerReference((SimObject**)&attachedGui.mpAttachedCtrl);
+    attachedGui.mpAttachedSceneWindow->registerReference((SimObject**)&attachedGui.mpAttachedSceneWindow);
 
-    // Set Size Gui Flag.
-    mAttachedGuiSizeControl = sizeControl;
-
-    // Register Gui Control/Window References.
-    mpAttachedGui->registerReference( (SimObject**)&mpAttachedGui );
-    mpAttachedGuiSceneWindow->registerReference( (SimObject**)&mpAttachedGuiSceneWindow );
-
-    // Check/Adjust Parentage.
-    if ( mpAttachedGui->getParent() != mpAttachedGuiSceneWindow )
+    // Check & adjust GUI parentage.
+    if (attachedGui.mpAttachedCtrl->getParent() != attachedGui.mpAttachedSceneWindow)
     {
-        // Warn.
-        // Remove GuiControl from existing parent (if it has one).
-        if ( mpAttachedGui->getParent() )
+        // Warn user & remove the GuiControl from the existing parent (if it has one).
+        if (attachedGui.mpAttachedCtrl->getParent())
         {
-            mpAttachedGui->getParent()->removeObject( mpAttachedGui );
+            Con::warnf("Warning: SceneObject::attachGui - GuiControl already has a parent GuiWindow!");
+            attachedGui.mpAttachedCtrl->getParent()->removeObject(attachedGui.mpAttachedCtrl);
         }
 
-        // Add it to the scene-window.
-        mpAttachedGuiSceneWindow->addObject( mpAttachedGui );
+        // Add the GuiControl to the scene window.
+        attachedGui.mpAttachedSceneWindow->addObject(attachedGui.mpAttachedCtrl);
     }
-    
-}
 
+    mAttachedCtrls.push_back(attachedGui);
+}
 //-----------------------------------------------------------------------------
 
-void SceneObject::detachGui( void )
+void SceneObject::detachGui(void)
 {
-    // Unregister Gui Control Reference.
-    if ( mpAttachedGui )
+    // Remove the last attached GUI.
+    if (mAttachedCtrls.size() > 0)
     {
-       // [neo, 5/7/2007 - #2997]
-       // Changed to UNregisterReference was registerReference which would crash later
-       mpAttachedGui->unregisterReference( (SimObject**)&mpAttachedGui );
-        mpAttachedGui = NULL;
+        mAttachedCtrls.last().mpAttachedCtrl->unregisterReference((SimObject**)&mAttachedCtrls.last().mpAttachedCtrl);
+        mAttachedCtrls.last().mpAttachedSceneWindow->unregisterReference((SimObject**)&mAttachedCtrls.last().mpAttachedSceneWindow);
+
+        mAttachedCtrls.pop_back();
+    }
+}
+
+void SceneObject::detachGui(GuiControl* pGuiControl)
+{
+    Vector<SceneObjectAttachedGUI>::iterator i;
+    for (i = mAttachedCtrls.begin(); i != mAttachedCtrls.end(); i++)
+    {
+        if (i->mpAttachedCtrl == pGuiControl)
+        {
+            // Remove the attached GuiControl.
+            i->mpAttachedCtrl->unregisterReference((SimObject**)&i->mpAttachedCtrl);
+            i->mpAttachedSceneWindow->unregisterReference((SimObject**)&i->mpAttachedSceneWindow);
+
+            mAttachedCtrls.pop_back();
+
+            return;
+        }
     }
 
-    // Unregister Gui Control Reference.
-    if ( mpAttachedGuiSceneWindow )
-    {
-        mpAttachedGuiSceneWindow->registerReference( (SimObject**)&mpAttachedGuiSceneWindow );
-        mpAttachedGuiSceneWindow = NULL;
-    }
+    // Warn user that no GuiControls were found.
+    Con::warnf("Warning: SceneObject::detachGui() - The GuiControl was not found!");
 }
 
 //-----------------------------------------------------------------------------
 
-void SceneObject::updateAttachedGui( void )
+void SceneObject::detachAllGuiControls(void)
+{
+    Vector<SceneObjectAttachedGUI>::iterator i;
+    for (i = mAttachedCtrls.begin(); i != mAttachedCtrls.end(); i++)
+    {
+        // Remove the attached GuiControl.
+        i->mpAttachedCtrl->unregisterReference((SimObject**)&i->mpAttachedCtrl);
+        i->mpAttachedSceneWindow->unregisterReference((SimObject**)&i->mpAttachedSceneWindow);
+    }
+
+    // Clear all references to the attached GuiControls.
+    mAttachedCtrls.clear();
+}
+
+//-----------------------------------------------------------------------------
+void SceneObject::updateAttachedGui(void)
 {
     // Debug Profiling.
     PROFILE_SCOPE(SceneObject_updateAttachedGui);
 
-    // Finish if either Gui Control or Window is invalid.
-    if ( !mpAttachedGui || !mpAttachedGuiSceneWindow )
+    // Early-out if no GUIs are attached.
+    if (mAttachedCtrls.size() == 0)
         return;
 
-    // Ignore if we're not in the scene that the scene-window is attached to.
-    if ( getScene() != mpAttachedGuiSceneWindow->getScene() )
+    Vector<SceneObjectAttachedGUI>::iterator i;
+    for (i = mAttachedCtrls.begin(); i != mAttachedCtrls.end(); i++)
     {
-        // Warn.
-        Con::warnf("SceneObject::updateAttachedGui() - SceneWindow is not attached to my Scene!");
-        // Detach from GUI Control.
-        detachGui();
-        // Finish Here.
-        return;
+        // Ignore if we're not in the scene that the GUI is attached to.
+        if (getScene() != i->mpAttachedSceneWindow->getScene())
+        {
+            // Warn.
+            Con::warnf("Warning: SceneObject::updateAttachedGui() - SceneWindow is not attached to the Scene!");
+
+            // Detach the control.
+            detachGui(i->mpAttachedCtrl);
+
+            return;
+        }
+
+        // Calculate the GUI Controls' dimensions.
+        Point2I topLeftI, extentI;
+
+        // Size Control?
+        if (i->mAutoSize)
+        {
+            // Yes, so fetch Clip Rectangle; this forms the area we want to fix the Gui-Control to.
+            const RectF objAABB = getAABBRectangle();
+            // Fetch Top-Left.
+            Vector2 upperLeft = Vector2(objAABB.point.x, objAABB.point.y + objAABB.extent.y);
+            Vector2 lowerRight = Vector2(objAABB.point.x + objAABB.extent.x, objAABB.point.y);
+
+            // Convert Scene to Window Coordinates.
+            i->mpAttachedSceneWindow->sceneToWindowPoint(upperLeft, upperLeft);
+            i->mpAttachedSceneWindow->sceneToWindowPoint(lowerRight, lowerRight);
+
+            // Convert Control Dimensions.
+            topLeftI.set(S32(upperLeft.x), S32(upperLeft.y));
+            extentI.set(S32(lowerRight.x - upperLeft.x), S32(lowerRight.y - upperLeft.y));
+
+            // Add offset
+            topLeftI.x += static_cast<S32>(i->mAttachedOffset.x);
+            topLeftI.y += static_cast<S32>(i->mAttachedOffset.y);
+        }
+        else
+        {
+            // No, so center GUI-Control on objects position but don't resize it.
+
+            // Calculate Position from World Clip.
+            const RectF clipRectangle = getAABBRectangle();
+            // Calculate center position.
+            const Vector2 centerPosition = clipRectangle.point + Vector2(clipRectangle.len_x()*0.5f, clipRectangle.len_y()*0.5f);
+
+            // Convert Scene to Window Coordinates.
+            Vector2 positionI;
+            i->mpAttachedSceneWindow->sceneToWindowPoint(centerPosition, positionI);
+
+            // Fetch Control Extents (which don't change here).
+            extentI = i->mpAttachedCtrl->getExtent();
+
+            // Calculate new top-left.
+            topLeftI.set(S32(positionI.x - extentI.x / 2), S32(positionI.y - extentI.y / 2));
+
+            // Add offset
+            topLeftI.x += static_cast<S32>(i->mAttachedOffset.x);
+            topLeftI.y += static_cast<S32>(i->mAttachedOffset.y);
+        }
+
+        // Set Control Dimensions.
+        i->mpAttachedCtrl->resize(topLeftI, extentI);
     }
-
-    // Calculate the GUI Controls' dimensions.
-    Point2I topLeftI, extentI;
-
-    // Size Control?
-    if ( mAttachedGuiSizeControl )
-    {
-        // Yes, so fetch Clip Rectangle; this forms the area we want to fix the Gui-Control to.
-        const RectF objAABB = getAABBRectangle();
-        // Fetch Top-Left.
-        Vector2 upperLeft = Vector2( objAABB.point.x, objAABB.point.y + objAABB.extent.y );
-        Vector2 lowerRight = Vector2( objAABB.point.x + objAABB.extent.x, objAABB.point.y );
-
-        // Convert Scene to Window Coordinates.
-        mpAttachedGuiSceneWindow->sceneToWindowPoint( upperLeft, upperLeft );
-        mpAttachedGuiSceneWindow->sceneToWindowPoint( lowerRight, lowerRight );
-        // Convert Control Dimensions.
-        topLeftI.set( S32(upperLeft.x), S32(upperLeft.y) );
-        extentI.set( S32(lowerRight.x-upperLeft.x), S32(lowerRight.y-upperLeft.y) );
-    }
-    else
-    {
-        // No, so center GUI-Control on objects position but don't resize it.
-
-        // Calculate Position from World Clip.
-        const RectF clipRectangle = getAABBRectangle();
-        // Calculate center position.
-        const Vector2 centerPosition = clipRectangle.point + Vector2(clipRectangle.len_x()*0.5f, clipRectangle.len_y()*0.5f);
-
-        // Convert Scene to Window Coordinates.
-        Vector2 positionI;
-        mpAttachedGuiSceneWindow->sceneToWindowPoint( centerPosition, positionI );
-        // Fetch Control Extents (which don't change here).
-        extentI = mpAttachedGui->getExtent();
-        // Calculate new top-left.
-        topLeftI.set( S32(positionI.x-extentI.x/2), S32(positionI.y-extentI.y/2) );
-    }
-
-    // Set Control Dimensions.
-    mpAttachedGui->resize( topLeftI, extentI );
 }
 
 //-----------------------------------------------------------------------------
@@ -3990,6 +4073,56 @@ bool SceneObject::writeField(StringTableEntry fieldname, const char* value)
 
    return true;
 }
+
+void SceneObject::addAudioHandle(AUDIOHANDLE handle)
+{
+   mAudioHandles.push_back_unique(handle);
+   Con::printf("New Vector size : %i", mAudioHandles.size());
+}
+
+S32 SceneObject::getSoundsCount(void)
+{
+    return mAudioHandles.size();
+}
+
+U32 SceneObject::getSound(S32 index)
+{
+    if (mAudioHandles.size() - 1 < index)
+        return NULL_AUDIOHANDLE;
+    U32 handle = mAudioHandles[index];
+    return handle;
+}
+
+void SceneObject::refreshsources()
+{
+if (mAudioHandles.size())
+{
+    S32 index = 0;
+    for (typeAudioHandleVector::iterator itr = mAudioHandles.begin(); itr != mAudioHandles.end(); ++itr)
+    {
+        U32 handle = *itr;
+
+        if (handle)
+        {
+            if (!alxIsValidHandle(handle))
+            mHandleDeletionList.push_back(index);
+
+            index++;
+        }
+    }
+        
+    if (mHandleDeletionList.size())
+    {
+
+        for (Vector<S32>::iterator delitr = mHandleDeletionList.begin(); delitr != mHandleDeletionList.end(); ++delitr)
+        {
+            mAudioHandles.erase(*delitr);
+        }
+            mHandleDeletionList.clear();
+    }
+}
+}
+
 
 //------------------------------------------------------------------------------
 

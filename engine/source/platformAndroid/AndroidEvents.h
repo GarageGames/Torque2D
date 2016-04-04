@@ -54,7 +54,7 @@ bool AndroidHandleMenuCommand(void* hiCommand);
 void AndroidSendTorqueEventToMain( U32 eventKind, void* userData = NULL );
 
 /// event type for alerts. The event class is an arbitrary val, it must not collide w/ kEventApp* .
-const U32 kEventClassTorque   = 'TORQ';
+const U32 kEventClassTorque   = ('T' * 0x1000000 + 'O' * 0x10000 + 'R' * 0x100 + 'Q'); //'TORQ';
 const U32 kEventTorqueAlert   = 1;
 const U32 kEventTorqueFadeInWindow = 2;
 const U32 kEventTorqueFadeOutWindow = 3;
@@ -63,7 +63,7 @@ const U32 kEventTorqueShowMenuBar = 5;
 const U32 kEventTorqueModalDialog = 6;
 const U32 kEventTorqueDrawMenuBar = 7;
 
-const U32 kEventParamTorqueData           = 'tDAT'; // typeVoidPtr void*
+const U32 kEventParamTorqueData           = ('t' * 0x1000000 + 'D' * 0x10000 + 'A' * 0x100 + 'T'); //'tDAT'; // typeVoidPtr void*
 //const U32 kEventParamTorqueSemaphorePtr   = 'tSEM'; // typeVoidPtr void*
 //const U32 kEventParamTorqueDialogRef      = 'tDRF'; // typeDialogRef DialogRef
 //const U32 kEventParamTorqueHitPtr         = 'tHIT'; // typeVoidPtr U32*
@@ -71,6 +71,6 @@ const U32 kEventParamTorqueData           = 'tDAT'; // typeVoidPtr void*
 
 
 // this command id is used for all dynamically created menus.
-const U32 kHICommandTorque = 'TORQ';
+const U32 kHICommandTorque = ('T' * 0x1000000 + 'O' * 0x10000 + 'R' * 0x100 + 'Q'); //'TORQ';
 
 #endif
