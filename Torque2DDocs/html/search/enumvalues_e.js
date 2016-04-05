@@ -94,5 +94,12 @@ var searchData=
   ['op_5fuint_5fto_5fstr',['OP_UINT_TO_STR',['../namespace_compiler.html#a7dbbc2482a81cb58ff7faf50144685e4afae79728b259cc67138dfdf95d57a27e',1,'Compiler']]],
   ['op_5fxor',['OP_XOR',['../namespace_compiler.html#a7dbbc2482a81cb58ff7faf50144685e4aa0587506ce6da96de3a95a97d84b0fc4',1,'Compiler']]],
   ['open',['Open',['../class_remote_debugger_bridge.html#acdd867d72142510ce53521a63a062f9bac8e6944e998ac466c3cc4a648dde8291',1,'RemoteDebuggerBridge']]],
+  ['overflow_5fx_5fhidden',['OVERFLOW_X_HIDDEN',['../class_text_sprite.html#aec7f0168ae63b93fad7008bfbb9e1696ab21571cc4eef0b9a29069a5d0c49ae2a',1,'TextSprite']]],
+  ['overflow_5fx_5fshrink',['OVERFLOW_X_SHRINK',['../class_text_sprite.html#aec7f0168ae63b93fad7008bfbb9e1696ab8284ec60e8196a8cf0ec461b9e25be7',1,'TextSprite']]],
+  ['overflow_5fx_5fvisible',['OVERFLOW_X_VISIBLE',['../class_text_sprite.html#aec7f0168ae63b93fad7008bfbb9e1696acfd805766ecc1a29bfdcd11cb5d99ad5',1,'TextSprite']]],
+  ['overflow_5fx_5fwrap',['OVERFLOW_X_WRAP',['../class_text_sprite.html#aec7f0168ae63b93fad7008bfbb9e1696a4e51504a93555a1ad17474c309b3ce2d',1,'TextSprite']]],
+  ['overflow_5fy_5fhidden',['OVERFLOW_Y_HIDDEN',['../class_text_sprite.html#a87cd81e296755f9514c3e4957f5bf4e9a7cf5b63bc5725063deeaec3f7e4185e7',1,'TextSprite']]],
+  ['overflow_5fy_5fshrink',['OVERFLOW_Y_SHRINK',['../class_text_sprite.html#a87cd81e296755f9514c3e4957f5bf4e9ade43c7bb5b39100bd22bdd7c2110e248',1,'TextSprite']]],
+  ['overflow_5fy_5fvisible',['OVERFLOW_Y_VISIBLE',['../class_text_sprite.html#a87cd81e296755f9514c3e4957f5bf4e9a2a4ab79b43367946c186f331a3116ffd',1,'TextSprite']]],
   ['overloadmarker',['OverloadMarker',['../struct_namespace_1_1_entry.html#a61dadd085c1777f559549e05962b2c9ea4b75760d6e094652186a250c7b85a0aa',1,'Namespace::Entry']]]
 ];

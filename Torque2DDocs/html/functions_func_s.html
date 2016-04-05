@@ -192,15 +192,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>scenePrepareRender()
 : <a class="el" href="class_composite_sprite.html#ab74fc47417c4ba44e8a4a8721459b053">CompositeSprite</a>
-, <a class="el" href="class_image_font.html#ab74fc47417c4ba44e8a4a8721459b053">ImageFont</a>
 , <a class="el" href="class_scene_object.html#a9dccc074ebba658c9aff24d0b150c11f">SceneObject</a>
 , <a class="el" href="class_scene_render_object.html#a25589538d1363052dbc086677ac4b498">SceneRenderObject</a>
 , <a class="el" href="class_skeleton_object.html#ab74fc47417c4ba44e8a4a8721459b053">SkeletonObject</a>
+, <a class="el" href="class_text_sprite.html#ab74fc47417c4ba44e8a4a8721459b053">TextSprite</a>
 , <a class="el" href="class_wave_composite.html#ab74fc47417c4ba44e8a4a8721459b053">WaveComposite</a>
 </li>
 <li>sceneRender()
 : <a class="el" href="class_composite_sprite.html#a71f0087e869c8a9f99796a21651c6c57">CompositeSprite</a>
-, <a class="el" href="class_image_font.html#a71f0087e869c8a9f99796a21651c6c57">ImageFont</a>
 , <a class="el" href="class_particle_player.html#a71f0087e869c8a9f99796a21651c6c57">ParticlePlayer</a>
 , <a class="el" href="class_scene.html#a37b5c607c5eab07cba2820ce2be4daa5">Scene</a>
 , <a class="el" href="class_scene_object.html#a9a3cf0b13f4a74e64702e942ad4d9e8f">SceneObject</a>
@@ -209,6 +208,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="class_shape_vector.html#a71f0087e869c8a9f99796a21651c6c57">ShapeVector</a>
 , <a class="el" href="class_skeleton_object.html#a71f0087e869c8a9f99796a21651c6c57">SkeletonObject</a>
 , <a class="el" href="class_sprite.html#a71f0087e869c8a9f99796a21651c6c57">Sprite</a>
+, <a class="el" href="class_text_sprite.html#a71f0087e869c8a9f99796a21651c6c57">TextSprite</a>
 , <a class="el" href="class_wave_composite.html#a71f0087e869c8a9f99796a21651c6c57">WaveComposite</a>
 </li>
 <li>sceneRenderFallback()
@@ -575,6 +575,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>setAutoFormatXmlExtension()
 : <a class="el" href="class_taml.html#ac6eef67715e0e3a771e410827f3466df">Taml</a>
 </li>
+<li>setAutoLineHeight()
+: <a class="el" href="class_text_sprite.html#a3b72e8885396846cba848c203d0ea0e7">TextSprite</a>
+</li>
 <li>setAwake()
 : <a class="el" href="class_scene_object.html#acd09053317ed5af67e472a136e3527a0">SceneObject</a>
 </li>
@@ -766,6 +769,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>setChar()
 : <a class="el" href="class_string_buffer.html#afe39a7cce48f1d58081e3390ff5216d6">StringBuffer</a>
 </li>
+<li>setCharacterBlendColor()
+: <a class="el" href="class_text_sprite.html#aeea3c26c3c6e0e3e31517ecead22b284">TextSprite</a>
+</li>
+<li>setCharacterOffset()
+: <a class="el" href="class_text_sprite.html#a551aec66d071c29b99d3a3aeeab0d073">TextSprite</a>
+</li>
+<li>setCharacterScale()
+: <a class="el" href="class_text_sprite.html#a9b5aa080222c9902f964d87788597fac">TextSprite</a>
+</li>
 <li>setCircleRadius()
 : <a class="el" href="class_shape_vector.html#a9b32733ad700afbbcad4a97b5f0e57e7">ShapeVector</a>
 </li>
@@ -934,6 +946,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>setCurVarNameCreate()
 : <a class="el" href="class_expr_eval_state.html#adb0a29ba9504634bfdca33ff57eddf8b">ExprEvalState</a>
+</li>
+<li>setCustomLineHeight()
+: <a class="el" href="class_text_sprite.html#a5dfd4518edbb6f411494131387097291">TextSprite</a>
 </li>
 <li>setData()
 : <a class="el" href="class_console_base_type.html#ac6f5ff24113dec49aabb1864c5d0241f">ConsoleBaseType</a>
@@ -1149,7 +1164,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>setFieldValue()
 : <a class="el" href="class_sim_field_dictionary.html#a4c56c09cd55db7afd81d675440d28890">SimFieldDictionary</a>
-, <a class="el" href="class_taml_custom_field.html#a34955c35a4a4cba46aee38667c76a6b5">TamlCustomField</a>
+, <a class="el" href="class_taml_custom_field.html#aec2bf4bd3f0ac0aa61eabbf0cdec673d">TamlCustomField</a>
 </li>
 <li>setFile()
 : <a class="el" href="class_file_dialog.html#aeea0ff8cc8b972be93411e8ca344eb38">FileDialog</a>
@@ -1239,12 +1254,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>setFont()
 : <a class="el" href="class_gui_window_ctrl.html#a9c42bbb70894f1304e370edfabd0b18a">GuiWindowCtrl</a>
+, <a class="el" href="class_text_sprite.html#a2410afb18f7357899a8015f811ad03a0">TextSprite</a>
 </li>
-<li>setFontPadding()
-: <a class="el" href="class_image_font.html#a38ff9c4cc33a33ab34c64d8bb3d0866c">ImageFont</a>
+<li>setFontFile()
+: <a class="el" href="class_font_asset.html#a04c3ab3709ebce270f682090803b139c">FontAsset</a>
+</li>
+<li>setFontScaleX()
+: <a class="el" href="class_text_sprite.html#a2cf80158dcbfdc4c0a03cb4d928844bf">TextSprite</a>
+</li>
+<li>setFontScaleY()
+: <a class="el" href="class_text_sprite.html#a8379fee82f26cdf6a38626d3f98ab056">TextSprite</a>
 </li>
 <li>setFontSize()
-: <a class="el" href="class_image_font.html#a9ecf52d2394dc67aa5412badbf18505e">ImageFont</a>
+: <a class="el" href="class_text_sprite.html#a9364976b7dab2f5e518f1feced3698a4">TextSprite</a>
 </li>
 <li>setForce()
 : <a class="el" href="class_ambient_force_controller.html#a7a9ee8bb53da55b422759ca1b5a41930">AmbientForceController</a>
@@ -1331,7 +1353,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>setImage()
 : <a class="el" href="class_animation_asset.html#a826550fa9dfd92bfd0a6985bec1e2ef8">AnimationAsset</a>
 , <a class="el" href="class_gui_sprite_ctrl.html#a9112f673ee7b80f0dec6be4d478920c3">GuiSpriteCtrl</a>
-, <a class="el" href="class_image_font.html#a9112f673ee7b80f0dec6be4d478920c3">ImageFont</a>
 , <a class="el" href="class_image_frame_provider_core.html#a9112f673ee7b80f0dec6be4d478920c3">ImageFrameProviderCore</a>
 , <a class="el" href="class_particle_asset_emitter.html#a22a826e4a9c06f5ce36a99a394999cef">ParticleAssetEmitter</a>
 , <a class="el" href="class_render_proxy.html#a9d0de10de2eb20c8c370fdc2c24d3f36">RenderProxy</a>
@@ -1414,6 +1435,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>setKeepAligned()
 : <a class="el" href="class_particle_asset_emitter.html#aeecdf6911062a49fd8f6b56f5190b3e2">ParticleAssetEmitter</a>
 </li>
+<li>setKerning()
+: <a class="el" href="class_text_sprite.html#ac4b01d946b14c1616e601687a28e29db">TextSprite</a>
+</li>
 <li>setLangFile()
 : <a class="el" href="class_lang_file.html#af2d5873d9383fadf08bbe02ef2d6831d">LangFile</a>
 </li>
@@ -1489,7 +1513,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_console_logger.html#a0c2c22d15c44da40e9639d9866c69358">ConsoleLogger</a>
 </li>
 <li>setLooping()
-: <a class="el" href="class_audio_asset.html#ac04cccd6ed8cad15554c0059518e524b">AudioAsset</a>
+: <a class="el" href="class_audio_asset.html#a8bf376946911895ff63f87fc352b2c42">AudioAsset</a>
 </li>
 <li>setLoweredBitmap()
 : <a class="el" href="class_gui_toolbox_button_ctrl.html#a88cc0cfda03e0aa7b02ec7cbae4a6456">GuiToolboxButtonCtrl</a>
@@ -1584,7 +1608,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_module_definition.html#a62f4a7d022cf2ac972ec981f58776d53">ModuleDefinition</a>
 </li>
 <li>setModuleType()
-: <a class="el" href="class_module_definition.html#aee1f7418de25695f9692d2892b39de3b">ModuleDefinition</a>
+: <a class="el" href="class_module_definition.html#a04aaf4bb75e886b943b9a5d5b0b42060">ModuleDefinition</a>
 </li>
 <li>setMotorJointAngularOffset()
 : <a class="el" href="class_scene.html#ac5fb8a43bdb7c5fb6d5c1e122bdc858d">Scene</a>
@@ -1624,12 +1648,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_animation_asset.html#a1a0e9034ef0dfd077d3262c41c3e3ca6">AnimationAsset</a>
 </li>
 <li>setNamedCellsMode()
-: <a class="el" href="class_animation_asset.html#a6014df5166c7c0696a3759fc557a82d3">AnimationAsset</a>
+: <a class="el" href="class_animation_asset.html#a336c266b5488a15799e4eddeae392765">AnimationAsset</a>
 </li>
 <li>setNamedImageFrame()
 : <a class="el" href="class_gui_sprite_ctrl.html#ad9dfa5a1049a34770aa1336d54cac0a9">GuiSpriteCtrl</a>
 , <a class="el" href="class_image_frame_provider_core.html#a69cc2679bbad7ac6eea3f8327fe581b0">ImageFrameProviderCore</a>
-, <a class="el" href="class_particle_asset_emitter.html#aaf16718baf767dabdb4d09d4a2e40c6f">ParticleAssetEmitter</a>
+, <a class="el" href="class_particle_asset_emitter.html#a8095d1867f0efd861c8109c3fab29e99">ParticleAssetEmitter</a>
 , <a class="el" href="class_sprite_base.html#aaf16718baf767dabdb4d09d4a2e40c6f">SpriteBase</a>
 </li>
 <li>setNetAddress()
@@ -1699,6 +1723,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>setOrientationType()
 : <a class="el" href="class_particle_asset_emitter.html#a05b6d9f1c14a358a3c00f6abcac8cee6">ParticleAssetEmitter</a>
+</li>
+<li>setOverflowModeX()
+: <a class="el" href="class_text_sprite.html#a89fba3fc692cc13420c33f10d3581169">TextSprite</a>
+</li>
+<li>setOverflowModeY()
+: <a class="el" href="class_text_sprite.html#aa9e15d225e2d4fafa35a23a079e541df">TextSprite</a>
 </li>
 <li>setOverwritePrompt()
 : <a class="el" href="class_save_file_dialog.html#aad7fc4f1473e565760976d49564328fa">SaveFileDialog</a>
@@ -1806,6 +1836,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>setPrismaticJointMotor()
 : <a class="el" href="class_scene.html#af6f5834c090ab0bd654a229c1e8f3fde">Scene</a>
 </li>
+<li>setProcessAudioListener()
+: <a class="el" href="class_scene_window.html#a42d826df93f4f516460ddd06a946da24">SceneWindow</a>
+</li>
 <li>setProcessTicks()
 : <a class="el" href="class_image_frame_provider_core.html#a94b8d13ff159fb7f3c958a23bf97470e">ImageFrameProviderCore</a>
 , <a class="el" href="class_tickable.html#a8c7201617a14b9ed862bbe4fe6527370">Tickable</a>
@@ -1841,7 +1874,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_particle_asset_emitter.html#a47762ddfd0c3b2aa5c29000ceeae03b3">ParticleAssetEmitter</a>
 </li>
 <li>setRandomStart()
-: <a class="el" href="class_animation_asset.html#aadc7af6a736b1f775bf07e148fd85861">AnimationAsset</a>
+: <a class="el" href="class_animation_asset.html#aa4776d679f8020db0061d638a0369b2a">AnimationAsset</a>
 </li>
 <li>setRecurse()
 : <a class="el" href="class_declared_assets.html#ae45af1a55a6301e7b9b190bbf77652d8">DeclaredAssets</a>
@@ -1880,7 +1913,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_scroller.html#acff8a5fb80241a867f808fbdc19e9153">Scroller</a>
 </li>
 <li>setRepeatY()
-: <a class="el" href="class_scroller.html#a2d1376c133a536c44f8a6cbcfa4bc674">Scroller</a>
+: <a class="el" href="class_scroller.html#af7e33509a27546258ff511655ceb61c0">Scroller</a>
 </li>
 <li>setResolution()
 : <a class="el" href="class_display_device.html#ad501635f5b87b7162410b194ef649a21">DisplayDevice</a>
@@ -1902,13 +1935,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_skeleton_object.html#adb9e370d4f3df11ec6860453640087c7">SkeletonObject</a>
 </li>
 <li>setRootBoneScale()
-: <a class="el" href="class_skeleton_object.html#afeeb21612bc523c3e11d7889bbed5261">SkeletonObject</a>
+: <a class="el" href="class_skeleton_object.html#afc4c31bd89289ee74359b8c2e445822d">SkeletonObject</a>
 </li>
 <li>setRopeJointMaxLength()
 : <a class="el" href="class_scene.html#ad96a9ff7955d383d540e91150da7f559">Scene</a>
 </li>
 <li>setRow()
-: <a class="el" href="class_matrix_f.html#ad1ff6c730c1081656ab3a43622008b94">MatrixF</a>
+: <a class="el" href="class_matrix_f.html#ae3942975e5d08b6d09f01092f7710451">MatrixF</a>
 </li>
 <li>setRunning()
 : <a class="el" href="class_game_interface.html#affa464a1d259b8fdb964058925b1b69b">GameInterface</a>
@@ -2036,14 +2069,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="class_particle_asset_field_collection.html#ab26a6326c7806cf951a3837ab106b62d">ParticleAssetFieldCollection</a>
 </li>
 <li>setSingleParticle()
-: <a class="el" href="class_particle_asset_emitter.html#a962bc0db9d0dbcb6c14a9dfc662d46de">ParticleAssetEmitter</a>
+: <a class="el" href="class_particle_asset_emitter.html#af676053c1706df6a6d3185c56bdeb7c9">ParticleAssetEmitter</a>
 </li>
 <li>setSize()
 : <a class="el" href="class_bit_vector.html#a2613c96df8c9ac50ef0bade6a124aa13">BitVector</a>
 , <a class="el" href="class_dynamic_texture.html#afd4dddf6850b47c6dbd446d21c5c3587">DynamicTexture</a>
 , <a class="el" href="class_gui_array_ctrl.html#a4d99646e9602046603d76a7b52071507">GuiArrayCtrl</a>
 , <a class="el" href="class_gui_text_list_ctrl.html#acac600fa91ed4c963d39f0897a6186eb">GuiTextListCtrl</a>
-, <a class="el" href="class_scene_object.html#a8b565265d9bb61c1008f186fa2cc583e">SceneObject</a>
+, <a class="el" href="class_scene_object.html#a3d445cf7e469d72ecb39198bae6bef7d">SceneObject</a>
 , <a class="el" href="class_shape_vector.html#a33fe51395aa3d372a16ccda8df5c7b12">ShapeVector</a>
 , <a class="el" href="class_sprite_batch_item.html#a33fe51395aa3d372a16ccda8df5c7b12">SpriteBatchItem</a>
 , <a class="el" href="class_vector.html#aeefb54afa0c13b666f3a71f0d35afbd5">Vector&lt; T &gt;</a>
@@ -2055,13 +2088,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_gui_control.html#ad01812715507154d3125ded2c9d1a6b0">GuiControl</a>
 </li>
 <li>setSkeletonAsset()
-: <a class="el" href="class_skeleton_object.html#ae0accd504dc3bdf7afbfa4fdceba3451">SkeletonObject</a>
+: <a class="el" href="class_skeleton_object.html#a224643617f1c3008027f022e801968c2">SkeletonObject</a>
 </li>
 <li>setSkeletonFile()
-: <a class="el" href="class_skeleton_asset.html#a098c990b9eb7000dfb3951288b16ece3">SkeletonAsset</a>
+: <a class="el" href="class_skeleton_asset.html#a9749f98c213da630ed08de913d0eb0e9">SkeletonAsset</a>
 </li>
 <li>setSleepingAllowed()
-: <a class="el" href="class_scene_object.html#ad3827415b358d22caef7c5eb68fe56b3">SceneObject</a>
+: <a class="el" href="class_scene_object.html#aaad936b2c6159df8b91b7eb93c1ed66a">SceneObject</a>
 </li>
 <li>setSleepingCallback()
 : <a class="el" href="class_scene_object.html#a361629bbb7856d67110c8f90d59d73f5">SceneObject</a>
@@ -2122,7 +2155,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_sprite_batch.html#aa7a380b0751c57cc8cec57eb93148b65">SpriteBatch</a>
 </li>
 <li>setSpriteImage()
-: <a class="el" href="class_sprite_batch.html#aaf5d8c9eee2e373bfd5e6399d373c2ad">SpriteBatch</a>
+: <a class="el" href="class_sprite_batch.html#a43e9a62d9d7e0b0941100082ca1c94c4">SpriteBatch</a>
 </li>
 <li>setSpriteImageFrame()
 : <a class="el" href="class_sprite_batch.html#a48e4793ec78fcbe5fda45e0506d0ce65">SpriteBatch</a>
@@ -2153,7 +2186,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_sprite_batch.html#ae2168437adf095d8cafb3678ddedc54a">SpriteBatch</a>
 </li>
 <li>setSrcBlendFactor()
-: <a class="el" href="class_particle_asset_emitter.html#abe7a3c5da4972ea23af6f05f3eaef7f8">ParticleAssetEmitter</a>
+: <a class="el" href="class_particle_asset_emitter.html#acbc7e1ccf36c40ae348b10b543680d5d">ParticleAssetEmitter</a>
 , <a class="el" href="class_scene_object.html#abe7a3c5da4972ea23af6f05f3eaef7f8">SceneObject</a>
 , <a class="el" href="class_sprite_batch_item.html#a8a6cdde65bdf9d53a84ad2d83403b5cc">SpriteBatchItem</a>
 </li>
@@ -2207,7 +2240,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_sim_object.html#abeb83ab949786a5de00558e024c2efd5">SimObject</a>
 </li>
 <li>setSynchronized()
-: <a class="el" href="class_module_definition.html#a6c3bdc50a2fb4feeaee5ef58962ba9d9">ModuleDefinition</a>
+: <a class="el" href="class_module_definition.html#a3181909e86580619541b2fa44d889735">ModuleDefinition</a>
 </li>
 <li>SetTabSize()
 : <a class="el" href="class_ti_xml_document.html#ae52c1e6d112677e7fce608a2de6201bd">TiXmlDocument</a>
@@ -2253,18 +2286,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="class_gui_console_text_ctrl.html#a6be70492a50208ba82833185c3bbac13">GuiConsoleTextCtrl</a>
 , <a class="el" href="class_gui_m_l_text_ctrl.html#a23e2868600a0272f99824146580fff04">GuiMLTextCtrl</a>
 , <a class="el" href="class_gui_tab_page_ctrl.html#a6be70492a50208ba82833185c3bbac13">GuiTabPageCtrl</a>
-, <a class="el" href="class_gui_text_ctrl.html#a6be70492a50208ba82833185c3bbac13">GuiTextCtrl</a>
-, <a class="el" href="class_gui_text_edit_ctrl.html#ac39c258206ce7a4845a2c6655410a19b">GuiTextEditCtrl</a>
-, <a class="el" href="class_gui_text_edit_slider_ctrl.html#a5e956a5102ef2faef93a8c2e1d4f3eff">GuiTextEditSliderCtrl</a>
+, <a class="el" href="class_gui_text_ctrl.html#a94e452e2b8e2af16604f2b90f3ad0e26">GuiTextCtrl</a>
+, <a class="el" href="class_gui_text_edit_ctrl.html#a557a25596fdd64785385b3aae2909a24">GuiTextEditCtrl</a>
+, <a class="el" href="class_gui_text_edit_slider_ctrl.html#ac39c258206ce7a4845a2c6655410a19b">GuiTextEditSliderCtrl</a>
 , <a class="el" href="struct_gui_tree_view_ctrl_1_1_item.html#ab9288aaa281166c3b4713acfb5cac795">GuiTreeViewCtrl::Item</a>
-, <a class="el" href="class_image_font.html#a44ce575850b18ef42edd72f0dfbc43ab">ImageFont</a>
+, <a class="el" href="class_text_sprite.html#a94e452e2b8e2af16604f2b90f3ad0e26">TextSprite</a>
 </li>
 <li>setTextAlignment()
-: <a class="el" href="class_image_font.html#a111f5f83587ba61fcbaaf0c7b5f3ec82">ImageFont</a>
+: <a class="el" href="class_text_sprite.html#a111f5f83587ba61fcbaaf0c7b5f3ec82">TextSprite</a>
 </li>
 <li>setTextID()
-: <a class="el" href="class_gui_button_base_ctrl.html#a54e7d9deeb64d5b0e729531a39fb35b2">GuiButtonBaseCtrl</a>
-, <a class="el" href="class_gui_text_ctrl.html#a54e7d9deeb64d5b0e729531a39fb35b2">GuiTextCtrl</a>
+: <a class="el" href="class_gui_button_base_ctrl.html#ad6c723c556a50ab6d766769575859aba">GuiButtonBaseCtrl</a>
+, <a class="el" href="class_gui_text_ctrl.html#ad6c723c556a50ab6d766769575859aba">GuiTextCtrl</a>
+</li>
+<li>setTextVAlignment()
+: <a class="el" href="class_text_sprite.html#ab6b0bc393a08617b99195f6e3235eac3">TextSprite</a>
 </li>
 <li>setTimeScale()
 : <a class="el" href="class_particle_player.html#a5f2df3889cf70e28d91298eece445fef">ParticlePlayer</a>
@@ -2356,7 +2392,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_zip_1_1_zip_archive.html#a939c88bf50b5af948cd67690222907a8">ZipArchive</a>
 </li>
 <li>setVersionId()
-: <a class="el" href="class_module_definition.html#a1bc23c09480f8617cad5e4fc373b92de">ModuleDefinition</a>
+: <a class="el" href="class_module_definition.html#a19af6a56878ee48a2ce98dc64a4ab119">ModuleDefinition</a>
 </li>
 <li>setVerticalSync()
 : <a class="el" href="class_display_device.html#ac81f5352a00a8d600995b1360855e8ef">DisplayDevice</a>
@@ -2434,7 +2470,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_taml_custom_node.html#a9cd2362e7316f39a8c125a1e5e70f8e5">TamlCustomNode</a>
 </li>
 <li>setXY()
-: <a class="el" href="class_plane_f.html#a7e861b729a3e4ce1949b51568a249604">PlaneF</a>
+: <a class="el" href="class_plane_f.html#ac19e9867a94eef866dc171e79254c4bc">PlaneF</a>
 </li>
 <li>setXZ()
 : <a class="el" href="class_plane_f.html#abab60e9ca49a5aef6bb2618f39603531">PlaneF</a>
@@ -2462,13 +2498,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>shouldRender()
 : <a class="el" href="class_composite_sprite.html#ab0278e05fcb85d667a800dd539663751">CompositeSprite</a>
-, <a class="el" href="class_image_font.html#ab0278e05fcb85d667a800dd539663751">ImageFont</a>
 , <a class="el" href="class_particle_player.html#ab0278e05fcb85d667a800dd539663751">ParticlePlayer</a>
 , <a class="el" href="class_scene_object.html#ab0278e05fcb85d667a800dd539663751">SceneObject</a>
 , <a class="el" href="class_scene_render_object.html#adff9a91f7dea0eaff638bda2313ea2ea">SceneRenderObject</a>
 , <a class="el" href="class_shape_vector.html#ab0278e05fcb85d667a800dd539663751">ShapeVector</a>
 , <a class="el" href="class_skeleton_object.html#ab0278e05fcb85d667a800dd539663751">SkeletonObject</a>
 , <a class="el" href="class_sprite_base.html#ab0278e05fcb85d667a800dd539663751">SpriteBase</a>
+, <a class="el" href="class_text_sprite.html#ab0278e05fcb85d667a800dd539663751">TextSprite</a>
 , <a class="el" href="class_trigger.html#ab0278e05fcb85d667a800dd539663751">Trigger</a>
 , <a class="el" href="class_wave_composite.html#ab0278e05fcb85d667a800dd539663751">WaveComposite</a>
 </li>
@@ -2528,7 +2564,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_sim_object.html#a2f0d5f226a833bafd913a942723c6918">SimObject</a>
 </li>
 <li>SimObjectPtr()
-: <a class="el" href="class_sim_object_ptr.html#af2b5aedf23c1afabdd2728b9d6613416">SimObjectPtr&lt; T &gt;</a>
+: <a class="el" href="class_sim_object_ptr.html#a31c0eda5d99f4c0e482634ee72c54075">SimObjectPtr&lt; T &gt;</a>
 </li>
 <li>SimObjectTimerEvent()
 : <a class="el" href="class_sim_object_timer_event.html#a350ffaac2616d1fec8cf9df86f9f7c63">SimObjectTimerEvent</a>
@@ -2614,7 +2650,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_sparse_array.html#a165e5ea63e54178236afbabd4058047b">SparseArray&lt; T &gt;</a>
 </li>
 <li>SphereF()
-: <a class="el" href="class_sphere_f.html#a2f272292b9a28aae8c9a66fee6a03ddd">SphereF</a>
+: <a class="el" href="class_sphere_f.html#a2400e29f8d9c92f588fb9ea6285ea6bd">SphereF</a>
 </li>
 <li>SplCtrlPts()
 : <a class="el" href="class_spl_ctrl_pts.html#af6c2fb8765d3d08b809859bf178fecad">SplCtrlPts</a>
@@ -2703,7 +2739,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>StockColor()
 : <a class="el" href="class_color_f.html#a5fd65e820e59b74b5dc928edfea60e76">ColorF</a>
-, <a class="el" href="class_color_i.html#a5fd65e820e59b74b5dc928edfea60e76">ColorI</a>
+, <a class="el" href="class_color_i.html#a3be1f3a9e3df3c67202dbb93ecbdd1df">ColorI</a>
 </li>
 <li>StockColorItem()
 : <a class="el" href="class_stock_color_item.html#acdb46f4f309ed2f374a6bd81e7e9c008">StockColorItem</a>
@@ -2739,10 +2775,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="struct_streaming_list.html#a75e9490665402ea6c92d31a39340d939">StreamingList</a>
 </li>
 <li>StreamObject()
-: <a class="el" href="class_stream_object.html#a480a22a6f423a6e123eb2a4eab02d8ac">StreamObject</a>
+: <a class="el" href="class_stream_object.html#a8172b21e746b8da45e49b013170139e2">StreamObject</a>
 </li>
 <li>StringBuffer()
-: <a class="el" href="class_string_buffer.html#abed17781b5e7348ba267130a67bf4cd7">StringBuffer</a>
+: <a class="el" href="class_string_buffer.html#ade295e51a26e8012fb68e261b9b2ffe4">StringBuffer</a>
 </li>
 <li>StringEqual()
 : <a class="el" href="class_ti_xml_base.html#a3c9ce136bdc36e3da5716967f85103d7">TiXmlBase</a>

@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['sim',['Sim',['../namespace_sim.html',1,'']]],
-  ['splineutil',['SplineUtil',['../namespace_spline_util.html',1,'']]],
-  ['stringunit',['StringUnit',['../namespace_string_unit.html',1,'']]]
+  ['leapmotionconstants',['LeapMotionConstants',['../namespace_leap_motion_constants.html',1,'']]],
+  ['leapmotionutil',['LeapMotionUtil',['../namespace_leap_motion_util.html',1,'']]]
 ];

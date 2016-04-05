@@ -116,11 +116,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <area href="class_console_object.html" alt="ConsoleObject" shape="rect" coords="0,0,212,24"/>
 <area href="class_taml_callbacks.html" alt="TamlCallbacks" shape="rect" coords="222,0,434,24"/>
 <area href="class_composite_sprite.html" alt="CompositeSprite" shape="rect" coords="555,336,767,360"/>
-<area href="class_image_font.html" alt="ImageFont" shape="rect" coords="555,392,767,416"/>
-<area href="class_particle_player.html" alt="ParticlePlayer" shape="rect" coords="555,448,767,472"/>
-<area href="class_shape_vector.html" alt="ShapeVector" shape="rect" coords="555,504,767,528"/>
-<area href="class_skeleton_object.html" alt="SkeletonObject" shape="rect" coords="555,560,767,584"/>
-<area href="class_sprite_base.html" alt="SpriteBase" shape="rect" coords="555,616,767,640"/>
+<area href="class_particle_player.html" alt="ParticlePlayer" shape="rect" coords="555,392,767,416"/>
+<area href="class_shape_vector.html" alt="ShapeVector" shape="rect" coords="555,448,767,472"/>
+<area href="class_skeleton_object.html" alt="SkeletonObject" shape="rect" coords="555,504,767,528"/>
+<area href="class_sprite_base.html" alt="SpriteBase" shape="rect" coords="555,560,767,584"/>
+<area href="class_text_sprite.html" alt="TextSprite" shape="rect" coords="555,616,767,640"/>
 <area href="class_trigger.html" alt="Trigger" shape="rect" coords="555,672,767,696"/>
 <area href="class_wave_composite.html" alt="WaveComposite" shape="rect" coords="555,728,767,752"/>
 </map>
@@ -595,10 +595,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a751679939c4bf024410664cca6207dd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f995fd3f1d847cbb8d015e643be5a1e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#a4f995fd3f1d847cbb8d015e643be5a1e">dismountCamera</a> (void)</td></tr>
 <tr class="separator:a4f995fd3f1d847cbb8d015e643be5a1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0df056e9bcc5d9e5c240ba3d438f7c0c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#a0df056e9bcc5d9e5c240ba3d438f7c0c">attachGui</a> (<a class="el" href="class_gui_control.html">GuiControl</a> *pGuiControl, <a class="el" href="class_scene_window.html">SceneWindow</a> *pSceneWindow, const bool sizeControl)</td></tr>
-<tr class="separator:a0df056e9bcc5d9e5c240ba3d438f7c0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af736f7dbf6bdf18490b39e2d90216edc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#af736f7dbf6bdf18490b39e2d90216edc">attachGui</a> (<a class="el" href="class_gui_control.html">GuiControl</a> *pGuiControl, <a class="el" href="class_scene_window.html">SceneWindow</a> *pSceneWindow, const bool sizeControl, const <a class="el" href="struct_vector2.html">Vector2</a> offset)</td></tr>
+<tr class="separator:af736f7dbf6bdf18490b39e2d90216edc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49d91361e25a3fc3cf089469d4c6f1b2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#a49d91361e25a3fc3cf089469d4c6f1b2">detachGui</a> (void)</td></tr>
 <tr class="separator:a49d91361e25a3fc3cf089469d4c6f1b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a674a299c97dbe6183352ee3ee92525"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#a9a674a299c97dbe6183352ee3ee92525">detachGui</a> (<a class="el" href="class_gui_control.html">GuiControl</a> *pGuiControl)</td></tr>
+<tr class="separator:a9a674a299c97dbe6183352ee3ee92525"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18d62cf9410f575df1a434e6e3590d72"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#a18d62cf9410f575df1a434e6e3590d72">detachAllGuiControls</a> (void)</td></tr>
+<tr class="separator:a18d62cf9410f575df1a434e6e3590d72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ad6701535ed7d7158903610cc95957e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#a8ad6701535ed7d7158903610cc95957e">updateAttachedGui</a> (void)</td></tr>
 <tr class="separator:a8ad6701535ed7d7158903610cc95957e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf5b79923a0a7456c707742878f23c8b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#aaf5b79923a0a7456c707742878f23c8b">setPickingAllowed</a> (const bool pickingAllowed)</td></tr>
@@ -646,6 +650,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aaeb5d5bf87c7ae88b20993ac06abd069"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9366f29867d479912e239e0cbb894300"><td class="memItemLeft" align="right" valign="top">U32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#a9366f29867d479912e239e0cbb894300">getSerialId</a> (void) const </td></tr>
 <tr class="separator:a9366f29867d479912e239e0cbb894300"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad017d8edf7cb88e23298cb56b2bb5572"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#ad017d8edf7cb88e23298cb56b2bb5572">addAudioHandle</a> (AUDIOHANDLE handle)</td></tr>
+<tr class="separator:ad017d8edf7cb88e23298cb56b2bb5572"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c18a92636856e670c6fb4062d916163"><td class="memItemLeft" align="right" valign="top">U32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#a3c18a92636856e670c6fb4062d916163">getSound</a> (S32 index)</td></tr>
+<tr class="separator:a3c18a92636856e670c6fb4062d916163"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a618cb5b286ef139bfa542d9d2803447e"><td class="memItemLeft" align="right" valign="top">S32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#a618cb5b286ef139bfa542d9d2803447e">getSoundsCount</a> ()</td></tr>
+<tr class="separator:a618cb5b286ef139bfa542d9d2803447e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe4a718f1465a4f855bf8692473c6bcf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#abe4a718f1465a4f855bf8692473c6bcf">refreshsources</a> ()</td></tr>
+<tr class="separator:abe4a718f1465a4f855bf8692473c6bcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b9f425bde559d3f1b3146fd3c1ceba2"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#a8b9f425bde559d3f1b3146fd3c1ceba2">writeField</a> (StringTableEntry fieldname, const char *value)</td></tr>
 <tr class="separator:a8b9f425bde559d3f1b3146fd3c1ceba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a642aeab92cc3c398ae49a0ddd5379c79"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#a642aeab92cc3c398ae49a0ddd5379c79">DECLARE_CONOBJECT</a> (<a class="el" href="class_scene_object.html">SceneObject</a>)</td></tr>
@@ -1448,6 +1460,10 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a5f376fa148318abca305efc5249dc9b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9da6c9a79f85e62da379dbcef5098780"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_vector_ptr.html">typeCollisionFixtureVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#a9da6c9a79f85e62da379dbcef5098780">mCollisionFixtures</a></td></tr>
 <tr class="separator:a9da6c9a79f85e62da379dbcef5098780"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae70c5dedd0b1858af620c15848c530ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_vector.html">typeAudioHandleVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#ae70c5dedd0b1858af620c15848c530ee">mAudioHandles</a></td></tr>
+<tr class="separator:ae70c5dedd0b1858af620c15848c530ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d314c97167fad2c28f473358f078f92"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_vector.html">Vector</a>&lt; S32 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#a7d314c97167fad2c28f473358f078f92">mHandleDeletionList</a></td></tr>
+<tr class="separator:a7d314c97167fad2c28f473358f078f92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d94696db39f3a31382dd7d2429f4953"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#a1d94696db39f3a31382dd7d2429f4953">mVisible</a></td></tr>
 <tr class="memdesc:a1d94696db39f3a31382dd7d2429f4953"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render visibility.  <a href="#a1d94696db39f3a31382dd7d2429f4953">More...</a><br /></td></tr>
 <tr class="separator:a1d94696db39f3a31382dd7d2429f4953"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1495,13 +1511,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:afc170487078e4a56e68fc6e9485b94ba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_scene_window.html">SceneWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#afc170487078e4a56e68fc6e9485b94ba">mpAttachedCamera</a></td></tr>
 <tr class="memdesc:afc170487078e4a56e68fc6e9485b94ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Camera mounting.  <a href="#afc170487078e4a56e68fc6e9485b94ba">More...</a><br /></td></tr>
 <tr class="separator:afc170487078e4a56e68fc6e9485b94ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abff7d155a55f085792fd36f8a5295cd1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#abff7d155a55f085792fd36f8a5295cd1">mAttachedGuiSizeControl</a></td></tr>
-<tr class="memdesc:abff7d155a55f085792fd36f8a5295cd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">GUI attachment.  <a href="#abff7d155a55f085792fd36f8a5295cd1">More...</a><br /></td></tr>
-<tr class="separator:abff7d155a55f085792fd36f8a5295cd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a36c87efd1ba1c11b0a4d412cdae3f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_gui_control.html">GuiControl</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#a7a36c87efd1ba1c11b0a4d412cdae3f9">mpAttachedGui</a></td></tr>
-<tr class="separator:a7a36c87efd1ba1c11b0a4d412cdae3f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f69af25a9bfa85fd2d962ae73225146"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_scene_window.html">SceneWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#a4f69af25a9bfa85fd2d962ae73225146">mpAttachedGuiSceneWindow</a></td></tr>
-<tr class="separator:a4f69af25a9bfa85fd2d962ae73225146"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3253c4affc97e524156843e62b0aafb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_vector.html">Vector</a>&lt; <a class="el" href="struct_scene_object_attached_g_u_i.html">SceneObjectAttachedGUI</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#ab3253c4affc97e524156843e62b0aafb">mAttachedCtrls</a></td></tr>
+<tr class="memdesc:ab3253c4affc97e524156843e62b0aafb"><td class="mdescLeft">&#160;</td><td class="mdescRight">GUI attachment.  <a href="#ab3253c4affc97e524156843e62b0aafb">More...</a><br /></td></tr>
+<tr class="separator:ab3253c4affc97e524156843e62b0aafb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3a9e331e7d25d965fc02898b5df0950"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_object.html#ad3a9e331e7d25d965fc02898b5df0950">mBeingSafeDeleted</a></td></tr>
 <tr class="memdesc:ad3a9e331e7d25d965fc02898b5df0950"><td class="mdescLeft">&#160;</td><td class="mdescRight">Safe deletion.  <a href="#ad3a9e331e7d25d965fc02898b5df0950">More...</a><br /></td></tr>
 <tr class="separator:ad3a9e331e7d25d965fc02898b5df0950"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1642,6 +1654,22 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ad017d8edf7cb88e23298cb56b2bb5572"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void addAudioHandle </td>
+          <td>(</td>
+          <td class="paramtype">AUDIOHANDLE&#160;</td>
+          <td class="paramname"><em>handle</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a67eaf51423a16a178e794516487ec843"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1856,7 +1884,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a0df056e9bcc5d9e5c240ba3d438f7c0c"></a>
+<a class="anchor" id="af736f7dbf6bdf18490b39e2d90216edc"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1876,7 +1904,13 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const bool&#160;</td>
-          <td class="paramname"><em>sizeControl</em>&#160;</td>
+          <td class="paramname"><em>sizeControl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="struct_vector2.html">Vector2</a>&#160;</td>
+          <td class="paramname"><em>offset</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1992,7 +2026,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Render Output. </p>
 
-<p>Reimplemented in <a class="el" href="class_image_font.html#a93a2790c432fecdacff5b028b4209ccf">ImageFont</a>, <a class="el" href="class_skeleton_object.html#a93a2790c432fecdacff5b028b4209ccf">SkeletonObject</a>, <a class="el" href="class_composite_sprite.html#a93a2790c432fecdacff5b028b4209ccf">CompositeSprite</a>, and <a class="el" href="class_wave_composite.html#a93a2790c432fecdacff5b028b4209ccf">WaveComposite</a>.</p>
+<p>Reimplemented in <a class="el" href="class_text_sprite.html#a93a2790c432fecdacff5b028b4209ccf">TextSprite</a>, <a class="el" href="class_skeleton_object.html#a93a2790c432fecdacff5b028b4209ccf">SkeletonObject</a>, <a class="el" href="class_composite_sprite.html#a93a2790c432fecdacff5b028b4209ccf">CompositeSprite</a>, and <a class="el" href="class_wave_composite.html#a93a2790c432fecdacff5b028b4209ccf">WaveComposite</a>.</p>
 
 </div>
 </div>
@@ -2256,7 +2290,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="class_behavior_component.html#a62aa4e3f1aea3c0841234882d0105c1b">BehaviorComponent</a>.</p>
 
-<p>Reimplemented in <a class="el" href="class_particle_player.html#a62aa4e3f1aea3c0841234882d0105c1b">ParticlePlayer</a>, <a class="el" href="class_scroller.html#a62aa4e3f1aea3c0841234882d0105c1b">Scroller</a>, <a class="el" href="class_shape_vector.html#add6ef633c96e2e1663b017c4541ddb1e">ShapeVector</a>, <a class="el" href="class_image_font.html#a62aa4e3f1aea3c0841234882d0105c1b">ImageFont</a>, <a class="el" href="class_skeleton_object.html#a62aa4e3f1aea3c0841234882d0105c1b">SkeletonObject</a>, <a class="el" href="class_composite_sprite.html#a62aa4e3f1aea3c0841234882d0105c1b">CompositeSprite</a>, <a class="el" href="class_trigger.html#a62aa4e3f1aea3c0841234882d0105c1b">Trigger</a>, <a class="el" href="class_wave_composite.html#a62aa4e3f1aea3c0841234882d0105c1b">WaveComposite</a>, <a class="el" href="class_sprite_base.html#a62aa4e3f1aea3c0841234882d0105c1b">SpriteBase</a>, and <a class="el" href="class_sprite.html#a62aa4e3f1aea3c0841234882d0105c1b">Sprite</a>.</p>
+<p>Reimplemented in <a class="el" href="class_particle_player.html#a62aa4e3f1aea3c0841234882d0105c1b">ParticlePlayer</a>, <a class="el" href="class_text_sprite.html#a62aa4e3f1aea3c0841234882d0105c1b">TextSprite</a>, <a class="el" href="class_scroller.html#a62aa4e3f1aea3c0841234882d0105c1b">Scroller</a>, <a class="el" href="class_shape_vector.html#add6ef633c96e2e1663b017c4541ddb1e">ShapeVector</a>, <a class="el" href="class_skeleton_object.html#a62aa4e3f1aea3c0841234882d0105c1b">SkeletonObject</a>, <a class="el" href="class_composite_sprite.html#a62aa4e3f1aea3c0841234882d0105c1b">CompositeSprite</a>, <a class="el" href="class_trigger.html#a62aa4e3f1aea3c0841234882d0105c1b">Trigger</a>, <a class="el" href="class_wave_composite.html#a62aa4e3f1aea3c0841234882d0105c1b">WaveComposite</a>, <a class="el" href="class_sprite_base.html#a62aa4e3f1aea3c0841234882d0105c1b">SpriteBase</a>, and <a class="el" href="class_sprite.html#a62aa4e3f1aea3c0841234882d0105c1b">Sprite</a>.</p>
 
 </div>
 </div>
@@ -2620,6 +2654,22 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a18d62cf9410f575df1a434e6e3590d72"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void detachAllGuiControls </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a49d91361e25a3fc3cf089469d4c6f1b2"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2629,6 +2679,22 @@ Additional Inherited Members</h2></td></tr>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9a674a299c97dbe6183352ee3ee92525"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void detachGui </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_gui_control.html">GuiControl</a> *&#160;</td>
+          <td class="paramname"><em>pGuiControl</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -5484,6 +5550,38 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a3c18a92636856e670c6fb4062d916163"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">U32 getSound </td>
+          <td>(</td>
+          <td class="paramtype">S32&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a618cb5b286ef139bfa542d9d2803447e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">S32 getSoundsCount </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a7521698ed437755820636c17466882b0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -6206,7 +6304,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="class_behavior_component.html#aa8fb2a4e72e5c4975d3cd912c5de131a">BehaviorComponent</a>.</p>
 
-<p>Reimplemented in <a class="el" href="class_scroller.html#aa8fb2a4e72e5c4975d3cd912c5de131a">Scroller</a>, <a class="el" href="class_image_font.html#aa8fb2a4e72e5c4975d3cd912c5de131a">ImageFont</a>, <a class="el" href="class_shape_vector.html#aa8fb2a4e72e5c4975d3cd912c5de131a">ShapeVector</a>, <a class="el" href="class_composite_sprite.html#aa8fb2a4e72e5c4975d3cd912c5de131a">CompositeSprite</a>, and <a class="el" href="class_trigger.html#aa8fb2a4e72e5c4975d3cd912c5de131a">Trigger</a>.</p>
+<p>Reimplemented in <a class="el" href="class_text_sprite.html#aa8fb2a4e72e5c4975d3cd912c5de131a">TextSprite</a>, <a class="el" href="class_scroller.html#aa8fb2a4e72e5c4975d3cd912c5de131a">Scroller</a>, <a class="el" href="class_shape_vector.html#aa8fb2a4e72e5c4975d3cd912c5de131a">ShapeVector</a>, <a class="el" href="class_composite_sprite.html#aa8fb2a4e72e5c4975d3cd912c5de131a">CompositeSprite</a>, and <a class="el" href="class_trigger.html#aa8fb2a4e72e5c4975d3cd912c5de131a">Trigger</a>.</p>
 
 </div>
 </div>
@@ -6379,7 +6477,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="class_behavior_component.html#a28fb2b0653c2c31284ebef9237dc9c5c">BehaviorComponent</a>.</p>
 
-<p>Reimplemented in <a class="el" href="class_scroller.html#a28fb2b0653c2c31284ebef9237dc9c5c">Scroller</a>, <a class="el" href="class_image_font.html#a28fb2b0653c2c31284ebef9237dc9c5c">ImageFont</a>, <a class="el" href="class_shape_vector.html#a28fb2b0653c2c31284ebef9237dc9c5c">ShapeVector</a>, and <a class="el" href="class_composite_sprite.html#a28fb2b0653c2c31284ebef9237dc9c5c">CompositeSprite</a>.</p>
+<p>Reimplemented in <a class="el" href="class_text_sprite.html#a28fb2b0653c2c31284ebef9237dc9c5c">TextSprite</a>, <a class="el" href="class_scroller.html#a28fb2b0653c2c31284ebef9237dc9c5c">Scroller</a>, <a class="el" href="class_shape_vector.html#a28fb2b0653c2c31284ebef9237dc9c5c">ShapeVector</a>, and <a class="el" href="class_composite_sprite.html#a28fb2b0653c2c31284ebef9237dc9c5c">CompositeSprite</a>.</p>
 
 </div>
 </div>
@@ -6651,6 +6749,21 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="abe4a718f1465a4f855bf8692473c6bcf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void refreshsources </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a751679939c4bf024410664cca6207dd8"></a>
 <div class="memitem">
 <div class="memproto">
@@ -6873,7 +6986,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="class_scene_render_object.html#a25589538d1363052dbc086677ac4b498">SceneRenderObject</a>.</p>
 
-<p>Reimplemented in <a class="el" href="class_image_font.html#ab74fc47417c4ba44e8a4a8721459b053">ImageFont</a>, <a class="el" href="class_skeleton_object.html#ab74fc47417c4ba44e8a4a8721459b053">SkeletonObject</a>, <a class="el" href="class_composite_sprite.html#ab74fc47417c4ba44e8a4a8721459b053">CompositeSprite</a>, and <a class="el" href="class_wave_composite.html#ab74fc47417c4ba44e8a4a8721459b053">WaveComposite</a>.</p>
+<p>Reimplemented in <a class="el" href="class_text_sprite.html#ab74fc47417c4ba44e8a4a8721459b053">TextSprite</a>, <a class="el" href="class_skeleton_object.html#ab74fc47417c4ba44e8a4a8721459b053">SkeletonObject</a>, <a class="el" href="class_composite_sprite.html#ab74fc47417c4ba44e8a4a8721459b053">CompositeSprite</a>, and <a class="el" href="class_wave_composite.html#ab74fc47417c4ba44e8a4a8721459b053">WaveComposite</a>.</p>
 
 </div>
 </div>
@@ -6917,7 +7030,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="class_scene_render_object.html#ad36295c29e139df35b960f2db37e6456">SceneRenderObject</a>.</p>
 
-<p>Reimplemented in <a class="el" href="class_particle_player.html#a71f0087e869c8a9f99796a21651c6c57">ParticlePlayer</a>, <a class="el" href="class_scroller.html#a71f0087e869c8a9f99796a21651c6c57">Scroller</a>, <a class="el" href="class_image_font.html#a71f0087e869c8a9f99796a21651c6c57">ImageFont</a>, <a class="el" href="class_shape_vector.html#a71f0087e869c8a9f99796a21651c6c57">ShapeVector</a>, <a class="el" href="class_skeleton_object.html#a71f0087e869c8a9f99796a21651c6c57">SkeletonObject</a>, <a class="el" href="class_composite_sprite.html#a71f0087e869c8a9f99796a21651c6c57">CompositeSprite</a>, <a class="el" href="class_wave_composite.html#a71f0087e869c8a9f99796a21651c6c57">WaveComposite</a>, and <a class="el" href="class_sprite.html#a71f0087e869c8a9f99796a21651c6c57">Sprite</a>.</p>
+<p>Reimplemented in <a class="el" href="class_particle_player.html#a71f0087e869c8a9f99796a21651c6c57">ParticlePlayer</a>, <a class="el" href="class_text_sprite.html#a71f0087e869c8a9f99796a21651c6c57">TextSprite</a>, <a class="el" href="class_scroller.html#a71f0087e869c8a9f99796a21651c6c57">Scroller</a>, <a class="el" href="class_shape_vector.html#a71f0087e869c8a9f99796a21651c6c57">ShapeVector</a>, <a class="el" href="class_skeleton_object.html#a71f0087e869c8a9f99796a21651c6c57">SkeletonObject</a>, <a class="el" href="class_composite_sprite.html#a71f0087e869c8a9f99796a21651c6c57">CompositeSprite</a>, <a class="el" href="class_wave_composite.html#a71f0087e869c8a9f99796a21651c6c57">WaveComposite</a>, and <a class="el" href="class_sprite.html#a71f0087e869c8a9f99796a21651c6c57">Sprite</a>.</p>
 
 </div>
 </div>
@@ -9335,7 +9448,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="class_scene_render_object.html#adff9a91f7dea0eaff638bda2313ea2ea">SceneRenderObject</a>.</p>
 
-<p>Reimplemented in <a class="el" href="class_particle_player.html#ab0278e05fcb85d667a800dd539663751">ParticlePlayer</a>, <a class="el" href="class_image_font.html#ab0278e05fcb85d667a800dd539663751">ImageFont</a>, <a class="el" href="class_shape_vector.html#ab0278e05fcb85d667a800dd539663751">ShapeVector</a>, <a class="el" href="class_skeleton_object.html#ab0278e05fcb85d667a800dd539663751">SkeletonObject</a>, <a class="el" href="class_composite_sprite.html#ab0278e05fcb85d667a800dd539663751">CompositeSprite</a>, <a class="el" href="class_trigger.html#ab0278e05fcb85d667a800dd539663751">Trigger</a>, <a class="el" href="class_wave_composite.html#ab0278e05fcb85d667a800dd539663751">WaveComposite</a>, and <a class="el" href="class_sprite_base.html#ab0278e05fcb85d667a800dd539663751">SpriteBase</a>.</p>
+<p>Reimplemented in <a class="el" href="class_particle_player.html#ab0278e05fcb85d667a800dd539663751">ParticlePlayer</a>, <a class="el" href="class_text_sprite.html#ab0278e05fcb85d667a800dd539663751">TextSprite</a>, <a class="el" href="class_shape_vector.html#ab0278e05fcb85d667a800dd539663751">ShapeVector</a>, <a class="el" href="class_skeleton_object.html#ab0278e05fcb85d667a800dd539663751">SkeletonObject</a>, <a class="el" href="class_composite_sprite.html#ab0278e05fcb85d667a800dd539663751">CompositeSprite</a>, <a class="el" href="class_trigger.html#ab0278e05fcb85d667a800dd539663751">Trigger</a>, <a class="el" href="class_wave_composite.html#ab0278e05fcb85d667a800dd539663751">WaveComposite</a>, and <a class="el" href="class_sprite_base.html#ab0278e05fcb85d667a800dd539663751">SpriteBase</a>.</p>
 
 </div>
 </div>
@@ -9485,7 +9598,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="class_scene_render_object.html#ac03e95b3eaf9e25330af426fd95093e9">SceneRenderObject</a>.</p>
 
-<p>Reimplemented in <a class="el" href="class_particle_player.html#ae407f2a30c48d7d16319e666800a9a75">ParticlePlayer</a>, <a class="el" href="class_image_font.html#ae407f2a30c48d7d16319e666800a9a75">ImageFont</a>, <a class="el" href="class_shape_vector.html#ae407f2a30c48d7d16319e666800a9a75">ShapeVector</a>, <a class="el" href="class_skeleton_object.html#ae407f2a30c48d7d16319e666800a9a75">SkeletonObject</a>, <a class="el" href="class_wave_composite.html#ae407f2a30c48d7d16319e666800a9a75">WaveComposite</a>, and <a class="el" href="class_sprite_base.html#a7f98fea119975500e019c105b55db5de">SpriteBase</a>.</p>
+<p>Reimplemented in <a class="el" href="class_particle_player.html#ae407f2a30c48d7d16319e666800a9a75">ParticlePlayer</a>, <a class="el" href="class_text_sprite.html#ae407f2a30c48d7d16319e666800a9a75">TextSprite</a>, <a class="el" href="class_shape_vector.html#ae407f2a30c48d7d16319e666800a9a75">ShapeVector</a>, <a class="el" href="class_skeleton_object.html#ae407f2a30c48d7d16319e666800a9a75">SkeletonObject</a>, <a class="el" href="class_wave_composite.html#ae407f2a30c48d7d16319e666800a9a75">WaveComposite</a>, and <a class="el" href="class_sprite_base.html#a7f98fea119975500e019c105b55db5de">SpriteBase</a>.</p>
 
 </div>
 </div>
@@ -11067,7 +11180,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="abff7d155a55f085792fd36f8a5295cd1"></a>
+<a class="anchor" id="ab3253c4affc97e524156843e62b0aafb"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -11075,7 +11188,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool mAttachedGuiSizeControl</td>
+          <td class="memname"><a class="el" href="class_vector.html">Vector</a>&lt;<a class="el" href="struct_scene_object_attached_g_u_i.html">SceneObjectAttachedGUI</a>&gt; mAttachedCtrls</td>
         </tr>
       </table>
   </td>
@@ -11086,6 +11199,26 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>GUI attachment. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae70c5dedd0b1858af620c15848c530ee"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_vector.html">typeAudioHandleVector</a> mAudioHandles</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -11663,6 +11796,26 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a7d314c97167fad2c28f473358f078f92"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_vector.html">Vector</a>&lt;S32&gt; mHandleDeletionList</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="af94daabf2723d736bd0dcb5b383513ed"></a>
 <div class="memitem">
 <div class="memproto">
@@ -11784,46 +11937,6 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Camera mounting. </p>
-
-</div>
-</div>
-<a class="anchor" id="a7a36c87efd1ba1c11b0a4d412cdae3f9"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_gui_control.html">GuiControl</a>* mpAttachedGui</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a4f69af25a9bfa85fd2d962ae73225146"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_scene_window.html">SceneWindow</a>* mpAttachedGuiSceneWindow</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>

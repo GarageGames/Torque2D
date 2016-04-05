@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['writeflags',['WriteFlags',['../class_sim_object.html#aa764d6ab46a34397a2a625235de83577',1,'SimObject']]]
+  ['vertsizingoptions',['vertSizingOptions',['../class_gui_control.html#a2a3615f2581f4aa3eea851a273f6137b',1,'GuiControl']]]
 ];

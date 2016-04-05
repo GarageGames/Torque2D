@@ -1,6 +1,9 @@
 var searchData=
 [
   ['valid',['Valid',['../struct_ghost_info.html#aa705cf7e79a21c2352b00ffe20cd295fac9ceaeea41ae06d1a39c3322c762ec71',1,'GhostInfo']]],
+  ['valign_5fbottom',['VALIGN_BOTTOM',['../class_text_sprite.html#a3ba8a1cdd2e577efbad7c7b88e1c6175a7178e59d239d98435f6f473dced2c2d1',1,'TextSprite']]],
+  ['valign_5fmiddle',['VALIGN_MIDDLE',['../class_text_sprite.html#a3ba8a1cdd2e577efbad7c7b88e1c6175ad1216289dceeda78e8281be5542d16c1',1,'TextSprite']]],
+  ['valign_5ftop',['VALIGN_TOP',['../class_text_sprite.html#a3ba8a1cdd2e577efbad7c7b88e1c6175a667caf0089bc36abdd821dfd4e55038c',1,'TextSprite']]],
   ['vectordeletion',['VectorDeletion',['../class_message_vector.html#a6b0b71f0ea4cc69997f0c2044f12f2bba558af43ae412aba188213529e80e9fa1',1,'MessageVector']]],
   ['vertical_5fdivider',['VERTICAL_DIVIDER',['../class_gui_frame_set_ctrl.html#a81a01a86de31071a92e6cce0bab9bc4ba245412ab32d5f8a9118fdc45176c2235',1,'GuiFrameSetCtrl']]],
   ['vertresizebottom',['vertResizeBottom',['../class_gui_control.html#a2a3615f2581f4aa3eea851a273f6137ba4a3e18bc000b13c56fc990ff64cce65a',1,'GuiControl']]],

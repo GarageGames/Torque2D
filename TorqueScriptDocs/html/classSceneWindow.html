@@ -30,7 +30,6 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
     </ul>
@@ -131,6 +130,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:affca316168aeaf1d4bc309936c667809"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1dc047d96926110b4a5601f629d3523f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSceneWindow.html#a1dc047d96926110b4a5601f629d3523f">resetScene</a> ()</td></tr>
 <tr class="separator:a1dc047d96926110b4a5601f629d3523f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5f5f17823e886d4e5fb02ef5a8dfc77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSceneWindow.html#af5f5f17823e886d4e5fb02ef5a8dfc77">setAudioListener</a> ()</td></tr>
+<tr class="separator:af5f5f17823e886d4e5fb02ef5a8dfc77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a384c3ead0aa0c633ec5aeecd96bb766d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSceneWindow.html#a384c3ead0aa0c633ec5aeecd96bb766d">setBackgroundColor</a> (float red, float green, float blue, [float alpha=1.0])</td></tr>
 <tr class="separator:a384c3ead0aa0c633ec5aeecd96bb766d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adfc5ef4f5911d82195d337036aeb7fd7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSceneWindow.html#adfc5ef4f5911d82195d337036aeb7fd7">setCameraAngle</a> (angle)</td></tr>
@@ -898,6 +899,27 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Detaches the window from any <a class="el" href="classScene.html">Scene</a> Object. </p><dl class="section return"><dt>Returns</dt><dd>No return value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af5f5f17823e886d4e5fb02ef5a8dfc77"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setAudioListener </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets this Scenewindow to process the AudioListener's position and velocity WARNING : The code does not verify if multiple SceneWindows have this function enabled. User must make sure to manage this manually. Multiple listeners may lead to crashes/bugs/unexpected behaviors. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">status</td><td>- Whether to enable or disable AudioListener processing (optional, default to true) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

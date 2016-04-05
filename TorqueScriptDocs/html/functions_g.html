@@ -30,7 +30,6 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
     </ul>
@@ -222,6 +221,9 @@
 <li>getAutoFormatXmlExtension()
 : <a class="el" href="classTaml.html#a004ac73cb71ec7221f4d9e32824bc9b5">Taml</a>
 </li>
+<li>getAutoLineHeight()
+: <a class="el" href="classTextSprite.html#a4d3174258d1fcb527f41daad737987ef">TextSprite</a>
+</li>
 <li>getAutoSizing()
 : <a class="el" href="classSceneObject.html#a808d2ed7909501b143a84be8f92ed61e">SceneObject</a>
 </li>
@@ -389,6 +391,18 @@
 <li>getChainCollisionShapePointCount()
 : <a class="el" href="classSceneObject.html#a30d792bb8911e0a35c3d8d9261e719f0">SceneObject</a>
 </li>
+<li>getCharacterBlendColor()
+: <a class="el" href="classTextSprite.html#a84669c79c11ed75e37be6c1f421a3455">TextSprite</a>
+</li>
+<li>getCharacterHasBlendColor()
+: <a class="el" href="classTextSprite.html#adb062616051842bb3d4957dcde1c9f7b">TextSprite</a>
+</li>
+<li>getCharacterOffset()
+: <a class="el" href="classTextSprite.html#ac6ed05411b7601c47356735427bd68a2">TextSprite</a>
+</li>
+<li>getCharacterScale()
+: <a class="el" href="classTextSprite.html#a48ce35c120c6390231101cabd588f3f8">TextSprite</a>
+</li>
 <li>getCircleCollisionShapeLocalPosition()
 : <a class="el" href="classSceneObject.html#ac22f98ca4ada2bfe8e1dd3d4333f7562">SceneObject</a>
 </li>
@@ -481,6 +495,9 @@
 </li>
 <li>getCursorPos()
 : <a class="el" href="classGuiCanvas.html#a411c7297210a54ab69c75278db8a11bf">GuiCanvas</a>
+</li>
+<li>getCustomLineHeight()
+: <a class="el" href="classTextSprite.html#a4fa8aa32e034c34a03a5d89a228741c3">TextSprite</a>
 </li>
 <li>getData()
 : <a class="el" href="classSimXMLDocument.html#ae9dea42fcae074448f7cf65759642b7e">SimXMLDocument</a>
@@ -679,11 +696,20 @@
 , <a class="el" href="classSkeletonObject.html#acc1b5693fb1a90f6df5ec68abe1047fa">SkeletonObject</a>
 , <a class="el" href="classSprite.html#acc1b5693fb1a90f6df5ec68abe1047fa">Sprite</a>
 </li>
-<li>getFontPadding()
-: <a class="el" href="classImageFont.html#a118943df4c5bd900e6d47a312b650498">ImageFont</a>
+<li>getFont()
+: <a class="el" href="classTextSprite.html#adad7f5793da2ff898b4f499fef51086c">TextSprite</a>
+</li>
+<li>getFontFile()
+: <a class="el" href="classFontAsset.html#a3373e8a64baabc9945031c08b0b284d7">FontAsset</a>
+</li>
+<li>getFontScaleX()
+: <a class="el" href="classTextSprite.html#a014b2fad0eba7cbd5c45a93dfb4f38c5">TextSprite</a>
+</li>
+<li>getFontScaleY()
+: <a class="el" href="classTextSprite.html#afa88649cf124acd7550ce4d5118d5c7d">TextSprite</a>
 </li>
 <li>getFontSize()
-: <a class="el" href="classImageFont.html#a5f97e5806faae02adf7be9ea0a4b2e6d">ImageFont</a>
+: <a class="el" href="classTextSprite.html#a6aed0048ed521d6bc9805665908ac290">TextSprite</a>
 </li>
 <li>getForce()
 : <a class="el" href="classAmbientForceController.html#a0434fc9330abb8405750f7c8196fc5a3">AmbientForceController</a>
@@ -750,7 +776,6 @@
 </li>
 <li>getImage()
 : <a class="el" href="classAnimationAsset.html#a832e57df908361dd86dc673520d7fb81">AnimationAsset</a>
-, <a class="el" href="classImageFont.html#a832e57df908361dd86dc673520d7fb81">ImageFont</a>
 , <a class="el" href="classParticleAssetEmitter.html#a832e57df908361dd86dc673520d7fb81">ParticleAssetEmitter</a>
 , <a class="el" href="classRenderProxy.html#a832e57df908361dd86dc673520d7fb81">RenderProxy</a>
 , <a class="el" href="classSpriteBase.html#a832e57df908361dd86dc673520d7fb81">SpriteBase</a>
@@ -820,6 +845,9 @@
 </li>
 <li>getKeepAligned()
 : <a class="el" href="classParticleAssetEmitter.html#aa72993b4730a5d0e4a72475aa18bd678">ParticleAssetEmitter</a>
+</li>
+<li>getKerning()
+: <a class="el" href="classTextSprite.html#a7392f08c5d7b1aab84283d3d3fc499c6">TextSprite</a>
 </li>
 <li>getLayerSortMode()
 : <a class="el" href="classScene.html#aa0ffbcfcd72170e3e65b58820b3f8e4e">Scene</a>
@@ -972,6 +1000,12 @@
 </li>
 <li>getOrientationType()
 : <a class="el" href="classParticleAssetEmitter.html#adfb927a226605c9a2b133d2657a4ac01">ParticleAssetEmitter</a>
+</li>
+<li>getOverflowModeX()
+: <a class="el" href="classTextSprite.html#a20cff60f8d9f16af5b85e0b0c5fce4fa">TextSprite</a>
+</li>
+<li>getOverflowModeY()
+: <a class="el" href="classTextSprite.html#a48fb0cbc852c3f33e2dacef078f29544">TextSprite</a>
 </li>
 <li>getOwner()
 : <a class="el" href="classParticleAssetEmitter.html#ada0d96cba91d34313989fb591bc9581f">ParticleAssetEmitter</a>
@@ -1194,6 +1228,12 @@
 <li>getSortPointY()
 : <a class="el" href="classSceneObject.html#a858e6cf21369c5f596371bbec474933c">SceneObject</a>
 </li>
+<li>getSoundatIndex()
+: <a class="el" href="classSceneObject.html#a3fdfb5fc048f70a55bd5059dbe6a7c68">SceneObject</a>
+</li>
+<li>getSoundsCount()
+: <a class="el" href="classSceneObject.html#a91693db43a1bd82a525882f4619206db">SceneObject</a>
+</li>
 <li>getSpriteAlphaTest()
 : <a class="el" href="classCompositeSprite.html#ae2f0b2ca9a9561f7f0cd44a90d21363e">CompositeSprite</a>
 </li>
@@ -1329,11 +1369,14 @@
 : <a class="el" href="classBehaviorInstance.html#a31708b039fbfd7802a4950e08fe7d920">BehaviorInstance</a>
 </li>
 <li>getText()
-: <a class="el" href="classImageFont.html#afab766445043570e6a82c14851366933">ImageFont</a>
-, <a class="el" href="classSimXMLDocument.html#afab766445043570e6a82c14851366933">SimXMLDocument</a>
+: <a class="el" href="classSimXMLDocument.html#afab766445043570e6a82c14851366933">SimXMLDocument</a>
+, <a class="el" href="classTextSprite.html#afab766445043570e6a82c14851366933">TextSprite</a>
 </li>
 <li>getTextAlignment()
-: <a class="el" href="classImageFont.html#ad59a07fe0695129104f5184746597bec">ImageFont</a>
+: <a class="el" href="classTextSprite.html#ad59a07fe0695129104f5184746597bec">TextSprite</a>
+</li>
+<li>getTextVAlignment()
+: <a class="el" href="classTextSprite.html#ab5e8cb64e6515bcd5b1b11412c276d58">TextSprite</a>
 </li>
 <li>getTimeScale()
 : <a class="el" href="classParticlePlayer.html#a94bb4c68cd730ce5c8a5ad6528e88276">ParticlePlayer</a>

@@ -33,6 +33,7 @@ var searchData=
   ['templinebreak',['TempLineBreak',['../struct_temp_line_break.html',1,'']]],
   ['texelarea',['TexelArea',['../class_image_asset_1_1_frame_area_1_1_texel_area.html',1,'ImageAsset::FrameArea']]],
   ['textelement',['TextElement',['../struct_gui_message_vector_ctrl_1_1_text_element.html',1,'GuiMessageVectorCtrl']]],
+  ['textsprite',['TextSprite',['../class_text_sprite.html',1,'']]],
   ['texturedictionary',['TextureDictionary',['../class_texture_dictionary.html',1,'']]],
   ['texturehandle',['TextureHandle',['../class_texture_handle.html',1,'']]],
   ['texturemanager',['TextureManager',['../class_texture_manager.html',1,'']]],

@@ -1,6 +1,7 @@
 var searchData=
 [
   ['scene_5fdebug_5faabb',['SCENE_DEBUG_AABB',['../class_scene.html#a5a0d89173d9e3970774d01404aa09859ab6b558f56c9027d6a8130042c8c3bf69',1,'Scene']]],
+  ['scene_5fdebug_5faudio_5fsources',['SCENE_DEBUG_AUDIO_SOURCES',['../class_scene.html#a5a0d89173d9e3970774d01404aa09859abea019b6c3ed56d295ca0ae4372c12c4',1,'Scene']]],
   ['scene_5fdebug_5fcollision_5fshapes',['SCENE_DEBUG_COLLISION_SHAPES',['../class_scene.html#a5a0d89173d9e3970774d01404aa09859a11dcddeee7a83a06d70a9abb66f043a8',1,'Scene']]],
   ['scene_5fdebug_5fcontrollers',['SCENE_DEBUG_CONTROLLERS',['../class_scene.html#a5a0d89173d9e3970774d01404aa09859aeb720db1e7f0fba22020dad73959f288',1,'Scene']]],
   ['scene_5fdebug_5ffps_5fmetrics',['SCENE_DEBUG_FPS_METRICS',['../class_scene.html#a5a0d89173d9e3970774d01404aa09859ae501c5db11d818ba1c8f61f6669b30a2',1,'Scene']]],

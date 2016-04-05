@@ -3,7 +3,6 @@ var searchData=
   ['ifactoryobjectreset',['IFactoryObjectReset',['../class_i_factory_object_reset.html',1,'']]],
   ['ifstmtnode',['IfStmtNode',['../struct_if_stmt_node.html',1,'']]],
   ['imageasset',['ImageAsset',['../class_image_asset.html',1,'']]],
-  ['imagefont',['ImageFont',['../class_image_font.html',1,'']]],
   ['imageframeprovider',['ImageFrameProvider',['../class_image_frame_provider.html',1,'']]],
   ['imageframeprovidercore',['ImageFrameProviderCore',['../class_image_frame_provider_core.html',1,'']]],
   ['imessagelistener',['IMessageListener',['../class_dispatcher_1_1_i_message_listener.html',1,'Dispatcher']]],
