@@ -143,7 +143,7 @@ ThreadIdent ThreadManager::getCurrentThreadId()
    return (U32)pthread_self();
 }
 
-bool ThreadManager::compare(U32 threadId_1, U32 threadId_2)
+bool ThreadManager::compare(ThreadIdent threadId_1, ThreadIdent threadId_2)
 {
    return (bool)pthread_equal((pthread_t)threadId_1, (pthread_t)threadId_2);
 }
