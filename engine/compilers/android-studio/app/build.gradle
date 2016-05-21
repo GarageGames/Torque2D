@@ -16,8 +16,8 @@ android {
                     'src/main/assets',
                     'src/main/game'
             ]
-            jni.srcDirs = ['../../../source/']
-            jniLibs.srcDir 'src/main/libs'
+           /* jni.srcDirs = ['../../../source/']
+            jniLibs.srcDir 'src/main/libs' */
 
         }
         task buildNative(type: Exec, description: 'Compile JNI source via NDK') {

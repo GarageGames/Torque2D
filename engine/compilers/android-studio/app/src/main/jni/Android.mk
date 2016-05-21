@@ -35,7 +35,7 @@ LOCAL_PATH := $(MY_LOCAL_PATH)
 include $(CLEAR_VARS)
  
 LOCAL_MODULE := freetype-prebuilt
-LOCAL_SRC_FILES := ../../../../../../lib/freetype/android/lib/libfreetype.a
+LOCAL_SRC_FILES := ../../../../../../lib/freetype/android/lib/$(TARGET_ARCH_ABI)/libfreetype.a
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../../../../lib/freetype/android/include $(LOCAL_PATH)/../../../../../../lib/freetype/android/include/freetype2
  
 include $(PREBUILT_STATIC_LIBRARY)
