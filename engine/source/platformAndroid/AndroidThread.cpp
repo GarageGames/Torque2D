@@ -133,12 +133,12 @@ bool Thread::isAlive()
      return true; // we could not get the lock, it must be alive.
 }
 
-U32 Thread::getId()
+ThreadIdent Thread::getId()
 {
    return mData->mThreadID;
 }
 
-U32 ThreadManager::getCurrentThreadId()
+ThreadIdent ThreadManager::getCurrentThreadId()
 {
    return (U32)pthread_self();
 }
