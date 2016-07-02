@@ -46,7 +46,7 @@ function initializeCanvas(%windowName)
 
     if ( $pref::iOS::DeviceType !$= "" )
     {
-        %resolution = iOSResolutionFromSetting($pref::iOS::DeviceType, $pref::iOS::ScreenOrientation);
+        $Resolution = $iOSwidth SPC $iOSheight;
     }
     else if ($platform $= "Android")
     {
