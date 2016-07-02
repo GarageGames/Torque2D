@@ -121,6 +121,13 @@ void Platform::setWindowTitle(const char *title)
 //------------------------------------------------------------------------------
 void Platform::init()
 {
+    // Create two variables that I use later to make the canvas the right size
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    CGFloat screenScale = [[UIScreen mainScreen] scale];
+    
+    Con::setFloatVariable("$iOSwidth", screenBounds.size.width * screenScale);
+    Con::setFloatVariable("$iOSheight", screenBounds.size.height * screenScale);
+
     Con::setVariable("$platform", "iOS");
     
     if ([[UIScreen mainScreen] scale] == 2)
