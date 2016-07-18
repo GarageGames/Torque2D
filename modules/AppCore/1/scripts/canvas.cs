@@ -44,7 +44,7 @@ function initializeCanvas(%windowName)
 
     $pref::iOS::ScreenDepth = 32;
 
-    if ( $pref::iOS::DeviceType !$= "" )
+    if ($platform $= "iOS")
     {
         %resolution = $iOSwidth SPC $iOSheight SPC "32";
     }
