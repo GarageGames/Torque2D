@@ -1,0 +1,10 @@
+<ModuleDefinition
+	ModuleId="KeyboardToy"
+	VersionId="1"
+	Description="Display virtual keyboard."
+	Dependencies="Keyboard=1"
+	Type="toy"
+	ToyCategoryIndex="7"
+	ScriptFile="main.cs"
+	CreateFunction="create"
+	DestroyFunction="destroy"/>
