@@ -46,7 +46,7 @@ function initializeCanvas(%windowName)
 
     if ($platform $= "iOS")
     {
-        %resolution = $iOSwidth SPC $iOSheight SPC "32";
+        %resolution = $pref::iOS::Width SPC $pref::iOS::Height SPC 32;
     }
     else if ($platform $= "Android")
     {

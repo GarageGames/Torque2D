@@ -108,6 +108,7 @@ void _iOSGameSetCurrentOrientation(int iOrientation)
 
 S32 _iOSGetPortraitTouchoffset()
 {
+// NOTE: This needs to be changed to acount for different retina sizes, but I am not sure what is going on with it yet
     S32 offset = 0;
     
     S32 deviceType = Con::getIntVariable("$pref::iOS::DeviceType");
