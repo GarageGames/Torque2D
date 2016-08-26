@@ -71,7 +71,7 @@ public:
    {
       Parent::onRender(offset, updateRect);
       U32 elapsed = Platform::getRealMilliseconds() - wakeTime;
-
+      
       U32 alpha;
       if (elapsed < fadeinTime)
       {
@@ -93,7 +93,12 @@ public:
       {
          // done state
          alpha = fadeoutTime ? 255 : 0;
-         done = true;
+         if (!done) {
+             done = true;
+             // Provide and onClick script callback.
+             if (isMethod("onDone"))
+                 Con::executef(this, 2, "onDone");
+         }
       }
       ColorI color(0,0,0,alpha);
       dglDrawRectFill(offset, mBounds.extent + offset, color);
