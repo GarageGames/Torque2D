@@ -79,5 +79,6 @@ function androidBackButton(%val)
 
 function dummy()
 {
+    // another comment
     //dummy function added for feature 1
 }
