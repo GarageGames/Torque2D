@@ -76,3 +76,8 @@ function androidBackButton(%val)
 	}
 
 }
+
+function dummy()
+{
+    //dummy function added for feature 1
+}
