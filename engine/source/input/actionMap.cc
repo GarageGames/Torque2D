@@ -310,14 +310,30 @@ bool ActionMap::createEventDescriptor(const char* pEventString, EventDescriptor*
       while (pModifier != NULL) {
          if (dStricmp(pModifier, "shift") == 0) {
             pDescriptor->flags |= SI_SHIFT;
+         } else if (dStricmp(pModifier, "lshift") == 0) {
+            pDescriptor->flags |= SI_LSHIFT;
+         } else if (dStricmp(pModifier, "rshift") == 0) {
+            pDescriptor->flags |= SI_RSHIFT;
          } else if (dStricmp(pModifier, "ctrl") == 0) {
             pDescriptor->flags |= SI_CTRL;
+         } else if (dStricmp(pModifier, "lctrl") == 0) {
+            pDescriptor->flags |= SI_LCTRL;
+         } else if (dStricmp(pModifier, "rctrl") == 0) {
+            pDescriptor->flags |= SI_RCTRL;
          } else if (dStricmp(pModifier, "alt") == 0) {
             pDescriptor->flags |= SI_ALT;
+         } else if (dStricmp(pModifier, "lalt") == 0) {
+            pDescriptor->flags |= SI_LALT;
+         } else if (dStricmp(pModifier, "ralt") == 0) {
+            pDescriptor->flags |= SI_RALT;
          } else if (dStricmp(pModifier, "cmd") == 0) {
             pDescriptor->flags |= SI_ALT;
          } else if (dStricmp(pModifier, "opt") == 0) {
             pDescriptor->flags |= SI_MAC_OPT;
+         } else if (dStricmp(pModifier, "lopt") == 0) {
+            pDescriptor->flags |= SI_MAC_LOPT;
+         } else if (dStricmp(pModifier, "ropt") == 0) {
+            pDescriptor->flags |= SI_MAC_ROPT;
          }
 
          pModifier = dStrtok(NULL, "-");
@@ -528,10 +544,12 @@ const ActionMap::Node* ActionMap::findNode(const U32 inDeviceType, const U32 inD
 
    for (i = 0; i < (U32)pDeviceMap->nodeMap.size(); i++)
    {
-      if (pDeviceMap->nodeMap[i].action == KEY_ANYKEY && pDeviceMap->nodeMap[i].modifiers == realMods && dIsDecentChar(inAction))
-         return &pDeviceMap->nodeMap[i];
-      else if (pDeviceMap->nodeMap[i].modifiers == realMods && pDeviceMap->nodeMap[i].action    == inAction)
-         return &pDeviceMap->nodeMap[i];
+       if (pDeviceMap->nodeMap[i].action == KEY_ANYKEY && pDeviceMap->nodeMap[i].modifiers == realMods && dIsDecentChar(inAction))
+           return &pDeviceMap->nodeMap[i];
+       else if (inModifiers == 0 && pDeviceMap->nodeMap[i].modifiers == 0 && pDeviceMap->nodeMap[i].action == inAction)
+           return &pDeviceMap->nodeMap[i];
+       else if (pDeviceMap->nodeMap[i].modifiers == realMods && pDeviceMap->nodeMap[i].action    == inAction)
+           return &pDeviceMap->nodeMap[i];
    }
 
    return NULL;
@@ -1505,10 +1523,21 @@ bool ActionMap::processButton(const InputEvent* pEvent)
     // after the execs and don't use pNode again.
     pNode = findNode( pEvent->deviceType, pEvent->deviceInst, pEvent->modifier, pEvent->objInst );
 
-    if( pNode == NULL )
-        return true; // We already called any bound methods/functions so our job is done
+    if (pNode == NULL)
+    {
+        if (pEvent->modifier != 0)
+        {
+            // Check to see if we clear the modifiers, do we find an action?
+            pNode = findNode(pEvent->deviceType, pEvent->deviceInst, 0, pEvent->objInst);
 
-    //
+            if (pNode == NULL)
+            {
+                // We already called any bound methods/functions so our job is done
+                return true;
+            }
+        }
+    }
+
     // And enter the break into the table if this is a make event...
     enterBreakEvent(pEvent, pNode);
 
