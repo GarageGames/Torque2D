@@ -198,6 +198,8 @@ protected:
 
     virtual SpriteBatchItem* createSprite( const SpriteBatchItem::LogicalPosition& logicalPosition );
 
+    void integrateSprites(const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats);
+
     void setBatchTransform( const b2Transform& batchTransform );
     void updateLocalExtents( void );
 
