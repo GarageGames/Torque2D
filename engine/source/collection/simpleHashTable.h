@@ -79,17 +79,17 @@ public:
 
 template <class T> inline void SimpleHashTable<T>::insert(T* pObject, U8 *key, U32 keyLen)
 {
-   Parent::insert(pObject, hash(key, keyLen, 0));
+   Parent::insert(pObject, ::hash(key, keyLen, 0));
 }
 
 template <class T> inline T* SimpleHashTable<T>::remove(U8 *key, U32 keyLen)
 {
-   return Parent::remove(hash(key, keyLen, 0));
+   return Parent::remove(::hash(key, keyLen, 0));
 }
 
 template <class T> inline T* SimpleHashTable<T>::retrieve(U8 *key, U32 keyLen)
 {
-   return Parent::retrieve(hash(key, keyLen, 0));
+   return Parent::retrieve(::hash(key, keyLen, 0));
 }
 
 template <class T> inline void SimpleHashTable<T>::insert(T* pObject, const char *key)
