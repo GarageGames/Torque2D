@@ -1,0 +1,11 @@
+<ModuleDefinition
+	ModuleId="Keyboard"
+	VersionId="1"
+	ScriptFile="main.cs"
+	CreateFunction="create"
+	DestroyFunction="destroy">
+    <DeclaredAssets
+         Path="assets"
+         Extension="taml"
+         Recurse="true"/>
+</ModuleDefinition>
