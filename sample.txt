@@ -1,8 +1,0 @@
-Hi this is edit message from development branch..
-
-by rajasekaran on 2016-12-07 at 11.31
-<<<<<<< HEAD
-
-2nd edit by -- 12.01
-=======
->>>>>>> 4675becd8fcc5782e176d0b0046817d09ba3da45
