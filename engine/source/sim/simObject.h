@@ -39,6 +39,7 @@
 
 using namespace std;
 #include <vector>
+#include <string>
 typedef U32 SimObjectId;
 class SimGroup;
 
