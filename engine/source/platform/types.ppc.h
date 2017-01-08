@@ -46,5 +46,6 @@ typedef U64 FileTime;
 #  define NULL (0)
 #endif
 
+#define _WCHAR_H_CPLUSPLUS_98_CONFORMANCE_
 
 #endif //_TYPESPPC_H_
