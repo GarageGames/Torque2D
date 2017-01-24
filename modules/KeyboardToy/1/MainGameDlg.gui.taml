@@ -1,0 +1,70 @@
+<GuiSpriteCtrl
+    Name="MainGameDlg"
+    Profile="GuiToolboxProfile"
+    HorizSizing="width"
+    VertSizing="height"
+    Position="0 0"
+    Extent="1024 768"
+    MinExtent="8 8"
+    Visible="1"
+	HelpTag="0"
+	Image="@asset=Sandbox:blueGradient">
+	
+   <GuiTextCtrl
+      Name = "UserNameTxt"
+      text="NONAME"
+      canSaveDynamicFields="0"
+      isContainer="0"
+      Profile="GuiTextProfile"
+      HorizSizing="relative"
+      VertSizing="relative"
+      Position="430 120"
+      Extent="128 15"
+      MinExtent="8 2"
+      canSave="1"
+      Visible="1"
+      Active="0"
+      hovertime="1000"
+      toolTipProfile="GuiToolTipProfile"
+      maxLength="255"
+      truncate="0" />
+      
+	<GuiButtonCtrl
+		Profile="BlueButtonProfile"
+		Text="Change username"
+		ButtonType="PushButton"
+		command="Keyboard.push(ChangeUsernameDlg, ChangeUsernameEntry);"
+		canSaveDynamicFields="0"
+		isContainer="0"
+		HorizSizing="relative"
+		VertSizing="relative"
+		Position="400 150"
+		Extent="150 40"
+		MinExtent="8 2"
+		canSave="1"
+		Visible="1"
+		Active="1"
+		hovertime="1000"
+		groupNum="-1"
+		useMouseEvents="1" />
+		
+	<GuiButtonCtrl
+		Profile="BlueButtonProfile"
+		Text="Exit"
+		ButtonType="PushButton"
+		command="Canvas.popDialog(MainGameDlg);"
+		canSaveDynamicFields="0"
+		isContainer="0"
+		HorizSizing="relative"
+		VertSizing="relative"
+		Position="400 200"
+		Extent="150 40"
+		MinExtent="8 2"
+		canSave="1"
+		Visible="1"
+		Active="1"
+		hovertime="1000"
+		groupNum="-1"
+		useMouseEvents="1" />
+		
+</GuiSpriteCtrl>

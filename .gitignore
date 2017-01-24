@@ -76,3 +76,4 @@ engine/compilers/android-studio/local.properties
 engine/compilers/android-studio/app/src/main/obj/
 engine/compilers/android-studio/app/src/main/libs/
 engine/compilers/android-studio/app/src/main/game/
+engine/compilers/android-studio/app/.externalNativeBuild/

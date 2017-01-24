@@ -301,6 +301,7 @@ protected:
     static bool writeFilterMode( void* obj, StringTableEntry pFieldName )   { return static_cast<ImageAsset*>(obj)->getFilterMode() != FILTER_BILINEAR; }
 
     static bool setExplicitMode( void* obj, const char* data )              { static_cast<ImageAsset*>(obj)->setExplicitMode(dAtob(data)); return false; }
+    static bool writeExplicitMode(void* obj, StringTableEntry pFieldName) { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return pImageAsset->getExplicitMode(); }
 
     static bool setCellRowOrder( void* obj, const char* data )              { static_cast<ImageAsset*>(obj)->setCellRowOrder(dAtob(data)); return false; }
     static bool writeCellRowOrder( void* obj, StringTableEntry pFieldName ) { ImageAsset* pImageAsset = static_cast<ImageAsset*>(obj); return !pImageAsset->getExplicitMode() && !pImageAsset->getCellRowOrder(); }

@@ -1018,4 +1018,121 @@ ConsoleMethodWithDocs(SimObject,schedule, ConsoleInt, 4, 0, (time , command , [a
 
 /*! @} */ // member group Timer Events
 
+/*! @name member group Object to Object Events
+Raise events for listening objects to consume.
+@{
+*/
+
+/*! Starts listening to another object.
+   @param SimObject The object that will be posting events.
+@return No return value.
+*/
+ConsoleMethodWithDocs(SimObject, startListening, ConsoleVoid, 3, 3, (SimObject))
+{
+   // Find the specified object.
+   SimObject* pSimObject = dynamic_cast<SimObject*>(Sim::findObject(argv[2]));
+
+   // Did we find the object?
+   if (!pSimObject)
+   {
+      // No, so warn.
+      Con::warnf("SimObject::startListening() - Could not find the specified object '%s'.", argv[2]);
+      return;
+   }
+
+   // Start Listening
+   pSimObject->addListener(object->getIdString());
+}
+
+/*! Stops listening to another object.
+@param SimObject The object that will be posting events.
+@return No return value.
+*/
+ConsoleMethodWithDocs(SimObject, stopListening, ConsoleVoid, 3, 3, (SimObject))
+{
+   // Find the specified object.
+   SimObject* pSimObject = dynamic_cast<SimObject*>(Sim::findObject(argv[2]));
+
+   // Did we find the object?
+   if (!pSimObject)
+   {
+      // No, so warn.
+      Con::warnf("SimObject::stopListening() - Could not find the specified object '%s'.", argv[2]);
+      return;
+   }
+
+   // Stop Listening
+   pSimObject->removeListener(object->getIdString());
+}
+
+/*! Adds an object so that it receives events from this object.
+@param SimObject The object that will be listening to events.
+@return No return value.
+*/
+ConsoleMethodWithDocs(SimObject, addListener, ConsoleVoid, 3, 3, (SimObject))
+{
+   // Find the specified object.
+   SimObject* pSimObject = dynamic_cast<SimObject*>(Sim::findObject(argv[2]));
+
+   // Did we find the object?
+   if (!pSimObject)
+   {
+      // No, so warn.
+      Con::warnf("SimObject::addListener() - Could not find the specified object '%s'.", argv[2]);
+      return;
+   }
+
+   // Start Listening
+   object->addListener(pSimObject->getIdString());
+}
+
+/*! Removes an object so that it no longer receives events from this object.
+@param SimObject The object that will stop listening to events.
+@return No return value.
+*/
+ConsoleMethodWithDocs(SimObject, removeListener, ConsoleVoid, 3, 3, (SimObject))
+{
+   // Find the specified object.
+   SimObject* pSimObject = dynamic_cast<SimObject*>(Sim::findObject(argv[2]));
+
+   // Did we find the object?
+   if (!pSimObject)
+   {
+      // No, so warn.
+      Con::warnf("SimObject::removeListener() - Could not find the specified object '%s'.", argv[2]);
+      return;
+   }
+
+   // Start Listening
+   object->removeListener(pSimObject->getIdString());
+}
+
+/*! Removes all listeners from this object.
+@return No return value.
+*/
+ConsoleMethodWithDocs(SimObject, removeAllListeners, ConsoleVoid, 2, 2, ())
+{
+   // Start Listening
+   object->removeAllListeners();
+}
+
+/*! Raises an event on all listening objects.
+    @param eventName The name of the event to raise. The actual function called on listeners will begin with "on" followed by the event name.
+    @param data Any data that should be passed on to the listeners.
+@return No return value.
+*/
+ConsoleMethodWithDocs(SimObject, postEvent, ConsoleVoid, 3, 4, (String eventName, String data))
+{
+   if (argc < 3)
+   {
+      Con::warnf("SimObject::postEvent() - Invalid number of parameters. You must include an Event Name.");
+      return;
+   }
+
+   // Start Listening
+   object->postEvent(argv[2], argc > 3 ? argv[3] : "");
+}
+
+/*! @} */ // member group Object to Object Events
+
 ConsoleMethodRootGroupEndWithDocs(SimObject)

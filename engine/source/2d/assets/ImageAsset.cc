@@ -197,7 +197,7 @@ void ImageAsset::initPersistFields()
     addProtectedField("ImageFile", TypeAssetLooseFilePath, Offset(mImageFile, ImageAsset), &setImageFile, &getImageFile, &defaultProtectedWriteFn, "");
     addProtectedField("Force16bit", TypeBool, Offset(mForce16Bit, ImageAsset), &setForce16Bit, &defaultProtectedGetFn, &writeForce16Bit, "");
     addProtectedField("FilterMode", TypeEnum, Offset(mLocalFilterMode, ImageAsset), &setFilterMode, &defaultProtectedGetFn, &writeFilterMode, 1, &textureFilterTable);   
-    addProtectedField("ExplicitMode", TypeBool, Offset(mExplicitMode, ImageAsset), &setExplicitMode, &defaultProtectedGetFn, &defaultProtectedNotWriteFn, "");
+    addProtectedField("ExplicitMode", TypeBool, Offset(mExplicitMode, ImageAsset), &setExplicitMode, &defaultProtectedGetFn, &writeExplicitMode, "");
 
     addProtectedField("CellRowOrder", TypeBool, Offset(mCellRowOrder, ImageAsset), &setCellRowOrder, &defaultProtectedGetFn, &writeCellRowOrder, "");
     addProtectedField("CellOffsetX", TypeS32, Offset(mCellOffsetX, ImageAsset), &setCellOffsetX, &defaultProtectedGetFn, &writeCellOffsetX, "");

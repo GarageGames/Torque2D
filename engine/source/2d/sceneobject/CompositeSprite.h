@@ -66,6 +66,8 @@ public:
     virtual void integrateObject( const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats );
     virtual void interpolateObject( const F32 timeDelta );
 
+    virtual inline void setSpatialDirty(void) { mSpatialDirty = true; }
+
     virtual bool canPrepareRender( void ) const { return true; }
     virtual bool shouldRender( void ) const { return true; }
     virtual void scenePrepareRender( const SceneRenderState* pSceneRenderState, SceneRenderQueue* pSceneRenderQueue );    

@@ -31,6 +31,7 @@
 #include "console/ConsoleTypeValidators.h"
 
 #include "simObject_ScriptBinding.h"
+#include <algorithm>
 
 //-----------------------------------------------------------------------------
 
@@ -67,6 +68,7 @@ SimObject::SimObject()
     mSuperClassName          = NULL;
     mProgenitorFile          = CodeBlock::getCurrentCodeBlockFullPath();
     mPeriodicTimerID         = 0;
+    bIsEventRaised           = false;
 }
 
 //---------------------------------------------------------------------------
@@ -1378,6 +1380,101 @@ void SimObject::setSuperClassNamespace( const char* superClassNamespace )
     // Link the new namespaces.
     if ( isProperlyAdded() )
         linkNamespaces();
+}
+
+//-----------------------------------------------------------------------------
+
+void SimObject::addListener(std::string objID)
+{
+   for (auto iter = mListenerList.begin(); iter != mListenerList.end(); ++iter)
+   {
+      if (iter->objID == objID)
+      {
+         iter->doomed = false;
+         return;
+      }
+   }
+
+   OtoListener listener = OtoListener();
+   listener.objID = objID;
+   listener.doomed = false;
+   mListenerList.push_back(listener);
+}
+
+//-----------------------------------------------------------------------------
+
+void SimObject::removeListener(std::string objID)
+{
+   for (auto iter = mListenerList.begin(); iter != mListenerList.end(); ++iter)
+   {
+      if (iter->objID == objID)
+      {
+         iter->doomed = true;
+      }
+   }
+   
+   if (!bIsEventRaised)
+   {
+      mListenerList.erase(std::remove_if(mListenerList.begin(), mListenerList.end(), [](OtoListener listener){ return listener.doomed; }), mListenerList.end());
+   }
+}
+
+//-----------------------------------------------------------------------------
+
+void SimObject::removeAllListeners()
+{
+   if (bIsEventRaised)
+   {
+      for (auto iter = mListenerList.begin(); iter != mListenerList.end(); ++iter)
+      {
+         iter->doomed = true;
+      }
+   }
+   else
+   {
+      mListenerList.clear();
+   }
+}
+
+//-----------------------------------------------------------------------------
+
+void SimObject::postEvent(std::string eventName, std::string data)
+{
+   std::string onEvent = "on" + eventName;
+   if (mListenerList.empty())
+   {
+      return;
+   }
+
+   if (bIsEventRaised)
+   {
+      Con::warnf("SimObject::postEvent() - To avoid circular events, you cannot raise the event '%s' until a previous event has finished.", eventName.c_str());
+      return;
+   }
+
+   bIsEventRaised = true;
+   for (auto iter = mListenerList.begin(); iter != mListenerList.end(); ++iter)
+   {
+      SimObject* pSimObject = dynamic_cast<SimObject*>(Sim::findObject(iter->objID.c_str()));
+
+      // Did we find the object?
+      if (pSimObject)
+      {
+         if (!iter->doomed && pSimObject->isMethod(onEvent.c_str()))
+         {
+            Con::executef(pSimObject, 3, onEvent.c_str(), data.c_str());
+         }
+      }
+      else
+      {
+         //it must have been deleted
+         iter->doomed = true;
+      }
+   }
+   bIsEventRaised = false;
+
+   //now to remove all doomed listeners
+   mListenerList.erase(std::remove_if(mListenerList.begin(), mListenerList.end(), [](OtoListener listener){ return listener.doomed; }), mListenerList.end());
 }
 
 //-----------------------------------------------------------------------------
