@@ -3198,6 +3198,9 @@
     <ClInclude Include="..\..\source\audio\audioDescriptions.h">
       <Filter>audio</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\math\mNormalDistribution.h">
+      <Filter>math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\math\mMath_ASM.asm">
