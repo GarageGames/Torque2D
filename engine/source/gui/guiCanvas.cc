@@ -594,8 +594,12 @@ void GuiCanvas::findMouseControl(const GuiEvent &event)
    GuiControl *controlHit = findHitControl(event.mousePoint);
    if(controlHit != static_cast<GuiControl*>(mMouseControl))
    {
-      if(bool(mMouseControl))
+      if (bool(mMouseControl))
+      {
          mMouseControl->onMouseLeave(event);
+         hoverControlStart = Platform::getRealMilliseconds();
+         hoverPositionSet = false;
+      }
       mMouseControl = controlHit;
       mMouseControl->onMouseEnter(event);
    }
