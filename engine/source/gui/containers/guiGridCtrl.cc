@@ -294,7 +294,7 @@ void GuiGridControl::AdjustGridItems(S32 size, Vector<StringTableEntry>& strItem
 			char* tmp = new char[len-1];
 			dStrncpy(tmp, str, len-1);
 			int perc = dAtoi(tmp);
-			delete tmp;
+			delete[] tmp;
 
 			GridItem gi;
 			gi.IsAbsolute = false;

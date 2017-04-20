@@ -961,6 +961,7 @@
     <ClInclude Include="..\..\source\io\zip\zipTempStream.h" />
     <ClInclude Include="..\..\source\math\box_ScriptBinding.h" />
     <ClInclude Include="..\..\source\math\matrix_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\math\mNormalDistribution.h" />
     <ClInclude Include="..\..\source\math\random_ScriptBinding.h" />
     <ClInclude Include="..\..\source\math\rectClipper.h" />
     <ClInclude Include="..\..\source\math\vector_ScriptBinding.h" />

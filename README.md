@@ -25,7 +25,7 @@ After downloading a copy of the source code, the following project files for eac
 * **OSX:** Xcode
 * **Linux:** Make
 * **iOS:** Xcode_iOS
-* **Android:** Eclipse or Android Studio
+* **Android:** Android Studio
 * **Web:** Emscripten/Cmake
 
 See the [wiki](https://github.com/GarageGames/Torque2D/wiki) for available guides on platform setup and development.

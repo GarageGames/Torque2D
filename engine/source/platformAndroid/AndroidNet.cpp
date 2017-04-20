@@ -40,11 +40,6 @@
 // IPX fixes from William Taysom.
 #define IPX_NODE_LEN 6
 
-// for 10.2 compatability...
-#ifndef socklen_t
-#define socklen_t unsigned int
-#endif
-
 struct sockaddr_ipx
 {
    sa_family_t     sipx_family;
@@ -438,7 +433,7 @@ void Net::process()
    PacketReceiveEvent receiveEvent;
    for(;;)
    {
-      S32 addrLen = sizeof(sa);
+      socklen_t addrLen = sizeof(sa);
       S32 bytesRead = -1;
       if(udpSocket != InvalidSocket)
          bytesRead = recvfrom(udpSocket, (char *) receiveEvent.data,  MaxPacketDataSize, 0, &sa, &addrLen);
@@ -506,7 +501,7 @@ void Net::process()
             // see if it is now connected
             if (getsockopt(currentSock->fd, SOL_SOCKET, SO_ERROR,
                            &optval,
-                           (S32*)&optlen) == -1)
+                           &optlen) == -1)
             {
                Con::errorf("Error getting socket options: %s",  strerror(errno));
                notifyEvent.state = ConnectedNotifyEvent::ConnectFailed;
@@ -695,7 +690,7 @@ Net::Error Net::listen(NetSocket socket, S32 backlog)
 NetSocket Net::accept(NetSocket acceptSocket, NetAddress *remoteAddress)
 {
    sockaddr_in socketAddress;
-   S32 addrLen = sizeof(socketAddress);
+   socklen_t addrLen = sizeof(socketAddress);
 
    int retVal = ::accept(acceptSocket, (sockaddr *) &socketAddress,  &addrLen);
    if(retVal != InvalidSocket)
