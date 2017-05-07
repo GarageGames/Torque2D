@@ -562,6 +562,7 @@ ConsoleMethodWithDocs(CompositeSprite, setSpriteLocalPosition, ConsoleVoid, 3, 4
     }
 
     object->setSpriteLocalPosition( localPosition );
+    object->setSpatialDirty();
 }
 
 //-----------------------------------------------------------------------------

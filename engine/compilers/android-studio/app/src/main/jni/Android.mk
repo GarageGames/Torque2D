@@ -35,7 +35,7 @@ LOCAL_PATH := $(MY_LOCAL_PATH)
 include $(CLEAR_VARS)
  
 LOCAL_MODULE := freetype-prebuilt
-LOCAL_SRC_FILES := ../../../../../../lib/freetype/android/lib/libfreetype.a
+LOCAL_SRC_FILES := ../../../../../../lib/freetype/android/lib/$(TARGET_ARCH_ABI)/libfreetype.a
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../../../../lib/freetype/android/include $(LOCAL_PATH)/../../../../../../lib/freetype/android/include/freetype2
  
 include $(PREBUILT_STATIC_LIBRARY)
@@ -500,6 +500,7 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../source/platform/menus/popupMenu.cc \
 					../../../../../../source/platform/nativeDialogs/msgBox.cpp \
 					../../../../../../source/platform/Tickable.cc \
+					../../../../../../source/platformAndroid/android_native_app_glue.c \
 					../../../../../../source/platformAndroid/AndroidAlerts.cpp \
 					../../../../../../source/platformAndroid/AndroidAudio.cpp \
 					../../../../../../source/platformAndroid/AndroidConsole.cpp \
@@ -614,12 +615,9 @@ else
 	LOCAL_CPPFLAGS := -std=gnu++11 $(LOCAL_CFLAGS)
 endif
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lz -lOpenSLES -L../../../../../../lib/openal/Android/$(TARGET_ARCH_ABI)
-LOCAL_STATIC_LIBRARIES := android_native_app_glue freetype-prebuilt
+LOCAL_STATIC_LIBRARIES := freetype-prebuilt
 LOCAL_SHARED_LIBRARIES := libopenal-prebuilt
 
 LOCAL_ARM_MODE := arm
 
 include $(BUILD_SHARED_LIBRARY)
-
-$(call import-module,android/native_app_glue)
-

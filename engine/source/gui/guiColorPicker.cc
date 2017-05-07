@@ -103,8 +103,8 @@ void GuiColorPickerCtrl::initPersistFields()
 #if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_EMSCRIPTEN)
 void dglDrawBlendBox(RectI &bounds, ColorF &c1, ColorF &c2, ColorF &c3, ColorF &c4)
 {
-   S32 left = bounds.point.x, right = bounds.point.x + bounds.extent.x - 1;
-   S32 top = bounds.point.y, bottom = bounds.point.y + bounds.extent.y - 1;
+   GLfloat left = bounds.point.x, right = bounds.point.x + bounds.extent.x - 1;
+   GLfloat top = bounds.point.y, bottom = bounds.point.y + bounds.extent.y - 1;
    
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -117,10 +117,10 @@ void dglDrawBlendBox(RectI &bounds, ColorF &c1, ColorF &c2, ColorF &c3, ColorF &
         right,   bottom,
     };
     const GLubyte squareColors[] = {
-        255 * c1.red, 255 * c1.green, 255 * c1.blue, 255 * c1.alpha,
-        255 * c2.red, 255 * c2.green, 255 * c2.blue, 255 * c2.alpha,
-        255 * c3.red, 255 * c3.green, 255 * c3.blue, 255 * c3.alpha,
-        255 * c4.red, 255 * c4.green, 255 * c4.blue, 255 * c4.alpha,
+        static_cast<GLubyte>(255 * c1.red),  static_cast<GLubyte>(255 * c1.green),  static_cast<GLubyte>(255 * c1.blue),  static_cast<GLubyte>(255 * c1.alpha),
+        static_cast<GLubyte>(255 * c2.red),  static_cast<GLubyte>(255 * c2.green),  static_cast<GLubyte>(255 * c2.blue),  static_cast<GLubyte>(255 * c2.alpha),
+        static_cast<GLubyte>(255 * c3.red),  static_cast<GLubyte>(255 * c3.green),  static_cast<GLubyte>(255 * c3.blue),  static_cast<GLubyte>(255 * c3.alpha),
+        static_cast<GLubyte>(255 * c4.red),  static_cast<GLubyte>(255 * c4.green),  static_cast<GLubyte>(255 * c4.blue),  static_cast<GLubyte>(255 * c4.alpha),
     };
     glVertexPointer(2, GL_FLOAT, 0, verts);
     glEnableClientState(GL_VERTEX_ARRAY);

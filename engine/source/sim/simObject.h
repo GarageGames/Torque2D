@@ -37,6 +37,9 @@
 
 //-----------------------------------------------------------------------------
 
+using namespace std;
+#include <vector>
+#include <string>
 typedef U32 SimObjectId;
 class SimGroup;
 
@@ -705,6 +708,24 @@ public:
 
     /// @}
 
+    /// @Object to Object Events
+    /// @{
+private:
+    struct OtoListener {
+        bool doomed;
+        std::string objID;
+    };
+    std::vector<OtoListener> mListenerList;
+    bool bIsEventRaised;
+public:
+    void addListener(std::string objID);
+    void removeListener(std::string objID);
+    void removeAllListeners();
+    void postEvent(std::string eventName, std::string data);
+
+    /// @}
+
+public:
     virtual void            dump();
     virtual void            dumpClassHierarchy();
 

@@ -41,6 +41,7 @@ extern int _AndroidGetScreenWidth();
 extern int _AndroidGetScreenHeight();
 extern S32 _AndroidGameGetOrientation();
 extern char* _AndroidLoadFile(const char* fileName, U32 *size);
+extern char* _AndroidLoadInternalFile(const char* fileName, U32 *size);
 extern void android_InitDirList(const char* dir);
 extern void android_GetNextDir(const char* pdir, char *dir);
 extern void android_GetNextFile(const char* pdir, char *file);
@@ -93,6 +94,7 @@ private:
     bool isLayedOut;
     
     char cacheDir[2048];
+    char internalDir[2048];
 
     bool accelerometerActive;
 
@@ -113,6 +115,11 @@ public:
     char *getCacheDir() {
     	return cacheDir;
     }
+    void loadInternalDir();
+    char *getInternalDir() {
+    	return internalDir;
+    }
+
     void update();
     void finishShutdown();
     void finishGLSetup();
