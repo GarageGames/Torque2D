@@ -50,8 +50,9 @@ bool retinaEnabled;
 
 void ConvertToRetina(CGPoint *p)
 {
-    p->x *= 2;
-    p->y *= 2;
+    CGFloat screenScale = [[UIScreen mainScreen] scale];
+    p->x *= screenScale;
+    p->y *= screenScale;
 }
 
 @implementation T2DView

@@ -1239,6 +1239,18 @@ SpriteBatchItem* SpriteBatch::createSprite( const SpriteBatchItem::LogicalPositi
 
 //------------------------------------------------------------------------------
 
+void SpriteBatch::integrateSprites(const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats)
+{
+   //process the elapsed time for all sprites
+   for (typeSpriteBatchHash::iterator spriteItr = mSprites.begin(); spriteItr != mSprites.end(); ++spriteItr)
+   {
+      // Update image frame provider.
+      spriteItr->value->ImageFrameProvider::update(elapsedTime);
+   }
+}
+
+//------------------------------------------------------------------------------
+
 void SpriteBatch::setBatchTransform( const b2Transform& batchTransform )
 {
     // Update world transform.

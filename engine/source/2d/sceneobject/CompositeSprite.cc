@@ -165,6 +165,8 @@ void CompositeSprite::integrateObject( const F32 totalTime, const F32 elapsedTim
     // Call Parent.
     Parent::integrateObject( totalTime, elapsedTime, pDebugStats );
 
+    integrateSprites(totalTime, elapsedTime, pDebugStats);
+
     // Finish if the spatials are NOT dirty.
     if ( !getSpatialDirty() )
         return;

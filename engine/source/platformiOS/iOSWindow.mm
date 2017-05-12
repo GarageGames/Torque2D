@@ -121,32 +121,36 @@ void Platform::setWindowTitle(const char *title)
 //------------------------------------------------------------------------------
 void Platform::init()
 {
+    // set the Platform to iOS
     Con::setVariable("$platform", "iOS");
     
-    if ([[UIScreen mainScreen] scale] == 2)
-        Con::setBoolVariable("$pref::iOS::RetinaEnabled", true);
-    else
-        Con::setBoolVariable("$pref::iOS::RetinaEnabled", false);
-
-    // Set the platform variable for the scripts
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
+    // Calculate the size of the screen
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    CGFloat screenScale = [[UIScreen mainScreen] scale];
+    
+    // Set the screen size to a variable
+    Con::setFloatVariable("$pref::iOS::Width", screenBounds.size.width * screenScale);
+    Con::setFloatVariable("$pref::iOS::Height", screenBounds.size.height * screenScale);
+    
+    // Set RetinaEnabled and the Scale
+    // NOTE: I think we could get rid of RetinaEnabled through out and just multiply directly by the scale or use RetinaScale > 1 when needed because with iPhone 6 Plus the screenScale is 3.
+    Con::setBoolVariable("$pref::iOS::RetinaEnabled", retinaEnabled);
+    Con::setBoolVariable("$pref::iOS::RetinaScale", screenScale);
+    
+    // Determine the Aspect Ratio and set the device type from that
+    float resolutionWidth = Con::getFloatVariable("$pref::iOS::Width");
+    float resolutionHeight = Con::getFloatVariable("$pref::iOS::Height");
+    
+    // NOTE: This does not work properly for portrate orientation yet, but I think the way portrate is handled over all needs a rework.
+    float Ratio = resolutionWidth/resolutionHeight;
+    
+    if (Ratio <= 1.4)// 1: iPad = 4:3
         Con::setIntVariable("$pref::iOS::DeviceType", 1);
-    }
-    else
-    {
-        F32 screenHeight = [[UIScreen mainScreen] bounds].size.height;
-        bool iPhone5 = (fabs((double)screenHeight - (double)568 ) < DBL_EPSILON);
-        if (iPhone5)
-        {
-            Con::setIntVariable("$pref::iOS::DeviceType", 2);
-            Con::setBoolVariable("$pref::iOS::RetinaEnabled", false);
-        }
-        else
-        {
-            Con::setIntVariable("$pref::iOS::DeviceType", 0);
-        }
-    }
+    else if (Ratio > 1.4 && Ratio <= 1.6)// 0: iPhone = 3:2
+        Con::setIntVariable("$pref::iOS::DeviceType", 0);
+    else if (Ratio > 1.6)// 2: iPhone 5 and up = 16:9
+        Con::setIntVariable("$pref::iOS::DeviceType", 2);
+    // Add more aspcet ratios if needed for future devices
 
     iOSConsole::create();
 
@@ -194,30 +198,11 @@ bool gScreenUpsideDown = true;
 //------------------------------------------------------------------------------
 void Platform::initWindow(const Point2I &initialSize, const char *name)
 {
-    S32 resolutionWidth = IOS_DEFAULT_RESOLUTION_X;
-    S32 resolutionHeight = IOS_DEFAULT_RESOLUTION_Y;
-
     // First fetch the values from the prefs.
-    U32 iDeviceType = (U32) Con::getIntVariable("$pref::iOS::DeviceType");
     U32 iDeviceOrientation = (U32) Con::getIntVariable("$pref::iOS::ScreenOrientation");
-    bool retinaEnabled = Con::getBoolVariable("$pref::iOS::RetinaEnabled");
-
-    // 0: iPhone
-    // 1: iPad
-    // 2: iPhone 5
-    if (iDeviceType == 2)
-    {
-        resolutionWidth = 1136;
-        resolutionHeight = 640;
-    }
-    else
-    {
-        U32 scaleFactor = retinaEnabled ? 2 : 1;
-
-        resolutionWidth = iDeviceType ? (1024 * scaleFactor) : (480 * scaleFactor);
-        resolutionHeight = iDeviceType ? (768 * scaleFactor) : (320 * scaleFactor);
-    }
-
+    S32 resolutionWidth = Con::getIntVariable("$pref::iOS::Width");
+    S32 resolutionHeight = Con::getIntVariable("$pref::iOS::Height");
+    
     Point2I startRes;
 
     if (!iDeviceOrientation)

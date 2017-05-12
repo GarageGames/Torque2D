@@ -645,7 +645,7 @@ void TextSprite::CalculateSpatials(F32 ratio)
             wordEndLength = length - getCursorAdvance(bmChar, prevCharID, ratio);
          }
 
-         if (length > mSize.x && wordEnd > start)
+         if (length > mSize.x && wordEnd > start && start != -1)
          {
             mLine.back().mEnd = wordEnd;
             U32 endCharID = mText.getChar(wordEnd);

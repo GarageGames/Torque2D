@@ -1,0 +1,70 @@
+<GuiSpriteCtrl
+    Name="ChangeUserNameDlg"
+    Profile="GuiToolboxProfile"
+    HorizSizing="width"
+    VertSizing="height"
+    Position="0 0"
+    Extent="1024 768"
+    MinExtent="8 8"
+    Visible="1"
+	HelpTag="0"
+	Image="@asset=Sandbox:blueGradient">
+
+    <GuiConsoleEditCtrl
+      Name="ChangeUsernameEntry"
+		Profile="GuiConsoleTextEditProfile"
+		HorizSizing="width"
+		VertSizing="top"
+		Position="400 150"
+		Extent="250 40"
+		minExtent="8 8"
+		Visible="1"
+		AltCommand="Keyboard.pop();UserNameTxt.setText(ChangeUsernameEntry.getText());"
+		HelpTag="0"
+		MaxLength="255"
+		HistorySize="40"
+		password="0"
+		TabComplete="0"
+		SinkAllKeyEvents="1"
+		UseSiblingScroller="1"
+	/>
+
+	<GuiButtonCtrl
+		Profile="BlueButtonProfile"
+		Text="Cancel"
+		ButtonType="PushButton"
+		command="Keyboard.pop();"
+		canSaveDynamicFields="0"
+		isContainer="0"
+		HorizSizing="relative"
+		VertSizing="relative"
+		Position="400 200"
+		Extent="100 40"
+		MinExtent="8 2"
+		canSave="1"
+		Visible="1"
+		Active="1"
+		hovertime="1000"
+		groupNum="-1"
+		useMouseEvents="1" />
+		
+	<GuiButtonCtrl
+		Profile="BlueButtonProfile"
+		Text="OK"
+		ButtonType="PushButton"
+		command="Keyboard.pop();UserNameTxt.setText(ChangeUsernameEntry.getText());"
+		canSaveDynamicFields="0"
+		isContainer="0"
+		HorizSizing="relative"
+		VertSizing="relative"
+		Position="500 200"
+		Extent="100 40"
+		MinExtent="8 2"
+		canSave="1"
+		Visible="1"
+		Active="1"
+		hovertime="1000"
+		groupNum="-1"
+		useMouseEvents="1" />
+		
+</GuiSpriteCtrl>

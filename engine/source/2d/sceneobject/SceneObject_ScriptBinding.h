@@ -3244,12 +3244,12 @@ ConsoleMethodWithDocs( SceneObject, getChainCollisionShapeLocalPoint, ConsoleStr
     }
 
     // Fetch point count.
-    const U32 pointCount = object->getPolygonCollisionShapePointCount( shapeIndex );
+    const U32 pointCount = object->getChainCollisionShapePointCount( shapeIndex );
 
     // Sanity!
     if ( pointIndex >= pointCount )
     {
-        Con::warnf("SceneObject::getPolygonCollisionShapeLocalPoint() - Invalid point index of %d (only %d available) on shape index of %d.", pointIndex, pointCount, shapeIndex);
+        Con::warnf("SceneObject::getChainCollisionShapePointCount() - Invalid point index of %d (only %d available) on shape index of %d.", pointIndex, pointCount, shapeIndex);
         return Vector2::getZero().scriptThis();
     }
 
