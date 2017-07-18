@@ -337,6 +337,7 @@ SET(T2D_SRCS
 	../../source/input/actionMap.cc
 	../../source/io/bitStream.cc
 	../../source/io/bufferStream.cc
+	../../source/io/byteBuffer.cpp
 	../../source/io/fileObject.cc
 	../../source/io/fileStream.cc
 	../../source/io/fileStreamObject.cc

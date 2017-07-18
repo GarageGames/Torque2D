@@ -43,6 +43,18 @@ ConsoleFunctionWithDocs( commandToServer, ConsoleVoid, 2, RemoteCommandEvent::Ma
    sendRemoteCommand(conn, argc - 1, argv + 1);
 }
 
+// Send command to other server by given address
+// Useful when you connected to multi-servers
+ConsoleFunction( commandToNamedServer, void, 3, RemoteCommandEvent::MaxRemoteCommandArgs + 2, "(NetConnection server, string func, ...)"  
+                "Send a command to the server.")  
+{  
+   NetConnection *conn;  
+   if(!Sim::findObject(argv[1], conn))  
+      return;  
+   sendRemoteCommand(conn, argc - 2, argv + 2);  
+}
+
+
 /*! Use the commandToClient function to issue a remote procedure call on a client.
     All arguments (excluding client) may be in tagged or non-tagged format. See 'Remote Procedure Call Samples' below
     @param client The numeric ID of a client gameConnection.

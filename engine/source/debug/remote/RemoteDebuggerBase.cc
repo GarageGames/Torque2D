@@ -50,7 +50,7 @@ IMPLEMENT_CONOBJECT(RemoteDebuggerBase);
 //-----------------------------------------------------------------------------
 
 RemoteDebuggerBase::RemoteDebuggerBase() :
-    mClientSocket( InvalidSocket ),
+    mClientSocket( NetSocket::INVALID ),
     mClientAuthenticated( false ),
     mReceiveCommandCursor( 0 )
 {
@@ -180,7 +180,7 @@ RemoteDebuggerBase* RemoteDebuggerBase::getRemoteDebugger( void )
 void RemoteDebuggerBase::processTick( void )
 {
     // Finish if the client socket is invalid.
-    if ( mClientSocket == InvalidSocket )
+    if ( mClientSocket == NetSocket::INVALID )
         return;
     
     // Calculate read point.
@@ -289,7 +289,7 @@ void RemoteDebuggerBase::receiveCommand( const char* pCommand )
 bool RemoteDebuggerBase::sendCommand( const char* pCommand )
 {
     // Is the client socket valid?
-    if ( mClientSocket == InvalidSocket )
+    if ( mClientSocket == NetSocket::INVALID )
     {
         // No, so warn.
         Con::warnf( "Cannot send command with invalid client socket." );

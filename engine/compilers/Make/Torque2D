@@ -175,6 +175,7 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/gui/language/lang.cc \
 	../../source/gui/messageVector.cc \
 	../../source/input/actionMap.cc \
+	../../source/io/byteBuffer.cpp \
 	../../source/io/bitStream.cc \
 	../../source/io/bufferStream.cc \
 	../../source/io/fileObject.cc \
@@ -299,10 +300,11 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/platform/platformFileIO.cc \
 	../../source/platform/platformFont.cc \
 	../../source/platform/platformMemory.cc \
-	../../source/platform/platformNetwork_ScriptBinding.cc \
+	../../source/platform/platformNet.cpp \
+	../../source/platform/platformNetAsync.cpp \
+	../../source/platform/platformNet_ScriptBinding.cc \
 	../../source/platform/platformString.cc \
 	../../source/platform/platformVideo.cc \
-	../../source/platform/platformNetAsync.unix.cc \
 	../../source/platform/menus/popupMenu.cc \
 	../../source/platform/nativeDialogs/msgBox.cpp \
 	../../source/platform/Tickable.cc \
@@ -320,7 +322,6 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/platformX86UNIX/x86UNIXMemory.cc \
 	../../source/platformX86UNIX/x86UNIXMessageBox.cc \
 	../../source/platformX86UNIX/x86UNIXMutex.cc \
-	../../source/platformX86UNIX/x86UNIXNet.cc \
 	../../source/platformX86UNIX/x86UNIXOGLVideo.cc \
 	../../source/platformX86UNIX/x86UNIXOpenAL.cc \
 	../../source/platformX86UNIX/x86UNIXProcessControl.cc \
