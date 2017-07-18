@@ -55,8 +55,8 @@
 #include "platform/platformString.h"
 #endif
 
-#ifndef _PLATFORM_NETWORK_H_
-#include "platform/platformNetwork.h"
+#ifndef _PLATFORM_PLATFORMNET_H_
+#include "platform/platformNet.h"
 #endif
 
 #ifndef _PLATFORM_MEMORY_H_
@@ -79,6 +79,19 @@
 
 template <class T> class Vector;
 class Point2I;
+
+//------------------------------------------------------------------------------
+/// Memory functions
+
+#if !defined(TORQUE_DISABLE_MEMORY_MANAGER)
+#  define TORQUE_TMM_ARGS_DECL   , const char* fileName, const U32 lineNum
+#  define TORQUE_TMM_ARGS        , fileName, lineNum
+#  define TORQUE_TMM_LOC         , __FILE__, __LINE__
+#else
+#  define TORQUE_TMM_ARGS_DECL
+#  define TORQUE_TMM_ARGS
+#  define TORQUE_TMM_LOC
+#endif
 
 //------------------------------------------------------------------------------
 

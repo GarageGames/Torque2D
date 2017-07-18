@@ -380,6 +380,7 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../source/gui/language/lang.cc \
 					../../../../../../source/gui/messageVector.cc \
 					../../../../../../source/input/actionMap.cc \
+					../../../../../../source/io/byteBuffer.cpp \
 					../../../../../../source/io/bitStream.cc \
 					../../../../../../source/io/bufferStream.cc \
 					../../../../../../source/io/fileObject.cc \
@@ -493,10 +494,11 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../source/platform/platformFileIO.cc \
 					../../../../../../source/platform/platformFont.cc \
 					../../../../../../source/platform/platformMemory.cc \
-					../../../../../../source/platform/platformNetwork_ScriptBinding.cc \
+					../../../../../../source/platform/platformNet.cpp \
+					../../../../../../source/platform/platformNetAsync.cpp \
+					../../../../../../source/platform/platformNet_ScriptBinding.cc \
 					../../../../../../source/platform/platformString.cc \
 					../../../../../../source/platform/platformVideo.cc \
-					../../../../../../source/platform/platformNetAsync.unix.cc \
 					../../../../../../source/platform/menus/popupMenu.cc \
 					../../../../../../source/platform/nativeDialogs/msgBox.cpp \
 					../../../../../../source/platform/Tickable.cc \
@@ -515,7 +517,6 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../source/platformAndroid/AndroidMath.cpp \
 					../../../../../../source/platformAndroid/AndroidMemory.cpp \
 					../../../../../../source/platformAndroid/AndroidMutex.cpp \
-					../../../../../../source/platformAndroid/AndroidNet.cpp \
 					../../../../../../source/platformAndroid/AndroidOGLVideo.cpp \
 					../../../../../../source/platformAndroid/AndroidOutlineGL.cpp \
 					../../../../../../source/platformAndroid/AndroidPlatform.cpp \
