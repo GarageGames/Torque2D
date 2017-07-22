@@ -22,7 +22,7 @@
       canSave = "1"
       Visible = "1"
       Active = "1"
-      Image = "Keyboard:keyboardAlpha">
+      Image = "VirtualKeyboard:keyboardAlpha">
       
       <GuiImageButtonCtrl
          HorizSizing = "relative"
@@ -39,10 +39,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(Q,1,"[");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(Q,1,"[");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -58,10 +58,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(W,2,"]");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(W,2,"]");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -77,10 +77,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(E,3,"{");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(E,3,"{");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -96,10 +96,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(R,4,"}");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(R,4,"}");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -115,10 +115,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(T,5,"#");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(T,5,"#");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -134,10 +134,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(Y,6,"%");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(Y,6,"%");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -153,10 +153,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(U,7,"^");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(U,7,"^");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -172,10 +172,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(I,8, "*");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(I,8, "*");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -191,10 +191,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(O, 9, "+");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(O, 9, "+");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -210,10 +210,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(P,0,"=");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(P,0,"=");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -229,10 +229,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(A,"-", "_");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(A,"-", "_");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -248,10 +248,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(S,"\/","\\");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(S,"\/","\\");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -267,10 +267,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(D,":","|");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(D,":","|");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -286,10 +286,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(F,";","~");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(F,";","~");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -305,10 +305,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(G,"(","<");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(G,"(","<");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -324,10 +324,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(H,")",">");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(H,")",">");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -343,10 +343,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(J,"$","€");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(J,"$","€");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -362,10 +362,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(K,"","£");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(K,"","£");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -381,10 +381,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(L,"@","¥");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(L,"@","¥");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -400,10 +400,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(Z,".",".");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(Z,".",".");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -419,10 +419,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(X,",",",");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(X,",",",");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -438,10 +438,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(C,"?","?");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(C,"?","?");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -457,10 +457,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(V,"!","!");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(V,"!","!");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -476,10 +476,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(B,"","");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(B,"","");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -495,10 +495,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(N,"\"","\"");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(N,"\"","\"");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -514,10 +514,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command='Keyboard.KeyPress(M,".",".");'/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command='VirtualKeyboard.KeyPress(M,".",".");'/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -533,10 +533,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command="Keyboard.KeyPress(DELETE);"/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command="VirtualKeyboard.KeyPress(DELETE);"/>
       <GuiImageButtonCtrl
          HorizSizing = "relative"
          VertSizing = "relative"
@@ -552,10 +552,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:spaceBarD"
-         NormalImage = "Keyboard:spaceBar"
-         HoverImage = "Keyboard:spaceBar"
-         command="Keyboard.KeyPress(SPACE);"/>
+         DownImage = "VirtualKeyboard:spaceBarD"
+         NormalImage = "VirtualKeyboard:spaceBar"
+         HoverImage = "VirtualKeyboard:spaceBar"
+         command="VirtualKeyboard.KeyPress(SPACE);"/>
          
       <GuiImageButtonCtrl
          name = "toUpperBtn"
@@ -573,10 +573,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         command = "Keyboard.toUpper();"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"/>
+         command = "VirtualKeyboard.toUpper();"
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"/>
          
       <GuiImageButtonCtrl
          name = "toUpperLockBtn"
@@ -594,10 +594,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         command = "Keyboard.toUpperLock();"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"/>
+         command = "VirtualKeyboard.toUpperLock();"
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"/>
          
       <GuiImageButtonCtrl
          name = "toLower_UpperLockBtn"
@@ -615,10 +615,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         command = "Keyboard.toLower();"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbD"
-         HoverImage = "Keyboard:kbbD"/>
+         command = "VirtualKeyboard.toLower();"
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbD"
+         HoverImage = "VirtualKeyboard:kbbD"/>
       <GuiImageButtonCtrl
          name = "toLowerBtn"
          HorizSizing = "relative"
@@ -635,10 +635,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         command = "Keyboard.toLower();"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"/>
+         command = "VirtualKeyboard.toLower();"
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"/>
          
       <GuiImageButtonCtrl
          name = "toNumberBtn"
@@ -656,10 +656,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command = "Keyboard.toNumber();"/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command = "VirtualKeyboard.toNumber();"/>
          
       <GuiImageButtonCtrl
          name = "toLower_NumberBtn"
@@ -677,10 +677,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command = "Keyboard.tolower();"/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command = "VirtualKeyboard.tolower();"/>
          
       <GuiImageButtonCtrl
          name = "toSymbolBtn"
@@ -698,10 +698,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command = "Keyboard.toSymbol();"/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command = "VirtualKeyboard.toSymbol();"/>
       <GuiImageButtonCtrl
          name = "toNumber_SymbolBtn"
          HorizSizing = "relative"
@@ -718,10 +718,10 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         DownImage = "Keyboard:kbbD"
-         NormalImage = "Keyboard:kbbN"
-         HoverImage = "Keyboard:kbbN"
-         command = "Keyboard.toNumber();"/>
+         DownImage = "VirtualKeyboard:kbbD"
+         NormalImage = "VirtualKeyboard:kbbN"
+         HoverImage = "VirtualKeyboard:kbbN"
+         command = "VirtualKeyboard.toNumber();"/>
          
       <GuiImageButtonCtrl
          name = "keyCloseBtn"
@@ -739,11 +739,11 @@
          groupNum = "-1"
          buttonType = "PushButton"
          useMouseEvents = "1"
-         NormalImage = "Keyboard:closeBtn"
-         DownImage = "Keyboard:closeBtn"
-         HoverImage = "Keyboard:closeBtn"
-         InactiveImage = "Keyboard:closeBtn"
-         command="Keyboard.KeyPress(CLOSE);"/>
+         NormalImage = "VirtualKeyboard:closeBtn"
+         DownImage = "VirtualKeyboard:closeBtn"
+         HoverImage = "VirtualKeyboard:closeBtn"
+         InactiveImage = "VirtualKeyboard:closeBtn"
+         command="VirtualKeyboard.KeyPress(CLOSE);"/>
    </GuiSpriteCtrl>
    
 </GuiControl>

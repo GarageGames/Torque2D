@@ -1,5 +1,5 @@
 <ModuleDefinition
-	ModuleId="Keyboard"
+	ModuleId="VirtualKeyboard"
 	VersionId="1"
 	ScriptFile="main.cs"
 	CreateFunction="create"

@@ -1,22 +1,22 @@
-function Keyboard::create(%this)
+function VirtualKeyboard::create(%this)
 {
    %this.resetState();
    
 }
 
-function Keyboard::destroy(%this)
+function VirtualKeyboard::destroy(%this)
 {
    
 }
 
-function Keyboard::resetState(%this)
+function VirtualKeyboard::resetState(%this)
 {
    %this.state = "toLower";
    %this.dock = "bottom";
    %this.targetGui ="";
    %this.textBox = "";
 }
-function Keyboard::push(%this, %targetGui, %textBox, %showClose)
+function VirtualKeyboard::push(%this, %targetGui, %textBox, %showClose)
 {
    Sandbox.add( TamlRead("./gui/keyboardGui.taml") );
    %textBox.setText("");
@@ -38,7 +38,7 @@ function Keyboard::push(%this, %targetGui, %textBox, %showClose)
    
 }
 
-function Keyboard::Pop(%this)
+function VirtualKeyboard::Pop(%this)
 {
    KeyboardSet.delete();
    KeyboardGui.delete();
@@ -46,7 +46,7 @@ function Keyboard::Pop(%this)
    %this.resetState();
 }
 
-function Keyboard::toLower(%this)
+function VirtualKeyboard::toLower(%this)
 {
    %this.state = "toLower";
    toLower_NumberBtn.visible = false;
@@ -58,11 +58,11 @@ function Keyboard::toLower(%this)
    
    toUpperBtn.visible = true;
    toNumberBtn.visible = true;
-   keyboardSet.Image = "Keyboard:keyboardAlphaLower";
+   keyboardSet.Image = "VirtualKeyboard:keyboardAlphaLower";
    
 }
 
-function Keyboard::toUpper(%this)
+function VirtualKeyboard::toUpper(%this)
 {
    %this.state = "toUpper";
    toUpperBtn.visible = false;
@@ -74,10 +74,10 @@ function Keyboard::toUpper(%this)
 
    toUpperLockBtn.visible =true;
    toNumberBtn.visible = true;
-   keyboardSet.Image = "Keyboard:keyboardAlpha";
+   keyboardSet.Image = "VirtualKeyboard:keyboardAlpha";
 }
 
-function Keyboard::toUpperLock(%this)
+function VirtualKeyboard::toUpperLock(%this)
 {
    %this.state = "toUpperLock";
    toUpperBtn.visible = false;
@@ -89,10 +89,10 @@ function Keyboard::toUpperLock(%this)
    
    toLower_UpperLockBtn.visible = true;
    toNumberBtn.visible = true;
-   keyboardSet.Image = "Keyboard:keyboardAlpha";
+   keyboardSet.Image = "VirtualKeyboard:keyboardAlpha";
 }
 
-function Keyboard::toNumber(%this)
+function VirtualKeyboard::toNumber(%this)
 {
    %this.state = "toNumber";
    toNumberBtn.visible = false;
@@ -104,10 +104,10 @@ function Keyboard::toNumber(%this)
    
    toSymbolBtn.visible = true;
    toLower_NumberBtn.visible = true;
-   keyboardSet.Image = "Keyboard:keyboardNumber";
+   keyboardSet.Image = "VirtualKeyboard:keyboardNumber";
 }
 
-function Keyboard::toSymbol(%this)
+function VirtualKeyboard::toSymbol(%this)
 {
    %this.state = "toSymbol";
    toSymbolBtn.visible = false;
@@ -120,11 +120,11 @@ function Keyboard::toSymbol(%this)
    toNumber_symbolBtn.visible = true;
    toLower_NumberBtn.visible = true;
    
-   keyboardSet.Image = "Keyboard:keyboardSymbol";
+   keyboardSet.Image = "VirtualKeyboard:keyboardSymbol";
 }
 
 
-function Keyboard::KeyPress(%this, %letter, %number, %symbol)
+function VirtualKeyboard::KeyPress(%this, %letter, %number, %symbol)
 {
    if (%letter $= "close")
       %this.schedule(50, "Pop");
@@ -137,7 +137,7 @@ function Keyboard::KeyPress(%this, %letter, %number, %symbol)
 }
 
 
-function Keyboard::InsertChar(%this, %letter, %number, %symbol)
+function VirtualKeyboard::InsertChar(%this, %letter, %number, %symbol)
 {
    if (strlen(%this.textBox.getText()) >= %this.textBox.MaxLength)
       return;
@@ -175,7 +175,7 @@ function Keyboard::InsertChar(%this, %letter, %number, %symbol)
    }
 }
 
-function Keyboard::DeleteCommand(%this)
+function VirtualKeyboard::DeleteCommand(%this)
 {
    %len = strlen(%this.textBox.getText());
    if (%len > 0)
@@ -220,6 +220,6 @@ if(!isObject(GuiKeyboardProfile)) new GuiControlProfile (GuiKeyboardProfile)
     cursorColor = "0 0 0 255";
 
     // sounds
-    soundButtonDown = "Keyboard:keypress";
+    soundButtonDown = "VirtualKeyboard:keypress";
     //soundButtonOver = "Sandbox:mouseOver";
 };
