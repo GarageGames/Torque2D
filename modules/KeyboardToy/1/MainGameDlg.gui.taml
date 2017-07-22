@@ -33,7 +33,7 @@
 		Profile="BlueButtonProfile"
 		Text="Change username"
 		ButtonType="PushButton"
-		command="Keyboard.push(ChangeUsernameDlg, ChangeUsernameEntry);"
+		command="VirtualKeyboard.push(ChangeUsernameDlg, ChangeUsernameEntry);"
 		canSaveDynamicFields="0"
 		isContainer="0"
 		HorizSizing="relative"
