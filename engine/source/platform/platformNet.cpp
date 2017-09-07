@@ -98,6 +98,22 @@ typedef int SOCKET;
 
 #define closesocket close
 
+
+S32 Poll(SOCKET fd, S32 eventMask, S32 timeoutMs)
+{
+	pollfd pfd;
+	S32 retVal;
+	pfd.fd = fd;
+	pfd.events = eventMask;
+
+	retVal = poll(&pfd, 1, timeoutMs);
+	return retVal;
+	if (retVal <= 0)
+		return retVal;
+	else
+		return pfd.revents;
+}
+
 #endif
 
 #if defined(TORQUE_USE_WINSOCK)
@@ -652,12 +668,14 @@ static void IPSocket6ToNetAddress(const struct sockaddr_in6 *sockAddr, NetAddres
 
 NetSocket Net::openListenPort(U16 port, NetAddress::Type addressType)
 {
+#ifdef TORQUE_ALLOW_JOURNALING
    if(Game->isJournalReading())
    {
       U32 ret;
       Game->journalRead(&ret);
       return NetSocket::fromHandle(ret);
    }
+#endif
 
    Net::Error error = NoError;
    NetAddress address;
@@ -709,21 +727,23 @@ NetSocket Net::openListenPort(U16 port, NetAddress::Type addressType)
       addPolledSocket(handleFd, sockId, PolledSocket::Listening);
    }
 
+#ifdef TORQUE_ALLOW_JOURNALING
    if(Game->isJournalWriting())
       Game->journalWrite(U32(handleFd.getHandle()));
-
+#endif
    return handleFd;
 }
 
 NetSocket Net::openConnectTo(const char *addressString)
 {
+#ifdef TORQUE_ALLOW_JOURNALING
    if (Game->isJournalReading())
    {
       U32 ret;
       Game->journalRead(&ret);
       return NetSocket::fromHandle(ret);
    }
-
+#endif
    NetAddress address;
    NetSocket handleFd = NetSocket::INVALID;
    Net::Error error = NoError;
@@ -830,17 +850,19 @@ NetSocket Net::openConnectTo(const char *addressString)
       closeSocket(handleFd);
       handleFd = NetSocket::INVALID;
    }
-
+#ifdef TORQUE_ALLOW_JOURNALING
    if (Game->isJournalWriting())
       Game->journalWrite(U32(handleFd.getHandle()));
+#endif
    return handleFd;
 }
 
 void Net::closeConnectTo(NetSocket handleFd)
 {
+#ifdef TORQUE_ALLOW_JOURNALING
    if(Game->isJournalReading())
       return;
-
+#endif
    // if this socket is in the list of polled sockets, remove it
    for (S32 i = 0; i < gPolledSockets.size(); ++i)
    {
@@ -857,6 +879,7 @@ void Net::closeConnectTo(NetSocket handleFd)
 
 Net::Error Net::sendtoSocket(NetSocket handleFd, const U8 *buffer, S32  bufferSize, S32 *outBufferWritten)
 {
+#ifdef TORQUE_ALLOW_JOURNALING
    if(Game->isJournalReading())
    {
       U32 e;
@@ -868,16 +891,16 @@ Net::Error Net::sendtoSocket(NetSocket handleFd, const U8 *buffer, S32  bufferSi
 
       return (Net::Error) e;
    }
-
+#endif
    S32 outBytes = 0;
    Net::Error e = send(handleFd, buffer, bufferSize, &outBytes);
-
+#ifdef TORQUE_ALLOW_JOURNALING
    if (Game->isJournalWriting())
    {
       Game->journalWrite(U32(e));
       Game->journalWrite(outBytes);
    }
-
+#endif
    if (outBufferWritten)
       *outBufferWritten = outBytes;
 
@@ -1041,9 +1064,10 @@ void Net::closePort()
 
 Net::Error Net::sendto(const NetAddress *address, const U8 *buffer, S32  bufferSize)
 {
+#ifdef TORQUE_ALLOW_JOURNALING
    if(Game->isJournalReading())
       return NoError;
-
+#endif
    SOCKET socketFd;
 
    if(address->type == NetAddress::IPAddress || address->type == NetAddress::IPBroadcastAddress)
@@ -1648,6 +1672,14 @@ Net::Error Net::send(NetSocket handleFd, const U8 *buffer, S32 bufferSize, S32 *
    SOCKET socketFd = PlatformNetState::smReservedSocketList.resolve(handleFd);
    if (socketFd == InvalidSocketHandle)
       return NotASocket;
+
+#if defined( TORQUE_OS_LINUX )
+	// Poll for write status.  this blocks.  should really
+	// do this in a separate thread or set it up so that the data can
+	// get queued and sent later
+	// JMQTODO
+	Poll(socketFd, POLLOUT, 10000);
+#endif
 
    errno = 0;
    S32 bytesWritten = ::send(socketFd, (const char*)buffer, bufferSize, 0);
