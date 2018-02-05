@@ -610,10 +610,10 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
  
 ifeq ($(APP_OPTIM),debug)
 	LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_DEBUG -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O0 -fsigned-char
-	LOCAL_CPPFLAGS := -std=gnu++11 $(LOCAL_CFLAGS)
+	LOCAL_CPPFLAGS := -std=gnu++11 -frtti $(LOCAL_CFLAGS)
 else
 	LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O3 -fsigned-char
-	LOCAL_CPPFLAGS := -std=gnu++11 $(LOCAL_CFLAGS)
+	LOCAL_CPPFLAGS := -std=gnu++11 -frtti $(LOCAL_CFLAGS)
 endif
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lz -lOpenSLES -L../../../../../../lib/openal/Android/$(TARGET_ARCH_ABI)
 LOCAL_STATIC_LIBRARIES := freetype-prebuilt

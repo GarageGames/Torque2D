@@ -20,8 +20,8 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef _SIGNAL_H_
-#define _SIGNAL_H_
+#ifndef _DELEGATESIGNAL_H_
+#define _DELEGATESIGNAL_H_
 
 #ifndef _UTIL_DELEGATE_H_
 #include "delegates/delegate.h"
@@ -663,4 +663,4 @@ class Signal<void(A,B,C,D,E,F,G,H,I,J)> : public SignalBaseT<void(A,B,C,D,E,F,G,
       }
 };
 
-#endif // _SIGNAL_H_
+#endif // _DELEGATESIGNAL_H_

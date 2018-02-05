@@ -259,12 +259,12 @@ U32 dStrcspn(const char *str, const char *set)
 }   
 
 
-char* dStrstr(char *str1, char *str2)
+char* dStrstr(char *str1, const char *str2)
 {
    return strstr(str1,str2);
 }
 
-char* dStrstr(const char *str1, const char *str2)
+const char* dStrstr(const char *str1, const char *str2)
 {
    return strstr(str1,str2);
 }   

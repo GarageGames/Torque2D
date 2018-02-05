@@ -2678,7 +2678,7 @@ char* _AndroidLoadInternalFile(const char* fn, U32 *size)
 
 	lResult=lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
 	if (lResult == JNI_ERR) {
-		return "";
+		return NULL;
 	}
 
 	// Retrieves NativeActivity.

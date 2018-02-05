@@ -1,33 +1,30 @@
 apply plugin: 'com.android.application'
-
-
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
-
-    externalNativeBuild{
-        ndkBuild{
+    buildToolsVersion '26.0.2'
+    externalNativeBuild {
+        ndkBuild {
             path './src/main/jni/Android.mk'
         }
     }
     defaultConfig {
         applicationId "com.garagegames.torque2d"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 25
 
         sourceSets.main {
-            assets.srcDirs=[
+            assets.srcDirs = [
                     'src/main/assets',
                     'src/main/game'
             ]
 
             ndk {
-                     abiFilters 'x86', 'x86_64', 'armeabi-v7a'
+                abiFilters 'x86', 'x86_64', 'armeabi-v7a'
             }
         }
 
-        task copyGame(type: Copy, description: 'Copy torque scripts and modules'){
-            from('../../../../'){
+        task copyGame(type: Copy, description: 'Copy torque scripts and modules') {
+            from('../../../../') {
                 include '**'
                 exclude 'engine/**'
                 exclude 'tools/**'
@@ -46,7 +43,7 @@ android {
 
         }
 
-        task wipeGame(type: Delete, description: 'Wipe android-specific copy of torque scripts and modules'){
+        task wipeGame(type: Delete, description: 'Wipe android-specific copy of torque scripts and modules') {
             delete 'src/main/game/'
         }
 
@@ -58,11 +55,14 @@ android {
 
 
     }
-
     buildTypes {
         release {
             minifyEnabled false
         }
     }
+    productFlavors {
+    }
+}
 
+dependencies {
 }
