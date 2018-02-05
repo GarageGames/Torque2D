@@ -1718,9 +1718,9 @@ bool Platform::openWebBrowser( const char* webAddress )
       convertUTF16toUTF8(sWebKey,utf8WebKey,512);
 
 #ifdef UNICODE
-      char *p = dStrstr((const char *)utf8WebKey, "%1"); 
+      char *p = dStrstr(utf8WebKey, "%1"); 
 #else
-      char *p = dStrstr( (const char *) sWebKey  , "%1"); 
+      char *p = dStrstr(sWebKey, "%1"); 
 #endif
       if (p) *p = 0; 
 

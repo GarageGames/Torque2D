@@ -1932,7 +1932,7 @@ static void handleGameInfoResponse( const NetAddress* address, BitStream* stream
    // Get the mission name:
    stream->readString( stringBuf );
    // Clip the file extension off:
-   char* temp = dStrstr( static_cast<char*>( stringBuf ), const_cast<char*>( ".mis" ) );
+   char* temp = dStrstr( stringBuf, ".mis" );
    if ( temp )
       *temp = '\0';
    if ( !si->missionName || dStrcmp( si->missionName, stringBuf ) != 0 )
