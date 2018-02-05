@@ -302,7 +302,7 @@ void GuiMessageVectorCtrl::createSpecialMarkers(SpecialMarkers& rSpecial, const 
          matchBuffer[499] = '\0';
          dStrcat(matchBuffer, "://");
 
-         const char* pMatch = dStrstr(pCurr, (const char*)matchBuffer);
+         const char* pMatch = dStrstr(pCurr, matchBuffer);
          if (pMatch != NULL && pMatch < pMinMatch) {
             pMinMatch = pMatch;
             minMatchType = i;
