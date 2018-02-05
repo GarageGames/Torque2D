@@ -88,8 +88,8 @@ void SkeletonObject::initPersistFields()
     addProtectedField("Asset", TypeSkeletonAssetPtr, Offset(mSkeletonAsset, SkeletonObject), &setSkeletonAsset, &getSkeletonAsset, &writeSkeletonAsset, "The skeleton asset ID used for the skeleton.");
     addProtectedField("AnimationName", TypeString, Offset(mCurrentAnimation, SkeletonObject), &setAnimationName, &getAnimationName, &writeAnimationName, "The animation name to play.");
     addProtectedField("Skin", TypeString, Offset(mCurrentSkin, SkeletonObject), &setCurrentSkin, &getCurrentSkin, &writeCurrentSkin, "The skin to use.");
-    addProtectedField("RootBoneScale", TypeVector2, NULL, &setRootBoneScale, &getRootBoneScale, &writeRootBoneScale, "Scaling of the skeleton's root bone");
-    addProtectedField("RootBoneOffset", TypeVector2, NULL, &setRootBoneOffset, &getRootBoneOffset, &writeRootBoneOffset, "X/Y offset of the skeleton's root bone");
+    addProtectedField("RootBoneScale", TypeVector2, 0, &setRootBoneScale, &getRootBoneScale, &writeRootBoneScale, "Scaling of the skeleton's root bone");
+    addProtectedField("RootBoneOffset", TypeVector2, 0, &setRootBoneOffset, &getRootBoneOffset, &writeRootBoneOffset, "X/Y offset of the skeleton's root bone");
     addProtectedField("AnimationCycle", TypeBool, Offset(mAnimationCycle, SkeletonObject), &setAnimationCycle, &defaultProtectedGetFn, &writeAnimationCycle, "Whether the animation loops or not");
     addField("FlipX", TypeBool, Offset(mFlipX, SkeletonObject), &writeFlipX, "");
     addField("FlipY", TypeBool, Offset(mFlipY, SkeletonObject), &writeFlipY, "");

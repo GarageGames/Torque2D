@@ -2541,7 +2541,7 @@ ConsoleMethodWithDocs(SceneObject, getCollisionShapeArea, ConsoleFloat, 3, 3, (i
     if ( shapeIndex >= shapeCount )
     {
         Con::warnf("SceneObject::getCollisionShapeArea() - Invalid shape index of %d.", shapeIndex);
-        return NULL;
+        return 0.0f;
     }
 
     // Calculate area if the shape type is circle
