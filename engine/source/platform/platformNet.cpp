@@ -259,7 +259,7 @@ namespace PlatformNetState
 
    struct addrinfo* pickAddressByProtocol(struct addrinfo* addr, int protocol)
    {
-      for (addr; addr != NULL; addr = addr->ai_next)
+      for (; addr != NULL; addr = addr->ai_next)
       {
          if (addr->ai_family == protocol)
             return addr;
@@ -1686,7 +1686,7 @@ Net::Error Net::send(NetSocket handleFd, const U8 *buffer, S32 bufferSize, S32 *
 
    if (outBytesWritten)
    {
-      *outBytesWritten = outBytesWritten < 0 ? 0 : bytesWritten;
+      *outBytesWritten = outBytesWritten < (void *)0 ? 0 : bytesWritten;
    }
 
    return PlatformNetState::getLastError();

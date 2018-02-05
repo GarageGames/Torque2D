@@ -95,7 +95,7 @@ ConsoleFunctionWithDocs(png2jpg, ConsoleInt, 2, 3, ( pngFilename, [quality ]? ))
    {
       char * buf = new char[dStrlen(bmpname)+32];
       dStrcpy(buf,bmpname);
-      char * pos = dStrstr((const char*)buf,".png");
+      char * pos = dStrstr(buf,".png");
       if (!pos)
          pos = buf + dStrlen(buf);
       dStrcpy(pos,".jpg");
@@ -105,7 +105,7 @@ ConsoleFunctionWithDocs(png2jpg, ConsoleInt, 2, 3, ( pngFilename, [quality ]? ))
    {
       char * buf = new char[dStrlen(bmpname)+32];
       dStrcpy(buf,bmpname);
-      char * pos = dStrstr((const char*)buf,".png");
+      char * pos = dStrstr(buf,".png");
       if (!pos)
          pos = buf + dStrlen(buf);
       dStrcpy(pos,".alpha.jpg");
