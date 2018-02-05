@@ -129,7 +129,7 @@ S32 SimXMLDocument::saveFile(const char* rFileName)
    char buffer[1024];
    Con::expandPath(buffer, sizeof(buffer), rFileName);
 
-   if(buffer == NULL || *buffer == 0)
+   if(*buffer == 0)
       return false;
 
    FileStream strm;

@@ -533,7 +533,7 @@ U32 SpriteBatch::getSpriteImageFrame( void ) const
 {
     // Finish if a sprite is not selected.
     if ( !checkSpriteSelected() )
-        return NULL;
+        return 0;
 
     // Get image frame.
     return mSelectedSprite->getImageFrame();
@@ -611,7 +611,7 @@ U32 SpriteBatch::getSpriteAnimationFrame(void) const
 {
 	// Finish if a sprite is not selected.
 	if (!checkSpriteSelected())
-		return NULL;
+		return 0;
 
 	// Get image frame.
 	return mSelectedSprite->getAnimationFrame();
