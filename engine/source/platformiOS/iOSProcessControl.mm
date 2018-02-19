@@ -25,7 +25,7 @@
 #include "game/gameInterface.h"
 #include "platformiOS/iOSEvents.h"
 #include <pthread.h>
-
+#include <ftw.h>
 
 void Platform::postQuitMessage(const U32 in_quitVal)
 {
@@ -73,6 +73,6 @@ void Platform::restartInstance()
    execCString[len - 1] = '\0';
    
    Con::printf("---- %s -----",execCString);
-   system(execCString);
+   nftw(execCString, NULL, NULL, NULL);
    delete[] execCString;
 }

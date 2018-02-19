@@ -521,7 +521,7 @@ void Platform::openFolder(const char* path )
    }
    
    const char* arg = avar("open '%s'", path);
-   U32 ret = nftw(arg, NULL, NULL , NULL);
+   U32 ret = nftw(arg, NULL, NULL, NULL);
    if(ret != 0)
       Con::printf(strerror(errno));
 }
