@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
-
+#include <ftw.h>
 #include <utime.h>
 
 #include <sys/types.h>
@@ -521,7 +521,7 @@ void Platform::openFolder(const char* path )
    }
    
    const char* arg = avar("open '%s'", path);
-   U32 ret = system(arg);
+   U32 ret = nftw(arg, NULL, NULL, NULL);
    if(ret != 0)
       Con::printf(strerror(errno));
 }
