@@ -51,6 +51,8 @@ public:
 
    void parseLine(U8 *buffer, U32 *start, U32 bufferLen);
    void finishLastLine();
+	bool isBufferEmpty();
+	void emptyBuffer();
 
    static TCPObject *find(NetSocket tag);
 

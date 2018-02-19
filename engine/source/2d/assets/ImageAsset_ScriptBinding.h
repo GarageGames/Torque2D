@@ -585,4 +585,21 @@ ConsoleMethodWithDocs(ImageAsset, getExplicitCellIndex, ConsoleInt, 3, 3, (cellN
     return object->getExplicitCellIndex( argv[2] );
 }
 
+/*! Gets the status of Explicit mode
+@return Returns true if ExplicitMode is on, false otherwise.
+*/
+ConsoleMethodWithDocs(ImageAsset, getExplicitMode, ConsoleBool, 2, 2, ())
+{
+    return object->getExplicitMode();
+}
+
+/*! Sets Explicit Mode
+@param explicitMode Whether to set Explicit Mode or disable it
+@return No return value.
+*/
+ConsoleMethodWithDocs(ImageAsset, setExplicitMode, ConsoleVoid, 3, 3, (explicitMode))
+{
+    object->setExplicitMode(dAtob(argv[2]));
+}
+
 ConsoleMethodGroupEndWithDocs(ImageAsset)

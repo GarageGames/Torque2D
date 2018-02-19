@@ -14861,7 +14861,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
        have_pthreads="$acx_pthread_ok"
 fi
- if test "x$have_pthreads" == "xyes"; then
+ if test "x$have_pthreads" = "xyes"; then
   HAVE_PTHREADS_TRUE=
   HAVE_PTHREADS_FALSE='#'
 else
@@ -17479,4 +17479,3 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
-

@@ -58,7 +58,7 @@ bool FileObject::openForWrite(const char *fileName, const bool append)
 
    close();
 
-   if(buffer == NULL || *buffer == 0)
+   if(*buffer == 0)
       return false;
 
    if ( !append )

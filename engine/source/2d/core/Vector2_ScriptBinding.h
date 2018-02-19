@@ -202,7 +202,7 @@ ConsoleFunctionWithDocs( Vector2Compare, ConsoleBool, 3, 4, (Vector2 p1, Vector2
     if (Utility::mGetStringElementCount(argv[1]) < 2 ||Utility::mGetStringElementCount(argv[2]) < 2 )
     {
         Con::warnf("Vector2Compare() - Invalid number of parameters!");
-        return NULL;
+        return false;
     }
 
     Vector2 p1( argv[1] );
@@ -228,7 +228,7 @@ ConsoleFunctionWithDocs( Vector2Distance, ConsoleFloat, 3, 3, (Vector2 p1, Vecto
     if (Utility::mGetStringElementCount(argv[1]) < 2 ||Utility::mGetStringElementCount(argv[2]) < 2 )
     {
         Con::warnf("Vector2Distance() - Invalid number of parameters!");
-        return NULL;
+        return false;
     }
 
     Vector2 p1( argv[1] );
@@ -247,7 +247,7 @@ ConsoleFunctionWithDocs( Vector2AngleBetween, ConsoleFloat, 3, 3, (Vector2 v1, V
     if (Utility::mGetStringElementCount(argv[1]) < 2 ||Utility::mGetStringElementCount(argv[2]) < 2 )
     {
         Con::warnf("t2dAngleBetween() - Invalid number of parameters!");
-        return NULL;
+        return false;
     }
 
     Vector2 v1( argv[1] );
@@ -269,7 +269,7 @@ ConsoleFunctionWithDocs( Vector2AngleToPoint, ConsoleFloat, 3, 3, (Vector2 p1, V
     if (Utility::mGetStringElementCount(argv[1]) < 2 ||Utility::mGetStringElementCount(argv[2]) < 2 )
     {
         Con::warnf("t2dAngleToPoint() - Invalid number of parameters!");
-        return NULL;
+        return false;
     }
 
     Vector2 p1( argv[1] );

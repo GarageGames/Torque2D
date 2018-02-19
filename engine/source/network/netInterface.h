@@ -46,7 +46,7 @@ public:
       GameInfoRequest               = 18,
       GameInfoResponse              = 20,
       GameHeartbeat                 = 22,
-
+      GGCPacket                     = 24,
       ConnectChallengeRequest       = 26,
       ConnectChallengeReject        = 28,
       ConnectChallengeResponse      = 30,
@@ -54,6 +54,9 @@ public:
       ConnectReject                 = 34,
       ConnectAccept                 = 36,
       Disconnect                    = 38,
+      MasterServerExtendedListResponse = 40,
+      MasterServerChallenge            = 42,
+      MasterServerExtendedListRequest  = 44,
    };
 protected:
 
@@ -83,7 +86,6 @@ protected:
 
    void            addPendingConnection(NetConnection *conn);
    NetConnection *findPendingConnection(const NetAddress *address, U32 packetSequence);
-   void         removePendingConnection(NetConnection *conn);
 
    void   sendConnectChallengeRequest(NetConnection *conn);
    void handleConnectChallengeRequest(const NetAddress *addr, BitStream *stream);
@@ -108,7 +110,7 @@ protected:
 
 public:
    NetInterface();
-
+	void         removePendingConnection(NetConnection *conn);
    /// Returns whether or not this NetInterface allows connections from remote hosts.
    bool doesAllowConnections() { return mAllowConnections; }
 

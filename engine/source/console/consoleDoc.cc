@@ -278,7 +278,7 @@ void Namespace::printNamespaceEntries(Namespace * g, bool dumpScript, bool dumpE
          }
 
          // Finally, see if they did it foo(*) style.
-         char* func_pos = dStrstr(use, funcName);
+         const char* func_pos = dStrstr(use, funcName);
          if((func_pos) && (func_pos < bgn) && (end > bgn))
          {
             U32 len = (U32)(end - bgn - 1);
