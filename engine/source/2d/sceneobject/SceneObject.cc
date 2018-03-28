@@ -293,35 +293,35 @@ void SceneObject::initPersistFields()
     addProtectedField("Size", TypeVector2, Offset( mSize, SceneObject), &setSize, &defaultProtectedGetFn, &writeSize, "");
 
     /// Position / Angle.
-    addProtectedField("Position", TypeVector2, NULL, &setPosition, &getPosition, &writePosition, "");
-    addProtectedField("Angle", TypeF32, NULL, &setAngle, &getAngle, &writeAngle, "");
-    addProtectedField("FixedAngle", TypeBool, NULL, &setFixedAngle, &getFixedAngle, &writeFixedAngle, "");
+    addProtectedField("Position", TypeVector2, 0, &setPosition, &getPosition, &writePosition, "");
+    addProtectedField("Angle", TypeF32, 0, &setAngle, &getAngle, &writeAngle, "");
+    addProtectedField("FixedAngle", TypeBool, 0, &setFixedAngle, &getFixedAngle, &writeFixedAngle, "");
 
     /// Body.
-    addProtectedField("BodyType", TypeEnum, NULL, &setBodyType, &getBodyType, &writeBodyType, 1, &bodyTypeTable, "" );
-    addProtectedField("Active", TypeBool, NULL, &setActive, &getActive, &writeActive, "" );
-    addProtectedField("Awake", TypeBool, NULL, &setAwake, &getAwake, &writeAwake, "" );
-    addProtectedField("Bullet", TypeBool, NULL, &setBullet, &getBullet, &writeBullet, "" );
-    addProtectedField("SleepingAllowed", TypeBool, NULL, &setSleepingAllowed, &getSleepingAllowed, &writeSleepingAllowed, "" );
+    addProtectedField("BodyType", TypeEnum, 0, &setBodyType, &getBodyType, &writeBodyType, 1, &bodyTypeTable, "" );
+    addProtectedField("Active", TypeBool, 0, &setActive, &getActive, &writeActive, "" );
+    addProtectedField("Awake", TypeBool, 0, &setAwake, &getAwake, &writeAwake, "" );
+    addProtectedField("Bullet", TypeBool, 0, &setBullet, &getBullet, &writeBullet, "" );
+    addProtectedField("SleepingAllowed", TypeBool, 0, &setSleepingAllowed, &getSleepingAllowed, &writeSleepingAllowed, "" );
 
     /// Collision control.
     addProtectedField("CollisionGroups", TypeS32, Offset(mCollisionGroupMask, SceneObject), &setCollisionGroups, &getCollisionGroups, &writeCollisionGroups, "");
     addProtectedField("CollisionLayers", TypeS32, Offset(mCollisionLayerMask, SceneObject), &setCollisionLayers, &getCollisionLayers, &writeCollisionLayers, "");
     addField("CollisionSuppress", TypeBool, Offset(mCollisionSuppress, SceneObject), &writeCollisionSuppress, "");
     addField("CollisionOneWay", TypeBool, Offset(mCollisionOneWay, SceneObject), &writeCollisionOneWay, "");
-    addProtectedField("GatherContacts", TypeBool, NULL, &setGatherContacts, &defaultProtectedGetFn, &writeGatherContacts, "");
+    addProtectedField("GatherContacts", TypeBool, 0, &setGatherContacts, &defaultProtectedGetFn, &writeGatherContacts, "");
     addProtectedField("DefaultDensity", TypeF32, Offset( mDefaultFixture.density, SceneObject), &setDefaultDensity, &defaultProtectedGetFn, &writeDefaultDensity, "");
     addProtectedField("DefaultFriction", TypeF32, Offset( mDefaultFixture.friction, SceneObject), &setDefaultFriction, &defaultProtectedGetFn, &writeDefaultFriction, "");
     addProtectedField("DefaultRestitution", TypeF32, Offset( mDefaultFixture.restitution, SceneObject), &setDefaultRestitution, &defaultProtectedGetFn, &writeDefaultRestitution, "");
 
     /// Velocities.
-    addProtectedField("LinearVelocity", TypeVector2, NULL, &setLinearVelocity, &getLinearVelocity, &writeLinearVelocity, "");
-    addProtectedField("AngularVelocity", TypeF32, NULL, &setAngularVelocity, &getAngularVelocity, &writeAngularVelocity, "");
-    addProtectedField("LinearDamping", TypeF32, NULL, &setLinearDamping, &getLinearDamping, &writeLinearDamping, "");
-    addProtectedField("AngularDamping", TypeF32, NULL, &setAngularDamping, &getAngularDamping, &writeAngularDamping, "");
+    addProtectedField("LinearVelocity", TypeVector2, 0, &setLinearVelocity, &getLinearVelocity, &writeLinearVelocity, "");
+    addProtectedField("AngularVelocity", TypeF32, 0, &setAngularVelocity, &getAngularVelocity, &writeAngularVelocity, "");
+    addProtectedField("LinearDamping", TypeF32, 0, &setLinearDamping, &getLinearDamping, &writeLinearDamping, "");
+    addProtectedField("AngularDamping", TypeF32, 0, &setAngularDamping, &getAngularDamping, &writeAngularDamping, "");
 
     /// Gravity scaling.
-    addProtectedField("GravityScale", TypeF32, NULL, &setGravityScale, &getGravityScale, &writeGravityScale, "");
+    addProtectedField("GravityScale", TypeF32, 0, &setGravityScale, &getGravityScale, &writeGravityScale, "");
 
     /// Render visibility.
     addField("Visible", TypeBool, Offset(mVisible, SceneObject), &writeVisible, "");

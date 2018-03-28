@@ -533,7 +533,7 @@ U32 SpriteBatch::getSpriteImageFrame( void ) const
 {
     // Finish if a sprite is not selected.
     if ( !checkSpriteSelected() )
-        return NULL;
+        return 0;
 
     // Get image frame.
     return mSelectedSprite->getImageFrame();
@@ -611,7 +611,7 @@ U32 SpriteBatch::getSpriteAnimationFrame(void) const
 {
 	// Finish if a sprite is not selected.
 	if (!checkSpriteSelected())
-		return NULL;
+		return 0;
 
 	// Get image frame.
 	return mSelectedSprite->getAnimationFrame();
@@ -1235,6 +1235,18 @@ SpriteBatchItem* SpriteBatch::createSprite( const SpriteBatchItem::LogicalPositi
     pSpriteBatchItem->setLocalAngle( getDefaultSpriteAngle() );
 
     return pSpriteBatchItem;
+}
+
+//------------------------------------------------------------------------------
+
+void SpriteBatch::integrateSprites(const F32 totalTime, const F32 elapsedTime, DebugStats* pDebugStats)
+{
+   //process the elapsed time for all sprites
+   for (typeSpriteBatchHash::iterator spriteItr = mSprites.begin(); spriteItr != mSprites.end(); ++spriteItr)
+   {
+      // Update image frame provider.
+      spriteItr->value->ImageFrameProvider::update(elapsedTime);
+   }
 }
 
 //------------------------------------------------------------------------------

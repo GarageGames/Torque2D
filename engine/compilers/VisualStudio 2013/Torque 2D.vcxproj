@@ -100,7 +100,7 @@
       <AdditionalIncludeDirectories>../../Lib/MSPlatformSDK/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Leap.lib;COMCTL32.LIB;COMDLG32.LIB;USER32.LIB;ADVAPI32.LIB;GDI32.LIB;RPCRT4.LIB;WINMM.LIB;WSOCK32.LIB;vfw32.lib;Imm32.lib;shell32.lib;shlwapi.lib;ole32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Leap.lib;COMCTL32.LIB;COMDLG32.LIB;USER32.LIB;ADVAPI32.LIB;GDI32.LIB;RPCRT4.LIB;WINMM.LIB;WS2_32.LIB;vfw32.lib;Imm32.lib;shell32.lib;shlwapi.lib;ole32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../../../Torque2D_DEBUG.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>../../lib/LeapSDK/lib/x86;../../Lib/unicode;../../lib/MSPlatformSDK/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -149,7 +149,7 @@
       <AdditionalIncludeDirectories>../../Lib/MSPlatformSDK/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Leap.lib;COMCTL32.LIB;COMDLG32.LIB;USER32.LIB;ADVAPI32.LIB;GDI32.LIB;WINMM.LIB;WSOCK32.LIB;vfw32.lib;Imm32.lib;shell32.lib;shlwapi.lib;ole32.lib;RPCRT4.LIB;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Leap.lib;COMCTL32.LIB;COMDLG32.LIB;USER32.LIB;ADVAPI32.LIB;GDI32.LIB;WINMM.LIB;WS2_32.LIB;vfw32.lib;Imm32.lib;shell32.lib;shlwapi.lib;ole32.lib;RPCRT4.LIB;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../../../Torque2D.exe</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <AdditionalLibraryDirectories>../../lib/LeapSDK/lib/x86;../../Lib/unicode;../../Lib/MSPlatformSDK/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -209,7 +209,7 @@
       <AdditionalIncludeDirectories>../../Lib/MSPlatformSDK/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Leap.lib;COMCTL32.LIB;COMDLG32.LIB;USER32.LIB;ADVAPI32.LIB;GDI32.LIB;WINMM.LIB;WSOCK32.LIB;vfw32.lib;Imm32.lib;shell32.lib;shlwapi.lib;ole32.lib;RPCRT4.LIB;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Leap.lib;COMCTL32.LIB;COMDLG32.LIB;USER32.LIB;ADVAPI32.LIB;GDI32.LIB;WINMM.LIB;WS2_32.LIB;vfw32.lib;Imm32.lib;shell32.lib;shlwapi.lib;ole32.lib;RPCRT4.LIB;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../../../Torque2D.exe</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <AdditionalLibraryDirectories>../../lib/LeapSDK/lib/x86;../../Lib/unicode;../../Lib/MSPlatformSDK/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -422,6 +422,7 @@
     <ClCompile Include="..\..\source\input\leapMotion\leapMotionUtil.cpp" />
     <ClCompile Include="..\..\source\io\bitStream.cc" />
     <ClCompile Include="..\..\source\io\bufferStream.cc" />
+    <ClCompile Include="..\..\source\io\byteBuffer.cpp" />
     <ClCompile Include="..\..\source\io\fileObject.cc" />
     <ClCompile Include="..\..\source\io\fileStream.cc" />
     <ClCompile Include="..\..\source\io\fileStreamObject.cc" />
@@ -539,7 +540,9 @@
     <ClCompile Include="..\..\source\platform\platformFileIO.cc" />
     <ClCompile Include="..\..\source\platform\platformFont.cc" />
     <ClCompile Include="..\..\source\platform\platformMemory.cc" />
-    <ClCompile Include="..\..\source\platform\platformNetwork_ScriptBinding.cc" />
+    <ClCompile Include="..\..\source\platform\platformNet.cpp" />
+    <ClCompile Include="..\..\source\platform\platformNetAsync.cpp" />
+    <ClCompile Include="..\..\source\platform\platformNet_ScriptBinding.cc" />
     <ClCompile Include="..\..\source\platform\platformString.cc" />
     <ClCompile Include="..\..\source\platform\platformVideo.cc" />
     <ClCompile Include="..\..\source\platform\menus\popupMenu.cc" />
@@ -559,7 +562,6 @@
     <ClCompile Include="..\..\source\platformWin32\winMath.cc" />
     <ClCompile Include="..\..\source\platformWin32\winMath_ASM.cc" />
     <ClCompile Include="..\..\source\platformWin32\winMemory.cc" />
-    <ClCompile Include="..\..\source\platformWin32\winNet.cc" />
     <ClCompile Include="..\..\source\platformWin32\winOGLVideo.cc" />
     <ClCompile Include="..\..\source\platformWin32\winOpenAL.cc" />
     <ClCompile Include="..\..\source\platformWin32\winProcessControl.cc" />
@@ -935,6 +937,7 @@
     <ClInclude Include="..\..\source\input\leapMotion\leapMotionUtil.h" />
     <ClInclude Include="..\..\source\io\bitStream.h" />
     <ClInclude Include="..\..\source\io\bufferStream.h" />
+    <ClInclude Include="..\..\source\io\byteBuffer.h" />
     <ClInclude Include="..\..\source\io\fileObject.h" />
     <ClInclude Include="..\..\source\io\fileObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\io\fileStream.h" />
@@ -942,6 +945,7 @@
     <ClInclude Include="..\..\source\io\fileStreamObject_ScriptBinding.h" />
     <ClInclude Include="..\..\source\io\filterStream.h" />
     <ClInclude Include="..\..\source\io\memstream.h" />
+    <ClInclude Include="..\..\source\io\rawData.h" />
     <ClInclude Include="..\..\source\io\resizeStream.h" />
     <ClInclude Include="..\..\source\io\resource\resourceManager.h" />
     <ClInclude Include="..\..\source\io\resource\resourceManager_ScriptBinding.h" />
@@ -961,6 +965,7 @@
     <ClInclude Include="..\..\source\io\zip\zipTempStream.h" />
     <ClInclude Include="..\..\source\math\box_ScriptBinding.h" />
     <ClInclude Include="..\..\source\math\matrix_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\math\mNormalDistribution.h" />
     <ClInclude Include="..\..\source\math\random_ScriptBinding.h" />
     <ClInclude Include="..\..\source\math\rectClipper.h" />
     <ClInclude Include="..\..\source\math\vector_ScriptBinding.h" />
@@ -1114,7 +1119,8 @@
     <ClInclude Include="..\..\source\platform\platformInput_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platform\platformMath.h" />
     <ClInclude Include="..\..\source\platform\platformMemory.h" />
-    <ClInclude Include="..\..\source\platform\platformNetwork.h" />
+    <ClInclude Include="..\..\source\platform\platformNet.h" />
+    <ClInclude Include="..\..\source\platform\platformNetAsync.h" />
     <ClInclude Include="..\..\source\platform\platformSemaphore.h" />
     <ClInclude Include="..\..\source\platform\platformString.h" />
     <ClInclude Include="..\..\source\platform\platformString_ScriptBinding.h" />
@@ -1125,6 +1131,8 @@
     <ClInclude Include="..\..\source\platform\platformVideo_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platform\platform_ScriptBinding.h" />
     <ClInclude Include="..\..\source\platform\Tickable.h" />
+    <ClInclude Include="..\..\source\platform\tmm_off.h" />
+    <ClInclude Include="..\..\source\platform\tmm_on.h" />
     <ClInclude Include="..\..\source\platform\types.codewarrior.h" />
     <ClInclude Include="..\..\source\platform\types.gcc.h" />
     <ClInclude Include="..\..\source\platform\types.h" />
@@ -1157,6 +1165,7 @@
     <ClInclude Include="..\..\source\platformWin32\winOGLVideo.h" />
     <ClInclude Include="..\..\source\platformWin32\winVideo.h" />
     <ClInclude Include="..\..\source\platformWin32\nativeDialogs\win32DirectoryResolver.h" />
+    <ClInclude Include="..\..\source\platform\typetraits.h" />
     <ClInclude Include="..\..\source\sim\scriptGroup.h" />
     <ClInclude Include="..\..\source\sim\scriptObject.h" />
     <ClInclude Include="..\..\source\sim\simBase.h" />

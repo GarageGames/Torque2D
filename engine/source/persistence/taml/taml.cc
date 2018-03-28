@@ -226,6 +226,12 @@ bool Taml::write( SimObject* pSimObject, const char* pFilename )
     AssertFatal( pSimObject != NULL, "Cannot write a NULL object." );
     AssertFatal( pFilename != NULL, "Cannot write to a NULL filename." );
 
+    if (!Platform::createPath(pFilename))
+    {
+       Con::warnf("Taml::writeFile() - Unable to create path for file '%s'", pFilename);
+       return false;
+    }
+
     // Expand the file-name into the file-path buffer.
     Con::expandPath( mFilePathBuffer, sizeof(mFilePathBuffer), pFilename );
 

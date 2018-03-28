@@ -109,8 +109,8 @@ TelnetDebugger::TelnetDebugger()
    Con::addConsumer(debuggerConsumer);
 
    mAcceptPort = -1;
-   mAcceptSocket = InvalidSocket;
-   mDebugSocket = InvalidSocket;
+   mAcceptSocket = NetSocket::INVALID;
+   mDebugSocket = NetSocket::INVALID;
 
    mState = NotConnected;
    mCurPos = 0;
@@ -147,9 +147,9 @@ TelnetDebugger::~TelnetDebugger()
 {
    Con::removeConsumer(debuggerConsumer);
 
-   if(mAcceptSocket != InvalidSocket)
+   if(mAcceptSocket != NetSocket::INVALID)
       Net::closeSocket(mAcceptSocket);
-   if(mDebugSocket != InvalidSocket)
+   if(mDebugSocket != NetSocket::INVALID)
       Net::closeSocket(mDebugSocket);
 }
 
@@ -168,16 +168,16 @@ void TelnetDebugger::destroy()
 
 void TelnetDebugger::send(const char *str)
 {
-   if ( mDebugSocket != InvalidSocket )
+   if ( mDebugSocket != NetSocket::INVALID )
       Net::send(mDebugSocket, (const unsigned char*)str, dStrlen(str));
 }
 
 void TelnetDebugger::disconnect()
 {
-   if ( mDebugSocket != InvalidSocket )
+   if ( mDebugSocket != NetSocket::INVALID )
    {
       Net::closeSocket(mDebugSocket);
-      mDebugSocket = InvalidSocket;
+      mDebugSocket = NetSocket::INVALID;
    }
 
    removeAllBreakpoints();
@@ -193,16 +193,20 @@ void TelnetDebugger::setDebugParameters(S32 port, const char *password, bool wai
 //   if(port == mAcceptPort)
 //      return;
 
-   if(mAcceptSocket != InvalidSocket)
+   if(mAcceptSocket != NetSocket::INVALID)
    {
       Net::closeSocket(mAcceptSocket);
-      mAcceptSocket = InvalidSocket;
+      mAcceptSocket = NetSocket::INVALID;
    }
    mAcceptPort = port;
    if(mAcceptPort != -1 && mAcceptPort != 0)
    {
+     NetAddress address;
+     Net::getIdealListenAddress(&address);
+     address.port = mAcceptPort;
+
       mAcceptSocket = Net::openSocket();
-      Net::bind(mAcceptSocket, mAcceptPort);
+      Net::bindAddress(address, mAcceptSocket);
       Net::listen(mAcceptSocket, 4);
 
       Net::setBlocking(mAcceptSocket, false);
@@ -236,32 +240,33 @@ void TelnetDebugger::process()
 {
    NetAddress address;
 
-   if(mAcceptSocket != InvalidSocket)
+   if(mAcceptSocket != NetSocket::INVALID)
    {
       // ok, see if we have any new connections:
       NetSocket newConnection;
       newConnection = Net::accept(mAcceptSocket, &address);
 
-      if(newConnection != InvalidSocket && mDebugSocket == InvalidSocket)
+      if(newConnection != NetSocket::INVALID && mDebugSocket == NetSocket::INVALID)
       {
-        Con::printf ("Debugger connection from %i.%i.%i.%i",
-                address.netNum[0], address.netNum[1], address.netNum[2], address.netNum[3]);
+         char buffer[256];
+         Net::addressToString(&address, buffer);
+         Con::printf("Debugger connection from %s", buffer);
 
          mState = PasswordTry;
          mDebugSocket = newConnection;
 
          Net::setBlocking(newConnection, false);
       }
-      else if(newConnection != InvalidSocket)
+      else if(newConnection != NetSocket::INVALID)
          Net::closeSocket(newConnection);
    }
    // see if we have any input to process...
 
-   if(mDebugSocket == InvalidSocket)
+   if(mDebugSocket == NetSocket::INVALID)
       return;
 
    checkDebugRecv();
-   if(mDebugSocket == InvalidSocket)
+   if(mDebugSocket == NetSocket::INVALID)
       removeAllBreakpoints();
 }
 
@@ -315,10 +320,7 @@ void TelnetDebugger::checkDebugRecv()
       }
 
       S32 numBytes;
-      Net::Error err = Net::NotASocket;
-      
-      if ( mDebugSocket != InvalidSocket )
-         err = Net::recv(mDebugSocket, (unsigned char*)(mLineBuffer + mCurPos), MaxCommandSize - mCurPos, &numBytes);
+      Net::Error err = Net::recv(mDebugSocket, (unsigned char*)(mLineBuffer + mCurPos), MaxCommandSize - mCurPos, &numBytes);
 
       if((err != Net::NoError && err != Net::WouldBlock) || numBytes == 0)
       {
@@ -395,7 +397,7 @@ void TelnetDebugger::breakProcess()
    {
       Platform::sleep(10);
       checkDebugRecv();
-      if(mDebugSocket == InvalidSocket)
+      if(mDebugSocket == NetSocket::INVALID)
       {
          mProgramPaused = false;
          removeAllBreakpoints();

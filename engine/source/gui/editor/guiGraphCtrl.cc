@@ -120,10 +120,10 @@ void GuiGraphCtrl::onRender(Point2I offset, const RectI &updateRect)
 					temp2 = (S32)(((F32)getExtent().x / (F32)mPlots[k].mGraphData.size()) * (F32)sample);
 
 				GLfloat verts[] = {
-					getPosition().x + temp1, (getPosition().y + getExtent().y) - (S32)(getDatum(k, sample) * Scale),
-					getPosition().x + temp2, (getPosition().y + getExtent().y) - (S32)(getDatum(k, sample) * Scale),
-					getPosition().x + temp2, getPosition().y + getExtent().y,//may need to switch these last two
-					getPosition().x + temp1, getPosition().y + getExtent().y,				
+					static_cast<GLfloat>(getPosition().x + temp1), static_cast<GLfloat>((getPosition().y + getExtent().y) - (S32)(getDatum(k, sample) * Scale)),
+					static_cast<GLfloat>(getPosition().x + temp2), static_cast<GLfloat>((getPosition().y + getExtent().y) - (S32)(getDatum(k, sample) * Scale)),
+					static_cast<GLfloat>(getPosition().x + temp2), static_cast<GLfloat>(getPosition().y + getExtent().y),//may need to switch these last two
+					static_cast<GLfloat>(getPosition().x + temp1), static_cast<GLfloat>(getPosition().y + getExtent().y),
 				};
 				glVertexPointer(2, GL_FLOAT, 0, verts);
 				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -149,10 +149,10 @@ void GuiGraphCtrl::onRender(Point2I offset, const RectI &updateRect)
 					temp2 = (S32)(((F32)getExtent().x / (F32)mPlots[k].mGraphData.size()) * (F32)sample);
 
 				GLfloat verts[] = {
-					getPosition().x + temp1, (getPosition().y + getExtent().y) - (S32)(getDatum(k, sample) * Scale),
-					getPosition().x + temp2, (getPosition().y + getExtent().y) - (S32)(getDatum(k, sample+1) * Scale),
-					getPosition().x + temp2, getPosition().y + getExtent().y,//may need to switch these last two
-					getPosition().x + temp1, getPosition().y + getExtent().y,
+						static_cast<GLfloat>(getPosition().x + temp1), static_cast<GLfloat>((getPosition().y + getExtent().y) - (S32)(getDatum(k, sample) * Scale)),
+						static_cast<GLfloat>(getPosition().x + temp2), static_cast<GLfloat>((getPosition().y + getExtent().y) - (S32)(getDatum(k, sample+1) * Scale)),
+						static_cast<GLfloat>(getPosition().x + temp2), static_cast<GLfloat>(getPosition().y + getExtent().y),//may need to switch these last two
+						static_cast<GLfloat>(getPosition().x + temp1), static_cast<GLfloat>(getPosition().y + getExtent().y),
 				};
 				glVertexPointer(2, GL_FLOAT, 0, verts);
 				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -170,10 +170,10 @@ void GuiGraphCtrl::onRender(Point2I offset, const RectI &updateRect)
 				temp2 = (S32)(((F32)getExtent().x / (F32)mPlots[k].mGraphData.size()) * (F32)sample);
 
 			GLfloat last[] = {
-				getPosition().x + temp1, (getPosition().y + getExtent().y) - (S32)(getDatum(k, sample) * Scale),
-				getPosition().x + temp2, (getPosition().y + getExtent().y) - (S32)(getDatum(k, sample) * Scale),
-				getPosition().x + temp2, getPosition().y + getExtent().y,
-				getPosition().x + temp1, getPosition().y + getExtent().y,
+					static_cast<GLfloat>(getPosition().x + temp1), static_cast<GLfloat>((getPosition().y + getExtent().y) - (S32)(getDatum(k, sample) * Scale)),
+					static_cast<GLfloat>(getPosition().x + temp2), static_cast<GLfloat>((getPosition().y + getExtent().y) - (S32)(getDatum(k, sample) * Scale)),
+					static_cast<GLfloat>(getPosition().x + temp2), static_cast<GLfloat>(getPosition().y + getExtent().y),
+					static_cast<GLfloat>(getPosition().x + temp1), static_cast<GLfloat>(getPosition().y + getExtent().y),
 			};
 			glVertexPointer(2, GL_FLOAT, 0, last);
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -194,7 +194,7 @@ void GuiGraphCtrl::onRender(Point2I offset, const RectI &updateRect)
 				temp = (S32)(((F32)getExtent().x / (F32)mPlots[k].mGraphData.size()) * (F32)0);
 			
 			GLfloat verts[] = {
-				getPosition().x + temp, getPosition().y + getExtent().y - (S32)(getDatum(k, 0) * Scale),
+					static_cast<GLfloat>(getPosition().x + temp), static_cast<GLfloat>(getPosition().y + getExtent().y - (S32)(getDatum(k, 0) * Scale)),
 				0, 0
 			};
 			
