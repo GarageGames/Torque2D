@@ -233,7 +233,7 @@ void GuiCanvas::processScreenTouchEvent(const ScreenTouchEvent *event)
         mLastMouseDownTime = curTime;
 //		mLastEvent.mouseClickCount = mLastMouseClickCount;
         
-        rootScreenTouchDown(mLastEvent);
+        rootMouseDown(mLastEvent);
     }
     else if(event->action == SI_MOVE)
     {
@@ -243,7 +243,7 @@ void GuiCanvas::processScreenTouchEvent(const ScreenTouchEvent *event)
     else if(event->action == SI_BREAK)
     {
         mNextMouseTime = 0xFFFFFFFF;
-        rootScreenTouchUp(mLastEvent);
+        rootMouseUp(mLastEvent);
     }
 }
 
@@ -1095,10 +1095,8 @@ void GuiCanvas::popDialogControl(S32 layer)
       i--;
       ctrl = static_cast<GuiControl*>(*i);
       if (ctrl->mLayer == layer)
-         break;
+			popDialogControl(ctrl);
    }
-   if (ctrl)
-      popDialogControl(ctrl);
 }
 
 void GuiCanvas::mouseLock(GuiControl *lockingControl)
