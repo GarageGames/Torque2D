@@ -172,6 +172,7 @@ SET(T2D_SRCS
 	../../source/2d/assets/ParticleAssetField.cc
 	../../source/2d/assets/ParticleAssetFieldCollection.cc
 	../../source/2d/assets/SkeletonAsset.cc
+	../../source/2d/assets/FontAsset.cc
 	../../source/2d/controllers/AmbientForceController.cc
 	../../source/2d/controllers/BuoyancyController.cc
 	../../source/2d/controllers/core/GroupedSceneController.cc
@@ -225,6 +226,10 @@ SET(T2D_SRCS
 	../../source/audio/audioDataBlock.cc
 	../../source/audio/audioStreamSourceFactory.cc
 	../../source/audio/wavStreamSource.cc
+	../../source/audio/audioDescriptions.cc
+	../../source/audio/vorbisStreamSource.cc
+	../../source/bitmapFont/BitmapFont.cc
+	../../source/bitmapFont/BitmapFontCharacter.cc
 	../../source/collection/bitTables.cc
 	../../source/collection/hashTable.cc
 	../../source/collection/undo.cc
@@ -506,4 +511,3 @@ ${T2D_SRCS})
 add_dependencies(Torque2D.html Assets)
 
 #em_link_js_library
-
