@@ -193,9 +193,6 @@
     <Filter Include="persistence\taml\xml">
       <UniqueIdentifier>{cc1c1416-376b-4686-a4ac-21d1a35c9390}</UniqueIdentifier>
     </Filter>
-    <Filter Include="input\leapMotion">
-      <UniqueIdentifier>{addcb993-5059-42bf-a1ea-871f700c67c3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="spine">
       <UniqueIdentifier>{bb776838-ed6f-477c-b366-dd0c5c60ae5f}</UniqueIdentifier>
     </Filter>
@@ -1337,12 +1334,6 @@
     </ClCompile>
     <ClCompile Include="..\..\source\console\Package.cc">
       <Filter>console</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\input\leapMotion\leapMotionManager.cc">
-      <Filter>input\leapMotion</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\input\leapMotion\leapMotionUtil.cpp">
-      <Filter>input\leapMotion</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\math\mPoint.cpp">
       <Filter>math</Filter>
@@ -3066,18 +3057,6 @@
     </ClInclude>
     <ClInclude Include="..\..\source\console\Package.h">
       <Filter>console</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\input\leapMotion\leapMotionConstants.h">
-      <Filter>input\leapMotion</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\input\leapMotion\leapMotionManager.h">
-      <Filter>input\leapMotion</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\input\leapMotion\LeapMotionManager_ScriptBinding.h">
-      <Filter>input\leapMotion</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\input\leapMotion\leapMotionUtil.h">
-      <Filter>input\leapMotion</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\spine\Animation.h">
       <Filter>spine</Filter>

@@ -452,14 +452,6 @@ enum GestureCodes
     SI_SCALE_GESTURE     = 0x408
 };
 
-enum LeapMotionCodes
-{
-    LM_HANDAXIS          = 0x409,
-    LM_HANDROT           = 0x40A,
-    LM_HANDPOS           = 0x40B,
-    LM_FINGERPOS         = 0x40C,
-};
-
 /// Input device types
 enum InputDeviceTypes
 {
@@ -471,8 +463,7 @@ enum InputDeviceTypes
    XInputDeviceType,
    ScreenTouchDeviceType,
    AccelerometerDeviceType,
-   GyroscopeDeviceType,
-   LeapMotionDeviceType
+   GyroscopeDeviceType
 };
 
 /// Device Event Action Types
@@ -491,7 +482,6 @@ enum InputDeviceTypes
 #define SI_TOUCH             0x0C
 #define SI_GESTURE           0x0D
 #define SI_MOTION            0x0F
-#define SI_LEAP              0x11
 
 /// Event SubTypes
 #define SI_ANY       0xff

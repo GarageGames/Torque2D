@@ -1445,7 +1445,7 @@ static void handleMasterServerListResponse( BitStream* stream, U32 key, U8 /*fla
    else
    {
       // Remove the packet we just received from the status list:
-      for ( i = 0; i < gPacketStatusList.size(); i++ )
+      for ( i = 0; i < (U32)gPacketStatusList.size(); i++ )
       {
          if ( gPacketStatusList[i].index == packetIndex )
          {
@@ -1472,7 +1472,7 @@ static void handleExtendedMasterServerListResponse(BitStream* stream, U32 key, U
    U32 packetKey = gMasterServerPing.key;
    if (gGotFirstListPacket)
    {
-      for (i = 0; i < gPacketStatusList.size(); i++)
+      for (i = 0; i < (U32)gPacketStatusList.size(); i++)
       {
          if (gPacketStatusList[i].index == packetIndex)
          {
@@ -1537,7 +1537,7 @@ static void handleExtendedMasterServerListResponse(BitStream* stream, U32 key, U
    else
    {
       // Remove the packet we just received from the status list:
-      for (i = 0; i < gPacketStatusList.size(); i++)
+      for (i = 0; i < (U32)gPacketStatusList.size(); i++)
       {
          if ( gPacketStatusList[i].index == packetIndex )
          {

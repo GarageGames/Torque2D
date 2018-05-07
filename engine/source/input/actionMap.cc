@@ -812,11 +812,6 @@ bool ActionMap::getDeviceTypeAndInstance(const char *pDeviceName, U32 &deviceTyp
       deviceType = GamepadDeviceType;
       offset     = dStrlen("gamepad");
    }
-   else if (dStrnicmp(pDeviceName, "leapdevice", dStrlen("leapdevice")) == 0)
-   {
-       deviceType = LeapMotionDeviceType;
-       offset = dStrlen("leapdevice");
-   }
    else
       return false;
     
@@ -867,10 +862,6 @@ bool ActionMap::getDeviceName(const U32 deviceType, const U32 deviceInstance, ch
 
 	  case GamepadDeviceType:
       dSprintf(buffer, 16, "gamepad%d", deviceInstance);
-      break;
-
-     case LeapMotionDeviceType:
-      dStrcpy(buffer, "leapdevice");
       break;
 
      default:
@@ -1195,112 +1186,6 @@ bool ActionMap::processBind(const U32 argc, const char** argv, SimObject* object
    pBindNode->consoleFunction = StringTable->insert(pFnName);
 
    return true;
-}
-
-//------------------------------------------------------------------------------
-
-bool ActionMap::processLeap(const InputEvent* pEvent)
-{
-    static const char *argv[5];
-    char buffer[64];
-
-    const Node* pNode = findNode( pEvent->deviceType, pEvent->deviceInst, pEvent->modifier, pEvent->objType );
-
-    if (pNode == NULL)
-    {
-        // Check to see if we clear the modifiers, do we find an action?
-        if (pEvent->modifier != 0)
-            pNode = findNode(pEvent->deviceType, pEvent->deviceInst, 0, pEvent->objInst);
-
-        if (pNode == NULL)
-            return false;
-    }
-
-    // "Do nothing" bind:
-    if ( !pNode->consoleFunction[0] )
-        return( true );
-
-    argv[0] = pNode->consoleFunction;
-
-    float values[3];
-    values[0] = pEvent->fValues[0];
-    values[1] = pEvent->fValues[1];
-    values[2] = pEvent->fValues[2];
-
-    if ( pNode->flags & Node::HasDeadZone )
-    {
-        if ( pEvent->fValues[0] >= pNode->deadZoneBegin && pEvent->fValues[0] <= pNode->deadZoneEnd )
-            values[0] = 0.0f;
-        if ( pEvent->fValues[1] >= pNode->deadZoneBegin && pEvent->fValues[1] <= pNode->deadZoneEnd )
-            values[1] = 0.0f;
-        if ( pEvent->fValues[2] >= pNode->deadZoneBegin && pEvent->fValues[2] <= pNode->deadZoneEnd )
-            values[2] = 0.0f;
-
-        // All values are all null, so don't bother executing the function
-        if (!values[0] && !values[1] && !values[2])
-            return true;
-    }
-
-    switch(pEvent->objType)
-    {
-        case LM_HANDPOS:
-
-            // ID
-            argv[1] = Con::getIntArg(pEvent->iValue);
-
-            // Position
-            dSprintf(buffer, sizeof(buffer), "%f %f %f", values[0], values[1], values[2]);
-
-            argv[2] = buffer;
-
-            if (pNode->object)
-                Con::executef(pNode->object, 3, argv[0], argv[1], argv[2]);
-            else
-                Con::execute(3, argv);
-            break;
-
-        case LM_HANDROT:
-            
-            // ID
-            argv[1] = Con::getIntArg(pEvent->iValue);
-
-            // Rotation
-            dSprintf(buffer, sizeof(buffer), "%f %f %f", values[0], values[1], values[2]);
-
-            argv[2] = buffer;
-
-            if (pNode->object)
-                Con::executef(pNode->object, 3, argv[0], argv[1], argv[2]);
-            else
-                Con::execute(3, argv);
-            break;
-
-        case LM_FINGERPOS:
-            
-            // IDs
-            argv[1] = pEvent->fingerIDs;
-
-            // X-coordinates
-            argv[2] = pEvent->fingersX;
-
-            // Y-coordinates
-            argv[3] = pEvent->fingersY;
-
-            // Z-coordinates
-            argv[4] = pEvent->fingersZ;
-
-            if (pNode->object)
-                Con::executef(pNode->object, 5, argv[0], argv[1], argv[2], argv[3], argv[4]);
-            else
-                Con::execute(5, argv);
-            break;
-
-        case LM_HANDAXIS:
-        default:
-            return false;
-    }
-
-    return true;
 }
 
 //------------------------------------------------------------------------------
@@ -1849,9 +1734,6 @@ bool ActionMap::processAction(const InputEvent* pEvent)
 {
     switch(pEvent->action)
     {
-    case SI_LEAP:
-        return processLeap(pEvent);
-        break;
     case SI_GESTURE:
         return processGesture(pEvent);
         break;
@@ -2263,13 +2145,6 @@ CodeMapping gVirtualMap[] =
    { "keyTapGesture",      SI_GESTURE,  SI_KEYTAP_GESTURE    },
    { "pinchGesture",       SI_GESTURE,  SI_PINCH_GESTURE     },
    { "scaleGesture",       SI_GESTURE,  SI_SCALE_GESTURE     },
-
-   //-------------------------------------- GESTURE EVENTS
-   // Preset gesture events:
-   { "leapHandAxis",    SI_LEAP,     LM_HANDAXIS    },
-   { "leapHandPos",     SI_LEAP,     LM_HANDPOS     },
-   { "leapHandRot",     SI_LEAP,     LM_HANDROT     },
-   { "leapFingerPos",   SI_LEAP,     LM_FINGERPOS   },
    
    //-------------------------------------- MISCELLANEOUS EVENTS
    //
