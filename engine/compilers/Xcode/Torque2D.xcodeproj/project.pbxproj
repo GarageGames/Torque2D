@@ -77,10 +77,7 @@
 		8609FE361655716E004662ED /* osxPopupMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8609FE351655716E004662ED /* osxPopupMenu.mm */; };
 		8609FE38165572EC004662ED /* osxFont.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8609FE37165572EC004662ED /* osxFont.mm */; };
 		861CD8D01678F6C200DAE1A0 /* fileDialog.cc in Sources */ = {isa = PBXBuildFile; fileRef = 861CD8CF1678F6C200DAE1A0 /* fileDialog.cc */; };
-		862BBACD18872BB400E3233A /* libLeap.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 867492F4188727FF00CF0136 /* libLeap.dylib */; };
 		8645C96C1887231C004ED987 /* mPoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8645C96B1887231C004ED987 /* mPoint.cpp */; };
-		8645C97418872339004ED987 /* leapMotionManager.cc in Sources */ = {isa = PBXBuildFile; fileRef = 8645C96F18872339004ED987 /* leapMotionManager.cc */; };
-		8645C97518872339004ED987 /* leapMotionUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8645C97218872339004ED987 /* leapMotionUtil.cpp */; };
 		8652C279165586520052D0CB /* osxAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8652C278165586520052D0CB /* osxAudio.mm */; };
 		8652F2A016C146CF00639EFE /* torque2d.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8652F29F16C146CF00639EFE /* torque2d.icns */; };
 		8658B174165A7BFB0087ABC1 /* osxCPU.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8658B171165A7BFB0087ABC1 /* osxCPU.mm */; };
@@ -208,7 +205,6 @@
 		866381DC165556AD00C8C551 /* osxMath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 866381DB165556AD00C8C551 /* osxMath.mm */; };
 		866381E51655615200C8C551 /* osxInput.mm in Sources */ = {isa = PBXBuildFile; fileRef = 866381E41655615200C8C551 /* osxInput.mm */; };
 		866381E91655674B00C8C551 /* osxTime.mm in Sources */ = {isa = PBXBuildFile; fileRef = 866381E81655674B00C8C551 /* osxTime.mm */; };
-		867492F5188727FF00CF0136 /* libLeap.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 867492F4188727FF00CF0136 /* libLeap.dylib */; };
 		86854E341663AAE6009FAFB2 /* osxOpenGLDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 86854E331663AAE6009FAFB2 /* osxOpenGLDevice.mm */; };
 		8694ADC81656B06B0080ABAC /* osxEvents.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8694ADC51656B06B0080ABAC /* osxEvents.mm */; };
 		8694ADC91656B06B0080ABAC /* osxWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8694ADC61656B06B0080ABAC /* osxWindow.mm */; };
@@ -518,19 +514,6 @@
 		D0D55CC41EAAA5BB00B2C750 /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = D0D55CAA1EAAA5BB00B2C750 /* window.c */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		8645C978188723B7004ED987 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 6;
-			files = (
-				862BBACD18872BB400E3233A /* libLeap.dylib in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		06D168681C1F949D009A1AD1 /* vorbisStreamSource.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vorbisStreamSource.cc; sourceTree = "<group>"; };
 		06D168691C1F949D009A1AD1 /* vorbisStreamSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vorbisStreamSource.h; sourceTree = "<group>"; };
@@ -702,12 +685,6 @@
 		861CD8CE1678F6C200DAE1A0 /* fileDialog_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fileDialog_ScriptBinding.h; sourceTree = "<group>"; };
 		861CD8CF1678F6C200DAE1A0 /* fileDialog.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fileDialog.cc; sourceTree = "<group>"; };
 		8645C96B1887231C004ED987 /* mPoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mPoint.cpp; sourceTree = "<group>"; };
-		8645C96E18872339004ED987 /* leapMotionConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = leapMotionConstants.h; sourceTree = "<group>"; };
-		8645C96F18872339004ED987 /* leapMotionManager.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = leapMotionManager.cc; sourceTree = "<group>"; };
-		8645C97018872339004ED987 /* leapMotionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = leapMotionManager.h; sourceTree = "<group>"; };
-		8645C97118872339004ED987 /* LeapMotionManager_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeapMotionManager_ScriptBinding.h; sourceTree = "<group>"; };
-		8645C97218872339004ED987 /* leapMotionUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = leapMotionUtil.cpp; sourceTree = "<group>"; };
-		8645C97318872339004ED987 /* leapMotionUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = leapMotionUtil.h; sourceTree = "<group>"; };
 		864ECFEA1652795700012416 /* platform_ScriptBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platform_ScriptBinding.h; sourceTree = "<group>"; };
 		864ECFED165279E100012416 /* networkProcessList.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = networkProcessList.cc; sourceTree = "<group>"; };
 		864ECFEE165279E100012416 /* networkProcessList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = networkProcessList.h; sourceTree = "<group>"; };
@@ -1670,7 +1647,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				867492F5188727FF00CF0136 /* libLeap.dylib in Frameworks */,
 				865A20CA16515B1E00527C44 /* AppKit.framework in Frameworks */,
 				865A20CC16515B1E00527C44 /* Cocoa.framework in Frameworks */,
 				865A20CD16515B1E00527C44 /* CoreData.framework in Frameworks */,
@@ -1870,19 +1846,6 @@
 				2AE2938416EF4C220015E200 /* WaveComposite.h */,
 			);
 			name = composites;
-			sourceTree = "<group>";
-		};
-		8645C96D18872339004ED987 /* leapMotion */ = {
-			isa = PBXGroup;
-			children = (
-				8645C96E18872339004ED987 /* leapMotionConstants.h */,
-				8645C96F18872339004ED987 /* leapMotionManager.cc */,
-				8645C97018872339004ED987 /* leapMotionManager.h */,
-				8645C97118872339004ED987 /* LeapMotionManager_ScriptBinding.h */,
-				8645C97218872339004ED987 /* leapMotionUtil.cpp */,
-				8645C97318872339004ED987 /* leapMotionUtil.h */,
-			);
-			path = leapMotion;
 			sourceTree = "<group>";
 		};
 		865A20BD1651589F00527C44 /* Resources */ = {
@@ -2914,7 +2877,6 @@
 		86BC805816518D4600D96ADF /* input */ = {
 			isa = PBXGroup;
 			children = (
-				8645C96D18872339004ED987 /* leapMotion */,
 				B350D153174EF5F200033EBB /* actionMap_ScriptBinding.h */,
 				86BC805916518D4600D96ADF /* actionMap.cc */,
 				86BC805A16518D4600D96ADF /* actionMap.h */,
@@ -3556,7 +3518,6 @@
 				869FF8B61651518C002FE082 /* Resources */,
 				869FF8B41651518C002FE082 /* Sources */,
 				869FF8B51651518C002FE082 /* Frameworks */,
-				8645C978188723B7004ED987 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -3729,7 +3690,6 @@
 				86D77052165687220046D71F /* zipArchive.cc in Sources */,
 				86D77053165687220046D71F /* zipCryptStream.cc in Sources */,
 				86D77054165687220046D71F /* zipObject.cc in Sources */,
-				8645C97418872339004ED987 /* leapMotionManager.cc in Sources */,
 				86D77055165687220046D71F /* zipSubStream.cc in Sources */,
 				86D77056165687220046D71F /* zipTempStream.cc in Sources */,
 				86D76FAF165687060046D71F /* crc.cc in Sources */,
@@ -3832,7 +3792,6 @@
 				86D77022165687060046D71F /* guiColorPicker.cc in Sources */,
 				86D77023165687060046D71F /* guiConsole.cc in Sources */,
 				86D77024165687060046D71F /* guiConsoleEditCtrl.cc in Sources */,
-				8645C97518872339004ED987 /* leapMotionUtil.cpp in Sources */,
 				86D77025165687060046D71F /* guiConsoleTextCtrl.cc in Sources */,
 				86D77026165687060046D71F /* guiControl.cc in Sources */,
 				D0D55CBD1EAAA5BB00B2C750 /* res0.c in Sources */,
@@ -4105,7 +4064,6 @@
 				86DE5688171F05F60054CB83 /* guiGridCtrl.cc in Sources */,
 				B350D12F174ED1FE00033EBB /* math_ScriptBinding.cc in Sources */,
 				B350D131174ED23E00033EBB /* frameAllocator_ScriptBinding.cc in Sources */,
-				B350D147174ED56500033EBB /* platformNetwork_ScriptBinding.cc in Sources */,
 				B350D158174EF62400033EBB /* fileSystem_ScriptBinding.cc in Sources */,
 				B350D164174EF71B00033EBB /* metaScripting_ScriptBinding.cc in Sources */,
 				B350D172174EF91900033EBB /* audio_ScriptBinding.cc in Sources */,
@@ -4179,14 +4137,10 @@
 					../../source/testing/googleTest/include,
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Versions/Current/Frameworks/QD.framework/Headers",
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/OpenGL.framework/Headers",
-					../../lib/LeapSDK/include,
 					../../lib/libvorbis/lib,
 				);
 				INFOPLIST_FILE = "Torque2D/Torque2D-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"../../lib/LeapSDK/lib/libc++",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = /usr/lib/libz.dylib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4286,14 +4240,10 @@
 					../../source/testing/googleTest/include,
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Versions/Current/Frameworks/QD.framework/Headers",
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/OpenGL.framework/Headers",
-					../../lib/LeapSDK/include,
 					../../lib/libvorbis/lib,
 				);
 				INFOPLIST_FILE = "Torque2D/Torque2D-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"../../lib/LeapSDK/lib/libc++",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = /usr/lib/libz.dylib;
 				PRODUCT_NAME = "$(TARGET_NAME)_DEBUG";
@@ -4329,14 +4279,10 @@
 					../../source/testing/googleTest/include,
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Versions/Current/Frameworks/QD.framework/Headers",
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/OpenGL.framework/Headers",
-					../../lib/LeapSDK/include,
 					../../lib/libvorbis/lib,
 				);
 				INFOPLIST_FILE = "Torque2D/Torque2D-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"../../lib/LeapSDK/lib/libc++",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = /usr/lib/libz.dylib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
