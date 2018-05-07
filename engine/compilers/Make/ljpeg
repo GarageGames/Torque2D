@@ -1,5 +1,5 @@
 # I release this sample under the MIT license: free for any use, provided 
-# you hold me harmless from any such use you make, and you retain my 
+# you hold me harmless from any such use you make, and you retain my
 # copyright on the actual sources.
 # Copyright 2005 Jon Watte.
 
@@ -79,27 +79,27 @@ LIB_TARGETS_DEBUG += $(TARGET_ljpeg_DEBUG)
 OBJS_ljpeg := $(patsubst ../../lib/ljpeg/%,Release/ljpeg/%.o,$(SOURCES))
 OBJS_ljpeg_DEBUG := $(patsubst ../../lib/ljpeg/%,Debug/ljpeg/%.o,$(SOURCES))
 
-# Deriving the variable name from the target name is the secret sauce 
+# Deriving the variable name from the target name is the secret sauce
 # of the build system.
 #
 $(TARGET_ljpeg):	$(OBJS_ljpeg)
-	@echo Linking library ljpng 
+	@echo Linking library ljpng
 	@mkdir -p $(dir $@)
 	ar cr $@ $(OBJS_ljpeg)
-   
+
 $(TARGET_ljpeg_DEBUG):	$(OBJS_ljpeg_DEBUG)
-	@echo Linking debug library ljpng 
+	@echo Linking debug library ljpng
 	@mkdir -p $(dir $@)
 	ar cr $@ $(OBJS_ljpeg_DEBUG)
 
 Release/ljpeg/%.o:	../../lib/ljpeg/%
 	@mkdir -p $(dir $@)
 	$(CC) -c $(CFLAGS_ljpeg) $< -o $@
-   
+
 Debug/ljpeg/%.o:	../../lib/ljpeg/%
 	@mkdir -p $(dir $@)
 	$(CC) -c $(CFLAGS_DEBUG_ljpeg) $< -o $@
-   
+
 release_ljpeg: $(TARGET_ljpeg)
 debug_ljpeg: $(TARGET_ljpeg_DEBUG)
 

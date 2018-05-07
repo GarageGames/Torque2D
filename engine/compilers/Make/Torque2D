@@ -56,7 +56,15 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/assets/assetTagsManifest.cc \
 	../../source/assets/declaredAssets.cc \
 	../../source/assets/referencedAssets.cc \
+	../../source/audio/audio.cc \
+	../../source/audio/audioDataBlock.cc \
+	../../source/audio/audioDescriptions.cc \
+	../../source/audio/audio_ScriptBinding.cc \
+	../../source/audio/audioStreamSourceFactory.cc \
+	../../source/audio/wavStreamSource.cc \
 	../../source/audio/AudioAsset.cc \
+	../../source/audio/audioBuffer.cc \
+	../../source/audio/vorbisStreamSource.cc \
 	../../source/bitmapFont/BitmapFont.cc \
 	../../source/bitmapFont/BitmapFontCharacter.cc \
 	../../source/Box2D/Collision/b2BroadPhase.cpp \
@@ -242,13 +250,6 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/persistence/tinyXML/tinyxml.cpp \
 	../../source/persistence/tinyXML/tinyxmlerror.cpp \
 	../../source/persistence/tinyXML/tinyxmlparser.cpp \
-	../../source/audio/vorbisStreamSource.cc \
-	../../source/audio/audio.cc \
-	../../source/audio/audioBuffer.cc \
-	../../source/audio/audioDataBlock.cc \
-	../../source/audio/audio_ScriptBinding.cc \
-	../../source/audio/audioStreamSourceFactory.cc \
-	../../source/audio/wavStreamSource.cc \
 	../../source/component/dynamicConsoleMethodComponent.cpp \
 	../../source/component/simComponent.cpp \
 	../../source/component/behaviors/behaviorComponent.cpp \
