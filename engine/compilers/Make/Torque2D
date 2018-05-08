@@ -56,7 +56,15 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/assets/assetTagsManifest.cc \
 	../../source/assets/declaredAssets.cc \
 	../../source/assets/referencedAssets.cc \
+	../../source/audio/audio.cc \
+	../../source/audio/audioDataBlock.cc \
+	../../source/audio/audioDescriptions.cc \
+	../../source/audio/audio_ScriptBinding.cc \
+	../../source/audio/audioStreamSourceFactory.cc \
+	../../source/audio/wavStreamSource.cc \
 	../../source/audio/AudioAsset.cc \
+	../../source/audio/audioBuffer.cc \
+	../../source/audio/vorbisStreamSource.cc \
 	../../source/bitmapFont/BitmapFont.cc \
 	../../source/bitmapFont/BitmapFontCharacter.cc \
 	../../source/Box2D/Collision/b2BroadPhase.cpp \
@@ -175,6 +183,7 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/gui/language/lang.cc \
 	../../source/gui/messageVector.cc \
 	../../source/input/actionMap.cc \
+	../../source/io/byteBuffer.cpp \
 	../../source/io/bitStream.cc \
 	../../source/io/bufferStream.cc \
 	../../source/io/fileObject.cc \
@@ -241,13 +250,6 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/persistence/tinyXML/tinyxml.cpp \
 	../../source/persistence/tinyXML/tinyxmlerror.cpp \
 	../../source/persistence/tinyXML/tinyxmlparser.cpp \
-	../../source/audio/vorbisStreamSource.cc \
-	../../source/audio/audio.cc \
-	../../source/audio/audioBuffer.cc \
-	../../source/audio/audioDataBlock.cc \
-	../../source/audio/audio_ScriptBinding.cc \
-	../../source/audio/audioStreamSourceFactory.cc \
-	../../source/audio/wavStreamSource.cc \
 	../../source/component/dynamicConsoleMethodComponent.cpp \
 	../../source/component/simComponent.cpp \
 	../../source/component/behaviors/behaviorComponent.cpp \
@@ -299,10 +301,11 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/platform/platformFileIO.cc \
 	../../source/platform/platformFont.cc \
 	../../source/platform/platformMemory.cc \
-	../../source/platform/platformNetwork_ScriptBinding.cc \
+	../../source/platform/platformNet.cpp \
+	../../source/platform/platformNetAsync.cpp \
+	../../source/platform/platformNet_ScriptBinding.cc \
 	../../source/platform/platformString.cc \
 	../../source/platform/platformVideo.cc \
-	../../source/platform/platformNetAsync.unix.cc \
 	../../source/platform/menus/popupMenu.cc \
 	../../source/platform/nativeDialogs/msgBox.cpp \
 	../../source/platform/Tickable.cc \
@@ -320,7 +323,6 @@ SOURCES := ../../source/2d/assets/AnimationAsset.cc \
 	../../source/platformX86UNIX/x86UNIXMemory.cc \
 	../../source/platformX86UNIX/x86UNIXMessageBox.cc \
 	../../source/platformX86UNIX/x86UNIXMutex.cc \
-	../../source/platformX86UNIX/x86UNIXNet.cc \
 	../../source/platformX86UNIX/x86UNIXOGLVideo.cc \
 	../../source/platformX86UNIX/x86UNIXOpenAL.cc \
 	../../source/platformX86UNIX/x86UNIXProcessControl.cc \

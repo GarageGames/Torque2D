@@ -1,5 +1,5 @@
 ![Torque Logo](http://static.garagegames.com/static/pg/logokits/Torque-Logo_H.png)
-## Torque 2D 3.3
+## Torque 2D 3.4
 
 MIT Licensed Open Source version of Torque 2D from GarageGames. Maintained by the T2D Steering Committee and contributions from the community.
 
@@ -7,9 +7,9 @@ Dedicated to 2D game development, Torque 2D is an extremely powerful, flexible, 
 
 ### Branches
 
-Here is an overview of the branches found in the Torque 2D repository: 
+Here is an overview of the branches found in the Torque 2D repository:
 
-* **master:** this branch contains the current stable release code that can be used in a production environment. 
+* **master:** this branch contains the current stable release code that can be used in a production environment.
 * **development:** this branch is dedicated to active development. It contains the latest bug fixes, new features, and other updates. All pull requests need to go to the development branch. While we try our best to test all incoming changes, it is possible for mistakes to slip in therefore this branch should always be considered unstable.
 * **gh-pages:** this branch currently contains the html pages generated from doxygen for the engine and TorqueScript references.
 
@@ -21,18 +21,16 @@ If you do not wish to compile the source code yourself, precompiled binary files
 
 After downloading a copy of the source code, the following project files for each platform are provided for you and can be found in the `engine/compilers` folder.
 
-* **Windows:** Visual Studio 2013 or 2015 (works with the free, "Express for Windows Desktop" version)
+* **Windows:** Visual Studio 2017 (works with the free Community Edition)
 * **OSX:** Xcode
 * **Linux:** Make
 * **iOS:** Xcode_iOS
-* **Android:** Eclipse or Android Studio
+* **Android:** Android Studio
 * **Web:** Emscripten/Cmake
 
 See the [wiki](https://github.com/GarageGames/Torque2D/wiki) for available guides on platform setup and development.
 
 ### Batteries Included
-
-![truck](http://t2dtutorials.com/img/Truck.png)
 
 Running Torque 2D for the first time out of the box will start you off in the Sandbox. The Sandbox is a collection of over 30 simple "toys" (or modules) which demonstrate various features in T2D. The default toy is a side scrolling level with a monster truck. To see a list of the available modules/toys to choose from, click on the `Show Tools` button in the lower right corner of the screen.
 
@@ -46,7 +44,11 @@ All documentation for the open source version of Torque 2D can be found on our [
 
 ### Community
 
-Don't go it alone! Join the active community around Torque 2D at GarageGames.com. Ask questions, talk about T2D and general game development topics, learn the latest news, or post a blog promoting your game or showing off additional engine features in your T2D fork.
+Don't go it alone! Join the active Torque community. Ask questions, talk about T2D and general game development topics, learn the latest news, or post a blog promoting your game or showing off additional engine features in your T2D fork.
+
+* [Torque 2D Forums on the Torque 3D Website](https://forums.torque3d.org/viewforum.php?f=31)
+
+You also might be able to find useful information on the less active GarageGames website.
 
 * [Torque 2D Beginner Forum](http://www.garagegames.com/community/forums/84)
 * [Torque 2D Professional Forum](http://www.garagegames.com/community/forums/85)

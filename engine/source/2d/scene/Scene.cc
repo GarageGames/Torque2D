@@ -503,36 +503,60 @@ void Scene::dispatchBeginContactCallbacks( void )
         dSprintf( sceneObjectABuffer, sizeof(sceneObjectABuffer), "%d", pSceneObjectA->getId() );
         dSprintf( sceneObjectBBuffer, sizeof(sceneObjectBBuffer), "%d", pSceneObjectB->getId() );
 
-        // Format miscellaneous information.
-        char miscInfoBuffer[128];
+        // Format miscellaneous information twice so object b can see things from his point of view.
+        char miscInfoBufferA[128];
+        char miscInfoBufferB[128];
         if ( pointCount == 2 )
         {
-            dSprintf(miscInfoBuffer, sizeof(miscInfoBuffer),
+            dSprintf(miscInfoBufferA, sizeof(miscInfoBufferA),
                 "%d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
                 shapeIndexA, shapeIndexB,
-                normal.x, normal.y,
+                -normal.x, -normal.y,
                 point1.x, point1.y,
                 normalImpulse1,
                 tangentImpulse1,
                 point2.x, point2.y,
                 normalImpulse2,
                 tangentImpulse2 );
+
+            dSprintf(miscInfoBufferB, sizeof(miscInfoBufferB),
+               "%d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
+               shapeIndexB, shapeIndexA,
+               normal.x, normal.y,
+               point1.x, point1.y,
+               normalImpulse1,
+               tangentImpulse1,
+               point2.x, point2.y,
+               normalImpulse2,
+               tangentImpulse2);
         }
         else if ( pointCount == 1 )
         {
-            dSprintf(miscInfoBuffer, sizeof(miscInfoBuffer),
+            dSprintf(miscInfoBufferA, sizeof(miscInfoBufferA),
                 "%d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
                 shapeIndexA, shapeIndexB,
-                normal.x, normal.y,
+                -normal.x, -normal.y,
                 point1.x, point1.y,
                 normalImpulse1,
                 tangentImpulse1 );
+
+            dSprintf(miscInfoBufferB, sizeof(miscInfoBufferB),
+               "%d %d %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f",
+               shapeIndexB, shapeIndexA,
+               normal.x, normal.y,
+               point1.x, point1.y,
+               normalImpulse1,
+               tangentImpulse1);
         }
         else
         {
-            dSprintf(miscInfoBuffer, sizeof(miscInfoBuffer),
+            dSprintf(miscInfoBufferA, sizeof(miscInfoBufferA),
                 "%d %d",
                 shapeIndexA, shapeIndexB );
+
+            dSprintf(miscInfoBufferB, sizeof(miscInfoBufferB),
+               "%d %d",
+               shapeIndexB, shapeIndexA);
         }
 
         // Does the scene handle the collision callback?
@@ -543,12 +567,12 @@ void Scene::dispatchBeginContactCallbacks( void )
             Con::executef( this, 4, "onSceneCollision",
                 sceneObjectABuffer,
                 sceneObjectBBuffer,
-                miscInfoBuffer );
+                miscInfoBufferA );
         }
         else
         {
             // No, so call it on its behaviors.
-            const char* args[5] = { "onSceneCollision", "", sceneObjectABuffer, sceneObjectBBuffer, miscInfoBuffer };
+            const char* args[5] = { "onSceneCollision", "", sceneObjectABuffer, sceneObjectBBuffer, miscInfoBufferA };
             callOnBehaviors( 5, args );
         }
 
@@ -562,12 +586,12 @@ void Scene::dispatchBeginContactCallbacks( void )
                 // Yes, so perform the script callback on it.
                 Con::executef( pSceneObjectA, 3, "onCollision",
                     sceneObjectBBuffer,
-                    miscInfoBuffer );
+                    miscInfoBufferA );
             }
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[4] = { "onCollision", "", sceneObjectBBuffer, miscInfoBuffer };
+                const char* args[4] = { "onCollision", "", sceneObjectBBuffer, miscInfoBufferA };
                 pSceneObjectA->callOnBehaviors( 4, args );
             }
         }
@@ -582,12 +606,12 @@ void Scene::dispatchBeginContactCallbacks( void )
                 // Yes, so perform the script callback on it.
                 Con::executef( pSceneObjectB, 3, "onCollision",
                     sceneObjectABuffer,
-                    miscInfoBuffer );
+                    miscInfoBufferB );
             }
             else
             {
                 // No, so call it on its behaviors.
-                const char* args[4] = { "onCollision", "", sceneObjectABuffer, miscInfoBuffer };
+                const char* args[4] = { "onCollision", "", sceneObjectABuffer, miscInfoBufferB };
                 pSceneObjectB->callOnBehaviors( 4, args );
             }
         }

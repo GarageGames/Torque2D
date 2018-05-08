@@ -1,0 +1,5 @@
+<AudioAsset
+    AssetName="keypress"
+    AssetAutoUnload="0"
+    AudioFile="keypress.wav"
+    Looping="0" />

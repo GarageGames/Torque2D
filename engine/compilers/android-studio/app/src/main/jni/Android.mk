@@ -35,7 +35,7 @@ LOCAL_PATH := $(MY_LOCAL_PATH)
 include $(CLEAR_VARS)
  
 LOCAL_MODULE := freetype-prebuilt
-LOCAL_SRC_FILES := ../../../../../../lib/freetype/android/lib/libfreetype.a
+LOCAL_SRC_FILES := ../../../../../../lib/freetype/android/lib/$(TARGET_ARCH_ABI)/libfreetype.a
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../../../../lib/freetype/android/include $(LOCAL_PATH)/../../../../../../lib/freetype/android/include/freetype2
  
 include $(PREBUILT_STATIC_LIBRARY)
@@ -380,6 +380,7 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../source/gui/language/lang.cc \
 					../../../../../../source/gui/messageVector.cc \
 					../../../../../../source/input/actionMap.cc \
+					../../../../../../source/io/byteBuffer.cpp \
 					../../../../../../source/io/bitStream.cc \
 					../../../../../../source/io/bufferStream.cc \
 					../../../../../../source/io/fileObject.cc \
@@ -493,13 +494,15 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../source/platform/platformFileIO.cc \
 					../../../../../../source/platform/platformFont.cc \
 					../../../../../../source/platform/platformMemory.cc \
-					../../../../../../source/platform/platformNetwork_ScriptBinding.cc \
+					../../../../../../source/platform/platformNet.cpp \
+					../../../../../../source/platform/platformNetAsync.cpp \
+					../../../../../../source/platform/platformNet_ScriptBinding.cc \
 					../../../../../../source/platform/platformString.cc \
 					../../../../../../source/platform/platformVideo.cc \
-					../../../../../../source/platform/platformNetAsync.unix.cc \
 					../../../../../../source/platform/menus/popupMenu.cc \
 					../../../../../../source/platform/nativeDialogs/msgBox.cpp \
 					../../../../../../source/platform/Tickable.cc \
+					../../../../../../source/platformAndroid/android_native_app_glue.c \
 					../../../../../../source/platformAndroid/AndroidAlerts.cpp \
 					../../../../../../source/platformAndroid/AndroidAudio.cpp \
 					../../../../../../source/platformAndroid/AndroidConsole.cpp \
@@ -514,7 +517,6 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../source/platformAndroid/AndroidMath.cpp \
 					../../../../../../source/platformAndroid/AndroidMemory.cpp \
 					../../../../../../source/platformAndroid/AndroidMutex.cpp \
-					../../../../../../source/platformAndroid/AndroidNet.cpp \
 					../../../../../../source/platformAndroid/AndroidOGLVideo.cpp \
 					../../../../../../source/platformAndroid/AndroidOutlineGL.cpp \
 					../../../../../../source/platformAndroid/AndroidPlatform.cpp \
@@ -608,18 +610,15 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
  
 ifeq ($(APP_OPTIM),debug)
 	LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_DEBUG -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O0 -fsigned-char
-	LOCAL_CPPFLAGS := -std=gnu++11 $(LOCAL_CFLAGS)
+	LOCAL_CPPFLAGS := -std=gnu++11 -frtti $(LOCAL_CFLAGS)
 else
 	LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O3 -fsigned-char
-	LOCAL_CPPFLAGS := -std=gnu++11 $(LOCAL_CFLAGS)
+	LOCAL_CPPFLAGS := -std=gnu++11 -frtti $(LOCAL_CFLAGS)
 endif
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lz -lOpenSLES -L../../../../../../lib/openal/Android/$(TARGET_ARCH_ABI)
-LOCAL_STATIC_LIBRARIES := android_native_app_glue freetype-prebuilt
+LOCAL_STATIC_LIBRARIES := freetype-prebuilt
 LOCAL_SHARED_LIBRARIES := libopenal-prebuilt
 
 LOCAL_ARM_MODE := arm
 
 include $(BUILD_SHARED_LIBRARY)
-
-$(call import-module,android/native_app_glue)
-

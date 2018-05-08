@@ -1,45 +1,30 @@
 apply plugin: 'com.android.application'
-
-import org.apache.tools.ant.taskdefs.condition.Os
-
 android {
-    compileSdkVersion 22
-    buildToolsVersion "23.0.2"
-
+    compileSdkVersion 25
+    buildToolsVersion '26.0.2'
+    externalNativeBuild {
+        ndkBuild {
+            path './src/main/jni/Android.mk'
+        }
+    }
     defaultConfig {
         applicationId "com.garagegames.torque2d"
-        minSdkVersion 22
-        targetSdkVersion 22
+        minSdkVersion 19
+        targetSdkVersion 25
 
         sourceSets.main {
-            assets.srcDirs=[
+            assets.srcDirs = [
                     'src/main/assets',
                     'src/main/game'
             ]
-            jni.srcDirs = ['../../../source/']
-            jniLibs.srcDir 'src/main/libs'
 
-        }
-        task buildNative(type: Exec, description: 'Compile JNI source via NDK') {
-            def ndkDir = plugins.getPlugin('com.android.application').sdkHandler.getNdkFolder()
-            def extension = (Os.isFamily(Os.FAMILY_WINDOWS))? '.cmd' : ''
-            commandLine "$ndkDir/ndk-build" + extension,
-                    '-C', file('src/main/jni').absolutePath,
-                    '-j', Runtime.runtime.availableProcessors(),
-                    'all',
-                    'NDK_DEBUG=1'
+            ndk {
+                abiFilters 'x86', 'x86_64', 'armeabi-v7a'
+            }
         }
 
-        task cleanNative(type: Exec, description: 'Clean JNI object files') {
-            def ndkDir = plugins.getPlugin('com.android.application').sdkHandler.getNdkFolder()
-            def extension = (Os.isFamily(Os.FAMILY_WINDOWS))? '.cmd' : ''
-            commandLine "$ndkDir/ndk-build" + extension,
-                    '-C', file('src/main/jni').absolutePath,
-                    'clean'
-        }
-
-        task copyGame(type: Copy, description: 'Copy torque scripts and modules'){
-            from('../../../../'){
+        task copyGame(type: Copy, description: 'Copy torque scripts and modules') {
+            from('../../../../') {
                 include '**'
                 exclude 'engine/**'
                 exclude 'tools/**'
@@ -58,30 +43,26 @@ android {
 
         }
 
-        task wipeGame(type: Delete, description: 'Wipe android-specific copy of torque scripts and modules'){
+        task wipeGame(type: Delete, description: 'Wipe android-specific copy of torque scripts and modules') {
             delete 'src/main/game/'
         }
 
-        clean.dependsOn 'cleanNative'
         clean.dependsOn 'wipeGame'
 
         tasks.withType(JavaCompile) {
             compileTask -> compileTask.dependsOn copyGame
         }
-        tasks.withType(JavaCompile) {
-            compileTask -> compileTask.dependsOn buildNative
-        }
-        tasks.withType(com.android.build.gradle.tasks.NdkCompile){task->
-            task.enabled = false
-        }
+
 
     }
-
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    productFlavors {
+    }
+}
 
+dependencies {
 }

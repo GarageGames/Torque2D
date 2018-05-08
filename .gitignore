@@ -59,8 +59,7 @@ linkmap.txt
 .Spotlight-V100
 .Trashes
 Icon?
-ehthumbs.db
-Thumbs.db
+*.db
 
 # Android project files #
 #########################
@@ -76,3 +75,4 @@ engine/compilers/android-studio/local.properties
 engine/compilers/android-studio/app/src/main/obj/
 engine/compilers/android-studio/app/src/main/libs/
 engine/compilers/android-studio/app/src/main/game/
+engine/compilers/android-studio/app/.externalNativeBuild/

@@ -20,6 +20,8 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
+#include "math/mNormalDistribution.h"
+
 ConsoleFunctionGroupBegin(RandomNumbers, "Functions relating to the generation of random numbers.");
 
 
@@ -109,6 +111,61 @@ ConsoleFunctionWithDocs(getRandomF, ConsoleFloat, 3, 3, (min, max))
     
     return min + (gRandGen.randF() * (max-min));
     
+}
+
+/*! Gets a random integer number with normal distribution (a bell curve) from min to max with optional mean and standard deviation.
+@param min The minimum range of the random integer number.
+@param max The maximum range of the random integer number.
+@param mean The Most commonly occuring value or the center of the "bell". Must be between the min and max. Defaults to the center value between min and max.
+@param stdDev The standard deviation affects how far values tend to be from the mean. Defaults to 1/6th of the difference between min and max.
+@return A random floating-point number from min to max.
+*/
+ConsoleFunctionWithDocs(getRandomBell, ConsoleInt, 3, 5, (min, max, [ mean ]?, [ stdDev ]?))
+{
+   S32 min = dAtoi(argv[1]);
+   S32 max = dAtoi(argv[2]);
+
+   if (min > max)
+   {
+      const S32 temp = min;
+      min = max;
+      max = temp;
+   }
+
+   if (argc == 3)
+   {
+      NormalDistributionGenerator g(min, max);
+      return g();
+   }
+   else if (argc > 3 && argc <= 5)
+   {
+      S32 mean = dAtoi(argv[3]);
+      if (mean > max)
+      {
+         mean = max;
+      }
+
+      if (mean < min)
+      {
+         mean = min;
+      }
+
+      if (argc == 4)
+      {
+         NormalDistributionGenerator g(min, max, mean);
+         return g();
+      }
+      else
+      {
+         NormalDistributionGenerator g(min, max, mean, dAtoi(argv[4]));
+         return g();
+      }
+   }
+   else
+   {
+      Con::warnf("getRandomBell() - Invalid number of parameters!");
+      return 0;
+   }
 }
 
 //------------------------------------------------------------------------------

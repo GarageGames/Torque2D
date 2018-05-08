@@ -24,6 +24,8 @@
 #include "stream.h"
 #include "string/stringTable.h"
 #include "graphics/color.h"
+#include "io/rawData.h"
+#include "io/byteBuffer.h"
 
 #ifndef _INC_STDARG
 #include <stdarg.h>
@@ -198,6 +200,35 @@ bool Stream::read(ColorF* pColor)
    bool success = read(&temp);
 
    *pColor = temp;
+   return success;
+}
+
+bool Stream::write(const NetAddress &na)
+{
+   bool success = write(na.type);
+   success &= write(na.port);
+   success &= write(sizeof(na.address), &na.address);
+   return success;
+}
+
+bool Stream::read(NetAddress *na)
+{
+   bool success = read(&na->type);
+   success &= read(&na->port);
+   success &= read(sizeof(na->address), &na->address);
+   return success;
+}
+
+bool Stream::write(const NetSocket &so)
+{
+   return write(so.getHandle());
+}
+
+bool Stream::read(NetSocket* so)
+{
+   S32 handle = -1;
+   bool success = read(&handle);
+   *so = NetSocket::fromHandle(handle);
    return success;
 }
 

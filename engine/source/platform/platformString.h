@@ -63,8 +63,8 @@ extern char* dStrrchr(char *str, int c);
 extern const char* dStrrchr(const char *str, int c);
 extern U32 dStrspn(const char *str, const char *set);
 extern U32 dStrcspn(const char *str, const char *set);
-extern char* dStrstr(char *str1, char *str2);
-extern char* dStrstr(const char *str1, const char *str2);
+extern char* dStrstr(char *str1, const char *str2);
+extern const char* dStrstr(const char *str1, const char *str2);
 
 extern char* dStrtok(char *str, const char *sep);
 

@@ -240,7 +240,7 @@ ConsoleFunctionWithDocs(isWriteableFileName, ConsoleBool, 2, 2, (fileName))
    char filename[1024];
    Con::expandPath(filename, sizeof(filename), argv[1]);
 
-   if (filename == NULL || *filename == 0)
+   if (*filename == 0)
       return false;
 
    // in a writeable directory?
