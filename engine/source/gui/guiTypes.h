@@ -118,7 +118,7 @@ public:
    ColorI mFillColorNA;                            ///< This is used to instead of mFillColor if the object is not active or disabled
 
    S32 mBorder;                                    ///< For most controls, if mBorder is > 0 a border will be drawn, some controls use this to draw different types of borders however @see guiDefaultControlRender.cc
-   S32 mBorderThickness;                           ///< Border thickness
+   S32 mBorderSize;								   ///< Border thickness
    ColorI mBorderColor;                            ///< Border color, used to draw a border around the bounds if border is enabled
    ColorI mBorderColorHL;                          ///< Used instead of mBorderColor when the object is highlited
    ColorI mBorderColorNA;                          ///< Used instead of mBorderColor when the object is not active or disabled

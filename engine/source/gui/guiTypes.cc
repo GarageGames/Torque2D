@@ -147,7 +147,7 @@ GuiControlProfile::GuiControlProfile(void) :
     mOpaque        = false;
     
     mBorder        = 0;
-    mBorderThickness = 1;
+    mBorderSize = 1;
     
     // default font
     mFontType      = StringTable->EmptyString;
@@ -181,7 +181,7 @@ GuiControlProfile::GuiControlProfile(void) :
       mFillColorNA   = def->mFillColorNA;
 
       mBorder        = def->mBorder;
-      mBorderThickness = def->mBorderThickness;
+      mBorderSize    = def->mBorderSize;
       mBorderColor   = def->mBorderColor;
       mBorderColorHL = def->mBorderColorHL;
       mBorderColorNA = def->mBorderColorNA;
@@ -232,7 +232,7 @@ void GuiControlProfile::initPersistFields()
    addField("fillColorHL",   TypeColorI,     Offset(mFillColorHL, GuiControlProfile));
    addField("fillColorNA",   TypeColorI,     Offset(mFillColorNA, GuiControlProfile));
    addField("border",        TypeS32,        Offset(mBorder, GuiControlProfile));
-   addField("borderThickness",TypeS32,       Offset(mBorderThickness, GuiControlProfile));
+   addField("borderSize",    TypeS32,        Offset(mBorderSize, GuiControlProfile));
    addField("borderColor",   TypeColorI,     Offset(mBorderColor, GuiControlProfile));
    addField("borderColorHL", TypeColorI,     Offset(mBorderColorHL, GuiControlProfile));
    addField("borderColorNA", TypeColorI,     Offset(mBorderColorNA, GuiControlProfile));

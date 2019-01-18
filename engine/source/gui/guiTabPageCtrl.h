@@ -61,4 +61,4 @@ class GuiTabPageCtrl : public GuiTextCtrl
       void onRender(Point2I offset, const RectI &updateRect);  ///< Called when it's time to render this page to the scene
 };
 
-#endif //_GUI_WINDOW_CTRL_H
+#endif //_GUITABPAGECTRL_H_

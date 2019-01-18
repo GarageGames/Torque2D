@@ -981,9 +981,9 @@ void GuiMenuBar::onRender(Point2I offset, const RectI &updateRect)
         RectI highlightBounds = bounds;
         highlightBounds.inset(1,1);
          if(walk == mouseDownMenu)
-            renderFilledBorder(highlightBounds, mProfile->mBorderColorHL, mProfile->mFillColorHL );
+            renderFilledBorder(highlightBounds, mProfile->mBorderColorHL, mProfile->mFillColorHL, mProfile->mBorderSize);
          else if(walk == mouseOverMenu && mouseDownMenu == NULL)
-            renderFilledBorder(highlightBounds, mProfile->mBorderColor, mProfile->mFillColor );
+            renderFilledBorder(highlightBounds, mProfile->mBorderColor, mProfile->mFillColor, mProfile->mBorderSize);
       }
 
       // Do we draw a bitmap?

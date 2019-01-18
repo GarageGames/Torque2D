@@ -67,9 +67,9 @@ void GuiButtonCtrl::onRender(Point2I      offset,
    if( mProfile->mBorder != 0 && !mHasTheme )
    {
       if (mDepressed || mStateOn)
-         renderFilledBorder( boundsRect, mProfile->mBorderColorHL, mProfile->mFillColorHL );
+         renderFilledBorder( boundsRect, mProfile->mBorderColorHL, mProfile->mFillColorHL, mProfile->mBorderSize);
       else
-         renderFilledBorder( boundsRect, mProfile->mBorderColor, mProfile->mFillColor );
+         renderFilledBorder( boundsRect, mProfile->mBorderColor, mProfile->mFillColor, mProfile->mBorderSize);
    }
    else if( mHasTheme )
    {

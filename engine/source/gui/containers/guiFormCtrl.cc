@@ -253,7 +253,7 @@ void GuiFormCtrl::onRender(Point2I offset, const RectI &updateRect)
    {
       dglClearBitmapModulation();
 
-      S32 barStart = (mHasMenu ? mThumbSize.x : 1 + mProfile->mBorderThickness) + offset.x + textWidth;
+      S32 barStart = (mHasMenu ? mThumbSize.x : 1 + mProfile->mBorderSize) + offset.x + textWidth;
       S32 barTop   = mThumbSize.y/2 + offset.y - mProfile->mBitmapArrayRects[3].extent.y /2;
 
       Point2I barOffset(barStart, barTop);

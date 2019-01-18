@@ -226,17 +226,17 @@ void GuiScrollCtrl::addObject(SimObject *object)
 
 GuiControl* GuiScrollCtrl::findHitControl(const Point2I &pt, S32 initialLayer)
 {
-   if(pt.x < mProfile->mBorderThickness || pt.y < mProfile->mBorderThickness)
+   if(pt.x < mProfile->mBorderSize || pt.y < mProfile->mBorderSize)
       return this;
-   if(pt.x >= mBounds.extent.x - mProfile->mBorderThickness - (mHasVScrollBar ? mScrollBarThickness : 0) ||
-      pt.y >= mBounds.extent.y - mProfile->mBorderThickness - (mHasHScrollBar ? mScrollBarThickness : 0))
+   if(pt.x >= mBounds.extent.x - mProfile->mBorderSize - (mHasVScrollBar ? mScrollBarThickness : 0) ||
+      pt.y >= mBounds.extent.y - mProfile->mBorderSize - (mHasHScrollBar ? mScrollBarThickness : 0))
       return this;
    return Parent::findHitControl(pt, initialLayer);
 }
 
 void GuiScrollCtrl::computeSizes()
 {
-   S32 thickness = (mProfile ? mProfile->mBorderThickness : 1);
+   S32 thickness = (mProfile ? mProfile->mBorderSize : 1);
    Point2I borderExtent(thickness, thickness);
    mContentPos = borderExtent + mChildMargin;
    mContentExt = mBounds.extent - (mChildMargin * 2)
@@ -324,7 +324,7 @@ void GuiScrollCtrl::computeSizes()
 
 void GuiScrollCtrl::calcScrollRects(void)
 {
-   S32 thickness = ( mProfile ? mProfile->mBorderThickness : 1 );
+   S32 thickness = ( mProfile ? mProfile->mBorderSize : 1 );
    if (mHasHScrollBar)
    {
       mLeftArrowRect.set(thickness,

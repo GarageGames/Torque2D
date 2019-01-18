@@ -447,8 +447,8 @@ void GuiControl::onRender(Point2I offset, const RectI &updateRect)
     RectI ctrlRect(offset, mBounds.extent);
 
     dglSetBitmapModulation( mProfile->mFontColor );
-    //if opaque, fill the update rect with the fill color
-    if (mProfile->mOpaque)
+    //if opaque, fill the update rect with the fill color and the border is not 5
+    if (mProfile->mOpaque && mProfile->mBorder != 5)
         dglDrawRectFill( ctrlRect, mProfile->mFillColor );
 
     //if there's a border, draw the border

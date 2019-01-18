@@ -1213,7 +1213,7 @@ void GuiPopUpMenuCtrlEx::onAction()
          textWidth = mFont->getStrWidth(mEntries[i].buf);
 
    //if(textWidth > mBounds.extent.x)
-   S32 sbWidth = mSc->mProfile->mBorderThickness * 2 + mSc->scrollBarThickness(); // DAW: Calculate the scroll bar width
+   S32 sbWidth = mSc->mProfile->mBorderSize * 2 + mSc->scrollBarThickness(); // DAW: Calculate the scroll bar width
    if(textWidth > (mBounds.extent.x - sbWidth-mProfile->mTextOffset.x - mSc->getChildMargin().x * 2)) // DAW: The text draw area to test against is the width of the drop-down minus the scroll bar width, the text margin and the scroll bar child margins.
    {
       //textWidth +=10;
@@ -1237,7 +1237,7 @@ void GuiPopUpMenuCtrlEx::onAction()
 
    //Calc max Y distance, so Scroll Ctrl will fit on window 
    //S32 maxYdis = windowExt.y - pointInGC.y - mBounds.extent.y - menuSpace; 
-   S32 sbBorder = mSc->mProfile->mBorderThickness * 2 + mSc->getChildMargin().y * 2; // DAW: Added to take into account the border thickness and the margin of the child controls of the scroll control when figuring out the size of the contained text list control
+   S32 sbBorder = mSc->mProfile->mBorderSize * 2 + mSc->getChildMargin().y * 2; // DAW: Added to take into account the border thickness and the margin of the child controls of the scroll control when figuring out the size of the contained text list control
    S32 maxYdis = windowExt.y - pointInGC.y - mBounds.extent.y - sbBorder; // - menuSpace; // DAW: Need to remove the border thickness from the contained control maximum extent and got rid of the 'menuspace' variable
                      
    //If scroll bars need to be added

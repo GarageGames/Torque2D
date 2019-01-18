@@ -335,7 +335,7 @@ void GuiTextListCtrl::onRenderCell(Point2I offset, Point2I cell, bool selected, 
       {
          RectI highlightRect = RectI(offset.x, offset.y, mCellSize.x, mCellSize.y);
          highlightRect.inset( 0, -1 );
-         renderFilledBorder( highlightRect, mProfile->mBorderColorHL, mProfile->mFillColorHL);
+         renderFilledBorder( highlightRect, mProfile->mBorderColorHL, mProfile->mFillColorHL, mProfile->mBorderSize);
          dglSetBitmapModulation(mProfile->mFontColorHL);
       }
       else
