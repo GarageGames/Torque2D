@@ -52,44 +52,59 @@ bool GuiButtonCtrl::onWake()
 }
 //--------------------------------------------------------------------------
 
-void GuiButtonCtrl::onRender(Point2I      offset,
-                             const RectI& updateRect)
+void GuiButtonCtrl::onRender(Point2I offset, const RectI& updateRect)
 {
-   bool highlight = mMouseOver;
-   bool depressed = mDepressed;
+	GuiControlState currentState = GuiControlState::normal;
+	if (!mActive)
+	{
+		currentState = GuiControlState::disabled;
+	}
+	else if (mDepressed || mStateOn)
+	{
+		currentState = GuiControlState::selected;
+	}
+	else if(mMouseOver)
+	{
+		currentState = GuiControlState::highlight;
+	}
 
-   ColorI fontColor   = mActive ? (highlight ? mProfile->mFontColorHL : mProfile->mFontColor) : mProfile->mFontColorNA;
-   ColorI backColor   = mActive ? mProfile->mFillColor : mProfile->mFillColorNA;
-   ColorI borderColor = mActive ? mProfile->mBorderColor : mProfile->mBorderColorNA;
+	RectI boundsRect(offset, mBounds.extent);
 
-   RectI boundsRect(offset, mBounds.extent);
-
-   if( mProfile->mBorder != 0 && !mHasTheme )
-   {
-      if (mDepressed || mStateOn)
-         renderFilledBorder( boundsRect, mProfile->mBorderColorHL, mProfile->mFillColorHL, mProfile->mBorderSize);
-      else
-         renderFilledBorder( boundsRect, mProfile->mBorderColor, mProfile->mFillColor, mProfile->mBorderSize);
-   }
+	if( !mHasTheme )
+	{
+		renderBorderedRect(boundsRect, mProfile, currentState);
+	}
    else if( mHasTheme )
    {
       S32 indexMultiplier = 1;
-      if ( mDepressed || mStateOn ) 
+      if ( currentState == selected) 
          indexMultiplier = 3;
-      else if ( mMouseOver )
+      else if ( currentState == highlight )
          indexMultiplier = 2;
-      else if ( !mActive )
+      else if ( currentState == disabled )
          indexMultiplier = 4;
 
       renderSizableBitmapBordersFilled( boundsRect, indexMultiplier, mProfile );
    }
 
-   Point2I textPos = offset;
-   if(depressed)
-      textPos += Point2I(1,1);
+	//Get the border profiles
+	GuiBorderProfile *leftProfile = (mProfile->mBorderLeft) ? mProfile->mBorderLeft : mProfile->mBorderDefault;
+	GuiBorderProfile *rightProfile = (mProfile->mBorderRight) ? mProfile->mBorderRight : mProfile->mBorderDefault;
+	GuiBorderProfile *topProfile = (mProfile->mBorderTop) ? mProfile->mBorderTop : mProfile->mBorderDefault;
+	GuiBorderProfile *bottomProfile = (mProfile->mBorderBottom) ? mProfile->mBorderBottom : mProfile->mBorderDefault;
+
+	S32 leftSize = (leftProfile) ? leftProfile->getBorder(currentState) : 0;
+	S32 rightSize = (rightProfile) ? rightProfile->getBorder(currentState) : 0;
+	S32 topSize = (topProfile) ? topProfile->getBorder(currentState) : 0;
+	S32 bottomSize = (bottomProfile) ? bottomProfile->getBorder(currentState) : 0;
+
+	//Get the inner rect
+	RectI innerRect = RectI(offset.x + leftSize, offset.y + topSize, (mBounds.extent.x - leftSize) - rightSize, (mBounds.extent.y - topSize) - bottomSize);
+
+	ColorI fontColor = mProfile->getFontColor(currentState);
 
    dglSetBitmapModulation( fontColor );
-   renderJustifiedText(textPos, mBounds.extent, mButtonText);
+   renderJustifiedText(innerRect.point, innerRect.extent, mButtonText);
 
    //render the children
    renderChildControls( offset, updateRect);

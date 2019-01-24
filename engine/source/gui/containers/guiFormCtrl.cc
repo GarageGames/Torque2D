@@ -236,8 +236,8 @@ void GuiFormCtrl::onRender(Point2I offset, const RectI &updateRect)
    if (mProfile->mOpaque)
       dglDrawRectFill(boundsRect, mProfile->mFillColor);
 
-   if (mProfile->mBorder)
-      renderBorder(boundsRect, mProfile);
+   //if (mProfile->mBorder)
+      //renderBorder(boundsRect, mProfile);
 
    // If we don't have a child (other than the menu), put some text in the child area
    if(size() <= 1)
@@ -253,7 +253,7 @@ void GuiFormCtrl::onRender(Point2I offset, const RectI &updateRect)
    {
       dglClearBitmapModulation();
 
-      S32 barStart = (mHasMenu ? mThumbSize.x : 1 + mProfile->mBorderSize) + offset.x + textWidth;
+      S32 barStart = 0;//(mHasMenu ? mThumbSize.x : 1 + mProfile->mBorderSize) + offset.x + textWidth;
       S32 barTop   = mThumbSize.y/2 + offset.y - mProfile->mBitmapArrayRects[3].extent.y /2;
 
       Point2I barOffset(barStart, barTop);

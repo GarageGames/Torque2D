@@ -68,6 +68,14 @@ struct GuiEvent
    S32		eventID;		   ///< assigns mouse or touch ID to the event
 };
 
+enum GuiControlState
+{
+	normal = 0,				//Control renders with default look
+	highlight,				//Control is highlighted
+	selected,				//Control has been selected
+	disabled				//Control cannot be used
+};
+
 class GuiCursor : public SimObject
 {
 private:
@@ -93,6 +101,36 @@ public:
    void render(const Point2I &pos);
 };
 
+/// A GuiBorderProfile holds on the information needed for a single border of a GuiControl.
+/// GuiBorderProfiles can be assigned to a GuiControlProfile to cover one or all of the borders.
+class GuiBorderProfile : public SimObject
+{
+private:
+	typedef SimObject Parent;
+
+public:
+	S32 mBorder;								//Width of this border
+	S32 mBorderHL;
+	S32 mBorderSL;
+	S32 mBorderNA;
+
+	ColorI mBorderColor;						//The color of the border
+	ColorI mBorderColorHL;
+	ColorI mBorderColorSL;
+	ColorI mBorderColorNA;
+
+	bool mUnderfill;							//True if the control's fill color should appear under the border.
+public:
+	DECLARE_CONOBJECT(GuiBorderProfile);
+	GuiBorderProfile();
+	~GuiBorderProfile();
+	static void initPersistFields();
+	bool onAdd();
+	void onRemove();
+	const ColorI& getBorderColor(const GuiControlState state); //Returns the correct border color based on the control's state.
+	S32 getBorder(const GuiControlState state); //Returns the size of the border based on the control's state.
+};
+
 /// A GuiControlProfile is used by every GuiObject and is akin to a
 /// datablock. It is used to control information that does not change
 /// or is unlikely to change during execution of a program. It is also
@@ -112,19 +150,17 @@ public:
    bool mCanKeyFocus;                              ///< True if the object can be given keyboard focus (in other words, made a first responder @see GuiControl)
    bool mModal;                                    ///< True if this is a Modeless dialog meaning it will pass input through instead of taking it all
 
-   bool mOpaque;                                   ///< True if this object is not translucent
+   bool mOpaque;                                   ///< True if this object should render its fill color
    ColorI mFillColor;                              ///< Fill color, this is used to fill the bounds of the control if it is opaque
    ColorI mFillColorHL;                            ///< This is used insetead of mFillColor if the object is highlited
+   ColorI mFillColorSL;								//Color used when the control is selected.
    ColorI mFillColorNA;                            ///< This is used to instead of mFillColor if the object is not active or disabled
 
-   S32 mBorder;                                    ///< For most controls, if mBorder is > 0 a border will be drawn, some controls use this to draw different types of borders however @see guiDefaultControlRender.cc
-   S32 mBorderSize;								   ///< Border thickness
-   ColorI mBorderColor;                            ///< Border color, used to draw a border around the bounds if border is enabled
-   ColorI mBorderColorHL;                          ///< Used instead of mBorderColor when the object is highlited
-   ColorI mBorderColorNA;                          ///< Used instead of mBorderColor when the object is not active or disabled
-
-   ColorI mBevelColorHL;                          ///< Used for the high-light part of the bevel
-   ColorI mBevelColorLL;                          ///< Used for the low-light part of the bevel
+   GuiBorderProfile *mBorderDefault;					//The default border settings.
+   GuiBorderProfile *mBorderTop;
+   GuiBorderProfile *mBorderBottom;
+   GuiBorderProfile *mBorderLeft;
+   GuiBorderProfile *mBorderRight;
 
    // font members
    StringTableEntry  mFontType;                    ///< Font face name for the control
@@ -133,7 +169,7 @@ public:
       BaseColor = 0,
       ColorHL,
       ColorNA,
-      ColorSEL,
+      ColorSL,
       ColorUser0,
       ColorUser1,
       ColorUser2,
@@ -145,7 +181,7 @@ public:
    ColorI& mFontColor;                             ///< Main font color
    ColorI& mFontColorHL;                           ///< Highlited font color
    ColorI& mFontColorNA;                           ///< Font color when object is not active/disabled
-   ColorI& mFontColorSEL;                          ///< Font color when object/text is selected
+   ColorI& mFontColorSL;                          ///< Font color when object/text is selected
    FontCharset mFontCharset;                       ///< Font character set
 
    Resource<GFont>   mFont;                        ///< Font resource
@@ -193,6 +229,9 @@ public:
 
    void incRefCount();
    void decRefCount();
+
+   const ColorI& getFillColor(const GuiControlState state); //Returns the fill color based on the state.
+   const ColorI& getFontColor(const GuiControlState state); //Returns the font color based on the state.
 };
 DefineConsoleType( TypeGuiProfile)
 

@@ -197,13 +197,13 @@ void GuiIconButtonCtrl::renderButton( Point2I &offset, const RectI& updateRect )
        if (highlight)
            fontColor = mProfile->mFontColorHL;
        else if (mStateOn)
-           fontColor = mProfile->mFontColorSEL;
+           fontColor = mProfile->mFontColorSL;
        else
            fontColor = mProfile->mFontColor;
    }
 
    ColorI backColor   = mActive ? mProfile->mFillColor : mProfile->mFillColorNA; 
-   ColorI borderColor = mActive ? mProfile->mBorderColor : mProfile->mBorderColorNA;
+   ColorI borderColor = mProfile->mFillColor;//mActive ? mProfile->mBorderColor : mProfile->mBorderColorNA;
 
    RectI boundsRect(offset, mBounds.extent);
 
@@ -214,7 +214,7 @@ void GuiIconButtonCtrl::renderButton( Point2I &offset, const RectI& updateRect )
       if( mProfile->mBitmapArrayRects.size() )
          renderBitmapArray(boundsRect, statePressed);
       else
-         renderLoweredBox(boundsRect, mProfile);
+         renderBorderedRect(boundsRect, mProfile, normal);
    }
    else if(mMouseOver && mActive)
    {
@@ -223,7 +223,7 @@ void GuiIconButtonCtrl::renderButton( Point2I &offset, const RectI& updateRect )
       if(mProfile->mBitmapArrayRects.size())
          renderBitmapArray(boundsRect, stateMouseOver);
       else
-         renderRaisedBox(boundsRect, mProfile);
+         renderBorderedRect(boundsRect, mProfile, GuiControlState::highlight);
    }
    else
    {
@@ -239,7 +239,7 @@ void GuiIconButtonCtrl::renderButton( Point2I &offset, const RectI& updateRect )
       else
       {
          dglDrawRectFill(boundsRect, mProfile->mFillColorNA);
-         dglDrawRect(boundsRect, mProfile->mBorderColorNA);
+         dglDrawRect(boundsRect, mProfile->mFillColorNA);//mBorderColorNA);
       }
    }
 
@@ -321,30 +321,30 @@ void GuiIconButtonCtrl::renderBitmapArray(RectI &bounds, S32 state)
    switch(state)
    {
    case stateNormal:
-      if(mProfile->mBorder == -2)
+     /* if(mProfile->mBorder == -2)
          renderSizableBitmapBordersFilled(bounds, 1, mProfile);
-      else
+      else*/
          renderFixedBitmapBordersFilled(bounds, 1, mProfile);
       break;
 
    case stateMouseOver:
-      if(mProfile->mBorder == -2)
+      /*if(mProfile->mBorder == -2)
          renderSizableBitmapBordersFilled(bounds, 2, mProfile);
-      else
+      else*/
          renderFixedBitmapBordersFilled(bounds, 2, mProfile);
       break;
 
    case statePressed:
-      if(mProfile->mBorder == -2)
+      /*if(mProfile->mBorder == -2)
          renderSizableBitmapBordersFilled(bounds, 3, mProfile);
-      else
+      else*/
          renderFixedBitmapBordersFilled(bounds, 3, mProfile);
       break;
 
    case stateDisabled:
-      if(mProfile->mBorder == -2)
+      /*if(mProfile->mBorder == -2)
          renderSizableBitmapBordersFilled(bounds, 4, mProfile);
-      else
+      else*/
          renderFixedBitmapBordersFilled(bounds, 4, mProfile);
       break;
    }

@@ -226,17 +226,17 @@ void GuiScrollCtrl::addObject(SimObject *object)
 
 GuiControl* GuiScrollCtrl::findHitControl(const Point2I &pt, S32 initialLayer)
 {
-   if(pt.x < mProfile->mBorderSize || pt.y < mProfile->mBorderSize)
+   //if(pt.x < mProfile->mBorderSize || pt.y < mProfile->mBorderSize)
       return this;
-   if(pt.x >= mBounds.extent.x - mProfile->mBorderSize - (mHasVScrollBar ? mScrollBarThickness : 0) ||
-      pt.y >= mBounds.extent.y - mProfile->mBorderSize - (mHasHScrollBar ? mScrollBarThickness : 0))
-      return this;
-   return Parent::findHitControl(pt, initialLayer);
+   //if(pt.x >= mBounds.extent.x - mProfile->mBorderSize - (mHasVScrollBar ? mScrollBarThickness : 0) ||
+   //   pt.y >= mBounds.extent.y - mProfile->mBorderSize - (mHasHScrollBar ? mScrollBarThickness : 0))
+   //   return this;
+   //return Parent::findHitControl(pt, initialLayer);
 }
 
 void GuiScrollCtrl::computeSizes()
 {
-   S32 thickness = (mProfile ? mProfile->mBorderSize : 1);
+   S32 thickness = 0;//(mProfile ? mProfile->mBorderSize : 1);
    Point2I borderExtent(thickness, thickness);
    mContentPos = borderExtent + mChildMargin;
    mContentExt = mBounds.extent - (mChildMargin * 2)
@@ -324,7 +324,7 @@ void GuiScrollCtrl::computeSizes()
 
 void GuiScrollCtrl::calcScrollRects(void)
 {
-   S32 thickness = ( mProfile ? mProfile->mBorderSize : 1 );
+   S32 thickness = 0;//( mProfile ? mProfile->mBorderSize : 1 );
    if (mHasHScrollBar)
    {
       mLeftArrowRect.set(thickness,
@@ -796,11 +796,7 @@ void GuiScrollCtrl::onRender(Point2I offset, const RectI &updateRect)
 {
    RectI r(offset.x, offset.y, mBounds.extent.x, mBounds.extent.y);
 
-   if (mProfile->mOpaque)
-      dglDrawRectFill(r, mProfile->mFillColor);
-
-    if (mProfile->mBorder)
-        renderFilledBorder(r, mProfile);
+   renderBorderedRect(r, mProfile, normal);
 
    // draw scroll bars
    if (mHasVScrollBar)

@@ -1121,10 +1121,10 @@ void GuiTextEditCtrl::onRender(Point2I offset, const RectI & updateRect)
    }
 
    //if there's a border, draw the border
-   if ( mProfile->mBorder )
+   if (mProfile->mBorderDefault && mProfile->mBorderDefault->mBorder > 0)
    {
       dglSetBitmapModulation( mActive ? mProfile->mFillColor : mProfile->mFillColorNA );
-      renderBorder( ctrlRect, mProfile );
+      //renderBorder( ctrlRect, mProfile );
    }
 
    drawText( ctrlRect, isFirstResponder() );

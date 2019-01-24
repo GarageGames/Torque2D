@@ -875,6 +875,28 @@ void dglDrawRectFill(const RectI &rect, const ColorI &color)
    dglDrawRectFill(rect.point, lowerR, color);
 }
 
+void dglDrawQuadFill(const Point2I &point1, const Point2I &point2, const Point2I &point3, const Point2I &point4, const ColorI &color)
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_TEXTURE_2D);
+
+	glColor4ub(color.red, color.green, color.blue, color.alpha);
+
+	//Points 3 and 4 are switched by design.
+	GLint vertices[] = {
+		(GLint)point1.x, (GLint)point1.y,
+		(GLint)point2.x, (GLint)point2.y,
+		(GLint)point4.x, (GLint)point4.y,
+		(GLint)point3.x, (GLint)point3.y,
+	};
+
+	glVertexPointer(2, GL_INT, 0, vertices);
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+}
+
 void dglDraw2DSquare( const Point2F &screenPoint, F32 width, F32 spinAngle )
 {
    width *= 0.5;

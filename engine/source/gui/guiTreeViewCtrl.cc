@@ -3199,7 +3199,7 @@ void GuiTreeViewCtrl::onRenderCell(Point2I offset, Point2I cell, bool, bool )
    // Determine what color the font should be.
    ColorI fontColor;
 
-   fontColor = item->mState.test( Item::Selected ) ? mProfile->mFontColorSEL :
+   fontColor = item->mState.test( Item::Selected ) ? mProfile->mFontColorSL :
              ( item->mState.test( Item::MouseOverText ) ? mProfile->mFontColorHL : mProfile->mFontColor );
 
    if (item->mState.test(Item::Selected))

@@ -92,6 +92,99 @@ void GuiCursor::render(const Point2I &pos)
 }
 
 //------------------------------------------------------------------------------
+IMPLEMENT_CONOBJECT(GuiBorderProfile);
+
+GuiBorderProfile::GuiBorderProfile()
+{
+	mBorder = 0;
+	mBorderHL = 0;
+	mBorderSL = 0;
+	mBorderNA = 0;
+
+	mBorderColor.set(255, 255, 255, 255);
+	mBorderColorHL.set(255, 255, 255, 255);
+	mBorderColorSL.set(255, 255, 255, 255);
+	mBorderColorNA.set(255, 255, 255, 255);
+
+	mUnderfill = true;
+}
+
+GuiBorderProfile::~GuiBorderProfile()
+{
+}
+
+void GuiBorderProfile::initPersistFields()
+{
+	Parent::initPersistFields();
+	addField("border", TypeS32, Offset(mBorder, GuiBorderProfile));
+	addField("borderHL", TypeS32, Offset(mBorderHL, GuiBorderProfile));
+	addField("borderSL", TypeS32, Offset(mBorderSL, GuiBorderProfile));
+	addField("borderNA", TypeS32, Offset(mBorderNA, GuiBorderProfile));
+
+	addField("borderColor", TypeColorI, Offset(mBorderColor, GuiBorderProfile));
+	addField("borderColorHL", TypeColorI, Offset(mBorderColorHL, GuiBorderProfile));
+	addField("borderColorSL", TypeColorI, Offset(mBorderColorSL, GuiBorderProfile));
+	addField("borderColorNA", TypeColorI, Offset(mBorderColorNA, GuiBorderProfile));
+
+	addField("underfill", TypeBool, Offset(mUnderfill, GuiBorderProfile));
+}
+
+bool GuiBorderProfile::onAdd()
+{
+	if (!Parent::onAdd())
+		return false;
+
+	Sim::getGuiDataGroup()->addObject(this);
+
+	return true;
+}
+
+void GuiBorderProfile::onRemove()
+{
+	Parent::onRemove();
+}
+
+const ColorI& GuiBorderProfile::getBorderColor(const GuiControlState state)
+{
+	switch (state)
+	{
+	default:
+	case normal:
+		return mBorderColor;
+		break;
+	case highlight:
+		return mBorderColorHL;
+		break;
+	case selected:
+		return mBorderColorSL;
+		break;
+	case disabled:
+		return mBorderColorNA;
+		break;
+	}
+}
+
+S32 GuiBorderProfile::getBorder(const GuiControlState state)
+{
+	switch (state)
+	{
+	default:
+	case normal:
+		return mBorder;
+		break;
+	case highlight:
+		return mBorderHL;
+		break;
+	case selected:
+		return mBorderSL;
+		break;
+	case disabled:
+		return mBorderNA;
+		break;
+	}
+}
+
+//------------------------------------------------------------------------------
 IMPLEMENT_CONOBJECT(GuiControlProfile);
 
 static EnumTable::Enums alignEnums[] =
@@ -135,7 +228,7 @@ GuiControlProfile::GuiControlProfile(void) :
    mFontColor(mFontColors[BaseColor]),
    mFontColorHL(mFontColors[ColorHL]),
    mFontColorNA(mFontColors[ColorNA]),
-   mFontColorSEL(mFontColors[ColorSEL])
+   mFontColorSL(mFontColors[ColorSL])
 {
     mRefCount = 0;
     mBitmapArrayRects.clear();
@@ -145,9 +238,12 @@ GuiControlProfile::GuiControlProfile(void) :
     mCanKeyFocus   = false;
     
     mOpaque        = false;
-    
-    mBorder        = 0;
-    mBorderSize = 1;
+
+	mBorderDefault = NULL;
+	mBorderLeft = NULL;
+	mBorderRight = NULL;
+	mBorderTop = NULL;
+	mBorderBottom = NULL;
     
     // default font
     mFontType      = StringTable->EmptyString;
@@ -179,15 +275,6 @@ GuiControlProfile::GuiControlProfile(void) :
       mFillColor     = def->mFillColor;
       mFillColorHL   = def->mFillColorHL;
       mFillColorNA   = def->mFillColorNA;
-
-      mBorder        = def->mBorder;
-      mBorderSize    = def->mBorderSize;
-      mBorderColor   = def->mBorderColor;
-      mBorderColorHL = def->mBorderColorHL;
-      mBorderColorNA = def->mBorderColorNA;
-
-      mBevelColorHL = def->mBevelColorHL;
-      mBevelColorLL = def->mBevelColorLL;
 
       // default font
       mFontType      = def->mFontType;
@@ -230,15 +317,14 @@ void GuiControlProfile::initPersistFields()
    addField("opaque",        TypeBool,       Offset(mOpaque, GuiControlProfile));
    addField("fillColor",     TypeColorI,     Offset(mFillColor, GuiControlProfile));
    addField("fillColorHL",   TypeColorI,     Offset(mFillColorHL, GuiControlProfile));
+   addField("fillColorSL",   TypeColorI,     Offset(mFillColorSL, GuiControlProfile));
    addField("fillColorNA",   TypeColorI,     Offset(mFillColorNA, GuiControlProfile));
-   addField("border",        TypeS32,        Offset(mBorder, GuiControlProfile));
-   addField("borderSize",    TypeS32,        Offset(mBorderSize, GuiControlProfile));
-   addField("borderColor",   TypeColorI,     Offset(mBorderColor, GuiControlProfile));
-   addField("borderColorHL", TypeColorI,     Offset(mBorderColorHL, GuiControlProfile));
-   addField("borderColorNA", TypeColorI,     Offset(mBorderColorNA, GuiControlProfile));
 
-   addField("bevelColorHL", TypeColorI,     Offset(mBevelColorHL, GuiControlProfile));
-   addField("bevelColorLL", TypeColorI,     Offset(mBevelColorLL, GuiControlProfile));
+   addField("borderDefault", TypeSimObjectPtr, Offset(mBorderDefault, GuiControlProfile));
+   addField("borderLeft",    TypeSimObjectPtr, Offset(mBorderLeft, GuiControlProfile));
+   addField("borderRight",   TypeSimObjectPtr, Offset(mBorderRight, GuiControlProfile));
+   addField("borderTop",     TypeSimObjectPtr, Offset(mBorderTop, GuiControlProfile));
+   addField("borderBottom",  TypeSimObjectPtr, Offset(mBorderBottom, GuiControlProfile));
 
    addField("fontType",      TypeString,     Offset(mFontType, GuiControlProfile));
    addField("fontSize",      TypeS32,        Offset(mFontSize, GuiControlProfile));
@@ -247,7 +333,7 @@ void GuiControlProfile::initPersistFields()
    addField("fontColor",     TypeColorI,     Offset(mFontColors[BaseColor], GuiControlProfile));
    addField("fontColorHL",   TypeColorI,     Offset(mFontColors[ColorHL], GuiControlProfile));
    addField("fontColorNA",   TypeColorI,     Offset(mFontColors[ColorNA], GuiControlProfile));
-   addField("fontColorSEL",  TypeColorI,     Offset(mFontColors[ColorSEL], GuiControlProfile));
+   addField("fontColorSL",  TypeColorI,     Offset(mFontColors[ColorSL], GuiControlProfile));
    addField("fontColorLink", TypeColorI,     Offset(mFontColors[ColorUser0], GuiControlProfile));
    addField("fontColorLinkHL", TypeColorI,     Offset(mFontColors[ColorUser1], GuiControlProfile));
 
@@ -367,10 +453,6 @@ void GuiControlProfile::incRefCount()
           mTextureHandle = TextureHandle(mBitmapName, TextureHandle::BitmapKeepTexture);
           if (!(bool)mTextureHandle)
              Con::errorf("Failed to load profile bitmap (%s)",mBitmapName);
-
-          // If we've got a special border, make sure it's usable.
-          if( mBorder == -1 || mBorder == -2 )
-             constructBitmapArray();
       }
    }
 }
@@ -386,6 +468,46 @@ void GuiControlProfile::decRefCount()
       mFont = NULL;
       mTextureHandle = NULL;
    }
+}
+
+const ColorI& GuiControlProfile::getFillColor(const GuiControlState state)
+{
+	switch (state)
+	{
+	default:
+	case normal:
+		return mFillColor;
+		break;
+	case highlight:
+		return mFillColorHL;
+		break;
+	case selected:
+		return mFillColorSL;
+		break;
+	case disabled:
+		return mFillColorNA;
+		break;
+	}
+}
+
+const ColorI& GuiControlProfile::getFontColor(const GuiControlState state)
+{
+	switch (state)
+	{
+	default:
+	case normal:
+		return mFontColor;
+		break;
+	case highlight:
+		return mFontColorHL;
+		break;
+	case selected:
+		return mFontColorSL;
+		break;
+	case disabled:
+		return mFontColorNA;
+		break;
+	}
 }
 
 ConsoleType( GuiProfile, TypeGuiProfile, sizeof(GuiControlProfile*), "" )

@@ -137,10 +137,10 @@ void GuiArrayCtrl::scrollCellVisible(Point2I cell)
 
 void GuiArrayCtrl::onRenderColumnHeaders(Point2I offset, Point2I parentOffset, Point2I headerDim)
 {
-   if (mProfile->mBorder)
+   if (mProfile->mBorderDefault && mProfile->mBorderDefault->mBorder > 0)
    {
       RectI cellR(offset.x + headerDim.x, parentOffset.y, mBounds.extent.x - headerDim.x, headerDim.y);
-      dglDrawRectFill(cellR, mProfile->mBorderColor);
+      dglDrawRectFill(cellR, mProfile->mBorderDefault->mBorderColor);
    }
 }
 

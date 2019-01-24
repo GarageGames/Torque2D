@@ -133,7 +133,7 @@ void GuiCheckBoxCtrl::onRender(Point2I offset, const RectI &updateRect)
 {
    ColorI backColor = mActive ? mProfile->mFillColor : mProfile->mFillColorNA;
    ColorI fontColor = mMouseOver ? mProfile->mFontColorHL : mProfile->mFontColor;
-    ColorI insideBorderColor = isFirstResponder() ? mProfile->mBorderColorHL : mProfile->mBorderColor;
+    ColorI insideBorderColor = mProfile->mFillColor;//isFirstResponder() ? mProfile->mBorderColorHL : mProfile->mBorderColor;
 
    // just draw the check box and the text:
    S32 xOffset = 0;

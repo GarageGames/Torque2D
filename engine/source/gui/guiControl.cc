@@ -446,15 +446,9 @@ void GuiControl::onRender(Point2I offset, const RectI &updateRect)
 {
     RectI ctrlRect(offset, mBounds.extent);
 
-    dglSetBitmapModulation( mProfile->mFontColor );
-    //if opaque, fill the update rect with the fill color and the border is not 5
-    if (mProfile->mOpaque && mProfile->mBorder != 5)
-        dglDrawRectFill( ctrlRect, mProfile->mFillColor );
+    renderBorderedRect(ctrlRect, mProfile, normal);
 
-    //if there's a border, draw the border
-    if (mProfile->mBorder)
-        renderBorder(ctrlRect, mProfile);
-
+	dglSetBitmapModulation(mProfile->mFontColor);
     renderChildControls(offset, updateRect);
 }
 
@@ -593,9 +587,8 @@ bool GuiControl::renderTooltip(Point2I cursorPos, const char* tipText )
     RectI rect(offset, textBounds);
     dglSetClipRect(rect);
 
-    // Draw Filler bit, then border on top of that
-    dglDrawRectFill(rect, mTooltipProfile->mFillColor );
-    dglDrawRect( rect, mTooltipProfile->mBorderColor );
+    // Draw body and border of the tool tip
+	renderBorderedRect(rect, mTooltipProfile, normal);
 
     // Draw the text centered in the tool tip box
     dglSetBitmapModulation( mTooltipProfile->mFontColor );

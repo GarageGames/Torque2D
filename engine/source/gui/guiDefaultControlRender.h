@@ -23,15 +23,13 @@
 #ifndef _H_GUIDEFAULTCONTROLRENDER_
 #define _H_GUIDEFAULTCONTROLRENDER_
 
+#ifndef _GUITYPES_H_
+#include "gui/guiTypes.h"
+#endif
+
 class GuiControlProfile;
 
-void renderRaisedBox(RectI &bounds, GuiControlProfile *profile);
-void renderSlightlyRaisedBox(RectI &bounds, GuiControlProfile *profile);
-void renderLoweredBox(RectI &bounds, GuiControlProfile *profile);
-void renderSlightlyLoweredBox(RectI &bounds, GuiControlProfile *profile, bool active = true);
-void renderBorder(RectI &bounds, GuiControlProfile *profile);
-void renderFilledBorder( RectI &bounds, GuiControlProfile *profile );
-void renderFilledBorder( RectI &bounds, ColorI &borderColor, ColorI &fillColor, S32 borderSize);
+void renderBorderedRect(RectI &bounds, GuiControlProfile *profile, GuiControlState state);
 void renderSizableBitmapBordersFilled(RectI &bounds, S32 baseMultiplier, GuiControlProfile *profile); // DAW: Added
 void renderSizableBitmapBordersFilledIndex(RectI &bounds, S32 startIndex, GuiControlProfile *profile);
 void renderFixedBitmapBordersFilled(RectI &bounds, S32 baseMultiplier, GuiControlProfile *profile); // DAW: Added
