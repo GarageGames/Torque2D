@@ -56,7 +56,7 @@ You also might be able to find useful information on the less active GarageGames
 
 ### Support
 
-Torque 2D is completely free to use, but like all things, it takes time and energy to maintain and develop. You can support T2D by becoming a sponsor on Patreon. Doing so ensures that T2D will continue receiving the attention it needs to remain competetive.
+Torque 2D is completely free to use, but like all things, it takes time and energy to maintain and develop. You can support T2D by becoming a sponsor on Patreon. Doing so ensures that T2D will continue receiving the attention it needs to remain competitive.
 
 [Become a Patron](https://www.patreon.com/bePatron?u=15485520)
 
