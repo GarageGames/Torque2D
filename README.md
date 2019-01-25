@@ -54,6 +54,14 @@ You also might be able to find useful information on the less active GarageGames
 * [Torque 2D Professional Forum](http://www.garagegames.com/community/forums/85)
 * [GarageGames Community Blogs](http://www.garagegames.com/community/blogs)
 
+### Support
+
+Torque 2D is completely free to use, but like all things, it takes time and energy to maintain and develop. You can support T2D by becoming a sponsor on Patreon. Doing so ensures that T2D will continue receiving the attention it needs to remain competetive.
+
+[Become a Patron](https://www.patreon.com/bePatron?u=15485520)
+
+You can also support development directly by submitting pull requests or joining the steering committee! See the wiki for details.
+
 # License
 Copyright (c) 2012 GarageGames, LLC
 
