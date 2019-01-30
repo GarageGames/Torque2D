@@ -167,6 +167,9 @@ protected:
 
     StringTableEntry	mTooltip;
 
+	StringTableEntry    mText;
+	StringTableEntry    mTextID;
+
     /// @}
 
     /// @name Console
@@ -264,6 +267,11 @@ public:
     const S32        getTop() { return mBounds.point.y; } ///< Returns the Y position of the control
     const S32        getWidth() { return mBounds.extent.x; } ///< Returns the width of the control
     const S32        getHeight() { return mBounds.extent.y; } ///< Returns the height of the control
+	
+	void             setText(const char *text);
+	void             setTextID(S32 id);
+	void             setTextID(const char *id);
+	const char*      getText();
 
     /// @}
 
@@ -480,12 +488,12 @@ public:
     /// These functions are called when the input event which is
     /// in the name of the function occurs.
     /// @{
-    virtual void onMouseUp(const GuiEvent &event);
-    virtual void onMouseDown(const GuiEvent &event);
-    virtual void onMouseMove(const GuiEvent &event);
-    virtual void onMouseDragged(const GuiEvent &event);
-    virtual void onMouseEnter(const GuiEvent &event);
-    virtual void onMouseLeave(const GuiEvent &event);
+    virtual void onTouchUp(const GuiEvent &event);
+    virtual void onTouchDown(const GuiEvent &event);
+    virtual void onTouchMove(const GuiEvent &event);
+    virtual void onTouchDragged(const GuiEvent &event);
+    virtual void onTouchEnter(const GuiEvent &event);
+    virtual void onTouchLeave(const GuiEvent &event);
 
     virtual bool onMouseWheelUp(const GuiEvent &event);
     virtual bool onMouseWheelDown(const GuiEvent &event);

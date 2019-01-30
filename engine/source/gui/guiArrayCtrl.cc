@@ -283,7 +283,7 @@ void GuiArrayCtrl::onMouseDown(const GuiEvent &event)
       return;
 
    //let the guiControl method take care of the rest
-   Parent::onMouseDown(event);
+   Parent::onTouchDown(event);
 
    Point2I pt = globalToLocalCoord(event.mousePoint);
    pt.x -= mHeaderDim.x; pt.y -= mHeaderDim.y;

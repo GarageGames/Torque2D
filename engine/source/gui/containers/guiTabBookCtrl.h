@@ -241,9 +241,9 @@ private:
 
    /// @name Mouse Events
    /// @{
-   void onMouseDown(const GuiEvent &event);
-   void onMouseMove(const GuiEvent &event);
-   void onMouseLeave(const GuiEvent &event);
+   void onTouchDown(const GuiEvent &event);
+   void onTouchMove(const GuiEvent &event);
+   void onTouchLeave(const GuiEvent &event);
    virtual bool onMouseDownEditor(const GuiEvent &event, Point2I offset);
    /// @}
 };

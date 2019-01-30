@@ -70,10 +70,10 @@ struct GuiEvent
 
 enum GuiControlState
 {
-	normal = 0,				//Control renders with default look
-	highlight,				//Control is highlighted
-	selected,				//Control has been selected
-	disabled				//Control cannot be used
+	NormalState = 0,				//Control renders with default look
+	HighlightState,				//Control is highlighted
+	SelectedState,				//Control has been selected
+	DisabledState				//Control cannot be used
 };
 
 class GuiCursor : public SimObject

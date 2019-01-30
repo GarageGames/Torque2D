@@ -210,7 +210,7 @@ void GuiImageButtonCtrl::onRender(Point2I offset, const RectI& updateRect)
         if ( mMouseOver )
             state = HOVER;
 
-        if ( mDepressed || mStateOn )
+        if ( mDepressed )
             state = DOWN;
     }
     else

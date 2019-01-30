@@ -199,9 +199,9 @@ void GuiPopupTextListCtrlEx::onMouseUp(const GuiEvent &event)
          return;
    }
 
-   Parent::onMouseDown(event);
+   Parent::onTouchDown(event);
    mPopUpCtrl->closePopUp();
-   Parent::onMouseUp(event);
+   Parent::onTouchUp(event);
 }
 
 void GuiPopupTextListCtrlEx::onMouseMove( const GuiEvent &event )
@@ -222,7 +222,7 @@ void GuiPopupTextListCtrlEx::onMouseMove( const GuiEvent &event )
       Con::executef( mPopUpCtrl, 2, "onHotTrackItem", Con::getIntArg(-1) );
 
    // Call Parent
-   Parent::onMouseMove(event);
+   Parent::onTouchMove(event);
 }
 
 //------------------------------------------------------------------------------

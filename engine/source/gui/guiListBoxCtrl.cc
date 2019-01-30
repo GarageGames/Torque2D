@@ -764,7 +764,7 @@ void GuiListBoxCtrl::drawBox(const Point2I &box, S32 size, ColorI &outlineColor,
 
 void GuiListBoxCtrl::onMouseDragged(const GuiEvent &event)
 {
-   Parent::onMouseDragged(event);
+   Parent::onTouchDragged(event);
 
    if(isMethod("onMouseDragged"))
       Con::executef(this, 1, "onMouseDragged");

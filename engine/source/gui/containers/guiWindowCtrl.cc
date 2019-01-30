@@ -248,7 +248,7 @@ void GuiWindowCtrl::onMouseDown(const GuiEvent &event)
 
       GuiControl *ctrl = findHitControl(localPoint);
       if (ctrl && ctrl != this)
-         ctrl->onMouseDown(event);
+         ctrl->onTouchDown(event);
 
    }
 }

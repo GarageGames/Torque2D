@@ -392,7 +392,7 @@ void GuiTextEditCtrl::onMouseDragged( const GuiEvent &event )
       mBlockStart = mBlockEnd = 0;
 
    //let the parent get the event
-   Parent::onMouseDragged(event);
+   Parent::onTouchDragged(event);
 
    // Notify Script.
     if( isMethod("onMouseDragged") )

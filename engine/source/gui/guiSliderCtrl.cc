@@ -440,7 +440,7 @@ void GuiSliderCtrl::onRender(Point2I offset, const RectI &updateRect)
 
         // draw the thumb
         thumb.point += pos;
-        renderBorderedRect(thumb, mProfile, normal);
+        renderBorderedRect(thumb, mProfile, NormalState);
     }
 
     if (mDisplayValue)

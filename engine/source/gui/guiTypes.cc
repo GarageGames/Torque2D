@@ -149,16 +149,16 @@ const ColorI& GuiBorderProfile::getBorderColor(const GuiControlState state)
 	switch (state)
 	{
 	default:
-	case normal:
+	case NormalState:
 		return mBorderColor;
 		break;
-	case highlight:
+	case HighlightState:
 		return mBorderColorHL;
 		break;
-	case selected:
+	case SelectedState:
 		return mBorderColorSL;
 		break;
-	case disabled:
+	case DisabledState:
 		return mBorderColorNA;
 		break;
 	}
@@ -169,16 +169,16 @@ S32 GuiBorderProfile::getBorder(const GuiControlState state)
 	switch (state)
 	{
 	default:
-	case normal:
+	case NormalState:
 		return mBorder;
 		break;
-	case highlight:
+	case HighlightState:
 		return mBorderHL;
 		break;
-	case selected:
+	case SelectedState:
 		return mBorderSL;
 		break;
-	case disabled:
+	case DisabledState:
 		return mBorderNA;
 		break;
 	}
@@ -285,7 +285,6 @@ GuiControlProfile::GuiControlProfile(void) :
          mFontColors[i] = def->mFontColors[i];
 
       // default bitmap
-      mBitmapName    = def->mBitmapName;
       mTextOffset    = def->mTextOffset;
 
       //used by GuiTextCtrl
@@ -475,16 +474,16 @@ const ColorI& GuiControlProfile::getFillColor(const GuiControlState state)
 	switch (state)
 	{
 	default:
-	case normal:
+	case NormalState:
 		return mFillColor;
 		break;
-	case highlight:
+	case HighlightState:
 		return mFillColorHL;
 		break;
-	case selected:
+	case SelectedState:
 		return mFillColorSL;
 		break;
-	case disabled:
+	case DisabledState:
 		return mFillColorNA;
 		break;
 	}
@@ -495,16 +494,16 @@ const ColorI& GuiControlProfile::getFontColor(const GuiControlState state)
 	switch (state)
 	{
 	default:
-	case normal:
+	case NormalState:
 		return mFontColor;
 		break;
-	case highlight:
+	case HighlightState:
 		return mFontColorHL;
 		break;
-	case selected:
+	case SelectedState:
 		return mFontColorSL;
 		break;
-	case disabled:
+	case DisabledState:
 		return mFontColorNA;
 		break;
 	}

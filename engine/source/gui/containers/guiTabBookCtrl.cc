@@ -219,7 +219,7 @@ void GuiTabBookCtrl::childResized(GuiControl *child)
    child->resize( mPageRect.point, mPageRect.extent );
 }
 
-void GuiTabBookCtrl::onMouseDown(const GuiEvent &event)
+void GuiTabBookCtrl::onTouchDown(const GuiEvent &event)
 {
     Point2I localMouse = globalToLocalCoord( event.mousePoint );
     if( mTabRect.pointInRect( localMouse ) )
@@ -230,7 +230,7 @@ void GuiTabBookCtrl::onMouseDown(const GuiEvent &event)
     }
 }
 
-void GuiTabBookCtrl::onMouseMove(const GuiEvent &event)
+void GuiTabBookCtrl::onTouchMove(const GuiEvent &event)
 {
 
    Point2I localMouse = globalToLocalCoord( event.mousePoint );
@@ -243,10 +243,10 @@ void GuiTabBookCtrl::onMouseMove(const GuiEvent &event)
       else if ( !tab )
          mHoverTab = NULL;
    }
-   Parent::onMouseMove( event );
+   Parent::onTouchMove( event );
 }
 
-void GuiTabBookCtrl::onMouseLeave( const GuiEvent &event )
+void GuiTabBookCtrl::onTouchLeave( const GuiEvent &event )
 {
    mHoverTab = NULL;
 }

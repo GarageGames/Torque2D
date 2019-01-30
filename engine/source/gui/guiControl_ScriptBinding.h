@@ -308,4 +308,32 @@ ConsoleMethodWithDocs(GuiControl, setFirstResponder, ConsoleVoid, 2, 2, ())
    object->setFirstResponder();
 }
 
+/*! Simulates a click on the control.
+*/
+ConsoleMethodWithDocs(GuiControl, performClick, ConsoleVoid, 2, 2, ())
+{
+	object->onAction();
+}
+
+/*! Sets the text of the control to the string.
+*/
+ConsoleMethodWithDocs(GuiControl, setText, ConsoleVoid, 3, 3, (text))
+{
+	object->setText(argv[2]);
+}
+
+/*! Sets the text of the control to the localized string.
+*/
+ConsoleMethodWithDocs(GuiControl, setTextID, ConsoleVoid, 3, 3, (id))
+{
+	object->setTextID(argv[2]);
+}
+
+/*! returns the text of the control.
+*/
+ConsoleMethodWithDocs(GuiControl, getText, ConsoleString, 2, 2, ())
+{
+	return object->getText();
+}
+
 ConsoleMethodGroupEndWithDocs(GuiControl)

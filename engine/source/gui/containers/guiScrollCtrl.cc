@@ -631,7 +631,7 @@ bool GuiScrollCtrl::onMouseWheelUp(const GuiEvent &event)
    for ( itr = begin(); itr != end(); itr++ )
    {
       GuiControl* grandKid = static_cast<GuiControl*>( *itr );
-      grandKid->onMouseMove( event );
+      grandKid->onTouchMove( event );
    }
 
    // If no scrolling happened (already at the top), pass it on to the parent.
@@ -655,7 +655,7 @@ bool GuiScrollCtrl::onMouseWheelDown(const GuiEvent &event)
    for ( itr = begin(); itr != end(); itr++ )
    {
       GuiControl* grandKid = static_cast<GuiControl *>( *itr );
-      grandKid->onMouseMove( event );
+      grandKid->onTouchMove( event );
    }
 
    // If no scrolling happened (already at the bottom), pass it on to the parent.
@@ -796,7 +796,7 @@ void GuiScrollCtrl::onRender(Point2I offset, const RectI &updateRect)
 {
    RectI r(offset.x, offset.y, mBounds.extent.x, mBounds.extent.y);
 
-   renderBorderedRect(r, mProfile, normal);
+   renderBorderedRect(r, mProfile, NormalState);
 
    // draw scroll bars
    if (mHasVScrollBar)

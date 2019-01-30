@@ -453,9 +453,6 @@
     <ClCompile Include="..\..\source\gui\buttons\guiBitmapButtonCtrl.cc">
       <Filter>gui\buttons</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\gui\buttons\guiBorderButton.cc">
-      <Filter>gui\buttons</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\gui\buttons\guiButtonBaseCtrl.cc">
       <Filter>gui\buttons</Filter>
     </ClCompile>
@@ -469,9 +466,6 @@
       <Filter>gui\buttons</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\gui\buttons\guiRadioCtrl.cc">
-      <Filter>gui\buttons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\gui\buttons\guiToolboxButtonCtrl.cc">
       <Filter>gui\buttons</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\gui\containers\guiAutoScrollCtrl.cc">
@@ -1720,9 +1714,6 @@
       <Filter>gui\buttons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\gui\buttons\guiRadioCtrl.h">
-      <Filter>gui\buttons</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\gui\buttons\guiToolboxButtonCtrl.h">
       <Filter>gui\buttons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\gui\containers\guiAutoScrollCtrl.h">
@@ -3180,6 +3171,9 @@
     <ClInclude Include="..\..\source\platform\tmm_off.h" />
     <ClInclude Include="..\..\source\platform\tmm_on.h" />
     <ClInclude Include="..\..\source\platform\typetraits.h" />
+    <ClInclude Include="..\..\source\gui\buttons\guiCheckBoxCtrl_ScriptBinding.h">
+      <Filter>gui\buttons</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\math\mMath_ASM.asm">

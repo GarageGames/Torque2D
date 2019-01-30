@@ -620,13 +620,11 @@
     <ClCompile Include="..\..\source\string\stringUnit.cpp" />
     <ClCompile Include="..\..\source\string\unicode.cc" />
     <ClCompile Include="..\..\source\gui\buttons\guiBitmapButtonCtrl.cc" />
-    <ClCompile Include="..\..\source\gui\buttons\guiBorderButton.cc" />
     <ClCompile Include="..\..\source\gui\buttons\guiButtonBaseCtrl.cc" />
     <ClCompile Include="..\..\source\gui\buttons\guiButtonCtrl.cc" />
     <ClCompile Include="..\..\source\gui\buttons\guiCheckBoxCtrl.cc" />
     <ClCompile Include="..\..\source\gui\buttons\guiIconButtonCtrl.cc" />
     <ClCompile Include="..\..\source\gui\buttons\guiRadioCtrl.cc" />
-    <ClCompile Include="..\..\source\gui\buttons\guiToolboxButtonCtrl.cc" />
     <ClCompile Include="..\..\source\gui\containers\guiAutoScrollCtrl.cc" />
     <ClCompile Include="..\..\source\gui\containers\guiCtrlArrayCtrl.cc" />
     <ClCompile Include="..\..\source\gui\containers\guiDragAndDropCtrl.cc" />
@@ -893,6 +891,7 @@
     <ClInclude Include="..\..\source\graphics\TextureManager.h" />
     <ClInclude Include="..\..\source\graphics\TextureManager_ScriptBinding.h" />
     <ClInclude Include="..\..\source\graphics\TextureObject.h" />
+    <ClInclude Include="..\..\source\gui\buttons\guiCheckBoxCtrl_ScriptBinding.h" />
     <ClInclude Include="..\..\source\gui\containers\guiGridCtrl.h" />
     <ClInclude Include="..\..\source\gui\guiArrayCtrl.h" />
     <ClInclude Include="..\..\source\gui\guiBackgroundCtrl.h" />
@@ -1218,7 +1217,6 @@
     <ClInclude Include="..\..\source\gui\buttons\guiCheckBoxCtrl.h" />
     <ClInclude Include="..\..\source\gui\buttons\guiIconButtonCtrl.h" />
     <ClInclude Include="..\..\source\gui\buttons\guiRadioCtrl.h" />
-    <ClInclude Include="..\..\source\gui\buttons\guiToolboxButtonCtrl.h" />
     <ClInclude Include="..\..\source\gui\containers\guiAutoScrollCtrl.h" />
     <ClInclude Include="..\..\source\gui\containers\guiCtrlArrayCtrl.h" />
     <ClInclude Include="..\..\source\gui\containers\guiDragAndDropCtrl.h" />

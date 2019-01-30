@@ -557,7 +557,7 @@ void GuiCanvas::rootMouseDown(const GuiEvent &event)
 
    //pass the event to the mouse locked control
    if (bool(mMouseCapturedControl))
-      mMouseCapturedControl->onMouseDown(event);
+      mMouseCapturedControl->onTouchDown(event);
 
    //else pass it to whoever is underneath the cursor
    else
@@ -575,7 +575,7 @@ void GuiCanvas::rootMouseDown(const GuiEvent &event)
             continue;
          else
          {
-            controlHit->onMouseDown(event);
+            controlHit->onTouchDown(event);
             break;
          }
       }
@@ -596,12 +596,12 @@ void GuiCanvas::findMouseControl(const GuiEvent &event)
    {
       if (bool(mMouseControl))
       {
-         mMouseControl->onMouseLeave(event);
+         mMouseControl->onTouchLeave(event);
          hoverControlStart = Platform::getRealMilliseconds();
          hoverPositionSet = false;
       }
       mMouseControl = controlHit;
-      mMouseControl->onMouseEnter(event);
+      mMouseControl->onTouchEnter(event);
    }
 }
 
@@ -628,7 +628,7 @@ void GuiCanvas::rootScreenTouchDown(const GuiEvent &event)
                 {  
                     if(mMouseCapturedControl != controlHit)  
                     {  
-                        mMouseCapturedControl->onMouseLeave(event);  
+                        mMouseCapturedControl->onTouchLeave(event);  
                     }  
                 }  
             }  
@@ -638,7 +638,7 @@ void GuiCanvas::rootScreenTouchDown(const GuiEvent &event)
                 continue;  
             else  
             {  
-                controlHit->onMouseDown(event);  
+                controlHit->onTouchDown(event);  
                 break;  
             }  
         }  
@@ -665,7 +665,7 @@ void GuiCanvas::rootScreenTouchUp(const GuiEvent &event)
             continue;
         else
         {
-            controlHit->onMouseUp(event);
+            controlHit->onTouchUp(event);
             break;
         }
     }
@@ -678,14 +678,14 @@ void GuiCanvas::rootScreenTouchMove(const GuiEvent &event)
    {
       checkLockMouseMove(event);
       if(!mMouseCapturedControl.isNull())
-            mMouseCapturedControl->onMouseDragged(event);
+            mMouseCapturedControl->onTouchDragged(event);
    }
    else
    {
       findMouseControl(event);
       if(bool(mMouseControl))
       {
-          mMouseControl->onMouseDragged(event);		  
+          mMouseControl->onTouchDragged(event);		  
       }
    }
 }
@@ -704,12 +704,12 @@ void GuiCanvas::rootMouseUp(const GuiEvent &event)
 
    //pass the event to the mouse locked control
    if (bool(mMouseCapturedControl))
-      mMouseCapturedControl->onMouseUp(event);
+      mMouseCapturedControl->onTouchUp(event);
    else
    {
       findMouseControl(event);
       if(bool(mMouseControl))
-         mMouseControl->onMouseUp(event);
+         mMouseControl->onTouchUp(event);
    }
 }
 
@@ -719,9 +719,9 @@ void GuiCanvas::checkLockMouseMove(const GuiEvent &event)
    if(controlHit != mMouseControl)
    {
       if(mMouseControl == mMouseCapturedControl)
-         mMouseCapturedControl->onMouseLeave(event);
+         mMouseCapturedControl->onTouchLeave(event);
       else if(controlHit == mMouseCapturedControl)
-         mMouseCapturedControl->onMouseEnter(event);
+         mMouseCapturedControl->onTouchEnter(event);
       mMouseControl = controlHit;
    }
 }
@@ -733,7 +733,7 @@ void GuiCanvas::rootMouseDragged(const GuiEvent &event)
    {
       checkLockMouseMove(event);
       if(!mMouseCapturedControl.isNull())
-            mMouseCapturedControl->onMouseDragged(event);
+            mMouseCapturedControl->onTouchDragged(event);
        //Luma: Mouse dragged calls mouse Moved on iPhone
 #if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
        mMouseCapturedControl->onMouseMove(event);
@@ -744,7 +744,7 @@ void GuiCanvas::rootMouseDragged(const GuiEvent &event)
       findMouseControl(event);
       if(bool(mMouseControl))
       {
-          mMouseControl->onMouseDragged(event);
+          mMouseControl->onTouchDragged(event);
 #if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
           mMouseControl->onMouseMove(event);
 #endif //TORQUE_OS_IOS
@@ -759,13 +759,13 @@ void GuiCanvas::rootMouseMove(const GuiEvent &event)
    {
       checkLockMouseMove(event);
       if(mMouseCapturedControl != NULL)
-        mMouseCapturedControl->onMouseMove(event);
+        mMouseCapturedControl->onTouchMove(event);
    }
    else
    {
       findMouseControl(event);
       if(bool(mMouseControl))
-         mMouseControl->onMouseMove(event);
+         mMouseControl->onTouchMove(event);
    }
 }
 
@@ -1112,7 +1112,7 @@ void GuiCanvas::mouseLock(GuiControl *lockingControl)
       evt.mousePoint.x = S32(cursorPt.x);
       evt.mousePoint.y = S32(cursorPt.y);
 
-      mMouseControl->onMouseLeave(evt);
+      mMouseControl->onTouchLeave(evt);
    }
 }
 
@@ -1131,7 +1131,7 @@ void GuiCanvas::mouseUnlock(GuiControl *lockingControl)
       mMouseControl = controlHit;
       mMouseControlClicked = false;
       if(bool(mMouseControl))
-         mMouseControl->onMouseEnter(evt);
+         mMouseControl->onTouchEnter(evt);
    }
    mMouseCapturedControl = NULL;
 }

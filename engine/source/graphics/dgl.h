@@ -195,6 +195,10 @@ void dglDrawBillboard( const Point3F &position, F32 width, F32 spinAngle );
 void dglWireCube(const Point3F &extent, const Point3F &center);
 /// Draws a solid cube around "center" with size "extent"
 void dglSolidCube(const Point3F &extent, const Point3F & enter);
+/// Draws an unfilled circle using line segments
+void dglDrawCircle(const Point2I &center, const F32 radius, const ColorI &color, const F32 &lineWidth = 1.0f);
+/// Draws a filled circle
+void dglDrawCircleFill(const Point2I &center, const F32 radius, const ColorI &color);
 /// @}
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 // Matrix functions

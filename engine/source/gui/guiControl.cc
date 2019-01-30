@@ -58,7 +58,7 @@ GuiControl::GuiControl()
 {
    mLayer = 0;
    mBounds.set(0, 0, 64, 64);
-   mMinExtent.set(8, 2);			// MM: Reduced to 8x2 so GuiControl can be used as a separator.
+   mMinExtent.set(8, 2);			// Set to 8x2 so GuiControl can be used as a separator.
 
    mProfile = NULL;
 
@@ -67,6 +67,8 @@ GuiControl::GuiControl()
    mAltConsoleCommand   = StringTable->EmptyString;
    mAcceleratorKey      = StringTable->EmptyString;
    mLangTableName       = StringTable->EmptyString;
+   mText                = StringTable->EmptyString;
+   mTextID              = StringTable->EmptyString;
 
    mLangTable           = NULL;
    mFirstResponder      = NULL;
@@ -181,6 +183,11 @@ void GuiControl::initPersistFields()
    addGroup("Localization");
    addField("langTableMod",      TypeString,		Offset(mLangTableName, GuiControl));
    endGroup("Localization");
+
+   addGroup("Text");
+   addField("text", TypeCaseString, Offset(mText, GuiControl));
+   addField("textID", TypeString, Offset(mTextID, GuiControl));
+   endGroup("Text");
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
@@ -446,7 +453,7 @@ void GuiControl::onRender(Point2I offset, const RectI &updateRect)
 {
     RectI ctrlRect(offset, mBounds.extent);
 
-    renderBorderedRect(ctrlRect, mProfile, normal);
+    renderBorderedRect(ctrlRect, mProfile, NormalState);
 
 	dglSetBitmapModulation(mProfile->mFontColor);
     renderChildControls(offset, updateRect);
@@ -588,7 +595,7 @@ bool GuiControl::renderTooltip(Point2I cursorPos, const char* tipText )
     dglSetClipRect(rect);
 
     // Draw body and border of the tool tip
-	renderBorderedRect(rect, mTooltipProfile, normal);
+	renderBorderedRect(rect, mTooltipProfile, NormalState);
 
     // Draw the text centered in the tool tip box
     dglSetBitmapModulation( mTooltipProfile->mFontColor );
@@ -685,6 +692,11 @@ void GuiControl::awaken()
          AssertFatal(0, "GuiControl::awaken: failed onWake");
          deleteObject();
       }
+	  else
+	  {
+		  if (mTextID && *mTextID != 0)
+			  setTextID(mTextID);
+	  }
    }
 }
 
@@ -1085,15 +1097,15 @@ bool GuiControl::onInputEvent(const InputEvent &event)
    return( false );
 }
 
-void GuiControl::onMouseUp(const GuiEvent &event)
+void GuiControl::onTouchUp(const GuiEvent &event)
 {
 }
 
-void GuiControl::onMouseDown(const GuiEvent &event)
+void GuiControl::onTouchDown(const GuiEvent &event)
 {
 }
 
-void GuiControl::onMouseMove(const GuiEvent &event)
+void GuiControl::onTouchMove(const GuiEvent &event)
 {
    //if this control is a dead end, make sure the event stops here
    if ( !mVisible || !mAwake )
@@ -1102,18 +1114,18 @@ void GuiControl::onMouseMove(const GuiEvent &event)
    //pass the event to the parent
    GuiControl *parent = getParent();
    if ( parent )
-      parent->onMouseMove( event );
+      parent->onTouchMove( event );
 }
 
-void GuiControl::onMouseDragged(const GuiEvent &event)
+void GuiControl::onTouchDragged(const GuiEvent &event)
 {
 }
 
-void GuiControl::onMouseEnter(const GuiEvent &)
+void GuiControl::onTouchEnter(const GuiEvent &)
 {
 }
 
-void GuiControl::onMouseLeave(const GuiEvent &)
+void GuiControl::onTouchLeave(const GuiEvent &)
 {
 }
 
@@ -1560,4 +1572,29 @@ const char* GuiControl::execAltConsoleCallback()
       return Con::evaluate(mAltConsoleCommand, false);
    }
    return "";
+}
+
+void GuiControl::setText(const char *text)
+{
+	mText = StringTable->insert(text);
+}
+
+void GuiControl::setTextID(const char *id)
+{
+	S32 n = Con::getIntVariable(id, -1);
+	if (n != -1)
+	{
+		mTextID = StringTable->insert(id);
+		setTextID(n);
+	}
+}
+void GuiControl::setTextID(S32 id)
+{
+	const UTF8 *str = getGUIString(id);
+	if (str)
+		setText((const char*)str);
+}
+const char *GuiControl::getText()
+{
+	return mText;
 }

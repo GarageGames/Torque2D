@@ -107,7 +107,7 @@ GuiControl* GuiInspectorTypeCheckBox::constructEditControl()
    retCtrl->setField( "profile", "InspectorTypeCheckboxProfile" );
    retCtrl->setField( "text", "" );
 
-   check->mIndent = 4;
+   //check->mIndent = 4;
 
    retCtrl->setScriptValue( getData() );
 

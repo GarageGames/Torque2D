@@ -182,7 +182,7 @@ void GuiPopupTextListCtrl::onMouseUp(const GuiEvent &event)
 {
    Parent::onMouseDown(event);
    mPopUpCtrl->closePopUp();
-   Parent::onMouseUp(event);
+   Parent::onTouchUp(event);
 }
 
 //------------------------------------------------------------------------------
