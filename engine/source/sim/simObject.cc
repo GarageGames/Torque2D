@@ -541,10 +541,6 @@ void SimObject::setDataField(StringTableEntry slotName, const char *array, const
 
             if( (*fld->setDataFn)( this, bufferSecure ) )
                Con::setData(fld->type, (void *) (((const char *)this) + fld->offset), array1, 1, &value, fld->table);
-
-            onStaticModified( slotName, value );
-
-            return;
          }
 
          if(fld->validator)
