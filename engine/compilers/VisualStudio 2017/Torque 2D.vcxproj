@@ -619,11 +619,8 @@
     <ClCompile Include="..\..\source\string\stringTable.cc" />
     <ClCompile Include="..\..\source\string\stringUnit.cpp" />
     <ClCompile Include="..\..\source\string\unicode.cc" />
-    <ClCompile Include="..\..\source\gui\buttons\guiBitmapButtonCtrl.cc" />
-    <ClCompile Include="..\..\source\gui\buttons\guiButtonBaseCtrl.cc" />
     <ClCompile Include="..\..\source\gui\buttons\guiButtonCtrl.cc" />
     <ClCompile Include="..\..\source\gui\buttons\guiCheckBoxCtrl.cc" />
-    <ClCompile Include="..\..\source\gui\buttons\guiIconButtonCtrl.cc" />
     <ClCompile Include="..\..\source\gui\buttons\guiRadioCtrl.cc" />
     <ClCompile Include="..\..\source\gui\containers\guiAutoScrollCtrl.cc" />
     <ClCompile Include="..\..\source\gui\containers\guiCtrlArrayCtrl.cc" />
@@ -1211,11 +1208,8 @@
     <ClInclude Include="..\..\source\string\stringUnit.h" />
     <ClInclude Include="..\..\source\string\stringUnit_ScriptBinding.h" />
     <ClInclude Include="..\..\source\string\unicode.h" />
-    <ClInclude Include="..\..\source\gui\buttons\guiBitmapButtonCtrl.h" />
-    <ClInclude Include="..\..\source\gui\buttons\guiButtonBaseCtrl.h" />
     <ClInclude Include="..\..\source\gui\buttons\guiButtonCtrl.h" />
     <ClInclude Include="..\..\source\gui\buttons\guiCheckBoxCtrl.h" />
-    <ClInclude Include="..\..\source\gui\buttons\guiIconButtonCtrl.h" />
     <ClInclude Include="..\..\source\gui\buttons\guiRadioCtrl.h" />
     <ClInclude Include="..\..\source\gui\containers\guiAutoScrollCtrl.h" />
     <ClInclude Include="..\..\source\gui\containers\guiCtrlArrayCtrl.h" />

@@ -54,8 +54,8 @@
 #include "gui/guiTextEditCtrl.h"
 #endif
 
-#ifndef _GUIBITMAPBUTTON_H_
-#include "gui/buttons/guiBitmapButtonCtrl.h"
+#ifndef _GUIBUTTONCTRL_H_
+#include "gui/buttons/guiButtonCtrl.h"
 #endif
 
 #ifndef _GUIPOPUPCTRL_H_

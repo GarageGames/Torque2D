@@ -450,19 +450,10 @@
     <ClCompile Include="..\..\source\platformWin32\threads\thread.cc">
       <Filter>platformWin32\threads</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\gui\buttons\guiBitmapButtonCtrl.cc">
-      <Filter>gui\buttons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\gui\buttons\guiButtonBaseCtrl.cc">
-      <Filter>gui\buttons</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\gui\buttons\guiButtonCtrl.cc">
       <Filter>gui\buttons</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\gui\buttons\guiCheckBoxCtrl.cc">
-      <Filter>gui\buttons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\gui\buttons\guiIconButtonCtrl.cc">
       <Filter>gui\buttons</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\gui\buttons\guiRadioCtrl.cc">
@@ -1698,19 +1689,10 @@
     <ClInclude Include="..\..\source\platformWin32\nativeDialogs\win32DirectoryResolver.h">
       <Filter>platformWin32\nativeDialogs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\gui\buttons\guiBitmapButtonCtrl.h">
-      <Filter>gui\buttons</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\gui\buttons\guiButtonBaseCtrl.h">
-      <Filter>gui\buttons</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\gui\buttons\guiButtonCtrl.h">
       <Filter>gui\buttons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\gui\buttons\guiCheckBoxCtrl.h">
-      <Filter>gui\buttons</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\gui\buttons\guiIconButtonCtrl.h">
       <Filter>gui\buttons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\gui\buttons\guiRadioCtrl.h">
