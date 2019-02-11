@@ -62,10 +62,10 @@ class GuiTabBookCtrl : public GuiControl
 public:
     enum TabPosition
     {
-        AlignTop,   ///< Align the tabs on the top of the tab book control
-        AlignBottom,///< Align the tabs on the bottom of the tab book control
-      AlignLeft,  ///< Align the tabs on the left of the tab book control
-      AlignRight  ///< Align the tabs on the right of the tab book control
+		AlignTop,   ///< Align the tabs on the top of the tab book control
+		AlignBottom,///< Align the tabs on the bottom of the tab book control
+		AlignLeft,  ///< Align the tabs on the left of the tab book control
+		AlignRight  ///< Align the tabs on the right of the tab book control
     };
 
    struct TabHeaderInfo
@@ -97,14 +97,14 @@ private:
 
    enum
    {
-       TabSelected = 0,     ///< Index of selected tab texture
-      TabNormal,           ///< Index of normal tab texture
-      TabHover,            ///< Index of hover tab texture
-      TabSelectedVertical, ///< Index of selected tab texture
-      TabNormalVertical,   ///< Index of normal tab texture
-      TabHoverVertical,    ///< Index of hover tab texture
-      TabBackground = 19,       ///< Index of background texture (tiled)
-       NumBitmaps           ///< Number of bitmaps in this array
+		TabSelected = 0,		///< Index of selected tab texture
+		TabNormal,				///< Index of normal tab texture
+		TabHover,				///< Index of hover tab texture
+		TabSelectedVertical,	///< Index of selected tab texture
+		TabNormalVertical,		///< Index of normal tab texture
+		TabHoverVertical,		///< Index of hover tab texture
+		TabBackground = 19,     ///< Index of background texture (tiled)
+		NumBitmaps				///< Number of bitmaps in this array
    };
    bool  mHasTexture;   ///< Indicates whether we have a texture to render the tabs with
    RectI *mBitmapBounds;///< Array of rectangles identifying textures for tab book
@@ -228,7 +228,7 @@ private:
    /// Called when a child page is resized
    /// This method is overridden so that we may handle resizing of our child tab
    /// pages when one of them is resized.
-   /// This ensures we keep our sizing in sync when we our children are sized or moved.
+   /// This ensures we keep our sizing in sync when our children are sized or moved.
    ///
    /// @param   child   A pointer to the child control that has been resized
    void childResized(GuiControl *child);

@@ -694,7 +694,7 @@ void GuiWindowCtrl::onRender(Point2I offset, const RectI &updateRect)
    if( !mMinimized )
    {
       //render the children
-      renderChildControls( offset, updateRect );
+      renderChildControls( offset, mBounds, updateRect );
    }
 }
 

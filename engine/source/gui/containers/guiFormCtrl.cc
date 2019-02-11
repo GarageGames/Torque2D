@@ -291,7 +291,7 @@ void GuiFormCtrl::onRender(Point2I offset, const RectI &updateRect)
    }
 
    // Render the children
-   renderChildControls(offset, updateRect);
+   renderChildControls(offset, mBounds, updateRect);
 }
 
 void GuiFormCtrl::onMouseDragged(const GuiEvent &event)

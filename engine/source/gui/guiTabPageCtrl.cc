@@ -34,7 +34,7 @@ GuiTabPageCtrl::GuiTabPageCtrl(void)
 {
    mBounds.extent.set(100, 200);
    mMinSize.set(50, 50);
-   dStrcpy(mText,(UTF8*)"TabPage");
+   //dStrcpy(mText,(UTF8*)"TabPage");
    mActive = true;
    mIsContainer = true;
 }
@@ -62,7 +62,7 @@ GuiControl* GuiTabPageCtrl::findHitControl(const Point2I &pt, S32 initialLayer)
    return Parent::findHitControl(pt, initialLayer);
 }
 
-void GuiTabPageCtrl::onMouseDown(const GuiEvent &event)
+void GuiTabPageCtrl::onTouchDown(const GuiEvent &event)
 {
    setUpdate();
    Point2I localPoint = globalToLocalCoord( event.mousePoint );

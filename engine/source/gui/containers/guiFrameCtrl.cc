@@ -498,7 +498,7 @@ void GuiFrameSetCtrl::onRender(Point2I offset, const RectI &updateRect )
    //   dglDrawRect(r, mProfile->mBorderColor);
 
    // draw the frame contents
-   renderChildControls(offset, updateRect);
+   renderChildControls(offset, mBounds, updateRect);
 }
 
 //-----------------------------------------------------------------------------

@@ -73,7 +73,8 @@ enum GuiControlState
 	NormalState = 0,				//Control renders with default look
 	HighlightState,				//Control is highlighted
 	SelectedState,				//Control has been selected
-	DisabledState				//Control cannot be used
+	DisabledState,				//Control cannot be used
+	StateCount					//Not an actual state! Should always be at the end of the list.
 };
 
 class GuiCursor : public SimObject
@@ -109,17 +110,11 @@ private:
 	typedef SimObject Parent;
 
 public:
-	S32 mBorder;								//Width of this border
-	S32 mBorderHL;
-	S32 mBorderSL;
-	S32 mBorderNA;
-
-	ColorI mBorderColor;						//The color of the border
-	ColorI mBorderColorHL;
-	ColorI mBorderColorSL;
-	ColorI mBorderColorNA;
-
-	bool mUnderfill;							//True if the control's fill color should appear under the border.
+	S32 mMargin[static_cast<S32>(StateCount)];					//The distance between the edge and the start of the border. Margin is outside of the control.
+	S32 mBorder[static_cast<S32>(StateCount)];					//Width of the border.
+	ColorI mBorderColor[static_cast<S32>(StateCount)];			//The color of the border.
+	S32 mPadding[static_cast<S32>(StateCount)];					//The distance between the border and content of the control.
+	bool mUnderfill;											//True if the control's fill color should appear under the border.
 public:
 	DECLARE_CONOBJECT(GuiBorderProfile);
 	GuiBorderProfile();
@@ -127,8 +122,11 @@ public:
 	static void initPersistFields();
 	bool onAdd();
 	void onRemove();
-	const ColorI& getBorderColor(const GuiControlState state); //Returns the correct border color based on the control's state.
+
+	S32 getMargin(const GuiControlState state); //Returns the margin based on the control's state.
 	S32 getBorder(const GuiControlState state); //Returns the size of the border based on the control's state.
+	const ColorI& getBorderColor(const GuiControlState state); //Returns the correct border color based on the control's state.
+	S32 getPadding(const GuiControlState state); //Returns the padding based on the control's state.
 };
 
 /// A GuiControlProfile is used by every GuiObject and is akin to a
@@ -232,6 +230,11 @@ public:
 
    const ColorI& getFillColor(const GuiControlState state); //Returns the fill color based on the state.
    const ColorI& getFontColor(const GuiControlState state); //Returns the font color based on the state.
+
+   GuiBorderProfile* getLeftBorder() { return ((mBorderLeft) ? mBorderLeft : mBorderDefault); };
+   GuiBorderProfile* getRightBorder() { return ((mBorderRight) ? mBorderRight : mBorderDefault); };
+   GuiBorderProfile* getTopBorder() { return ((mBorderTop) ? mBorderTop : mBorderDefault); };
+   GuiBorderProfile* getBottomBorder() { return ((mBorderBottom) ? mBorderBottom : mBorderDefault); };
 };
 DefineConsoleType( TypeGuiProfile)
 

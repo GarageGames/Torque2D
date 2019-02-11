@@ -78,8 +78,20 @@ void GuiCheckBoxCtrl::onRender(Point2I offset, const RectI &updateRect)
 		currentState = GuiControlState::HighlightState;
 	}
 
-	RectI boundsRect(offset, mBounds.extent);
-	RectI boxRect(offset + mBoxOffset, mBoxExtent);
+	RectI ctrlRect = applyMargins(offset, mBounds.extent, currentState);
+	RectI fillRect = applyBorders(ctrlRect.point, ctrlRect.extent, currentState);
+	RectI contentRect = applyPadding(fillRect.point, fillRect.extent, currentState);
+	RectI boxRect(contentRect.point + mBoxOffset, mBoxExtent);
+
+	//Contrain the Box Rect. It must fit in the content Rect.
+	if ((boxRect.point.x + boxRect.extent.x) > (contentRect.point.x + contentRect.extent.x))
+	{
+		boxRect.extent.x = contentRect.point.x + contentRect.extent.x - boxRect.point.x;
+	}
+	if ((boxRect.point.y + boxRect.extent.y) > (contentRect.point.y + contentRect.extent.y))
+	{
+		boxRect.extent.y = contentRect.point.y + contentRect.extent.y - boxRect.point.y;
+	}
 
 	if(mProfile->mBitmapName != NULL && mProfile->constructBitmapArray() >= 6)
 	{
@@ -105,29 +117,32 @@ void GuiCheckBoxCtrl::onRender(Point2I offset, const RectI &updateRect)
 	else
 	{
 		//Draw the checkbox
-		renderBorderedRect(boxRect, mProfile, currentState);
+		renderInnerControl(boxRect, currentState);
 	}
-   
-    if(mText[0] != '\0')
-    {
-		ColorI fontColor = mProfile->getFontColor(currentState);
-		dglSetBitmapModulation( fontColor );
 
-		Point2I textArea = mTextExtent;
-		if ((textArea.x + mTextOffset.x) > mBounds.extent.x)
-		{
-			textArea.x = mBounds.extent.x;
-		}
-		if ((textArea.y + mTextOffset.y) > mBounds.extent.y)
-		{
-			textArea.y = mBounds.extent.y;
-		}
+	RectI textRect(contentRect.point + mTextOffset, mTextExtent);
 
-		renderJustifiedText(Point2I(offset.x + mTextOffset.x, offset.y + mTextOffset.y), textArea, mText);
-    }
+	//Contrain the Text Rect. It must fit in the content Rect.
+	if ((textRect.point.x + textRect.extent.x) > (contentRect.point.x + contentRect.extent.x))
+	{
+		textRect.extent.x = contentRect.point.x + contentRect.extent.x - textRect.point.x;
+	}
+	if ((textRect.point.y + textRect.extent.y) > (contentRect.point.y + contentRect.extent.y))
+	{
+		textRect.extent.y = contentRect.point.y + contentRect.extent.y - textRect.point.y;
+	}
 
-   //render the children
-   renderChildControls(offset, updateRect);
+	//Render Text
+	dglSetBitmapModulation(mProfile->getFontColor(currentState));
+	renderJustifiedText(textRect.point, textRect.extent, mText);
+
+	//Render the childen
+	renderChildControls(offset, contentRect, updateRect);
+}
+
+void GuiCheckBoxCtrl::renderInnerControl(RectI &boxRect, const GuiControlState currentState)
+{
+	renderBorderedRect(boxRect, mProfile, currentState);
 }
 
 void GuiCheckBoxCtrl::onAction()

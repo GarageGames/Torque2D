@@ -118,6 +118,8 @@ public:
     static S32     smCursorChanged; ///< Has this control modified the cursor? -1 or type
     RectI   mBounds;
     Point2I mMinExtent;
+	Point2I mRenderInsetLT;			///Add this to the mBounds and parent offset to get the true render location of the control
+	Point2I mRenderInsetRB;			///The actual rendered inset for the right and bottom sides.
     StringTableEntry mLangTableName;
     LangTable *mLangTable;
 
@@ -393,9 +395,10 @@ public:
     virtual bool renderTooltip(Point2I cursorPos, const char* tipText = NULL );
 
     /// Called when this control should render its children
-    /// @param   offset   The location this control is to begin rendering
+    /// @param   offset   The top left of the parent control
+    /// @param   contentOffset   The top left of the parent's content
     /// @param   updateRect   The screen area this control has drawing access to
-    void renderChildControls(Point2I offset, const RectI &updateRect);
+    void renderChildControls(Point2I offset, RectI content, const RectI &updateRect);
 
     /// Sets the area (local coordinates) this control wants refreshed each frame
     /// @param   pos   UpperLeft point on rectangle of refresh area
@@ -484,7 +487,7 @@ public:
     /// General input handler.
     virtual bool onInputEvent(const InputEvent &event);
 
-    /// @name Mouse Events
+    /// @name Touch/Mouse Events
     /// These functions are called when the input event which is
     /// in the name of the function occurs.
     /// @{
@@ -669,6 +672,15 @@ public:
     ///
     /// @note This should move into the graphics library at some point
     void renderJustifiedText(Point2I offset, Point2I extent, const char *text);
+
+	/// Returns a new rect based on the margins.
+	RectI GuiControl::applyMargins(Point2I offset, Point2I extent, GuiControlState currentState);
+
+	/// Returns the bounds of the rect after considering the borders.
+	RectI GuiControl::applyBorders(Point2I offset, Point2I extent, GuiControlState currentState);
+
+	/// Returns the bounds of the rect this time with padding.
+	RectI GuiControl::applyPadding(Point2I offset, Point2I extent, GuiControlState currentState);
 
     void inspectPostApply();
     void inspectPreApply();

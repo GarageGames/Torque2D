@@ -463,6 +463,6 @@ void GuiSliderCtrl::onRender(Point2I offset, const RectI &updateRect)
         dglSetBitmapModulation(mProfile->mFontColor);
         dglDrawText(mProfile->mFont, textStart, buf, mProfile->mFontColors);
     }
-    renderChildControls(offset, updateRect);
+    renderChildControls(offset, mBounds, updateRect);
 }
 

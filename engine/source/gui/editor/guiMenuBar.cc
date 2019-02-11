@@ -1021,7 +1021,7 @@ void GuiMenuBar::onRender(Point2I offset, const RectI &updateRect)
       }
    }
 
-   renderChildControls( offset, updateRect );
+   renderChildControls( offset, mBounds, updateRect );
 }
 
 void GuiMenuBar::buildAcceleratorMap()

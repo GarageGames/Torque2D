@@ -41,79 +41,16 @@ void GuiRadioCtrl::initPersistFields()
 	addField("groupNum", TypeS32, Offset(mRadioGroup, GuiRadioCtrl));
 }
 
-void GuiRadioCtrl::onRender(Point2I offset, const RectI &updateRect)
+void GuiRadioCtrl::renderInnerControl(RectI &boxRect, const GuiControlState currentState)
 {
-	GuiControlState currentState = GuiControlState::NormalState;
-	if (!mActive)
+	S32 radius = boxRect.extent.x;
+	if (boxRect.extent.y < radius)
 	{
-		currentState = GuiControlState::DisabledState;
+		radius = boxRect.extent.y;
 	}
-	else if (mDepressed || mStateOn)
-	{
-		currentState = GuiControlState::SelectedState;
-	}
-	else if (mMouseOver)
-	{
-		currentState = GuiControlState::HighlightState;
-	}
-
-	RectI boundsRect(offset, mBounds.extent);
-	RectI boxRect(offset + mBoxOffset, mBoxExtent);
-
-	if (mProfile->mBitmapName != NULL && mProfile->constructBitmapArray() >= 6)
-	{
-		//Use the bitmap to create the radio button
-		S32 index = 1;
-		if (mStateOn || mDepressed)
-		{
-			index = 2;
-		}
-		if (mMouseOver)
-		{
-			index += 2;
-		}
-		else if (!mActive)
-		{
-			index += 4;
-		}
-
-		RectI dest = RectI(offset + mBoxOffset, mBoxExtent);
-		dglClearBitmapModulation();
-		dglDrawBitmapStretchSR(mProfile->mTextureHandle, dest, mProfile->mBitmapArrayRects[index - 1]);
-	}
-	else
-	{
-		//Draw the radio button
-		S32 radius = mBoxExtent.x;
-		if (mBoxExtent.y < radius)
-		{
-			radius = mBoxExtent.y;
-		}
-		radius = (S32)round(radius/2);
-		Point2I center = Point2I(offset.x + mBoxOffset.x + (mBoxExtent.x/2), offset.y + mBoxOffset.y + (mBoxExtent.y / 2));
-		renderBorderedCircle(center, radius, mProfile, currentState);
-	}
-
-	if (mText[0] != '\0')
-	{
-		ColorI fontColor = mProfile->getFontColor(currentState);
-		dglSetBitmapModulation(fontColor);
-
-		Point2I textArea = mTextExtent;
-		if ((textArea.x + mTextOffset.x) > mBounds.extent.x)
-		{
-			textArea.x = mBounds.extent.x;
-		}
-		if ((textArea.y + mTextOffset.y) > mBounds.extent.y)
-		{
-			textArea.y = mBounds.extent.y;
-		}
-
-		renderJustifiedText(Point2I(offset.x + mTextOffset.x, offset.y + mTextOffset.y), textArea, mText);
-	}
-
-	//render the children
-	renderChildControls(offset, updateRect);
+	radius = (S32)round(radius / 2);
+	Point2I center = Point2I(boxRect.point.x + (boxRect.extent.x / 2), boxRect.point.y + (boxRect.extent.y / 2));
+	renderBorderedCircle(center, radius, mProfile, currentState);
 }
 
 void GuiRadioCtrl::onAction()

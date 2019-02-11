@@ -29,10 +29,10 @@
 void renderBorderedRect(RectI &bounds, GuiControlProfile *profile, GuiControlState state )
 {
 	//Get the border profiles
-	GuiBorderProfile *leftProfile = (profile->mBorderLeft) ? profile->mBorderLeft : profile->mBorderDefault;
-	GuiBorderProfile *rightProfile = (profile->mBorderRight) ? profile->mBorderRight : profile->mBorderDefault;
-	GuiBorderProfile *topProfile = (profile->mBorderTop) ? profile->mBorderTop : profile->mBorderDefault;
-	GuiBorderProfile *bottomProfile = (profile->mBorderBottom) ? profile->mBorderBottom : profile->mBorderDefault;
+	GuiBorderProfile *leftProfile = profile->getLeftBorder();
+	GuiBorderProfile *rightProfile = profile->getRightBorder();
+	GuiBorderProfile *topProfile = profile->getTopBorder();
+	GuiBorderProfile *bottomProfile = profile->getBottomBorder();
 
 	//Get the colors
 	ColorI fillColor = profile->getFillColor(state);
@@ -104,11 +104,11 @@ void renderBorderedCircle(Point2I &center, S32 radius, GuiControlProfile *profil
 	if (profile->mOpaque)
 	{
 		S32 fillRadius = (profile->mBorderDefault && profile->mBorderDefault->mUnderfill) ? radius : radius - borderSize;
-		dglDrawCircleFill(center, fillRadius, fillColor);
+		dglDrawCircleFill(center, (F32)fillRadius, fillColor);
 	}
 
 	//Draw the border
-	dglDrawCircle(center, radius, borderColor, borderSize);
+	dglDrawCircle(center, (F32)radius, borderColor, (F32)borderSize);
 }
 
 // DAW: Render out the sizable bitmap borders based on a multiplier into the bitmap array

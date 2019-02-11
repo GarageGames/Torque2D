@@ -140,7 +140,7 @@ void GuiArrayCtrl::onRenderColumnHeaders(Point2I offset, Point2I parentOffset, P
    if (mProfile->mBorderDefault && mProfile->mBorderDefault->mBorder > 0)
    {
       RectI cellR(offset.x + headerDim.x, parentOffset.y, mBounds.extent.x - headerDim.x, headerDim.y);
-      dglDrawRectFill(cellR, mProfile->mBorderDefault->mBorderColor);
+      dglDrawRectFill(cellR, mProfile->mBorderDefault->mBorderColor[0]);
    }
 }
 

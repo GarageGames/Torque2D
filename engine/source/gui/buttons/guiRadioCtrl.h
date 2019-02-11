@@ -38,7 +38,7 @@ public:
    DECLARE_CONOBJECT(GuiRadioCtrl);
    GuiRadioCtrl();
    static void initPersistFields();
-   void onRender(Point2I offset, const RectI &updateRect);
+   void renderInnerControl(RectI &boxRect, const GuiControlState currentState);
    void setStateOn(bool bStateOn);
    void onAction();
    void onMessage(GuiControl *, S32 msg);

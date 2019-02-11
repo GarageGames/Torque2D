@@ -61,6 +61,7 @@ public:
    void setTextExtent(const Point2I &newExtent) { mTextExtent = newExtent; }
 
    void onRender(Point2I offset, const RectI &updateRect);
+   virtual void renderInnerControl(RectI &boxRect, const GuiControlState currentState);
    void setScriptValue(const char *value);
    const char *getScriptValue();
 

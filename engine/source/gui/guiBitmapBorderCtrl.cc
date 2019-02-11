@@ -74,7 +74,7 @@ void GuiBitmapBorderCtrl::onSleep()
 
 void GuiBitmapBorderCtrl::onRender(Point2I offset, const RectI &updateRect)
 {
-   renderChildControls( offset, updateRect );
+   renderChildControls( offset, mBounds, updateRect );
    dglSetClipRect(updateRect);
 
    //draw the outline

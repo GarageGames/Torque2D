@@ -476,5 +476,5 @@ void GuiSceneObjectCtrl::onRender(Point2I offset, const RectI& updateRect)
    
 
    // Render Child Controls.
-   renderChildControls(offset, updateRect);
+   renderChildControls(offset, mBounds, updateRect);
 }

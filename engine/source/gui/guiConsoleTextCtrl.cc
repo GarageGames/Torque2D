@@ -164,7 +164,7 @@ void GuiConsoleTextCtrl::onRender(Point2I offset, const RectI &updateRect)
    }
 
    //render the child controls
-   renderChildControls(offset, updateRect);
+   renderChildControls(offset, mBounds, updateRect);
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //

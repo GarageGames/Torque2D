@@ -813,7 +813,7 @@ void GuiScrollCtrl::onRender(Point2I offset, const RectI &updateRect)
    // create a rect to intersect with the updateRect
    RectI contentRect(mContentPos.x + offset.x, mContentPos.y + offset.y, mContentExt.x, mContentExt.y);
    if(contentRect.intersect(updateRect))
-      renderChildControls(offset, contentRect);
+      renderChildControls(offset, mBounds, contentRect);
 
    // Finally draw the last vis rect (debug aid, BJG)
    //RectI renderRect = lastVisRect;

@@ -38,7 +38,7 @@ void GuiBackgroundCtrl::onRender(Point2I offset, const RectI &updateRect)
    if ( mDraw )
       Parent::onRender( offset, updateRect );
 
-   renderChildControls(offset, updateRect);
+   renderChildControls(offset, mBounds, updateRect);
 }
 
 

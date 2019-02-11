@@ -250,7 +250,7 @@ class GuiMLTextCtrl : public GuiControl
    bool  mAllowColorChars;
 
    // Too many chars sound:
-   AssetPtr<AudioAsset>  mDeniedSound;
+   AssetPtr<AudioAsset>  mDeniedSound; 
 
    //-------------------------------------- Protected interface
   protected:

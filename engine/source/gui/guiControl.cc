@@ -58,6 +58,8 @@ GuiControl::GuiControl()
 {
    mLayer = 0;
    mBounds.set(0, 0, 64, 64);
+   mRenderInsetLT.set(0, 0);
+   mRenderInsetRB.set(0, 0);
    mMinExtent.set(8, 2);			// Set to 8x2 so GuiControl can be used as a separator.
 
    mProfile = NULL;
@@ -339,8 +341,10 @@ void GuiControl::resize(const Point2I &newPosition, const Point2I &newExtent)
    Point2I actualNewExtent = Point2I(getMax(mMinExtent.x, newExtent.x),
       getMax(mMinExtent.y, newExtent.y));
 
+	Point2I oldExtent = mBounds.extent;
+
    // only do the child control resizing stuff if you really need to.
-   bool extentChanged = (actualNewExtent != mBounds.extent);
+   bool extentChanged = (actualNewExtent != oldExtent);
 
    if (extentChanged) {
       //call set update both before and after
@@ -349,7 +353,7 @@ void GuiControl::resize(const Point2I &newPosition, const Point2I &newExtent)
       for(i = begin(); i != end(); i++)
       {
          GuiControl *ctrl = static_cast<GuiControl *>(*i);
-         ctrl->parentResized(mBounds.extent, actualNewExtent);
+         ctrl->parentResized(oldExtent - (ctrl->mRenderInsetLT + ctrl->mRenderInsetRB), actualNewExtent - (ctrl->mRenderInsetLT + ctrl->mRenderInsetRB));
       }
       mBounds.set(newPosition, actualNewExtent);
 
@@ -451,12 +455,93 @@ void GuiControl::parentResized(const Point2I &oldParentExtent, const Point2I &ne
 
 void GuiControl::onRender(Point2I offset, const RectI &updateRect)
 {
-    RectI ctrlRect(offset, mBounds.extent);
+    RectI ctrlRect = applyMargins(offset, mBounds.extent, NormalState);
+
+	if (!ctrlRect.isValidRect())
+	{
+		return;
+	}
 
     renderBorderedRect(ctrlRect, mProfile, NormalState);
 
+	//Render Text
 	dglSetBitmapModulation(mProfile->mFontColor);
-    renderChildControls(offset, updateRect);
+	RectI fillRect = applyBorders(ctrlRect.point, ctrlRect.extent, NormalState);
+	RectI contentRect = applyPadding(fillRect.point, fillRect.extent, NormalState);
+
+	if(contentRect.isValidRect())
+	{
+		renderJustifiedText(contentRect.point, contentRect.extent, mText);
+
+		//Render the childen
+		renderChildControls(offset, contentRect, updateRect);
+	}
+}
+
+RectI GuiControl::applyMargins(Point2I offset, Point2I extent, GuiControlState currentState)
+{
+	//Get the border profiles
+	GuiBorderProfile *leftProfile = mProfile->getLeftBorder();
+	GuiBorderProfile *rightProfile = mProfile->getRightBorder();
+	GuiBorderProfile *topProfile = mProfile->getTopBorder();
+	GuiBorderProfile *bottomProfile = mProfile->getBottomBorder();
+
+	S32 leftSize = (leftProfile) ? leftProfile->getMargin(currentState) : 0;
+	S32 rightSize = (rightProfile) ? rightProfile->getMargin(currentState) : 0;
+	S32 topSize = (topProfile) ? topProfile->getMargin(currentState) : 0;
+	S32 bottomSize = (bottomProfile) ? bottomProfile->getMargin(currentState) : 0;
+
+	//Ensure positive values
+	leftSize = (leftSize >= 0) ? leftSize : 0;
+	rightSize = (rightSize >= 0) ? rightSize : 0;
+	topSize = (topSize >= 0) ? topSize : 0;
+	bottomSize = (bottomSize >= 0) ? bottomSize : 0;
+
+	return RectI(offset.x + leftSize, offset.y + topSize, (extent.x - leftSize) - rightSize, (extent.y - topSize) - bottomSize);
+}
+
+RectI GuiControl::applyBorders(Point2I offset, Point2I extent, GuiControlState currentState)
+{
+	//Get the border profiles
+	GuiBorderProfile *leftProfile = mProfile->getLeftBorder();
+	GuiBorderProfile *rightProfile = mProfile->getRightBorder();
+	GuiBorderProfile *topProfile = mProfile->getTopBorder();
+	GuiBorderProfile *bottomProfile = mProfile->getBottomBorder();
+
+	S32 leftSize = (leftProfile) ? leftProfile->getBorder(currentState) : 0;
+	S32 rightSize = (rightProfile) ? rightProfile->getBorder(currentState) : 0;
+	S32 topSize = (topProfile) ? topProfile->getBorder(currentState) : 0;
+	S32 bottomSize = (bottomProfile) ? bottomProfile->getBorder(currentState) : 0;
+
+	//Ensure positive values
+	leftSize = (leftSize >= 0) ? leftSize : 0;
+	rightSize = (rightSize >= 0) ? rightSize : 0;
+	topSize = (topSize >= 0) ? topSize : 0;
+	bottomSize = (bottomSize >= 0) ? bottomSize : 0;
+
+	return RectI(offset.x + leftSize, offset.y + topSize, (extent.x - leftSize) - rightSize, (extent.y - topSize) - bottomSize);
+}
+
+RectI GuiControl::applyPadding(Point2I offset, Point2I extent, GuiControlState currentState)
+{
+	//Get the border profiles
+	GuiBorderProfile *leftProfile = mProfile->getLeftBorder();
+	GuiBorderProfile *rightProfile = mProfile->getRightBorder();
+	GuiBorderProfile *topProfile = mProfile->getTopBorder();
+	GuiBorderProfile *bottomProfile = mProfile->getBottomBorder();
+
+	S32 leftSize = (leftProfile) ? leftProfile->getPadding(currentState) : 0;
+	S32 rightSize = (rightProfile) ? rightProfile->getPadding(currentState) : 0;
+	S32 topSize = (topProfile) ? topProfile->getPadding(currentState) : 0;
+	S32 bottomSize = (bottomProfile) ? bottomProfile->getPadding(currentState) : 0;
+
+	//Ensure positive values
+	leftSize = (leftSize >= 0) ? leftSize : 0;
+	rightSize = (rightSize >= 0) ? rightSize : 0;
+	topSize = (topSize >= 0) ? topSize : 0;
+	bottomSize = (bottomSize >= 0) ? bottomSize : 0;
+
+	return RectI(offset.x + leftSize, offset.y + topSize, (extent.x - leftSize) - rightSize, (extent.y - topSize) - bottomSize);
 }
 
 bool GuiControl::renderTooltip(Point2I cursorPos, const char* tipText )
@@ -611,7 +696,7 @@ bool GuiControl::renderTooltip(Point2I cursorPos, const char* tipText )
     return true;
 }
 
-void GuiControl::renderChildControls(Point2I offset, const RectI &updateRect)
+void GuiControl::renderChildControls(Point2I offset, RectI content, const RectI &updateRect)
 {
    // offset is the upper-left corner of this control in screen coordinates
    // updateRect is the intersection rectangle in screen coords of the control
@@ -631,12 +716,14 @@ void GuiControl::renderChildControls(Point2I offset, const RectI &updateRect)
       }
       if (ctrl->mVisible)
       {
-         Point2I childPosition = offset + ctrl->getPosition();
+		 ctrl->mRenderInsetLT = content.point - offset;
+		 ctrl->mRenderInsetRB = mBounds.extent - (ctrl->mRenderInsetLT + content.extent);
+         Point2I childPosition = content.point + ctrl->getPosition();
          RectI childClip(childPosition, ctrl->getExtent());
 
          if (childClip.intersect(clipRect))
          {
-            dglSetClipRect(childClip);
+            dglSetClipRect(content);
             glDisable(GL_CULL_FACE);
             ctrl->onRender(childPosition, childClip);
          }
@@ -1050,9 +1137,9 @@ GuiControl* GuiControl::findHitControl(const Point2I &pt, S32 initialLayer)
       {
          continue;
       }
-      else if (ctrl->mVisible && ctrl->pointInControl(pt))
+      else if (ctrl->mVisible && ctrl->pointInControl(pt - ctrl->mRenderInsetLT))
       {
-         Point2I ptemp = pt - ctrl->mBounds.point;
+         Point2I ptemp = pt - (ctrl->mBounds.point + ctrl->mRenderInsetLT);
          GuiControl *hitCtrl = ctrl->findHitControl(ptemp);
 
          if(hitCtrl->mProfile->mModal)

@@ -1129,7 +1129,7 @@ void GuiTextEditCtrl::onRender(Point2I offset, const RectI & updateRect)
 
    drawText( ctrlRect, isFirstResponder() );
    
-   renderChildControls(offset, updateRect);
+   renderChildControls(offset, mBounds, updateRect);
 }
 
 void GuiTextEditCtrl::onPreRender()

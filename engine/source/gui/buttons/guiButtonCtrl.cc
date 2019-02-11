@@ -238,6 +238,7 @@ void GuiButtonCtrl::onAction()
 
 void GuiButtonCtrl::onRender(Point2I offset, const RectI& updateRect)
 {
+
 	GuiControlState currentState = GuiControlState::NormalState;
 	if (!mActive)
 	{
@@ -252,46 +253,34 @@ void GuiButtonCtrl::onRender(Point2I offset, const RectI& updateRect)
 		currentState = GuiControlState::HighlightState;
 	}
 
+	RectI ctrlRect = applyMargins(offset, mBounds.extent, currentState);
 	RectI boundsRect(offset, mBounds.extent);
 
-   if(mProfile->mBitmapName != NULL && mProfile->constructBitmapArray() >= 36)
-   {
-      S32 indexMultiplier = 1;
-      if ( currentState == HighlightState)
-         indexMultiplier = 2;
-      else if ( currentState == SelectedState )
-         indexMultiplier = 3;
-      else if ( currentState == DisabledState )
-         indexMultiplier = 4;
+	if(mProfile->mBitmapName != NULL && mProfile->constructBitmapArray() >= 36)
+	{
+		S32 indexMultiplier = 1;
+		if ( currentState == HighlightState)
+			indexMultiplier = 2;
+		else if ( currentState == SelectedState )
+			indexMultiplier = 3;
+		else if ( currentState == DisabledState )
+			indexMultiplier = 4;
 
-      renderSizableBitmapBordersFilled( boundsRect, indexMultiplier, mProfile );
-   }
+		renderSizableBitmapBordersFilled(ctrlRect, indexMultiplier, mProfile );
+	}
 	else
-   {
-	   renderBorderedRect(boundsRect, mProfile, currentState);
-   }
+	{
+		renderBorderedRect(ctrlRect, mProfile, currentState);
+	}
 
-	//Get the border profiles
-	GuiBorderProfile *leftProfile = (mProfile->mBorderLeft) ? mProfile->mBorderLeft : mProfile->mBorderDefault;
-	GuiBorderProfile *rightProfile = (mProfile->mBorderRight) ? mProfile->mBorderRight : mProfile->mBorderDefault;
-	GuiBorderProfile *topProfile = (mProfile->mBorderTop) ? mProfile->mBorderTop : mProfile->mBorderDefault;
-	GuiBorderProfile *bottomProfile = (mProfile->mBorderBottom) ? mProfile->mBorderBottom : mProfile->mBorderDefault;
+	//Render Text
+	dglSetBitmapModulation(mProfile->getFontColor(currentState));
+	RectI fillRect = applyBorders(ctrlRect.point, ctrlRect.extent, currentState);
+	RectI contentRect = applyPadding(fillRect.point, fillRect.extent, currentState);
+	renderJustifiedText(contentRect.point, contentRect.extent, mText);
 
-	S32 leftSize = (leftProfile) ? leftProfile->getBorder(currentState) : 0;
-	S32 rightSize = (rightProfile) ? rightProfile->getBorder(currentState) : 0;
-	S32 topSize = (topProfile) ? topProfile->getBorder(currentState) : 0;
-	S32 bottomSize = (bottomProfile) ? bottomProfile->getBorder(currentState) : 0;
-
-	//Get the inner rect
-	RectI innerRect = RectI(offset.x + leftSize, offset.y + topSize, (mBounds.extent.x - leftSize) - rightSize, (mBounds.extent.y - topSize) - bottomSize);
-
-	ColorI fontColor = mProfile->getFontColor(currentState);
-
-   dglSetBitmapModulation( fontColor );
-   renderJustifiedText(innerRect.point, innerRect.extent, mText);
-
-   //render the children
-   renderChildControls( offset, updateRect);
+	//Render the childen
+	renderChildControls(contentRect.point, contentRect, updateRect);
 }
 
 void GuiButtonCtrl::setScriptValue(const char *value)

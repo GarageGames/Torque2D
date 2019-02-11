@@ -64,6 +64,7 @@ GuiTabBookCtrl::GuiTabBookCtrl()
    mPages.reserve(12);
    mTabMargin = 7;
    mMinTabWidth = 64;
+   mTabWidth = 64;
    mIsContainer = true;
 
 
@@ -309,7 +310,7 @@ void GuiTabBookCtrl::onRender(Point2I offset, const RectI &updateRect)
    renderTabs( offset );
 
    // Render Children
-   renderChildControls( offset, updateRect );
+   renderChildControls( offset, mBounds, updateRect );
 
    // Restore old modulation
    dglSetBitmapModulation( oldModulation );

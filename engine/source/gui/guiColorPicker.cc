@@ -473,7 +473,7 @@ void GuiColorPickerCtrl::renderColorBox(RectI &bounds)
    pickerBounds.extent.y = bounds.extent.y-1;
    
    if (mProfile->mBorderDefault && mProfile->mBorderDefault->mBorder > 0)
-      dglDrawRect(bounds, mProfile->mBorderDefault->mBorderColor);
+      dglDrawRect(bounds, mProfile->mBorderDefault->mBorderColor[0]);
       
    Point2I selectorPos = Point2I(bounds.point.x+mSelectorPos.x+1, bounds.point.y+mSelectorPos.y+1);
 
@@ -607,7 +607,7 @@ void GuiColorPickerCtrl::onRender(Point2I offset, const RectI& updateRect)
    }
    
    //render the children
-   renderChildControls( offset, updateRect);
+   renderChildControls( offset, mBounds, updateRect);
 }
 
 //--------------------------------------------------------------------------

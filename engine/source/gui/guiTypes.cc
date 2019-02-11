@@ -96,15 +96,14 @@ IMPLEMENT_CONOBJECT(GuiBorderProfile);
 
 GuiBorderProfile::GuiBorderProfile()
 {
-	mBorder = 0;
-	mBorderHL = 0;
-	mBorderSL = 0;
-	mBorderNA = 0;
-
-	mBorderColor.set(255, 255, 255, 255);
-	mBorderColorHL.set(255, 255, 255, 255);
-	mBorderColorSL.set(255, 255, 255, 255);
-	mBorderColorNA.set(255, 255, 255, 255);
+	S32 stateCount = static_cast<S32>(StateCount);
+	for(S32 i = 0; i < stateCount; i++)
+	{
+		mMargin[i] = 0;
+		mBorder[i] = 0;
+		mBorderColor[i].set(255, 255, 255, 255);
+		mPadding[i] = 0;
+	}
 
 	mUnderfill = true;
 }
@@ -116,15 +115,26 @@ GuiBorderProfile::~GuiBorderProfile()
 void GuiBorderProfile::initPersistFields()
 {
 	Parent::initPersistFields();
-	addField("border", TypeS32, Offset(mBorder, GuiBorderProfile));
-	addField("borderHL", TypeS32, Offset(mBorderHL, GuiBorderProfile));
-	addField("borderSL", TypeS32, Offset(mBorderSL, GuiBorderProfile));
-	addField("borderNA", TypeS32, Offset(mBorderNA, GuiBorderProfile));
 
-	addField("borderColor", TypeColorI, Offset(mBorderColor, GuiBorderProfile));
-	addField("borderColorHL", TypeColorI, Offset(mBorderColorHL, GuiBorderProfile));
-	addField("borderColorSL", TypeColorI, Offset(mBorderColorSL, GuiBorderProfile));
-	addField("borderColorNA", TypeColorI, Offset(mBorderColorNA, GuiBorderProfile));
+	addField("margin", TypeS32, Offset(mMargin[0], GuiBorderProfile));
+	addField("marginHL", TypeS32, Offset(mMargin[1], GuiBorderProfile));
+	addField("marginSL", TypeS32, Offset(mMargin[2], GuiBorderProfile));
+	addField("marginNA", TypeS32, Offset(mMargin[3], GuiBorderProfile));
+
+	addField("border", TypeS32, Offset(mBorder[0], GuiBorderProfile));
+	addField("borderHL", TypeS32, Offset(mBorder[1], GuiBorderProfile));
+	addField("borderSL", TypeS32, Offset(mBorder[2], GuiBorderProfile));
+	addField("borderNA", TypeS32, Offset(mBorder[3], GuiBorderProfile));
+
+	addField("borderColor", TypeColorI, Offset(mBorderColor[0], GuiBorderProfile));
+	addField("borderColorHL", TypeColorI, Offset(mBorderColor[1], GuiBorderProfile));
+	addField("borderColorSL", TypeColorI, Offset(mBorderColor[2], GuiBorderProfile));
+	addField("borderColorNA", TypeColorI, Offset(mBorderColor[3], GuiBorderProfile));
+
+	addField("padding", TypeS32, Offset(mPadding[0], GuiBorderProfile));
+	addField("paddingHL", TypeS32, Offset(mPadding[1], GuiBorderProfile));
+	addField("paddingSL", TypeS32, Offset(mPadding[2], GuiBorderProfile));
+	addField("paddingNA", TypeS32, Offset(mPadding[3], GuiBorderProfile));
 
 	addField("underfill", TypeBool, Offset(mUnderfill, GuiBorderProfile));
 }
@@ -144,44 +154,24 @@ void GuiBorderProfile::onRemove()
 	Parent::onRemove();
 }
 
-const ColorI& GuiBorderProfile::getBorderColor(const GuiControlState state)
+S32 GuiBorderProfile::getMargin(const GuiControlState state)
 {
-	switch (state)
-	{
-	default:
-	case NormalState:
-		return mBorderColor;
-		break;
-	case HighlightState:
-		return mBorderColorHL;
-		break;
-	case SelectedState:
-		return mBorderColorSL;
-		break;
-	case DisabledState:
-		return mBorderColorNA;
-		break;
-	}
+	return mMargin[static_cast<S32>(state)];
 }
 
 S32 GuiBorderProfile::getBorder(const GuiControlState state)
 {
-	switch (state)
-	{
-	default:
-	case NormalState:
-		return mBorder;
-		break;
-	case HighlightState:
-		return mBorderHL;
-		break;
-	case SelectedState:
-		return mBorderSL;
-		break;
-	case DisabledState:
-		return mBorderNA;
-		break;
-	}
+	return mBorder[static_cast<S32>(state)];
+}
+
+const ColorI& GuiBorderProfile::getBorderColor(const GuiControlState state)
+{
+	return mBorderColor[static_cast<S32>(state)];
+}
+
+S32 GuiBorderProfile::getPadding(const GuiControlState state)
+{
+	return mPadding[static_cast<S32>(state)];
 }
 
 //------------------------------------------------------------------------------
