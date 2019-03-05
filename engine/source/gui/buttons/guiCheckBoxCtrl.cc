@@ -78,9 +78,9 @@ void GuiCheckBoxCtrl::onRender(Point2I offset, const RectI &updateRect)
 		currentState = GuiControlState::HighlightState;
 	}
 
-	RectI ctrlRect = applyMargins(offset, mBounds.extent, currentState);
-	RectI fillRect = applyBorders(ctrlRect.point, ctrlRect.extent, currentState);
-	RectI contentRect = applyPadding(fillRect.point, fillRect.extent, currentState);
+	RectI ctrlRect = applyMargins(offset, mBounds.extent, currentState, mProfile);
+	RectI fillRect = applyBorders(ctrlRect.point, ctrlRect.extent, currentState, mProfile);
+	RectI contentRect = applyPadding(fillRect.point, fillRect.extent, currentState, mProfile);
 	RectI boxRect(contentRect.point + mBoxOffset, mBoxExtent);
 
 	//Contrain the Box Rect. It must fit in the content Rect.
@@ -134,7 +134,7 @@ void GuiCheckBoxCtrl::onRender(Point2I offset, const RectI &updateRect)
 
 	//Render Text
 	dglSetBitmapModulation(mProfile->getFontColor(currentState));
-	renderJustifiedText(textRect.point, textRect.extent, mText);
+	renderText(textRect.point, textRect.extent, mText, mProfile);
 
 	//Render the childen
 	renderChildControls(offset, contentRect, updateRect);

@@ -186,12 +186,20 @@ public:
 
    enum AlignmentType
    {
-      LeftJustify,
-      RightJustify,
-      CenterJustify
+      LeftAlign,
+      RightAlign,
+      CenterAlign
    };
-
    AlignmentType mAlignment;                       ///< Horizontal text alignment
+
+   enum VertAlignmentType
+   {
+	   TopVAlign,
+	   BottomVAlign,
+	   MiddleVAlign
+   };
+   VertAlignmentType mVAlignment;				   ///< Vertical text alignment
+
    bool mAutoSizeWidth;                            ///< Auto-size the width-bounds of the control to fit it's contents
    bool mAutoSizeHeight;                           ///< Auto-size the height-bounds of the control to fit it's contents
    bool mReturnTab;                                ///< Used in GuiTextEditCtrl to specify if a tab-event should be simulated when return is pressed.

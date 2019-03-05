@@ -215,12 +215,12 @@ void GuiTextCtrl::onRender(Point2I offset, const RectI &updateRect)
         const UTF8* truncatedBufferPtr = truncatedBuffer.getPtr8();
         
         dglSetBitmapModulation(fontColor);
-		renderJustifiedText(offset, mBounds.extent, (char*)truncatedBufferPtr);
+		renderText(offset, mBounds.extent, (char*)truncatedBufferPtr, mProfile);
     }
     else
     {
 		dglSetBitmapModulation(fontColor);
-		renderJustifiedText(offset, mBounds.extent, (char*)mText);
+		renderText(offset, mBounds.extent, (char*)mText, mProfile);
 	}
 
     //render the child controls

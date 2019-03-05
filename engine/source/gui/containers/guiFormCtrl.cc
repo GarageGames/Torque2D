@@ -243,7 +243,7 @@ void GuiFormCtrl::onRender(Point2I offset, const RectI &updateRect)
    if(size() <= 1)
    {
       dglSetBitmapModulation(ColorI(0,0,0));
-      renderJustifiedText(boundsRect.point, boundsRect.extent, "[none]");
+      renderText(boundsRect.point, boundsRect.extent, "[none]", mProfile);
    }
 
    S32 textWidth = 0;
@@ -286,7 +286,7 @@ void GuiFormCtrl::onRender(Point2I offset, const RectI &updateRect)
          mProfile->mBitmapArrayRects[4]);
 
       dglSetBitmapModulation((mMouseOver ? mProfile->mFontColorHL : mProfile->mFontColor));
-      renderJustifiedText(Point2I(mThumbSize.x, 0) + offset, Point2I(mBounds.extent.x - mThumbSize.x - mProfile->mBitmapArrayRects[4].extent.x, mThumbSize.y), (mUseSmallCaption ? mSmallCaption : mCaption) );
+      renderText(Point2I(mThumbSize.x, 0) + offset, Point2I(mBounds.extent.x - mThumbSize.x - mProfile->mBitmapArrayRects[4].extent.x, mThumbSize.y), (mUseSmallCaption ? mSmallCaption : mCaption), mProfile);
 
    }
 

@@ -41,9 +41,9 @@ class GuiMLTextCtrl : public GuiControl
   public:
    enum Justification
    {
-      LeftJustify,
-      RightJustify,
-      CenterJustify,
+      LeftAlign,
+      RightAlign,
+      CenterAlign,
    };
 
    struct Font {

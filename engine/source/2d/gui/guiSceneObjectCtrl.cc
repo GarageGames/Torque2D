@@ -468,10 +468,10 @@ void GuiSceneObjectCtrl::onRender(Point2I offset, const RectI& updateRect)
 
    captionRect.inset(1, 1);
    dglSetBitmapModulation( ColorI(0,0,0,255) );
-   renderJustifiedText(captionRect.point, captionRect.extent, mCaption);
+   renderText(captionRect.point, captionRect.extent, mCaption, mProfile);
    captionRect.inset(1, 1);   
    dglSetBitmapModulation( mProfile->mFontColor );
-   renderJustifiedText(captionRect.point, captionRect.extent, mCaption);
+   renderText(captionRect.point, captionRect.extent, mCaption, mProfile);
 
    
 

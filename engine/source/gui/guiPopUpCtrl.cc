@@ -963,7 +963,7 @@ void GuiPopUpMenuCtrl::onRender(Point2I offset, const RectI &updateRect)
       // align the horizontal
       switch (mProfile->mAlignment)
       {
-      case GuiControlProfile::RightJustify:
+      case GuiControlProfile::RightAlign:
          if(mProfile->mProfileForChildren && mProfile->mBitmapArrayRects.size())
          {
             // We're making use of a bitmap border, so take into account the
@@ -976,13 +976,13 @@ void GuiPopUpMenuCtrl::onRender(Point2I offset, const RectI &updateRect)
             localStart.x = mBounds.extent.x - txt_w;  
          }
          break;
-      case GuiControlProfile::CenterJustify:
+      case GuiControlProfile::CenterAlign:
 
          if(mProfile->mProfileForChildren && mProfile->mBitmapArrayRects.size())
          {
             RectI* mBitmapBounds = mProfile->mBitmapArrayRects.address();
 
-             // GuiControlProfile::LeftJustify
+             // GuiControlProfile::LeftAlign
              if(txt_w > (mBounds.extent.x - mBitmapBounds[BorderLeft].extent.x - mBitmapBounds[BorderRight].extent.x) )
              {
                 // We're making use of a bitmap border, so take into account the
@@ -1009,7 +1009,7 @@ void GuiPopUpMenuCtrl::onRender(Point2I offset, const RectI &updateRect)
         {
             RectI* mBitmapBounds = mProfile->mBitmapArrayRects.address();
 
-             // GuiControlProfile::LeftJustify
+             // GuiControlProfile::LeftAlign
              if(txt_w > (mBounds.extent.x - mBitmapBounds[BorderLeft].extent.x - mBitmapBounds[BorderRight].extent.x) )
              {
                 // We're making use of a bitmap border, so take into account the

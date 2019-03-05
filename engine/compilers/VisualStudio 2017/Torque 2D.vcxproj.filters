@@ -3156,6 +3156,9 @@
     <ClInclude Include="..\..\source\gui\buttons\guiCheckBoxCtrl_ScriptBinding.h">
       <Filter>gui\buttons</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\gui\containers\guiTabBookCtrl_ScriptBinding.h">
+      <Filter>gui\containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\math\mMath_ASM.asm">

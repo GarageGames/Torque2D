@@ -253,7 +253,7 @@ void GuiButtonCtrl::onRender(Point2I offset, const RectI& updateRect)
 		currentState = GuiControlState::HighlightState;
 	}
 
-	RectI ctrlRect = applyMargins(offset, mBounds.extent, currentState);
+	RectI ctrlRect = applyMargins(offset, mBounds.extent, currentState, mProfile);
 	RectI boundsRect(offset, mBounds.extent);
 
 	if(mProfile->mBitmapName != NULL && mProfile->constructBitmapArray() >= 36)
@@ -275,9 +275,9 @@ void GuiButtonCtrl::onRender(Point2I offset, const RectI& updateRect)
 
 	//Render Text
 	dglSetBitmapModulation(mProfile->getFontColor(currentState));
-	RectI fillRect = applyBorders(ctrlRect.point, ctrlRect.extent, currentState);
-	RectI contentRect = applyPadding(fillRect.point, fillRect.extent, currentState);
-	renderJustifiedText(contentRect.point, contentRect.extent, mText);
+	RectI fillRect = applyBorders(ctrlRect.point, ctrlRect.extent, currentState, mProfile);
+	RectI contentRect = applyPadding(fillRect.point, fillRect.extent, currentState, mProfile);
+	renderText(contentRect.point, contentRect.extent, mText, mProfile);
 
 	//Render the childen
 	renderChildControls(contentRect.point, contentRect, updateRect);

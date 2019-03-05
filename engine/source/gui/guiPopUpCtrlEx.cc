@@ -969,7 +969,7 @@ void GuiPopUpMenuCtrlEx::onRender(Point2I offset, const RectI &updateRect)
    // align the horizontal
    switch (mProfile->mAlignment)
    {
-      case GuiControlProfile::RightJustify:
+      case GuiControlProfile::RightAlign:
          if(mProfile->mProfileForChildren && mProfile->mBitmapArrayRects.size())
 		 {
             // We're making use of a bitmap border, so take into account the
@@ -982,7 +982,7 @@ void GuiPopUpMenuCtrlEx::onRender(Point2I offset, const RectI &updateRect)
             localStart.x = mBounds.extent.x - txt_w;  
          }
          break;
-      case GuiControlProfile::CenterJustify:
+      case GuiControlProfile::CenterAlign:
          if(mProfile->mProfileForChildren && mProfile->mBitmapArrayRects.size())
 		 {
             // We're making use of a bitmap border, so take into account the
@@ -996,7 +996,7 @@ void GuiPopUpMenuCtrlEx::onRender(Point2I offset, const RectI &updateRect)
          }
          break;
       default:
-         // GuiControlProfile::LeftJustify
+         // GuiControlProfile::LeftAlign
          if(txt_w > mBounds.extent.x)
 		 {
             // DAW: The width of the text is greater than the width of the control.

@@ -144,14 +144,14 @@ void GuiConsoleTextCtrl::onRender(Point2I offset, const RectI &updateRect)
       Point2I localStart;
       switch (mProfile->mAlignment)
       {
-         case GuiControlProfile::RightJustify:
+         case GuiControlProfile::RightAlign:
             localStart.set(mBounds.extent.x - txt_w-2, 0);
             break;
-         case GuiControlProfile::CenterJustify:
+         case GuiControlProfile::CenterAlign:
             localStart.set((mBounds.extent.x - txt_w) / 2, 0);
             break;
          default:
-            // GuiControlProfile::LeftJustify
+            // GuiControlProfile::LeftAlign
             localStart.set(2,0);
             break;
       }

@@ -312,11 +312,11 @@ void GuiControl::inspectPostApply()
 Point2I GuiControl::localToGlobalCoord(const Point2I &src)
 {
    Point2I ret = src;
-   ret += mBounds.point;
+   ret += (mBounds.point + mRenderInsetLT);
    GuiControl *walk = getParent();
    while(walk)
    {
-      ret += walk->getPosition();
+      ret += (walk->getPosition() + mRenderInsetLT);
       walk = walk->getParent();
    }
    return ret;
@@ -325,11 +325,11 @@ Point2I GuiControl::localToGlobalCoord(const Point2I &src)
 Point2I GuiControl::globalToLocalCoord(const Point2I &src)
 {
    Point2I ret = src;
-   ret -= mBounds.point;
+   ret -= (mBounds.point + mRenderInsetLT);
    GuiControl *walk = getParent();
    while(walk)
    {
-      ret -= walk->getPosition();
+      ret -= (walk->getPosition() + mRenderInsetLT);
       walk = walk->getParent();
    }
    return ret;
@@ -455,7 +455,7 @@ void GuiControl::parentResized(const Point2I &oldParentExtent, const Point2I &ne
 
 void GuiControl::onRender(Point2I offset, const RectI &updateRect)
 {
-    RectI ctrlRect = applyMargins(offset, mBounds.extent, NormalState);
+    RectI ctrlRect = applyMargins(offset, mBounds.extent, NormalState, mProfile);
 
 	if (!ctrlRect.isValidRect())
 	{
@@ -466,82 +466,96 @@ void GuiControl::onRender(Point2I offset, const RectI &updateRect)
 
 	//Render Text
 	dglSetBitmapModulation(mProfile->mFontColor);
-	RectI fillRect = applyBorders(ctrlRect.point, ctrlRect.extent, NormalState);
-	RectI contentRect = applyPadding(fillRect.point, fillRect.extent, NormalState);
+	RectI fillRect = applyBorders(ctrlRect.point, ctrlRect.extent, NormalState, mProfile);
+	RectI contentRect = applyPadding(fillRect.point, fillRect.extent, NormalState, mProfile);
 
 	if(contentRect.isValidRect())
 	{
-		renderJustifiedText(contentRect.point, contentRect.extent, mText);
+		renderText(contentRect.point, contentRect.extent, mText, mProfile);
 
 		//Render the childen
 		renderChildControls(offset, contentRect, updateRect);
 	}
 }
 
-RectI GuiControl::applyMargins(Point2I offset, Point2I extent, GuiControlState currentState)
+RectI GuiControl::applyMargins(Point2I offset, Point2I extent, GuiControlState currentState, GuiControlProfile *profile)
 {
 	//Get the border profiles
-	GuiBorderProfile *leftProfile = mProfile->getLeftBorder();
-	GuiBorderProfile *rightProfile = mProfile->getRightBorder();
-	GuiBorderProfile *topProfile = mProfile->getTopBorder();
-	GuiBorderProfile *bottomProfile = mProfile->getBottomBorder();
+	GuiBorderProfile *leftProfile = profile->getLeftBorder();
+	GuiBorderProfile *rightProfile = profile->getRightBorder();
+	GuiBorderProfile *topProfile = profile->getTopBorder();
+	GuiBorderProfile *bottomProfile = profile->getBottomBorder();
 
 	S32 leftSize = (leftProfile) ? leftProfile->getMargin(currentState) : 0;
 	S32 rightSize = (rightProfile) ? rightProfile->getMargin(currentState) : 0;
 	S32 topSize = (topProfile) ? topProfile->getMargin(currentState) : 0;
 	S32 bottomSize = (bottomProfile) ? bottomProfile->getMargin(currentState) : 0;
 
-	//Ensure positive values
-	leftSize = (leftSize >= 0) ? leftSize : 0;
-	rightSize = (rightSize >= 0) ? rightSize : 0;
-	topSize = (topSize >= 0) ? topSize : 0;
-	bottomSize = (bottomSize >= 0) ? bottomSize : 0;
-
 	return RectI(offset.x + leftSize, offset.y + topSize, (extent.x - leftSize) - rightSize, (extent.y - topSize) - bottomSize);
 }
 
-RectI GuiControl::applyBorders(Point2I offset, Point2I extent, GuiControlState currentState)
+RectI GuiControl::applyBorders(Point2I offset, Point2I extent, GuiControlState currentState, GuiControlProfile *profile)
 {
 	//Get the border profiles
-	GuiBorderProfile *leftProfile = mProfile->getLeftBorder();
-	GuiBorderProfile *rightProfile = mProfile->getRightBorder();
-	GuiBorderProfile *topProfile = mProfile->getTopBorder();
-	GuiBorderProfile *bottomProfile = mProfile->getBottomBorder();
+	GuiBorderProfile *leftProfile = profile->getLeftBorder();
+	GuiBorderProfile *rightProfile = profile->getRightBorder();
+	GuiBorderProfile *topProfile = profile->getTopBorder();
+	GuiBorderProfile *bottomProfile = profile->getBottomBorder();
 
 	S32 leftSize = (leftProfile) ? leftProfile->getBorder(currentState) : 0;
 	S32 rightSize = (rightProfile) ? rightProfile->getBorder(currentState) : 0;
 	S32 topSize = (topProfile) ? topProfile->getBorder(currentState) : 0;
 	S32 bottomSize = (bottomProfile) ? bottomProfile->getBorder(currentState) : 0;
 
-	//Ensure positive values
-	leftSize = (leftSize >= 0) ? leftSize : 0;
-	rightSize = (rightSize >= 0) ? rightSize : 0;
-	topSize = (topSize >= 0) ? topSize : 0;
-	bottomSize = (bottomSize >= 0) ? bottomSize : 0;
-
 	return RectI(offset.x + leftSize, offset.y + topSize, (extent.x - leftSize) - rightSize, (extent.y - topSize) - bottomSize);
 }
 
-RectI GuiControl::applyPadding(Point2I offset, Point2I extent, GuiControlState currentState)
+RectI GuiControl::applyPadding(Point2I offset, Point2I extent, GuiControlState currentState, GuiControlProfile *profile)
 {
 	//Get the border profiles
-	GuiBorderProfile *leftProfile = mProfile->getLeftBorder();
-	GuiBorderProfile *rightProfile = mProfile->getRightBorder();
-	GuiBorderProfile *topProfile = mProfile->getTopBorder();
-	GuiBorderProfile *bottomProfile = mProfile->getBottomBorder();
+	GuiBorderProfile *leftProfile = profile->getLeftBorder();
+	GuiBorderProfile *rightProfile = profile->getRightBorder();
+	GuiBorderProfile *topProfile = profile->getTopBorder();
+	GuiBorderProfile *bottomProfile = profile->getBottomBorder();
 
 	S32 leftSize = (leftProfile) ? leftProfile->getPadding(currentState) : 0;
 	S32 rightSize = (rightProfile) ? rightProfile->getPadding(currentState) : 0;
 	S32 topSize = (topProfile) ? topProfile->getPadding(currentState) : 0;
 	S32 bottomSize = (bottomProfile) ? bottomProfile->getPadding(currentState) : 0;
 
-	//Ensure positive values
-	leftSize = (leftSize >= 0) ? leftSize : 0;
-	rightSize = (rightSize >= 0) ? rightSize : 0;
-	topSize = (topSize >= 0) ? topSize : 0;
-	bottomSize = (bottomSize >= 0) ? bottomSize : 0;
+	return RectI(offset.x + leftSize, offset.y + topSize, (extent.x - leftSize) - rightSize, (extent.y - topSize) - bottomSize);
+}
+
+RectI GuiControl::getInnerRect(Point2I offset, Point2I extent, GuiControlState currentState, GuiControlProfile *profile)
+{
+	//Get the border profiles
+	GuiBorderProfile *leftProfile = profile->getLeftBorder();
+	GuiBorderProfile *rightProfile = profile->getRightBorder();
+	GuiBorderProfile *topProfile = profile->getTopBorder();
+	GuiBorderProfile *bottomProfile = profile->getBottomBorder();
+
+	S32 leftSize = (leftProfile) ? leftProfile->getMargin(currentState) + leftProfile->getBorder(currentState) + leftProfile->getPadding(currentState) : 0;
+	S32 rightSize = (rightProfile) ? rightProfile->getMargin(currentState) + rightProfile->getBorder(currentState) + rightProfile->getPadding(currentState) : 0;
+	S32 topSize = (topProfile) ? topProfile->getMargin(currentState) + topProfile->getBorder(currentState) + topProfile->getPadding(currentState) : 0;
+	S32 bottomSize = (bottomProfile) ? bottomProfile->getMargin(currentState) + bottomProfile->getBorder(currentState) + bottomProfile->getPadding(currentState) : 0;
 
 	return RectI(offset.x + leftSize, offset.y + topSize, (extent.x - leftSize) - rightSize, (extent.y - topSize) - bottomSize);
+}
+
+Point2I GuiControl::getOuterExtent(Point2I innerExtent, GuiControlState currentState, GuiControlProfile *profile)
+{
+	//Get the border profiles
+	GuiBorderProfile *leftProfile = profile->getLeftBorder();
+	GuiBorderProfile *rightProfile = profile->getRightBorder();
+	GuiBorderProfile *topProfile = profile->getTopBorder();
+	GuiBorderProfile *bottomProfile = profile->getBottomBorder();
+
+	S32 leftSize = (leftProfile) ? leftProfile->getMargin(currentState) + leftProfile->getBorder(currentState) + leftProfile->getPadding(currentState) : 0;
+	S32 rightSize = (rightProfile) ? rightProfile->getMargin(currentState) + rightProfile->getBorder(currentState) + rightProfile->getPadding(currentState) : 0;
+	S32 topSize = (topProfile) ? topProfile->getMargin(currentState) + topProfile->getBorder(currentState) + topProfile->getPadding(currentState) : 0;
+	S32 bottomSize = (bottomProfile) ? bottomProfile->getMargin(currentState) + bottomProfile->getBorder(currentState) + bottomProfile->getPadding(currentState) : 0;
+
+	return Point2I(innerExtent.x + leftSize + rightSize, innerExtent.y + topSize + bottomSize);
 }
 
 bool GuiControl::renderTooltip(Point2I cursorPos, const char* tipText )
@@ -1592,40 +1606,72 @@ void GuiControl::getScrollLineSizes(U32 *rowHeight, U32 *columnWidth)
     *rowHeight = 30;
 }
 
-void GuiControl::renderJustifiedText(Point2I offset, Point2I extent, const char *text)
+void GuiControl::renderText(Point2I offset, Point2I extent, const char *text, GuiControlProfile *profile, TextRotationOptions rot)
 {
-   GFont *font = mProfile->mFont;
+   GFont *font = profile->mFont;
    S32 textWidth = font->getStrWidth((const UTF8*)text);
-   Point2I start;
+   S32 textHeight = font->getHeight();
+   S32 totalWidth = extent.x;
+   S32 totalHeight = extent.y;
 
-   // align the horizontal
-   switch( mProfile->mAlignment )
+   if (rot != tRotateNone)
    {
-      case GuiControlProfile::RightJustify:
-         start.set( extent.x - textWidth, 0 );
-         break;
-      case GuiControlProfile::CenterJustify:
-         start.set( ( extent.x - textWidth) / 2, 0 );
-         break;
-      default:
-         // GuiControlProfile::LeftJustify
-         start.set( 0, 0 );
-         break;
+	   totalWidth = extent.y;
+	   totalHeight = extent.x;
    }
 
-   // If the text is longer then the box size, (it'll get clipped) so
-   // force Left Justify
+   Point2I startOffset = Point2I(0,0);
+   // align the horizontal
+   if(textWidth < totalWidth)
+   {
+	   if (profile->mAlignment == GuiControlProfile::RightAlign)
+	   {
+		   startOffset.x = totalWidth - textWidth;
+	   }
+	   else if (profile->mAlignment == GuiControlProfile::CenterAlign)
+	   {
+		   startOffset.x = (totalWidth - textWidth) / 2;
+	   }
+   }
 
-   if( textWidth > extent.x )
-      start.set( 0, 0 );
+	// align the vertical
+	if (textHeight < totalHeight)
+	{
+		if (profile->mVAlignment == GuiControlProfile::MiddleVAlign)
+		{
+			startOffset.y = (totalHeight - textHeight) / 2;
+		}
+		else if (profile->mVAlignment == GuiControlProfile::BottomVAlign)
+		{
+			startOffset.y = (totalHeight - textHeight);
+		}
+	}
+	else
+	{
+		startOffset.y = -((textHeight - totalHeight) / 2);
+	}
 
-   // center the vertical
-   if(font->getHeight() > (U32)extent.y)
-      start.y = 0 - ((font->getHeight() - extent.y) / 2) ;
-   else
-      start.y = ( extent.y - font->getHeight() ) / 2;
+	Point2I start = Point2I(0, 0);
+	F32 rotation;
+	if (rot == tRotateNone)
+	{
+		start += startOffset;
+		rotation = 0.0f;
+	}
+	else if (rot == tRotateLeft)
+	{
+		start.x = startOffset.y;
+		start.y = extent.y + startOffset.x;
+		rotation = 90.0f;
+	}
+	else if (rot == tRotateRight)
+	{
+		start.x = extent.x - startOffset.y;
+		start.y = startOffset.x;
+		rotation = -90.0f;
+	}
 
-   dglDrawText( font, start + offset, text, mProfile->mFontColors );
+	dglDrawText( font, start + offset, text, profile->mFontColors, 9, rotation );
 }
 
 void GuiControl::getCursor(GuiCursor *&cursor, bool &showCursor, const GuiEvent &lastGuiEvent)

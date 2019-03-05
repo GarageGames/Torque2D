@@ -156,12 +156,12 @@ void GuiBorderProfile::onRemove()
 
 S32 GuiBorderProfile::getMargin(const GuiControlState state)
 {
-	return mMargin[static_cast<S32>(state)];
+	return getMax(mMargin[static_cast<S32>(state)], 0);
 }
 
 S32 GuiBorderProfile::getBorder(const GuiControlState state)
 {
-	return mBorder[static_cast<S32>(state)];
+	return getMax(mBorder[static_cast<S32>(state)], 0);
 }
 
 const ColorI& GuiBorderProfile::getBorderColor(const GuiControlState state)
@@ -171,7 +171,7 @@ const ColorI& GuiBorderProfile::getBorderColor(const GuiControlState state)
 
 S32 GuiBorderProfile::getPadding(const GuiControlState state)
 {
-	return mPadding[static_cast<S32>(state)];
+	return getMax(mPadding[static_cast<S32>(state)], 0);
 }
 
 //------------------------------------------------------------------------------
@@ -179,11 +179,19 @@ IMPLEMENT_CONOBJECT(GuiControlProfile);
 
 static EnumTable::Enums alignEnums[] =
 {
-   { GuiControlProfile::LeftJustify,          "left"      },
-   { GuiControlProfile::CenterJustify,        "center"    },
-   { GuiControlProfile::RightJustify,         "right"     }
+   { GuiControlProfile::LeftAlign,          "left"      },
+   { GuiControlProfile::CenterAlign,        "center"    },
+   { GuiControlProfile::RightAlign,         "right"     }
 };
 static EnumTable gAlignTable(3, &alignEnums[0]);
+
+static EnumTable::Enums vAlignEnums[] =
+{
+   { GuiControlProfile::TopVAlign,          "top"      },
+   { GuiControlProfile::MiddleVAlign,        "middle"    },
+   { GuiControlProfile::BottomVAlign,         "bottom"     }
+};
+static EnumTable gVAlignTable(3, &vAlignEnums[0]);
 
 static EnumTable::Enums charsetEnums[]=
 {
@@ -227,7 +235,7 @@ GuiControlProfile::GuiControlProfile(void) :
     mTabable       = false;
     mCanKeyFocus   = false;
     
-    mOpaque        = false;
+    mOpaque        = true;
 
 	mBorderDefault = NULL;
 	mBorderLeft = NULL;
@@ -246,14 +254,15 @@ GuiControlProfile::GuiControlProfile(void) :
     mTextOffset.set(0,0);
     
     //used by GuiTextCtrl
-    mModal         = false;
-    mAlignment     = LeftJustify;
+    mModal         = true;
+    mAlignment     = LeftAlign;
+	mVAlignment    = MiddleVAlign;
     mAutoSizeWidth = false;
     mAutoSizeHeight= false;
     mReturnTab     = false;
     mNumbersOnly   = false;
     mProfileForChildren = NULL;
-
+/*
    GuiControlProfile *def = dynamic_cast<GuiControlProfile*>(Sim::findObject("GuiDefaultProfile"));
    if (def)
    {
@@ -286,7 +295,7 @@ GuiControlProfile::GuiControlProfile(void) :
       mNumbersOnly   = def->mNumbersOnly;
       mCursorColor   = def->mCursorColor;
       mProfileForChildren = def->mProfileForChildren;
-   }
+   }*/
 }
 
 GuiControlProfile::~GuiControlProfile()
@@ -326,7 +335,8 @@ void GuiControlProfile::initPersistFields()
    addField("fontColorLink", TypeColorI,     Offset(mFontColors[ColorUser0], GuiControlProfile));
    addField("fontColorLinkHL", TypeColorI,     Offset(mFontColors[ColorUser1], GuiControlProfile));
 
-   addField("justify",       TypeEnum,       Offset(mAlignment, GuiControlProfile), 1, &gAlignTable);
+   addField("align", TypeEnum, Offset(mAlignment, GuiControlProfile), 1, &gAlignTable);
+   addField("vAlign", TypeEnum, Offset(mVAlignment, GuiControlProfile), 1, &gVAlignTable);
    addField("textOffset",    TypePoint2I,    Offset(mTextOffset, GuiControlProfile));
    addField("autoSizeWidth", TypeBool,       Offset(mAutoSizeWidth, GuiControlProfile));
    addField("autoSizeHeight",TypeBool,       Offset(mAutoSizeHeight, GuiControlProfile));

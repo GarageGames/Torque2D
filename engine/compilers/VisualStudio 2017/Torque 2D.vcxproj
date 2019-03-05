@@ -890,6 +890,7 @@
     <ClInclude Include="..\..\source\graphics\TextureObject.h" />
     <ClInclude Include="..\..\source\gui\buttons\guiCheckBoxCtrl_ScriptBinding.h" />
     <ClInclude Include="..\..\source\gui\containers\guiGridCtrl.h" />
+    <ClInclude Include="..\..\source\gui\containers\guiTabBookCtrl_ScriptBinding.h" />
     <ClInclude Include="..\..\source\gui\guiArrayCtrl.h" />
     <ClInclude Include="..\..\source\gui\guiBackgroundCtrl.h" />
     <ClInclude Include="..\..\source\gui\guiBitmapCtrl.h" />

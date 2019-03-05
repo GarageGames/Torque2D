@@ -179,8 +179,3 @@ void GuiTabPageCtrl::selectWindow(void)
    //also set the first responder to be the one within this window
    setFirstResponder(mFirstResponder);
 }
-
-void GuiTabPageCtrl::onRender(Point2I offset,const RectI &updateRect)
-{
-   GuiControl::onRender( offset, updateRect );
-}

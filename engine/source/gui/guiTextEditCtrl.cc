@@ -1195,14 +1195,14 @@ void GuiTextEditCtrl::drawText( const RectI &drawRect, bool isFocused )
    {
       switch( mProfile->mAlignment )
       {
-      case GuiControlProfile::RightJustify:
+      case GuiControlProfile::RightAlign:
          drawPoint.x += ( drawRect.extent.x - textWidth - paddingRightBottom.x );
          break;
-      case GuiControlProfile::CenterJustify:
+      case GuiControlProfile::CenterAlign:
          drawPoint.x += ( ( drawRect.extent.x - textWidth ) / 2 );
          break;
       default:
-      case GuiControlProfile::LeftJustify :
+      case GuiControlProfile::LeftAlign :
          drawPoint.x += paddingLeftTop.x;
          break;
       }
@@ -1226,8 +1226,8 @@ void GuiTextEditCtrl::drawText( const RectI &drawRect, bool isFocused )
    else
    {
       // Alignment affects large text
-      if ( mProfile->mAlignment == GuiControlProfile::RightJustify
-         || mProfile->mAlignment == GuiControlProfile::CenterJustify )
+      if ( mProfile->mAlignment == GuiControlProfile::RightAlign
+         || mProfile->mAlignment == GuiControlProfile::CenterAlign )
       {
          if ( mTextOffset.x + textWidth < (drawRect.point.x + drawRect.extent.x) - paddingRightBottom.x)
             mTextOffset.x = (drawRect.point.x + drawRect.extent.x) - paddingRightBottom.x - textWidth;
