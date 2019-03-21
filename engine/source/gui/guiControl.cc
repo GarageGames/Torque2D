@@ -712,9 +712,9 @@ bool GuiControl::renderTooltip(Point2I cursorPos, const char* tipText )
 
 void GuiControl::renderChildControls(Point2I offset, RectI content, const RectI &updateRect)
 {
-   // offset is the upper-left corner of this control in screen coordinates
-   // updateRect is the intersection rectangle in screen coords of the control
-   // hierarchy.  This can be set as the clip rectangle in most cases.
+   // offset is the upper-left corner of this control in screen coordinates. It should almost always be the same offset passed into the onRender method.
+   // updateRect is the area that this control was allowed to draw in. It should almost always be the same as the value in onRender.
+   // content is the area that child controls are allowed to draw in.
    RectI clipRect = updateRect;
 
    S32 size = objectList.size();
@@ -1671,7 +1671,7 @@ void GuiControl::renderText(Point2I offset, Point2I extent, const char *text, Gu
 		rotation = -90.0f;
 	}
 
-	dglDrawText( font, start + offset, text, profile->mFontColors, 9, rotation );
+	dglDrawText( font, start + offset + profile->mTextOffset, text, profile->mFontColors, 9, rotation );
 }
 
 void GuiControl::getCursor(GuiCursor *&cursor, bool &showCursor, const GuiEvent &lastGuiEvent)

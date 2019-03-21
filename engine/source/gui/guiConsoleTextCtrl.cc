@@ -90,6 +90,8 @@ void GuiConsoleTextCtrl::calcResize()
       return;
 
    //resize
+   //DEPRECIATED
+   /*
    if (mProfile->mAutoSizeWidth)
    {
       if (mProfile->mAutoSizeHeight)
@@ -101,6 +103,7 @@ void GuiConsoleTextCtrl::calcResize()
    {
       resize(mBounds.point, Point2I(mBounds.extent.x, mFont->getHeight() + 4));
    }
+   */
 }
 
 

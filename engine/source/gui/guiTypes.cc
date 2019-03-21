@@ -257,8 +257,6 @@ GuiControlProfile::GuiControlProfile(void) :
     mModal         = true;
     mAlignment     = LeftAlign;
 	mVAlignment    = MiddleVAlign;
-    mAutoSizeWidth = false;
-    mAutoSizeHeight= false;
     mReturnTab     = false;
     mNumbersOnly   = false;
     mProfileForChildren = NULL;
@@ -338,8 +336,6 @@ void GuiControlProfile::initPersistFields()
    addField("align", TypeEnum, Offset(mAlignment, GuiControlProfile), 1, &gAlignTable);
    addField("vAlign", TypeEnum, Offset(mVAlignment, GuiControlProfile), 1, &gVAlignTable);
    addField("textOffset",    TypePoint2I,    Offset(mTextOffset, GuiControlProfile));
-   addField("autoSizeWidth", TypeBool,       Offset(mAutoSizeWidth, GuiControlProfile));
-   addField("autoSizeHeight",TypeBool,       Offset(mAutoSizeHeight, GuiControlProfile));
    addField("returnTab",     TypeBool,       Offset(mReturnTab, GuiControlProfile));
    addField("numbersOnly",   TypeBool,       Offset(mNumbersOnly, GuiControlProfile));
    addField("cursorColor",   TypeColorI,     Offset(mCursorColor, GuiControlProfile));

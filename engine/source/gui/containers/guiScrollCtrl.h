@@ -202,10 +202,9 @@ public:
    Region getCurHitRegion(void) { return curHitRegion; }
 
    bool onKeyDown(const GuiEvent &event);
-   void onMouseDown(const GuiEvent &event);
-   void onMouseRepeat(const GuiEvent &event);
-   void onMouseUp(const GuiEvent &event);
-   void onMouseDragged(const GuiEvent &event);
+   void onTouchDown(const GuiEvent &event);
+   void onTouchUp(const GuiEvent &event);
+   void onTouchDragged(const GuiEvent &event);
    bool onMouseWheelUp(const GuiEvent &event);
    bool onMouseWheelDown(const GuiEvent &event);
 

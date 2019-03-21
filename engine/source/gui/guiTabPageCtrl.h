@@ -32,7 +32,6 @@ class GuiTabPageCtrl : public GuiControl
    private:
       typedef GuiControl Parent;
 
-      Point2I        mMinSize;
       S32            mTabIndex;
 
    public:

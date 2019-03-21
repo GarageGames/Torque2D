@@ -102,21 +102,20 @@ public:
    /// dest should be of size GuiTextCtrl::MAX_STRING_LENGTH+1.
    void getText(char *dest);
 
-   void setText(S32 tag);
    virtual void setText(const UTF8* txt);
    virtual void setText(const UTF16* txt);
    S32   getCursorPos()   { return( mCursorPos ); }
    void  reallySetCursorPos( const S32 newPos );
    
-   void selectAllText(); //*** DAW: Added
-   void forceValidateText(); //*** DAW: Added
+   void selectAllText();
+   void forceValidateText();
    const char *getScriptValue();
    void setScriptValue(const char *value);
 
    bool onKeyDown(const GuiEvent &event);
-   void onMouseDown(const GuiEvent &event);
-   void onMouseDragged(const GuiEvent &event);
-   void onMouseUp(const GuiEvent &event);
+   void onTouchDown(const GuiEvent &event);
+   void onTouchDragged(const GuiEvent &event);
+   void onTouchUp(const GuiEvent &event);
    
    void onCopy(bool andCut);
    void onPaste();
@@ -132,7 +131,7 @@ public:
 
    void onPreRender();
    void onRender(Point2I offset, const RectI &updateRect);
-   virtual void drawText( const RectI &drawRect, bool isFocused );
+   virtual void drawText( const RectI &drawRect, GuiControlState currentState );
 	
 	void playDeniedSound();
 	void execConsoleCallback();	

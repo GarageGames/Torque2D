@@ -112,6 +112,8 @@ bool GuiTextCtrl::onWake()
    }
    
    //resize
+   //DEPRECIATED
+   /*
    if ( mProfile->mAutoSizeWidth )
    {
       if ( mProfile->mAutoSizeHeight )
@@ -122,6 +124,7 @@ bool GuiTextCtrl::onWake()
    else if ( mProfile->mAutoSizeHeight )
       resize( mBounds.point, Point2I( mBounds.extent.x, mFont->getHeight() + 4 ) );
 
+*/
    return true;
 }
 
@@ -156,6 +159,8 @@ void GuiTextCtrl::setText(const char *txt)
 	}
 
 	//resize
+	//DEPRECIATED
+   /*
    if (mProfile->mAutoSizeWidth)
    {
       if (mProfile->mAutoSizeHeight)
@@ -167,6 +172,7 @@ void GuiTextCtrl::setText(const char *txt)
    {
       resize(mBounds.point, Point2I(mBounds.extent.x, mFont->getHeight() + 4));
    }
+   */
       
    setVariable((char*)mText);
    setUpdate();

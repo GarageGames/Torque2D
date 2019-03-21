@@ -521,7 +521,7 @@ bool GuiScrollCtrl::onKeyDown(const GuiEvent &event)
    return Parent::onKeyDown(event);
 }
 
-void GuiScrollCtrl::onMouseDown(const GuiEvent &event)
+void GuiScrollCtrl::onTouchDown(const GuiEvent &event)
 {
    mouseLock();
 
@@ -548,7 +548,7 @@ void GuiScrollCtrl::onMouseDown(const GuiEvent &event)
    }
 }
 
-void GuiScrollCtrl::onMouseUp(const GuiEvent &)
+void GuiScrollCtrl::onTouchUp(const GuiEvent &)
 {
    mouseUnlock();
 
@@ -558,7 +558,7 @@ void GuiScrollCtrl::onMouseUp(const GuiEvent &)
    stateDepressed = false;
 }
 
-void GuiScrollCtrl::onMouseDragged(const GuiEvent &event)
+void GuiScrollCtrl::onTouchDragged(const GuiEvent &event)
 {
    Point2I curMousePos = globalToLocalCoord(event.mousePoint);
    setUpdate();
@@ -813,7 +813,7 @@ void GuiScrollCtrl::onRender(Point2I offset, const RectI &updateRect)
    // create a rect to intersect with the updateRect
    RectI contentRect(mContentPos.x + offset.x, mContentPos.y + offset.y, mContentExt.x, mContentExt.y);
    if(contentRect.intersect(updateRect))
-      renderChildControls(offset, mBounds, contentRect);
+      renderChildControls(offset, contentRect, updateRect);
 
    // Finally draw the last vis rect (debug aid, BJG)
    //RectI renderRect = lastVisRect;
