@@ -1,0 +1,8 @@
+<ImageAsset
+    AssetName="TD_DwarfImage"
+    imageFile="TD_Dwarf.png"
+    cellCountX="8"
+    cellCountY="8"
+    cellWidth="64"
+    cellHeight="64"
+     />

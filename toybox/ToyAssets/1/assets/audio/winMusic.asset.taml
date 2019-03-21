@@ -1,0 +1,5 @@
+<AudioAsset
+    AssetName="winMusic"
+    AssetAutoUnload="0"
+    AudioFile="TD_WinMusic.wav"
+    Looping="1" />

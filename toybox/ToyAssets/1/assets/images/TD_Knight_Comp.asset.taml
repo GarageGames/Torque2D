@@ -1,0 +1,8 @@
+<ImageAsset
+    AssetName="TD_Knight_CompSprite"
+    imageFile="TD_Knight_Comp.png"
+    cellCountX="8"
+    cellCountY="8"
+    cellWidth="64"
+    cellHeight="64"
+	 />

@@ -1,7 +1,0 @@
-<AnimationAsset
-    AssetName="TD_Wizard_Death"
-    Image="@asset=ToyAssets:TD_Wizard_CompSprite"
-    animationFrames="36 37 38 39 44 45 46 47 52 53 54 55 60 61 62 63"
-    animationTime="1.06666672"
-    animationCycle="0"
-     />

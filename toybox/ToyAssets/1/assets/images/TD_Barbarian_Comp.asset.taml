@@ -1,0 +1,8 @@
+<ImageAsset
+    AssetName="TD_Barbarian_CompSprite"
+    imageFile="TD_Barbarian_Comp.png"
+    cellCountX="10"
+    cellCountY="10"
+    cellWidth="96"
+    cellHeight="96"
+	 />

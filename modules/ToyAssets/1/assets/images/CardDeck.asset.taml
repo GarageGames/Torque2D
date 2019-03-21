@@ -1,7 +1,0 @@
-<ImageAsset
-    AssetName="CardDeck"
-    ImageFile="CardDeck.png"
-    CellCountX="13"
-    CellCountY="5"
-    CellWidth="144"
-    CellHeight="210" />

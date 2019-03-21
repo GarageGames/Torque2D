@@ -1,0 +1,10 @@
+<ModuleDefinition
+	ModuleId="SpriteStressToy"
+	VersionId="1"
+	Description="Allows render stressing of the engine by rendering many sprites in both individual and composite forms."
+	Dependencies="ToyAssets=1"
+	Type="toy"
+	ToyCategoryIndex="4"
+	ScriptFile="main.cs"
+	CreateFunction="create"
+	DestroyFunction="destroy"/>

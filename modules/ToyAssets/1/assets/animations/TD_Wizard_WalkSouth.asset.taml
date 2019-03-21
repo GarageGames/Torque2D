@@ -1,7 +1,0 @@
-<AnimationAsset
-    AssetName="TD_Wizard_WalkSouth"
-    Image="@asset=ToyAssets:TD_Wizard_CompSprite"
-    animationFrames="0 1 2 3 8 9 10 11 16 17 18 19 24 25 26 27"
-    animationTime="1.06666672"
-    animationCycle="1"
-     />

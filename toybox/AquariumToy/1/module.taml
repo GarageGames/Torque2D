@@ -1,0 +1,12 @@
+<ModuleDefinition
+	ModuleId="AquariumToy"
+	VersionId="1"
+	Description="A fun demonstration of an aquarium."
+	Dependencies="ToyAssets=1,TropicalAssets=1"
+	Type="toy"
+	ToyCategoryIndex="5"
+	ScriptFile="main.cs"
+	CreateFunction="create"
+	DestroyFunction="destroy"/>
+
+

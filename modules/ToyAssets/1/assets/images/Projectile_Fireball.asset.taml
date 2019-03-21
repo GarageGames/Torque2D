@@ -1,8 +1,0 @@
-<ImageAsset
-    AssetName="Projectile_FireballImage"
-    imageFile="Projectile_Fireball.png"
-    cellCountX="4"
-    cellCountY="4"
-    cellWidth="32"
-    cellHeight="32"
-     />

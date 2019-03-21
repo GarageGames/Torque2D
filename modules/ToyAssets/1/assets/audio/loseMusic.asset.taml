@@ -1,5 +1,0 @@
-<AudioAsset
-    AssetName="loseMusic"
-    AssetAutoUnload="0"
-    AudioFile="TD_LoseMusic.wav"
-    Looping="1" />

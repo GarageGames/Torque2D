@@ -1,0 +1,10 @@
+<ModuleDefinition
+	ModuleId="AlphaBlendToy"
+	VersionId="1"
+	Description="Show the sprite alpha blending feature."
+	Dependencies="ToyAssets=1"
+	Type="toy"
+	ToyCategoryIndex="3"
+	ScriptFile="main.cs"
+	CreateFunction="create"
+	DestroyFunction="destroy"/>

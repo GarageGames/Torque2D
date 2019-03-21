@@ -1,8 +1,0 @@
-<ImageAsset
-    AssetName="TD_Wizard_CompSprite"
-    imageFile="TD_Wizard_Comp.png"
-    cellCountX="8"
-    cellCountY="8"
-    cellWidth="64"
-    cellHeight="64"
-	 />

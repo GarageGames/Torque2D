@@ -1,0 +1,24 @@
+<Scroller
+    SceneGroup="10"
+    Size="40 6"
+    Position="0 -12"
+    FixedAngle="1"
+    BodyType="Static"
+    Image="@asset=ToyAssets:dirtGround"
+    Frame="0"
+    repeatX="0.666666687">
+    <Scroller.CollisionShapes>
+        <Edge>
+            <Point>-20 3</Point>
+            <Point>20 3</Point>
+        </Edge>
+        <Edge>
+            <Point>-20 3</Point>
+            <Point>-20 40</Point>
+        </Edge>
+        <Edge>
+            <Point>20 3</Point>
+            <Point>20 40</Point>
+        </Edge>
+    </Scroller.CollisionShapes>
+</Scroller>

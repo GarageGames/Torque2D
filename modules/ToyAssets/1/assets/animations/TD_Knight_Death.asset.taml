@@ -1,7 +1,0 @@
-<AnimationAsset
-    AssetName="TD_Knight_Death"
-    Image="@asset=ToyAssets:TD_Knight_CompSprite"
-    animationFrames="36 37 38 39 44 45 46 47 52 53 54 55 60 61 62 63"
-    animationTime="1"
-    animationCycle="0"
-     />

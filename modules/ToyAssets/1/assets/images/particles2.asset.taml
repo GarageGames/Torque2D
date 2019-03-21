@@ -1,7 +1,0 @@
-<ImageAsset
-    AssetName="Particles2"
-    ImageFile="particles2.png"
-    CellCountX="2"
-    CellCountY="2"
-    CellWidth="128"
-    CellHeight="128" />

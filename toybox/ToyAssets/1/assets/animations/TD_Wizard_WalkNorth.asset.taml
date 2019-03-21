@@ -1,0 +1,7 @@
+<AnimationAsset
+    AssetName="TD_Wizard_WalkNorth"
+    Image="@asset=ToyAssets:TD_Wizard_CompSprite"
+    animationFrames="32 33 34 35 40 41 42 43 48 49 50 51 56 57 58 59"
+    animationTime="1.06666672"
+    animationCycle="1"
+     />

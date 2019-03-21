@@ -1,0 +1,8 @@
+<ImageAsset
+    AssetName="Impact_FireCloudSprite"
+    imageFile="Impact_FireCloud.png"
+    cellCountX="4"
+    cellCountY="4"
+    cellWidth="64"
+    cellHeight="64"
+	 />

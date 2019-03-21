@@ -1,0 +1,7 @@
+<ImageAsset
+    AssetName="Particles3"
+    ImageFile="particles3.png"
+    CellCountX="2"
+    CellCountY="2"
+    CellWidth="128"
+    CellHeight="128" />

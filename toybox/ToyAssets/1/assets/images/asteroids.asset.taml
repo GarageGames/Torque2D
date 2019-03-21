@@ -1,0 +1,7 @@
+<ImageAsset
+    AssetName="Asteroids"
+    ImageFile="asteroids.png"
+    CellCountX="2"
+    CellCountY="2"
+    CellWidth="128"
+    CellHeight="128" />

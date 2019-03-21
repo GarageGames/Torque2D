@@ -1,0 +1,8 @@
+<ImageAsset
+    AssetName="Cannonball_projectile_1Sprite"
+    imageFile="Cannonball_projectile_1.png"
+    cellCountX="4"
+    cellCountY="4"
+    cellWidth="64"
+    cellHeight="64"
+	 />

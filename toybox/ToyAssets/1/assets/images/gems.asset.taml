@@ -1,0 +1,7 @@
+<ImageAsset
+    AssetName="Gems"
+    ImageFile="Gems.png"
+    CellCountX="8"
+    CellCountY="8"
+    CellWidth="64"
+    CellHeight="64" />

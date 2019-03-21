@@ -1,0 +1,8 @@
+<ImageAsset
+    AssetName="Coconut"
+    ImageFile="Coconut.png"
+    CellCountX="4"
+    CellCountY="4"
+    CellWidth="32"
+    CellHeight="32"
+    linkProperties="1" />
