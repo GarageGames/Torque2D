@@ -290,7 +290,7 @@ void ImageFrameProviderCore::renderGui( GuiControl& owner, Point2I offset, const
     }
 
     // Render child controls.
-    owner.renderChildControls(offset, updateRect);
+    owner.renderChildControls(offset, updateRect, updateRect);
 }
 
 //------------------------------------------------------------------------------

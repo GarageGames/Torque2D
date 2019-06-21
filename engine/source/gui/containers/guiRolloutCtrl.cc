@@ -352,7 +352,7 @@ void GuiRolloutCtrl::onRender(Point2I offset, const RectI &updateRect)
       dglGetBitmapModulation( &currColor );
       Point2I textPosition = mHeader.point + offset + mProfile->mTextOffset;
       dglSetBitmapModulation( mProfile->mFontColor );
-      renderJustifiedText( textPosition, mHeader.extent, mCaption );
+      renderText( textPosition, mHeader.extent, mCaption, mProfile);
       dglSetBitmapModulation( currColor );
 
       // If we're collapsed we contain the first child as our content
@@ -367,7 +367,7 @@ void GuiRolloutCtrl::onRender(Point2I offset, const RectI &updateRect)
          else if( mIsExpanded && !pChild->isVisible())
             pChild->setVisible( true );
       }
-      renderChildControls(offset, updateRect);
+      renderChildControls(offset, mBounds, updateRect);
    }
 }
 

@@ -46,8 +46,8 @@ GuiSceneObjectCtrl::GuiSceneObjectCtrl(void)
 
    mCaption = StringTable->EmptyString;
 
-   mStateOn = false;
-   mButtonType = ButtonTypeRadio;
+   //mStateOn = false;
+   //mButtonType = ButtonTypeRadio;
 
    // Set-up private batcher.
    mBatchRenderer.setDebugStats( &mDebugStats );
@@ -190,28 +190,28 @@ void GuiSceneObjectCtrl::onMouseUp(const GuiEvent &event)
    if( mDepressed && ( event.mouseClickCount % 2 ) == 0 )
          Con::executef( this, 2, "onDoubleClick" );    
 
-   Parent::onMouseUp( event );
+   Parent::onTouchUp( event );
 }
 
 void GuiSceneObjectCtrl::onMouseLeave( const GuiEvent &event )
 {
    Con::executef( this, 2, "onMouseLeave" );
 
-   Parent::onMouseLeave( event );
+   Parent::onTouchLeave( event );
 }
 
 void GuiSceneObjectCtrl::onMouseEnter( const GuiEvent &event )
 {
    Con::executef( this, 2, "onMouseEnter" );
 
-   Parent::onMouseEnter( event );
+   Parent::onTouchEnter( event );
 }
 
 void GuiSceneObjectCtrl::onMouseDragged( const GuiEvent &event )
 {
    Con::executef( this, 2, "onMouseDragged" );
 
-   Parent::onMouseDragged( event );
+   Parent::onTouchDragged( event );
 }
 
 // -----------------------------------------------------------------------------
@@ -226,7 +226,7 @@ void GuiSceneObjectCtrl::onRender(Point2I offset, const RectI& updateRect)
    // Draw Background
    if( mProfile->mOpaque )
    {
-      if( mDepressed || mStateOn )
+      if( mDepressed )
       {
          if( mHasTexture )
             renderSizableBitmapBordersFilled( ctrlRect, 3, mProfile );
@@ -468,13 +468,13 @@ void GuiSceneObjectCtrl::onRender(Point2I offset, const RectI& updateRect)
 
    captionRect.inset(1, 1);
    dglSetBitmapModulation( ColorI(0,0,0,255) );
-   renderJustifiedText(captionRect.point, captionRect.extent, mCaption);
+   renderText(captionRect.point, captionRect.extent, mCaption, mProfile);
    captionRect.inset(1, 1);   
    dglSetBitmapModulation( mProfile->mFontColor );
-   renderJustifiedText(captionRect.point, captionRect.extent, mCaption);
+   renderText(captionRect.point, captionRect.extent, mCaption, mProfile);
 
    
 
    // Render Child Controls.
-   renderChildControls(offset, updateRect);
+   renderChildControls(offset, mBounds, updateRect);
 }

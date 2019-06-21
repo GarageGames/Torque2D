@@ -62,10 +62,10 @@ class GuiTabBookCtrl : public GuiControl
 public:
     enum TabPosition
     {
-        AlignTop,   ///< Align the tabs on the top of the tab book control
-        AlignBottom,///< Align the tabs on the bottom of the tab book control
-      AlignLeft,  ///< Align the tabs on the left of the tab book control
-      AlignRight  ///< Align the tabs on the right of the tab book control
+		AlignTop,   ///< Align the tabs on the top of the tab book control
+		AlignBottom,///< Align the tabs on the bottom of the tab book control
+		AlignLeft,  ///< Align the tabs on the left of the tab book control
+		AlignRight  ///< Align the tabs on the right of the tab book control
     };
 
    struct TabHeaderInfo
@@ -76,6 +76,8 @@ public:
       S32             TabColumn;
       RectI           TabRect;
    };
+
+   GuiControlProfile *mTabProfile; //Used to render the tabs
 
 private:
 
@@ -89,22 +91,20 @@ private:
    S32                     mMinTabWidth;     ///< Minimum Width a tab will display as.
    TabPosition             mTabPosition;     ///< Current tab position (see alignment)
    TabPosition             mLastTabPosition; ///< Last known tab position, stored to compare to tabPosition to know when to resize children
-   S32                     mTabHeight;       ///< Current tab height
-   S32                     mLastTabHeight;   ///< Last known tab height, stored to compare to current tabHeight to know when to resize children
+   S32                     mLastFontHeight;  ///< Last known font height
    S32                     mTabWidth;        ///< Current tab width
    S32                     mLastTabWidth;    ///< Last know tab width, stored to compare to current tabWidth to know when to resize children
-   S32                     mTabMargin;       ///< Margin left/right of tab text in tab
 
    enum
    {
-       TabSelected = 0,     ///< Index of selected tab texture
-      TabNormal,           ///< Index of normal tab texture
-      TabHover,            ///< Index of hover tab texture
-      TabSelectedVertical, ///< Index of selected tab texture
-      TabNormalVertical,   ///< Index of normal tab texture
-      TabHoverVertical,    ///< Index of hover tab texture
-      TabBackground = 19,       ///< Index of background texture (tiled)
-       NumBitmaps           ///< Number of bitmaps in this array
+		TabSelected = 0,		///< Index of selected tab texture
+		TabNormal,				///< Index of normal tab texture
+		TabHover,				///< Index of hover tab texture
+		TabSelectedVertical,	///< Index of selected tab texture
+		TabNormalVertical,		///< Index of normal tab texture
+		TabHoverVertical,		///< Index of hover tab texture
+		TabBackground = 19,     ///< Index of background texture (tiled)
+		NumBitmaps				///< Number of bitmaps in this array
    };
    bool  mHasTexture;   ///< Indicates whether we have a texture to render the tabs with
    RectI *mBitmapBounds;///< Array of rectangles identifying textures for tab book
@@ -143,10 +143,6 @@ private:
    /// @param   tabRect   the rectangle to render the tab into
    /// @param   tab   pointer to the tab page control for which to render the tab
    void renderTab( RectI tabRect, GuiTabPageCtrl* tab );
-
-   /// Page Rendering Routine
-   void renderBackground( Point2I offset, const RectI &updateRect );
-
 
    void renderJustifiedTextRot(Point2I offset, Point2I extent, const char *text, F32 rot );
 
@@ -211,6 +207,9 @@ private:
    /// @param    hitPoint   A Point2I that specifies where to search for a tab hit
    GuiTabPageCtrl *findHitTab( Point2I hitPoint );
 
+   /// Changes a local point to a point in the inner rect of the tab section.
+   Point2I GuiTabBookCtrl::getTabLocalCoord(const Point2I &src);
+
    /// @}
 
    /// @name Sizing
@@ -228,7 +227,7 @@ private:
    /// Called when a child page is resized
    /// This method is overridden so that we may handle resizing of our child tab
    /// pages when one of them is resized.
-   /// This ensures we keep our sizing in sync when we our children are sized or moved.
+   /// This ensures we keep our sizing in sync when our children are sized or moved.
    ///
    /// @param   child   A pointer to the child control that has been resized
    void childResized(GuiControl *child);
@@ -241,9 +240,9 @@ private:
 
    /// @name Mouse Events
    /// @{
-   void onMouseDown(const GuiEvent &event);
-   void onMouseMove(const GuiEvent &event);
-   void onMouseLeave(const GuiEvent &event);
+   void onTouchDown(const GuiEvent &event);
+   void onTouchMove(const GuiEvent &event);
+   void onTouchLeave(const GuiEvent &event);
    virtual bool onMouseDownEditor(const GuiEvent &event, Point2I offset);
    /// @}
 };

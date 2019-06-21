@@ -450,28 +450,13 @@
     <ClCompile Include="..\..\source\platformWin32\threads\thread.cc">
       <Filter>platformWin32\threads</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\gui\buttons\guiBitmapButtonCtrl.cc">
-      <Filter>gui\buttons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\gui\buttons\guiBorderButton.cc">
-      <Filter>gui\buttons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\gui\buttons\guiButtonBaseCtrl.cc">
-      <Filter>gui\buttons</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\gui\buttons\guiButtonCtrl.cc">
       <Filter>gui\buttons</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\gui\buttons\guiCheckBoxCtrl.cc">
       <Filter>gui\buttons</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\gui\buttons\guiIconButtonCtrl.cc">
-      <Filter>gui\buttons</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\gui\buttons\guiRadioCtrl.cc">
-      <Filter>gui\buttons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\gui\buttons\guiToolboxButtonCtrl.cc">
       <Filter>gui\buttons</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\gui\containers\guiAutoScrollCtrl.cc">
@@ -1704,25 +1689,13 @@
     <ClInclude Include="..\..\source\platformWin32\nativeDialogs\win32DirectoryResolver.h">
       <Filter>platformWin32\nativeDialogs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\gui\buttons\guiBitmapButtonCtrl.h">
-      <Filter>gui\buttons</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\gui\buttons\guiButtonBaseCtrl.h">
-      <Filter>gui\buttons</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\gui\buttons\guiButtonCtrl.h">
       <Filter>gui\buttons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\gui\buttons\guiCheckBoxCtrl.h">
       <Filter>gui\buttons</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\gui\buttons\guiIconButtonCtrl.h">
-      <Filter>gui\buttons</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\gui\buttons\guiRadioCtrl.h">
-      <Filter>gui\buttons</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\gui\buttons\guiToolboxButtonCtrl.h">
       <Filter>gui\buttons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\gui\containers\guiAutoScrollCtrl.h">
@@ -3180,6 +3153,12 @@
     <ClInclude Include="..\..\source\platform\tmm_off.h" />
     <ClInclude Include="..\..\source\platform\tmm_on.h" />
     <ClInclude Include="..\..\source\platform\typetraits.h" />
+    <ClInclude Include="..\..\source\gui\buttons\guiCheckBoxCtrl_ScriptBinding.h">
+      <Filter>gui\buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\gui\containers\guiTabBookCtrl_ScriptBinding.h">
+      <Filter>gui\containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\source\math\mMath_ASM.asm">

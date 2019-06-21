@@ -118,6 +118,8 @@ public:
     static S32     smCursorChanged; ///< Has this control modified the cursor? -1 or type
     RectI   mBounds;
     Point2I mMinExtent;
+	Point2I mRenderInsetLT;			///Add this to the mBounds and parent offset to get the true render location of the control
+	Point2I mRenderInsetRB;			///The actual rendered inset for the right and bottom sides.
     StringTableEntry mLangTableName;
     LangTable *mLangTable;
 
@@ -152,6 +154,12 @@ public:
         vertResizeCenter,
         vertResizeRelative      ///< resize relative
     };
+	enum TextRotationOptions
+	{
+		tRotateNone = 0,
+		tRotateLeft, 
+		tRotateRight
+	};
 
 protected:
     /// @name Control State
@@ -166,6 +174,9 @@ protected:
     StringTableEntry	mAcceleratorKey;
 
     StringTableEntry	mTooltip;
+
+	StringTableEntry    mText;
+	StringTableEntry    mTextID;
 
     /// @}
 
@@ -264,6 +275,11 @@ public:
     const S32        getTop() { return mBounds.point.y; } ///< Returns the Y position of the control
     const S32        getWidth() { return mBounds.extent.x; } ///< Returns the width of the control
     const S32        getHeight() { return mBounds.extent.y; } ///< Returns the height of the control
+	
+	void             setText(const char *text);
+	void             setTextID(S32 id);
+	void             setTextID(const char *id);
+	const char*      getText();
 
     /// @}
 
@@ -385,9 +401,10 @@ public:
     virtual bool renderTooltip(Point2I cursorPos, const char* tipText = NULL );
 
     /// Called when this control should render its children
-    /// @param   offset   The location this control is to begin rendering
+    /// @param   offset   The top left of the parent control
+    /// @param   contentOffset   The top left of the parent's content
     /// @param   updateRect   The screen area this control has drawing access to
-    void renderChildControls(Point2I offset, const RectI &updateRect);
+    void renderChildControls(Point2I offset, RectI content, const RectI &updateRect);
 
     /// Sets the area (local coordinates) this control wants refreshed each frame
     /// @param   pos   UpperLeft point on rectangle of refresh area
@@ -476,16 +493,16 @@ public:
     /// General input handler.
     virtual bool onInputEvent(const InputEvent &event);
 
-    /// @name Mouse Events
+    /// @name Touch/Mouse Events
     /// These functions are called when the input event which is
     /// in the name of the function occurs.
     /// @{
-    virtual void onMouseUp(const GuiEvent &event);
-    virtual void onMouseDown(const GuiEvent &event);
-    virtual void onMouseMove(const GuiEvent &event);
-    virtual void onMouseDragged(const GuiEvent &event);
-    virtual void onMouseEnter(const GuiEvent &event);
-    virtual void onMouseLeave(const GuiEvent &event);
+    virtual void onTouchUp(const GuiEvent &event);
+    virtual void onTouchDown(const GuiEvent &event);
+    virtual void onTouchMove(const GuiEvent &event);
+    virtual void onTouchDragged(const GuiEvent &event);
+    virtual void onTouchEnter(const GuiEvent &event);
+    virtual void onTouchLeave(const GuiEvent &event);
 
     virtual bool onMouseWheelUp(const GuiEvent &event);
     virtual bool onMouseWheelDown(const GuiEvent &event);
@@ -660,7 +677,22 @@ public:
     /// Renders justified text using the profile.
     ///
     /// @note This should move into the graphics library at some point
-    void renderJustifiedText(Point2I offset, Point2I extent, const char *text);
+    void renderText(Point2I offset, Point2I extent, const char *text, GuiControlProfile *profile, TextRotationOptions rot = tRotateNone);
+
+	/// Returns a new rect based on the margins.
+	RectI GuiControl::applyMargins(Point2I offset, Point2I extent, GuiControlState currentState, GuiControlProfile *profile);
+
+	/// Returns the bounds of the rect after considering the borders.
+	RectI GuiControl::applyBorders(Point2I offset, Point2I extent, GuiControlState currentState, GuiControlProfile *profile);
+
+	/// Returns the bounds of the rect this time with padding.
+	RectI GuiControl::applyPadding(Point2I offset, Point2I extent, GuiControlState currentState, GuiControlProfile *profile);
+
+	/// Returns the bounds of the rect with margin, borders, and padding applied.
+	RectI GuiControl::getInnerRect(Point2I offset, Point2I extent, GuiControlState currentState, GuiControlProfile *profile);
+
+	/// Returns the extent of the outer rect given the extent of the inner rect.
+	Point2I GuiControl::getOuterExtent(Point2I innerExtent, GuiControlState currentState, GuiControlProfile *profile);
 
     void inspectPostApply();
     void inspectPreApply();

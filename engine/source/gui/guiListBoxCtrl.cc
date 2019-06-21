@@ -746,7 +746,7 @@ void GuiListBoxCtrl::onRenderItem( RectI itemRect, LBItem *item )
       dglDrawRectFill( itemRect, mProfile->mFillColor );
 
    dglSetBitmapModulation(mProfile->mFontColor);
-   renderJustifiedText(itemRect.point + Point2I( 2, 0 ), itemRect.extent, item->itemText);
+   renderText(itemRect.point + Point2I( 2, 0 ), itemRect.extent, item->itemText, mProfile);
 }
 
 void GuiListBoxCtrl::drawBox(const Point2I &box, S32 size, ColorI &outlineColor, ColorI &boxColor)
@@ -764,7 +764,7 @@ void GuiListBoxCtrl::drawBox(const Point2I &box, S32 size, ColorI &outlineColor,
 
 void GuiListBoxCtrl::onMouseDragged(const GuiEvent &event)
 {
-   Parent::onMouseDragged(event);
+   Parent::onTouchDragged(event);
 
    if(isMethod("onMouseDragged"))
       Con::executef(this, 1, "onMouseDragged");

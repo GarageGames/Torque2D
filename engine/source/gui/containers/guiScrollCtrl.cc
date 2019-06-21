@@ -226,17 +226,17 @@ void GuiScrollCtrl::addObject(SimObject *object)
 
 GuiControl* GuiScrollCtrl::findHitControl(const Point2I &pt, S32 initialLayer)
 {
-   if(pt.x < mProfile->mBorderThickness || pt.y < mProfile->mBorderThickness)
+   //if(pt.x < mProfile->mBorderSize || pt.y < mProfile->mBorderSize)
       return this;
-   if(pt.x >= mBounds.extent.x - mProfile->mBorderThickness - (mHasVScrollBar ? mScrollBarThickness : 0) ||
-      pt.y >= mBounds.extent.y - mProfile->mBorderThickness - (mHasHScrollBar ? mScrollBarThickness : 0))
-      return this;
-   return Parent::findHitControl(pt, initialLayer);
+   //if(pt.x >= mBounds.extent.x - mProfile->mBorderSize - (mHasVScrollBar ? mScrollBarThickness : 0) ||
+   //   pt.y >= mBounds.extent.y - mProfile->mBorderSize - (mHasHScrollBar ? mScrollBarThickness : 0))
+   //   return this;
+   //return Parent::findHitControl(pt, initialLayer);
 }
 
 void GuiScrollCtrl::computeSizes()
 {
-   S32 thickness = (mProfile ? mProfile->mBorderThickness : 1);
+   S32 thickness = 0;//(mProfile ? mProfile->mBorderSize : 1);
    Point2I borderExtent(thickness, thickness);
    mContentPos = borderExtent + mChildMargin;
    mContentExt = mBounds.extent - (mChildMargin * 2)
@@ -324,7 +324,7 @@ void GuiScrollCtrl::computeSizes()
 
 void GuiScrollCtrl::calcScrollRects(void)
 {
-   S32 thickness = ( mProfile ? mProfile->mBorderThickness : 1 );
+   S32 thickness = 0;//( mProfile ? mProfile->mBorderSize : 1 );
    if (mHasHScrollBar)
    {
       mLeftArrowRect.set(thickness,
@@ -521,7 +521,7 @@ bool GuiScrollCtrl::onKeyDown(const GuiEvent &event)
    return Parent::onKeyDown(event);
 }
 
-void GuiScrollCtrl::onMouseDown(const GuiEvent &event)
+void GuiScrollCtrl::onTouchDown(const GuiEvent &event)
 {
    mouseLock();
 
@@ -548,7 +548,7 @@ void GuiScrollCtrl::onMouseDown(const GuiEvent &event)
    }
 }
 
-void GuiScrollCtrl::onMouseUp(const GuiEvent &)
+void GuiScrollCtrl::onTouchUp(const GuiEvent &)
 {
    mouseUnlock();
 
@@ -558,7 +558,7 @@ void GuiScrollCtrl::onMouseUp(const GuiEvent &)
    stateDepressed = false;
 }
 
-void GuiScrollCtrl::onMouseDragged(const GuiEvent &event)
+void GuiScrollCtrl::onTouchDragged(const GuiEvent &event)
 {
    Point2I curMousePos = globalToLocalCoord(event.mousePoint);
    setUpdate();
@@ -631,7 +631,7 @@ bool GuiScrollCtrl::onMouseWheelUp(const GuiEvent &event)
    for ( itr = begin(); itr != end(); itr++ )
    {
       GuiControl* grandKid = static_cast<GuiControl*>( *itr );
-      grandKid->onMouseMove( event );
+      grandKid->onTouchMove( event );
    }
 
    // If no scrolling happened (already at the top), pass it on to the parent.
@@ -655,7 +655,7 @@ bool GuiScrollCtrl::onMouseWheelDown(const GuiEvent &event)
    for ( itr = begin(); itr != end(); itr++ )
    {
       GuiControl* grandKid = static_cast<GuiControl *>( *itr );
-      grandKid->onMouseMove( event );
+      grandKid->onTouchMove( event );
    }
 
    // If no scrolling happened (already at the bottom), pass it on to the parent.
@@ -796,11 +796,7 @@ void GuiScrollCtrl::onRender(Point2I offset, const RectI &updateRect)
 {
    RectI r(offset.x, offset.y, mBounds.extent.x, mBounds.extent.y);
 
-   if (mProfile->mOpaque)
-      dglDrawRectFill(r, mProfile->mFillColor);
-
-    if (mProfile->mBorder)
-        renderFilledBorder(r, mProfile);
+   renderBorderedRect(r, mProfile, NormalState);
 
    // draw scroll bars
    if (mHasVScrollBar)
@@ -817,7 +813,7 @@ void GuiScrollCtrl::onRender(Point2I offset, const RectI &updateRect)
    // create a rect to intersect with the updateRect
    RectI contentRect(mContentPos.x + offset.x, mContentPos.y + offset.y, mContentExt.x, mContentExt.y);
    if(contentRect.intersect(updateRect))
-      renderChildControls(offset, contentRect);
+      renderChildControls(offset, contentRect, updateRect);
 
    // Finally draw the last vis rect (debug aid, BJG)
    //RectI renderRect = lastVisRect;

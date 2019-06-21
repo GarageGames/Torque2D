@@ -220,7 +220,7 @@ void GuiPaneControl::onRender(Point2I offset, const RectI &updateRect)
 
    // Draw child controls if appropriate
    if(!mCollapsed)
-      renderChildControls(offset, updateRect);
+      renderChildControls(offset, mBounds, updateRect);
 }
 
 ConsoleMethod(GuiPaneControl, setCollapsed, void, 3, 3, "(bool collapsed) Sets the controls \"collapsed\" property\n"

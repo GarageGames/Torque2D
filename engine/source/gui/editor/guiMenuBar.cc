@@ -959,8 +959,8 @@ void GuiMenuBar::onRender(Point2I offset, const RectI &updateRect)
       dglDrawRectFill(RectI(offset, mBounds.extent), mProfile->mFillColor);
 
    //if there's a border, draw the border
-   if (mProfile->mBorder)
-      renderBorder(ctrlRect, mProfile);
+   //if (mProfile->mBorder)
+   //   renderBorder(ctrlRect, mProfile);
 
    for(Menu *walk = menuList; walk; walk = walk->nextMenu)
    {
@@ -981,10 +981,14 @@ void GuiMenuBar::onRender(Point2I offset, const RectI &updateRect)
         RectI highlightBounds = bounds;
         highlightBounds.inset(1,1);
          if(walk == mouseDownMenu)
-            renderFilledBorder(highlightBounds, mProfile->mBorderColorHL, mProfile->mFillColorHL );
-         else if(walk == mouseOverMenu && mouseDownMenu == NULL)
-            renderFilledBorder(highlightBounds, mProfile->mBorderColor, mProfile->mFillColor );
-      }
+		 {
+			renderBorderedRect(highlightBounds, mProfile, GuiControlState::HighlightState);
+         }
+		 else if(walk == mouseOverMenu && mouseDownMenu == NULL)
+		 {
+			 renderBorderedRect(highlightBounds, mProfile, GuiControlState::NormalState);
+		 }
+	  }
 
       // Do we draw a bitmap?
       if(walk->bitmapIndex != -1)
@@ -1017,7 +1021,7 @@ void GuiMenuBar::onRender(Point2I offset, const RectI &updateRect)
       }
    }
 
-   renderChildControls( offset, updateRect );
+   renderChildControls( offset, mBounds, updateRect );
 }
 
 void GuiMenuBar::buildAcceleratorMap()

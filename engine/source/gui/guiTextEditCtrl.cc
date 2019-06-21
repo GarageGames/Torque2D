@@ -315,7 +315,7 @@ S32 GuiTextEditCtrl::setCursorPos( const Point2I &offset )
    return count;
 }
 
-void GuiTextEditCtrl::onMouseDown( const GuiEvent &event )
+void GuiTextEditCtrl::onTouchDown( const GuiEvent &event )
 {
    mDragHit = false;
 
@@ -357,17 +357,17 @@ void GuiTextEditCtrl::onMouseDown( const GuiEvent &event )
    setFirstResponder();
 
    // Notify Script.
-    if( isMethod("onMouseDown") )
+    if( isMethod("onTouchDown") )
     {
         char buf[3][32];
         dSprintf(buf[0], 32, "%d", event.modifier);
         dSprintf(buf[1], 32, "%d %d", event.mousePoint.x, event.mousePoint.y);
         dSprintf(buf[2], 32, "%d", event.mouseClickCount);
-        Con::executef(this, 4, "onMouseDown", buf[0], buf[1], buf[2]);
+        Con::executef(this, 4, "onTouchDown", buf[0], buf[1], buf[2]);
     }
 }
 
-void GuiTextEditCtrl::onMouseDragged( const GuiEvent &event )
+void GuiTextEditCtrl::onTouchDragged( const GuiEvent &event )
 {
    S32 pos = setCursorPos( event.mousePoint );
 
@@ -392,33 +392,33 @@ void GuiTextEditCtrl::onMouseDragged( const GuiEvent &event )
       mBlockStart = mBlockEnd = 0;
 
    //let the parent get the event
-   Parent::onMouseDragged(event);
+   Parent::onTouchDragged(event);
 
    // Notify Script.
-    if( isMethod("onMouseDragged") )
+    if( isMethod("onTouchDragged") )
     {
         char buf[3][32];
         dSprintf(buf[0], 32, "%d", event.modifier);
         dSprintf(buf[1], 32, "%d %d", event.mousePoint.x, event.mousePoint.y);
         dSprintf(buf[2], 32, "%d", event.mouseClickCount);
-        Con::executef(this, 4, "onMouseDragged", buf[0], buf[1], buf[2]);
+        Con::executef(this, 4, "onTouchDragged", buf[0], buf[1], buf[2]);
     }
 }
 
-void GuiTextEditCtrl::onMouseUp(const GuiEvent &event)
+void GuiTextEditCtrl::onTouchUp(const GuiEvent &event)
 {
    mDragHit = false;
    mScrollDir = 0;
    mouseUnlock();
 
     // Notify Script.
-    if( isMethod("onMouseUp") )
+    if( isMethod("onTouchUp") )
     {
         char buf[3][32];
         dSprintf(buf[0], 32, "%d", event.modifier);
         dSprintf(buf[1], 32, "%d %d", event.mousePoint.x, event.mousePoint.y);
         dSprintf(buf[2], 32, "%d", event.mouseClickCount);
-        Con::executef(this, 4, "onMouseUp", buf[0], buf[1], buf[2]);
+        Con::executef(this, 4, "onTouchUp", buf[0], buf[1], buf[2]);
     }
 }
 
@@ -1109,27 +1109,39 @@ void GuiTextEditCtrl::parentResized(const Point2I &oldParentExtent, const Point2
 
 void GuiTextEditCtrl::onRender(Point2I offset, const RectI & updateRect)
 {
-   RectI ctrlRect( offset, mBounds.extent );
+	//Notice that there's no Highlight state. The HL colors are used for selected text - not hover.
+	//The selected state is used when the box has the focus and can be typed in.
+	GuiControlState currentState = NormalState;
+	if (!mActive)
+	{
+		currentState = DisabledState;
+	}
+	else if (isFirstResponder())
+	{
+		currentState = SelectedState;
+	}
 
-   //if opaque, fill the update rect with the fill color
-   if ( mProfile->mOpaque )
-   {
-      if(isFirstResponder())
-         dglDrawRectFill( ctrlRect, mActive ? mProfile->mFillColor : mProfile->mFillColorNA );
-      else
-         dglDrawRectFill( ctrlRect, mActive ? mProfile->mFillColor : mProfile->mFillColorNA );
-   }
+	RectI ctrlRect = applyMargins(offset, mBounds.extent, currentState, mProfile);
 
-   //if there's a border, draw the border
-   if ( mProfile->mBorder )
-   {
-      dglSetBitmapModulation( mActive ? mProfile->mFillColor : mProfile->mFillColorNA );
-      renderBorder( ctrlRect, mProfile );
-   }
+	if (!ctrlRect.isValidRect())
+	{
+		return;
+	}
 
-   drawText( ctrlRect, isFirstResponder() );
-   
-   renderChildControls(offset, updateRect);
+	renderBorderedRect(ctrlRect, mProfile, currentState);
+
+	//Render Text
+	dglSetBitmapModulation(mProfile->mFontColor);
+	RectI fillRect = applyBorders(ctrlRect.point, ctrlRect.extent, NormalState, mProfile);
+	RectI contentRect = applyPadding(fillRect.point, fillRect.extent, NormalState, mProfile);
+
+	if (contentRect.isValidRect())
+	{
+		drawText(contentRect, currentState);
+
+		//Render the childen
+		renderChildControls(offset, contentRect, updateRect);
+	}
 }
 
 void GuiTextEditCtrl::onPreRender()
@@ -1157,11 +1169,10 @@ void GuiTextEditCtrl::onPreRender()
    }
 }
 
-void GuiTextEditCtrl::drawText( const RectI &drawRect, bool isFocused )
+void GuiTextEditCtrl::drawText( const RectI &drawRect, GuiControlState currentState )
 {
    StringBuffer textBuffer;
    Point2I drawPoint = drawRect.point;
-   Point2I paddingLeftTop, paddingRightBottom;
 
    // Just a little sanity.
    if(mCursorPos > (S32)mTextBuffer.length()) 
@@ -1181,34 +1192,25 @@ void GuiTextEditCtrl::drawText( const RectI &drawRect, bool isFocused )
       textBuffer.set(&mTextBuffer);
    }
 
-   paddingLeftTop.set(( mProfile->mTextOffset.x != 0 ? mProfile->mTextOffset.x : 3 ), mProfile->mTextOffset.y);
-   paddingRightBottom = paddingLeftTop;
-
    // Center vertically:
-   drawPoint.y += ( ( drawRect.extent.y - paddingLeftTop.y - paddingRightBottom.y - mFont->getHeight() ) / 2 ) + paddingLeftTop.y;
+   drawPoint.y += ( ( drawRect.extent.y - mFont->getHeight() ) / 2 );
 
    // Align horizontally:
    
    S32 textWidth = mFont->getStrNWidth(textBuffer.getPtr(), textBuffer.length());
 
-   if ( drawRect.extent.x - paddingLeftTop.x > textWidth )
+   if ( drawRect.extent.x > textWidth )
    {
       switch( mProfile->mAlignment )
       {
-      case GuiControlProfile::RightJustify:
-         drawPoint.x += ( drawRect.extent.x - textWidth - paddingRightBottom.x );
+      case GuiControlProfile::RightAlign:
+         drawPoint.x += ( drawRect.extent.x - textWidth );
          break;
-      case GuiControlProfile::CenterJustify:
+      case GuiControlProfile::CenterAlign:
          drawPoint.x += ( ( drawRect.extent.x - textWidth ) / 2 );
-         break;
-      default:
-      case GuiControlProfile::LeftJustify :
-         drawPoint.x += paddingLeftTop.x;
          break;
       }
    }
-   else
-      drawPoint.x += paddingLeftTop.x;
 
    ColorI fontColor = mActive ? mProfile->mFontColor : mProfile->mFontColorNA;
 
@@ -1221,21 +1223,21 @@ void GuiTextEditCtrl::drawText( const RectI &drawRect, bool isFocused )
       mTextOffsetReset = false;
    }
 
-   if ( drawRect.extent.x - paddingLeftTop.x > textWidth )
+   if ( drawRect.extent.x > textWidth )
       mTextOffset.x = drawPoint.x;
    else
    {
       // Alignment affects large text
-      if ( mProfile->mAlignment == GuiControlProfile::RightJustify
-         || mProfile->mAlignment == GuiControlProfile::CenterJustify )
+      if ( mProfile->mAlignment == GuiControlProfile::RightAlign
+         || mProfile->mAlignment == GuiControlProfile::CenterAlign )
       {
-         if ( mTextOffset.x + textWidth < (drawRect.point.x + drawRect.extent.x) - paddingRightBottom.x)
-            mTextOffset.x = (drawRect.point.x + drawRect.extent.x) - paddingRightBottom.x - textWidth;
+         if ( mTextOffset.x + textWidth < (drawRect.point.x + drawRect.extent.x))
+            mTextOffset.x = (drawRect.point.x + drawRect.extent.x) - textWidth;
       }
    }
 
    // calculate the cursor
-   if ( isFocused )
+   if ( currentState == SelectedState )
    {
       // Where in the string are we?
       S32 cursorOffset=0, charWidth=0;
@@ -1252,27 +1254,27 @@ void GuiTextEditCtrl::drawText( const RectI &drawRect, bool isFocused )
       if ( tempChar )
          charWidth = mFont->getCharWidth( tempChar );
       else
-         charWidth = paddingRightBottom.x;
+         charWidth = 0;
 
-      if( mTextOffset.x + cursorOffset + charWidth >= (drawRect.point.x + drawRect.extent.x) - paddingLeftTop.x )
+      if( mTextOffset.x + cursorOffset + charWidth >= (drawRect.point.x + drawRect.extent.x))
       {
          // Cursor somewhere beyond the textcontrol,
          // skip forward roughly 25% of the total width (if possible)
          S32 skipForward = drawRect.extent.x / 4;
 
          if ( cursorOffset + skipForward > textWidth )
-            mTextOffset.x = (drawRect.point.x + drawRect.extent.x) - paddingRightBottom.x - textWidth;
+            mTextOffset.x = (drawRect.point.x + drawRect.extent.x) - textWidth;
          else
             mTextOffset.x -= skipForward;
       }
-      else if( mTextOffset.x + cursorOffset < drawRect.point.x + paddingLeftTop.x )
+      else if( mTextOffset.x + cursorOffset < drawRect.point.x)
       {
          // Cursor somewhere before the textcontrol
          // skip backward roughly 25% of the total width (if possible)
          S32 skipBackward = drawRect.extent.x / 4;
 
          if ( cursorOffset - skipBackward < 0 )
-            mTextOffset.x = drawRect.point.x + paddingLeftTop.x;
+            mTextOffset.x = drawRect.point.x;
          else
             mTextOffset.x += skipBackward;
       }
@@ -1293,7 +1295,7 @@ void GuiTextEditCtrl::drawText( const RectI &drawRect, bool isFocused )
    }
 
    //draw the text
-   if ( !isFocused )
+   if ( currentState != SelectedState )
       mBlockStart = mBlockEnd = 0;
 
    //also verify the block start/end
@@ -1333,7 +1335,7 @@ void GuiTextEditCtrl::drawText( const RectI &drawRect, bool isFocused )
    if(mBlockEnd < (S32)mTextBuffer.length())
    {
        // Special handling if we are truncating when the ctrl is unfocused
-       if ( !isFocused && mTruncateWhenUnfocused)
+       if (currentState != SelectedState && mTruncateWhenUnfocused)
        {
           StringBuffer terminationString = "...";
           S32 width = mBounds.extent.x;
@@ -1355,7 +1357,7 @@ void GuiTextEditCtrl::drawText( const RectI &drawRect, bool isFocused )
    }
 
    //draw the cursor
-   if ( isFocused && mCursorOn )
+   if (currentState == SelectedState && mCursorOn )
       dglDrawLine( cursorStart, cursorEnd, mProfile->mCursorColor );
 }
 

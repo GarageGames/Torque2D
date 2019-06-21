@@ -494,11 +494,11 @@ void GuiFrameSetCtrl::onRender(Point2I offset, const RectI &updateRect )
 
    drawDividers(offset);
 
-   if (mProfile->mBorder)
-      dglDrawRect(r, mProfile->mBorderColor);
+   //if (mProfile->mBorder)
+   //   dglDrawRect(r, mProfile->mBorderColor);
 
    // draw the frame contents
-   renderChildControls(offset, updateRect);
+   renderChildControls(offset, mBounds, updateRect);
 }
 
 //-----------------------------------------------------------------------------

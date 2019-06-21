@@ -440,7 +440,7 @@ void GuiSliderCtrl::onRender(Point2I offset, const RectI &updateRect)
 
         // draw the thumb
         thumb.point += pos;
-        renderRaisedBox(thumb, mProfile);
+        renderBorderedRect(thumb, mProfile, NormalState);
     }
 
     if (mDisplayValue)
@@ -463,6 +463,6 @@ void GuiSliderCtrl::onRender(Point2I offset, const RectI &updateRect)
         dglSetBitmapModulation(mProfile->mFontColor);
         dglDrawText(mProfile->mFont, textStart, buf, mProfile->mFontColors);
     }
-    renderChildControls(offset, updateRect);
+    renderChildControls(offset, mBounds, updateRect);
 }
 

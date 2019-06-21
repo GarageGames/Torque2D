@@ -1720,7 +1720,7 @@ void SceneWindow::onRender( Point2I offset, const RectI& updateRect )
     renderMetricsOverlay( offset, updateRect );
 
     // Render Children.
-    renderChildControls( offset, updateRect );
+    renderChildControls( offset, mBounds, updateRect );
 
     // Update Window.
     setUpdate();

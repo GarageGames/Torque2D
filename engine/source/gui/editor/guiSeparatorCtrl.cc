@@ -78,7 +78,7 @@ void GuiSeparatorCtrl::onRender(Point2I offset, const RectI &updateRect)
       if(mTextLeftMargin > 0)
       {
          RectI rect(Point2I(posx,seppos),Point2I(mTextLeftMargin,2));
-         renderSlightlyLoweredBox(rect, mProfile);
+         renderBorderedRect(rect, mProfile, GuiControlState::HighlightState);
          posx += mTextLeftMargin;
       }
 
@@ -87,7 +87,7 @@ void GuiSeparatorCtrl::onRender(Point2I offset, const RectI &updateRect)
       //posx += mProfile->mFont->getStrWidth(mText);
 
       RectI rect(Point2I(posx,seppos),Point2I(mBounds.extent.x - posx + offset.x,2));
-      renderSlightlyLoweredBox(rect, mProfile, mActive);
+	  renderBorderedRect(rect, mProfile, GuiControlState::HighlightState);
 
    } else
    {
@@ -95,17 +95,17 @@ void GuiSeparatorCtrl::onRender(Point2I offset, const RectI &updateRect)
       {
          S32 seppos = mBounds.extent.y / 2 + offset.y; 
          RectI rect(Point2I(offset.x + mMargin ,seppos),Point2I(mBounds.extent.x - (mMargin * 2),2));
-         renderSlightlyLoweredBox(rect, mProfile);
+		 renderBorderedRect(rect, mProfile, GuiControlState::NormalState);
       }
       else
       {
          S32 seppos = mBounds.extent.x / 2 + offset.x; 
          RectI rect(Point2I(seppos, offset.y + mMargin),Point2I(2, mBounds.extent.y - (mMargin * 2)));
-         renderSlightlyLoweredBox(rect, mProfile);
+		 renderBorderedRect(rect, mProfile, GuiControlState::NormalState);
       }
    }
 
-   renderChildControls(offset, updateRect);
+   renderChildControls(offset, mBounds, updateRect);
 }
 
 

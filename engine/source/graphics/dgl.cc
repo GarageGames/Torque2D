@@ -36,6 +36,8 @@
 #include "dglMac_ScriptBinding.h"
 #include "dgl_ScriptBinding.h"
 
+#include <vector>
+
 namespace {
 
 ColorI sg_bitmapModulation(255, 255, 255, 255);
@@ -875,6 +877,28 @@ void dglDrawRectFill(const RectI &rect, const ColorI &color)
    dglDrawRectFill(rect.point, lowerR, color);
 }
 
+void dglDrawQuadFill(const Point2I &point1, const Point2I &point2, const Point2I &point3, const Point2I &point4, const ColorI &color)
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_TEXTURE_2D);
+
+	glColor4ub(color.red, color.green, color.blue, color.alpha);
+
+	//Points 3 and 4 are switched by design.
+	GLint vertices[] = {
+		(GLint)point1.x, (GLint)point1.y,
+		(GLint)point2.x, (GLint)point2.y,
+		(GLint)point4.x, (GLint)point4.y,
+		(GLint)point3.x, (GLint)point3.y,
+	};
+
+	glVertexPointer(2, GL_INT, 0, vertices);
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+}
+
 void dglDraw2DSquare( const Point2F &screenPoint, F32 width, F32 spinAngle )
 {
    width *= 0.5;
@@ -1109,6 +1133,88 @@ void dglSolidCube(const Point3F & extent, const Point3F & center)
       glEnd();
    }
 #endif
+}
+
+//Draws an unfilled circle with line segments.
+//Circle drawing code was modified from this source with gratitude. It is in the public domain.
+//http://slabode.exofire.net/circle_draw.shtml
+void dglDrawCircle(const Point2I &center, const F32 radius, const ColorI &color, const F32 &lineWidth)
+{
+	F32 adjustedRadius = radius - (lineWidth/2);
+	const S32 num_segments = (const S32)round(10 * sqrtf(adjustedRadius));
+	F32 theta = 2 * 3.1415926f / F32(num_segments);
+	F32 c = cosf(theta);//precalculate the sine and cosine
+	F32 s = sinf(theta);
+	F32 t;
+
+	F32 x = adjustedRadius;//we start at angle = 0 
+	F32 y = 0;
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_TEXTURE_2D);
+
+	glLineWidth(lineWidth);
+
+	glColor4ub(color.red, color.green, color.blue, color.alpha);
+
+	vector<GLfloat> verts;
+	for (int ii = 0; ii < num_segments; ii++)
+	{
+		verts.push_back(GLfloat(x + center.x));
+		verts.push_back(GLfloat(y + center.y));
+
+		//apply the rotation matrix
+		t = x;
+		x = c * x - s * y;
+		y = s * t + c * y;
+	}
+	verts.push_back(GLfloat(verts[0]));
+	verts.push_back(GLfloat(verts[1]));
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts.data());
+	glDrawArrays(GL_LINE_LOOP, 0, num_segments + 1);//draw last two
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void dglDrawCircleFill(const Point2I &center, const F32 radius, const ColorI &color)
+{
+	const S32 num_segments = (const S32)round(10 * sqrtf(radius));
+	F32 theta = 2 * 3.1415926f / F32(num_segments);
+	F32 c = cosf(theta);//precalculate the sine and cosine
+	F32 s = sinf(theta);
+	F32 t;
+
+	F32 x = radius;//we start at angle = 0 
+	F32 y = 0;
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_TEXTURE_2D);
+
+	glColor4ub(color.red, color.green, color.blue, color.alpha);
+
+	vector<GLfloat> verts;
+	verts.push_back(GLfloat(center.x));
+	verts.push_back(GLfloat(center.y));
+	for (int ii = 0; ii < num_segments; ii++)
+	{
+		verts.push_back(GLfloat(x + center.x));
+		verts.push_back(GLfloat(y + center.y));
+
+		//apply the rotation matrix
+		t = x;
+		x = c * x - s * y;
+		y = s * t + c * y;
+	}
+	verts.push_back(GLfloat(verts[2]));
+	verts.push_back(GLfloat(verts[3]));
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts.data());
+	glDrawArrays(GL_TRIANGLE_FAN, 0, num_segments+2);
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void dglSetClipRect(const RectI &clipRect)

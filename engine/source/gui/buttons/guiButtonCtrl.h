@@ -23,20 +23,43 @@
 #ifndef _GUIBUTTONCTRL_H_
 #define _GUIBUTTONCTRL_H_
 
-#ifndef _GUIBUTTONBASECTRL_H_
-#include "gui/buttons/guiButtonBaseCtrl.h"
+#ifndef _GUICONTROL_H_
+#include "gui/guiControl.h"
 #endif
 
-class GuiButtonCtrl : public GuiButtonBaseCtrl
+class GuiButtonCtrl : public GuiControl
 {
-   typedef GuiButtonBaseCtrl Parent;
+   typedef GuiControl Parent;
 protected:
-   bool mHasTheme;
+	bool mDepressed;
+	bool mMouseOver;
+	bool mHasTheme;
 public:
-   DECLARE_CONOBJECT(GuiButtonCtrl);
-   GuiButtonCtrl();
-   bool onWake();
-   void onRender(Point2I offset, const RectI &updateRect);
+	GuiButtonCtrl();
+	bool onWake();
+
+	DECLARE_CONOBJECT(GuiButtonCtrl);
+
+	void acceleratorKeyPress(U32 index);
+	void acceleratorKeyRelease(U32 index);
+
+	void onTouchDown(const GuiEvent &);
+	void onTouchUp(const GuiEvent &);
+	void onRightMouseUp(const GuiEvent &);
+
+	void onTouchEnter(const GuiEvent &);
+	void onTouchLeave(const GuiEvent &);
+
+	bool onKeyDown(const GuiEvent &event);
+	bool onKeyUp(const GuiEvent &event);
+
+	virtual void setScriptValue(const char *value);
+	virtual const char *getScriptValue();
+
+	virtual void onMessage(GuiControl *, S32 msg);
+	virtual void onAction();
+   
+	virtual void onRender(Point2I offset, const RectI &updateRect);
 };
 
 #endif //_GUI_BUTTON_CTRL_H

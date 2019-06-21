@@ -248,7 +248,7 @@ void GuiWindowCtrl::onMouseDown(const GuiEvent &event)
 
       GuiControl *ctrl = findHitControl(localPoint);
       if (ctrl && ctrl != this)
-         ctrl->onMouseDown(event);
+         ctrl->onTouchDown(event);
 
    }
 }
@@ -634,11 +634,11 @@ void GuiWindowCtrl::onRender(Point2I offset, const RectI &updateRect)
    S32 textWidth = mProfile->mFont->getStrWidth((const UTF8 *)mText);
    Point2I start(0,0);
    // align the horizontal
-   if ( mProfile->mAlignment == GuiControlProfile::RightJustify )
+   if ( mProfile->mAlignment == GuiControlProfile::RightAlign )
       start.set( winRect.extent.x - textWidth, 0 );
-   else if ( mProfile->mAlignment == GuiControlProfile::CenterJustify )
+   else if ( mProfile->mAlignment == GuiControlProfile::CenterAlign )
       start.set( ( winRect.extent.x - textWidth) / 2, 0 );
-   else // GuiControlProfile::LeftJustify or garbage... ;)
+   else // GuiControlProfile::LeftAlign or garbage... ;)
       start.set( 0, 0 );
    // If the text is longer then the box size, (it'll get clipped) so force Left Justify
    if( textWidth > winRect.extent.x ) start.set( 0, 0 );
@@ -694,7 +694,7 @@ void GuiWindowCtrl::onRender(Point2I offset, const RectI &updateRect)
    if( !mMinimized )
    {
       //render the children
-      renderChildControls( offset, updateRect );
+      renderChildControls( offset, mBounds, updateRect );
    }
 }
 

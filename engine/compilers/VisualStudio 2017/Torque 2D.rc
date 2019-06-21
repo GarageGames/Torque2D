@@ -62,8 +62,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,0,0,0
- PRODUCTVERSION 2,0,0,0
+ FILEVERSION 4,0,0,0
+ PRODUCTVERSION 4,0,0,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -80,12 +80,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "GarageGames LLC"
             VALUE "FileDescription", "Torque 2D MIT"
-            VALUE "FileVersion", "2, 0, 0, 0"
+            VALUE "FileVersion", "4, 0, 0, 0"
             VALUE "InternalName", "Torque 2D"
-            VALUE "LegalCopyright", "Copyright (c) 2013 GarageGames, LLC"
+            VALUE "LegalCopyright", "Copyright (c) 2019 GarageGames, LLC"
             VALUE "OriginalFilename", "Torque2D.exe"
             VALUE "ProductName", "Torque 2D MIT"
-            VALUE "ProductVersion", "2, 0, 0, 0"
+            VALUE "ProductVersion", "4, 0, 0, 0"
         END
     END
     BLOCK "VarFileInfo"

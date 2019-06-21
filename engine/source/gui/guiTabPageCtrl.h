@@ -27,12 +27,11 @@
 #include "gui/guiTextCtrl.h"
 #endif
 
-class GuiTabPageCtrl : public GuiTextCtrl
+class GuiTabPageCtrl : public GuiControl
 {
    private:
-      typedef GuiTextCtrl Parent;
+      typedef GuiControl Parent;
 
-      Point2I        mMinSize;
       S32            mTabIndex;
 
    public:
@@ -45,7 +44,7 @@ class GuiTabPageCtrl : public GuiTextCtrl
 
       GuiControl* findHitControl(const Point2I &pt, S32 initialLayer = -1); ///< Find which control is hit by the mouse starting at a specified layer
 
-      void onMouseDown(const GuiEvent &event);  ///< Called when a mouseDown event occurs
+      void onTouchDown(const GuiEvent &event);  ///< Called when a mouseDown event occurs
       bool onMouseDownEditor(const GuiEvent &event, Point2I offset );   ///< Called when a mouseDown event occurs and the GUI editor is active
 
       S32 getTabIndex(void) { return mTabIndex; }  ///< Get the tab index of this control
@@ -57,8 +56,6 @@ class GuiTabPageCtrl : public GuiTextCtrl
       void selectWindow(void);               ///< Select this window
 
       virtual void setText(const char *txt = NULL); ///< Override setText function to signal parent we need to update.
-
-      void onRender(Point2I offset, const RectI &updateRect);  ///< Called when it's time to render this page to the scene
 };
 
-#endif //_GUI_WINDOW_CTRL_H
+#endif //_GUITABPAGECTRL_H_

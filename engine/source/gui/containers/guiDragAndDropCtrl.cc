@@ -52,7 +52,7 @@ void GuiDragAndDropControl::startDragging(Point2I offset)
    if (canvas->getMouseLockedControl())
    {
       GuiEvent event;
-      canvas->getMouseLockedControl()->onMouseLeave(event);
+      canvas->getMouseLockedControl()->onTouchLeave(event);
       canvas->mouseUnlock(canvas->getMouseLockedControl());
    }
    canvas->mouseLock(this);

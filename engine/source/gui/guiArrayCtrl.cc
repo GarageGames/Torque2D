@@ -137,10 +137,10 @@ void GuiArrayCtrl::scrollCellVisible(Point2I cell)
 
 void GuiArrayCtrl::onRenderColumnHeaders(Point2I offset, Point2I parentOffset, Point2I headerDim)
 {
-   if (mProfile->mBorder)
+   if (mProfile->mBorderDefault && mProfile->mBorderDefault->mBorder > 0)
    {
       RectI cellR(offset.x + headerDim.x, parentOffset.y, mBounds.extent.x - headerDim.x, headerDim.y);
-      dglDrawRectFill(cellR, mProfile->mBorderColor);
+      dglDrawRectFill(cellR, mProfile->mBorderDefault->mBorderColor[0]);
    }
 }
 
@@ -283,7 +283,7 @@ void GuiArrayCtrl::onMouseDown(const GuiEvent &event)
       return;
 
    //let the guiControl method take care of the rest
-   Parent::onMouseDown(event);
+   Parent::onTouchDown(event);
 
    Point2I pt = globalToLocalCoord(event.mousePoint);
    pt.x -= mHeaderDim.x; pt.y -= mHeaderDim.y;

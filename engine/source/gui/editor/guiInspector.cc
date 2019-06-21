@@ -20,7 +20,7 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 #include "gui/editor/guiInspector.h"
-#include "gui/buttons/guiIconButtonCtrl.h"
+#include "gui/buttons/guiButtonCtrl.h"
 #include "memory/frameAllocator.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -782,9 +782,9 @@ bool GuiInspectorDynamicGroup::createContent()
       return false;
 
    // add a button that lets us add new dynamic fields.
-   GuiIconButtonCtrl* addFieldBtn = new GuiIconButtonCtrl();
+   GuiButtonCtrl* addFieldBtn = new GuiButtonCtrl();
    {
-      addFieldBtn->setBitmap("tools/gui/images/iconAdd");
+      //addFieldBtn->setBitmap("tools/gui/images/iconAdd");
 
       SimObject* profilePtr = Sim::findObject("EditorButton");
       if( profilePtr != NULL )
@@ -1086,7 +1086,7 @@ GuiControl* GuiInspectorDynamicField::constructRenameControl()
    mEdit->resize(valueRect.point, valueRect.extent);
 
    // Finally, add a delete button for this field
-   GuiIconButtonCtrl * delButt = new GuiIconButtonCtrl();
+   GuiButtonCtrl * delButt = new GuiButtonCtrl();
    if( delButt != NULL )
    {
       dSprintf(szBuffer, 512, "%d.%s = \"\";%d.inspectGroup();", mTarget->getId(), getFieldName(), mParent->getId());

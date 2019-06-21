@@ -185,6 +185,8 @@ void dglDrawRect(const RectI &rect, const ColorI &color, const float &lineWidth 
 void dglDrawRectFill(const Point2I &upperL, const Point2I &lowerR, const ColorI &color);
 /// draws an UNTEXTURED filled rectangle in "rect" in specified color
 void dglDrawRectFill(const RectI &rect, const ColorI &color);
+/// draws an UNTEXTURED filled quad in specified color
+void dglDrawQuadFill(const Point2I &point1, const Point2I &point2, const Point2I &point3, const Point2I &point4, const ColorI &color);
 /// draws a square, with center point "screenPoint", width of "width" on an angle of "spinAngle" in 2d
 void dglDraw2DSquare( const Point2F &screenPoint, F32 width, F32 spinAngle );
 /// draws a square, with center point "position", width of "width" on an angle of "spinAngle" in 3d
@@ -193,6 +195,10 @@ void dglDrawBillboard( const Point3F &position, F32 width, F32 spinAngle );
 void dglWireCube(const Point3F &extent, const Point3F &center);
 /// Draws a solid cube around "center" with size "extent"
 void dglSolidCube(const Point3F &extent, const Point3F & enter);
+/// Draws an unfilled circle using line segments
+void dglDrawCircle(const Point2I &center, const F32 radius, const ColorI &color, const F32 &lineWidth = 1.0f);
+/// Draws a filled circle
+void dglDrawCircleFill(const Point2I &center, const F32 radius, const ColorI &color);
 /// @}
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 // Matrix functions
