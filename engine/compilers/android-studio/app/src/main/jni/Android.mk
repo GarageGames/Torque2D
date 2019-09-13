@@ -619,6 +619,12 @@ LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lz -lOpenSLES -L../../../.
 LOCAL_STATIC_LIBRARIES := freetype-prebuilt
 LOCAL_SHARED_LIBRARIES := libopenal-prebuilt
 
+ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI), arm64-v8a))
+    LOCAL_CFLAGS := -DHAVE_NEON=1
+    LOCAL_ARM_NEON := true
+
+endif
+
 LOCAL_ARM_MODE := arm
 
 include $(BUILD_SHARED_LIBRARY)
