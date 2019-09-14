@@ -79,7 +79,7 @@ Vector<touchEvent> TouchDownEvents;
 Vector<touchEvent> TouchUpEvents;
 
 // EFM - BEGIN TOUCH CHANGES
-#define MAX_TOUCH_EVENTS 5
+#define MAX_TOUCH_EVENTS 16
 
 struct touchTracker {
 	S32 lastX;
@@ -771,7 +771,7 @@ int processMultipleTouches()
         
         lastTouches[currentEvent->number].lastX = -1;
 		lastTouches[currentEvent->number].lastY	 = -1;
-        
+
 		TouchUpEvents.pop_back();
 	}
     
@@ -793,7 +793,7 @@ int processMultipleTouches()
         dStrcpy(touchEvent.fingerIDs, touchNums);
         
         touchEvent.modifier = 0;
-        
+
         Game->postEvent(touchEvent);        
     }
     
@@ -837,7 +837,7 @@ bool createMouseMoveEvent( S32 touchNumber, S32 x, S32 y, S32 lastX, S32 lastY )
 	if (Canvas == NULL)
 		return false;
 
-	for( int i = 0 ; (i < MAX_TOUCH_EVENTS) && (currentSlot == -1) ; i++ )
+	for( int i = 0 ; i < MAX_TOUCH_EVENTS ; i++ )
 	{
 		if( (lastX == lastTouches[i].lastX ) &&
 		   (lastY == lastTouches[i].lastY ) )
@@ -873,12 +873,12 @@ bool createMouseMoveEvent( S32 touchNumber, S32 x, S32 y, S32 lastX, S32 lastY )
 
 bool createMouseDownEvent( S32 touchNumber, S32 x, S32 y, U32 numTouches ) 
 {
-	S32 vacantSlot = -1;
+	S32 vacantSlot;
 	
 	if (Canvas == NULL)
 		return false;
 
-	for( int i = 0 ; (i < MAX_TOUCH_EVENTS) && (vacantSlot == -1) ; i++ )
+	for( int i = 0 ; i < MAX_TOUCH_EVENTS ; i++ )
 	{
 		if( lastTouches[i].lastX == -1 )
 		{
@@ -913,9 +913,9 @@ bool createMouseDownEvent( S32 touchNumber, S32 x, S32 y, U32 numTouches )
 
 bool createMouseUpEvent( S32 touchNumber, S32 x, S32 y, S32 lastX, S32 lastY, U32 numTouches ) //EFM
 {	
-	S32 currentSlot = -1;
+	S32 currentSlot;
 	
-	for( int i = 0 ; (i < MAX_TOUCH_EVENTS) && (currentSlot == -1) ; i++ )
+	for( int i = 0 ; i < MAX_TOUCH_EVENTS ; i++ )
 	{
 		if(( (x == lastTouches[i].lastX) && (y == lastTouches[i].lastY )) ||
 		   ( (lastX == lastTouches[i].lastX ) && (lastY == lastTouches[i].lastY )))
