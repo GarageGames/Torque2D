@@ -31,13 +31,13 @@ include $(PREBUILT_SHARED_LIBRARY)
 
 #freetype2 lib for generating fonts on device
 LOCAL_PATH := $(MY_LOCAL_PATH)
- 
+
 include $(CLEAR_VARS)
- 
+
 LOCAL_MODULE := freetype-prebuilt
 LOCAL_SRC_FILES := ../../../../../../lib/freetype/android/lib/$(TARGET_ARCH_ABI)/libfreetype.a
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../../../../lib/freetype/android/include $(LOCAL_PATH)/../../../../../../lib/freetype/android/include/freetype2
- 
+
 include $(PREBUILT_STATIC_LIBRARY)
 
 LOCAL_PATH := $(MY_LOCAL_PATH)
@@ -107,11 +107,11 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
     				$(LOCAL_PATH)/../../../../../../source/platformAndroid \
     				$(LOCAL_PATH)/../../../../../../source/sim \
     				$(LOCAL_PATH)/../../../../../../source/spine \
-    				$(LOCAL_PATH)/../../../../../../source/string 
+    				$(LOCAL_PATH)/../../../../../../source/string
 #    				$(LOCAL_PATH)/../../../../../../source/testing \
 #    				$(LOCAL_PATH)/../../../../../../source/testing/tests \
-	    			
-	    			
+
+
 LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../lib/ljpeg/jcapistd.c \
 					../../../../../../lib/ljpeg/jccoefct.c \
@@ -602,12 +602,12 @@ LOCAL_SRC_FILES :=  ../../../../../../lib/ljpeg/jcapimin.c \
 					../../../../../../source/gui/editor/guiInspector.cc \
 					../../../../../../source/gui/editor/guiInspectorTypes.cc \
 					../../../../../../source/gui/editor/guiMenuBar.cc \
-					../../../../../../source/gui/editor/guiSeparatorCtrl.cc 
+					../../../../../../source/gui/editor/guiSeparatorCtrl.cc
 #					../../../../../../source/testing/tests/platformFileIoTests.cc \
 #					../../../../../../source/testing/tests/platformMemoryTests.cc \
 #					../../../../../../source/testing/tests/platformStringTests.cc \
 #					../../../../../../source/testing/unitTesting.cc
- 
+
 ifeq ($(APP_OPTIM),debug)
 	LOCAL_CFLAGS := -DENABLE_CONSOLE_MSGS -D__ANDROID__ -DTORQUE_DEBUG -DTORQUE_OS_ANDROID -DGL_GLEXT_PROTOTYPES -O0 -fsigned-char
 	LOCAL_CPPFLAGS := -std=gnu++11 -frtti $(LOCAL_CFLAGS)
@@ -618,6 +618,12 @@ endif
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lz -lOpenSLES -L../../../../../../lib/openal/Android/$(TARGET_ARCH_ABI)
 LOCAL_STATIC_LIBRARIES := freetype-prebuilt
 LOCAL_SHARED_LIBRARIES := libopenal-prebuilt
+
+ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI), arm64-v8a))
+    LOCAL_CFLAGS := -DHAVE_NEON=1
+    LOCAL_ARM_NEON := true
+
+endif
 
 LOCAL_ARM_MODE := arm
 
