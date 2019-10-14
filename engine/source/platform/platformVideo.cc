@@ -194,8 +194,8 @@ bool Video::setDevice( const char *renderName, U32 width, U32 height, U32 bpp, b
          Game->textureResurrect();
          smNeedResurrect = false;
       }
-      if (sgOriginalGamma != -1.0 || Video::getGammaCorrection(sgOriginalGamma))
-         Video::setGammaCorrection(sgOriginalGamma + sgGammaCorrection);
+      //if (sgOriginalGamma != -1.0 || Video::getGammaCorrection(sgOriginalGamma))
+         //Video::setGammaCorrection(sgOriginalGamma + sgGammaCorrection);
       Con::evaluate("resetCanvas();");
    }
 
