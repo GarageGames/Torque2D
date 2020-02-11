@@ -680,19 +680,19 @@ public:
     void renderText(Point2I offset, Point2I extent, const char *text, GuiControlProfile *profile, TextRotationOptions rot = tRotateNone);
 
 	/// Returns a new rect based on the margins.
-	RectI GuiControl::applyMargins(Point2I offset, Point2I extent, GuiControlState currentState, GuiControlProfile *profile);
+	RectI applyMargins(Point2I offset, Point2I extent, GuiControlState currentState, GuiControlProfile *profile);
 
 	/// Returns the bounds of the rect after considering the borders.
-	RectI GuiControl::applyBorders(Point2I offset, Point2I extent, GuiControlState currentState, GuiControlProfile *profile);
+	RectI applyBorders(Point2I offset, Point2I extent, GuiControlState currentState, GuiControlProfile *profile);
 
 	/// Returns the bounds of the rect this time with padding.
-	RectI GuiControl::applyPadding(Point2I offset, Point2I extent, GuiControlState currentState, GuiControlProfile *profile);
+	RectI applyPadding(Point2I offset, Point2I extent, GuiControlState currentState, GuiControlProfile *profile);
 
 	/// Returns the bounds of the rect with margin, borders, and padding applied.
-	RectI GuiControl::getInnerRect(Point2I offset, Point2I extent, GuiControlState currentState, GuiControlProfile *profile);
+	RectI getInnerRect(Point2I offset, Point2I extent, GuiControlState currentState, GuiControlProfile *profile);
 
 	/// Returns the extent of the outer rect given the extent of the inner rect.
-	Point2I GuiControl::getOuterExtent(Point2I innerExtent, GuiControlState currentState, GuiControlProfile *profile);
+	Point2I getOuterExtent(Point2I innerExtent, GuiControlState currentState, GuiControlProfile *profile);
 
     void inspectPostApply();
     void inspectPreApply();

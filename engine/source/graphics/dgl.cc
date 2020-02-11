@@ -886,14 +886,14 @@ void dglDrawQuadFill(const Point2I &point1, const Point2I &point2, const Point2I
 	glColor4ub(color.red, color.green, color.blue, color.alpha);
 
 	//Points 3 and 4 are switched by design.
-	GLint vertices[] = {
-		(GLint)point1.x, (GLint)point1.y,
-		(GLint)point2.x, (GLint)point2.y,
-		(GLint)point4.x, (GLint)point4.y,
-		(GLint)point3.x, (GLint)point3.y,
+	GLfloat vertices[] = {
+		(GLfloat)point1.x, (GLfloat)point1.y,
+		(GLfloat)point2.x, (GLfloat)point2.y,
+		(GLfloat)point4.x, (GLfloat)point4.y,
+		(GLfloat)point3.x, (GLfloat)point3.y,
 	};
 
-	glVertexPointer(2, GL_INT, 0, vertices);
+	glVertexPointer(2, GL_FLOAT, 0, vertices);
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

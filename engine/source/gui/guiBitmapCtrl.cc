@@ -225,7 +225,7 @@ void GuiBitmapCtrl::onRender(Point2I offset, const RectI &updateRect)
       }
    }
 
-   if (mProfile->mBorderDefault && mProfile->mBorderDefault->mBorder > 0 && !mTextureHandle)
+   if (mProfile->mBorderDefault && *mProfile->mBorderDefault->mBorder > 0 && !mTextureHandle)
    {
       RectI rect(offset.x, offset.y, mBounds.extent.x, mBounds.extent.y);
       dglDrawRect(rect, mProfile->mBorderDefault->mBorderColor[0]);

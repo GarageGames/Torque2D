@@ -736,7 +736,7 @@ void GuiCanvas::rootMouseDragged(const GuiEvent &event)
             mMouseCapturedControl->onTouchDragged(event);
        //Luma: Mouse dragged calls mouse Moved on iPhone
 #if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
-       mMouseCapturedControl->onMouseMove(event);
+       mMouseCapturedControl->onTouchMove(event);
 #endif //TORQUE_OS_IOS
    }
    else
@@ -746,7 +746,7 @@ void GuiCanvas::rootMouseDragged(const GuiEvent &event)
       {
           mMouseControl->onTouchDragged(event);
 #if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID)
-          mMouseControl->onMouseMove(event);
+          mMouseControl->onTouchMove(event);
 #endif //TORQUE_OS_IOS
           
       }

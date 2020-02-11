@@ -208,7 +208,7 @@ private:
    GuiTabPageCtrl *findHitTab( Point2I hitPoint );
 
    /// Changes a local point to a point in the inner rect of the tab section.
-   Point2I GuiTabBookCtrl::getTabLocalCoord(const Point2I &src);
+   Point2I getTabLocalCoord(const Point2I &src);
 
    /// @}
 
