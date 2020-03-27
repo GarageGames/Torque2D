@@ -259,11 +259,11 @@ void GuiButtonCtrl::onRender(Point2I offset, const RectI& updateRect)
 	if(mProfile->mBitmapName != NULL && mProfile->constructBitmapArray() >= 36)
 	{
 		S32 indexMultiplier = 1;
-		if ( currentState == HighlightState)
+		if ( currentState == GuiControlState::HighlightState)
 			indexMultiplier = 2;
-		else if ( currentState == SelectedState )
+		else if ( currentState == GuiControlState::SelectedState )
 			indexMultiplier = 3;
-		else if ( currentState == DisabledState )
+		else if ( currentState == GuiControlState::DisabledState )
 			indexMultiplier = 4;
 
 		renderSizableBitmapBordersFilled(ctrlRect, indexMultiplier, mProfile );

@@ -1214,16 +1214,16 @@ void GuiPopUpMenuCtrlEx::onAction()
 
    //if(textWidth > mBounds.extent.x)
    S32 sbWidth = 0;//TODO: mSc->mProfile->mBorderSize * 2 + mSc->scrollBarThickness(); // DAW: Calculate the scroll bar width
-   if(textWidth > (mBounds.extent.x - sbWidth-mProfile->mTextOffset.x - mSc->getChildMargin().x * 2)) // DAW: The text draw area to test against is the width of the drop-down minus the scroll bar width, the text margin and the scroll bar child margins.
+   if(textWidth > (mBounds.extent.x - sbWidth-mProfile->mTextOffset.x)) // DAW: The text draw area to test against is the width of the drop-down minus the scroll bar width, the text margin and the scroll bar child margins.
    {
       //textWidth +=10;
-      textWidth +=sbWidth + mProfile->mTextOffset.x + mSc->getChildMargin().x * 2; // DAW: The new width is the width of the text plus the scroll bar width plus the text margin size plus the scroll bar child margins.
+      textWidth +=sbWidth + mProfile->mTextOffset.x; // DAW: The new width is the width of the text plus the scroll bar width plus the text margin size plus the scroll bar child margins.
       width = textWidth;
 	  
 	  // DAW: If a child margin is not defined for the scroll control, let's add
 	  //      some space between the text and scroll control for readability
-	  if(mSc->getChildMargin().x == 0)
-		  width += 2;
+	  //if(mSc->getChildMargin().x == 0)
+		//  width += 2;
    }
 
    //mTl->setCellSize(Point2I(width, mFont->getHeight()+3));
@@ -1511,7 +1511,7 @@ void GuiPopUpMenuCtrlEx::autoScroll()
 
    while(mScrollCount > 1)
    {
-      mSc->autoScroll(mScrollDir);
+      mSc->scrollByRegion(mScrollDir);
       mScrollCount -= 1;
    }
    mTl->onMouseMove(mEventSave);

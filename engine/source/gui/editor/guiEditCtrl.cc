@@ -1442,8 +1442,8 @@ public:
       //Sim::findObject(refCtrl, &ref);
       ref = dynamic_cast<GuiScrollCtrl *>(o);
       Point2I choffset(0,0);
-      if(ref)
-         choffset = ref->getChildPos();
+      //if(ref)
+      //   choffset = ref->getChildPos();
       if(mBounds.extent.x > mBounds.extent.y)
       {
          // it's horizontal.

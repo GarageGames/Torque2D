@@ -404,7 +404,7 @@ public:
     /// @param   offset   The top left of the parent control
     /// @param   contentOffset   The top left of the parent's content
     /// @param   updateRect   The screen area this control has drawing access to
-    void renderChildControls(Point2I offset, RectI content, const RectI &updateRect);
+    virtual void renderChildControls(Point2I offset, RectI content, const RectI &updateRect);
 
     /// Sets the area (local coordinates) this control wants refreshed each frame
     /// @param   pos   UpperLeft point on rectangle of refresh area

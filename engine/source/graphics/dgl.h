@@ -177,6 +177,8 @@ U32 dglDrawTextN(GFont *font, const Point2I &ptDraw, const UTF8  *in_string, U32
 void dglDrawLine(S32 x1, S32 y1, S32 x2, S32 y2, const ColorI &color);
 /// draws a line from startPt to endPt in specified color
 void dglDrawLine(const Point2I &startPt, const Point2I &endPt, const ColorI &color);
+/// draws an UNTEXTURED filled triangle with the three points which should be given in counterclockwise order
+void dglDrawTriangleFill(const Point2I& pt1, const Point2I& pt2, const Point2I& pt3, const ColorI& color);
 /// draws a wireframe rectangle from upperL to lowerR in specified color and optional line width
 void dglDrawRect(const Point2I &upperL, const Point2I &lowerR, const ColorI &color, const float &lineWidth = 1.0f);
 /// draws a wireframe rectangle in "rect" in specified color and optional line width

@@ -60,17 +60,19 @@ function EditorConsole::create(%this)
 	%this.scroller = new GuiScrollCtrl()
 	{
 		Name="ConsoleScrollCtrl";
-		Profile="ConsoleScrollProfile";
+		Profile=EditorCore.themes.scrollProfile;
+		ThumbProfile = EditorCore.themes.thumbProfile;
+		TrackProfile = EditorCore.themes.trackProfile;
+		ArrowProfile = EditorCore.themes.scrollArrowProfile;
 		HorizSizing="width";
 		VertSizing="height";
 		Position="0 0";
 		Extent="1024 738";
 		MinExtent="220 200";
-		willFirstRespond="1";
 		hScrollBar="alwaysOn";
 		vScrollBar="alwaysOn";
 		constantThumbHeight="0";
-		childMargin="10 0";
+		showArrowButtons="1";
 	};
 	%this.guiPage.add(%this.scroller);
 

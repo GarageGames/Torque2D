@@ -316,7 +316,7 @@ Point2I GuiControl::localToGlobalCoord(const Point2I &src)
    GuiControl *walk = getParent();
    while(walk)
    {
-      ret += (walk->getPosition() + mRenderInsetLT);
+      ret += (walk->getPosition() + walk->mRenderInsetLT);
       walk = walk->getParent();
    }
    return ret;
@@ -329,7 +329,7 @@ Point2I GuiControl::globalToLocalCoord(const Point2I &src)
    GuiControl *walk = getParent();
    while(walk)
    {
-      ret -= (walk->getPosition() + mRenderInsetLT);
+      ret -= (walk->getPosition() + walk->mRenderInsetLT);
       walk = walk->getParent();
    }
    return ret;
@@ -715,39 +715,41 @@ void GuiControl::renderChildControls(Point2I offset, RectI content, const RectI 
    // offset is the upper-left corner of this control in screen coordinates. It should almost always be the same offset passed into the onRender method.
    // updateRect is the area that this control was allowed to draw in. It should almost always be the same as the value in onRender.
    // content is the area that child controls are allowed to draw in.
-   RectI clipRect = updateRect;
-
-   S32 size = objectList.size();
-   S32 size_cpy = size;
-    //-Mat look through our vector all normal-like, trying to use an iterator sometimes gives us
-   //bad cast on good objects
-   for( S32 count = 0; count < objectList.size(); count++ )
+   RectI clipRect = content;
+   if(clipRect.intersect(dglGetClipRect()))
    {
-      GuiControl *ctrl = (GuiControl *)objectList[count];
-      if( ctrl == NULL ) {
-          Con::errorf( "GuiControl::renderChildControls() object %i is NULL", count );
-        continue;
-      }
-      if (ctrl->mVisible)
-      {
-		 ctrl->mRenderInsetLT = content.point - offset;
-		 ctrl->mRenderInsetRB = mBounds.extent - (ctrl->mRenderInsetLT + content.extent);
-         Point2I childPosition = content.point + ctrl->getPosition();
-         RectI childClip(childPosition, ctrl->getExtent());
+	   S32 size = objectList.size();
+	   S32 size_cpy = size;
+		//-Mat look through our vector all normal-like, trying to use an iterator sometimes gives us
+	   //bad cast on good objects
+	   for( S32 count = 0; count < objectList.size(); count++ )
+	   {
+		  GuiControl *ctrl = (GuiControl *)objectList[count];
+		  if( ctrl == NULL ) {
+			  Con::errorf( "GuiControl::renderChildControls() object %i is NULL", count );
+			continue;
+		  }
+		  if (ctrl->mVisible)
+		  {
+			 ctrl->mRenderInsetLT = content.point - offset;
+			 ctrl->mRenderInsetRB = mBounds.extent - (ctrl->mRenderInsetLT + content.extent);
+			 Point2I childPosition = content.point + ctrl->getPosition();
+			 RectI childClip(childPosition, ctrl->getExtent());
 
-         if (childClip.intersect(clipRect))
-         {
-            dglSetClipRect(content);
-            glDisable(GL_CULL_FACE);
-            ctrl->onRender(childPosition, childClip);
-         }
-      }
-      size_cpy = objectList.size(); //	CHRIS: i know its wierd but the size of the list changes sometimes during execution of this loop
-      if(size != size_cpy)
-      {
-          size = size_cpy;
-          count--;	//	CHRIS: just to make sure one wasnt skipped.
-      }
+			 if (childClip.intersect(clipRect))
+			 {
+				dglSetClipRect(clipRect);
+				glDisable(GL_CULL_FACE);
+				ctrl->onRender(childPosition, RectI(childPosition, ctrl->getExtent()));
+			 }
+		  }
+		  size_cpy = objectList.size(); //	CHRIS: i know its wierd but the size of the list changes sometimes during execution of this loop
+		  if(size != size_cpy)
+		  {
+			  size = size_cpy;
+			  count--;	//	CHRIS: just to make sure one wasnt skipped.
+		  }
+	   }
    }
 }
 

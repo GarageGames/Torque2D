@@ -807,6 +807,33 @@ void dglDrawLine(const Point2I &startPt, const Point2I &endPt, const ColorI &col
     dglDrawLine(startPt.x, startPt.y, endPt.x, endPt.y, color);
 }
 
+void dglDrawTriangleFill(const Point2I &pt1, const Point2I &pt2, const Point2I &pt3, const ColorI &color)
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_TEXTURE_2D);
+
+	glColor4ub(color.red, color.green, color.blue, color.alpha);
+#if defined(TORQUE_OS_IOS) || defined(TORQUE_OS_ANDROID) || defined(TORQUE_OS_EMSCRIPTEN)
+	GLfloat vertices[] = {
+		(GLfloat)pt1.x, (GLfloat)pt1.y,
+		(GLfloat)pt2.x, (GLfloat)pt2.y,
+		(GLfloat)pt3.x, (GLfloat)pt3.y,
+	};
+
+	glVertexPointer(2, GL_FLOAT, 0, vertices);
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
+#else
+	glBegin(GL_TRIANGLES);
+	glVertex2f((GLfloat)pt1.x, (GLfloat)pt1.y);
+	glVertex2f((GLfloat)pt2.x, (GLfloat)pt2.y);
+	glVertex2f((GLfloat)pt3.x, (GLfloat)pt3.y);
+	glEnd();
+#endif
+}
+
 void dglDrawRect(const Point2I &upperL, const Point2I &lowerR, const ColorI &color, const float &lineWidth)
 {
    glEnable(GL_BLEND);

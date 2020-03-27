@@ -76,4 +76,7 @@ function ThemeManager::activateTheme(%this, %theme)
 	%this.tabPageProfile = %theme.tabPageProfile;
 	%this.textEditProfile = %theme.textEditProfile;
 	%this.scrollProfile = %theme.scrollProfile;
+	%this.thumbProfile = %theme.thumbProfile;
+	%this.trackProfile = %theme.trackProfile;
+	%this.scrollArrowProfile = %theme.scrollArrowProfile;
 }

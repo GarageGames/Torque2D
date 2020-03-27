@@ -466,14 +466,108 @@ function BaseTheme::makeTextEditProfile(%this)
 
 function BaseTheme::makeScrollProfile(%this)
 {
+	%trackBorder = new GuiBorderProfile()
+	{
+		margin = 0;
+		padding = 0;
+		border = 0;
+	};
+
+	%this.trackProfile = new GuiControlProfile()
+	{
+			fillColor = %this.setAlpha(%this.color2, 150);
+			fillColorHL = %this.setAlpha(%this.color2, 150);
+			fillColorSL = %this.setAlpha(%this.adjustValue(%this.color2, 10), 150);
+			fillColorNA = %this.setAlpha(%this.color2, 50);
+			borderDefault = %trackBorder;
+	};
+
+	%buttonBorderLT = new GuiBorderProfile()
+	{
+		padding = 3;
+		paddingHL = 2;
+		paddingSL = 2;
+		paddingNA = 3;
+
+		border = 1;
+		borderHL = 2;
+		borderSL = 2;
+		borderNA = 1;
+
+		borderColor = %this.adjustValue(%this.color3, 20);
+		borderColorHL = %this.adjustValue(%this.color3, 30);
+		borderColorSL = %this.adjustValue(%this.color5, 20);
+		borderColorNA = %this.setAlpha(%this.adjustValue(%this.color3, 20), 80);
+
+		underfill = true;
+	};
+
+	%buttonBorderRB = new GuiBorderProfile()
+	{
+		padding = 3;
+		paddingHL = 2;
+		paddingSL = 2;
+		paddingNA = 3;
+
+		border = 1;
+		borderHL = 2;
+		borderSL = 2;
+		borderNA = 1;
+
+		borderColor = %this.adjustValue(%this.color3, -20);
+		borderColorHL = %this.adjustValue(%this.color3, -10);
+		borderColorSL = %this.adjustValue(%this.color5, -20);
+		borderColorNA = %this.setAlpha(%this.adjustValue(%this.color3, -20), 80);
+
+		underfill = true;
+	};
+
+	%this.thumbProfile = new GuiControlProfile()
+	{
+		fillColor = %this.color3;
+		fillColorHL = %this.adjustValue(%this.color3, 10);
+		fillColorSL = %this.color5;
+		fillColorNA = %this.setAlpha(%this.color3, 80);
+
+		borderDefault = %buttonBorderLT;
+		borderRight = %buttonBorderRB;
+		borderBottom = %buttonBorderRB;
+	};
+
+	%this.scrollArrowProfile = new GuiControlProfile()
+	{
+		fillColor = %this.color3;
+		fillColorHL = %this.adjustValue(%this.color3, 10);
+		fillColorSL = %this.color5;
+		fillColorNA = %this.setAlpha(%this.color3, 80);
+
+		fontType = %this.font;
+		fontColor = %this.color2;
+		fontColorHL = %this.color2;
+		fontColorSL = %this.color4;
+		fontColorNA = %this.setAlpha(%this.color2, 80);
+
+		borderDefault = %buttonBorderLT;
+		borderRight = %buttonBorderRB;
+		borderBottom = %buttonBorderRB;
+	};
+
+	%mainBorder = new GuiBorderProfile()
+	{
+		margin = 5;
+		padding = 20;
+		border = 3;
+		borderColor = %this.color5;
+	};
 	%this.scrollProfile = new GuiControlProfile()
 	{
-	    bitmap = "^Sandbox/gui/images/scrollBar.png";
-	    hasBitmapArray = true;
-	    fillColor = "0 0 0 120";
-	    border = 3;
-	    borderThickness = 0;
-	    borderColor = "0 0 0";
+			opaque = true;
+	    fillColor = %this.setAlpha(%this.color3, 100);
+			fillColorHL = %this.color3;
+			fillColorSL = %this.color4;
+			fillColorNA = %this.setAlpha(%this.color4, 80);
+
+			borderDefault = %mainBorder;
 	};
 }
 

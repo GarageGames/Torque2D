@@ -77,6 +77,16 @@ enum GuiControlState
 	StateCount					//Not an actual state! Should always be at the end of the list.
 };
 
+
+
+enum class GuiDirection
+{
+	Up,				
+	Down,				
+	Left,				
+	Right			
+};
+
 class GuiCursor : public SimObject
 {
 private:

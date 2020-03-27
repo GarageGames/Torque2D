@@ -184,7 +184,7 @@ void GuiArrayCtrl::onRender(Point2I offset, const RectI &updateRect)
 
    S32 i, j;
    RectI headerClip;
-   RectI clipRect(updateRect.point, updateRect.extent);
+   RectI clipRect = dglGetClipRect();
 
    Point2I parentOffset = parent->localToGlobalCoord(Point2I(0, 0));
 

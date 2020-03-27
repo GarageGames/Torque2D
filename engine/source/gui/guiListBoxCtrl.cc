@@ -667,7 +667,7 @@ void GuiListBoxCtrl::updateSize()
    GuiScrollCtrl* parent = dynamic_cast<GuiScrollCtrl *>(getParent());
 
    if ( mFitParentWidth && parent )
-      mItemSize.x = parent->getContentExtent().x;
+      mItemSize.x = 100;//parent->getContentExtent().x;
    else
    {
       // Find the maximum width cell:
