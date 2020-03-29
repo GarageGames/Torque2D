@@ -1214,7 +1214,7 @@ bool GuiMenuTextListCtrl::onKeyDown(const GuiEvent &event)
 
 void GuiMenuTextListCtrl::onMouseDown(const GuiEvent &event)
 {
-   Parent::onMouseDown(event);
+   Parent::onTouchDown(event);
    mMenuBarCtrl->closeMenu();
 }
 

@@ -562,7 +562,7 @@ void DbgFileView::onMouseDown(const GuiEvent &event)
 {
    if (! mActive)
    {
-      Parent::onMouseDown(event);
+      Parent::onTouchDown(event);
       return;
    }
 
@@ -588,7 +588,7 @@ void DbgFileView::onMouseDown(const GuiEvent &event)
       else
       {
          Point2I prevSelected = mSelectedCell;
-         Parent::onMouseDown(event);
+         Parent::onTouchDown(event);
          mBlockStart= -1;
          mBlockEnd = -1;
 
@@ -620,7 +620,7 @@ void DbgFileView::onMouseDown(const GuiEvent &event)
    }
    else
    {
-      Parent::onMouseDown(event);
+      Parent::onTouchDown(event);
    }
 }
 

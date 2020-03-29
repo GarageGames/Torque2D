@@ -524,7 +524,7 @@ void GuiTextListCtrl::setSize(Point2I newSize)
       mCellSize.y = mFont->getHeight() + 2;
    }
 
-   Point2I newExtent( newSize.x * mCellSize.x + mHeaderDim.x, newSize.y * mCellSize.y + mHeaderDim.y );
+   Point2I newExtent( newSize.x * mCellSize.x, newSize.y * mCellSize.y);
    resize( mBounds.point, newExtent );
 }
 

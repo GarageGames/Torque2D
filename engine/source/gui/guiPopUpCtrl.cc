@@ -180,7 +180,7 @@ void GuiPopupTextListCtrl::onMouseDown(const GuiEvent &event)
 
 void GuiPopupTextListCtrl::onMouseUp(const GuiEvent &event)
 {
-   Parent::onMouseDown(event);
+   Parent::onTouchDown(event);
    mPopUpCtrl->closePopUp();
    Parent::onTouchUp(event);
 }
@@ -1532,7 +1532,7 @@ void GuiPopUpMenuCtrl::autoScroll()
       mSc->scrollByRegion(mScrollDir);
       mScrollCount -= 1;
    }
-   mTl->onMouseMove(mEventSave);
+   mTl->onTouchMove(mEventSave);
 }
 
 //------------------------------------------------------------------------------

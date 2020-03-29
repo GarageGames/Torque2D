@@ -187,7 +187,6 @@ void GuiPopupTextListCtrlEx::onMouseUp(const GuiEvent &event)
         return;
 
    Point2I pt = globalToLocalCoord(event.mousePoint);
-   pt.x -= mHeaderDim.x; pt.y -= mHeaderDim.y;
    Point2I cell(
       (pt.x < 0 ? -1 : pt.x / mCellSize.x), 
       (pt.y < 0 ? -1 : pt.y / mCellSize.y)
@@ -207,10 +206,9 @@ void GuiPopupTextListCtrlEx::onMouseUp(const GuiEvent &event)
 void GuiPopupTextListCtrlEx::onMouseMove( const GuiEvent &event )
 {
    if( !mPopUpCtrl || !mPopUpCtrl->isMethod("onHotTrackItem") )
-      return Parent::onMouseMove( event );
+      return Parent::onTouchMove( event );
 
    Point2I pt = globalToLocalCoord(event.mousePoint);
-   pt.x -= mHeaderDim.x; pt.y -= mHeaderDim.y;
    Point2I cell( (pt.x < 0 ? -1 : pt.x / mCellSize.x), (pt.y < 0 ? -1 : pt.y / mCellSize.y) );
 
    // Within Bounds?
