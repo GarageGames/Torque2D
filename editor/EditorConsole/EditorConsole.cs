@@ -59,7 +59,6 @@ function EditorConsole::create(%this)
 
 	%this.scroller = new GuiScrollCtrl()
 	{
-		Name="ConsoleScrollCtrl";
 		Profile=EditorCore.themes.scrollProfile;
 		ThumbProfile = EditorCore.themes.thumbProfile;
 		TrackProfile = EditorCore.themes.trackProfile;
@@ -78,7 +77,7 @@ function EditorConsole::create(%this)
 
 	%this.consoleLog = new GuiConsole()
 	{
-		Profile="GuiConsoleProfile";
+		Profile=EditorCore.themes.consoleProfile;
 		Position="0 0";
 		Extent="1024 738";
 		HorizSizing="width";

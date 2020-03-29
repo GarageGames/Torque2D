@@ -8,6 +8,7 @@ function BaseTheme::onAdd(%this)
 	%this.makeTabProfile();
 	%this.makeTextEditProfile();
 	%this.makeScrollProfile();
+	%this.makeConsoleProfile();
 }
 
 function BaseTheme::init(%this)
@@ -555,19 +556,27 @@ function BaseTheme::makeScrollProfile(%this)
 	%mainBorder = new GuiBorderProfile()
 	{
 		margin = 5;
-		padding = 20;
+		padding = 5;
 		border = 3;
 		borderColor = %this.color5;
 	};
 	%this.scrollProfile = new GuiControlProfile()
 	{
 			opaque = true;
-	    fillColor = %this.setAlpha(%this.color3, 100);
-			fillColorHL = %this.color3;
-			fillColorSL = %this.color4;
-			fillColorNA = %this.setAlpha(%this.color4, 80);
+	    fillColor = %this.setAlpha(%this.color2, 180);
 
 			borderDefault = %mainBorder;
+	};
+}
+
+function BaseTheme::makeConsoleProfile(%this)
+{
+	%this.consoleProfile = new GuiControlProfile()
+	{
+		fontType = %this.font;
+		fontColor = %this.color4; //Normal text
+		fontColorHL = %this.setAlpha(%this.color4, 140); //Warnings
+		fontColorNA = "255 0 0 255"; //Errors
 	};
 }
 

@@ -79,4 +79,5 @@ function ThemeManager::activateTheme(%this, %theme)
 	%this.thumbProfile = %theme.thumbProfile;
 	%this.trackProfile = %theme.trackProfile;
 	%this.scrollArrowProfile = %theme.scrollArrowProfile;
+	%this.consoleProfile = %theme.consoleProfile;
 }
