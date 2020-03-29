@@ -67,6 +67,9 @@ public:
 
 protected:
     virtual void onAnimationEnd( void );
+	virtual void processTick();
+	virtual void interpolateTick(F32 delta) {};
+	virtual void advanceTime(F32 timeDelta) {};
 
 protected:
     static bool setImage(void* obj, const char* data) { static_cast<GuiSpriteCtrl*>(obj)->setImage( data ); return false; }

@@ -152,6 +152,14 @@ void GuiSpriteCtrl::onSleep()
 
 //-----------------------------------------------------------------------------
 
+void GuiSpriteCtrl::processTick(void)
+{
+	// Update using tick period.
+	update(Tickable::smTickSec);
+}
+
+//-----------------------------------------------------------------------------
+
 bool GuiSpriteCtrl::setImage( const char* pImageAssetId, const U32 frame )
 {
     // Sanity!

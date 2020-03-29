@@ -34,11 +34,7 @@
 #include "gui/guiDefaultControlRender.h"
 #endif
 
-#ifndef _GUITICKCTRL_H_
-#include "gui/guiTickCtrl.h"
-#endif
-
-class GuiRolloutCtrl : public GuiTickCtrl
+class GuiRolloutCtrl : public GuiControl
 {
 private:
    typedef GuiControl Parent;

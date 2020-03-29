@@ -26,9 +26,6 @@
 #ifndef _GUITEXTLISTCTRL_H_
 #include "gui/guiTextListCtrl.h"
 #endif
-#ifndef _GUITICKCTRL_H_
-#include "gui/guiTickCtrl.h"
-#endif
 
 class GuiMenuBar;
 class GuiMenuTextListCtrl;
@@ -84,9 +81,9 @@ class GuiMenuTextListCtrl : public GuiTextListCtrl
 
 //------------------------------------------------------------------------------
 
-class GuiMenuBar : public GuiTickCtrl // DAW: Was: GuiControl
+class GuiMenuBar : public GuiControl
 {
-   typedef GuiTickCtrl Parent; // DAW: Was: GuiControl Parent;
+   typedef GuiControl Parent;
 public:
 
     struct Menu;

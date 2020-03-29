@@ -40,7 +40,6 @@ function EditorConsole::create(%this)
 		TabComplete="0";
 		SinkAllKeyEvents="1";
 		UseSiblingScroller="1";
-		Text = "Hello World";
 	};
 	%this.guiPage.add(%this.consoleEntry);
 
