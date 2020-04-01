@@ -2238,7 +2238,7 @@ void GuiTreeViewCtrl::onMouseUp(const GuiEvent &event)
 
    if (mFlags.test(IsEditable))
    {
-      Parent::onMouseMove( event );
+      Parent::onTouchMove( event );
       if (mOldDragY != mMouseOverCell.y)
       {
 
@@ -2617,7 +2617,7 @@ void GuiTreeViewCtrl::onMouseDragged(const GuiEvent &event)
    if (mSelectedItems.size() == 0)
       return;
    Point2I pt = globalToLocalCoord(event.mousePoint);
-   Parent::onMouseMove(event);
+   Parent::onTouchMove(event);
    mouseLock();
    mMouseDragged = true;
    // whats our mDragMidPoint?
@@ -2704,7 +2704,7 @@ void GuiTreeViewCtrl::onMouseDown(const GuiEvent & event)
 {
    if( !mActive || !mAwake || !mVisible )
    {
-      Parent::onMouseDown(event);
+      Parent::onTouchDown(event);
       return;
    }
    if ( mProfile->mCanKeyFocus )
@@ -2879,7 +2879,7 @@ void GuiTreeViewCtrl::onMouseMove( const GuiEvent &event )
    if ( mMouseOverCell.y >= 0 && mVisibleItems.size() > mMouseOverCell.y)
       mVisibleItems[mMouseOverCell.y]->mState.clear( Item::MouseOverBmp | Item::MouseOverText );
 
-   Parent::onMouseMove( event );
+   Parent::onTouchMove( event );
 
    if ( mMouseOverCell.y >= 0 )
    {
@@ -2904,7 +2904,7 @@ void GuiTreeViewCtrl::onMouseMove( const GuiEvent &event )
 //------------------------------------------------------------------------------
 void GuiTreeViewCtrl::onMouseEnter( const GuiEvent &event )
 {
-   Parent::onMouseEnter( event );
+   Parent::onTouchEnter( event );
    onMouseMove( event );
 }
 
@@ -2915,7 +2915,7 @@ void GuiTreeViewCtrl::onMouseLeave( const GuiEvent &event )
    if ( mMouseOverCell.y >= 0 && mVisibleItems.size() > mMouseOverCell.y)
       mVisibleItems[mMouseOverCell.y]->mState.clear( Item::MouseOverBmp | Item::MouseOverText );
 
-   Parent::onMouseLeave( event );
+   Parent::onTouchLeave( event );
 }
 
 

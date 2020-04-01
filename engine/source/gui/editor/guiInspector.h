@@ -42,10 +42,6 @@
 #include "gui/guiDefaultControlRender.h"
 #endif
 
-#ifndef _GUITICKCTRL_H_
-#include "gui/guiTickCtrl.h"
-#endif
-
 #ifndef _GUISCROLLCTRL_H_
 #include "gui/containers/guiScrollCtrl.h"
 #endif

@@ -100,13 +100,13 @@ void GuiConsole::onPreRender()
       //resize the control
       resize(mBounds.point, Point2I(mCellSize.x, mCellSize.y * size));
 
-      //if the console was not scrolled, make the last entry visible
+      //if the console was scrolled to the bottom then make sure any new row is also visible
       if (scrolled)
          scrollCellVisible(Point2I(0,mSize.y - 1));
    }
 }
 
-void GuiConsole::onRenderCell(Point2I offset, Point2I cell, bool /*selected*/, bool /*mouseOver*/)
+void GuiConsole::onRenderCell(Point2I offset, Point2I cell, bool selected, bool mouseOver)
 {
    U32 size;
    ConsoleLogEntry *log;
