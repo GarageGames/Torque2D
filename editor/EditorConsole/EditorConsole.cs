@@ -95,6 +95,17 @@ function EditorConsole::destroy(%this)
 
 }
 
+function EditorConsole::onThemeChanged(%this, %theme)
+{
+	%this.consoleEntry.setProfile(%theme.textEditProfile);
+	%this.hideLogButton.setProfile(%theme.buttonProfile);
+	%this.scroller.setProfile(%theme.scrollProfile);
+	%this.scroller.setThumbProfile(%theme.thumbProfile);
+	%this.scroller.setTrackProfile(%theme.trackProfile);
+	%this.scroller.setArrowProfile(%theme.scrollArrowProfile);
+	%this.consoleLog.setProfile(%theme.consoleProfile);
+}
+
 function EditorConsole::open(%this)
 {
 	%this.scroller.scrollToBottom();

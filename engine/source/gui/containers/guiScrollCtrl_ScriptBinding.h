@@ -103,3 +103,39 @@ ConsoleMethod(GuiScrollCtrl, computeSizes, void, 2, 2, "()")
 {
 	object->computeSizes();
 }
+
+/*! Sets the currently used ThumbProfile for the GuiControl
+	@param p The Thumbprofile you wish to set the control to use
+	@return No return value
+*/
+ConsoleMethodWithDocs(GuiScrollCtrl, setThumbProfile, ConsoleVoid, 3, 3, (GuiControlProfile p))
+{
+	GuiControlProfile* profile;
+
+	if (Sim::findObject(argv[2], profile))
+		object->setControlThumbProfile(profile);
+}
+
+/*! Sets the currently used TrackProfile for the GuiControl
+	@param p The Trackprofile you wish to set the control to use
+	@return No return value
+*/
+ConsoleMethodWithDocs(GuiScrollCtrl, setTrackProfile, ConsoleVoid, 3, 3, (GuiControlProfile p))
+{
+	GuiControlProfile* profile;
+
+	if (Sim::findObject(argv[2], profile))
+		object->setControlTrackProfile(profile);
+}
+
+/*! Sets the currently used ArrowProfile for the GuiControl
+	@param p The Arrowprofile you wish to set the control to use
+	@return No return value
+*/
+ConsoleMethodWithDocs(GuiScrollCtrl, setArrowProfile, ConsoleVoid, 3, 3, (GuiControlProfile p))
+{
+	GuiControlProfile* profile;
+
+	if (Sim::findObject(argv[2], profile))
+		object->setControlArrowProfile(profile);
+}

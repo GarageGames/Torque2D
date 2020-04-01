@@ -45,6 +45,11 @@ function ProjectManager::destroy(%this)
 
 }
 
+function ProjectManager::onThemeChanged(%this, %theme)
+{
+	%this.comingSoon.setProfile(%theme.panelProfile);
+}
+
 function ProjectManager::open(%this)
 {
 

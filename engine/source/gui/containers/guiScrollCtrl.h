@@ -192,6 +192,9 @@ public:
 
    bool onWake();
    void onSleep();
+   void setControlThumbProfile(GuiControlProfile* prof);
+   void setControlTrackProfile(GuiControlProfile* prof);
+   void setControlArrowProfile(GuiControlProfile* prof);
 
    void onPreRender();
    void onRender(Point2I offset, const RectI &updateRect);

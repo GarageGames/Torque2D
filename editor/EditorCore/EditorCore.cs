@@ -31,6 +31,7 @@ function EditorCore::create( %this )
 	{
 		class = "ThemeManager";
 	};
+	%this.startListening(%this.themes);
 
 	%this.initGui();
 
@@ -103,10 +104,39 @@ function EditorCore::RegisterEditor(%this, %name, %editor)
 		Text = %name;
 	};
 
+	%editor.startListening(%this.themes);
+
 	return %this.page[%name];
 }
 
 function EditorCore::FinishRegistration(%this, %page)
 {
 	%this.tabBook.add(%page);
+}
+
+function EditorCore::onThemeChanged(%this, %theme)
+{
+	%this.tabBook.setProfile(%theme.tabBookProfileTop);
+	%this.tabBook.setTabProfile(%theme.tabProfileTop);
+
+	for(%i = 0; %i < %this.tabBook.getCount(); %i++)
+	{
+		%page = %this.tabBook.getObject(%i);
+		%page.setProfile(%theme.tabPageProfile);
+	}
+}
+
+function EditorCore::setTheme(%this, %i)
+{
+	%this.themes.setTheme(%i);
+}
+
+function EditorCore::nextTheme(%this)
+{
+	%this.themes.nextTheme();
+}
+
+function EditorCore::prevTheme(%this)
+{
+	%this.themes.prevTheme();
 }

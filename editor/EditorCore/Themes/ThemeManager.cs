@@ -24,7 +24,7 @@ function ThemeManager::onAdd(%this)
 {
 	%this.themeList = new SimSet();
 
-	%tuxedo = new ScriptObject()
+	%constructionVest = new ScriptObject()
 	{
 		class = "BaseTheme";
 	};
@@ -41,7 +41,7 @@ function ThemeManager::onAdd(%this)
 		class = "ForestRobeTheme";
 	};
 
-	%this.registerTheme(%tuxedo);
+	%this.registerTheme(%constructionVest);
 	%this.registerTheme(%labCoat);
 	%this.registerTheme(%forestRobe);
 	%this.setTheme(0);
@@ -49,8 +49,20 @@ function ThemeManager::onAdd(%this)
 
 function ThemeManager::setTheme(%this, %i)
 {
+	%i = mClamp(%i, 0, %this.themeList.getCount() - 1);
+	%this.curTheme = %i;
 	%theme = %this.themeList.getObject(%i);
 	%this.activateTheme(%theme);
+}
+
+function ThemeManager::nextTheme(%this)
+{
+	%this.setTheme(%this.curTheme+1);
+}
+
+function ThemeManager::prevTheme(%this)
+{
+	%this.setTheme(%this.curTheme-1);
 }
 
 function ThemeManager::registerTheme(%this, %theme)
@@ -79,4 +91,6 @@ function ThemeManager::activateTheme(%this, %theme)
 	%this.thumbProfile = %theme.thumbProfile;
 	%this.trackProfile = %theme.trackProfile;
 	%this.scrollArrowProfile = %theme.scrollArrowProfile;
+
+	%this.postEvent("ThemeChanged", %this);
 }

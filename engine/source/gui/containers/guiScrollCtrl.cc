@@ -130,6 +130,16 @@ bool GuiScrollCtrl::onWake()
 	   mScrollBarThickness      = mBitmapBounds[BmpStates * BmpVPage].extent.x;
 	   computeSizes();
    }
+
+	if (mThumbProfile != NULL)
+		mThumbProfile->incRefCount();
+
+	if (mTrackProfile != NULL)
+		mTrackProfile->incRefCount();
+
+	if (mArrowProfile != NULL)
+		mArrowProfile->incRefCount();
+
    return true;
 }
 
@@ -137,6 +147,54 @@ void GuiScrollCtrl::onSleep()
 {
    Parent::onSleep();
    mTextureHandle = NULL;
+
+   if (mThumbProfile != NULL)
+	   mThumbProfile->decRefCount();
+
+   if (mTrackProfile != NULL)
+	   mTrackProfile->decRefCount();
+
+   if (mArrowProfile != NULL)
+	   mArrowProfile->decRefCount();
+}
+
+void GuiScrollCtrl::setControlThumbProfile(GuiControlProfile* prof)
+{
+	AssertFatal(prof, "GuiScrollCtrl::setControlThumbProfile: invalid thumb profile");
+	if (prof == mThumbProfile)
+		return;
+	if (mAwake)
+		mThumbProfile->decRefCount();
+	mThumbProfile = prof;
+	if (mAwake)
+		mThumbProfile->incRefCount();
+
+}
+
+void GuiScrollCtrl::setControlTrackProfile(GuiControlProfile* prof)
+{
+	AssertFatal(prof, "GuiScrollCtrl::setControlTrackProfile: invalid track profile");
+	if (prof == mTrackProfile)
+		return;
+	if (mAwake)
+		mTrackProfile->decRefCount();
+	mTrackProfile = prof;
+	if (mAwake)
+		mTrackProfile->incRefCount();
+
+}
+
+void GuiScrollCtrl::setControlArrowProfile(GuiControlProfile* prof)
+{
+	AssertFatal(prof, "GuiScrollCtrl::setControlArrowProfile: invalid Arrow profile");
+	if (prof == mArrowProfile)
+		return;
+	if (mAwake)
+		mArrowProfile->decRefCount();
+	mArrowProfile = prof;
+	if (mAwake)
+		mArrowProfile->incRefCount();
+
 }
 
 GuiControl* GuiScrollCtrl::findHitControl(const Point2I& pt, S32 initialLayer)

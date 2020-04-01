@@ -173,14 +173,33 @@ bool GuiTabBookCtrl::onWake()
    if( mHasTexture )
       mBitmapBounds = mProfile->mBitmapArrayRects.address();
 
+   //increment the tab profile
+   mTabProfile->incRefCount();
+
    return true;
 }
 
 void GuiTabBookCtrl::onSleep()
 {
    Parent::onSleep();
+
+   //decrement the tab profile referrence
+   if (mTabProfile != NULL)
+       mTabProfile->decRefCount();
 }
 
+void GuiTabBookCtrl::setControlTabProfile(GuiControlProfile* prof)
+{
+    AssertFatal(prof, "GuiTabBookCtrl::setControlTabProfile: invalid tab profile");
+    if (prof == mTabProfile)
+        return;
+    if (mAwake)
+        mTabProfile->decRefCount();
+    mTabProfile = prof;
+    if (mAwake)
+        mTabProfile->incRefCount();
+
+}
 
 void GuiTabBookCtrl::addNewPage()
 {

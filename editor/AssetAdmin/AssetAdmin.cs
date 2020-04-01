@@ -45,6 +45,11 @@ function AssetAdmin::destroy(%this)
 
 }
 
+function AssetAdmin::onThemeChanged(%this, %theme)
+{
+	%this.comingSoon.setProfile(%theme.panelProfile);
+}
+
 function AssetAdmin::open(%this)
 {
 

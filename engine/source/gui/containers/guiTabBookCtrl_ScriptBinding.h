@@ -39,3 +39,15 @@ ConsoleMethodWithDocs(GuiTabBookCtrl, selectPageName, void, 3, 3, "(pageName)")
 {
 	object->selectPage(argv[2]);
 }
+
+/*! Sets the currently used TabProfile for the GuiControl
+	@param p The tabprofile you wish to set the control to use
+	@return No return value
+*/
+ConsoleMethodWithDocs(GuiTabBookCtrl, setTabProfile, ConsoleVoid, 3, 3, (GuiControlProfile p))
+{
+	GuiControlProfile* profile;
+
+	if (Sim::findObject(argv[2], profile))
+		object->setControlTabProfile(profile);
+}

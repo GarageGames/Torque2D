@@ -122,6 +122,7 @@ private:
    void onRemove();
    bool onWake();
    void onSleep();
+   void setControlTabProfile(GuiControlProfile* prof);
    void onPreRender();
    void onRender( Point2I offset, const RectI &updateRect );
    /// @}
