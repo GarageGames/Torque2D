@@ -92,6 +92,10 @@ function ThemeManager::activateTheme(%this, %theme)
 	%this.trackProfile = %theme.trackProfile;
 	%this.scrollArrowProfile = %theme.scrollArrowProfile;
 	%this.consoleProfile = %theme.consoleProfile;
+	%this.scrollingPanelProfile = %theme.scrollingPanelProfile;
+	%this.scrollingPanelThumbProfile = %theme.scrollingPanelThumbProfile;
+	%this.scrollingPanelTrackProfile = %theme.scrollingPanelTrackProfile;
+	%this.scrollingPanelArrowProfile = %theme.scrollingPanelArrowProfile;
 
 	%this.postEvent("ThemeChanged", %this);
 }

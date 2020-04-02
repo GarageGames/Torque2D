@@ -333,7 +333,7 @@ bool GuiScrollCtrl::calcChildExtents()
 
 void GuiScrollCtrl::calcScrollRects(void)
 {
-	RectI ctrlRect = applyMargins(mBounds.point, mBounds.extent, NormalState, mProfile);
+	RectI ctrlRect = applyMargins(mBounds.point.Zero, mBounds.extent, NormalState, mProfile);
 	RectI fillRect = applyBorders(ctrlRect.point, ctrlRect.extent, NormalState, mProfile);
 
 	if (mHasVScrollBar)
@@ -425,8 +425,8 @@ void GuiScrollCtrl::scrollDelta(S32 deltaX, S32 deltaY)
 	mScrollOffset.x += deltaX;
 	mScrollOffset.y += deltaY;
 
-	mScrollOffset.setMax(mScrollOffset.Zero);
 	mScrollOffset.setMin(mChildExt - mContentExt);
+	mScrollOffset.setMax(mScrollOffset.Zero);
 
 	calcThumbs();
 }
@@ -930,8 +930,10 @@ void GuiScrollCtrl::renderVScrollBar(const Point2I& offset)
 			renderBorderedRect(RectI(mVTrackRect.point + offset, mVTrackRect.extent), mTrackProfile, GuiControlState::NormalState);
 
 			//The Thumb
+			GuiControlState thumbState = getRegionCurrentState(Region::VertThumb);
 			RectI vThumb = RectI(mVTrackRect.point.x + offset.x, mVTrackRect.point.y + mVThumbPos + offset.y, mScrollBarThickness, mVThumbSize);
-			renderBorderedRect(vThumb, mThumbProfile, getRegionCurrentState(Region::VertThumb));
+			RectI vThumbWithMargins = applyMargins(vThumb.point, vThumb.extent, thumbState, mThumbProfile);
+			renderBorderedRect(vThumbWithMargins, mThumbProfile, thumbState);
 		}
 		else
 		{
@@ -959,8 +961,10 @@ void GuiScrollCtrl::renderHScrollBar(const Point2I& offset)
 			renderBorderedRect(RectI(mHTrackRect.point + offset, mHTrackRect.extent), mTrackProfile, GuiControlState::NormalState);
 
 			//The Thumb
+			GuiControlState thumbState = getRegionCurrentState(Region::HorizThumb);
 			RectI hThumb = RectI(mHTrackRect.point.x + mHThumbPos + offset.x, mHTrackRect.point.y + offset.y, mHThumbSize, mScrollBarThickness);
-			renderBorderedRect(hThumb, mThumbProfile, getRegionCurrentState(Region::HorizThumb));
+			RectI hThumbWithMargins = applyMargins(hThumb.point, hThumb.extent, thumbState, mThumbProfile);
+			renderBorderedRect(hThumbWithMargins, mThumbProfile, thumbState);
 		}
 		else
 		{

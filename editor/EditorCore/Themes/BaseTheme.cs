@@ -64,7 +64,7 @@ function BaseTheme::makePanelProfile(%this)
 {
 	%panelBorder = new GuiBorderProfile()
 	{
-		padding = 10;
+		padding = 0;
 		border = %this.borderSize;
 		borderColor = "0 0 0 60";
 	};
@@ -82,11 +82,6 @@ function BaseTheme::makePanelProfile(%this)
 		borderDefault = %panelBorder;
 	};
 
-	%paddingBorder = new GuiBorderProfile()
-	{
-		padding = 10;
-	};
-
 	%this.fullPanelProfile = new GuiControlProfile()
 	{
 		fillColor = %this.color1;
@@ -96,8 +91,6 @@ function BaseTheme::makePanelProfile(%this)
 		fontColor = %this.color4;
 		align = center;
 		vAlign = middle;
-
-		borderDefault = %paddingBorder;
 	};
 
 	%this.overlayProfile = new GuiControlProfile()
@@ -107,6 +100,70 @@ function BaseTheme::makePanelProfile(%this)
 		fontType = %this.font;
 		fontSize = %this.fontSize;
 		fontColor = %this.color4;
+	};
+
+	//Scrolling panel
+	%this.scrollingPanelTrackProfile = new GuiControlProfile()
+	{
+		fillColor = %this.color2;
+		fillColorHL = %this.color2;
+		fillColorSL = %this.color2;
+		fillColorNA = %this.setAlpha(%this.color2, 50);
+	};
+
+	%thumbBorder = new GuiBorderProfile()
+	{
+		margin = 3;
+		marginHL = 3;
+		marginSL = 3;
+		paddingNA = 3;
+	};
+
+	%this.scrollingPanelThumbProfile = new GuiControlProfile()
+	{
+		fillColor = %this.color3;
+		fillColorHL = %this.adjustValue(%this.color3, 10);
+		fillColorSL = %this.color5;
+		fillColorNA = %this.setAlpha(%this.color3, 0);
+
+		borderRight = %thumbBorder;
+		borderLeft = %thumbBorder;
+	};
+
+	%buttonBorder = new GuiBorderProfile()
+	{
+		padding = 3;
+		paddingHL = 3;
+		paddingSL = 3;
+		paddingNA = 3;
+	};
+
+	%this.scrollingPanelArrowProfile = new GuiControlProfile()
+	{
+		fillColor = %this.color2;
+		fillColorHL = %this.color2;
+		fillColorSL = %this.color2;
+		fillColorNA = %this.setAlpha(%this.color2, 50);
+
+		fontType = %this.font;
+		fontColor = %this.color3;
+		fontColorHL = %this.adjustValue(%this.color3, 10);
+		fontColorSL = %this.color5;
+		fontColorNA = %this.setAlpha(%this.color3, 80);
+
+		borderDefault = %buttonBorder;
+	};
+
+	%mainBorder = new GuiBorderProfile()
+	{
+		margin = 5;
+		padding = 5;
+		border = 3;
+		borderColor = %this.color5;
+	};
+	%this.scrollingPanelProfile = new GuiControlProfile()
+	{
+	    fillColor = %this.color1;
 	};
 }
 
