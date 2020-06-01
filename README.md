@@ -1,4 +1,8 @@
 ![Torque Logo](http://static.garagegames.com/static/pg/logokits/Torque-Logo_H.png)
+
+# We've moved!
+**_All torque engines have moved to a new organization, Torque Game Engines. Torque2D can be found at [https://github.com/TorqueGameEngines/Torque2D](https://github.com/TorqueGameEngines/Torque2D). This repository will not be updated. We encourage you to use the new repository instead of this one. Thank you!_**
+
 ## Torque 2D 3.4
 
 MIT Licensed Open Source version of Torque 2D from GarageGames. Maintained by the T2D Steering Committee and contributions from the community.
